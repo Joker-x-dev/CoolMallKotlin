@@ -12,6 +12,8 @@ composeBom = "2024.12.01"
 # 导航
 navigationCompose = "2.8.9"
 
+kotlinxSerializationJson = "1.8.0"
+
 # 依赖注入相关
 hilt = "2.54"
 hiltNavigationCompose = "1.2.0"
@@ -35,6 +37,9 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 
 # 导航
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+
+# 序列化
+kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 
 # 依赖注入相关
 ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }

@@ -3,6 +3,9 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 
+    // 官方 kotlin 序列化插件
+    kotlin("plugin.serialization") version "2.1.10"
+
     //依赖注入
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
@@ -64,6 +67,10 @@ dependencies {
     // 导航
     // https://mvnrepository.com/artifact/androidx.navigation/navigation-compose
     implementation(libs.navigation.compose)
+
+    // kotlin序列化
+    // https://kotlinlang.org/docs/serialization.html
+    implementation(libs.kotlinx.serialization.json)
 
     //region 依赖注入
     //https://developer.android.google.cn/training/dependency-injection/hilt-android?hl=zh-cn
