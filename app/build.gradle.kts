@@ -34,6 +34,34 @@ android {
             )
         }
     }
+
+    // 环境配置
+    flavorDimensions += listOf("env")
+    productFlavors {
+        create("dev") {
+            dimension = "env"
+            // 开发环境配置
+            
+            // 本地地址 - 模拟器访问方式
+            buildConfigField("String", "BASE_URL", "\"http://10.0.2.2:9900/dev/app/\"")
+            // 真机通过局域网IP访问方式
+            // buildConfigField("String", "BASE_URL", "\"http://192.168.x.x:9900/dev/app/\"")
+            // 直接使用localhost（仅适用于模拟器内网应用运行的特殊情况）
+            // buildConfigField("String", "BASE_URL", "\"http://localhost:9900/dev/app/\"")
+            
+            buildConfigField("Boolean", "DEBUG", "true")
+        }
+
+        create("prod") {
+            dimension = "env"
+            // 生产环境配置
+            
+            // 生产环境地址
+            buildConfigField("String", "BASE_URL", "\"https://api.coolmall.com/prod/app/\"")
+            buildConfigField("Boolean", "DEBUG", "false")
+        }
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -43,6 +71,8 @@ android {
     }
     buildFeatures {
         compose = true
+        // 启用BuildConfig生成
+        buildConfig = true
     }
 }
 
@@ -82,6 +112,13 @@ dependencies {
 
     // 让Retrofit支持Kotlinx Serialization
     implementation(libs.retrofit2.kotlinx.serialization.converter)
+
+    // 网络请求框架日志框架
+    implementation(libs.logging.interceptor)
+
+    //日志框架
+    //https://github.com/JakeWharton/timber
+    implementation(libs.timber)
 
     //region 依赖注入
     //https://developer.android.google.cn/training/dependency-injection/hilt-android?hl=zh-cn
