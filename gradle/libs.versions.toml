@@ -12,7 +12,13 @@ composeBom = "2024.12.01"
 # 导航
 navigationCompose = "2.8.9"
 
+# 序列化
 kotlinxSerializationJson = "1.8.0"
+
+# 网络请求
+okhttp = "4.12.0"
+retrofit = "2.11.0"
+retrofit2KotlinxSerializationConverter = "1.0.0"
 
 # 依赖注入相关
 hilt = "2.54"
@@ -40,6 +46,15 @@ navigation-compose = { group = "androidx.navigation", name = "navigation-compose
 
 # 序列化
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+
+# okhttp
+okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
+
+# retrofit
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+
+# 让Retrofit支持Kotlinx Serialization
+retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit2KotlinxSerializationConverter" }
 
 # 依赖注入相关
 ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
