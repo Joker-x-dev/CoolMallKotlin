@@ -69,7 +69,7 @@ private val LightColorScheme = lightColorScheme(
  * @param content 需要应用主题的内容
  */
 @Composable
-fun CoolMallKotlinTheme(
+fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = false,
