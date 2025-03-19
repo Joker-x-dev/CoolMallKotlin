@@ -15,26 +15,26 @@ enum class TopLevelDestination(
     val route: String
 ) {
     HOME(
-        selectedIconId = R.drawable.home_fill,
-        unselectedIconId = R.drawable.home,
+        selectedIconId = R.drawable.ic_home_fill,
+        unselectedIconId = R.drawable.ic_home,
         titleTextId = R.string.home,
         route = HOME_ROUTE
     ),
     CATEGORY(
-        selectedIconId = R.drawable.category_fill,
-        unselectedIconId = R.drawable.category,
+        selectedIconId = R.drawable.ic_category_fill,
+        unselectedIconId = R.drawable.ic_category,
         titleTextId = R.string.category,
         route = CATEGORY_ROUTE
     ),
     CART(
-        selectedIconId = R.drawable.cart_fill,
-        unselectedIconId = R.drawable.cart,
+        selectedIconId = R.drawable.ic_cart_fill,
+        unselectedIconId = R.drawable.ic_cart,
         titleTextId = R.string.cart,
         route = CART_ROUTE
     ),
     ME(
-        selectedIconId = R.drawable.me_fill,
-        unselectedIconId = R.drawable.me,
+        selectedIconId = R.drawable.ic_me_fill,
+        unselectedIconId = R.drawable.ic_me,
         titleTextId = R.string.me,
         route = ME_ROUTE
     )

@@ -35,7 +35,10 @@ private val DarkColorScheme = darkColorScheme(
     onError = TextWhite,
     outline = BorderDark,
     surfaceVariant = BgContentDark,
-    surfaceTint = BgColorDark
+    surfaceTint = BgColorDark,
+    surfaceContainer = BgWhiteDark,
+    surfaceContainerHigh = BgWhiteDark,
+    surfaceContainerHighest = BgWhiteDark
 )
 
 /**
@@ -57,7 +60,10 @@ private val LightColorScheme = lightColorScheme(
     onError = TextWhite,
     outline = BorderLight,
     surfaceVariant = BgContentLight,
-    surfaceTint = Primary
+    surfaceTint = Primary,
+    surfaceContainer = BgWhiteLight,
+    surfaceContainerHigh = BgWhiteLight,
+    surfaceContainerHighest = BgWhiteLight
 )
 
 /**

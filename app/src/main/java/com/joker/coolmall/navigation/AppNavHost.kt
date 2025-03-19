@@ -1,51 +1,61 @@
 package com.joker.coolmall.navigation
 
-import MAIN_ROUTE
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.core.tween
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import mainScreen
+import com.joker.coolmall.feature.goodsdetail.navigation.goodsDetailScreen
+import com.joker.coolmall.feature.main.navigation.MAIN_ROUTE
+import com.joker.coolmall.feature.main.navigation.mainScreen
+import kotlinx.coroutines.flow.collectLatest
 
+/**
+ * 应用导航宿主
+ * 配置整个应用的导航图和动画
+ */
 @Composable
 fun AppNavHost(
+    navigator: AppNavigator,
     modifier: Modifier = Modifier
 ) {
-    // 创建导航控制器实例，用于管理页面导航
     val navController = rememberNavController()
 
+    // 监听导航事件
+    LaunchedEffect(navController) {
+        navigator.navigationEvents.collectLatest { event ->
+            navController.handleNavigationEvent(event)
+        }
+    }
+
     NavHost(
-        // 设置导航控制器
         navController = navController,
-        // 设置应用启动时显示的首页
         startDestination = MAIN_ROUTE,
-        // 设置修饰符
         modifier = modifier,
-        // 配置页面进入动画：从右向左滑入
+        // 页面进入动画
         enterTransition = {
             slideIntoContainer(
                 AnimatedContentTransitionScope.SlideDirection.Left,
-                // 设置动画持续时间为300毫秒
                 animationSpec = tween(300)
             )
         },
-        // 配置页面退出动画：向左滑出
+        // 页面退出动画
         exitTransition = {
             slideOutOfContainer(
                 AnimatedContentTransitionScope.SlideDirection.Left,
                 animationSpec = tween(300)
             )
         },
-        // 配置返回时页面进入动画：从左向右滑入
+        // 返回时页面进入动画
         popEnterTransition = {
             slideIntoContainer(
                 AnimatedContentTransitionScope.SlideDirection.Right,
                 animationSpec = tween(300)
             )
         },
-        // 配置返回时页面退出动画：向右滑出
+        // 返回时页面退出动画
         popExitTransition = {
             slideOutOfContainer(
                 AnimatedContentTransitionScope.SlideDirection.Right,
@@ -53,7 +63,10 @@ fun AppNavHost(
             )
         }
     ) {
-        // 主页面（包含底部导航栏和四个子页面）
+        // 主页面路由
         mainScreen()
+
+        // 商品详情页面路由
+        goodsDetailScreen()
     }
 }

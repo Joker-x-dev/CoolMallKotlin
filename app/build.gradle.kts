@@ -130,4 +130,8 @@ dependencies {
     //endregion
 
     compileOnly(libs.ksp.gradlePlugin)
+
+    // 图片加载框架
+    // https://github.com/coil-kt/coil
+    implementation(libs.coil.compose)
 }
