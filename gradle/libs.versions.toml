@@ -45,6 +45,9 @@ ksp = "2.1.10-1.0.31"
 
 # 图片加载
 coilCompose = "2.7.0"
+# 模块化
+appcompat = "1.6.1"
+material = "1.10.0"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -92,6 +95,9 @@ hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", ve
 
 # 图片加载框架
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
+# 模块化
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
@@ -104,3 +110,5 @@ ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
 # 序列化
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+# 模块化
+android-library = { id = "com.android.library", version.ref = "agp" }
