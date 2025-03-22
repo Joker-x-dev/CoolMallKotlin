@@ -12,15 +12,15 @@ plugins {
 }
 
 android {
-    namespace = "com.joker.coolmall"
-    compileSdk = 35
+    namespace = libs.versions.namespace.get()
+    compileSdk = libs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.joker.coolmall"
-        minSdk = 26
-        targetSdk = 35
-        versionCode = 1
-        versionName = "1.0"
+        applicationId = libs.versions.namespace.get()
+        minSdk = libs.versions.minSdk.get().toInt()
+        targetSdk = libs.versions.targetSdk.get().toInt()
+        versionCode = libs.versions.versionCode.get().toInt()
+        versionName = libs.versions.versionName.get()
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -41,21 +41,21 @@ android {
         create("dev") {
             dimension = "env"
             // 开发环境配置
-            
+
             // 本地地址 - 模拟器访问方式
             buildConfigField("String", "BASE_URL", "\"http://10.0.2.2:9900/dev/app/\"")
             // 真机通过局域网IP访问方式
             // buildConfigField("String", "BASE_URL", "\"http://192.168.x.x:9900/dev/app/\"")
             // 直接使用localhost（仅适用于模拟器内网应用运行的特殊情况）
             // buildConfigField("String", "BASE_URL", "\"http://localhost:9900/dev/app/\"")
-            
+
             buildConfigField("Boolean", "DEBUG", "true")
         }
 
         create("prod") {
             dimension = "env"
             // 生产环境配置
-            
+
             // 生产环境地址
             buildConfigField("String", "BASE_URL", "\"https://api.coolmall.com/prod/app/\"")
             buildConfigField("Boolean", "DEBUG", "false")
@@ -67,7 +67,7 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = JavaVersion.VERSION_11.toString()
     }
     buildFeatures {
         compose = true
