@@ -3,8 +3,8 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 
-    // 官方 kotlin 序列化插件
-    kotlin("plugin.serialization") version "2.1.10"
+    // 序列化
+    alias(libs.plugins.kotlin.serialization)
 
     //依赖注入
     alias(libs.plugins.ksp)
