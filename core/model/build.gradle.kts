@@ -40,4 +40,8 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+
+    // kotlin序列化
+    // https://kotlinlang.org/docs/serialization.html
+    implementation(libs.kotlinx.serialization.json)
 }

@@ -19,8 +19,6 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
-import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -59,8 +57,6 @@ import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.ui.component.swiper.WeSwiper
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 
 /**
  * 首页路由入口
@@ -187,10 +183,10 @@ private fun ProductsGrid(onNavigateToGoodsDetail: (String) -> Unit = {}) {
             ),
         )
     }
-    
+
     // 将商品列表按每行2个进行分组
     val rows = items.chunked(2)
-    
+
     // 使用Column+Row组合布局
     Column(
         verticalArrangement = Arrangement.spacedBy(SpaceVerticalSmall)
@@ -245,7 +241,7 @@ private fun ProductsGrid(onNavigateToGoodsDetail: (String) -> Unit = {}) {
                         }
                     }
                 }
-                
+
                 // 如果一行只有一个商品，添加空白占位
                 if (rowItems.size == 1) {
                     Spacer(modifier = Modifier.weight(1f))
