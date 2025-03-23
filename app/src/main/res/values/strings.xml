@@ -1,7 +1,3 @@
 <resources>
     <string name="app_name">CoolMallKotlin</string>
-    <string name="home">主页</string>
-    <string name="category">分类</string>
-    <string name="cart">购物车</string>
-    <string name="me">我的</string>
 </resources>

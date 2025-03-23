@@ -22,17 +22,20 @@ dependencyResolutionManagement {
 rootProject.name = "CoolMallKotlin"
 include(":app")
 
-// core 模块
+// 核心
 include(":core:common")
 include(":core:data")
-//include(":core:designsystem")
+include(":core:designsystem")
 include(":core:model")
 include(":core:network")
-//include(":core:ui")
+include(":core:ui")
+
+// 导航
+include(":navigation")
 
 // feature 模块
 // 首页
-include(":feature:mian")
+include(":feature:main")
 // 用户认证
 include(":feature:auth")
 // 公共

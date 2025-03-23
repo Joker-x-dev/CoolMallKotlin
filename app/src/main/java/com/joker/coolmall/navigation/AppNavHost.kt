@@ -7,9 +7,9 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import com.joker.coolmall.feature.goodsdetail.navigation.goodsDetailScreen
+import com.joker.coolmall.feature.goods.navigation.goodsGraph
 import com.joker.coolmall.feature.main.navigation.MAIN_ROUTE
-import com.joker.coolmall.feature.main.navigation.mainScreen
+import com.joker.coolmall.feature.main.navigation.mainGraph
 import kotlinx.coroutines.flow.collectLatest
 
 /**
@@ -32,7 +32,7 @@ fun AppNavHost(
 
     NavHost(
         navController = navController,
-        startDestination = MAIN_ROUTE,
+        startDestination = MAIN_ROUTE,  // 直接引用主页面的路由常量
         modifier = modifier,
         // 页面进入动画
         enterTransition = {
@@ -63,10 +63,8 @@ fun AppNavHost(
             )
         }
     ) {
-        // 主页面路由
-        mainScreen()
-
-        // 商品详情页面路由
-        goodsDetailScreen()
+        // 只调用模块级Graph函数，大大减少了冲突可能性
+        mainGraph(navController)
+        goodsGraph(navController)
     }
 }

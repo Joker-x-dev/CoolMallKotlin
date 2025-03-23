@@ -3,13 +3,14 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
 
+
     //依赖注入
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
 }
 
 android {
-    namespace = "com.joker.coolmall.feature.goods"
+    namespace = "com.joker.coolmall.feature.main"
     compileSdk = 35
 
     defaultConfig {
@@ -41,11 +42,13 @@ android {
         // 启用BuildConfig生成
         buildConfig = true
     }
+
 }
 
 dependencies {
-
     implementation(project(":navigation"))
+    implementation(project(":core:designsystem"))
+    implementation(project(":core:ui"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -79,4 +82,7 @@ dependencies {
     //endregion
 
 
+    // 图片加载框架
+    // https://github.com/coil-kt/coil
+    implementation(libs.coil.compose)
 }
