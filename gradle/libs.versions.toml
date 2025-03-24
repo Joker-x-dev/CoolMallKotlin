@@ -13,8 +13,10 @@ compileSdk = "35"
 minSdk = "26"
 targetSdk = "35"
 
+# 已有的插件版本可以重用
 agp = "8.9.0"
 kotlin = "2.1.10"
+
 coreKtx = "1.15.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -98,6 +100,10 @@ coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose"
 # 模块化
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+# 构建工具 - 使用已有的版本引用
+android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
+kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

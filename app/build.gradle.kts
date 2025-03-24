@@ -1,12 +1,7 @@
 plugins {
-    alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
-
-    // 序列化
+    id("com.joker.coolmall.android.application")
+    id("com.joker.coolmall.android.compose")
     alias(libs.plugins.kotlin.serialization)
-
-    //依赖注入
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
 }
@@ -41,22 +36,13 @@ android {
         create("dev") {
             dimension = "env"
             // 开发环境配置
-
-            // 本地地址 - 模拟器访问方式
             buildConfigField("String", "BASE_URL", "\"http://10.0.2.2:9900/dev/app/\"")
-            // 真机通过局域网IP访问方式
-            // buildConfigField("String", "BASE_URL", "\"http://192.168.x.x:9900/dev/app/\"")
-            // 直接使用localhost（仅适用于模拟器内网应用运行的特殊情况）
-            // buildConfigField("String", "BASE_URL", "\"http://localhost:9900/dev/app/\"")
-
             buildConfigField("Boolean", "DEBUG", "true")
         }
 
         create("prod") {
             dimension = "env"
             // 生产环境配置
-
-            // 生产环境地址
             buildConfigField("String", "BASE_URL", "\"https://api.coolmall.com/prod/app/\"")
             buildConfigField("Boolean", "DEBUG", "false")
         }
@@ -101,7 +87,6 @@ dependencies {
     // 导航
     // https://mvnrepository.com/artifact/androidx.navigation/navigation-compose
     implementation(libs.navigation.compose)
-
 
     //日志框架
     //https://github.com/JakeWharton/timber

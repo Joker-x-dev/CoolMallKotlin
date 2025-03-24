@@ -1,7 +1,6 @@
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
-    alias(libs.plugins.kotlin.compose)
+    id("com.joker.coolmall.android.library")
+    id("com.joker.coolmall.android.compose")
 }
 
 android {
