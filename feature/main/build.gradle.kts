@@ -3,7 +3,6 @@ plugins {
 }
 
 android {
-    // 明确指定命名空间，覆盖插件中的自动设置
     namespace = "com.joker.coolmall.feature.main"
 }
 
