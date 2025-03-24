@@ -1,7 +1,8 @@
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.android)
+    id("com.joker.coolmall.android.library")
 }
+
+// 如果有特定依赖，可以在这里添加
 
 android {
     namespace = "com.joker.coolmall.feature.common"

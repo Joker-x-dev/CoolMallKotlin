@@ -23,13 +23,15 @@ class AndroidFeature : Plugin<Project> {
             }
 
             dependencies {
+                // 基础依赖
                 "implementation"(project(":navigation"))
                 "implementation"(project(":core:designsystem"))
                 "implementation"(project(":core:ui"))
-
+                
+                // 导航相关
                 "implementation"(libs.findLibrary("navigation.compose").get())
 
-                // Hilt
+                // Hilt 依赖注入
                 "implementation"(libs.findLibrary("hilt.android").get())
                 "implementation"(libs.findLibrary("hilt.navigation.compose").get())
                 "ksp"(libs.findLibrary("hilt.android.compiler").get())
