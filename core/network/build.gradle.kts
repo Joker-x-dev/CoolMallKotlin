@@ -25,4 +25,12 @@ dependencies {
     // Hilt
     ksp(libs.hilt.android.compiler)
     implementation(libs.hilt.android)
+
+    // 通过OkHttp的拦截器机制
+    // 实现在应用通知栏显示网络请求功能
+    // https://github.com/ChuckerTeam/chucker
+    // debug 下的依赖
+    debugImplementation(libs.chucker)
+    // prod 下的空依赖
+    releaseImplementation(libs.chucker.no.op)
 }

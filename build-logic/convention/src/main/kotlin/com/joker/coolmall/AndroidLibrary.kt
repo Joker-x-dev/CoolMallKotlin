@@ -74,6 +74,20 @@ class AndroidLibrary : Plugin<Project> {
 
                 configureAndroid(this)
                 defaultConfig.targetSdk = libs.findVersion("targetSdk").get().toString().toInt()
+
+                flavorDimensions += listOf("env")
+                productFlavors {
+                    create("dev") {
+                        dimension = "env"
+                        buildConfigField("String", "BASE_URL", "\"http://10.0.2.2:8001/dev/app/\"")
+                        buildConfigField("Boolean", "DEBUG", "true")
+                    }
+                    create("prod") {
+                        dimension = "env"
+                        buildConfigField("String", "BASE_URL", "\"https://api.coolmall.com/prod/app/\"")
+                        buildConfigField("Boolean", "DEBUG", "false")
+                    }
+                }
             }
 
             // 配置 Kotlin 编译选项

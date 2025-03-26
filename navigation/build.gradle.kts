@@ -13,3 +13,9 @@ dependencies {
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
 }
+
+android {
+    buildFeatures {
+        buildConfig = true
+    }
+}

@@ -1,6 +1,7 @@
 package com.joker.coolmall.core.network.di
 
 import com.joker.coolmall.core.network.service.GoodsService
+import com.joker.coolmall.core.network.service.BannerService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,5 +17,11 @@ object ServiceModule {
     @Singleton
     fun provideGoodsService(retrofit: Retrofit): GoodsService {
         return retrofit.create(GoodsService::class.java)
+    }
+
+    @Provides
+    @Singleton
+    fun provideBannerService(retrofit: Retrofit): BannerService {
+        return retrofit.create(BannerService::class.java)
     }
 } 

@@ -4,6 +4,12 @@ plugins {
     alias(libs.plugins.hilt)
 }
 
+android {
+    buildFeatures {
+        buildConfig = true
+    }
+}
+
 dependencies {
     // 引入 model 模块
     implementation(project(":core:model"))

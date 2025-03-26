@@ -1,6 +1,7 @@
 package com.joker.coolmall.core.network.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
+import com.joker.coolmall.core.network.BuildConfig
 import com.joker.coolmall.core.network.interceptor.AuthInterceptor
 import dagger.Module
 import dagger.Provides
@@ -13,14 +14,17 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
+import android.content.Context
+import com.chuckerteam.chucker.api.ChuckerInterceptor
+import dagger.hilt.android.qualifiers.ApplicationContext
 
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
 
     // 使用BuildConfig中的BASE_URL替换硬编码值
-//    private val BASE_URL = BuildConfig.BASE_URL
-    private val BASE_URL = ""
+    private const val BASE_URL = BuildConfig.BASE_URL
+//    private val BASE_URL = ""
 
     // 配置Json序列化
     @Provides
@@ -36,7 +40,8 @@ object NetworkModule {
     @Singleton
     fun provideOkHttpClient(
         authInterceptor: AuthInterceptor,
-        loggingInterceptor: HttpLoggingInterceptor
+        loggingInterceptor: HttpLoggingInterceptor,
+        @ApplicationContext context: Context
     ): OkHttpClient {
         return OkHttpClient.Builder()
             .connectTimeout(10, TimeUnit.SECONDS) // 连接超时时间
@@ -44,6 +49,11 @@ object NetworkModule {
             .readTimeout(10, TimeUnit.SECONDS) // 读超时时间
             .addInterceptor(authInterceptor)
             .addInterceptor(loggingInterceptor)
+            .apply {
+                if (BuildConfig.DEBUG) {
+                    addInterceptor(ChuckerInterceptor.Builder(context).build())
+                }
+            }
             .build()
     }
 
@@ -67,7 +77,11 @@ object NetworkModule {
     @Singleton
     fun provideLoggingInterceptor(): HttpLoggingInterceptor {
         return HttpLoggingInterceptor().apply {
-            level = HttpLoggingInterceptor.Level.BODY
+            level = if (BuildConfig.DEBUG) {
+                HttpLoggingInterceptor.Level.BODY
+            } else {
+                HttpLoggingInterceptor.Level.NONE
+            }
         }
     }
-} 
+}

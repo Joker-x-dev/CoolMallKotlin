@@ -37,6 +37,7 @@ retrofit = "2.11.0"
 retrofit2KotlinxSerializationConverter = "1.0.0"
 # 网络请求框架日志框架
 loggingInterceptor = "4.12.0"
+chucker = "4.0.0"
 # 日志框架
 timber = "5.0.1"
 
@@ -104,6 +105,11 @@ material = { group = "com.google.android.material", name = "material", version.r
 # 构建工具 - 使用已有的版本引用
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+
+# 通过OkHttp的拦截器机制
+# 实现在应用通知栏显示网络请求功能
+chucker = { group = "com.github.chuckerteam.chucker", name = "library", version.ref = "chucker" }
+chucker-no-op = { group = "com.github.chuckerteam.chucker", name = "library-no-op", version.ref = "chucker" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

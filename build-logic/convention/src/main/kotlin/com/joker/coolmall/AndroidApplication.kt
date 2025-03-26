@@ -76,6 +76,16 @@ class AndroidApplication : Plugin<Project> {
                     // 目标字节码兼容性级别设置为Java 11
                     targetCompatibility = JavaVersion.VERSION_11
                 }
+
+                flavorDimensions += listOf("env")
+                productFlavors {
+                    create("dev") {
+                        dimension = "env"
+                    }
+                    create("prod") {
+                        dimension = "env"
+                    }
+                }
             }
         }
     }

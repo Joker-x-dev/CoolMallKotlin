@@ -5,6 +5,10 @@ plugins {
 
 android {
     namespace = "com.joker.coolmall.core.ui"
+
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {
