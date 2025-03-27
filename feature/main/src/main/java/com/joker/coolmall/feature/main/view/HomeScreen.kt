@@ -26,6 +26,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -35,6 +36,7 @@ import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -55,8 +57,10 @@ import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
+import com.joker.coolmall.core.ui.component.loading.PageLoading
 import com.joker.coolmall.core.ui.component.swiper.WeSwiper
 import com.joker.coolmall.feature.main.R
+import com.joker.coolmall.feature.main.state.HomeUiState
 import com.joker.coolmall.feature.main.viewmodel.HomeViewModel
 
 /**
@@ -66,8 +70,11 @@ import com.joker.coolmall.feature.main.viewmodel.HomeViewModel
 internal fun HomeRoute(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
+    val uiState by viewModel.uiState.collectAsState()
     HomeScreen(
-        onNavigateToGoodsDetail = viewModel::navigateToGoodsDetail
+        uiState = uiState,
+        onNavigateToGoodsDetail = viewModel::navigateToGoodsDetail,
+        onRetry = viewModel::getHomeData
     )
 }
 
@@ -77,7 +84,9 @@ internal fun HomeRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun HomeScreen(
-    onNavigateToGoodsDetail: (String) -> Unit = {}
+    uiState: HomeUiState = HomeUiState.Loading,
+    onNavigateToGoodsDetail: (String) -> Unit = {},
+    onRetry: () -> Unit = {}
 ) {
     Scaffold(
         topBar = {
@@ -98,40 +107,68 @@ internal fun HomeScreen(
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            // 所有内容放在一个垂直滚动的Column中
-            Column(
-                modifier = Modifier
-                    .verticalScroll(scrollState)
-                    .padding(SpaceHorizontalLarge)
-            ) {
+            when (uiState) {
+                is HomeUiState.Loading -> PageLoading()
+                is HomeUiState.Error -> {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = uiState.message,
+                                style = MaterialTheme.typography.titleLarge
+                            )
+                            Spacer(modifier = Modifier.height(SpaceVerticalLarge))
+                            Button(
+                                onClick = onRetry
+                            ) {
+                                Text(text = "重试")
+                            }
+                        }
+                    }
+                }
 
-                // 轮播图
-                Banner()
+                is HomeUiState.Success -> {
+                    // 所有内容放在一个垂直滚动的Column中
+                    Column(
+                        modifier = Modifier
+                            .verticalScroll(scrollState)
+                            .padding(SpaceHorizontalLarge)
+                    ) {
 
-                Spacer(modifier = Modifier.height(SpaceVerticalLarge))
+                        // 轮播图
+                        Banner()
 
-                // 分类
-                Category()
+                        Spacer(modifier = Modifier.height(SpaceVerticalLarge))
 
-                Spacer(modifier = Modifier.height(SpaceVerticalLarge))
+                        // 分类
+                        Category()
 
-                // 限时精选
-                FlashSale()
+                        Spacer(modifier = Modifier.height(SpaceVerticalLarge))
 
-                Spacer(modifier = Modifier.height(SpaceVerticalLarge))
+                        // 限时精选
+                        FlashSale()
 
-                // 推荐商品标题
-                Text(
-                    text = "推荐商品",
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.padding(vertical = SpaceVerticalSmall)
-                )
+                        Spacer(modifier = Modifier.height(SpaceVerticalLarge))
 
-                // 商品列表 - 使用Row+Column布局
-                ProductsGrid(onNavigateToGoodsDetail = onNavigateToGoodsDetail)
+                        // 推荐商品标题
+                        Text(
+                            text = "推荐商品",
+                            style = MaterialTheme.typography.titleLarge,
+                            modifier = Modifier.padding(vertical = SpaceVerticalSmall)
+                        )
 
+                        // 商品列表 - 使用Row+Column布局
+                        ProductsGrid(onNavigateToGoodsDetail = onNavigateToGoodsDetail)
+
+                    }
+                }
             }
         }
+
     }
 }
 

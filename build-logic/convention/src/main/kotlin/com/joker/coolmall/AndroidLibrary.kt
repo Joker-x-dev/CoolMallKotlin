@@ -79,7 +79,7 @@ class AndroidLibrary : Plugin<Project> {
                 productFlavors {
                     create("dev") {
                         dimension = "env"
-                        buildConfigField("String", "BASE_URL", "\"http://10.0.2.2:8001/dev/app/\"")
+                        buildConfigField("String", "BASE_URL", "\"http://10.0.2.2:8001/app/\"")
                         buildConfigField("Boolean", "DEBUG", "true")
                     }
                     create("prod") {

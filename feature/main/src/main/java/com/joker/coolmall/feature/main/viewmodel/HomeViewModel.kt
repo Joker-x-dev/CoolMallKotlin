@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.result.Result
 import com.joker.coolmall.core.common.result.asResult
-import com.joker.coolmall.core.data.repository.BannerRepository
-import com.joker.coolmall.core.model.Banner
+import com.joker.coolmall.core.data.repository.PageRepository
+import com.joker.coolmall.feature.main.state.HomeUiState
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.GoodsRoutes
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,14 +22,14 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     private val navigator: AppNavigator,
-    private var bannerRepository: BannerRepository
+    private var pageRepository: PageRepository
 ) : ViewModel() {
 
-    private val _datum = MutableStateFlow<List<Banner>>(emptyList())
-    val datum: StateFlow<List<Banner>> = _datum
+    private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
+    val uiState: StateFlow<HomeUiState> = _uiState
 
     init {
-        getBannerList()
+        getHomeData()
     }
 
     /**
@@ -42,25 +42,33 @@ class HomeViewModel @Inject constructor(
     }
 
     /**
-     * 获取轮播图列表
+     * 获取首页数据
      */
-    fun getBannerList() {
+    fun getHomeData() {
         viewModelScope.launch {
-            bannerRepository.getBannerList()
+            pageRepository.getHomeData()
                 .asResult()
                 .collectLatest { result ->
                     when (result) {
                         is Result.Loading -> {
+                            _uiState.value = HomeUiState.Loading
                         }
 
                         is Result.Success -> {
-                            val bannerList = result.data.data?.list
-                            Timber.d("Banner list data: $bannerList")
-                            _datum.value = bannerList ?: emptyList()
+                            if (result.data.isSucceeded && result.data.data != null) {
+                                val homeData = result.data
+                                Timber.d("Home data: $homeData")
+                                _uiState.value = HomeUiState.Success(homeData.data!!)
+                            } else {
+                                _uiState.value =
+                                    HomeUiState.Error(result.data.message ?: "Unknown error")
+                            }
                         }
 
                         is Result.Error -> {
                             Timber.e(result.exception)
+                            _uiState.value =
+                                HomeUiState.Error(result.exception.message ?: "Unknown error")
                         }
                     }
                 }
