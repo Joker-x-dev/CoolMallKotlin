@@ -7,33 +7,74 @@ import kotlinx.serialization.Serializable
  */
 @Serializable
 data class Goods(
+
     /**
-     * 商品ID
+     * ID
      */
-    val id: String = "",
-    
+    val id: Long = 0,
+
     /**
-     * 商品名称
+     * 类型ID
      */
-    val name: String = "",
-    
+    val typeId: Int = 0,
+
     /**
-     * 商品价格
+     * 标题
      */
-    val price: Double = 0.0,
-    
+    val title: String = "",
+
     /**
-     * 商品图片
+     * 副标题
      */
-    val image: String = "",
-    
+    val subTitle: String? = null,
+
     /**
-     * 商品描述
+     * 主图
      */
-    val description: String = "",
-    
+    val mainPic: String = "",
+
     /**
-     * 商品库存
+     * 图片
      */
-    val stock: Int = 0
+    val pics: List<String>? = null,
+
+    /**
+     * 价格
+     */
+    val price: Int = 0,
+
+    /**
+     * 已售
+     */
+    val sold: Int = 0,
+
+    /**
+     * 详情
+     */
+    val content: String? = null,
+
+    /**
+     * 状态 0-下架 1-上架
+     */
+    val status: Int = 0,
+
+    /**
+     * 排序
+     */
+    val sortNum: Int = 0,
+
+    /**
+     * 规格
+     */
+    val specs: List<GoodsSpec>? = null,
+
+    /**
+     * 创建时间
+     */
+    val createTime: String? = null,
+
+    /**
+     * 更新时间
+     */
+    val updateTime: String? = null
 )

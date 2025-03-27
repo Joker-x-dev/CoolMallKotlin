@@ -3,30 +3,24 @@ package com.joker.coolmall.core.model
 import kotlinx.serialization.Serializable
 
 /**
- * 轮播图模型
+ * 商品类型
  */
 @Serializable
-data class Banner(
-
+data class Category(
     /**
      * ID
      */
     val id: Long = 0,
 
     /**
-     * 描述
+     * 名称
      */
-    val description: String = "",
+    val name: String = "",
 
     /**
-     * 跳转路径
+     * 父ID
      */
-    val path: String = "",
-
-    /**
-     * 图片
-     */
-    val pic: String = "",
+    val parentId: Int? = null,
 
     /**
      * 排序
@@ -34,7 +28,12 @@ data class Banner(
     val sortNum: Int = 0,
 
     /**
-     * 状态 1:启用 2:禁用
+     * 图片
+     */
+    val pic: String? = null,
+
+    /**
+     * 状态 0-禁用 1-启用
      */
     val status: Int = 1,
 
