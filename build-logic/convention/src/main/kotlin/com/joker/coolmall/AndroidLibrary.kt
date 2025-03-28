@@ -79,12 +79,13 @@ class AndroidLibrary : Plugin<Project> {
                 productFlavors {
                     create("dev") {
                         dimension = "env"
-                        buildConfigField("String", "BASE_URL", "\"http://10.0.2.2:8001/app/\"")
+                        // 开发环境地址跟生产环境的地址暂时一样
+                        buildConfigField("String", "BASE_URL", "\"https://mall.dusksnow.top/app/\"")
                         buildConfigField("Boolean", "DEBUG", "true")
                     }
                     create("prod") {
                         dimension = "env"
-                        buildConfigField("String", "BASE_URL", "\"https://api.coolmall.com/prod/app/\"")
+                        buildConfigField("String", "BASE_URL", "\"https://mall.dusksnow.top/app/\"")
                         buildConfigField("Boolean", "DEBUG", "false")
                     }
                 }
