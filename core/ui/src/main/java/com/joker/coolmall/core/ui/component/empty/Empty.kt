@@ -2,7 +2,6 @@ package com.joker.coolmall.core.ui.component.empty
 
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingLarge
+import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXLarge
 import com.joker.coolmall.core.designsystem.theme.appTextColors
 import com.joker.coolmall.core.ui.R
@@ -42,9 +42,6 @@ fun Empty(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .fillMaxSize()
-            .clickable {
-                onRetryClick()
-            }
             .padding(SpacePaddingLarge)
     ) {
         Image(
@@ -61,6 +58,7 @@ fun Empty(
         )
 
         subtitle?.let {
+            SpaceVerticalSmall()
             Text(
                 text = stringResource(id = it),
                 style = MaterialTheme.typography.bodyMedium,
