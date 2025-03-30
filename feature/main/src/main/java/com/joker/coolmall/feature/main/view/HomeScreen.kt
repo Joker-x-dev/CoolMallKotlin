@@ -22,11 +22,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -45,8 +45,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
+import com.joker.coolmall.core.designsystem.theme.LogoIcon
 import com.joker.coolmall.core.designsystem.theme.ShapeMedium
-import com.joker.coolmall.core.designsystem.theme.ShapeSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
@@ -112,71 +112,6 @@ internal fun HomeScreen(
                 }
             }
         }
-    )
-}
-
-/**
- * 首页顶部导航栏
- */
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-private fun HomeTopAppBar() {
-    TopAppBar(
-        navigationIcon = {
-            Icon(
-                imageVector = Icons.Default.Menu,
-                contentDescription = "Logo",
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .size(24.dp)
-            )
-        },
-        title = {
-            // 中间搜索框
-            Card(
-                shape = ShapeMedium,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(38.dp)
-                    .clip(ShapeMedium)
-                    .clickable { }
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .padding(horizontal = 12.dp),
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.Center
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = "搜索",
-                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-                        modifier = Modifier.size(18.dp)
-                    )
-
-                    Text(
-                        text = "搜索商品",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-                        modifier = Modifier.padding(start = 8.dp)
-                    )
-                }
-            }
-        },
-        actions = {
-            Icon(
-                imageVector = Icons.Default.Menu,
-                contentDescription = "聊天",
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .size(24.dp)
-                    .clickable { }
-            )
-        },
-        colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.background
-        )
     )
 }
 
@@ -416,6 +351,71 @@ private fun FlashSale(goods: List<Goods>, toGoodsDetail: (Long) -> Unit) {
             }
         }
     }
+}
+
+/**
+ * 首页顶部导航栏
+ */
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun HomeTopAppBar() {
+    TopAppBar(
+        navigationIcon = {
+            LogoIcon(
+                modifier = Modifier.padding(horizontal = 8.dp),
+                size = 34.dp
+            )
+        },
+        title = {
+            // 中间搜索框
+            Card(
+                shape = ShapeMedium,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(38.dp)
+                    .clip(ShapeMedium)
+                    .clickable { }
+            ) {
+                Row(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(horizontal = 12.dp),
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.Search,
+                        contentDescription = "搜索",
+                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                        modifier = Modifier.size(18.dp)
+                    )
+
+                    Text(
+                        text = "搜索商品",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
+                        modifier = Modifier.padding(start = 8.dp)
+                    )
+                }
+            }
+        },
+        actions = {
+            IconButton(
+                onClick = { },
+                modifier = Modifier
+                    .padding(horizontal = 8.dp)
+                    .size(27.dp)
+            ) {
+                Icon(
+                    painter = painterResource(id = R.drawable.ic_github),
+                    contentDescription = null,
+                )
+            }
+        },
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = MaterialTheme.colorScheme.background
+        )
+    )
 }
 
 @Preview(showBackground = true)
