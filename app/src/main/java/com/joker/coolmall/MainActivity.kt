@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.navigation.AppNavHost
 import com.joker.coolmall.navigation.AppNavigator
@@ -21,6 +22,8 @@ class MainActivity : ComponentActivity() {
     lateinit var navigator: AppNavigator
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        // 启动页
+        val splashScreen = installSplashScreen()
         super.onCreate(savedInstanceState)
         // 启用边缘到边缘的显示效果
         enableEdgeToEdge()
@@ -32,6 +35,11 @@ class MainActivity : ComponentActivity() {
                 // 这样所有页面都可以通过导航管理器进行导航操作
                 AppNavHost(navigator = navigator)
             }
+        }
+
+        // 不让启动界面一直显示
+        splashScreen.setKeepOnScreenCondition {
+            false
         }
     }
 }

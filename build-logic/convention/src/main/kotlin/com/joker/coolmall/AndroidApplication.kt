@@ -8,19 +8,19 @@ import org.gradle.kotlin.dsl.configure
 
 /**
  * Android应用级构建插件
- * 
+ *
  * 该插件用于配置Android应用模块的基本构建设置，包括：
  * - 应用ID和版本信息
  * - SDK版本配置
  * - Java编译选项
  * - 构建类型配置
- * 
+ *
  * 主要通过扩展Android Gradle Plugin的ApplicationExtension来实现配置
  */
 class AndroidApplication : Plugin<Project> {
     /**
      * 插件应用入口
-     * 
+     *
      * @param target 目标项目实例
      */
     override fun apply(target: Project) {
@@ -60,7 +60,9 @@ class AndroidApplication : Plugin<Project> {
                     // 发布构建配置
                     release {
                         // 是否启用代码压缩
-                        isMinifyEnabled = false
+                        isMinifyEnabled = true
+                        // 资源压缩
+                        isShrinkResources = true
                         // 配置ProGuard规则文件
                         proguardFiles(
                             getDefaultProguardFile("proguard-android-optimize.txt"), // 默认的Android优化规则

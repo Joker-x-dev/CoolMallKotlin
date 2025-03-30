@@ -6,6 +6,12 @@ plugins {
 }
 
 android {
+    defaultConfig {
+        ndk {
+            abiFilters += listOf("arm64-v8a")
+        }
+    }
+
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
@@ -31,4 +37,7 @@ dependencies {
     //endregion
 
     compileOnly(libs.ksp.gradlePlugin)
+
+    // 启动页
+    implementation(libs.androidx.core.splashscreen)
 }

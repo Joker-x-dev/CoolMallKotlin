@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.CoolMallKotlin" parent="android:Theme.Material.Light.NoActionBar">
+        <!--启动界面背景颜色-->
+        <item name="android:windowSplashScreenBackground">@color/splash_dark</item>
+        <!--启动页图标-->
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_launcher_foreground</item>
+    </style>
+</resources>
