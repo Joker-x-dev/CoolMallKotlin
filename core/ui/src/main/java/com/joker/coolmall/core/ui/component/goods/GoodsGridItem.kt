@@ -56,7 +56,7 @@ fun GoodsGridItem(
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis
             )
-            if (goods.subTitle.isNullOrEmpty()) {
+            if (!goods.subTitle.isNullOrEmpty()) {
                 Text(
                     text = goods.subTitle!!,
                     style = MaterialTheme.typography.bodySmall,
