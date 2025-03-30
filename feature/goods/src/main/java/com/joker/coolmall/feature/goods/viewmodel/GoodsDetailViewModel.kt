@@ -23,7 +23,7 @@ class GoodsDetailViewModel @Inject constructor(
 ) : ViewModel() {
 
     // 从SavedStateHandle获取路由参数
-    private val goodsId: String = checkNotNull(savedStateHandle[GoodsDetailRoutes.GOODS_ID_ARG])
+    private val goodsId: Long = checkNotNull(savedStateHandle[GoodsDetailRoutes.GOODS_ID_ARG])
 
     // 商品详情状态
     private val _uiState = MutableStateFlow(GoodsDetailUiState())
@@ -41,7 +41,7 @@ class GoodsDetailViewModel @Inject constructor(
         // 更新UI状态中的商品ID
         _uiState.value = GoodsDetailUiState(
             isLoading = true,
-            goodsId = goodsId
+            goodsId = goodsId.toString()
         )
 
         // 这里应该有获取商品详情的网络请求
@@ -53,7 +53,7 @@ class GoodsDetailViewModel @Inject constructor(
             // 更新UI状态
             _uiState.value = GoodsDetailUiState(
                 isLoading = false,
-                goodsId = goodsId,
+                goodsId = goodsId.toString(),
                 goodsName = "商品 $goodsId",
                 goodsPrice = "¥99.99"
                 // 可以添加更多商品信息

@@ -16,7 +16,7 @@ data class Goods(
     /**
      * 类型ID
      */
-    val typeId: Int = 0,
+    val typeId: Long = 0,
 
     /**
      * 标题

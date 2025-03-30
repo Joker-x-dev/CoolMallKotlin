@@ -31,10 +31,10 @@ import com.joker.coolmall.core.model.Goods
 fun GoodsGridItem(
     modifier: Modifier = Modifier,
     goods: Goods,
-    onClick: (String) -> Unit = {},
+    onClick: (Long) -> Unit = {},
 ) {
     Card(
-        onClick = { onClick(goods.title) },
+        onClick = { onClick(goods.id) },
         modifier = modifier
     ) {
         Column(

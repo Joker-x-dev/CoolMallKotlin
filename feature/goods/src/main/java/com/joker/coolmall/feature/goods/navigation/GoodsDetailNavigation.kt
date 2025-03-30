@@ -26,7 +26,7 @@ fun NavGraphBuilder.goodsDetailScreen() {
     composable(
         route = GoodsDetailRoutes.GOODS_DETAIL_PATTERN,
         arguments = listOf(navArgument(GoodsDetailRoutes.GOODS_ID_ARG) {
-            type = NavType.StringType
+            type = NavType.LongType
         })
     ) { backStackEntry ->
         GoodsDetailRoute()

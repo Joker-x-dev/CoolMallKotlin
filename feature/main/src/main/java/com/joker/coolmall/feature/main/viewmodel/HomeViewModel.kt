@@ -38,7 +38,7 @@ class HomeViewModel @Inject constructor(
     /**
      * 导航到商品详情页
      */
-    fun navigateToGoodsDetail(goodsId: String) {
+    fun toGoodsDetail(goodsId: Long) {
         viewModelScope.launch {
             navigator.navigateTo("${GoodsRoutes.DETAIL}/$goodsId")
         }

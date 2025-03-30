@@ -19,16 +19,19 @@ import com.joker.coolmall.core.designsystem.theme.ColorDanger
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.model.Goods
 
+/**
+ * 限时精选卡片项
+ */
 @Composable
 fun FlashSaleItem(
     goods: Goods,
     modifier: Modifier = Modifier,
-    onClick: (String) -> Unit = {}
+    onClick: (Long) -> Unit = {}
 ) {
     Column(
         modifier = modifier
             .width(120.dp)
-            .clickable(onClick = { onClick(goods.title) })
+            .clickable(onClick = { onClick(goods.id) })
     ) {
         AsyncImage(
             model = goods.mainPic,

@@ -54,6 +54,7 @@ import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.model.Banner
 import com.joker.coolmall.core.model.Category
 import com.joker.coolmall.core.model.Goods
+import com.joker.coolmall.core.model.Home
 import com.joker.coolmall.core.ui.component.empty.EmptyNetwork
 import com.joker.coolmall.core.ui.component.goods.GoodsGridItem
 import com.joker.coolmall.core.ui.component.loading.PageLoading
@@ -74,7 +75,7 @@ internal fun HomeRoute(
     val uiState by viewModel.uiState.collectAsState()
     HomeScreen(
         uiState = uiState,
-        onNavigateToGoodsDetail = viewModel::navigateToGoodsDetail,
+        toGoodsDetail = viewModel::toGoodsDetail,
         onRetry = viewModel::getHomeData
     )
 }
@@ -86,7 +87,7 @@ internal fun HomeRoute(
 @Composable
 internal fun HomeScreen(
     uiState: HomeUiState = HomeUiState.Loading,
-    onNavigateToGoodsDetail: (String) -> Unit = {},
+    toGoodsDetail: (Long) -> Unit = {},
     onRetry: () -> Unit = {}
 ) {
     Scaffold(
@@ -99,10 +100,6 @@ internal fun HomeScreen(
             .exclude(WindowInsets.navigationBars)
 
     ) { paddingValues ->
-
-        // 创建一个主垂直滚动容器
-        val scrollState = rememberScrollState()
-
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -111,53 +108,62 @@ internal fun HomeScreen(
             when (uiState) {
                 is HomeUiState.Loading -> PageLoading()
                 is HomeUiState.Error -> EmptyNetwork(onRetryClick = onRetry)
-                is HomeUiState.Success -> {
-                    // 所有内容放在一个垂直滚动的Column中
-                    Column(
-                        modifier = Modifier
-                            .verticalScroll(scrollState)
-                            .padding(SpaceHorizontalLarge)
-                    ) {
-
-                        // 轮播图
-                        uiState.data.banner.let {
-                            Banner(it!!)
-                            SpaceVerticalLarge()
-                        }
-
-                        // 分类
-                        uiState.data.category.let {
-                            Category(it!!)
-                            SpaceVerticalLarge()
-                        }
-
-                        // 限时精选
-                        uiState.data.flashSale.let {
-                            FlashSale(
-                                goods = it!!,
-                                onNavigateToGoodsDetail = onNavigateToGoodsDetail
-                            )
-                            SpaceVerticalLarge()
-                        }
-
-                        // 推荐商品标题和列表
-                        uiState.data.goods.let {
-                            TitleWithLine(
-                                text = "推荐商品",
-                                modifier = Modifier.padding(vertical = SpaceVerticalSmall)
-                            )
-                            // 商品列表 - 使用Row+Column布局
-                            ProductsGrid(
-                                goods = it!!,
-                                onNavigateToGoodsDetail = onNavigateToGoodsDetail
-                            )
-                        }
-
-                    }
-                }
+                is HomeUiState.Success -> HomeContentView(
+                    data = uiState.data,
+                    toGoodsDetail = toGoodsDetail
+                )
             }
         }
+    }
+}
 
+/**
+ * 主页内容
+ */
+@Composable
+private fun HomeContentView(data: Home, toGoodsDetail: (Long) -> Unit) {
+    // 创建一个主垂直滚动容器
+    val scrollState = rememberScrollState()
+    // 所有内容放在一个垂直滚动的Column中
+    Column(
+        modifier = Modifier
+            .verticalScroll(scrollState)
+            .padding(SpaceHorizontalLarge)
+    ) {
+
+        // 轮播图
+        data.banner.let {
+            Banner(it!!)
+            SpaceVerticalLarge()
+        }
+
+        // 分类
+        data.category.let {
+            Category(it!!)
+            SpaceVerticalLarge()
+        }
+
+        // 限时精选
+        data.flashSale.let {
+            FlashSale(
+                goods = it!!,
+                toGoodsDetail = toGoodsDetail
+            )
+            SpaceVerticalLarge()
+        }
+
+        // 推荐商品标题和列表
+        data.goods.let {
+            TitleWithLine(
+                text = "推荐商品",
+                modifier = Modifier.padding(vertical = SpaceVerticalSmall)
+            )
+            // 商品列表 - 使用Row+Column布局
+            ProductsGrid(
+                goods = it!!,
+                toGoodsDetail = toGoodsDetail
+            )
+        }
     }
 }
 
@@ -165,7 +171,7 @@ internal fun HomeScreen(
  * 商品网格实现
  */
 @Composable
-private fun ProductsGrid(goods: List<Goods>, onNavigateToGoodsDetail: (String) -> Unit) {
+private fun ProductsGrid(goods: List<Goods>, toGoodsDetail: (Long) -> Unit) {
     // 将商品列表按每行2个进行分组
     val rows = goods.chunked(2)
 
@@ -181,7 +187,7 @@ private fun ProductsGrid(goods: List<Goods>, onNavigateToGoodsDetail: (String) -
                 rowItems.forEach { goods ->
                     GoodsGridItem(
                         goods = goods,
-                        onClick = onNavigateToGoodsDetail,
+                        onClick = toGoodsDetail,
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -295,7 +301,7 @@ private fun CategoryItem(category: Category, modifier: Modifier = Modifier) {
  * 限时精选卡片 - 使用LazyRow
  */
 @Composable
-private fun FlashSale(goods: List<Goods>, onNavigateToGoodsDetail: (String) -> Unit) {
+private fun FlashSale(goods: List<Goods>, toGoodsDetail: (Long) -> Unit) {
     Card {
         Column(
             modifier = Modifier
@@ -342,7 +348,7 @@ private fun FlashSale(goods: List<Goods>, onNavigateToGoodsDetail: (String) -> U
             ) {
                 items(goods.size) { index ->
                     val goods = goods[index]
-                    FlashSaleItem(goods = goods, onClick = onNavigateToGoodsDetail)
+                    FlashSaleItem(goods = goods, onClick = toGoodsDetail)
                 }
             }
         }
