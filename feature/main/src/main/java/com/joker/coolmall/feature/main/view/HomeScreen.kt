@@ -15,7 +15,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
@@ -42,12 +41,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
-import com.joker.coolmall.core.designsystem.theme.ColorDanger
 import com.joker.coolmall.core.designsystem.theme.ShapeMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
@@ -63,6 +60,7 @@ import com.joker.coolmall.core.ui.component.loading.PageLoading
 import com.joker.coolmall.core.ui.component.swiper.WeSwiper
 import com.joker.coolmall.core.ui.component.title.TitleWithLine
 import com.joker.coolmall.feature.main.R
+import com.joker.coolmall.feature.main.component.FlashSaleItem
 import com.joker.coolmall.feature.main.state.HomeUiState
 import com.joker.coolmall.feature.main.viewmodel.HomeViewModel
 
@@ -135,7 +133,10 @@ internal fun HomeScreen(
 
                         // 限时精选
                         uiState.data.flashSale.let {
-                            FlashSale(it!!)
+                            FlashSale(
+                                goods = it!!,
+                                onNavigateToGoodsDetail = onNavigateToGoodsDetail
+                            )
                             SpaceVerticalLarge()
                         }
 
@@ -164,7 +165,7 @@ internal fun HomeScreen(
  * 商品网格实现
  */
 @Composable
-private fun ProductsGrid(goods: List<Goods>, onNavigateToGoodsDetail: (String) -> Unit = {}) {
+private fun ProductsGrid(goods: List<Goods>, onNavigateToGoodsDetail: (String) -> Unit) {
     // 将商品列表按每行2个进行分组
     val rows = goods.chunked(2)
 
@@ -294,7 +295,7 @@ private fun CategoryItem(category: Category, modifier: Modifier = Modifier) {
  * 限时精选卡片 - 使用LazyRow
  */
 @Composable
-private fun FlashSale(goods: List<Goods>) {
+private fun FlashSale(goods: List<Goods>, onNavigateToGoodsDetail: (String) -> Unit) {
     Card {
         Column(
             modifier = Modifier
@@ -341,32 +342,7 @@ private fun FlashSale(goods: List<Goods>) {
             ) {
                 items(goods.size) { index ->
                     val goods = goods[index]
-                    Column(
-                        modifier = Modifier.width(120.dp)
-                    ) {
-                        AsyncImage(
-                            model = goods.mainPic,
-                            contentDescription = null,
-                            contentScale = ContentScale.Crop,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .aspectRatio(1f)
-                                .clip(RoundedCornerShape(6.dp))
-                        )
-                        SpaceVerticalXSmall()
-                        Text(
-                            text = goods.title,
-                            style = MaterialTheme.typography.bodyMedium,
-                            maxLines = 1,
-                            overflow = TextOverflow.Ellipsis
-                        )
-                        SpaceVerticalXSmall()
-                        Text(
-                            text = "¥${goods.price}",
-                            style = MaterialTheme.typography.titleMedium,
-                            color = ColorDanger
-                        )
-                    }
+                    FlashSaleItem(goods = goods, onClick = onNavigateToGoodsDetail)
                 }
             }
         }
