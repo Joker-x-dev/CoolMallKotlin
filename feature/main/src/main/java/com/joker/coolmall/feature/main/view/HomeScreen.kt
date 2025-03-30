@@ -7,12 +7,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
@@ -27,10 +24,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.ScaffoldDefaults
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -55,12 +49,14 @@ import com.joker.coolmall.core.model.Banner
 import com.joker.coolmall.core.model.Category
 import com.joker.coolmall.core.model.Goods
 import com.joker.coolmall.core.model.Home
+import com.joker.coolmall.core.ui.component.appbar.CenterTopAppBar
 import com.joker.coolmall.core.ui.component.empty.EmptyNetwork
 import com.joker.coolmall.core.ui.component.goods.GoodsGridItem
 import com.joker.coolmall.core.ui.component.loading.PageLoading
 import com.joker.coolmall.core.ui.component.swiper.WeSwiper
 import com.joker.coolmall.core.ui.component.title.TitleWithLine
 import com.joker.coolmall.feature.main.R
+import com.joker.coolmall.feature.main.component.CommonScaffold
 import com.joker.coolmall.feature.main.component.FlashSaleItem
 import com.joker.coolmall.feature.main.state.HomeUiState
 import com.joker.coolmall.feature.main.viewmodel.HomeViewModel
@@ -90,31 +86,27 @@ internal fun HomeScreen(
     toGoodsDetail: (Long) -> Unit = {},
     onRetry: () -> Unit = {}
 ) {
-    Scaffold(
+    CommonScaffold(
         topBar = {
-            TopAppBar(title = { Text("主页") })
+            CenterTopAppBar(R.string.home, showBackIcon = false)
         },
-        //排除底部导航栏边距
-        contentWindowInsets = ScaffoldDefaults
-            .contentWindowInsets
-            .exclude(WindowInsets.navigationBars)
-
-    ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-        ) {
-            when (uiState) {
-                is HomeUiState.Loading -> PageLoading()
-                is HomeUiState.Error -> EmptyNetwork(onRetryClick = onRetry)
-                is HomeUiState.Success -> HomeContentView(
-                    data = uiState.data,
-                    toGoodsDetail = toGoodsDetail
-                )
+        content = {
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(it)
+            ) {
+                when (uiState) {
+                    is HomeUiState.Loading -> PageLoading()
+                    is HomeUiState.Error -> EmptyNetwork(onRetryClick = onRetry)
+                    is HomeUiState.Success -> HomeContentView(
+                        data = uiState.data,
+                        toGoodsDetail = toGoodsDetail
+                    )
+                }
             }
         }
-    }
+    )
 }
 
 /**
