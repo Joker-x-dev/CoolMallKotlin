@@ -13,4 +13,8 @@ android {
 
 dependencies {
     implementation(project(":core:designsystem"))
+    implementation(project(":core:model"))
+
+    // 图片加载框架
+    implementation(libs.coil.compose)
 }

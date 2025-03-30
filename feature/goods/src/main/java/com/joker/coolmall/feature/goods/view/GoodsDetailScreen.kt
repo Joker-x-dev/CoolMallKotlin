@@ -26,6 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.joker.coolmall.core.ui.component.loading.PageLoading
 import com.joker.coolmall.feature.goods.viewmodel.GoodsDetailUiState
 import com.joker.coolmall.feature.goods.viewmodel.GoodsDetailViewModel
 
@@ -79,7 +80,7 @@ internal fun GoodsDetailScreen(
         ) {
             if (uiState.isLoading) {
                 // 显示加载中状态
-                CircularProgressIndicator()
+                PageLoading()
             } else if (uiState.error != null) {
                 // 显示错误状态
                 Text(

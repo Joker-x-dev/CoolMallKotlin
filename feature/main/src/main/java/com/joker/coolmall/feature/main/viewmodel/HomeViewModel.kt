@@ -25,6 +25,9 @@ class HomeViewModel @Inject constructor(
     private var pageRepository: PageRepository
 ) : ViewModel() {
 
+    /**
+     * 首页UI状态
+     */
     private val _uiState = MutableStateFlow<HomeUiState>(HomeUiState.Loading)
     val uiState: StateFlow<HomeUiState> = _uiState
 
