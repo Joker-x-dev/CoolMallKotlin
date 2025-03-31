@@ -11,4 +11,6 @@ android {
 }
 
 dependencies {
+    // 吐司框架：https://github.com/getActivity/Toaster
+    implementation(libs.toaster)
 }

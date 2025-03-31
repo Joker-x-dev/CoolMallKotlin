@@ -56,6 +56,9 @@ material = "1.10.0"
 # 启动页
 androidxCoreSplashscreen = "1.0.1"
 
+# Toast框架
+toaster = "12.8"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -117,6 +120,9 @@ chucker-no-op = { group = "com.github.chuckerteam.chucker", name = "library-no-o
 
 # 启动页
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "androidxCoreSplashscreen" }
+
+# Toast框架
+toaster = { group = "com.github.getActivity", name = "Toaster", version.ref = "toaster" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

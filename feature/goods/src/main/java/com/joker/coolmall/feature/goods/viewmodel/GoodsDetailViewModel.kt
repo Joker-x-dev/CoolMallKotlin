@@ -3,8 +3,10 @@ package com.joker.coolmall.feature.goods.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hjq.toast.Toaster
 import com.joker.coolmall.feature.goods.navigation.GoodsDetailRoutes
 import com.joker.coolmall.navigation.AppNavigator
+import com.joker.coolmall.feature.goods.R
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -30,6 +32,7 @@ class GoodsDetailViewModel @Inject constructor(
     val uiState: StateFlow<GoodsDetailUiState> = _uiState.asStateFlow()
 
     init {
+        Toaster.show(com.joker.coolmall.core.ui.R.string.empty_cart)
         // 初始化时加载商品数据
         loadGoodsDetails()
     }
