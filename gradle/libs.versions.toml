@@ -14,7 +14,7 @@ minSdk = "26"
 targetSdk = "35"
 
 # 已有的插件版本可以重用
-agp = "8.9.0"
+agp = "8.9.1"
 kotlin = "2.1.10"
 
 coreKtx = "1.15.0"
@@ -50,7 +50,7 @@ ksp = "2.1.10-1.0.31"
 coilCompose = "2.7.0"
 
 # 模块化
-appcompat = "1.6.1"
+appcompat = "1.7.0"
 material = "1.10.0"
 
 # 启动页

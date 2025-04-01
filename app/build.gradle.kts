@@ -20,6 +20,7 @@ android {
 dependencies {
     implementation(project(":navigation"))
     implementation(project(":core:designsystem"))
+    implementation(project(":core:util"))
     implementation(project(":feature:main"))
     implementation(project(":feature:goods"))
 
@@ -41,6 +42,4 @@ dependencies {
     // 启动页
     implementation(libs.androidx.core.splashscreen)
 
-    // 吐司框架：https://github.com/getActivity/Toaster
-    implementation(libs.toaster)
 }

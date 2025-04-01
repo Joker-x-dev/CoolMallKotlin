@@ -44,6 +44,7 @@ include(":core:designsystem")
 include(":core:model")
 include(":core:network")
 include(":core:ui")
+include(":core:util")
 
 // 导航模块
 include(":navigation")
@@ -65,3 +66,4 @@ include(":feature:market")
 include(":feature:order")
 // 用户模块
 include(":feature:user")
+

@@ -1,8 +1,9 @@
 package com.joker.coolmall
 
 import android.app.Application
-import com.hjq.toast.Toaster
+import android.content.res.Configuration
 import com.joker.coolmall.core.designsystem.BuildConfig
+import com.joker.coolmall.core.util.toast.ToastUtils
 import dagger.hilt.android.HiltAndroidApp
 import timber.log.Timber
 
@@ -22,7 +23,12 @@ class Application : Application() {
      * 初始化 Toast 框架
      */
     private fun initToast() {
-        Toaster.init(this)
+        // 检测当前是否为深色模式
+        val isDarkTheme = resources.configuration.uiMode and
+                Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+
+        // 初始化Toast，传递深色模式参数
+        ToastUtils.init(this, isDarkTheme)
     }
 
     /**
@@ -31,6 +37,24 @@ class Application : Application() {
     private fun initLog() {
         if (BuildConfig.DEBUG) {
             Timber.plant(Timber.DebugTree())
+        }
+    }
+
+    /**
+     * 应用配置变化时调用（如切换深色模式）
+     */
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+
+        // 检测深色模式变化并更新Toast样式
+        val isDarkTheme = newConfig.uiMode and
+                Configuration.UI_MODE_NIGHT_MASK == Configuration.UI_MODE_NIGHT_YES
+
+        // 根据当前主题重新设置Toast样式
+        if (isDarkTheme) {
+            ToastUtils.setWhiteStyle()
+        } else {
+            ToastUtils.setBlackStyle()
         }
     }
 } 
