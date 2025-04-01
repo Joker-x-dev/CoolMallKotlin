@@ -13,4 +13,11 @@ android {
 dependencies {
     // 吐司框架：https://github.com/getActivity/Toaster
     api(libs.toaster)
+
+    // 腾讯存储 https://github.com/Tencent/MMKV
+    implementation (libs.mmkv)
+
+    //日志框架
+    // https://github.com/JakeWharton/timber
+    implementation(libs.timber)
 }

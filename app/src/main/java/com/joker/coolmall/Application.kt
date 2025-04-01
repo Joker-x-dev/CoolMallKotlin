@@ -3,9 +3,10 @@ package com.joker.coolmall
 import android.app.Application
 import android.content.res.Configuration
 import com.joker.coolmall.core.designsystem.BuildConfig
+import com.joker.coolmall.core.util.log.LogUtils
+import com.joker.coolmall.core.util.storage.MMKVUtils
 import com.joker.coolmall.core.util.toast.ToastUtils
 import dagger.hilt.android.HiltAndroidApp
-import timber.log.Timber
 
 /**
  * 全局Application
@@ -17,6 +18,7 @@ class Application : Application() {
         super.onCreate()
         initToast()
         initLog()
+        initMMKV()
     }
 
     /**
@@ -35,9 +37,14 @@ class Application : Application() {
      * 初始化 Log 框架
      */
     private fun initLog() {
-        if (BuildConfig.DEBUG) {
-            Timber.plant(Timber.DebugTree())
-        }
+        LogUtils.init(this, BuildConfig.DEBUG)
+    }
+
+    /**
+     * 初始化 mmkv 框架
+     */
+    private fun initMMKV() {
+        MMKVUtils.init(this)
     }
 
     /**

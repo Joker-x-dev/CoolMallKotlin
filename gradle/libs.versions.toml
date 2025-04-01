@@ -59,6 +59,9 @@ androidxCoreSplashscreen = "1.0.1"
 # Toast框架
 toaster = "12.8"
 
+# 腾讯mmkv
+mmkv = "2.1.0"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -123,6 +126,9 @@ androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscree
 
 # Toast框架
 toaster = { group = "com.github.getActivity", name = "Toaster", version.ref = "toaster" }
+
+# 腾讯mmkv
+mmkv = { group = "com.tencent", name = "mmkv", version.ref = "mmkv" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
