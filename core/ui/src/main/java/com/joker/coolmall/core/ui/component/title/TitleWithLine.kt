@@ -3,9 +3,7 @@ package com.joker.coolmall.core.ui.component.title
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
@@ -17,7 +15,9 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
+import com.joker.coolmall.core.designsystem.theme.TitleLarge
 
 /**
  * 带有垂直装饰线的标题组件
@@ -49,8 +49,7 @@ fun TitleWithLine(
         // 标题文本
         Text(
             text = text,
-            style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier.padding(vertical = 4.dp)
+            style = TitleLarge
         )
     }
 }
@@ -58,5 +57,7 @@ fun TitleWithLine(
 @Preview(showBackground = true)
 @Composable
 fun TitleWithLinePreview() {
-    TitleWithLine(text = "标题预览")
+    AppTheme {
+        TitleWithLine(text = "标题预览")
+    }
 }

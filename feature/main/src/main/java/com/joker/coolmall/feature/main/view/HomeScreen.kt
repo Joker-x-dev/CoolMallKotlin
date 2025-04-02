@@ -47,15 +47,16 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.joker.coolmall.core.designsystem.theme.LogoIcon
 import com.joker.coolmall.core.designsystem.theme.ShapeMedium
-import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
-import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
+import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
+import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.model.Banner
 import com.joker.coolmall.core.model.Category
 import com.joker.coolmall.core.model.Goods
 import com.joker.coolmall.core.model.Home
+import com.joker.coolmall.core.ui.component.card.AppCard
 import com.joker.coolmall.core.ui.component.empty.EmptyNetwork
 import com.joker.coolmall.core.ui.component.goods.GoodsGridItem
 import com.joker.coolmall.core.ui.component.loading.PageLoading
@@ -126,19 +127,19 @@ private fun HomeContentView(data: Home, toGoodsDetail: (Long) -> Unit) {
     Column(
         modifier = Modifier
             .verticalScroll(scrollState)
-            .padding(SpaceHorizontalLarge)
+            .padding(SpacePaddingMedium)
     ) {
 
         // 轮播图
         data.banner.let {
             Banner(it!!)
-            SpaceVerticalLarge()
+            SpaceVerticalMedium()
         }
 
         // 分类
         data.category.let {
             Category(it!!)
-            SpaceVerticalLarge()
+            SpaceVerticalMedium()
         }
 
         // 限时精选
@@ -147,7 +148,7 @@ private fun HomeContentView(data: Home, toGoodsDetail: (Long) -> Unit) {
                 goods = it!!,
                 toGoodsDetail = toGoodsDetail
             )
-            SpaceVerticalLarge()
+            SpaceVerticalMedium()
         }
 
         // 推荐商品标题和列表
@@ -243,36 +244,32 @@ private fun Banner(banners: List<Banner>) {
  */
 @Composable
 private fun Category(categories: List<Category>) {
-    Card {
-        // 改用普通布局，避免使用LazyVerticalGrid
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(SpaceVerticalSmall)
-        ) {
-            // 将分类列表限制为前10个并按每行5个进行分组
-            val rows = categories.take(10).chunked(5)
+    AppCard {
+        // 将分类列表限制为前10个并按每行5个进行分组
+        val rows = categories.take(10).chunked(5)
 
-            // 遍历每一行分类
-            rows.forEach { rowCategories ->
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(4.dp),
-                    modifier = Modifier.fillMaxWidth()
-                ) {
-                    rowCategories.forEach { category ->
-                        CategoryItem(category, Modifier.weight(1f))
-                    }
+        // 遍历每一行分类
+        rows.forEach { rowCategories ->
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(4.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                rowCategories.forEach { category ->
+                    CategoryItem(category, Modifier.weight(1f))
+                }
 
-                    // 如果一行不满5个，添加空白占位
-                    repeat(5 - rowCategories.size) {
-                        Spacer(modifier = Modifier.weight(1f))
-                    }
+                // 如果一行不满5个，添加空白占位
+                repeat(5 - rowCategories.size) {
+                    Spacer(modifier = Modifier.weight(1f))
                 }
             }
         }
     }
 }
 
+/**
+ * 分类项
+ */
 @Composable
 private fun CategoryItem(category: Category, modifier: Modifier = Modifier) {
     Column(
@@ -289,9 +286,7 @@ private fun CategoryItem(category: Category, modifier: Modifier = Modifier) {
                 .clip(CircleShape)
         )
         SpaceVerticalXSmall()
-        Text(
-            text = category.name
-        )
+        Text(text = category.name)
     }
 }
 
@@ -300,54 +295,48 @@ private fun CategoryItem(category: Category, modifier: Modifier = Modifier) {
  */
 @Composable
 private fun FlashSale(goods: List<Goods>, toGoodsDetail: (Long) -> Unit) {
-    Card {
-        Column(
+    AppCard {
+        // 标题栏
+        Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(SpaceHorizontalLarge)
+                .padding(vertical = SpaceVerticalXSmall),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
         ) {
-            // 标题栏
             Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = SpaceVerticalXSmall),
-                horizontalArrangement = Arrangement.SpaceBetween,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_clock),
-                        contentDescription = null,
-                        modifier = Modifier.size(24.dp),
-                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
-                    )
-                    SpaceHorizontalSmall()
-                    Text(
-                        text = "限时精选",
-                        style = MaterialTheme.typography.titleLarge
-                    )
-                }
                 Icon(
-                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                    painter = painterResource(id = R.drawable.ic_clock),
                     contentDescription = null,
                     modifier = Modifier.size(24.dp),
-                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
+                )
+                SpaceHorizontalSmall()
+                Text(
+                    text = "限时精选",
+                    style = MaterialTheme.typography.titleLarge
                 )
             }
+            Icon(
+                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+                contentDescription = null,
+                modifier = Modifier.size(24.dp),
+                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
+            )
+        }
 
-            SpaceVerticalSmall()
+        SpaceVerticalSmall()
 
-            // 商品列表 - 使用LazyRow
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(SpaceHorizontalSmall),
-                contentPadding = PaddingValues(horizontal = SpaceHorizontalSmall)
-            ) {
-                items(goods.size) { index ->
-                    val goods = goods[index]
-                    FlashSaleItem(goods = goods, onClick = toGoodsDetail)
-                }
+        // 商品列表 - 使用LazyRow
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(SpaceHorizontalSmall),
+            contentPadding = PaddingValues(horizontal = SpaceHorizontalSmall)
+        ) {
+            items(goods.size) { index ->
+                val goods = goods[index]
+                FlashSaleItem(goods = goods, onClick = toGoodsDetail)
             }
         }
     }

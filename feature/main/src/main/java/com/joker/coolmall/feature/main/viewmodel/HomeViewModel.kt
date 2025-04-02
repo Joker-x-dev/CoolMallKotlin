@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.result.Result
 import com.joker.coolmall.core.common.result.asResult
 import com.joker.coolmall.core.data.repository.PageRepository
+import com.joker.coolmall.core.util.log.LogUtils
 import com.joker.coolmall.feature.main.state.HomeUiState
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.GoodsRoutes
@@ -13,7 +14,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
 import javax.inject.Inject
 
 /**
@@ -60,7 +60,7 @@ class HomeViewModel @Inject constructor(
                         is Result.Success -> {
                             if (result.data.isSucceeded && result.data.data != null) {
                                 val homeData = result.data
-                                Timber.d("Home data: $homeData")
+                                LogUtils.d("Home data: $homeData")
                                 _uiState.value = HomeUiState.Success(homeData.data!!)
                             } else {
                                 _uiState.value =
@@ -69,7 +69,6 @@ class HomeViewModel @Inject constructor(
                         }
 
                         is Result.Error -> {
-                            Timber.e(result.exception)
                             _uiState.value =
                                 HomeUiState.Error(result.exception.message ?: "Unknown error")
                         }

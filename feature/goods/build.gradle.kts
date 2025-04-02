@@ -11,4 +11,6 @@ android {
 }
 
 dependencies {
+    // 图片加载框架
+    implementation(libs.coil.compose)
 }
