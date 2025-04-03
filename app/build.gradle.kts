@@ -10,6 +10,11 @@ android {
         ndk {
             abiFilters += listOf("arm64-v8a")
         }
+
+        // 仅包括中文和英文必要的语言资源
+        androidResources {
+            localeFilters += listOf("zh", "en")
+        }
     }
 
     kotlinOptions {

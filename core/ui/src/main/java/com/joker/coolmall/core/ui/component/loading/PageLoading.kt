@@ -19,7 +19,7 @@ fun PageLoading() {
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        MiLoadingMobile()
+        LottieLoading()
         SpaceVerticalSmall()
         Text(text = "加载中...")
     }

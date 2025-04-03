@@ -29,6 +29,9 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.rememberLottieComposition
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.Primary
 import com.joker.coolmall.core.ui.R
@@ -238,6 +241,18 @@ fun DotDanceLoading(color: Color = Primary) {
     }
 }
 
+@Composable
+fun LottieLoading(
+    modifier: Modifier = Modifier,
+) {
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading))
+    LottieAnimation(
+        composition,
+        modifier = modifier
+            .size(80.dp),
+    )
+}
+
 @Preview(showBackground = true)
 @Composable
 fun WeLoadingPreview() {
@@ -267,5 +282,13 @@ fun MiLoadingWebPreview() {
 fun DotDanceLoadingPreview() {
     AppTheme {
         DotDanceLoading()
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun LottieLoadingPreview() {
+    AppTheme {
+        LottieLoading()
     }
 }

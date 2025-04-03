@@ -62,6 +62,9 @@ toaster = "12.8"
 # 腾讯mmkv
 mmkv = "2.1.0"
 
+# lottie
+lottieCompose = "6.3.0"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -129,6 +132,8 @@ toaster = { group = "com.github.getActivity", name = "Toaster", version.ref = "t
 
 # 腾讯mmkv
 mmkv = { group = "com.tencent", name = "mmkv", version.ref = "mmkv" }
+
+lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottieCompose" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }
