@@ -1,7 +1,5 @@
 package com.joker.coolmall.feature.main.component
 
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Column
@@ -19,13 +17,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.input.pointer.pointerInput
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.animateLottieCompositionAsState
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.joker.coolmall.core.designsystem.theme.Primary
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.feature.main.model.TopLevelDestination
 
@@ -49,16 +49,11 @@ fun BottomNavigationBar(
             val selected = destination.route == currentDestination
 
             var isPressed by remember { mutableStateOf(false) }
-            val scale by animateFloatAsState(
-                targetValue = if (isPressed) 1.3f else 1f,
-                label = "ButtonScale${index}"
-            )
 
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
                 modifier = Modifier
                     .weight(1f)
-                    .scale(scale)
                     .pointerInput(Unit) {
                         detectTapGestures(
                             onPress = {
@@ -71,31 +66,49 @@ fun BottomNavigationBar(
                             }
                         )
                     }
-                    .padding(vertical = SpaceHorizontalSmall)
+                    .padding(vertical = SpaceVerticalXSmall)
             ) {
-                Image(
-                    painter = painterResource(
-                        id = if (selected)
-                            destination.selectedIconId
-                        else
-                            destination.unselectedIconId
-                    ),
-                    contentDescription = null,
-                    modifier = Modifier.size(30.dp)
+                // Lottie动画部分
+                TabLottieAnimation(
+                    animRes = destination.animationResId,
+                    isSelected = selected
                 )
-
-                SpaceVerticalXSmall()
 
                 Text(
                     text = stringResource(id = destination.titleTextId),
                     style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(
-                        alpha = if (selected) 0.7f else 0.5f
+                    color = if (selected) Primary else MaterialTheme.colorScheme.onSurface.copy(
+                        alpha = 0.5f
                     )
                 )
             }
         }
     }
+}
+
+/**
+ * 底部导航栏Lottie动画
+ */
+@Composable
+private fun TabLottieAnimation(
+    animRes: Int,
+    isSelected: Boolean,
+) {
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(animRes))
+
+    // 如果选中，播放动画；如果未选中，不播放动画但保持在初始帧
+    val progress by animateLottieCompositionAsState(
+        composition = composition,
+        // 只有选中时才播放
+        isPlaying = isSelected,
+    )
+
+    LottieAnimation(
+        composition = composition,
+        // 如果未选中，强制显示第一帧
+        progress = { if (!isSelected) 0f else progress },
+        modifier = Modifier.size(30.dp)
+    )
 }
 
 @Preview(showBackground = true)

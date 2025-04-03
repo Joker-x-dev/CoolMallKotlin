@@ -6,15 +6,15 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.joker.coolmall.feature.main.component.BottomNavigationBar
 import com.joker.coolmall.feature.main.model.TopLevelDestination
+import com.joker.coolmall.feature.main.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
 
 /**
@@ -22,7 +22,8 @@ import kotlinx.coroutines.launch
  */
 @Composable
 internal fun MainRoute() {
-    MainScreen()
+    val viewModel: MainViewModel = hiltViewModel()
+    MainScreen(viewModel)
 }
 
 /**
@@ -30,12 +31,13 @@ internal fun MainRoute() {
  * 包含底部导航栏和四个主要页面（首页、分类、购物车、我的）
  */
 @Composable
-internal fun MainScreen() {
-    // 当前选中的界面名称
-    var currentDestination by rememberSaveable {
-        mutableStateOf(TopLevelDestination.HOME.route)
-    }
-
+internal fun MainScreen(
+    viewModel: MainViewModel = hiltViewModel()
+) {
+    // 从ViewModel获取当前导航状态
+    val currentDestination by viewModel.currentDestination.collectAsState()
+    val currentPageIndex by viewModel.currentPageIndex.collectAsState()
+    
     // 协程作用域
     val scope = rememberCoroutineScope()
 
@@ -43,7 +45,9 @@ internal fun MainScreen() {
         modifier = Modifier.fillMaxSize()
     ) {
         // 创建分页器状态
-        val pageState = rememberPagerState {
+        val pageState = rememberPagerState(
+            initialPage = currentPageIndex
+        ) {
             TopLevelDestination.entries.size
         }
 
@@ -66,10 +70,11 @@ internal fun MainScreen() {
         // 底部导航栏
         BottomNavigationBar(
             destinations = TopLevelDestination.entries,
-            onNavigateToDestination = {
-                currentDestination = TopLevelDestination.entries[it].route
+            onNavigateToDestination = { index ->
+                // 更新ViewModel中的状态
+                viewModel.updateDestination(index)
                 scope.launch {
-                    pageState.scrollToPage(it)
+                    pageState.scrollToPage(index)
                 }
             },
             currentDestination = currentDestination,
