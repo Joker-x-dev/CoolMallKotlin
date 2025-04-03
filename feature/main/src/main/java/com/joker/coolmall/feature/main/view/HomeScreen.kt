@@ -96,24 +96,23 @@ internal fun HomeScreen(
     CommonScaffold(
         topBar = {
             HomeTopAppBar()
-        },
-        content = {
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(it)
-            ) {
-                when (uiState) {
-                    is HomeUiState.Loading -> PageLoading()
-                    is HomeUiState.Error -> EmptyNetwork(onRetryClick = onRetry)
-                    is HomeUiState.Success -> HomeContentView(
-                        data = uiState.data,
-                        toGoodsDetail = toGoodsDetail
-                    )
-                }
+        }
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(it)
+        ) {
+            when (uiState) {
+                is HomeUiState.Loading -> PageLoading()
+                is HomeUiState.Error -> EmptyNetwork(onRetryClick = onRetry)
+                is HomeUiState.Success -> HomeContentView(
+                    data = uiState.data,
+                    toGoodsDetail = toGoodsDetail
+                )
             }
         }
-    )
+    }
 }
 
 /**
