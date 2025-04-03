@@ -23,6 +23,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.joker.coolmall.core.designsystem.theme.Primary
 import kotlinx.coroutines.delay
 
 @Composable
@@ -79,7 +80,7 @@ object WeSwiperDefaults {
                 .width((count * 16).dp)
                 .height(3.dp)
                 .clip(RoundedCornerShape(2.dp))
-                .background(Color.White.copy(0.2f))
+                .background(Primary.copy(0.2f))
         ) {
             val offsetX by animateDpAsState(
                 targetValue = (current * 16).dp,
@@ -91,7 +92,7 @@ object WeSwiperDefaults {
                     .height(3.dp)
                     .offset(x = offsetX)
                     .clip(RoundedCornerShape(2.dp))
-                    .background(Color.White)
+                    .background(Primary.copy(0.6f))
             )
         }
     }

@@ -4,6 +4,7 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,9 +17,11 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -27,23 +30,23 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Share
 import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.outlined.Settings
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
@@ -51,17 +54,19 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import coil.compose.AsyncImage
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.BorderLight
 import com.joker.coolmall.core.designsystem.theme.ColorDanger
 import com.joker.coolmall.core.designsystem.theme.DisplayLarge
+import com.joker.coolmall.core.designsystem.theme.GradientPrimaryEnd
+import com.joker.coolmall.core.designsystem.theme.GradientPrimaryStart
 import com.joker.coolmall.core.designsystem.theme.Primary
 import com.joker.coolmall.core.designsystem.theme.ShapeCircle
 import com.joker.coolmall.core.designsystem.theme.ShapeSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceDivider
-import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
@@ -77,6 +82,7 @@ import com.joker.coolmall.core.ui.component.swiper.WeSwiper
 import com.joker.coolmall.feature.goods.R
 import com.joker.coolmall.feature.goods.viewmodel.GoodsDetailUiState
 import com.joker.coolmall.feature.goods.viewmodel.GoodsDetailViewModel
+import kotlinx.coroutines.flow.collectLatest
 
 /**
  * 商品详情页面路由入口
@@ -105,106 +111,164 @@ internal fun GoodsDetailScreen(
     uiState: GoodsDetailUiState,
     onBackClick: () -> Unit = {}
 ) {
-    Scaffold(
-        topBar = {
-            TopAppBar(
-                title = { Text("商品详情") },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.surface
-                ),
-                navigationIcon = {
-                    IconButton(onClick = { onBackClick() }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                            contentDescription = "返回"
-                        )
-                    }
-                },
-                actions = {
-                    IconButton(onClick = { /* TODO: 分享功能 */ }) {
-                        Icon(
-                            imageVector = Icons.Default.Share,
-                            contentDescription = "分享"
-                        )
-                    }
-                }
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(MaterialTheme.colorScheme.background)
+    ) {
+        if (uiState.isLoading) {
+            // 显示加载中状态
+            PageLoading()
+        } else if (uiState.error != null) {
+            // 显示错误状态
+            Text(
+                text = "加载失败: ${uiState.error}",
+                color = MaterialTheme.colorScheme.error
             )
-        },
-        bottomBar = {
+        } else {
+            // 主内容容器
+            var topBarAlpha by remember { mutableIntStateOf(0) }
+
+            // 内容区域
+            GoodsDetailContentWithScroll(
+                title = uiState.goodsName,
+                subTitle = uiState.goodsSubTitle,
+                price = uiState.goodsPrice,
+                images = uiState.goodsPics,
+                content = uiState.goodsContent,
+                onTopBarAlphaChanged = { topBarAlpha = it }
+            )
+
+            // 导航栏浮动在顶部
+            GoodsDetailTopBar(
+                onBackClick = onBackClick,
+                onShareClick = { /* TODO: 分享功能 */ },
+                topBarAlpha = topBarAlpha,
+                modifier = Modifier.zIndex(1f)
+            )
+
             // 底部操作栏
-            GoodsActionBar()
-        }
-    ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues),
-            contentAlignment = Alignment.Center
-        ) {
-            if (uiState.isLoading) {
-                // 显示加载中状态
-                PageLoading()
-            } else if (uiState.error != null) {
-                // 显示错误状态
-                Text(
-                    text = "加载失败: ${uiState.error}",
-                    color = MaterialTheme.colorScheme.error
-                )
-            } else {
-                // 显示商品详情
-                GoodsDetailContent(
-                    title = uiState.goodsName,
-                    subTitle = uiState.goodsSubTitle,
-                    price = uiState.goodsPrice,
-                    images = uiState.goodsPics,
-                    content = uiState.goodsContent
-                )
-            }
+            GoodsActionBar(
+                modifier = Modifier.align(Alignment.BottomCenter)
+            )
         }
     }
 }
 
 /**
- * 商品详情内容
+ * 顶部导航栏
  */
 @Composable
-private fun GoodsDetailContent(
+private fun GoodsDetailTopBar(
+    onBackClick: () -> Unit = {},
+    onShareClick: () -> Unit = {},
+    topBarAlpha: Int = 0,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .background(
+                if (isSystemInDarkTheme())
+                    Color(0, 0, 0, topBarAlpha)
+                else
+                    Color(255, 255, 255, topBarAlpha)
+            )
+            .statusBarsPadding()
+            .padding(horizontal = SpacePaddingMedium, vertical = SpacePaddingSmall)
+    ) {
+        CircleIconButton(
+            icon = Icons.AutoMirrored.Filled.ArrowBack,
+            onClick = onBackClick
+        )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        CircleIconButton(
+            icon = Icons.Default.Share,
+            onClick = onShareClick
+        )
+    }
+}
+
+/**
+ * 圆形图标按钮
+ */
+@Composable
+private fun CircleIconButton(
+    modifier: Modifier = Modifier,
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    onClick: () -> Unit = {},
+) {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = modifier
+            .size(38.dp)
+            .clip(CircleShape)
+            .clickable { onClick() }
+            .background(Color.Black.copy(alpha = 0.3f))
+    ) {
+        Icon(
+            imageVector = icon,
+            contentDescription = null,
+            tint = Color.White,
+            modifier = Modifier.size(20.dp)
+        )
+    }
+}
+
+/**
+ * 带滚动功能的商品详情内容
+ */
+@Composable
+private fun GoodsDetailContentWithScroll(
     title: String,
     subTitle: String,
     price: String,
     images: List<String>,
-    content: String
+    content: String,
+    onTopBarAlphaChanged: (Int) -> Unit = {}
 ) {
+    val scrollState = rememberScrollState()
+
+    LaunchedEffect(scrollState) {
+        snapshotFlow {
+            scrollState.value
+        }.collectLatest { scrollY ->
+            var alpha = scrollY
+            if (alpha > 255) {
+                alpha = 255
+            }
+            onTopBarAlphaChanged(alpha)
+        }
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
+            .verticalScroll(scrollState)
     ) {
-        // 主要内容区域
+        // 轮播图直接放在顶部，没有状态栏的padding
+        GoodsBanner(images)
+
         Column(
-            modifier = Modifier
-                .weight(1f)
-                .verticalScroll(rememberScrollState())
+            modifier = Modifier.padding(SpacePaddingMedium)
         ) {
-            // 轮播图
-            GoodsBanner(images)
+            // 基本信息
+            GoodsInfoCard(title, subTitle, price)
 
-            Column(
-                modifier = Modifier.padding(SpacePaddingMedium)
-            ) {
+            SpaceVerticalMedium()
 
-                // 基本信息
-                GoodsInfoCard(title, subTitle, price)
+            // 配送信息
+            GoodsDeliveryCard()
 
-                SpaceVerticalMedium()
+            SpaceVerticalMedium()
 
-                // 配送信息
-                GoodsDeliveryCard()
+            // 图文详情
+            GoodsDetailCard(content)
 
-                SpaceVerticalMedium()
-
-                // 图文详情
-                GoodsDetailCard(content)
-            }
+            // 底部安全区域（为底部操作栏留出空间）
+            Spacer(modifier = Modifier.height(60.dp))
         }
     }
 }
@@ -511,19 +575,19 @@ private fun GoodsDetailImages() {
  * 底部操作栏
  */
 @Composable
-private fun GoodsActionBar() {
+private fun GoodsActionBar(modifier: Modifier = Modifier) {
     Row(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .background(MaterialTheme.colorScheme.surface)
             .padding(horizontal = SpaceHorizontalMedium, vertical = SpaceVerticalSmall)
             .navigationBarsPadding(),
-        horizontalArrangement = Arrangement.Center
+        verticalAlignment = Alignment.CenterVertically
     ) {
         // 客服按钮
-
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.padding(end = SpaceHorizontalSmall)
         ) {
             Icon(
                 imageVector = Icons.Default.Share,
@@ -536,11 +600,12 @@ private fun GoodsActionBar() {
             )
         }
 
-        SpaceHorizontalLarge()
+        SpaceHorizontalSmall()
 
         // 购物车按钮
         Column(
-            horizontalAlignment = Alignment.CenterHorizontally
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.padding(end = SpaceHorizontalMedium)
         ) {
             Icon(
                 imageVector = Icons.Default.ShoppingCart,
@@ -553,34 +618,48 @@ private fun GoodsActionBar() {
             )
         }
 
-        SpaceHorizontalLarge()
-
-        // 加入购物车按钮
-        Button(
-            onClick = { /* TODO: 加入购物车 */ },
+        // 加入购物车按钮（边框样式）
+        Box(
+            contentAlignment = Alignment.Center,
             modifier = Modifier
                 .weight(1f)
-                .height(42.dp),
-            shape = RoundedCornerShape(
-                topStart = SpaceVerticalLarge,
-                bottomStart = SpaceVerticalLarge
-            )
+                .height(42.dp)
+                .border(
+                    width = 1.dp,
+                    color = GradientPrimaryStart,
+                    shape = RoundedCornerShape(24.dp)
+                )
+                .clip(RoundedCornerShape(24.dp))
+                .clickable { /* TODO: 加入购物车 */ }
         ) {
-            Text("加入购物车")
+            Text(
+                text = "加入购物车",
+                style = MaterialTheme.typography.bodyMedium,
+                color = GradientPrimaryStart
+            )
         }
 
-        // 立即购买按钮
-        Button(
-            onClick = { /* TODO: 立即购买 */ },
+        Spacer(modifier = Modifier.width(SpaceHorizontalSmall))
+
+        // 立即购买按钮（渐变背景）
+        Box(
+            contentAlignment = Alignment.Center,
             modifier = Modifier
                 .weight(1f)
-                .height(42.dp),
-            shape = RoundedCornerShape(topEnd = SpaceVerticalLarge, bottomEnd = SpaceVerticalLarge),
-            colors = androidx.compose.material3.ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.primary
-            )
+                .height(42.dp)
+                .clip(RoundedCornerShape(24.dp))
+                .background(
+                    brush = Brush.horizontalGradient(
+                        colors = listOf(GradientPrimaryStart, GradientPrimaryEnd)
+                    )
+                )
+                .clickable { /* TODO: 立即购买 */ }
         ) {
-            Text("立即购买")
+            Text(
+                text = "立即购买",
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color.White
+            )
         }
     }
 }
