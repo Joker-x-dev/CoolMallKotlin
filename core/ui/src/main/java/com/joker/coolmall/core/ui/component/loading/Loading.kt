@@ -31,6 +31,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.Primary
@@ -248,6 +249,8 @@ fun LottieLoading(
     val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(R.raw.loading))
     LottieAnimation(
         composition,
+        // 循环播放
+        iterations = LottieConstants.IterateForever,
         modifier = modifier
             .size(80.dp),
     )

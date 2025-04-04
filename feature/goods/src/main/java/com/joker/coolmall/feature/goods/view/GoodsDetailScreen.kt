@@ -28,10 +28,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material.icons.filled.Share
-import androidx.compose.material.icons.filled.ShoppingCart
 import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -49,6 +49,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -67,8 +68,9 @@ import com.joker.coolmall.core.designsystem.theme.Primary
 import com.joker.coolmall.core.designsystem.theme.ShapeCircle
 import com.joker.coolmall.core.designsystem.theme.ShapeSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceDivider
-import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalMedium
+import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
+import com.joker.coolmall.core.designsystem.theme.SpacePaddingLarge
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingSmall
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingXSmall
@@ -79,6 +81,7 @@ import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.ui.component.card.AppCard
 import com.joker.coolmall.core.ui.component.loading.PageLoading
 import com.joker.coolmall.core.ui.component.swiper.WeSwiper
+import com.joker.coolmall.core.ui.htmltext.HtmlText
 import com.joker.coolmall.feature.goods.R
 import com.joker.coolmall.feature.goods.viewmodel.GoodsDetailUiState
 import com.joker.coolmall.feature.goods.viewmodel.GoodsDetailViewModel
@@ -135,7 +138,6 @@ internal fun GoodsDetailScreen(
                 subTitle = uiState.goodsSubTitle,
                 price = uiState.goodsPrice,
                 images = uiState.goodsPics,
-                content = uiState.goodsContent,
                 onTopBarAlphaChanged = { topBarAlpha = it }
             )
 
@@ -160,10 +162,10 @@ internal fun GoodsDetailScreen(
  */
 @Composable
 private fun GoodsDetailTopBar(
+    modifier: Modifier = Modifier,
     onBackClick: () -> Unit = {},
     onShareClick: () -> Unit = {},
-    topBarAlpha: Int = 0,
-    modifier: Modifier = Modifier
+    topBarAlpha: Int = 0
 ) {
     Row(
         modifier = modifier
@@ -226,7 +228,6 @@ private fun GoodsDetailContentWithScroll(
     subTitle: String,
     price: String,
     images: List<String>,
-    content: String,
     onTopBarAlphaChanged: (Int) -> Unit = {}
 ) {
     val scrollState = rememberScrollState()
@@ -265,7 +266,7 @@ private fun GoodsDetailContentWithScroll(
             SpaceVerticalMedium()
 
             // 图文详情
-            GoodsDetailCard(content)
+            GoodsDetailCard()
 
             // 底部安全区域（为底部操作栏留出空间）
             Spacer(modifier = Modifier.height(60.dp))
@@ -530,7 +531,7 @@ private fun GoodsDeliveryCard() {
  * 商品详情卡片
  */
 @Composable
-private fun GoodsDetailCard(content: String) {
+private fun GoodsDetailCard() {
     AppCard(lineTitle = R.string.goods_detail) {
 
         SpaceVerticalMedium()
@@ -546,29 +547,9 @@ private fun GoodsDetailCard(content: String) {
  */
 @Composable
 private fun GoodsDetailImages() {
-    // 提取的详情图片URL列表 - 实际项目中应该从HTML内容中解析
-    val detailImages = listOf(
-        "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F5c161af71062402d8dc7e3193e62d8f5_d1.png",
-        "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Fea304cef45b846d2b7fc4e7fbef6d103_d2.jpg",
-        "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ff3d17dae77d144b9aa828537f96d04e4_d3.jpg",
-        "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F99710ccacd5443518a9b97386d028b5c_d4.jpg",
-        "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Fa180b572f52142d5811dcf4e18c27a95_d5.jpg",
-        "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ff5bab785f9d04ac38b35e10a1b63486e_d6.jpg",
-        "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F19f52075481c44a789dcf648e3f8a7aa_d7.jpg"
-    )
-
-    Column {
-        detailImages.forEach { imageUrl ->
-            AsyncImage(
-                model = imageUrl,
-                contentDescription = null,
-                contentScale = ContentScale.FillWidth,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = SpaceVerticalXSmall)
-            )
-        }
-    }
+    val html =
+        """<p><img src="https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F5c161af71062402d8dc7e3193e62d8f5_d1.png" alt="" data-href="" style="width: 100%;"/><img src="https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Fea304cef45b846d2b7fc4e7fbef6d103_d2.jpg" alt="" data-href="" style=""/></p><p><img src="https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ff3d17dae77d144b9aa828537f96d04e4_d3.jpg" alt="" data-href="" style="width: 100%;"/><img src="https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F99710ccacd5443518a9b97386d028b5c_d4.jpg" alt="" data-href="" style=""/><img src="https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Fa180b572f52142d5811dcf4e18c27a95_d5.jpg" alt="" data-href="" style=""/><img src="https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ff5bab785f9d04ac38b35e10a1b63486e_d6.jpg" alt="" data-href="" style=""/></p><p><img src="https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F19f52075481c44a789dcf648e3f8a7aa_d7.jpg" alt="" data-href="" style=""/></p>"""
+    HtmlText(html)
 }
 
 /**
@@ -579,87 +560,118 @@ private fun GoodsActionBar(modifier: Modifier = Modifier) {
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .border(
+                width = SpaceDivider,
+                color = BorderLight,
+                shape = ShapeSmall
+            )
             .background(MaterialTheme.colorScheme.surface)
-            .padding(horizontal = SpaceHorizontalMedium, vertical = SpaceVerticalSmall)
+            .padding(horizontal = SpacePaddingLarge, vertical = SpaceVerticalSmall)
             .navigationBarsPadding(),
-        verticalAlignment = Alignment.CenterVertically
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        // 客服按钮
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(end = SpaceHorizontalSmall)
-        ) {
-            Icon(
-                imageVector = Icons.Default.Share,
-                contentDescription = "客服",
-                modifier = Modifier.size(24.dp)
-            )
-            Text(
-                text = "客服",
-                fontSize = 10.sp
-            )
-        }
-
-        SpaceHorizontalSmall()
-
-        // 购物车按钮
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(end = SpaceHorizontalMedium)
-        ) {
-            Icon(
-                imageVector = Icons.Default.ShoppingCart,
-                contentDescription = "购物车",
-                modifier = Modifier.size(24.dp)
-            )
-            Text(
-                text = "购物车",
-                fontSize = 10.sp
-            )
-        }
-
-        // 加入购物车按钮（边框样式）
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .weight(1f)
-                .height(42.dp)
-                .border(
-                    width = 1.dp,
-                    color = GradientPrimaryStart,
-                    shape = RoundedCornerShape(24.dp)
-                )
-                .clip(RoundedCornerShape(24.dp))
-                .clickable { /* TODO: 加入购物车 */ }
-        ) {
-            Text(
-                text = "加入购物车",
-                style = MaterialTheme.typography.bodyMedium,
-                color = GradientPrimaryStart
-            )
-        }
-
-        Spacer(modifier = Modifier.width(SpaceHorizontalSmall))
-
-        // 立即购买按钮（渐变背景）
-        Box(
-            contentAlignment = Alignment.Center,
-            modifier = Modifier
-                .weight(1f)
-                .height(42.dp)
-                .clip(RoundedCornerShape(24.dp))
-                .background(
-                    brush = Brush.horizontalGradient(
-                        colors = listOf(GradientPrimaryStart, GradientPrimaryEnd)
+        Row {
+            // 客服按钮
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .padding(end = SpaceHorizontalSmall)
+            ) {
+                IconButton(
+                    onClick = { },
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clip(ShapeCircle)
+                        .background(MaterialTheme.colorScheme.surface)
+                        .padding(0.dp)
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_customer_service),
+                        contentDescription = "客服"
                     )
+                }
+
+                Text(
+                    text = "客服",
+                    fontSize = 10.sp
                 )
-                .clickable { /* TODO: 立即购买 */ }
-        ) {
-            Text(
-                text = "立即购买",
-                style = MaterialTheme.typography.bodyMedium,
-                color = Color.White
-            )
+            }
+
+            SpaceHorizontalLarge()
+
+            // 购物车按钮
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier
+                    .padding(end = SpaceHorizontalSmall)
+            ) {
+                IconButton(
+                    onClick = { },
+                    modifier = Modifier
+                        .size(24.dp)
+                        .clip(ShapeCircle)
+                        .background(MaterialTheme.colorScheme.surface)
+                        .padding(0.dp)
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_cart),
+                        contentDescription = "购物车",
+                    )
+                }
+
+                Text(
+                    text = "购物车",
+                    fontSize = 10.sp
+                )
+            }
+        }
+
+        Row {
+            // 加入购物车按钮（边框样式）
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .height(30.dp)
+                    .border(
+                        width = 1.dp,
+                        color = GradientPrimaryStart,
+                        shape = ShapeSmall
+                    )
+                    .clip(ShapeSmall)
+                    .clickable { /* TODO: 加入购物车 */ }
+                    .padding(horizontal = SpaceHorizontalLarge)
+
+            ) {
+                Text(
+                    text = "加入购物车",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = GradientPrimaryStart
+                )
+            }
+
+            SpaceHorizontalLarge()
+
+            // 立即购买按钮（渐变背景）
+            Box(
+                contentAlignment = Alignment.Center,
+                modifier = Modifier
+                    .height(30.dp)
+                    .clip(ShapeSmall)
+                    .background(
+                        brush = Brush.horizontalGradient(
+                            colors = listOf(GradientPrimaryStart, GradientPrimaryEnd)
+                        )
+                    )
+                    .clickable { /* TODO: 立即购买 */ }
+                    .padding(horizontal = SpaceHorizontalLarge)
+            ) {
+                Text(
+                    text = "立即购买",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color.White
+                )
+            }
         }
     }
 }
