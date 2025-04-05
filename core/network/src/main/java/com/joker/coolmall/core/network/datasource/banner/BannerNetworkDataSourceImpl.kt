@@ -1,22 +1,27 @@
 package com.joker.coolmall.core.network.datasource.banner
 
-import com.joker.coolmall.core.model.Banner
-import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.base.BaseNetworkDataSource
 import com.joker.coolmall.core.network.service.BannerService
 import javax.inject.Inject
-import javax.inject.Singleton
 
 /**
- * 轮播图网络数据源实现类
+ * 轮播图相关数据源实现类
+ * 负责处理所有与轮播图相关的网络请求
+ * 
+ * @property bannerService 轮播图服务接口，用于发起实际的网络请求
  */
-@Singleton
 class BannerNetworkDataSourceImpl @Inject constructor(
     private val bannerService: BannerService
 ) : BaseNetworkDataSource(), BannerNetworkDataSource {
 
-    override suspend fun getBannerList(): NetworkResponse<NetworkPageData<Banner>> {
-        return bannerService.getBannerList()
+    /**
+     * 查询轮播图列表
+     * 
+     * @param params 请求参数，可包含位置、类型等筛选条件
+     * @return 轮播图列表响应数据
+     */
+    override suspend fun getBannerList(params: Any): NetworkResponse<Any> {
+        return bannerService.getBannerList(params)
     }
 } 

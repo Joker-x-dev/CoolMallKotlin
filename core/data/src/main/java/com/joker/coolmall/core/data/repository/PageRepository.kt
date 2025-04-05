@@ -9,6 +9,9 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import javax.inject.Inject
 
+/**
+ * 页面相关仓库
+ */
 class PageRepository @Inject constructor(
     private val pageNetworkDataSource: PageNetworkDataSource
 ) {

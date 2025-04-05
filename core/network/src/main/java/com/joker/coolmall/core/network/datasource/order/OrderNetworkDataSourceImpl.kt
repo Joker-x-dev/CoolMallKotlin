@@ -1,0 +1,126 @@
+package com.joker.coolmall.core.network.datasource.order
+
+import com.joker.coolmall.core.model.response.NetworkResponse
+import com.joker.coolmall.core.network.base.BaseNetworkDataSource
+import com.joker.coolmall.core.network.service.OrderService
+import javax.inject.Inject
+
+/**
+ * 订单相关数据源实现类
+ * 负责处理所有与订单相关的网络请求
+ * 
+ * @property orderService 订单服务接口，用于发起实际的网络请求
+ */
+class OrderNetworkDataSourceImpl @Inject constructor(
+    private val orderService: OrderService
+) : BaseNetworkDataSource(), OrderNetworkDataSource {
+
+    /**
+     * 处理微信支付回调通知
+     * 
+     * @param params 请求参数，包含支付结果信息
+     * @return 处理结果响应数据
+     */
+    override suspend fun wxPayNotify(params: Any): NetworkResponse<Any> {
+        return orderService.wxPayNotify(params)
+    }
+
+    /**
+     * 微信APP支付
+     * 
+     * @param params 请求参数，包含订单ID和支付信息
+     * @return 支付参数响应数据
+     */
+    override suspend fun wxAppPay(params: Any): NetworkResponse<Any> {
+        return orderService.wxAppPay(params)
+    }
+
+    /**
+     * 修改订单
+     * 
+     * @param params 请求参数，包含订单ID和修改信息
+     * @return 修改结果响应数据
+     */
+    override suspend fun updateOrder(params: Any): NetworkResponse<Any> {
+        return orderService.updateOrder(params)
+    }
+
+    /**
+     * 申请订单退款
+     *
+     * @param params 请求参数，包含订单ID和退款信息
+     * @return 退款申请结果响应数据 
+     */
+    override suspend fun refundOrder(params: Any): NetworkResponse<Any> {
+        return orderService.refundOrder(params)
+    }
+
+    /**
+     * 分页查询订单
+     * 
+     * @param params 请求参数，包含分页和查询条件
+     * @return 订单分页列表响应数据
+     */
+    override suspend fun getOrderPage(params: Any): NetworkResponse<Any> {
+        return orderService.getOrderPage(params)
+    }
+
+    /**
+     * 创建订单
+     * 
+     * @param params 请求参数，包含商品、地址、支付等信息
+     * @return 创建结果响应数据
+     */
+    override suspend fun createOrder(params: Any): NetworkResponse<Any> {
+        return orderService.createOrder(params)
+    }
+
+    /**
+     * 取消订单
+     * 
+     * @param params 请求参数，包含订单ID和取消原因
+     * @return 取消结果响应数据
+     */
+    override suspend fun cancelOrder(params: Any): NetworkResponse<Any> {
+        return orderService.cancelOrder(params)
+    }
+
+    /**
+     * 获取用户订单统计
+     * 
+     * @return 订单统计信息响应数据
+     */
+    override suspend fun getUserOrderCount(): NetworkResponse<Any> {
+        return orderService.getUserOrderCount()
+    }
+
+    /**
+     * 获取订单物流信息
+     * 
+     * @param id 订单ID
+     * @return 物流信息响应数据
+     */
+    override suspend fun getOrderLogistics(id: String): NetworkResponse<Any> {
+        return orderService.getOrderLogistics(id)
+    }
+
+    /**
+     * 获取订单详情
+     * 
+     * @param id 订单ID
+     * @return 订单详情响应数据
+     */
+    override suspend fun getOrderInfo(id: String): NetworkResponse<Any> {
+        return orderService.getOrderInfo(id)
+    }
+
+    /**
+     * 确认收货
+     * 
+     * @param id 订单ID
+     * @return 确认结果响应数据
+     */
+    override suspend fun confirmReceive(id: String): NetworkResponse<Any> {
+        return orderService.confirmReceive(id)
+    }
+} 
