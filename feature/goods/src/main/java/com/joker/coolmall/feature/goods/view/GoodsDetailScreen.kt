@@ -48,6 +48,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -78,12 +79,14 @@ import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
+import com.joker.coolmall.core.model.Goods
 import com.joker.coolmall.core.ui.component.card.AppCard
+import com.joker.coolmall.core.ui.component.empty.EmptyNetwork
 import com.joker.coolmall.core.ui.component.loading.PageLoading
 import com.joker.coolmall.core.ui.component.swiper.WeSwiper
 import com.joker.coolmall.core.ui.htmltext.HtmlText
 import com.joker.coolmall.feature.goods.R
-import com.joker.coolmall.feature.goods.viewmodel.GoodsDetailUiState
+import com.joker.coolmall.feature.goods.state.GoodsDetailUiState
 import com.joker.coolmall.feature.goods.viewmodel.GoodsDetailViewModel
 import kotlinx.coroutines.flow.collectLatest
 
@@ -99,7 +102,8 @@ internal fun GoodsDetailRoute(
 
     GoodsDetailScreen(
         uiState = uiState,
-        onBackClick = { viewModel.navigateBack() }
+        onBackClick = { viewModel.navigateBack() },
+        onRetry = viewModel::getGoodsDetail
     )
 }
 
@@ -111,49 +115,56 @@ internal fun GoodsDetailRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun GoodsDetailScreen(
-    uiState: GoodsDetailUiState,
-    onBackClick: () -> Unit = {}
+    uiState: GoodsDetailUiState = GoodsDetailUiState.Loading,
+    onBackClick: () -> Unit = {},
+    onRetry: () -> Unit = {}
 ) {
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-        if (uiState.isLoading) {
-            // 显示加载中状态
-            PageLoading()
-        } else if (uiState.error != null) {
-            // 显示错误状态
-            Text(
-                text = "加载失败: ${uiState.error}",
-                color = MaterialTheme.colorScheme.error
-            )
-        } else {
-            // 主内容容器
-            var topBarAlpha by remember { mutableIntStateOf(0) }
-
-            // 内容区域
-            GoodsDetailContentWithScroll(
-                title = uiState.goodsName,
-                subTitle = uiState.goodsSubTitle,
-                price = uiState.goodsPrice,
-                images = uiState.goodsPics,
-                onTopBarAlphaChanged = { topBarAlpha = it }
-            )
-
-            // 导航栏浮动在顶部
-            GoodsDetailTopBar(
-                onBackClick = onBackClick,
-                onShareClick = { /* TODO: 分享功能 */ },
-                topBarAlpha = topBarAlpha,
-                modifier = Modifier.zIndex(1f)
-            )
-
-            // 底部操作栏
-            GoodsActionBar(
-                modifier = Modifier.align(Alignment.BottomCenter)
+        when (uiState) {
+            is GoodsDetailUiState.Loading -> PageLoading()
+            is GoodsDetailUiState.Error -> EmptyNetwork(onRetryClick = onRetry)
+            is GoodsDetailUiState.Success -> GoodsDetailContentView(
+                data = uiState.data,
+                onBackClick = onBackClick
             )
         }
+    }
+}
+
+/**
+ * 商品详情主内容
+ */
+@Composable
+private fun GoodsDetailContentView(
+    data: Goods,
+    onBackClick: () -> Unit,
+) {
+    // 主内容容器
+    var topBarAlpha by remember { mutableIntStateOf(0) }
+
+    Box(modifier = Modifier.fillMaxSize()) {
+        // 内容区域
+        GoodsDetailContentWithScroll(
+            data = data,
+            onTopBarAlphaChanged = { topBarAlpha = it }
+        )
+
+        // 导航栏浮动在顶部
+        GoodsDetailTopBar(
+            onBackClick = onBackClick,
+            onShareClick = { /* TODO: 分享功能 */ },
+            topBarAlpha = topBarAlpha,
+            modifier = Modifier.zIndex(1f)
+        )
+
+        // 底部操作栏
+        GoodsActionBar(
+            modifier = Modifier.align(Alignment.BottomCenter)
+        )
     }
 }
 
@@ -199,7 +210,7 @@ private fun GoodsDetailTopBar(
 @Composable
 private fun CircleIconButton(
     modifier: Modifier = Modifier,
-    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    icon: ImageVector,
     onClick: () -> Unit = {},
 ) {
     Box(
@@ -224,11 +235,8 @@ private fun CircleIconButton(
  */
 @Composable
 private fun GoodsDetailContentWithScroll(
-    title: String,
-    subTitle: String,
-    price: String,
-    images: List<String>,
-    onTopBarAlphaChanged: (Int) -> Unit = {}
+    data: Goods,
+    onTopBarAlphaChanged: (Int) -> Unit
 ) {
     val scrollState = rememberScrollState()
 
@@ -250,13 +258,15 @@ private fun GoodsDetailContentWithScroll(
             .verticalScroll(scrollState)
     ) {
         // 轮播图直接放在顶部，没有状态栏的padding
-        GoodsBanner(images)
+        data.pics.let {
+            GoodsBanner(data.pics!!)
+        }
 
         Column(
             modifier = Modifier.padding(SpacePaddingMedium)
         ) {
             // 基本信息
-            GoodsInfoCard(title, subTitle, price)
+            GoodsInfoCard(data)
 
             SpaceVerticalMedium()
 
@@ -266,7 +276,9 @@ private fun GoodsDetailContentWithScroll(
             SpaceVerticalMedium()
 
             // 图文详情
-            GoodsDetailCard()
+            data.content.let {
+                GoodsDetailCard(data.content!!)
+            }
 
             // 底部安全区域（为底部操作栏留出空间）
             Spacer(modifier = Modifier.height(60.dp))
@@ -315,7 +327,7 @@ private fun GoodsBanner(images: List<String>) {
  * 商品信息卡片
  */
 @Composable
-private fun GoodsInfoCard(title: String, subTitle: String, price: String) {
+private fun GoodsInfoCard(data: Goods) {
     AppCard {
         // 价格和已售标签行
         Row(
@@ -325,14 +337,14 @@ private fun GoodsInfoCard(title: String, subTitle: String, price: String) {
         ) {
             // 价格
             Text(
-                text = price,
+                text = data.price.toString(),
                 style = DisplayLarge,
                 color = ColorDanger,
                 fontWeight = FontWeight.Bold
             )
 
             // 已售标签
-            SoldCountTag(count = 99)
+            SoldCountTag(count = data.sold)
         }
 
         // 优惠券列表
@@ -342,7 +354,7 @@ private fun GoodsInfoCard(title: String, subTitle: String, price: String) {
 
         // 标题
         Text(
-            text = title,
+            text = data.title,
             style = MaterialTheme.typography.titleLarge,
             fontWeight = FontWeight.Bold,
             maxLines = 2,
@@ -351,16 +363,17 @@ private fun GoodsInfoCard(title: String, subTitle: String, price: String) {
 
         SpaceVerticalXSmall()
 
-        // 副标题
-        Text(
-            text = subTitle,
-            style = MaterialTheme.typography.bodyMedium,
-            color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
-            maxLines = 2,
-            overflow = TextOverflow.Ellipsis
-        )
-
-        SpaceVerticalMedium()
+        data.subTitle.let {
+            // 副标题
+            Text(
+                text = data.subTitle!!,
+                style = MaterialTheme.typography.bodyMedium,
+                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f),
+                maxLines = 2,
+                overflow = TextOverflow.Ellipsis
+            )
+            SpaceVerticalMedium()
+        }
 
         // 规格选择
         SpecSelection()
@@ -531,25 +544,11 @@ private fun GoodsDeliveryCard() {
  * 商品详情卡片
  */
 @Composable
-private fun GoodsDetailCard() {
+private fun GoodsDetailCard(content: String) {
     AppCard(lineTitle = R.string.goods_detail) {
-
-        SpaceVerticalMedium()
-
-        // 详情图片列表
-        GoodsDetailImages()
+        // 详情富文本
+        HtmlText(content)
     }
-}
-
-/**
- * 商品详情图片列表
- * 从HTML内容中提取的图片URL
- */
-@Composable
-private fun GoodsDetailImages() {
-    val html =
-        """<p><img src="https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F5c161af71062402d8dc7e3193e62d8f5_d1.png" alt="" data-href="" style="width: 100%;"/><img src="https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Fea304cef45b846d2b7fc4e7fbef6d103_d2.jpg" alt="" data-href="" style=""/></p><p><img src="https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ff3d17dae77d144b9aa828537f96d04e4_d3.jpg" alt="" data-href="" style="width: 100%;"/><img src="https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F99710ccacd5443518a9b97386d028b5c_d4.jpg" alt="" data-href="" style=""/><img src="https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Fa180b572f52142d5811dcf4e18c27a95_d5.jpg" alt="" data-href="" style=""/><img src="https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ff5bab785f9d04ac38b35e10a1b63486e_d6.jpg" alt="" data-href="" style=""/></p><p><img src="https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F19f52075481c44a789dcf648e3f8a7aa_d7.jpg" alt="" data-href="" style=""/></p>"""
-    HtmlText(html)
 }
 
 /**
@@ -681,7 +680,7 @@ private fun GoodsActionBar(modifier: Modifier = Modifier) {
 fun GoodsDetailScreenPreview() {
     AppTheme {
         GoodsDetailScreen(
-            uiState = GoodsDetailUiState(
+            /*uiState = GoodsDetailUiState(
                 isLoading = false,
                 goodsId = "1",
                 goodsName = "Redmi 14C",
@@ -700,7 +699,7 @@ fun GoodsDetailScreenPreview() {
                     "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F54a05d34d02141ee8c05a129a7cb3555_b9.jpeg"
                 ),
                 goodsContent = "<p><img src=\"https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F5c161af71062402d8dc7e3193e62d8f5_d1.png\" alt=\"\" data-href=\"\" style=\"width: 100%;\"/><img src=\"https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Fea304cef45b846d2b7fc4e7fbef6d103_d2.jpg\" alt=\"\" data-href=\"\" style=\"\"/></p><p><img src=\"https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ff3d17dae77d144b9aa828537f96d04e4_d3.jpg\" alt=\"\" data-href=\"\" style=\"width: 100%;\"/><img src=\"https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F99710ccacd5443518a9b97386d028b5c_d4.jpg\" alt=\"\" data-href=\"\" style=\"\"/><img src=\"https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Fa180b572f52142d5811dcf4e18c27a95_d5.jpg\" alt=\"\" data-href=\"\" style=\"\"/><img src=\"https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ff5bab785f9d04ac38b35e10a1b63486e_d6.jpg\" alt=\"\" data-href=\"\" style=\"\"/></p><p><img src=\"https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F19f52075481c44a789dcf648e3f8a7aa_d7.jpg\" alt=\"\" data-href=\"\" style=\"\"/></p>"
-            )
+            )*/
         )
     }
 }

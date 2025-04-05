@@ -1,5 +1,6 @@
 package com.joker.coolmall.core.network.datasource.goods
 
+import com.joker.coolmall.core.model.Goods
 import com.joker.coolmall.core.model.response.NetworkResponse
 
 /**
@@ -55,7 +56,7 @@ interface GoodsNetworkDataSource {
     /**
      * 商品信息
      */
-    suspend fun getGoodsInfo(id: String): NetworkResponse<Any>
+    suspend fun getGoodsInfo(id: String): NetworkResponse<Goods>
 
     /**
      * 提交商品评论

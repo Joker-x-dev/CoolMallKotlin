@@ -1,5 +1,6 @@
 package com.joker.coolmall.core.network.datasource.goods
 
+import com.joker.coolmall.core.model.Goods
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.base.BaseNetworkDataSource
 import com.joker.coolmall.core.network.service.GoodsService
@@ -111,7 +112,7 @@ class GoodsNetworkDataSourceImpl @Inject constructor(
      * @param id 商品ID
      * @return 商品详情响应数据
      */
-    override suspend fun getGoodsInfo(id: String): NetworkResponse<Any> {
+    override suspend fun getGoodsInfo(id: String): NetworkResponse<Goods> {
         return goodsService.getGoodsInfo(id)
     }
 

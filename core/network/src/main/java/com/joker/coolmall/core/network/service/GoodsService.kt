@@ -1,5 +1,6 @@
 package com.joker.coolmall.core.network.service
 
+import com.joker.coolmall.core.model.Goods
 import com.joker.coolmall.core.model.response.NetworkResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -69,7 +70,7 @@ interface GoodsService {
      * 商品信息
      */
     @GET("goods/info/info")
-    suspend fun getGoodsInfo(@Query("id") id: String): NetworkResponse<Any>
+    suspend fun getGoodsInfo(@Query("id") id: String): NetworkResponse<Goods>
 
     /**
      * 提交商品评论

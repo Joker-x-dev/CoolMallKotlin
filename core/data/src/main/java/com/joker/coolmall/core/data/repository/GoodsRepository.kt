@@ -1,5 +1,6 @@
 package com.joker.coolmall.core.data.repository
 
+import com.joker.coolmall.core.model.Goods
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.datasource.goods.GoodsNetworkDataSource
 import kotlinx.coroutines.Dispatchers
@@ -80,7 +81,7 @@ class GoodsRepository @Inject constructor(
     /**
      * 商品信息
      */
-    fun getGoodsInfo(id: String): Flow<NetworkResponse<Any>> = flow {
+    fun getGoodsInfo(id: String): Flow<NetworkResponse<Goods>> = flow {
         emit(goodsNetworkDataSource.getGoodsInfo(id))
     }.flowOn(Dispatchers.IO)
 
