@@ -16,7 +16,7 @@
         android:layout_height="24dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:src="@drawable/ic_toast_success" />
+        android:src="@drawable/ic_success" />
 
     <TextView
         android:id="@android:id/message"

@@ -39,12 +39,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import coil.compose.AsyncImage
 import com.joker.coolmall.core.designsystem.theme.LogoIcon
 import com.joker.coolmall.core.designsystem.theme.ShapeMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
@@ -59,6 +57,7 @@ import com.joker.coolmall.core.model.Home
 import com.joker.coolmall.core.ui.component.card.AppCard
 import com.joker.coolmall.core.ui.component.empty.EmptyNetwork
 import com.joker.coolmall.core.ui.component.goods.GoodsGridItem
+import com.joker.coolmall.core.ui.component.image.NetWorkImage
 import com.joker.coolmall.core.ui.component.loading.PageLoading
 import com.joker.coolmall.core.ui.component.swiper.WeSwiper
 import com.joker.coolmall.core.ui.component.title.TitleWithLine
@@ -224,11 +223,8 @@ private fun Banner(banners: List<Banner>) {
             label = ""
         )
 
-        // 使用AsyncImage加载网络图片
-        AsyncImage(
+        NetWorkImage(
             model = item,
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(2 / 1f)
@@ -275,10 +271,8 @@ private fun CategoryItem(category: Category, modifier: Modifier = Modifier) {
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier.padding(vertical = 4.dp)
     ) {
-        AsyncImage(
+        NetWorkImage(
             model = category.pic,
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxWidth(0.8f)
                 .aspectRatio(1f)

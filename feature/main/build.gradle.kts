@@ -11,8 +11,6 @@ android {
 }
 
 dependencies {
-    // 图片加载框架
-    implementation(libs.coil.compose)
 
     // lottie 动画
     // https://airbnb.io/lottie/#/android-compose

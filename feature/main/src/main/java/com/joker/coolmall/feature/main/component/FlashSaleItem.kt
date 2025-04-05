@@ -14,10 +14,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import com.joker.coolmall.core.designsystem.theme.ColorDanger
+import com.joker.coolmall.core.designsystem.theme.ShapeSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.model.Goods
+import com.joker.coolmall.core.ui.component.image.NetWorkImage
 
 /**
  * 限时精选卡片项
@@ -33,14 +34,12 @@ fun FlashSaleItem(
             .width(120.dp)
             .clickable(onClick = { onClick(goods.id) })
     ) {
-        AsyncImage(
+        NetWorkImage(
             model = goods.mainPic,
-            contentDescription = null,
-            contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(1f)
-                .clip(RoundedCornerShape(6.dp))
+                .clip(ShapeSmall)
         )
         SpaceVerticalXSmall()
         Text(

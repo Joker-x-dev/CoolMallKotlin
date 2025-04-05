@@ -11,6 +11,7 @@ import com.joker.coolmall.feature.goods.navigation.GoodsDetailRoutes
 import com.joker.coolmall.feature.goods.state.GoodsDetailUiState
 import com.joker.coolmall.navigation.AppNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collectLatest
