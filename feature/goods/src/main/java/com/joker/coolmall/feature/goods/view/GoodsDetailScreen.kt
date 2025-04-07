@@ -446,7 +446,7 @@ private fun CouponTag(text: String) {
             .padding(horizontal = SpacePaddingSmall, vertical = SpaceVerticalXSmall)
     ) {
         Icon(
-            imageVector = Icons.Outlined.Settings,
+            painter = painterResource(id = R.drawable.ic_coupon),
             contentDescription = null,
             tint = ColorDanger,
             modifier = Modifier.size(SpaceVerticalMedium)
@@ -483,7 +483,7 @@ private fun SpecSelection() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                imageVector = Icons.Outlined.Settings,
+                painter = painterResource(id = R.drawable.ic_spec),
                 contentDescription = "规格",
                 tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                 modifier = Modifier.size(SpaceVerticalLarge)

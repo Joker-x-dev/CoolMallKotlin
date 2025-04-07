@@ -180,7 +180,7 @@ private fun MembershipCard() {
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_user_fill),
+                    painter = painterResource(id = R.drawable.ic_vip),
                     contentDescription = "会员",
                     tint = Color(0xFFE0A472),
                     modifier = Modifier.size(20.dp)
