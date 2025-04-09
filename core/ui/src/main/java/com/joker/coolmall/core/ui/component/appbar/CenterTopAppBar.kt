@@ -14,6 +14,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import com.joker.coolmall.core.designsystem.theme.ArrowLeftIcon
 
 
 /**
@@ -43,10 +44,7 @@ fun CenterTopAppBar(
         navigationIcon = {
             if (showBackIcon) {
                 IconButton(onClick = onBackClick) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = null
-                    )
+                    ArrowLeftIcon()
                 }
             }
         },

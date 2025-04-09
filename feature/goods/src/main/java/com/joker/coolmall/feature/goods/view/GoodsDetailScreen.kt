@@ -30,10 +30,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.Share
-import androidx.compose.material.icons.outlined.Settings
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -57,11 +54,11 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
@@ -206,14 +203,15 @@ private fun GoodsDetailTopBar(
             .padding(horizontal = SpacePaddingMedium, vertical = SpacePaddingSmall)
     ) {
         CircleIconButton(
-            icon = Icons.AutoMirrored.Filled.ArrowBack,
-            onClick = onBackClick
+            icon = com.joker.coolmall.core.designsystem.R.drawable.ic_arrow_left,
+            onClick = onBackClick,
+            iconSize = 28.dp
         )
 
         Spacer(modifier = Modifier.weight(1f))
 
         CircleIconButton(
-            icon = Icons.Default.Share,
+            icon = R.drawable.ic_share_fill,
             onClick = onShareClick
         )
     }
@@ -225,8 +223,9 @@ private fun GoodsDetailTopBar(
 @Composable
 private fun CircleIconButton(
     modifier: Modifier = Modifier,
-    icon: ImageVector,
+    icon: Int,
     onClick: () -> Unit = {},
+    iconSize: Dp = 20.dp
 ) {
     Box(
         contentAlignment = Alignment.Center,
@@ -237,10 +236,10 @@ private fun CircleIconButton(
             .background(Color.Black.copy(alpha = 0.3f))
     ) {
         Icon(
-            imageVector = icon,
+            painter = painterResource(id = icon),
             contentDescription = null,
             tint = Color.White,
-            modifier = Modifier.size(20.dp)
+            modifier = Modifier.size(iconSize)
         )
     }
 }

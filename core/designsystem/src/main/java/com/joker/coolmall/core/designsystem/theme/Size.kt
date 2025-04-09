@@ -79,6 +79,12 @@ val SpaceHorizontalMedium = 12.dp // 24px
 val SpaceHorizontalSmall = 8.dp // 16px
 
 /**
+ * 超小平间间距：4dp (8px)
+ * 适用场景：最小的平间间隔，如紧凑排列的元素间距
+ */
+val SpaceHorizontalXSmall = 4.dp // 8px
+
+/**
  * 常用于内边距的值
  * 大内边距：16dp (32px)
  * 适用场景：卡片、对话框等容器的内边距
@@ -216,5 +222,14 @@ fun SpaceHorizontalMedium() {
 @Composable
 fun SpaceHorizontalSmall() {
     Spacer(modifier = Modifier.width(SpaceHorizontalSmall))
+}
+
+/**
+ * 创建一个超小水平间距(4dp)的Spacer组件
+ * 使用方式：SpaceHorizontalXSmall()
+ */
+@Composable
+fun SpaceHorizontalXSmall() {
+    Spacer(modifier = Modifier.width(SpaceHorizontalXSmall))
 }
 //endregion

@@ -303,7 +303,7 @@ private fun FlashSale(goods: List<Goods>, toGoodsDetail: (Long) -> Unit) {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_clock),
                     contentDescription = null,
-                    modifier = Modifier.size(24.dp),
+                    modifier = Modifier.size(20.dp),
                     tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
                 )
                 SpaceHorizontalSmall()

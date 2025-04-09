@@ -10,11 +10,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
@@ -25,7 +23,6 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -43,6 +40,14 @@ import androidx.compose.ui.unit.sp
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.Primary
 import com.joker.coolmall.core.designsystem.theme.ShapeSmall
+import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalLarge
+import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalMedium
+import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
+import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalXSmall
+import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
+import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
+import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
+import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.ui.component.divider.WeDivider
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
 import com.joker.coolmall.feature.main.R
@@ -56,36 +61,36 @@ internal fun MeRoute() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun MeScreen() {
-    CommonScaffold(
-        topBar = { /* 不需要顶部栏 */ },
-        content = {
-            Column(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(rememberScrollState())
-                    .padding(it)
-                    .background(MaterialTheme.colorScheme.background)
-            ) {
-                // 用户信息区域
-                UserInfoSection()
-                
-                // 会员权益卡片
-                MembershipCard()
-                
-                // 订单区域
-                OrderSection()
-                
-                // 我的足迹
-                MyFootprintSection()
-                
-                // 功能菜单区域
-                FunctionMenuSection()
-                
-                // 底部留白
-                Spacer(modifier = Modifier.height(20.dp))
-            }
+    CommonScaffold(topBar = { }) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(it)
+                .padding(SpacePaddingMedium)
+        ) {
+            // 用户信息区域
+            UserInfoSection()
+            SpaceVerticalMedium()
+
+            // 会员权益卡片
+            MembershipCard()
+            SpaceVerticalMedium()
+
+            // 订单区域
+            OrderSection()
+            SpaceVerticalMedium()
+
+            // 我的足迹
+            MyFootprintSection()
+            SpaceVerticalMedium()
+
+            // 功能菜单区域
+            FunctionMenuSection()
+            SpaceVerticalMedium()
+
         }
-    )
+    }
 }
 
 /**
@@ -94,61 +99,60 @@ internal fun MeScreen() {
 @Composable
 private fun UserInfoSection() {
 
-        Row(
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .clickable { /* 点击用户信息 */ },
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        // 头像
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .clickable { /* 点击用户信息 */ }
-                .padding(horizontal = 20.dp, vertical = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
+                .size(72.dp)
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.surface)
         ) {
-            // 头像
-            Box(
-                modifier = Modifier
-                    .size(72.dp)
-                    .clip(CircleShape)
-                    .background(MaterialTheme.colorScheme.surface)
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_user_fill),
-                    contentDescription = null,
-                    modifier = Modifier
-                        .size(36.dp)
-                        .align(Alignment.Center),
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-            
-            Spacer(modifier = Modifier.width(16.dp))
-            
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
-                // 用户名
-                Text(
-                    text = "Joker.X", 
-                    style = MaterialTheme.typography.titleLarge,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-                
-                Spacer(modifier = Modifier.height(4.dp))
-                
-                // 手机号
-                Text(
-                    text = "手机号: 18888888888",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-            }
-            
-            // 箭头图标
             Icon(
-                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                contentDescription = "查看详情",
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(24.dp)
+                painter = painterResource(id = R.drawable.ic_user_fill),
+                contentDescription = null,
+                modifier = Modifier
+                    .size(36.dp)
+                    .align(Alignment.Center),
+                tint = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
+
+        SpaceHorizontalLarge()
+
+        Column(
+            modifier = Modifier.weight(1f)
+        ) {
+            // 用户名
+            Text(
+                text = "Joker.X",
+                style = MaterialTheme.typography.titleLarge,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.onSurface
+            )
+
+            SpaceVerticalXSmall()
+
+            // 手机号
+            Text(
+                text = "手机号: 18888888888",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+        }
+
+        // 箭头图标
+        Icon(
+            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
+            contentDescription = "查看详情",
+            tint = MaterialTheme.colorScheme.onSurfaceVariant,
+            modifier = Modifier.size(24.dp)
+        )
+    }
 
 }
 
@@ -159,8 +163,7 @@ private fun UserInfoSection() {
 private fun MembershipCard() {
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 8.dp),
+            .fillMaxWidth(),
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color(0xFF242424) // 会员卡片保持深色背景
@@ -185,14 +188,14 @@ private fun MembershipCard() {
                     tint = Color(0xFFE0A472),
                     modifier = Modifier.size(20.dp)
                 )
-                Spacer(modifier = Modifier.width(8.dp))
+                SpaceHorizontalSmall()
                 Text(
                     text = "会员立享5大权益!",
                     style = MaterialTheme.typography.titleMedium,
                     color = Color(0xFFE0A472), // 金色
                 )
             }
-            
+
             Text(
                 text = "立即开通",
                 style = MaterialTheme.typography.bodySmall,
@@ -212,8 +215,7 @@ private fun MembershipCard() {
 private fun OrderSection() {
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 8.dp),
+            .fillMaxWidth(),
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
@@ -226,9 +228,10 @@ private fun OrderSection() {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .clickable { /* 查看全部 */ }
                 .padding(16.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically
@@ -239,9 +242,9 @@ private fun OrderSection() {
                     tint = Primary,
                     modifier = Modifier.size(18.dp)
                 )
-                
-                Spacer(modifier = Modifier.width(8.dp))
-                
+
+                SpaceHorizontalSmall()
+
                 Text(
                     text = "我的订单",
                     style = MaterialTheme.typography.titleMedium,
@@ -249,17 +252,16 @@ private fun OrderSection() {
                     color = MaterialTheme.colorScheme.onSurface
                 )
             }
-            
+
             Row(
                 verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.clickable { /* 查看全部 */ }
             ) {
                 Text(
                     text = "查看全部订单",
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                
+
                 Icon(
                     imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                     contentDescription = "查看全部",
@@ -274,33 +276,37 @@ private fun OrderSection() {
         // 订单状态图标
         Row(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = 20.dp),
+                .fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             OrderStatusItem(
                 icon = R.drawable.ic_wait_pay,
-                label = "待付款"
+                label = "待付款",
+                modifier = Modifier.weight(1f),
             )
-            
+
             OrderStatusItem(
                 icon = R.drawable.ic_wait_ship,
-                label = "待发货"
+                label = "待发货",
+                modifier = Modifier.weight(1f),
             )
-            
+
             OrderStatusItem(
                 icon = R.drawable.ic_wait_receive,
-                label = "待收货"
+                label = "待收货",
+                modifier = Modifier.weight(1f),
             )
-            
+
             OrderStatusItem(
                 icon = R.drawable.ic_wait_review,
-                label = "待评价"
+                label = "待评价",
+                modifier = Modifier.weight(1f),
             )
-            
+
             OrderStatusItem(
                 icon = R.drawable.ic_refund,
-                label = "退款/售后"
+                label = "退款/售后",
+                modifier = Modifier.weight(1f),
             )
         }
     }
@@ -313,8 +319,7 @@ private fun OrderSection() {
 private fun MyFootprintSection() {
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 8.dp),
+            .fillMaxWidth(),
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
@@ -345,9 +350,9 @@ private fun MyFootprintSection() {
                         tint = Color(0xFFFF9800),
                         modifier = Modifier.size(20.dp)
                     )
-                    
-                    Spacer(modifier = Modifier.width(8.dp))
-                    
+
+                    SpaceHorizontalSmall()
+
                     Text(
                         text = "我的足迹",
                         style = MaterialTheme.typography.titleMedium,
@@ -355,7 +360,7 @@ private fun MyFootprintSection() {
                         color = MaterialTheme.colorScheme.onSurface
                     )
                 }
-                
+
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.clickable { /* 查看更多足迹 */ }
@@ -365,7 +370,7 @@ private fun MyFootprintSection() {
                         style = MaterialTheme.typography.bodySmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                    
+
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                         contentDescription = "查看更多",
@@ -374,7 +379,7 @@ private fun MyFootprintSection() {
                     )
                 }
             }
-            
+
             // 水平滚动的产品列表
             LazyRow(
                 horizontalArrangement = Arrangement.spacedBy(12.dp)
@@ -387,7 +392,7 @@ private fun MyFootprintSection() {
                     "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ffcd84baf3d3a4b49b35a03aaf783281e_%E7%BA%A2%E7%B1%B3%2014c.png",
                     "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ffcd84baf3d3a4b49b35a03aaf783281e_%E7%BA%A2%E7%B1%B3%2014c.png",
                 )
-                
+
                 items(footprintItems) { imageUrl ->
                     FootprintItem(imageUrl = imageUrl)
                 }
@@ -427,13 +432,16 @@ private fun FootprintItem(imageUrl: String) {
  */
 @Composable
 private fun OrderStatusItem(
+    modifier: Modifier,
     icon: Int,
     label: String,
     badgeCount: Int = 0
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = Modifier.clickable { /* 点击处理 */ }
+        modifier = modifier
+            .clickable(onClick = {})
+            .padding(vertical = 16.dp)
     ) {
         Box {
             Icon(
@@ -442,7 +450,7 @@ private fun OrderStatusItem(
                 modifier = Modifier.size(24.dp),
                 tint = MaterialTheme.colorScheme.onSurface
             )
-            
+
             // 如果有角标数字，则显示
             if (badgeCount > 0) {
                 Box(
@@ -463,9 +471,9 @@ private fun OrderStatusItem(
                 }
             }
         }
-        
-        Spacer(modifier = Modifier.height(8.dp))
-        
+
+        SpaceVerticalSmall()
+
         Text(
             text = label,
             style = MaterialTheme.typography.bodySmall,
@@ -481,8 +489,7 @@ private fun OrderStatusItem(
 private fun FunctionMenuSection() {
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 8.dp),
+            .fillMaxWidth(),
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
@@ -515,13 +522,12 @@ private fun FunctionMenuSection() {
         }
     }
 
-    Spacer(modifier = Modifier.height(12.dp))
+    SpaceVerticalMedium()
 
     // 设置选项单独放在一个卡片中
     Card(
         modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 12.dp),
+            .fillMaxWidth(),
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
@@ -567,7 +573,7 @@ private fun FunctionMenuItem(
                 tint = iconTint
             )
 
-            Spacer(modifier = Modifier.width(12.dp))
+            SpaceHorizontalMedium()
 
             // 标题
             Text(
@@ -586,7 +592,7 @@ private fun FunctionMenuItem(
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
-                Spacer(modifier = Modifier.width(4.dp))
+                SpaceHorizontalXSmall()
             }
 
             // 右箭头
@@ -610,4 +616,4 @@ fun MeScreenPreview() {
     AppTheme {
         MeScreen()
     }
-} 
+}
