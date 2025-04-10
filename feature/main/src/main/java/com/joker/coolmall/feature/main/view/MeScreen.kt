@@ -19,8 +19,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -38,6 +36,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.joker.coolmall.core.designsystem.theme.AppTheme
+import com.joker.coolmall.core.designsystem.theme.ArrowRightIcon
 import com.joker.coolmall.core.designsystem.theme.Primary
 import com.joker.coolmall.core.designsystem.theme.ShapeSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalLarge
@@ -146,12 +145,7 @@ private fun UserInfoSection() {
         }
 
         // 箭头图标
-        Icon(
-            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-            contentDescription = "查看详情",
-            tint = MaterialTheme.colorScheme.onSurfaceVariant,
-            modifier = Modifier.size(24.dp)
-        )
+        ArrowRightIcon(tint = MaterialTheme.colorScheme.onSurfaceVariant)
     }
 
 }
@@ -262,12 +256,7 @@ private fun OrderSection() {
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
 
-                Icon(
-                    imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                    contentDescription = "查看全部",
-                    tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.size(16.dp)
-                )
+                ArrowRightIcon(size = 16.dp)
             }
         }
 
@@ -371,12 +360,7 @@ private fun MyFootprintSection() {
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
 
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                        contentDescription = "查看更多",
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.size(16.dp)
-                    )
+                    ArrowRightIcon(size = 16.dp)
                 }
             }
 
@@ -596,12 +580,7 @@ private fun FunctionMenuItem(
             }
 
             // 右箭头
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.size(16.dp)
-            )
+            ArrowRightIcon(size = 16.dp)
         }
 
         if (showDivider) {

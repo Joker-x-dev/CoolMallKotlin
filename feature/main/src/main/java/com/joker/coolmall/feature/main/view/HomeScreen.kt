@@ -43,6 +43,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.joker.coolmall.core.designsystem.theme.ArrowRightIcon
 import com.joker.coolmall.core.designsystem.theme.LogoIcon
 import com.joker.coolmall.core.designsystem.theme.ShapeMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
@@ -312,12 +313,7 @@ private fun FlashSale(goods: List<Goods>, toGoodsDetail: (Long) -> Unit) {
                     style = MaterialTheme.typography.titleLarge
                 )
             }
-            Icon(
-                imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-                contentDescription = null,
-                modifier = Modifier.size(24.dp),
-                tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-            )
+            ArrowRightIcon()
         }
 
         SpaceVerticalSmall()

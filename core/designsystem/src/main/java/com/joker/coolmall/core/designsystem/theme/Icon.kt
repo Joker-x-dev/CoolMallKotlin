@@ -152,7 +152,7 @@ fun ArrowLeftIcon(
 fun ArrowRightIcon(
     modifier: Modifier = Modifier,
     size: Dp? = 24.dp,
-    tint: Color = LocalContentColor.current
+    tint: Color = RightArrowGray
 ) {
     CoolIcon(
         resId = R.drawable.ic_arrow_right,

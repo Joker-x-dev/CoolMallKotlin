@@ -226,3 +226,9 @@ val GradientRedStart = Color(0xFFFD8C8C) // 红色渐变起点
  * 适用场景：与红色渐变起点配合使用，用于警告类渐变效果
  */
 val GradientRedEnd = Color(0xFFFF2B2B) // 红色渐变终点
+
+// 其他颜色
+/**
+ * 右箭头灰色：#A3A3A3
+ */
+val RightArrowGray = Color(0xFFA3A3A3) // 右箭头灰色
