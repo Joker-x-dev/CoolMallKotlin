@@ -438,8 +438,8 @@ private fun CartBottomBar(
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = Modifier
-                    .height(40.dp)
-                    .widthIn(min = 100.dp)
+                    .height(34.dp)
+                    .widthIn(min = 90.dp)
 
                     .border(
                         width = 1.dp,
@@ -482,8 +482,8 @@ private fun CartBottomBar(
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
-                        .height(40.dp)
-                        .widthIn(min = 100.dp)
+                        .height(34.dp)
+                        .widthIn(min = 90.dp)
                         .background(
                             brush = Brush.horizontalGradient(
                                 colors = listOf(Color(0xFF4F44FF), Color(0xFF7A3CFF))
