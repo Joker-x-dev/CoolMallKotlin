@@ -94,14 +94,16 @@ private fun CategoryContent(
     RefreshLayout(
         modifier = Modifier
             .fillMaxSize()
-            .padding(SpacePaddingMedium),
+            .padding(horizontal = SpacePaddingMedium),
         onRefresh = onRefresh,
         onLoadMore = onLoadMore
     ) {
-        // 直接使用Column显示列表，配合NestedScrollView
+        // 使用Column布局显示列表项
         Column(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.spacedBy(SpaceVerticalMedium)
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 12.dp),
+            verticalArrangement = Arrangement.spacedBy(SpaceVerticalMedium),
         ) {
             items.forEach { item ->
                 CategoryItem(title = item)

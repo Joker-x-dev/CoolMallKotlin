@@ -44,7 +44,7 @@ class CategoryViewModel @Inject constructor() : ViewModel() {
         viewModelScope.launch {
             _uiState.value = CategoryUiState.Loading
             delay(300) // 模拟网络请求延迟
-            categoryItems = List(20) { "分类 ${it + 1}" }
+            categoryItems = List(40) { "分类 ${it + 1}" }
             _uiState.value = CategoryUiState.Success(categoryItems)
         }
     }

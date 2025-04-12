@@ -1,17 +1,31 @@
 package com.joker.coolmall.core.ui.component.refresh
 
+import android.os.Bundle
 import android.view.ViewGroup
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.core.widget.NestedScrollView
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import com.scwang.smart.refresh.footer.ClassicsFooter
 import com.scwang.smart.refresh.header.ClassicsHeader
 import com.scwang.smart.refresh.layout.SmartRefreshLayout
 import com.scwang.smart.refresh.layout.api.RefreshLayout
+import com.scwang.smart.refresh.layout.constant.SpinnerStyle
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener
 import com.scwang.smart.refresh.layout.listener.OnRefreshListener
+
+// 滚动状态的保存键
+private const val KEY_SCROLL_POSITION = "scroll_position"
+
+// 触发加载更多的底部边距（像素）
+private const val LOAD_MORE_THRESHOLD = 100
 
 /**
  * 支持下拉刷新和上拉加载更多的布局组件
@@ -23,7 +37,8 @@ import com.scwang.smart.refresh.layout.listener.OnRefreshListener
  * 1. 下拉刷新 - 用户可以通过向下拉动页面触发刷新操作
  * 2. 上拉加载更多 - 用户滑动到底部时可以触发加载更多数据
  * 3. 嵌套滚动支持 - 使用NestedScrollView确保内容可以流畅滚动
- * 4. 自定义刷新状态 - 可以自定义刷新和加载的视觉反馈
+ * 4. 滚动状态保存 - 保存滚动位置，在配置更改或页面切换时恢复
+ * 5. 自定义刷新状态 - 可以自定义刷新和加载的视觉反馈
  *
  * 使用方法：
  * ```
@@ -43,8 +58,12 @@ import com.scwang.smart.refresh.layout.listener.OnRefreshListener
  *         }
  *     }
  * ) {
- *     // 在这里放置你的内容
- *     YourContent()
+ *     // 在这里放置你的内容，如Column
+ *     Column {
+ *         items.forEach { item ->
+ *             ItemView(item)
+ *         }
+ *     }
  * }
  * ```
  *
@@ -67,132 +86,239 @@ fun RefreshLayout(
     onLoadMore: (finishLoadMore: (Boolean, Boolean) -> Unit) -> Unit = { it(true, true) },
     content: @Composable () -> Unit
 ) {
+    // 使用rememberSaveable保存滚动位置，在配置更改时恢复
+    val scrollState = rememberSaveable { mutableStateOf<Bundle?>(null) }
+    val lifecycle = LocalLifecycleOwner.current.lifecycle
+
     // 使用AndroidView将Android原生视图包装到Compose中
-    // 这允许我们在Compose中使用SmartRefreshLayout，这是一个Android原生库
     AndroidView(
         factory = { ctx ->
-            // 创建SmartRefreshLayout实例
-            // SmartRefreshLayout是一个强大的下拉刷新和上拉加载组件
-            val refreshLayout = SmartRefreshLayout(ctx).apply {
-                // 设置刷新头部，ClassicsHeader提供了经典的下拉刷新动画和文字提示
-                setRefreshHeader(ClassicsHeader(ctx))
-                
-                // 设置加载底部，ClassicsFooter提供了经典的上拉加载动画和文字提示
-                setRefreshFooter(ClassicsFooter(ctx))
-                
-                // 配置是否启用下拉刷新功能
-                setEnableRefresh(enableRefresh)
-                
-                // 配置是否启用上拉加载更多功能
-                setEnableLoadMore(enableLoadMore)
-                
-                // 设置主色为透明，这样不会影响背景色
-                setPrimaryColors(android.graphics.Color.TRANSPARENT)
-
-                // 禁用自动加载更多，由我们的滚动监听器控制
-                // 这样可以更精确地控制何时触发加载更多
-                setEnableAutoLoadMore(false)
-
-                // 设置下拉刷新的监听器
-                setOnRefreshListener(object : OnRefreshListener {
-                    override fun onRefresh(refreshLayout: RefreshLayout) {
-                        // 当用户下拉刷新时，调用onRefresh回调
-                        // 并提供一个函数用于完成刷新操作
-                        onRefresh { success ->
-                            // 完成刷新动作，传入参数：
-                            // 0: 延迟毫秒数，0表示立即结束
-                            // success: 刷新是否成功
-                            // false: 是否没有更多数据，这里在刷新操作中不相关
-                            refreshLayout.finishRefresh(0, success, false)
-                        }
-                    }
-                })
-
-                // 设置上拉加载更多的监听器
-                setOnLoadMoreListener(object : OnLoadMoreListener {
-                    override fun onLoadMore(refreshLayout: RefreshLayout) {
-                        // 当触发加载更多时，调用onLoadMore回调
-                        // 并提供一个函数用于完成加载更多操作
-                        onLoadMore { success, hasMoreData ->
-                            // 根据是否有更多数据选择不同的结束方式
-                            if (hasMoreData) {
-                                // 有更多数据，正常结束加载更多
-                                // 参数1: 0毫秒延迟，立即结束
-                                // 参数2: 加载是否成功
-                                // 参数3: 没有更多数据为false
-                                refreshLayout.finishLoadMore(0, success, false)
-                            } else {
-                                // 没有更多数据，显示无更多数据状态
-                                refreshLayout.finishLoadMoreWithNoMoreData()
-                            }
-                        }
-                    }
-                })
-            }
-
-            // 创建NestedScrollView作为内容容器
-            // NestedScrollView允许我们在多层滚动视图中正确处理滚动事件
-            val nestedScrollView = NestedScrollView(ctx).apply {
-                // 启用平滑滚动，使滚动更加流畅
-                isSmoothScrollingEnabled = true
-                
-                // 添加滚动变化监听器，用于检测何时滚动到底部
-                setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
-                    // 检测是否滚动到了底部
-                    // v.getChildAt(0).measuredHeight: 内容的总高度
-                    // v.measuredHeight: 可见区域的高度
-                    // scrollY: 已经滚动的距离
-                    // 当scrollY + 可见区域高度 >= 内容总高度时，表示滚动到了底部
-                    if (!refreshLayout.isLoading && scrollY > 0 &&
-                        (v.getChildAt(0).measuredHeight - v.measuredHeight) <= scrollY
-                    ) {
-                        // 触发加载更多操作
-                        refreshLayout.autoLoadMore()
-                    }
-                })
-            }
-
-            // 创建ComposeView用于在Android View中渲染Compose内容
-            val composeView = ComposeView(ctx).apply {
-                // 设置Compose内容
-                setContent {
-                    // 直接渲染传入的content内容
-                    content()
-                }
-            }
-
-            // 构建视图层次结构
-            // 先将ComposeView添加到NestedScrollView中
-            nestedScrollView.addView(
-                composeView, 
-                // 设置ComposeView填满整个父容器
-                ViewGroup.LayoutParams(
-                    ViewGroup.LayoutParams.MATCH_PARENT,
-                    ViewGroup.LayoutParams.MATCH_PARENT
-                )
+            // 创建并配置SmartRefreshLayout实例
+            val refreshLayout = createRefreshLayout(
+                ctx = ctx,
+                enableRefresh = enableRefresh,
+                enableLoadMore = enableLoadMore,
+                onRefresh = onRefresh,
+                onLoadMore = onLoadMore
             )
 
-            // 再将NestedScrollView添加到SmartRefreshLayout中
+            // 创建并配置NestedScrollView作为内容容器
+            val nestedScrollView = createNestedScrollView(
+                ctx = ctx,
+                refreshLayout = refreshLayout,
+                scrollState = scrollState,
+                content = content
+            )
+
+            // 构建视图层次结构并返回刷新布局
             refreshLayout.addView(
-                nestedScrollView, 
-                // 设置NestedScrollView填满整个父容器
+                nestedScrollView,
                 ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT
                 )
             )
-
-            // 返回最外层的SmartRefreshLayout作为AndroidView的根视图
             refreshLayout
         },
-        // 应用传入的modifier到AndroidView
         modifier = modifier,
-        // update回调用于处理视图更新
         update = { layout ->
-            // 当组件重组时，更新刷新布局的配置
-            // 这确保enableRefresh和enableLoadMore属性的变化能够立即生效
+            // 更新刷新布局配置
             layout.setEnableRefresh(enableRefresh)
             layout.setEnableLoadMore(enableLoadMore)
+
+            // 恢复滚动位置
+            restoreScrollPosition(layout, scrollState)
         }
     )
+
+    // 监听生命周期事件
+    ObserveLifecycle(lifecycle)
+}
+
+/**
+ * 创建并配置SmartRefreshLayout实例
+ */
+private fun createRefreshLayout(
+    ctx: android.content.Context,
+    enableRefresh: Boolean,
+    enableLoadMore: Boolean,
+    onRefresh: (finishRefresh: (Boolean) -> Unit) -> Unit,
+    onLoadMore: (finishLoadMore: (Boolean, Boolean) -> Unit) -> Unit
+): SmartRefreshLayout {
+    return SmartRefreshLayout(ctx).apply {
+        // 启用嵌套滚动支持
+        setEnableNestedScroll(true)
+
+        // 配置刷新头部，使用跟随内容的风格
+        setRefreshHeader(ClassicsHeader(ctx).apply {
+            spinnerStyle = SpinnerStyle.Translate
+        })
+
+        // 配置加载底部，使用跟随内容的风格
+        setRefreshFooter(ClassicsFooter(ctx).apply {
+            spinnerStyle = SpinnerStyle.Translate
+        })
+
+        // 配置刷新和加载功能
+        setEnableRefresh(enableRefresh)
+        setEnableLoadMore(enableLoadMore)
+
+        // 优化滚动体验配置
+        // 启用越界拖拽效果
+        setEnableOverScrollDrag(true)
+        // 启用越界拦截
+        setEnableOverScrollBounce(true)
+        // 内容不满一页时仍可上拉加载
+        setEnableLoadMoreWhenContentNotFull(true)
+        // 纯净滚动模式
+        setEnablePureScrollMode(false)
+
+        // 设置主色为透明
+        setPrimaryColors(android.graphics.Color.TRANSPARENT)
+
+        // 设置下拉刷新监听器
+        setOnRefreshListener(object : OnRefreshListener {
+            override fun onRefresh(refreshLayout: RefreshLayout) {
+                onRefresh { success ->
+                    refreshLayout.finishRefresh(0, success, false)
+                }
+            }
+        })
+
+        // 设置上拉加载更多监听器
+        setOnLoadMoreListener(object : OnLoadMoreListener {
+            override fun onLoadMore(refreshLayout: RefreshLayout) {
+                onLoadMore { success, hasMoreData ->
+                    if (hasMoreData) {
+                        refreshLayout.finishLoadMore(0, success, false)
+                    } else {
+                        refreshLayout.finishLoadMoreWithNoMoreData()
+                    }
+                }
+            }
+        })
+    }
+}
+
+/**
+ * 创建并配置NestedScrollView作为内容容器
+ */
+private fun createNestedScrollView(
+    ctx: android.content.Context,
+    refreshLayout: SmartRefreshLayout,
+    scrollState: androidx.compose.runtime.MutableState<Bundle?>,
+    content: @Composable () -> Unit
+): NestedScrollView {
+    // 创建嵌套滚动视图
+    val nestedScrollView = NestedScrollView(ctx).apply {
+        // 启用平滑滚动
+        isSmoothScrollingEnabled = true
+
+        // 确保可以垂直滚动
+        isVerticalScrollBarEnabled = true
+
+        // 恢复保存的滚动位置
+        scrollState.value?.let { bundle ->
+            val position = bundle.getInt(KEY_SCROLL_POSITION, 0)
+            post {
+                scrollTo(0, position)
+            }
+        }
+
+        // 添加滚动变化监听器
+        setOnScrollChangeListener(NestedScrollView.OnScrollChangeListener { v, _, scrollY, _, _ ->
+            // 保存当前滚动位置
+            val bundle = Bundle().apply {
+                putInt(KEY_SCROLL_POSITION, scrollY)
+            }
+            scrollState.value = bundle
+
+            // 检测是否滚动到底部，以触发加载更多
+            checkAndTriggerLoadMore(this, scrollY, refreshLayout)
+        })
+    }
+
+    // 创建ComposeView用于渲染Compose内容
+    val composeView = ComposeView(ctx).apply {
+        setContent {
+            content()
+        }
+    }
+
+    // 将ComposeView添加到NestedScrollView
+    nestedScrollView.addView(
+        composeView,
+        ViewGroup.LayoutParams(
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.MATCH_PARENT
+        )
+    )
+
+    return nestedScrollView
+}
+
+/**
+ * 检测是否滚动到底部，以触发加载更多
+ */
+private fun checkAndTriggerLoadMore(
+    scrollView: NestedScrollView,
+    scrollY: Int,
+    refreshLayout: SmartRefreshLayout
+) {
+    val childHeight = scrollView.getChildAt(0)?.measuredHeight ?: 0
+    val viewHeight = scrollView.measuredHeight
+
+    // 当滚动到距离底部LOAD_MORE_THRESHOLD像素时，触发加载更多
+    if (!refreshLayout.isLoading && scrollY > 0 &&
+        childHeight > 0 && viewHeight > 0 &&
+        scrollY + viewHeight >= childHeight - LOAD_MORE_THRESHOLD
+    ) {
+        refreshLayout.autoLoadMore()
+    }
+}
+
+/**
+ * 恢复滚动位置
+ */
+private fun restoreScrollPosition(
+    layout: SmartRefreshLayout,
+    scrollState: androidx.compose.runtime.MutableState<Bundle?>
+) {
+    val nestedScrollView = layout.getChildAt(0) as? NestedScrollView
+    scrollState.value?.let { bundle ->
+        nestedScrollView?.let { scrollView ->
+            val position = bundle.getInt(KEY_SCROLL_POSITION, 0)
+            scrollView.post {
+                scrollView.scrollTo(0, position)
+            }
+        }
+    }
+}
+
+/**
+ * 监听生命周期事件
+ */
+@Composable
+private fun ObserveLifecycle(lifecycle: Lifecycle) {
+    DisposableEffect(lifecycle) {
+        val observer = LifecycleEventObserver { _, event ->
+            when (event) {
+                Lifecycle.Event.ON_RESUME -> {
+                    // 应用恢复前台时可添加额外逻辑
+                }
+
+                else -> {
+                    // 其他生命周期事件不需特殊处理
+                }
+            }
+        }
+
+        // 添加观察者
+        lifecycle.addObserver(observer)
+
+        // 清理
+        onDispose {
+            lifecycle.removeObserver(observer)
+        }
+    }
 } 
