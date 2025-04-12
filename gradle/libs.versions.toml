@@ -73,6 +73,8 @@ refreshLayoutKernel = "3.0.0-alpha"
 refreshHeaderClassics = "3.0.0-alpha"
 refreshFooterClassics = "3.0.0-alpha"
 
+leakcanaryAndroid = "2.14"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -151,6 +153,10 @@ jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 refresh-footer-classics = { module = "io.github.scwang90:refresh-footer-classics", version.ref = "refreshFooterClassics" }
 refresh-header-classics = { module = "io.github.scwang90:refresh-header-classics", version.ref = "refreshHeaderClassics" }
 refresh-layout-kernel = { module = "io.github.scwang90:refresh-layout-kernel", version.ref = "refreshLayoutKernel" }
+
+# LeakCanary - 内存泄漏检测工具
+# https://github.com/square/leakcanary
+leakcanary-android = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanaryAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

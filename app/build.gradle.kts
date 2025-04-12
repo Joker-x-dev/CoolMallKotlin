@@ -29,8 +29,8 @@ dependencies {
     implementation(project(":feature:main"))
     implementation(project(":feature:goods"))
 
-    //region 依赖注入
-    //https://developer.android.google.cn/training/dependency-injection/hilt-android?hl=zh-cn
+    // region 依赖注入
+    // https://developer.android.google.cn/training/dependency-injection/hilt-android?hl=zh-cn
     ksp(libs.hilt.android.compiler)
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
@@ -42,5 +42,8 @@ dependencies {
 
     // 启动页
     implementation(libs.androidx.core.splashscreen)
-
+    
+    // LeakCanary - 内存泄漏检测工具（仅在debug构建中使用）
+    // https://github.com/square/leakcanary
+    debugImplementation(libs.leakcanary.android)
 }
