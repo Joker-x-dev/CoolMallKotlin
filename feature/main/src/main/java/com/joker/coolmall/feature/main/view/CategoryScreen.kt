@@ -19,14 +19,22 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -47,35 +55,92 @@ import com.joker.coolmall.core.ui.component.image.NetWorkImage
 import com.joker.coolmall.core.ui.component.title.TitleWithLine
 import com.joker.coolmall.feature.main.R
 import com.joker.coolmall.feature.main.component.CommonScaffold
-import com.joker.coolmall.feature.main.viewmodel.Category
-import com.joker.coolmall.feature.main.viewmodel.CategoryItem
+import com.joker.coolmall.feature.main.model.CategoryTree
+import com.joker.coolmall.feature.main.state.CategoryUiState
 import com.joker.coolmall.feature.main.viewmodel.CategoryViewModel
-import com.joker.coolmall.feature.main.viewmodel.SubCategoryItem
+import kotlinx.coroutines.launch
 
+/**
+ * 分类页面路由
+ */
 @Composable
 internal fun CategoryRoute(
     viewModel: CategoryViewModel = hiltViewModel()
 ) {
-    val leftCategories by viewModel.leftCategories.collectAsState()
-    val rightCategories by viewModel.rightCategories.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
     val selectedIndex by viewModel.selectedCategoryIndex.collectAsState()
 
-    CategoryScreen(
-        leftCategories = leftCategories,
-        rightCategories = rightCategories,
-        selectedIndex = selectedIndex,
-        onCategorySelected = viewModel::selectCategory
-    )
+    when (uiState) {
+        is CategoryUiState.Loading -> {
+            // 显示加载状态
+            Box(modifier = Modifier.fillMaxSize()) {
+                Text(
+                    text = "加载中...",
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+        }
+        is CategoryUiState.Error -> {
+            // 显示错误状态
+            Box(modifier = Modifier.fillMaxSize()) {
+                Text(
+                    text = "加载失败，请重试",
+                    modifier = Modifier.align(Alignment.Center)
+                )
+            }
+        }
+        is CategoryUiState.Success -> {
+            val categoryTrees = (uiState as CategoryUiState.Success).data
+            CategoryScreen(
+                categoryTrees = categoryTrees,
+                selectedIndex = selectedIndex,
+                onCategorySelected = viewModel::selectCategory,
+                onSubCategoryClick = viewModel::navigateToGoodsList
+            )
+        }
+    }
 }
 
+/**
+ * 分类页面内容
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun CategoryScreen(
-    leftCategories: List<Category> = emptyList(),
-    rightCategories: List<CategoryItem> = emptyList(),
+    categoryTrees: List<CategoryTree> = emptyList(),
     selectedIndex: Int = 0,
-    onCategorySelected: (Int) -> Unit = {}
+    onCategorySelected: (Int) -> Unit = {},
+    onSubCategoryClick: (Long) -> Unit = {}
 ) {
+    // 记住协程作用域，用于滚动操作
+    val coroutineScope = rememberCoroutineScope()
+    
+    // 右侧列表的滚动状态
+    val rightListState = rememberLazyListState()
+    
+    // 用于跟踪滚动方向，避免循环联动
+    var isScrollingFromLeftClick by remember { mutableStateOf(false) }
+    
+    // 右侧滚动监听
+    LaunchedEffect(remember { derivedStateOf { rightListState.firstVisibleItemIndex } }) {
+        if (!isScrollingFromLeftClick && rightListState.firstVisibleItemIndex >= 0) {
+            // 当右侧滚动时，且不是由左侧点击触发的，更新左侧选中项
+            onCategorySelected(rightListState.firstVisibleItemIndex)
+        }
+    }
+    
+    // 当左侧选中项改变时，滚动右侧列表
+    LaunchedEffect(selectedIndex) {
+        if (selectedIndex >= 0 && selectedIndex < categoryTrees.size) {
+            isScrollingFromLeftClick = true
+            coroutineScope.launch {
+                rightListState.animateScrollToItem(selectedIndex)
+                // 滚动完成后重置标志
+                isScrollingFromLeftClick = false
+            }
+        }
+    }
+
     CommonScaffold(
         topBar = {
             CenterTopAppBar(R.string.category, showBackIcon = false)
@@ -86,9 +151,12 @@ internal fun CategoryScreen(
                     .fillMaxSize()
                     .padding(paddingValues)
             ) {
+                // 提取一级分类名称用于左侧显示
+                val rootCategories = categoryTrees.map { it.name }
+                
                 // 左侧分类列表
                 LeftCategoryList(
-                    categories = leftCategories,
+                    categories = rootCategories,
                     selectedIndex = selectedIndex,
                     onCategorySelected = onCategorySelected,
                     modifier = Modifier
@@ -96,9 +164,11 @@ internal fun CategoryScreen(
                         .fillMaxHeight()
                 )
 
-                // 右侧内容区域
+                // 右侧内容区域 - 显示所有二级分类
                 RightCategoryContent(
-                    categories = rightCategories,
+                    categoryTrees = categoryTrees,
+                    listState = rightListState,
+                    onSubCategoryClick = onSubCategoryClick,
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxHeight()
@@ -108,9 +178,12 @@ internal fun CategoryScreen(
     )
 }
 
+/**
+ * 左侧分类列表
+ */
 @Composable
 private fun LeftCategoryList(
-    categories: List<Category>,
+    categories: List<String>,
     selectedIndex: Int,
     onCategorySelected: (Int) -> Unit,
     modifier: Modifier = Modifier
@@ -121,7 +194,7 @@ private fun LeftCategoryList(
             // 首先渲染所有实际分类项
             itemsIndexed(categories) { index, category ->
                 LeftCategoryItem(
-                    name = category.name,
+                    name = category,
                     isSelected = index == selectedIndex,
                     isPrevious = index == selectedIndex - 1, // 是否为选中项的前一项
                     isNext = index == selectedIndex + 1,     // 是否为选中项的后一项
@@ -140,6 +213,9 @@ private fun LeftCategoryList(
     }
 }
 
+/**
+ * 左侧分类菜单项
+ */
 @Composable
 private fun LeftCategoryItem(
     name: String,
@@ -268,6 +344,9 @@ private fun LeftCategoryItem(
     }
 }
 
+/**
+ * 底部占位项
+ */
 @Composable
 private fun BottomPlaceholderItem(
     isLastSelected: Boolean // 最后一项是否被选中
@@ -304,60 +383,67 @@ private fun BottomPlaceholderItem(
     }
 }
 
+/**
+ * 右侧内容区域 - 显示所有二级分类
+ */
 @Composable
 private fun RightCategoryContent(
-    categories: List<CategoryItem>,
+    categoryTrees: List<CategoryTree>,
+    listState: LazyListState,
+    onSubCategoryClick: (Long) -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     AppLazyColumn(
+        listState = listState,
         modifier = modifier
             .background(MaterialTheme.colorScheme.surface)
             .padding(horizontal = 8.dp),
         contentPadding = PaddingValues(bottom = 16.dp)
     ) {
-        // 所有分类都使用分隔标题
-        items(categories.size) { index ->
-            val category = categories[index]
-
+        // 遍历所有一级分类
+        items(categoryTrees.size) { index ->
+            val category = categoryTrees[index]
+            
             SpaceVerticalMedium()
 
             // 分类标题作为分隔符
-            TitleWithLine(category.title)
+            TitleWithLine(category.name)
 
-            // 分类内容
-            CategorySection(category = category, showTitle = false)
+            // 二级分类内容
+            if (category.children.isNotEmpty()) {
+                CategorySection(
+                    categoryTree = category,
+                    onSubCategoryClick = onSubCategoryClick
+                )
+            }
         }
     }
 }
 
+/**
+ * 分类部分 - 显示单个分类的二级分类
+ */
 @Composable
 private fun CategorySection(
-    category: CategoryItem,
-    modifier: Modifier = Modifier,
-    showTitle: Boolean = true
+    categoryTree: CategoryTree,
+    onSubCategoryClick: (Long) -> Unit = {},
+    modifier: Modifier = Modifier
 ) {
     AppColumn(modifier = modifier.fillMaxWidth()) {
-        // 分类标题（如果需要显示）
-        if (showTitle) {
-            Text(
-                text = category.title,
-                style = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.padding(vertical = 12.dp)
-            )
-        }
-
         // 子分类网格
         val itemsPerRow = 3
-        val chunkedItems = category.items.chunked(itemsPerRow)
+        val chunkedItems = categoryTree.children.chunked(itemsPerRow)
 
         chunkedItems.forEach { rowItems ->
             AppRow(
                 modifier = Modifier.fillMaxWidth(),
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                rowItems.forEach { item ->
+                rowItems.forEach { subCategory ->
                     SubCategoryItem(
-                        item = item,
+                        name = subCategory.name,
+                        imageUrl = subCategory.pic ?: "",
+                        onClick = { onSubCategoryClick(subCategory.id) },
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -371,18 +457,25 @@ private fun CategorySection(
     }
 }
 
+/**
+ * 子分类项
+ */
 @Composable
 private fun SubCategoryItem(
-    item: SubCategoryItem,
+    name: String,
+    imageUrl: String,
+    onClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
     AppColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier.padding(8.dp)
+        modifier = modifier
+            .padding(8.dp)
+            .clickable(onClick = onClick)
     ) {
         // 使用NetWorkImage替代Image
         NetWorkImage(
-            model = item.imageUrl,
+            model = imageUrl,
             contentScale = ContentScale.Crop,
             modifier = Modifier
                 .fillMaxWidth()
@@ -392,7 +485,7 @@ private fun SubCategoryItem(
 
         // 标题
         Text(
-            text = item.title,
+            text = name,
             style = MaterialTheme.typography.bodySmall,
             textAlign = TextAlign.Center,
             modifier = Modifier.padding(top = 4.dp)
@@ -411,54 +504,78 @@ private val RightTopRoundedShape = RoundedCornerShape(
 @Preview(showBackground = true)
 @Composable
 fun CategoryScreenPreview() {
-    val leftCategories = listOf(
-        Category("网络"),
-        Category("包包"),
-        Category("会员"),
-        Category("潮鞋"),
-        Category("户外")
-    )
-
-    val rightCategories = listOf(
-        CategoryItem(
-            title = "网络",
-            items = listOf(
-                SubCategoryItem(
-                    "体重秤",
-                    "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ef2bf8a1400af4698a3e61fc7f4e340e.png"
+    // 创建预览用的分类树
+    val categoryTrees = listOf(
+        CategoryTree(
+            id = 1L,
+            name = "手机",
+            parentId = null,
+            sortNum = 0,
+            pic = null,
+            status = 1,
+            createTime = null,
+            updateTime = null,
+            children = listOf(
+                CategoryTree(
+                    id = 11L,
+                    name = "小米手机",
+                    parentId = 1,
+                    sortNum = 0,
+                    pic = "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ef2bf8a1400af4698a3e61fc7f4e340e.png",
+                    status = 1,
+                    createTime = null,
+                    updateTime = null
                 ),
-                SubCategoryItem(
-                    "跑步机",
-                    "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ef2bf8a1400af4698a3e61fc7f4e340e.png"
-                ),
-                SubCategoryItem(
-                    "车模",
-                    "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ef2bf8a1400af4698a3e61fc7f4e340e.png"
+                CategoryTree(
+                    id = 12L,
+                    name = "Redmi手机",
+                    parentId = 1,
+                    sortNum = 0,
+                    pic = "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ef2bf8a1400af4698a3e61fc7f4e340e.png",
+                    status = 1,
+                    createTime = null,
+                    updateTime = null
                 )
             )
         ),
-        CategoryItem(
-            title = "电脑",
-            items = listOf(
-                SubCategoryItem(
-                    "键盘",
-                    "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ef2bf8a1400af4698a3e61fc7f4e340e.png"
+        CategoryTree(
+            id = 2L,
+            name = "电脑",
+            parentId = null,
+            sortNum = 0,
+            pic = null,
+            status = 1,
+            createTime = null,
+            updateTime = null,
+            children = listOf(
+                CategoryTree(
+                    id = 21L,
+                    name = "笔记本",
+                    parentId = 2,
+                    sortNum = 0,
+                    pic = "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ef2bf8a1400af4698a3e61fc7f4e340e.png",
+                    status = 1,
+                    createTime = null,
+                    updateTime = null
                 ),
-                SubCategoryItem(
-                    "Redmi 轻薄本",
-                    "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ef2bf8a1400af4698a3e61fc7f4e340e.png"
-                ),
-                SubCategoryItem(
-                    "设计创作",
-                    "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ef2bf8a1400af4698a3e61fc7f4e340e.png"
+                CategoryTree(
+                    id = 22L,
+                    name = "台式机",
+                    parentId = 2,
+                    sortNum = 0,
+                    pic = "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ef2bf8a1400af4698a3e61fc7f4e340e.png",
+                    status = 1,
+                    createTime = null,
+                    updateTime = null
                 )
             )
         )
     )
 
     CategoryScreen(
-        leftCategories = leftCategories,
-        rightCategories = rightCategories,
-        selectedIndex = 1
+        categoryTrees = categoryTrees,
+        selectedIndex = 1,
+        onCategorySelected = { /* 预览时不执行任何操作 */ },
+        onSubCategoryClick = { /* 预览时不执行任何操作 */ }
     )
 } 

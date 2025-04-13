@@ -1,5 +1,6 @@
 package com.joker.coolmall.core.network.datasource.goods
 
+import com.joker.coolmall.core.model.Category
 import com.joker.coolmall.core.model.Goods
 import com.joker.coolmall.core.model.response.NetworkResponse
 
@@ -11,7 +12,7 @@ interface GoodsNetworkDataSource {
     /**
      * 查询商品分类
      */
-    suspend fun getGoodsTypeList(params: Any): NetworkResponse<Any>
+    suspend fun getGoodsTypeList(): NetworkResponse<List<Category>>
 
     /**
      * 查询商品规格

@@ -1,6 +1,8 @@
 package com.joker.coolmall.core.data.repository
 
+import com.joker.coolmall.core.model.Category
 import com.joker.coolmall.core.model.Goods
+import com.joker.coolmall.core.model.response.NetworkPageMeta
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.datasource.goods.GoodsNetworkDataSource
 import kotlinx.coroutines.Dispatchers
@@ -18,8 +20,8 @@ class GoodsRepository @Inject constructor(
     /**
      * 查询商品分类
      */
-    fun getGoodsTypeList(params: Any): Flow<NetworkResponse<Any>> = flow {
-        emit(goodsNetworkDataSource.getGoodsTypeList(params))
+    fun getGoodsTypeList(): Flow<NetworkResponse<List<Category>>> = flow {
+        emit(goodsNetworkDataSource.getGoodsTypeList())
     }.flowOn(Dispatchers.IO)
 
     /**
