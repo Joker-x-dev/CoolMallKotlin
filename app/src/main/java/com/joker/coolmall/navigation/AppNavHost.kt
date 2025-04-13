@@ -7,6 +7,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.joker.coolmall.feature.auth.navigation.authGraph
 import com.joker.coolmall.feature.goods.navigation.goodsGraph
 import com.joker.coolmall.feature.main.navigation.MAIN_ROUTE
 import com.joker.coolmall.feature.main.navigation.mainGraph
@@ -66,5 +67,6 @@ fun AppNavHost(
         // 只调用模块级Graph函数，大大减少了冲突可能性
         mainGraph(navController)
         goodsGraph(navController)
+        authGraph(navController)
     }
 }

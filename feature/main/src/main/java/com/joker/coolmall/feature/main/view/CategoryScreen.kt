@@ -48,6 +48,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.joker.coolmall.core.designsystem.component.AppColumn
 import com.joker.coolmall.core.designsystem.component.AppLazyColumn
 import com.joker.coolmall.core.designsystem.component.AppRow
+import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.RadiusLarge
 import com.joker.coolmall.core.designsystem.theme.ShapeMedium
 import com.joker.coolmall.core.ui.component.appbar.CenterTopAppBar
@@ -660,10 +661,12 @@ fun CategoryScreenPreview() {
         )
     )
 
-    CategoryScreen(
-        uiState = CategoryUiState.Success(categoryTrees),
-        selectedIndex = 1,
-        onCategorySelected = { /* 预览时不执行任何操作 */ },
-        onSubCategoryClick = { /* 预览时不执行任何操作 */ }
-    )
+    AppTheme {
+        CategoryScreen(
+            uiState = CategoryUiState.Success(categoryTrees),
+            selectedIndex = 1,
+            onCategorySelected = { /* 预览时不执行任何操作 */ },
+            onSubCategoryClick = { /* 预览时不执行任何操作 */ }
+        )
+    }
 } 

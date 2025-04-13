@@ -35,6 +35,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.ArrowRightIcon
 import com.joker.coolmall.core.designsystem.theme.Primary
@@ -51,15 +52,22 @@ import com.joker.coolmall.core.ui.component.divider.WeDivider
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
 import com.joker.coolmall.feature.main.R
 import com.joker.coolmall.feature.main.component.CommonScaffold
+import com.joker.coolmall.feature.main.viewmodel.MeViewModel
 
 @Composable
-internal fun MeRoute() {
-    MeScreen()
+internal fun MeRoute(
+    viewModel: MeViewModel = hiltViewModel(),
+) {
+    MeScreen(
+        toLogin = viewModel::toLogin
+    )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun MeScreen() {
+internal fun MeScreen(
+    toLogin: () -> Unit = {},
+) {
     CommonScaffold(topBar = { }) {
         Column(
             modifier = Modifier
@@ -69,7 +77,9 @@ internal fun MeScreen() {
                 .padding(SpacePaddingMedium)
         ) {
             // 用户信息区域
-            UserInfoSection()
+            UserInfoSection(
+                toLogin = toLogin
+            )
             SpaceVerticalMedium()
 
             // 会员权益卡片
@@ -96,12 +106,13 @@ internal fun MeScreen() {
  * 用户信息区域
  */
 @Composable
-private fun UserInfoSection() {
-
+private fun UserInfoSection(
+    toLogin: () -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { /* 点击用户信息 */ },
+            .clickable { toLogin() },
         verticalAlignment = Alignment.CenterVertically
     ) {
         // 头像

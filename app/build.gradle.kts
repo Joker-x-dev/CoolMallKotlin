@@ -26,8 +26,12 @@ dependencies {
     implementation(project(":navigation"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:util"))
+    // 首页模块
     implementation(project(":feature:main"))
+    // 商品模块
     implementation(project(":feature:goods"))
+    // 登录(认证)模块
+    implementation(project(":feature:auth"))
 
     // region 依赖注入
     // https://developer.android.google.cn/training/dependency-injection/hilt-android?hl=zh-cn

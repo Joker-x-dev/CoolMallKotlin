@@ -143,7 +143,7 @@ fun BottomColumn(
 @Composable
 fun SpaceBetweenColumn(
     modifier: Modifier = Modifier,
-    horizontalAlignment: Alignment.Horizontal = Alignment.Start,
+    horizontalAlignment: Alignment.Horizontal = Alignment.CenterHorizontally,
     fillMaxWidth: Boolean = true,
     padding: Dp = 0.dp,
     content: @Composable ColumnScope.() -> Unit

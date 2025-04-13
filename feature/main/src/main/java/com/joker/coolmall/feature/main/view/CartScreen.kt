@@ -43,6 +43,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.ArrowRightIcon
 import com.joker.coolmall.core.designsystem.theme.CoolIcon
 import com.joker.coolmall.core.designsystem.theme.Primary
@@ -520,5 +521,7 @@ data class CartItemSpec(
 @Preview(showBackground = true)
 @Composable
 fun CartScreenPreview() {
-    CartScreen()
+    AppTheme {
+        CartScreen()
+    }
 } 
