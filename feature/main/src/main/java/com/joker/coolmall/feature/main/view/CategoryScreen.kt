@@ -43,6 +43,16 @@ import com.joker.coolmall.feature.main.viewmodel.Category
 import com.joker.coolmall.feature.main.viewmodel.CategoryItem
 import com.joker.coolmall.feature.main.viewmodel.CategoryViewModel
 import com.joker.coolmall.feature.main.viewmodel.SubCategoryItem
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.material.ripple.rememberRipple
+import androidx.compose.runtime.remember
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.ui.text.font.FontWeight
 
 @Composable
 internal fun CategoryRoute(
@@ -141,6 +151,58 @@ private fun LeftCategoryItem(
     isFirst: Boolean = false,    // 是否为第一项
     onClick: () -> Unit
 ) {
+    // 确定圆角形状
+    val cornerShape = if (!isSelected) {
+        when {
+            // 第一项 - 始终有右上角圆角
+            isFirst -> {
+                if (isPrevious) {
+                    // 如果既是第一项又是前一项，同时有右上角和右下角圆角
+                    RoundedCornerShape(topEnd = 16.dp, bottomEnd = 16.dp)
+                } else {
+                    // 仅是第一项，只有右上角圆角
+                    RoundedCornerShape(topEnd = 16.dp)
+                }
+            }
+            isPrevious -> RoundedCornerShape(bottomEnd = 16.dp)  // 前一项右下角圆角
+            isNext -> RoundedCornerShape(topEnd = 16.dp)         // 后一项右上角圆角
+            else -> RoundedCornerShape(0.dp)                     // 其他项无圆角
+        }
+    } else {
+        // 选中项没有圆角
+        RoundedCornerShape(0.dp)
+    }
+    
+    // 添加文本颜色动画
+    val textColor by animateColorAsState(
+        targetValue = if (isSelected) MaterialTheme.colorScheme.primary else Color.Gray,
+        animationSpec = tween(durationMillis = 300),
+        label = "textColorAnimation"
+    )
+    
+    // 添加指示条宽度动画
+    val indicatorWidth by animateDpAsState(
+        targetValue = if (isSelected) 3.dp else 0.dp,
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioLowBouncy,
+            stiffness = Spring.StiffnessMedium
+        ),
+        label = "indicatorWidthAnimation"
+    )
+    
+    // 添加字体大小动画
+    val fontSize by animateFloatAsState(
+        targetValue = if (isSelected) 1.2f else 1.0f, // 选中时字体放大10%
+        animationSpec = spring(
+            dampingRatio = Spring.DampingRatioMediumBouncy,
+            stiffness = Spring.StiffnessLow
+        ),
+        label = "fontSizeAnimation"
+    )
+    
+    // 添加字体粗细动画 (通过改变字重来实现)
+    val fontWeight = if (isSelected) FontWeight.ExtraBold else FontWeight.Normal
+
     // 底层白色Box
     Box(
         contentAlignment = Alignment.Center,
@@ -148,51 +210,48 @@ private fun LeftCategoryItem(
             .fillMaxWidth()
             .height(50.dp)
             .background(Color.White)  // 底层都是白色
-            .clickable(onClick = onClick)
+            .then(
+                if (!isSelected) {
+                    // 非选中项可点击，带水波纹效果
+                    Modifier.clip(cornerShape) // 先裁剪确保水波纹有圆角
+                        .clickable(onClick = onClick) // 使用默认的clickable带水波纹
+                } else {
+                    // 选中项不可点击
+                    Modifier
+                }
+            )
     ) {
         // 如果不是选中项，则添加灰色顶层Box（可能带圆角）
         if (!isSelected) {
-            // 确定顶层灰色Box的圆角形状
-            val cornerShape = when {
-                // 第一项 - 始终有右上角圆角
-                isFirst -> {
-                    if (isPrevious) {
-                        // 如果既是第一项又是前一项，同时有右上角和右下角圆角
-                        RoundedCornerShape(topEnd = 16.dp, bottomEnd = 16.dp)
-                    } else {
-                        // 仅是第一项，只有右上角圆角
-                        RoundedCornerShape(topEnd = 16.dp)
-                    }
-                }
-                isPrevious -> RoundedCornerShape(bottomEnd = 16.dp)  // 前一项右下角圆角
-                isNext -> RoundedCornerShape(topEnd = 16.dp)         // 后一项右上角圆角
-                else -> RoundedCornerShape(0.dp)                     // 其他项无圆角
-            }
-
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .clip(cornerShape)
-                    .background(Color(0xFFF5F5F5))  // 灰色覆盖层
+                    .background(Color(0xFFF5F5F5))  // 使用固定的灰色
             )
         }
         
-        // 如果选中，在左侧添加主题色指示条（最上层）
-        if (isSelected) {
+        // 左侧指示条，使用动画宽度
+        if (indicatorWidth > 0.dp) {
             Spacer(
                 modifier = Modifier
-                    .width(3.dp)
+                    .width(indicatorWidth)
                     .height(24.dp)
                     .background(MaterialTheme.colorScheme.primary)
                     .align(Alignment.CenterStart)
             )
         }
 
-        // 文本内容（最上层）
+        // 文本内容（最上层），使用动画颜色和大小
         Text(
             text = name,
-            style = MaterialTheme.typography.bodyMedium,
-            color = if (isSelected) MaterialTheme.colorScheme.primary else Color.Gray
+            style = MaterialTheme.typography.bodyMedium.copy(
+                fontWeight = fontWeight
+            ),
+            color = textColor,
+            fontSize = MaterialTheme.typography.bodyMedium.fontSize * fontSize,
+            textAlign = TextAlign.Center,  // 确保文本居中
+            modifier = Modifier.fillMaxWidth()  // 填充整个宽度以确保居中
         )
     }
 }
@@ -201,6 +260,10 @@ private fun LeftCategoryItem(
 private fun BottomPlaceholderItem(
     isLastSelected: Boolean // 最后一项是否被选中
 ) {
+    // 固定颜色
+    val whiteColor = Color.White
+    val grayColor = Color(0xFFF5F5F5)
+
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -212,7 +275,7 @@ private fun BottomPlaceholderItem(
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color.White)
+                    .background(whiteColor)
             )
             
             // 顶层添加灰色圆角
@@ -220,14 +283,14 @@ private fun BottomPlaceholderItem(
                 modifier = Modifier
                     .fillMaxSize()
                     .clip(RoundedCornerShape(topEnd = 16.dp))
-                    .background(Color(0xFFF5F5F5))
+                    .background(grayColor) // 使用固定灰色
             )
         } else {
             // 否则就是普通的灰色背景
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(Color(0xFFF5F5F5))
+                    .background(grayColor) // 使用固定灰色
             )
         }
     }
