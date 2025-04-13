@@ -4,9 +4,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -15,10 +13,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -30,7 +26,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -38,8 +33,10 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.joker.coolmall.core.designsystem.component.AppColumn
 import com.joker.coolmall.core.designsystem.component.AppLazyColumn
 import com.joker.coolmall.core.designsystem.component.AppRow
+import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.ui.component.appbar.CenterTopAppBar
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
+import com.joker.coolmall.core.ui.component.title.TitleWithLine
 import com.joker.coolmall.feature.main.R
 import com.joker.coolmall.feature.main.component.CommonScaffold
 import com.joker.coolmall.feature.main.viewmodel.Category
@@ -90,8 +87,8 @@ internal fun CategoryScreen(
                         .width(100.dp)
                         .fillMaxHeight()
                 )
-                
-                // 右侧内容区域 - 移除了分隔线
+
+                // 右侧内容区域
                 RightCategoryContent(
                     categories = rightCategories,
                     modifier = Modifier
@@ -111,53 +108,24 @@ private fun LeftCategoryList(
     modifier: Modifier = Modifier
 ) {
     Box(modifier = modifier.background(Color(0xFFF5F5F5))) {
-        // 绘制选中项之前的圆角（上一个item的右下角圆角）
-        if (selectedIndex > 0) {
-            Spacer(
-                modifier = Modifier
-                    .width(100.dp)
-                    .height(50.dp)
-                    .clip(
-                        RoundedCornerShape(
-                            topEnd = 0.dp,
-                            bottomEnd = 8.dp,
-                            topStart = 0.dp,
-                            bottomStart = 0.dp
-                        )
-                    )
-                    .background(Color(0xFFF5F5F5))
-                    .align(Alignment.TopEnd)
-                    .padding(top = 50.dp * selectedIndex)
-            )
-        }
-        
-        // 绘制选中项之后的圆角（下一个item的右上角圆角）
-        if (selectedIndex < categories.size - 1) {
-            Spacer(
-                modifier = Modifier
-                    .width(100.dp)
-                    .height(50.dp)
-                    .clip(
-                        RoundedCornerShape(
-                            topEnd = 8.dp,
-                            bottomEnd = 0.dp,
-                            topStart = 0.dp,
-                            bottomStart = 0.dp
-                        )
-                    )
-                    .background(Color(0xFFF5F5F5))
-                    .align(Alignment.TopEnd)
-                    .padding(top = 50.dp * (selectedIndex + 1))
-            )
-        }
-        
         // 实际的分类列表
         AppLazyColumn {
+            // 首先渲染所有实际分类项
             itemsIndexed(categories) { index, category ->
                 LeftCategoryItem(
                     name = category.name,
                     isSelected = index == selectedIndex,
+                    isPrevious = index == selectedIndex - 1, // 是否为选中项的前一项
+                    isNext = index == selectedIndex + 1,     // 是否为选中项的后一项
+                    isFirst = index == 0,                    // 是否为第一项
                     onClick = { onCategorySelected(index) }
+                )
+            }
+            
+            // 额外添加一个不可点击的底部占位项（用于实现最后一项的圆角效果）
+            item {
+                BottomPlaceholderItem(
+                    isLastSelected = selectedIndex == categories.size - 1
                 )
             }
         }
@@ -168,19 +136,49 @@ private fun LeftCategoryList(
 private fun LeftCategoryItem(
     name: String,
     isSelected: Boolean,
+    isPrevious: Boolean = false, // 是选中项的前一项
+    isNext: Boolean = false,     // 是选中项的后一项
+    isFirst: Boolean = false,    // 是否为第一项
     onClick: () -> Unit
 ) {
+    // 底层白色Box
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .fillMaxWidth()
             .height(50.dp)
-            .background(if (isSelected) Color.White else Color.Transparent)
+            .background(Color.White)  // 底层都是白色
             .clickable(onClick = onClick)
     ) {
-        // 如果选中，在左侧添加主题色指示条
+        // 如果不是选中项，则添加灰色顶层Box（可能带圆角）
+        if (!isSelected) {
+            // 确定顶层灰色Box的圆角形状
+            val cornerShape = when {
+                // 第一项 - 始终有右上角圆角
+                isFirst -> {
+                    if (isPrevious) {
+                        // 如果既是第一项又是前一项，同时有右上角和右下角圆角
+                        RoundedCornerShape(topEnd = 16.dp, bottomEnd = 16.dp)
+                    } else {
+                        // 仅是第一项，只有右上角圆角
+                        RoundedCornerShape(topEnd = 16.dp)
+                    }
+                }
+                isPrevious -> RoundedCornerShape(bottomEnd = 16.dp)  // 前一项右下角圆角
+                isNext -> RoundedCornerShape(topEnd = 16.dp)         // 后一项右上角圆角
+                else -> RoundedCornerShape(0.dp)                     // 其他项无圆角
+            }
+
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(cornerShape)
+                    .background(Color(0xFFF5F5F5))  // 灰色覆盖层
+            )
+        }
+        
+        // 如果选中，在左侧添加主题色指示条（最上层）
         if (isSelected) {
-            // 添加左侧蓝色条
             Spacer(
                 modifier = Modifier
                     .width(3.dp)
@@ -189,12 +187,49 @@ private fun LeftCategoryItem(
                     .align(Alignment.CenterStart)
             )
         }
-        
+
+        // 文本内容（最上层）
         Text(
             text = name,
             style = MaterialTheme.typography.bodyMedium,
             color = if (isSelected) MaterialTheme.colorScheme.primary else Color.Gray
         )
+    }
+}
+
+@Composable
+private fun BottomPlaceholderItem(
+    isLastSelected: Boolean // 最后一项是否被选中
+) {
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(50.dp)
+    ) {
+        // 只有当最后一项被选中时，才需要添加右上角的圆角
+        if (isLastSelected) {
+            // 添加白色背景
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color.White)
+            )
+            
+            // 顶层添加灰色圆角
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clip(RoundedCornerShape(topEnd = 16.dp))
+                    .background(Color(0xFFF5F5F5))
+            )
+        } else {
+            // 否则就是普通的灰色背景
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .background(Color(0xFFF5F5F5))
+            )
+        }
     }
 }
 
@@ -212,40 +247,15 @@ private fun RightCategoryContent(
         // 所有分类都使用分隔标题
         items(categories.size) { index ->
             val category = categories[index]
-            
+
+            SpaceVerticalMedium()
+
             // 分类标题作为分隔符
-            CategoryDividerWithTitle(title = category.title)
-            
+            TitleWithLine(category.title)
+
             // 分类内容
             CategorySection(category = category, showTitle = false)
         }
-    }
-}
-
-@Composable
-private fun CategoryDividerWithTitle(
-    title: String,
-    modifier: Modifier = Modifier
-) {
-    Box(
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(vertical = 16.dp)
-    ) {
-        Divider(
-            color = Color.LightGray.copy(alpha = 0.5f),
-            modifier = Modifier.align(Alignment.Center)
-        )
-        
-        // 分类标题位于分隔线中央
-        Text(
-            text = title,
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier
-                .background(Color.White)
-                .padding(horizontal = 8.dp)
-                .align(Alignment.Center)
-        )
     }
 }
 
@@ -264,11 +274,11 @@ private fun CategorySection(
                 modifier = Modifier.padding(vertical = 12.dp)
             )
         }
-        
+
         // 子分类网格
         val itemsPerRow = 3
         val chunkedItems = category.items.chunked(itemsPerRow)
-        
+
         chunkedItems.forEach { rowItems ->
             AppRow(
                 modifier = Modifier.fillMaxWidth(),
@@ -280,7 +290,7 @@ private fun CategorySection(
                         modifier = Modifier.weight(1f)
                     )
                 }
-                
+
                 // 如果一行不满itemsPerRow个，添加空白占位
                 if (rowItems.size < itemsPerRow) {
                     Spacer(modifier = Modifier.weight(itemsPerRow - rowItems.size.toFloat()))
@@ -308,7 +318,7 @@ private fun SubCategoryItem(
                 .aspectRatio(1f)
                 .clip(RoundedCornerShape(4.dp))
         )
-        
+
         // 标题
         Text(
             text = item.title,
@@ -329,29 +339,47 @@ fun CategoryScreenPreview() {
         Category("潮鞋"),
         Category("户外")
     )
-    
+
     val rightCategories = listOf(
         CategoryItem(
             title = "网络",
             items = listOf(
-                SubCategoryItem("体重秤", "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ef2bf8a1400af4698a3e61fc7f4e340e.png"),
-                SubCategoryItem("跑步机", "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ef2bf8a1400af4698a3e61fc7f4e340e.png"),
-                SubCategoryItem("车模", "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ef2bf8a1400af4698a3e61fc7f4e340e.png")
+                SubCategoryItem(
+                    "体重秤",
+                    "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ef2bf8a1400af4698a3e61fc7f4e340e.png"
+                ),
+                SubCategoryItem(
+                    "跑步机",
+                    "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ef2bf8a1400af4698a3e61fc7f4e340e.png"
+                ),
+                SubCategoryItem(
+                    "车模",
+                    "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ef2bf8a1400af4698a3e61fc7f4e340e.png"
+                )
             )
         ),
         CategoryItem(
             title = "电脑",
             items = listOf(
-                SubCategoryItem("键盘", "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ef2bf8a1400af4698a3e61fc7f4e340e.png"),
-                SubCategoryItem("Redmi 轻薄本", "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ef2bf8a1400af4698a3e61fc7f4e340e.png"),
-                SubCategoryItem("设计创作", "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ef2bf8a1400af4698a3e61fc7f4e340e.png")
+                SubCategoryItem(
+                    "键盘",
+                    "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ef2bf8a1400af4698a3e61fc7f4e340e.png"
+                ),
+                SubCategoryItem(
+                    "Redmi 轻薄本",
+                    "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ef2bf8a1400af4698a3e61fc7f4e340e.png"
+                ),
+                SubCategoryItem(
+                    "设计创作",
+                    "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ef2bf8a1400af4698a3e61fc7f4e340e.png"
+                )
             )
         )
     )
-    
+
     CategoryScreen(
         leftCategories = leftCategories,
         rightCategories = rightCategories,
-        selectedIndex = 0
+        selectedIndex = 1
     )
 } 
