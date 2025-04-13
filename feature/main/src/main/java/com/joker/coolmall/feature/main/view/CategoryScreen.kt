@@ -31,6 +31,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -49,9 +50,10 @@ import com.joker.coolmall.core.designsystem.component.AppLazyColumn
 import com.joker.coolmall.core.designsystem.component.AppRow
 import com.joker.coolmall.core.designsystem.theme.RadiusLarge
 import com.joker.coolmall.core.designsystem.theme.ShapeMedium
-import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.ui.component.appbar.CenterTopAppBar
+import com.joker.coolmall.core.ui.component.empty.EmptyNetwork
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
+import com.joker.coolmall.core.ui.component.loading.PageLoading
 import com.joker.coolmall.core.ui.component.title.TitleWithLine
 import com.joker.coolmall.feature.main.R
 import com.joker.coolmall.feature.main.component.CommonScaffold
@@ -62,6 +64,8 @@ import kotlinx.coroutines.launch
 
 /**
  * 分类页面路由
+ * 
+ * @param viewModel 分类页面的ViewModel
  */
 @Composable
 internal fun CategoryRoute(
@@ -70,69 +74,126 @@ internal fun CategoryRoute(
     val uiState by viewModel.uiState.collectAsState()
     val selectedIndex by viewModel.selectedCategoryIndex.collectAsState()
 
-    when (uiState) {
-        is CategoryUiState.Loading -> {
-            // 显示加载状态
-            Box(modifier = Modifier.fillMaxSize()) {
-                Text(
-                    text = "加载中...",
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
-        }
-        is CategoryUiState.Error -> {
-            // 显示错误状态
-            Box(modifier = Modifier.fillMaxSize()) {
-                Text(
-                    text = "加载失败，请重试",
-                    modifier = Modifier.align(Alignment.Center)
-                )
-            }
-        }
-        is CategoryUiState.Success -> {
-            val categoryTrees = (uiState as CategoryUiState.Success).data
-            CategoryScreen(
-                categoryTrees = categoryTrees,
-                selectedIndex = selectedIndex,
-                onCategorySelected = viewModel::selectCategory,
-                onSubCategoryClick = viewModel::navigateToGoodsList
-            )
-        }
-    }
+    CategoryScreen(
+        uiState = uiState,
+        selectedIndex = selectedIndex,
+        onCategorySelected = viewModel::selectCategory,
+        onSubCategoryClick = viewModel::navigateToGoodsList,
+        onRetry = viewModel::getCategoryData
+    )
 }
 
 /**
  * 分类页面内容
+ * 
+ * @param uiState 当前UI状态
+ * @param selectedIndex 当前选中的分类索引
+ * @param onCategorySelected 分类选中回调
+ * @param onSubCategoryClick 子分类点击回调
+ * @param onRetry 重试加载数据回调
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun CategoryScreen(
-    categoryTrees: List<CategoryTree> = emptyList(),
+    uiState: CategoryUiState = CategoryUiState.Loading,
     selectedIndex: Int = 0,
     onCategorySelected: (Int) -> Unit = {},
-    onSubCategoryClick: (Long) -> Unit = {}
+    onSubCategoryClick: (Long) -> Unit = {},
+    onRetry: () -> Unit = {}
+) {
+    CommonScaffold(
+        topBar = {
+            CenterTopAppBar(R.string.category, showBackIcon = false)
+        },
+        content = { paddingValues ->
+            Box(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(paddingValues)
+            ) {
+                when (uiState) {
+                    is CategoryUiState.Loading -> PageLoading()
+                    is CategoryUiState.Error -> EmptyNetwork(onRetryClick = onRetry)
+                    is CategoryUiState.Success -> CategoryContentView(
+                        categoryTrees = uiState.data,
+                        selectedIndex = selectedIndex,
+                        onCategorySelected = onCategorySelected,
+                        onSubCategoryClick = onSubCategoryClick
+                    )
+                }
+            }
+        }
+    )
+}
+
+/**
+ * 分类页面的主要内容 - 成功状态
+ * 
+ * @param categoryTrees 分类树数据列表
+ * @param selectedIndex 当前选中的分类索引
+ * @param onCategorySelected 分类选中回调
+ * @param onSubCategoryClick 子分类点击回调
+ */
+@Composable
+private fun CategoryContentView(
+    categoryTrees: List<CategoryTree>,
+    selectedIndex: Int,
+    onCategorySelected: (Int) -> Unit,
+    onSubCategoryClick: (Long) -> Unit
 ) {
     // 记住协程作用域，用于滚动操作
     val coroutineScope = rememberCoroutineScope()
-    
+
     // 右侧列表的滚动状态
     val rightListState = rememberLazyListState()
-    
+
     // 用于跟踪滚动方向，避免循环联动
     var isScrollingFromLeftClick by remember { mutableStateOf(false) }
-    
-    // 右侧滚动监听
-    LaunchedEffect(remember { derivedStateOf { rightListState.firstVisibleItemIndex } }) {
-        if (!isScrollingFromLeftClick && rightListState.firstVisibleItemIndex >= 0) {
-            // 当右侧滚动时，且不是由左侧点击触发的，更新左侧选中项
-            onCategorySelected(rightListState.firstVisibleItemIndex)
+
+    // 上次更新左侧选中项的索引
+    var lastSelectedIndex by remember { mutableIntStateOf(selectedIndex) }
+
+    // 使用derivedStateOf获取当前可见的一级分类索引
+    val currentVisibleIndex = remember {
+        derivedStateOf {
+            // 获取当前所有可见项
+            val visibleItems = rightListState.layoutInfo.visibleItemsInfo
+            if (visibleItems.isEmpty()) return@derivedStateOf selectedIndex
+
+            // 第一个完全可见的项
+            val firstCompletelyVisibleItemIndex = visibleItems
+                .firstOrNull { it.offset >= 0 }?.index ?: rightListState.firstVisibleItemIndex
+
+            // 计算屏幕中心位置
+            val centerOffset = rightListState.layoutInfo.viewportEndOffset / 2
+
+            // 找到中心位置显示的项
+            val centerItem = visibleItems.firstOrNull { itemInfo ->
+                val itemCenter = itemInfo.offset + (itemInfo.size / 2)
+                (itemCenter > 0) && (itemCenter < centerOffset)
+            }
+
+            // 优先使用中心项，其次是第一个完全可见项，最后是第一个可见项
+            centerItem?.index ?: firstCompletelyVisibleItemIndex
         }
     }
-    
+
+    // 右侧滚动监听
+    LaunchedEffect(currentVisibleIndex.value) {
+        if (!isScrollingFromLeftClick && currentVisibleIndex.value != lastSelectedIndex) {
+            // 当右侧滚动时，索引变化，且不是由左侧点击触发的，更新左侧选中项
+            lastSelectedIndex = currentVisibleIndex.value
+            onCategorySelected(currentVisibleIndex.value)
+        }
+    }
+
     // 当左侧选中项改变时，滚动右侧列表
     LaunchedEffect(selectedIndex) {
-        if (selectedIndex >= 0 && selectedIndex < categoryTrees.size) {
+        if (selectedIndex >= 0 && selectedIndex < categoryTrees.size &&
+            selectedIndex != lastSelectedIndex
+        ) { // 避免重复滚动
             isScrollingFromLeftClick = true
+            lastSelectedIndex = selectedIndex
             coroutineScope.launch {
                 rightListState.animateScrollToItem(selectedIndex)
                 // 滚动完成后重置标志
@@ -141,45 +202,41 @@ internal fun CategoryScreen(
         }
     }
 
-    CommonScaffold(
-        topBar = {
-            CenterTopAppBar(R.string.category, showBackIcon = false)
-        },
-        content = { paddingValues ->
-            AppRow(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-            ) {
-                // 提取一级分类名称用于左侧显示
-                val rootCategories = categoryTrees.map { it.name }
-                
-                // 左侧分类列表
-                LeftCategoryList(
-                    categories = rootCategories,
-                    selectedIndex = selectedIndex,
-                    onCategorySelected = onCategorySelected,
-                    modifier = Modifier
-                        .width(100.dp)
-                        .fillMaxHeight()
-                )
+    AppRow(
+        modifier = Modifier.fillMaxSize()
+    ) {
+        // 提取一级分类名称用于左侧显示
+        val rootCategories = categoryTrees.map { it.name }
 
-                // 右侧内容区域 - 显示所有二级分类
-                RightCategoryContent(
-                    categoryTrees = categoryTrees,
-                    listState = rightListState,
-                    onSubCategoryClick = onSubCategoryClick,
-                    modifier = Modifier
-                        .weight(1f)
-                        .fillMaxHeight()
-                )
-            }
-        }
-    )
+        // 左侧分类列表
+        LeftCategoryList(
+            categories = rootCategories,
+            selectedIndex = selectedIndex,
+            onCategorySelected = onCategorySelected,
+            modifier = Modifier
+                .width(100.dp)
+                .fillMaxHeight()
+        )
+
+        // 右侧内容区域 - 显示所有二级分类
+        RightCategoryContent(
+            categoryTrees = categoryTrees,
+            listState = rightListState,
+            onSubCategoryClick = onSubCategoryClick,
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxHeight()
+        )
+    }
 }
 
 /**
  * 左侧分类列表
+ *
+ * @param categories 分类名称列表
+ * @param selectedIndex 当前选中的分类索引
+ * @param onCategorySelected 分类选中回调
+ * @param modifier 修饰符
  */
 @Composable
 private fun LeftCategoryList(
@@ -196,9 +253,9 @@ private fun LeftCategoryList(
                 LeftCategoryItem(
                     name = category,
                     isSelected = index == selectedIndex,
-                    isPrevious = index == selectedIndex - 1, // 是否为选中项的前一项
-                    isNext = index == selectedIndex + 1,     // 是否为选中项的后一项
-                    isFirst = index == 0,                    // 是否为第一项
+                    isPrevious = index == selectedIndex - 1,
+                    isNext = index == selectedIndex + 1,
+                    isFirst = index == 0,
                     onClick = { onCategorySelected(index) }
                 )
             }
@@ -215,14 +272,21 @@ private fun LeftCategoryList(
 
 /**
  * 左侧分类菜单项
+ *
+ * @param name 分类名称
+ * @param isSelected 是否是当前选中项
+ * @param isPrevious 是否为选中项的前一项
+ * @param isNext 是否为选中项的后一项
+ * @param isFirst 是否为第一项
+ * @param onClick 点击事件回调
  */
 @Composable
 private fun LeftCategoryItem(
     name: String,
     isSelected: Boolean,
-    isPrevious: Boolean = false, // 是选中项的前一项
-    isNext: Boolean = false,     // 是选中项的后一项
-    isFirst: Boolean = false,    // 是否为第一项
+    isPrevious: Boolean = false,
+    isNext: Boolean = false,
+    isFirst: Boolean = false,
     onClick: () -> Unit
 ) {
 
@@ -346,10 +410,12 @@ private fun LeftCategoryItem(
 
 /**
  * 底部占位项
+ *
+ * @param isLastSelected 最后一项是否被选中
  */
 @Composable
 private fun BottomPlaceholderItem(
-    isLastSelected: Boolean // 最后一项是否被选中
+    isLastSelected: Boolean
 ) {
     Box(
         modifier = Modifier
@@ -385,36 +451,49 @@ private fun BottomPlaceholderItem(
 
 /**
  * 右侧内容区域 - 显示所有二级分类
+ *
+ * @param modifier 修饰符
+ * @param categoryTrees 分类树列表
+ * @param listState 列表滚动状态
+ * @param onSubCategoryClick 子分类点击回调
  */
 @Composable
 private fun RightCategoryContent(
+    modifier: Modifier = Modifier,
     categoryTrees: List<CategoryTree>,
     listState: LazyListState,
-    onSubCategoryClick: (Long) -> Unit = {},
-    modifier: Modifier = Modifier
+    onSubCategoryClick: (Long) -> Unit,
 ) {
     AppLazyColumn(
         listState = listState,
         modifier = modifier
             .background(MaterialTheme.colorScheme.surface)
             .padding(horizontal = 8.dp),
-        contentPadding = PaddingValues(bottom = 16.dp)
+        contentPadding = PaddingValues(vertical = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(24.dp) // 增加项之间的间距
     ) {
         // 遍历所有一级分类
         items(categoryTrees.size) { index ->
             val category = categoryTrees[index]
-            
-            SpaceVerticalMedium()
 
-            // 分类标题作为分隔符
-            TitleWithLine(category.name)
+            // 分类区域整体包装，确保每个分类区域有足够的高度触发滚动监听
+            AppColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(bottom = 8.dp) // 底部额外增加间距
+            ) {
+                // 分类标题作为分隔符
+                TitleWithLine(category.name)
 
-            // 二级分类内容
-            if (category.children.isNotEmpty()) {
-                CategorySection(
-                    categoryTree = category,
-                    onSubCategoryClick = onSubCategoryClick
-                )
+                Spacer(modifier = Modifier.height(8.dp)) // 标题和内容之间的间距
+
+                // 二级分类内容
+                if (category.children.isNotEmpty()) {
+                    CategorySection(
+                        categoryTree = category,
+                        onSubCategoryClick = onSubCategoryClick
+                    )
+                }
             }
         }
     }
@@ -422,12 +501,16 @@ private fun RightCategoryContent(
 
 /**
  * 分类部分 - 显示单个分类的二级分类
+ *
+ * @param modifier 修饰符
+ * @param categoryTree 分类树数据
+ * @param onSubCategoryClick 子分类点击回调
  */
 @Composable
 private fun CategorySection(
+    modifier: Modifier = Modifier,
     categoryTree: CategoryTree,
     onSubCategoryClick: (Long) -> Unit = {},
-    modifier: Modifier = Modifier
 ) {
     AppColumn(modifier = modifier.fillMaxWidth()) {
         // 子分类网格
@@ -459,13 +542,18 @@ private fun CategorySection(
 
 /**
  * 子分类项
+ *
+ * @param modifier 修饰符
+ * @param name 分类名称
+ * @param imageUrl 图片URL
+ * @param onClick 点击事件回调
  */
 @Composable
 private fun SubCategoryItem(
+    modifier: Modifier = Modifier,
     name: String,
     imageUrl: String,
-    onClick: () -> Unit = {},
-    modifier: Modifier = Modifier
+    onClick: () -> Unit = {}
 ) {
     AppColumn(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -573,7 +661,7 @@ fun CategoryScreenPreview() {
     )
 
     CategoryScreen(
-        categoryTrees = categoryTrees,
+        uiState = CategoryUiState.Success(categoryTrees),
         selectedIndex = 1,
         onCategorySelected = { /* 预览时不执行任何操作 */ },
         onSubCategoryClick = { /* 预览时不执行任何操作 */ }
