@@ -1,5 +1,11 @@
 package com.joker.coolmall.feature.main.view
 
+import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -24,8 +30,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -33,6 +39,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.joker.coolmall.core.designsystem.component.AppColumn
 import com.joker.coolmall.core.designsystem.component.AppLazyColumn
 import com.joker.coolmall.core.designsystem.component.AppRow
+import com.joker.coolmall.core.designsystem.theme.RadiusLarge
+import com.joker.coolmall.core.designsystem.theme.ShapeMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.ui.component.appbar.CenterTopAppBar
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
@@ -43,16 +51,6 @@ import com.joker.coolmall.feature.main.viewmodel.Category
 import com.joker.coolmall.feature.main.viewmodel.CategoryItem
 import com.joker.coolmall.feature.main.viewmodel.CategoryViewModel
 import com.joker.coolmall.feature.main.viewmodel.SubCategoryItem
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.material.ripple.rememberRipple
-import androidx.compose.runtime.remember
-import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.core.Spring
-import androidx.compose.animation.core.spring
-import androidx.compose.animation.animateColorAsState
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.ui.text.font.FontWeight
 
 @Composable
 internal fun CategoryRoute(
@@ -117,7 +115,7 @@ private fun LeftCategoryList(
     onCategorySelected: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Box(modifier = modifier.background(Color(0xFFF5F5F5))) {
+    Box(modifier = modifier.background(MaterialTheme.colorScheme.background)) {
         // 实际的分类列表
         AppLazyColumn {
             // 首先渲染所有实际分类项
@@ -131,7 +129,7 @@ private fun LeftCategoryList(
                     onClick = { onCategorySelected(index) }
                 )
             }
-            
+
             // 额外添加一个不可点击的底部占位项（用于实现最后一项的圆角效果）
             item {
                 BottomPlaceholderItem(
@@ -151,6 +149,8 @@ private fun LeftCategoryItem(
     isFirst: Boolean = false,    // 是否为第一项
     onClick: () -> Unit
 ) {
+
+
     // 确定圆角形状
     val cornerShape = if (!isSelected) {
         when {
@@ -158,28 +158,39 @@ private fun LeftCategoryItem(
             isFirst -> {
                 if (isPrevious) {
                     // 如果既是第一项又是前一项，同时有右上角和右下角圆角
-                    RoundedCornerShape(topEnd = 16.dp, bottomEnd = 16.dp)
+                    RoundedCornerShape(
+                        topStart = 0.dp,
+                        topEnd = RadiusLarge,
+                        bottomEnd = RadiusLarge,
+                        bottomStart = 0.dp
+                    )
                 } else {
                     // 仅是第一项，只有右上角圆角
-                    RoundedCornerShape(topEnd = 16.dp)
+                    RightTopRoundedShape
                 }
             }
-            isPrevious -> RoundedCornerShape(bottomEnd = 16.dp)  // 前一项右下角圆角
-            isNext -> RoundedCornerShape(topEnd = 16.dp)         // 后一项右上角圆角
-            else -> RoundedCornerShape(0.dp)                     // 其他项无圆角
+
+            isPrevious -> RoundedCornerShape(
+                topStart = 0.dp,
+                topEnd = 0.dp,
+                bottomEnd = RadiusLarge,
+                bottomStart = 0.dp
+            )  // 前一项右下角圆角
+            isNext -> RightTopRoundedShape         // 后一项右上角圆角
+            else -> RoundedCornerShape(0.dp)       // 其他项无圆角
         }
     } else {
         // 选中项没有圆角
         RoundedCornerShape(0.dp)
     }
-    
+
     // 添加文本颜色动画
     val textColor by animateColorAsState(
-        targetValue = if (isSelected) MaterialTheme.colorScheme.primary else Color.Gray,
+        targetValue = if (isSelected) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.onSurfaceVariant,
         animationSpec = tween(durationMillis = 300),
         label = "textColorAnimation"
     )
-    
+
     // 添加指示条宽度动画
     val indicatorWidth by animateDpAsState(
         targetValue = if (isSelected) 3.dp else 0.dp,
@@ -189,17 +200,17 @@ private fun LeftCategoryItem(
         ),
         label = "indicatorWidthAnimation"
     )
-    
+
     // 添加字体大小动画
     val fontSize by animateFloatAsState(
-        targetValue = if (isSelected) 1.2f else 1.0f, // 选中时字体放大10%
+        targetValue = if (isSelected) 1.2f else 1.0f, // 选中时字体放大20%
         animationSpec = spring(
             dampingRatio = Spring.DampingRatioMediumBouncy,
             stiffness = Spring.StiffnessLow
         ),
         label = "fontSizeAnimation"
     )
-    
+
     // 添加字体粗细动画 (通过改变字重来实现)
     val fontWeight = if (isSelected) FontWeight.ExtraBold else FontWeight.Normal
 
@@ -209,11 +220,12 @@ private fun LeftCategoryItem(
         modifier = Modifier
             .fillMaxWidth()
             .height(50.dp)
-            .background(Color.White)  // 底层都是白色
+            .background(MaterialTheme.colorScheme.surface)  // 使用surface颜色
             .then(
                 if (!isSelected) {
                     // 非选中项可点击，带水波纹效果
-                    Modifier.clip(cornerShape) // 先裁剪确保水波纹有圆角
+                    Modifier
+                        .clip(cornerShape) // 先裁剪确保水波纹有圆角
                         .clickable(onClick = onClick) // 使用默认的clickable带水波纹
                 } else {
                     // 选中项不可点击
@@ -221,16 +233,16 @@ private fun LeftCategoryItem(
                 }
             )
     ) {
-        // 如果不是选中项，则添加灰色顶层Box（可能带圆角）
+        // 如果不是选中项，则添加背景顶层Box（可能带圆角）
         if (!isSelected) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
                     .clip(cornerShape)
-                    .background(Color(0xFFF5F5F5))  // 使用固定的灰色
+                    .background(MaterialTheme.colorScheme.background)  // 使用background颜色
             )
         }
-        
+
         // 左侧指示条，使用动画宽度
         if (indicatorWidth > 0.dp) {
             Spacer(
@@ -260,10 +272,6 @@ private fun LeftCategoryItem(
 private fun BottomPlaceholderItem(
     isLastSelected: Boolean // 最后一项是否被选中
 ) {
-    // 固定颜色
-    val whiteColor = Color.White
-    val grayColor = Color(0xFFF5F5F5)
-
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -271,26 +279,26 @@ private fun BottomPlaceholderItem(
     ) {
         // 只有当最后一项被选中时，才需要添加右上角的圆角
         if (isLastSelected) {
-            // 添加白色背景
+            // 添加表面颜色背景
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(whiteColor)
+                    .background(MaterialTheme.colorScheme.surface)
             )
-            
-            // 顶层添加灰色圆角
+
+            // 顶层添加背景色圆角
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .clip(RoundedCornerShape(topEnd = 16.dp))
-                    .background(grayColor) // 使用固定灰色
+                    .clip(RightTopRoundedShape)
+                    .background(MaterialTheme.colorScheme.background)
             )
         } else {
-            // 否则就是普通的灰色背景
+            // 否则就是普通的背景颜色
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .background(grayColor) // 使用固定灰色
+                    .background(MaterialTheme.colorScheme.background)
             )
         }
     }
@@ -303,7 +311,7 @@ private fun RightCategoryContent(
 ) {
     AppLazyColumn(
         modifier = modifier
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.surface)
             .padding(horizontal = 8.dp),
         contentPadding = PaddingValues(bottom = 16.dp)
     ) {
@@ -379,7 +387,7 @@ private fun SubCategoryItem(
             modifier = Modifier
                 .fillMaxWidth()
                 .aspectRatio(1f)
-                .clip(RoundedCornerShape(4.dp))
+                .clip(ShapeMedium)
         )
 
         // 标题
@@ -391,6 +399,14 @@ private fun SubCategoryItem(
         )
     }
 }
+
+// 右上角圆角
+private val RightTopRoundedShape = RoundedCornerShape(
+    topStart = 0.dp,
+    topEnd = RadiusLarge,
+    bottomEnd = 0.dp,
+    bottomStart = 0.dp
+)
 
 @Preview(showBackground = true)
 @Composable
