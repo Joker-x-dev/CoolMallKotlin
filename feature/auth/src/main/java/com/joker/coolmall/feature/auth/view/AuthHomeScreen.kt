@@ -8,6 +8,7 @@ import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInVertically
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -16,7 +17,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.text.ClickableText
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
@@ -24,20 +24,22 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.SpanStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.joker.coolmall.core.designsystem.component.CenterColumn
+import com.joker.coolmall.core.designsystem.component.CenterRow
 import com.joker.coolmall.core.designsystem.component.SpaceBetweenColumn
 import com.joker.coolmall.core.designsystem.component.SpaceEvenlyRow
 import com.joker.coolmall.core.designsystem.theme.AppTheme
@@ -80,11 +82,26 @@ fun AuthHomeScreen(
     onNavigateToSmsLogin: () -> Unit = {},
     onNavigateToRegister: () -> Unit = {}
 ) {
-    // 创建动画状态，初始为false(不可见)，然后设置为true(可见)触发动画
+    // 使用rememberSaveable来保持状态，即使在配置更改时也不会重置
+    // isAnimationPlayed标志用于跟踪动画是否已经播放过
+    val isAnimationPlayed = rememberSaveable { mutableStateOf(false) }
+
+    // 创建动画状态，根据isAnimationPlayed确定初始状态
+    // 如果已经播放过动画，则直接设置为true(可见)，否则设置为false(不可见)
     val animationState = remember {
-        MutableTransitionState(false).apply {
-            // 更新状态以启动动画
-            targetState = true
+        MutableTransitionState(isAnimationPlayed.value)
+    }
+
+    // 使用LaunchedEffect在组合时只触发一次
+    LaunchedEffect(Unit) {
+        if (!isAnimationPlayed.value) {
+            // 首次进入，触发动画
+            animationState.targetState = true
+            // 标记动画已播放
+            isAnimationPlayed.value = true
+        } else {
+            // 如果已经播放过，确保目标状态为true
+            animationState.targetState = true
         }
     }
 
@@ -245,27 +262,33 @@ fun ThirdPartyLoginButton(
 fun UserAgreement(
     modifier: Modifier = Modifier
 ) {
-    val text = buildAnnotatedString {
-        append("登录即代表您已同意")
-        withStyle(style = SpanStyle(color = Primary)) {
-            append("《用户协议》")
-        }
-        append("和")
-        withStyle(style = SpanStyle(color = Primary)) {
-            append("《隐私政策》")
-        }
-    }
+    CenterRow(modifier = modifier) {
+        Text(
+            text = "登录即代表您已阅读并同意",
+            fontSize = 12.sp,
+            color = Color.Gray
+        )
 
-    ClickableText(
-        text = text,
-        style = MaterialTheme.typography.bodySmall.copy(
-            color = TextTertiaryLight, textAlign = TextAlign.Center
-        ),
-        onClick = { offset ->
-            // 处理点击用户协议和隐私政策的逻辑
-        },
-        modifier = modifier.fillMaxWidth()
-    )
+        Text(
+            text = "《用户协议》",
+            color = Primary,
+            fontSize = 12.sp,
+            modifier = Modifier.clickable(onClick = {})
+        )
+
+        Text(
+            text = "和",
+            fontSize = 12.sp,
+            color = Color.Gray
+        )
+
+        Text(
+            text = "《隐私政策》",
+            color = Primary,
+            fontSize = 12.sp,
+            modifier = Modifier.clickable(onClick = {})
+        )
+    }
 }
 
 @Preview(showBackground = true)
