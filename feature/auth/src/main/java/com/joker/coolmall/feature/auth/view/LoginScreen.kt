@@ -54,6 +54,7 @@ import com.joker.coolmall.core.designsystem.component.StartRow
 import com.joker.coolmall.core.designsystem.component.TopColumn
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.Primary
+import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalXLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalXXLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
@@ -235,32 +236,41 @@ fun LoginScreen(
 
                 Spacer(modifier = Modifier.height(64.dp))
 
-                // 账号输入框
-                BasicTextField(
-                    value = account,
-                    onValueChange = onAccountChange,
-                    textStyle = TextStyle(
+                // 账号输入框改为手机号输入框
+                StartRow {
+                    Text(
+                        text = "+86",
+                        color = Primary,
                         fontSize = 16.sp,
-                        color = MaterialTheme.colorScheme.onSurface
-                    ),
-                    keyboardOptions = KeyboardOptions(
-                        keyboardType = KeyboardType.Text,
-                        imeAction = ImeAction.Next
-                    ),
-                    singleLine = true,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .onFocusChanged { accountFieldFocused.value = it.isFocused }
-                ) { innerTextField ->
-                    Box {
-                        if (account.isEmpty()) {
-                            Text(
-                                text = "请输入账号",
-                                color = Color.Gray,
-                                fontSize = 16.sp
-                            )
+                        modifier = Modifier.padding(end = SpaceHorizontalXLarge)
+                    )
+
+                    BasicTextField(
+                        value = account,
+                        onValueChange = onAccountChange,
+                        textStyle = TextStyle(
+                            fontSize = 16.sp,
+                            color = MaterialTheme.colorScheme.onSurface
+                        ),
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Phone,
+                            imeAction = ImeAction.Next
+                        ),
+                        singleLine = true,
+                        modifier = Modifier
+                            .weight(1f)
+                            .onFocusChanged { accountFieldFocused.value = it.isFocused }
+                    ) { innerTextField ->
+                        Box {
+                            if (account.isEmpty()) {
+                                Text(
+                                    text = "请输入手机号",
+                                    color = Color.Gray,
+                                    fontSize = 16.sp
+                                )
+                            }
+                            innerTextField()
                         }
-                        innerTextField()
                     }
                 }
 
@@ -363,7 +373,7 @@ fun LoginScreen(
                         modifier = Modifier.padding(horizontal = 8.dp)
                     )
                     
-                    TextButton(onClick = onNavigateToSmsLogin) {
+                    TextButton(onClick = onNavigateToResetPassword) {
                         Text(
                             text = "忘记密码",
                             fontSize = 14.sp,
