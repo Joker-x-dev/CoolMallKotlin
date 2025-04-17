@@ -17,6 +17,10 @@ dependencies {
     implementation(project(":core:network"))
     // 引入工具模块
     implementation(project(":core:util"))
+    // 引入数据存储模块
+    implementation(project(":core:datastore"))
+    // 引入数据库模块
+    implementation(project(":core:database"))
 
     // kotlin序列化
     implementation(libs.kotlinx.serialization.json)
