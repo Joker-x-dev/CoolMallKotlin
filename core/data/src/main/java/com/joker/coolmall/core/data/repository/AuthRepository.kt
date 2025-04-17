@@ -1,5 +1,6 @@
 package com.joker.coolmall.core.data.repository
 
+import com.joker.coolmall.core.model.Auth
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.datasource.auth.AuthNetworkDataSource
 import kotlinx.coroutines.Dispatchers
@@ -17,42 +18,42 @@ class AuthRepository @Inject constructor(
     /**
      * 微信APP授权登录
      */
-    fun loginByWxApp(params: Any): Flow<NetworkResponse<Any>> = flow {
+    fun loginByWxApp(params: Map<String, String>): Flow<NetworkResponse<Auth>> = flow {
         emit(authNetworkDataSource.loginByWxApp(params))
     }.flowOn(Dispatchers.IO)
 
     /**
-     * 一键手机号登录
+     * 用户注册
      */
-    fun loginByUniPhone(params: Any): Flow<NetworkResponse<Any>> = flow {
-        emit(authNetworkDataSource.loginByUniPhone(params))
+    fun register(params: Map<String, String>): Flow<NetworkResponse<Auth>> = flow {
+        emit(authNetworkDataSource.register(params))
     }.flowOn(Dispatchers.IO)
 
     /**
      * 验证码
      */
-    fun getSmsCode(params: Any): Flow<NetworkResponse<Any>> = flow {
+    fun getSmsCode(params: Map<String, String>): Flow<NetworkResponse<Any>> = flow {
         emit(authNetworkDataSource.getSmsCode(params))
     }.flowOn(Dispatchers.IO)
 
     /**
      * 刷新token
      */
-    fun refreshToken(params: Any): Flow<NetworkResponse<Any>> = flow {
+    fun refreshToken(params: Map<String, String>): Flow<NetworkResponse<Auth>> = flow {
         emit(authNetworkDataSource.refreshToken(params))
     }.flowOn(Dispatchers.IO)
 
     /**
      * 手机号登录
      */
-    fun loginByPhone(params: Any): Flow<NetworkResponse<Any>> = flow {
+    fun loginByPhone(params: Map<String, String>): Flow<NetworkResponse<Auth>> = flow {
         emit(authNetworkDataSource.loginByPhone(params))
     }.flowOn(Dispatchers.IO)
 
     /**
      * 密码登录
      */
-    fun loginByPassword(params: Any): Flow<NetworkResponse<Any>> = flow {
+    fun loginByPassword(params: Map<String, String>): Flow<NetworkResponse<Auth>> = flow {
         emit(authNetworkDataSource.loginByPassword(params))
     }.flowOn(Dispatchers.IO)
 

@@ -17,6 +17,31 @@ android {
         }
     }
 
+    signingConfigs {
+        // debug 模式下也使用正式签名
+        getByName("debug") {
+            // 哪个签名文件
+            storeFile = file("joker_open_key.keystore")
+            // 密钥别名
+            keyAlias = "joker_open_key"
+            // 密钥密码
+            keyPassword = "joker123456"
+            // 签名文件密码
+            storePassword = "joker123456"
+        }
+
+        create("release") {
+            // 哪个签名文件
+            storeFile = file("joker_open_key.keystore")
+            // 密钥别名
+            keyAlias = "joker_open_key"
+            // 密钥密码
+            keyPassword = "joker123456"
+            // 签名文件密码
+            storePassword = "joker123456"
+        }
+    }
+
     kotlinOptions {
         jvmTarget = JavaVersion.VERSION_11.toString()
     }
@@ -46,7 +71,7 @@ dependencies {
 
     // 启动页
     implementation(libs.androidx.core.splashscreen)
-    
+
     // LeakCanary - 内存泄漏检测工具（仅在debug构建中使用）
     // https://github.com/square/leakcanary
     debugImplementation(libs.leakcanary.android)

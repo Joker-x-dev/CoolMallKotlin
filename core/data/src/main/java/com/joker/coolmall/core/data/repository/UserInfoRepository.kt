@@ -1,5 +1,6 @@
 package com.joker.coolmall.core.data.repository
 
+import User
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.datasource.userinfo.UserInfoNetworkDataSource
 import kotlinx.coroutines.Dispatchers
@@ -17,35 +18,35 @@ class UserInfoRepository @Inject constructor(
     /**
      * 更新用户信息
      */
-    fun updatePersonInfo(params: Any): Flow<NetworkResponse<Any>> = flow {
+    fun updatePersonInfo(params: Map<String, Any>): Flow<NetworkResponse<Any>> = flow {
         emit(userInfoNetworkDataSource.updatePersonInfo(params))
     }.flowOn(Dispatchers.IO)
 
     /**
      * 更新用户密码
      */
-    fun updatePassword(params: Any): Flow<NetworkResponse<Any>> = flow {
+    fun updatePassword(params: Map<String, String>): Flow<NetworkResponse<Any>> = flow {
         emit(userInfoNetworkDataSource.updatePassword(params))
     }.flowOn(Dispatchers.IO)
 
     /**
      * 注销
      */
-    fun logoff(params: Any): Flow<NetworkResponse<Any>> = flow {
+    fun logoff(params: Map<String, Any>): Flow<NetworkResponse<Any>> = flow {
         emit(userInfoNetworkDataSource.logoff(params))
     }.flowOn(Dispatchers.IO)
 
     /**
      * 绑定手机号
      */
-    fun bindPhone(params: Any): Flow<NetworkResponse<Any>> = flow {
+    fun bindPhone(params: Map<String, String>): Flow<NetworkResponse<Any>> = flow {
         emit(userInfoNetworkDataSource.bindPhone(params))
     }.flowOn(Dispatchers.IO)
 
     /**
      * 用户个人信息
      */
-    fun getPersonInfo(): Flow<NetworkResponse<Any>> = flow {
+    fun getPersonInfo(): Flow<NetworkResponse<User>> = flow {
         emit(userInfoNetworkDataSource.getPersonInfo())
     }.flowOn(Dispatchers.IO)
 } 

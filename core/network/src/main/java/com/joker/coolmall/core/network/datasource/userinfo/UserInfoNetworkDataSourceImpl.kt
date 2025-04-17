@@ -1,5 +1,6 @@
 package com.joker.coolmall.core.network.datasource.userinfo
 
+import User
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.base.BaseNetworkDataSource
 import com.joker.coolmall.core.network.service.UserInfoService
@@ -21,7 +22,7 @@ class UserInfoNetworkDataSourceImpl @Inject constructor(
      * @param params 请求参数，包含用户信息
      * @return 更新结果响应数据
      */
-    override suspend fun updatePersonInfo(params: Any): NetworkResponse<Any> {
+    override suspend fun updatePersonInfo(params: Map<String, Any>): NetworkResponse<Any> {
         return userInfoService.updatePersonInfo(params)
     }
 
@@ -31,7 +32,7 @@ class UserInfoNetworkDataSourceImpl @Inject constructor(
      * @param params 请求参数，包含旧密码和新密码
      * @return 更新结果响应数据
      */
-    override suspend fun updatePassword(params: Any): NetworkResponse<Any> {
+    override suspend fun updatePassword(params: Map<String, String>): NetworkResponse<Any> {
         return userInfoService.updatePassword(params)
     }
 
@@ -41,7 +42,7 @@ class UserInfoNetworkDataSourceImpl @Inject constructor(
      * @param params 请求参数
      * @return 注销结果响应数据
      */
-    override suspend fun logoff(params: Any): NetworkResponse<Any> {
+    override suspend fun logoff(params: Map<String, Any>): NetworkResponse<Any> {
         return userInfoService.logoff(params)
     }
 
@@ -51,7 +52,7 @@ class UserInfoNetworkDataSourceImpl @Inject constructor(
      * @param params 请求参数，包含手机号和验证码
      * @return 绑定结果响应数据
      */
-    override suspend fun bindPhone(params: Any): NetworkResponse<Any> {
+    override suspend fun bindPhone(params: Map<String, String>): NetworkResponse<Any> {
         return userInfoService.bindPhone(params)
     }
 
@@ -60,7 +61,7 @@ class UserInfoNetworkDataSourceImpl @Inject constructor(
      * 
      * @return 用户个人信息响应数据
      */
-    override suspend fun getPersonInfo(): NetworkResponse<Any> {
+    override suspend fun getPersonInfo(): NetworkResponse<User> {
         return userInfoService.getPersonInfo()
     }
 } 

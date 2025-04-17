@@ -1,5 +1,6 @@
 package com.joker.coolmall.core.network.service
 
+import com.joker.coolmall.core.model.Auth
 import com.joker.coolmall.core.model.response.NetworkResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -14,37 +15,37 @@ interface AuthService {
      * 微信APP授权登录
      */
     @POST("user/login/wxApp")
-    suspend fun loginByWxApp(@Body params: Any): NetworkResponse<Any>
+    suspend fun loginByWxApp(@Body params: Map<String, String>): NetworkResponse<Auth>
 
     /**
-     * 一键手机号登录
+     * 用户注册
      */
-    @POST("user/login/uniPhone")
-    suspend fun loginByUniPhone(@Body params: Any): NetworkResponse<Any>
+    @POST("user/login/register")
+    suspend fun register(@Body params: Map<String, String>): NetworkResponse<Auth>
 
     /**
      * 验证码
      */
     @POST("user/login/smsCode")
-    suspend fun getSmsCode(@Body params: Any): NetworkResponse<Any>
+    suspend fun getSmsCode(@Body params: Map<String, String>): NetworkResponse<Any>
 
     /**
      * 刷新token
      */
     @POST("user/login/refreshToken")
-    suspend fun refreshToken(@Body params: Any): NetworkResponse<Any>
+    suspend fun refreshToken(@Body params: Map<String, String>): NetworkResponse<Auth>
 
     /**
      * 手机号登录
      */
     @POST("user/login/phone")
-    suspend fun loginByPhone(@Body params: Any): NetworkResponse<Any>
+    suspend fun loginByPhone(@Body params: Map<String, String>): NetworkResponse<Auth>
 
     /**
      * 密码登录
      */
     @POST("user/login/password")
-    suspend fun loginByPassword(@Body params: Any): NetworkResponse<Any>
+    suspend fun loginByPassword(@Body params: Map<String, String>): NetworkResponse<Auth>
 
     /**
      * 图片验证码

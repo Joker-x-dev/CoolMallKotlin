@@ -1,5 +1,6 @@
 package com.joker.coolmall.core.network.datasource.auth
 
+import com.joker.coolmall.core.model.Auth
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.base.BaseNetworkDataSource
 import com.joker.coolmall.core.network.service.AuthService
@@ -21,18 +22,18 @@ class AuthNetworkDataSourceImpl @Inject constructor(
      * @param params 请求参数，包含微信授权信息
      * @return 登录结果响应数据
      */
-    override suspend fun loginByWxApp(params: Any): NetworkResponse<Any> {
+    override suspend fun loginByWxApp(params: Map<String, String>): NetworkResponse<Auth> {
         return authService.loginByWxApp(params)
     }
 
     /**
-     * 一键手机号登录
+     * 用户注册
      * 
-     * @param params 请求参数，包含手机号信息
-     * @return 登录结果响应数据
+     * @param params 请求参数，包含手机号、验证码、密码和确认密码
+     * @return 注册结果响应数据
      */
-    override suspend fun loginByUniPhone(params: Any): NetworkResponse<Any> {
-        return authService.loginByUniPhone(params)
+    override suspend fun register(params: Map<String, String>): NetworkResponse<Auth> {
+        return authService.register(params)
     }
 
     /**
@@ -41,7 +42,7 @@ class AuthNetworkDataSourceImpl @Inject constructor(
      * @param params 请求参数，包含手机号
      * @return 验证码发送结果响应数据
      */
-    override suspend fun getSmsCode(params: Any): NetworkResponse<Any> {
+    override suspend fun getSmsCode(params: Map<String, String>): NetworkResponse<Any> {
         return authService.getSmsCode(params)
     }
 
@@ -51,7 +52,7 @@ class AuthNetworkDataSourceImpl @Inject constructor(
      * @param params 请求参数，包含refresh_token
      * @return 刷新结果响应数据
      */
-    override suspend fun refreshToken(params: Any): NetworkResponse<Any> {
+    override suspend fun refreshToken(params: Map<String, String>): NetworkResponse<Auth> {
         return authService.refreshToken(params)
     }
 
@@ -61,7 +62,7 @@ class AuthNetworkDataSourceImpl @Inject constructor(
      * @param params 请求参数，包含手机号和验证码
      * @return 登录结果响应数据
      */
-    override suspend fun loginByPhone(params: Any): NetworkResponse<Any> {
+    override suspend fun loginByPhone(params: Map<String, String>): NetworkResponse<Auth> {
         return authService.loginByPhone(params)
     }
 
@@ -71,7 +72,7 @@ class AuthNetworkDataSourceImpl @Inject constructor(
      * @param params 请求参数，包含账号和密码
      * @return 登录结果响应数据
      */
-    override suspend fun loginByPassword(params: Any): NetworkResponse<Any> {
+    override suspend fun loginByPassword(params: Map<String, String>): NetworkResponse<Auth> {
         return authService.loginByPassword(params)
     }
 
