@@ -49,7 +49,6 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.joker.coolmall.core.designsystem.component.CenterRow
-import com.joker.coolmall.core.designsystem.component.EndRow
 import com.joker.coolmall.core.designsystem.component.StartRow
 import com.joker.coolmall.core.designsystem.component.TopColumn
 import com.joker.coolmall.core.designsystem.theme.AppTheme
@@ -63,7 +62,6 @@ import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXXLarge
 import com.joker.coolmall.core.designsystem.theme.TitleLarge
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
 import com.joker.coolmall.feature.auth.R
-import com.joker.coolmall.feature.auth.state.AuthUiState
 import com.joker.coolmall.feature.auth.viewmodel.LoginViewModel
 import com.joker.coolmall.navigation.routes.AuthRoutes
 
@@ -80,12 +78,10 @@ fun LoginRoute(
 ) {
     val account by viewModel.account.collectAsState()
     val password by viewModel.password.collectAsState()
-    val uiState by viewModel.uiState.collectAsState()
 
     LoginScreen(
         account = account,
         password = password,
-        uiState = uiState,
         onAccountChange = viewModel::updateAccount,
         onPasswordChange = viewModel::updatePassword,
         onLoginClick = viewModel::login,
@@ -110,7 +106,7 @@ fun PasswordTextField(
 ) {
     val placeholderVisible = value.isEmpty()
     var passwordVisible by rememberSaveable { mutableStateOf(false) }
-    
+
     Box(modifier = modifier) {
         BasicTextField(
             value = value,
@@ -137,7 +133,7 @@ fun PasswordTextField(
                 innerTextField()
             }
         }
-        
+
         // 添加显示/隐藏密码的图标按钮
         IconButton(
             onClick = { passwordVisible = !passwordVisible },
@@ -175,7 +171,6 @@ fun PasswordTextField(
 fun LoginScreen(
     account: String = "",
     password: String = "",
-    uiState: AuthUiState = AuthUiState.Initial,
     onAccountChange: (String) -> Unit = {},
     onPasswordChange: (String) -> Unit = {},
     onLoginClick: () -> Unit = {},
@@ -187,15 +182,15 @@ fun LoginScreen(
     // 记录输入框焦点状态
     val accountFieldFocused = remember { mutableStateOf(false) }
     val passwordFieldFocused = remember { mutableStateOf(false) }
-    
+
     // 使用rememberSaveable来保持状态，即使在配置更改时也不会重置
     val isAnimationPlayed = rememberSaveable { mutableStateOf(false) }
-    
+
     // 创建动画状态，根据isAnimationPlayed确定初始状态
-    val animationState = remember { 
-        MutableTransitionState(isAnimationPlayed.value) 
+    val animationState = remember {
+        MutableTransitionState(isAnimationPlayed.value)
     }
-    
+
     // 使用LaunchedEffect在组合时只触发一次
     LaunchedEffect(Unit) {
         if (!isAnimationPlayed.value) {
@@ -365,14 +360,14 @@ fun LoginScreen(
                             color = MaterialTheme.colorScheme.onSurface
                         )
                     }
-                    
+
                     Text(
                         text = "|",
                         color = Color.Gray,
                         fontSize = 14.sp,
                         modifier = Modifier.padding(horizontal = 8.dp)
                     )
-                    
+
                     TextButton(onClick = onNavigateToResetPassword) {
                         Text(
                             text = "忘记密码",

@@ -62,7 +62,6 @@ import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXXLarge
 import com.joker.coolmall.core.designsystem.theme.TitleLarge
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
 import com.joker.coolmall.feature.auth.R
-import com.joker.coolmall.feature.auth.state.AuthUiState
 import com.joker.coolmall.feature.auth.viewmodel.ResetPasswordViewModel
 
 /**
@@ -80,14 +79,12 @@ fun ResetPasswordRoute(
     val newPassword by viewModel.newPassword.collectAsState()
     val confirmPassword by viewModel.confirmPassword.collectAsState()
     val verificationCode by viewModel.verificationCode.collectAsState()
-    val uiState by viewModel.uiState.collectAsState()
 
     ResetPasswordScreen(
         phone = phone,
         newPassword = newPassword,
         confirmPassword = confirmPassword,
         verificationCode = verificationCode,
-        uiState = uiState,
         onPhoneChange = viewModel::updatePhone,
         onNewPasswordChange = viewModel::updateNewPassword,
         onConfirmPasswordChange = viewModel::updateConfirmPassword,
@@ -181,7 +178,6 @@ fun ResetPasswordScreen(
     newPassword: String = "",
     confirmPassword: String = "",
     verificationCode: String = "",
-    uiState: AuthUiState = AuthUiState.Initial,
     onPhoneChange: (String) -> Unit = {},
     onNewPasswordChange: (String) -> Unit = {},
     onConfirmPasswordChange: (String) -> Unit = {},

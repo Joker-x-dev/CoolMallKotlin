@@ -54,7 +54,6 @@ import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXXLarge
 import com.joker.coolmall.core.designsystem.theme.TitleLarge
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
-import com.joker.coolmall.feature.auth.state.AuthUiState
 import com.joker.coolmall.feature.auth.viewmodel.SmsLoginViewModel
 import com.joker.coolmall.navigation.routes.AuthRoutes
 
@@ -71,12 +70,10 @@ fun SmsLoginRoute(
 ) {
     val phone by viewModel.phone.collectAsState()
     val verificationCode by viewModel.verificationCode.collectAsState()
-    val uiState by viewModel.uiState.collectAsState()
 
     SmsLoginScreen(
         phone = phone,
         verificationCode = verificationCode,
-        uiState = uiState,
         onPhoneChange = viewModel::updatePhone,
         onVerificationCodeChange = viewModel::updateVerificationCode,
         onSendVerificationCode = viewModel::sendVerificationCode,
@@ -104,7 +101,6 @@ fun SmsLoginRoute(
 fun SmsLoginScreen(
     phone: String = "",
     verificationCode: String = "",
-    uiState: AuthUiState = AuthUiState.Initial,
     onPhoneChange: (String) -> Unit = {},
     onVerificationCodeChange: (String) -> Unit = {},
     onSendVerificationCode: () -> Unit = {},

@@ -40,6 +40,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.ArrowRightIcon
 import com.joker.coolmall.core.designsystem.theme.LogoIcon
@@ -77,7 +78,7 @@ internal fun HomeRoute(
     HomeScreen(
         uiState = uiState,
         toGoodsDetail = viewModel::toGoodsDetail,
-        onRetry = viewModel::getHomeData
+        onRetry = viewModel::retry
     )
 }
 
@@ -87,7 +88,7 @@ internal fun HomeRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun HomeScreen(
-    uiState: HomeUiState = HomeUiState.Loading,
+    uiState: BaseNetWorkUiState<Home> = BaseNetWorkUiState.Loading,
     toGoodsDetail: (Long) -> Unit = {},
     onRetry: () -> Unit = {}
 ) {
@@ -102,9 +103,9 @@ internal fun HomeScreen(
                 .padding(it)
         ) {
             when (uiState) {
-                is HomeUiState.Loading -> PageLoading()
-                is HomeUiState.Error -> EmptyNetwork(onRetryClick = onRetry)
-                is HomeUiState.Success -> HomeContentView(
+                is BaseNetWorkUiState.Loading -> PageLoading()
+                is BaseNetWorkUiState.Error -> EmptyNetwork(onRetryClick = onRetry)
+                is BaseNetWorkUiState.Success -> HomeContentView(
                     data = uiState.data,
                     toGoodsDetail = toGoodsDetail
                 )

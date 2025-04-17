@@ -2,13 +2,14 @@ package com.joker.coolmall.core.datastore.datasource.auth
 
 import com.joker.coolmall.core.model.Auth
 import com.joker.coolmall.core.util.storage.MMKVUtils
+import jakarta.inject.Inject
 import kotlinx.serialization.json.Json
 
 /**
  * 本地用户认证相关数据源实现类
  * 负责处理所有与用户认证相关的本地存储
  */
-class AuthStoreDataSourceImpl : AuthStoreDataSource {
+class AuthStoreDataSourceImpl @Inject constructor() : AuthStoreDataSource {
 
     companion object {
         private const val KEY_AUTH = "auth_info"

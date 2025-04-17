@@ -2,7 +2,6 @@ package com.joker.coolmall.feature.auth.viewmodel
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.joker.coolmall.feature.auth.state.AuthUiState
 import com.joker.coolmall.navigation.AppNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,11 +17,6 @@ class SmsLoginViewModel @Inject constructor(
     private val navigator: AppNavigator
 ) : ViewModel() {
 
-    /**
-     * 登录UI状态
-     */
-    private val _uiState = MutableStateFlow<AuthUiState>(AuthUiState.Initial)
-    val uiState: StateFlow<AuthUiState> = _uiState
 
     /**
      * 手机号输入
@@ -66,7 +60,6 @@ class SmsLoginViewModel @Inject constructor(
     fun login() {
         // 此处仅为空实现，实际项目中需要调用登录API
         viewModelScope.launch {
-            _uiState.value = AuthUiState.Loading
             // TODO: 实现实际登录逻辑
         }
     }

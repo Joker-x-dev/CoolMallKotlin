@@ -51,6 +51,7 @@ dependencies {
     implementation(project(":navigation"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:util"))
+    implementation(project(":core:data"))
     // 首页模块
     implementation(project(":feature:main"))
     // 商品模块

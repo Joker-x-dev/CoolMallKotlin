@@ -18,7 +18,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
-import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButton
@@ -44,7 +43,6 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -66,7 +64,6 @@ import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXXLarge
 import com.joker.coolmall.core.designsystem.theme.TitleLarge
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
 import com.joker.coolmall.feature.auth.R
-import com.joker.coolmall.feature.auth.state.AuthUiState
 import com.joker.coolmall.feature.auth.viewmodel.RegisterViewModel
 
 /**
@@ -84,14 +81,12 @@ fun RegisterRoute(
     val verificationCode by viewModel.verificationCode.collectAsState()
     val password by viewModel.password.collectAsState()
     val confirmPassword by viewModel.confirmPassword.collectAsState()
-    val uiState by viewModel.uiState.collectAsState()
 
     RegisterScreen(
         phone = phone,
         verificationCode = verificationCode,
         password = password,
         confirmPassword = confirmPassword,
-        uiState = uiState,
         onPhoneChange = viewModel::updatePhone,
         onVerificationCodeChange = viewModel::updateVerificationCode,
         onPasswordChange = viewModel::updatePassword,
@@ -144,7 +139,7 @@ fun RegisterPasswordTextField(
                 innerTextField()
             }
         }
-        
+
         // 添加显示/隐藏密码的图标按钮
         IconButton(
             onClick = { passwordVisible = !passwordVisible },
@@ -187,7 +182,6 @@ fun RegisterScreen(
     verificationCode: String = "",
     password: String = "",
     confirmPassword: String = "",
-    uiState: AuthUiState = AuthUiState.Initial,
     onPhoneChange: (String) -> Unit = {},
     onVerificationCodeChange: (String) -> Unit = {},
     onPasswordChange: (String) -> Unit = {},

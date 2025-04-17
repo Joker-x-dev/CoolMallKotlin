@@ -2,6 +2,7 @@ package com.joker.coolmall.core.datastore.datasource.userinfo
 
 import User
 import com.joker.coolmall.core.util.storage.MMKVUtils
+import jakarta.inject.Inject
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
@@ -11,7 +12,7 @@ import kotlinx.serialization.json.jsonObject
  * 本地用户信息相关数据源实现类
  * 负责处理所有与用户信息相关的本地存储
  */
-class UserInfoStoreDataSourceImpl : UserInfoStoreDataSource {
+class UserInfoStoreDataSourceImpl @Inject constructor() : UserInfoStoreDataSource {
 
     companion object {
         private const val KEY_USER_INFO = "user_info"
