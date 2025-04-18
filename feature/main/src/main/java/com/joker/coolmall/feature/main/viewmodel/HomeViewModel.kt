@@ -1,6 +1,5 @@
 package com.joker.coolmall.feature.main.viewmodel
 
-import androidx.lifecycle.SavedStateHandle
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
 import com.joker.coolmall.core.data.repository.PageRepository
 import com.joker.coolmall.core.model.Home
@@ -18,15 +17,17 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     navigator: AppNavigator,
     private val pageRepository: PageRepository,
-    savedStateHandle: SavedStateHandle
 ) : BaseNetWorkViewModel<Home>(
     navigator = navigator
 ) {
     init {
-        super.loadData()
+        super.executeRequest()
     }
 
-    override fun fetchFlow(): Flow<NetworkResponse<Home>> {
+    /**
+     * 通过重写来给父类提供API请求的Flow
+     */
+    override fun requestApiFlow(): Flow<NetworkResponse<Home>> {
         return pageRepository.getHomeData()
     }
 

@@ -78,7 +78,7 @@ internal fun HomeRoute(
     HomeScreen(
         uiState = uiState,
         toGoodsDetail = viewModel::toGoodsDetail,
-        onRetry = viewModel::retry
+        onRetry = viewModel::retryRequest
     )
 }
 

@@ -15,7 +15,7 @@ import kotlinx.coroutines.launch
  *
  * @param T 数据类型
  */
-abstract class BaseViewModel<T> constructor(
+abstract class BaseViewModel<T>(
     protected val navigator: AppNavigator
 ) : ViewModel() {
 

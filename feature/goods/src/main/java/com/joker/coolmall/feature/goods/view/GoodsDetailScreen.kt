@@ -63,6 +63,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.BorderLight
 import com.joker.coolmall.core.designsystem.theme.ColorDanger
@@ -91,7 +92,6 @@ import com.joker.coolmall.core.ui.component.loading.PageLoading
 import com.joker.coolmall.core.ui.component.swiper.WeSwiper
 import com.joker.coolmall.core.ui.htmltext.HtmlText
 import com.joker.coolmall.feature.goods.R
-import com.joker.coolmall.feature.goods.state.GoodsDetailUiState
 import com.joker.coolmall.feature.goods.viewmodel.GoodsDetailViewModel
 import kotlinx.coroutines.flow.collectLatest
 
@@ -108,7 +108,7 @@ internal fun GoodsDetailRoute(
     GoodsDetailScreen(
         uiState = uiState,
         onBackClick = { viewModel.navigateBack() },
-        onRetry = viewModel::getGoodsDetail
+        onRetry = viewModel::retryRequest
     )
 }
 
@@ -120,7 +120,7 @@ internal fun GoodsDetailRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun GoodsDetailScreen(
-    uiState: GoodsDetailUiState = GoodsDetailUiState.Loading,
+    uiState: BaseNetWorkUiState<Goods> = BaseNetWorkUiState.Loading,
     onBackClick: () -> Unit = {},
     onRetry: () -> Unit = {}
 ) {
@@ -131,9 +131,9 @@ internal fun GoodsDetailScreen(
             .exclude(WindowInsets.statusBars)
     ) { paddingValues ->
         when (uiState) {
-            is GoodsDetailUiState.Loading -> PageLoading()
-            is GoodsDetailUiState.Error -> EmptyNetwork(onRetryClick = onRetry)
-            is GoodsDetailUiState.Success -> GoodsDetailContentView(
+            is BaseNetWorkUiState.Loading -> PageLoading()
+            is BaseNetWorkUiState.Error -> EmptyNetwork(onRetryClick = onRetry)
+            is BaseNetWorkUiState.Success -> GoodsDetailContentView(
                 data = uiState.data,
                 onBackClick = onBackClick,
                 paddingValues = paddingValues
@@ -697,7 +697,7 @@ private fun GoodsActionBar(modifier: Modifier = Modifier) {
 fun GoodsDetailScreenPreview() {
     AppTheme {
         GoodsDetailScreen(
-            uiState = GoodsDetailUiState.Success(
+            uiState = BaseNetWorkUiState.Success(
                 data = Goods(
                     id = 1,
                     createTime = "2025-03-29 00:17:15",
