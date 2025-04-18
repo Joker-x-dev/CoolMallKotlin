@@ -86,9 +86,8 @@ import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.model.Goods
 import com.joker.coolmall.core.ui.component.card.AppCard
-import com.joker.coolmall.core.ui.component.empty.EmptyNetwork
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
-import com.joker.coolmall.core.ui.component.loading.PageLoading
+import com.joker.coolmall.core.ui.component.network.BaseNetWorkView
 import com.joker.coolmall.core.ui.component.swiper.WeSwiper
 import com.joker.coolmall.core.ui.htmltext.HtmlText
 import com.joker.coolmall.feature.goods.R
@@ -130,11 +129,13 @@ internal fun GoodsDetailScreen(
             .exclude(WindowInsets.navigationBars)
             .exclude(WindowInsets.statusBars)
     ) { paddingValues ->
-        when (uiState) {
-            is BaseNetWorkUiState.Loading -> PageLoading()
-            is BaseNetWorkUiState.Error -> EmptyNetwork(onRetryClick = onRetry)
-            is BaseNetWorkUiState.Success -> GoodsDetailContentView(
-                data = uiState.data,
+        BaseNetWorkView(
+            uiState = uiState,
+            padding = paddingValues,
+            onRetry = onRetry
+        ) {
+            GoodsDetailContentView(
+                data = it,
                 onBackClick = onBackClick,
                 paddingValues = paddingValues
             )

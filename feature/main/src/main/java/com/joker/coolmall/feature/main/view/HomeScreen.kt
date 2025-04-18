@@ -3,7 +3,6 @@ package com.joker.coolmall.feature.main.view
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -55,16 +54,14 @@ import com.joker.coolmall.core.model.Category
 import com.joker.coolmall.core.model.Goods
 import com.joker.coolmall.core.model.Home
 import com.joker.coolmall.core.ui.component.card.AppCard
-import com.joker.coolmall.core.ui.component.empty.EmptyNetwork
 import com.joker.coolmall.core.ui.component.goods.GoodsGridItem
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
-import com.joker.coolmall.core.ui.component.loading.PageLoading
+import com.joker.coolmall.core.ui.component.network.BaseNetWorkView
 import com.joker.coolmall.core.ui.component.swiper.WeSwiper
 import com.joker.coolmall.core.ui.component.title.TitleWithLine
 import com.joker.coolmall.feature.main.R
 import com.joker.coolmall.feature.main.component.CommonScaffold
 import com.joker.coolmall.feature.main.component.FlashSaleItem
-import com.joker.coolmall.feature.main.state.HomeUiState
 import com.joker.coolmall.feature.main.viewmodel.HomeViewModel
 
 /**
@@ -93,23 +90,17 @@ internal fun HomeScreen(
     onRetry: () -> Unit = {}
 ) {
     CommonScaffold(
-        topBar = {
-            HomeTopAppBar()
-        }
+        topBar = { HomeTopAppBar() }
     ) {
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(it)
+        BaseNetWorkView(
+            uiState = uiState,
+            padding = it,
+            onRetry = onRetry
         ) {
-            when (uiState) {
-                is BaseNetWorkUiState.Loading -> PageLoading()
-                is BaseNetWorkUiState.Error -> EmptyNetwork(onRetryClick = onRetry)
-                is BaseNetWorkUiState.Success -> HomeContentView(
-                    data = uiState.data,
-                    toGoodsDetail = toGoodsDetail
-                )
-            }
+            HomeContentView(
+                data = it,
+                toGoodsDetail = toGoodsDetail
+            )
         }
     }
 }

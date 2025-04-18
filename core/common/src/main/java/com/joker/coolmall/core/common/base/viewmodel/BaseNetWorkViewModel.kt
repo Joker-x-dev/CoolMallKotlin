@@ -56,7 +56,7 @@ abstract class BaseNetWorkViewModel<T>(
      * 获取必须存在的ID参数，如果不存在则抛出异常
      * 当确定路由参数必须存在时使用此方法
      * 返回非空的Long类型ID参数
-     * 
+     *
      * @throws IllegalStateException 当ID参数不存在时抛出
      */
     protected val requiredId: Long by lazy {
@@ -133,7 +133,7 @@ abstract class BaseNetWorkViewModel<T>(
     /**
      * 设置网络状态为加载中
      */
-    protected fun setLoadingState() {
+    protected open fun setLoadingState() {
         _uiState.value = BaseNetWorkUiState.Loading
     }
 
@@ -142,7 +142,7 @@ abstract class BaseNetWorkViewModel<T>(
      *
      * @param data 成功返回的数据
      */
-    protected fun setSuccessState(data: T) {
+    protected open fun setSuccessState(data: T) {
         _uiState.value = BaseNetWorkUiState.Success(data)
     }
 
@@ -152,7 +152,7 @@ abstract class BaseNetWorkViewModel<T>(
      * @param message 错误信息
      * @param exception 异常信息
      */
-    protected fun setErrorState(message: String? = null, exception: Throwable? = null) {
+    protected open fun setErrorState(message: String? = null, exception: Throwable? = null) {
         _uiState.value = BaseNetWorkUiState.Error(message, exception)
     }
 }

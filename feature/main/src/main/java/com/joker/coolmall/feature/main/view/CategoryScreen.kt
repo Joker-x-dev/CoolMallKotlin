@@ -48,6 +48,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.joker.coolmall.core.designsystem.component.AppColumn
 import com.joker.coolmall.core.designsystem.component.AppLazyColumn
 import com.joker.coolmall.core.designsystem.component.AppRow
+import com.joker.coolmall.core.designsystem.component.FullScreenBox
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.RadiusLarge
 import com.joker.coolmall.core.designsystem.theme.ShapeMedium
@@ -65,28 +66,28 @@ import kotlinx.coroutines.launch
 
 /**
  * 分类页面路由
- * 
+ *
  * @param viewModel 分类页面的ViewModel
  */
 @Composable
 internal fun CategoryRoute(
     viewModel: CategoryViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsState()
+    val uiState by viewModel.categoryUiState.collectAsState()
     val selectedIndex by viewModel.selectedCategoryIndex.collectAsState()
 
     CategoryScreen(
         uiState = uiState,
         selectedIndex = selectedIndex,
         onCategorySelected = viewModel::selectCategory,
-        onSubCategoryClick = viewModel::navigateToGoodsList,
-        onRetry = viewModel::getCategoryData
+        onSubCategoryClick = {},
+        onRetry = viewModel::retryRequest
     )
 }
 
 /**
  * 分类页面内容
- * 
+ *
  * @param uiState 当前UI状态
  * @param selectedIndex 当前选中的分类索引
  * @param onCategorySelected 分类选中回调
@@ -105,31 +106,26 @@ internal fun CategoryScreen(
     CommonScaffold(
         topBar = {
             CenterTopAppBar(R.string.category, showBackIcon = false)
-        },
-        content = { paddingValues ->
-            Box(
-                modifier = Modifier
-                    .fillMaxSize()
-                    .padding(paddingValues)
-            ) {
-                when (uiState) {
-                    is CategoryUiState.Loading -> PageLoading()
-                    is CategoryUiState.Error -> EmptyNetwork(onRetryClick = onRetry)
-                    is CategoryUiState.Success -> CategoryContentView(
-                        categoryTrees = uiState.data,
-                        selectedIndex = selectedIndex,
-                        onCategorySelected = onCategorySelected,
-                        onSubCategoryClick = onSubCategoryClick
-                    )
-                }
+        }
+    ) { paddingValues ->
+        FullScreenBox(padding = paddingValues) {
+            when (uiState) {
+                is CategoryUiState.Loading -> PageLoading()
+                is CategoryUiState.Error -> EmptyNetwork(onRetryClick = onRetry)
+                is CategoryUiState.Success -> CategoryContentView(
+                    categoryTrees = uiState.data,
+                    selectedIndex = selectedIndex,
+                    onCategorySelected = onCategorySelected,
+                    onSubCategoryClick = onSubCategoryClick
+                )
             }
         }
-    )
+    }
 }
 
 /**
  * 分类页面的主要内容 - 成功状态
- * 
+ *
  * @param categoryTrees 分类树数据列表
  * @param selectedIndex 当前选中的分类索引
  * @param onCategorySelected 分类选中回调
