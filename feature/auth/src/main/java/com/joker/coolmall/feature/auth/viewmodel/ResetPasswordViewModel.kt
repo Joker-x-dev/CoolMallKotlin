@@ -1,8 +1,9 @@
 package com.joker.coolmall.feature.auth.viewmodel
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
 import com.joker.coolmall.navigation.AppNavigator
+import com.joker.coolmall.navigation.routes.AuthRoutes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -14,8 +15,10 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class ResetPasswordViewModel @Inject constructor(
-    private val navigator: AppNavigator
-) : ViewModel() {
+    navigator: AppNavigator
+) : BaseViewModel(
+    navigator = navigator
+) {
 
     /**
      * 手机号输入
@@ -88,22 +91,18 @@ class ResetPasswordViewModel @Inject constructor(
             // TODO: 实现实际重置密码逻辑
         }
     }
-
+    
     /**
-     * 导航回上一页
+     * 导航到账号密码登录页面
      */
-    fun navigateBack() {
-        viewModelScope.launch {
-            navigator.navigateBack()
-        }
+    fun toAccountLoginPage() {
+        super.toPage(AuthRoutes.ACCOUNT_LOGIN)
     }
-
+    
     /**
-     * 导航到指定路由
+     * 导航到短信登录页面
      */
-    fun navigateTo(route: String) {
-        viewModelScope.launch {
-            navigator.navigateTo(route)
-        }
+    fun toSmsLoginPage() {
+        super.toPage(AuthRoutes.SMS_LOGIN)
     }
 } 

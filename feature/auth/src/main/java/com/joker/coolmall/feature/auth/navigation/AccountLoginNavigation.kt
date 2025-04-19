@@ -2,14 +2,14 @@ package com.joker.coolmall.feature.auth.navigation
 
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.joker.coolmall.feature.auth.view.SmsLoginRoute
+import com.joker.coolmall.feature.auth.view.AccountLoginRoute
 import com.joker.coolmall.navigation.routes.AuthRoutes
 
 /**
- * 短信登录页面导航
+ * 账号登录页面导航
  */
-fun NavGraphBuilder.smsLoginScreen() {
-    composable(route = AuthRoutes.SMS_LOGIN) {
-        SmsLoginRoute()
+fun NavGraphBuilder.accountLoginScreen() {
+    composable(route = AuthRoutes.ACCOUNT_LOGIN) {
+        AccountLoginRoute()
     }
 } 

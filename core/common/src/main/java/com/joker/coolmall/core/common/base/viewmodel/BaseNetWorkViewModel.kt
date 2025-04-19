@@ -29,7 +29,7 @@ abstract class BaseNetWorkViewModel<T>(
     navigator: AppNavigator,
     protected val savedStateHandle: SavedStateHandle? = null,
     protected val idKey: String? = null
-) : BaseViewModel<T>(navigator) {
+) : BaseViewModel(navigator) {
 
     /**
      * 通用网络请求UI状态

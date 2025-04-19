@@ -1,7 +1,7 @@
 package com.joker.coolmall.feature.auth.viewmodel
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
 import com.joker.coolmall.navigation.AppNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -14,10 +14,10 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class SmsLoginViewModel @Inject constructor(
-    private val navigator: AppNavigator
-) : ViewModel() {
-
-
+    navigator: AppNavigator
+) : BaseViewModel(
+    navigator = navigator
+) {
     /**
      * 手机号输入
      */
@@ -61,24 +61,6 @@ class SmsLoginViewModel @Inject constructor(
         // 此处仅为空实现，实际项目中需要调用登录API
         viewModelScope.launch {
             // TODO: 实现实际登录逻辑
-        }
-    }
-
-    /**
-     * 导航回上一页
-     */
-    fun navigateBack() {
-        viewModelScope.launch {
-            navigator.navigateBack()
-        }
-    }
-
-    /**
-     * 导航到指定路由
-     */
-    fun navigateTo(route: String) {
-        viewModelScope.launch {
-            navigator.navigateTo(route)
         }
     }
 } 

@@ -1,74 +1,31 @@
 package com.joker.coolmall.feature.auth.viewmodel
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
 import com.joker.coolmall.navigation.AppNavigator
+import com.joker.coolmall.navigation.routes.AuthRoutes
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
- * 账号密码登录ViewModel
+ * 登录主页 ViewModel
  */
 @HiltViewModel
 class LoginViewModel @Inject constructor(
-    private val navigator: AppNavigator
-) : ViewModel() {
-
-
+    navigator: AppNavigator
+) : BaseViewModel(
+    navigator = navigator
+) {
     /**
-     * 账号输入
+     * 导航到短信登录页面
      */
-    private val _account = MutableStateFlow("")
-    val account: StateFlow<String> = _account
-
-    /**
-     * 密码输入
-     */
-    private val _password = MutableStateFlow("")
-    val password: StateFlow<String> = _password
-
-    /**
-     * 更新账号输入
-     */
-    fun updateAccount(value: String) {
-        _account.value = value
+    fun toSMSLoginPage() {
+        super.toPage(AuthRoutes.SMS_LOGIN)
     }
 
     /**
-     * 更新密码输入
+     * 导航到账号密码登录页面
      */
-    fun updatePassword(value: String) {
-        _password.value = value
-    }
-
-    /**
-     * 执行登录操作
-     */
-    fun login() {
-        // 此处仅为空实现，实际项目中需要调用登录API
-        viewModelScope.launch {
-            // TODO: 实现实际登录逻辑
-        }
-    }
-
-    /**
-     * 导航回上一页
-     */
-    fun navigateBack() {
-        viewModelScope.launch {
-            navigator.navigateBack()
-        }
-    }
-
-    /**
-     * 导航到指定路由
-     */
-    fun navigateTo(route: String) {
-        viewModelScope.launch {
-            navigator.navigateTo(route)
-        }
+    fun toAccountLoginPage() {
+        super.toPage(AuthRoutes.ACCOUNT_LOGIN)
     }
 } 

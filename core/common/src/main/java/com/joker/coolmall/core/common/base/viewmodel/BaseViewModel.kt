@@ -12,10 +12,8 @@ import kotlinx.coroutines.launch
  * 1. 导航
  * 2. 基础UI状态管理
  * 3. 错误处理
- *
- * @param T 数据类型
  */
-abstract class BaseViewModel<T>(
+abstract class BaseViewModel(
     protected val navigator: AppNavigator
 ) : ViewModel() {
 
@@ -33,7 +31,7 @@ abstract class BaseViewModel<T>(
      *
      * @param route 目标路由
      */
-    fun toPge(route: String) {
+    fun toPage(route: String) {
         viewModelScope.launch {
             navigator.navigateTo(route)
         }
@@ -45,8 +43,8 @@ abstract class BaseViewModel<T>(
      * @param route 基础路由
      * @param id ID参数值
      */
-    fun toPge(route: String, id: Long) {
-        toPge("${route}/$id")
+    fun toPage(route: String, id: Long) {
+        toPage("${route}/$id")
     }
 
     /**
@@ -55,7 +53,7 @@ abstract class BaseViewModel<T>(
      * @param route 基础路由
      * @param args 参数Map
      */
-    fun toPge(route: String, args: Map<String, Any>) {
+    fun toPage(route: String, args: Map<String, Any>) {
         viewModelScope.launch {
             val fullRoute = buildRouteWithArgs(route, args)
             navigator.navigateTo(fullRoute)

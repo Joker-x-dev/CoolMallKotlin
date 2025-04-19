@@ -19,60 +19,63 @@ import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.feature.auth.R
 import com.joker.coolmall.feature.auth.component.AnimatedAuthPage
 import com.joker.coolmall.feature.auth.component.BottomNavigationRow
+import com.joker.coolmall.feature.auth.component.PasswordInputField
 import com.joker.coolmall.feature.auth.component.PhoneInputField
 import com.joker.coolmall.feature.auth.component.PrimaryButton
 import com.joker.coolmall.feature.auth.component.UserAgreement
-import com.joker.coolmall.feature.auth.component.VerificationCodeField
-import com.joker.coolmall.feature.auth.viewmodel.SmsLoginViewModel
+import com.joker.coolmall.feature.auth.viewmodel.AccountLoginViewModel
 
 /**
- * 短信登录路由
+ * 账号密码登录路由
  *
- * @param viewModel 短信登录ViewModel
+ * @param viewModel 登录ViewModel
  */
 @Composable
-internal fun SmsLoginRoute(
-    viewModel: SmsLoginViewModel = hiltViewModel()
+internal fun AccountLoginRoute(
+    viewModel: AccountLoginViewModel = hiltViewModel()
 ) {
-    val phone by viewModel.phone.collectAsState()
-    val verificationCode by viewModel.verificationCode.collectAsState()
+    val account by viewModel.account.collectAsState()
+    val password by viewModel.password.collectAsState()
 
-    SmsLoginScreen(
-        phone = phone,
-        verificationCode = verificationCode,
-        onPhoneChange = viewModel::updatePhone,
-        onVerificationCodeChange = viewModel::updateVerificationCode,
-        onSendVerificationCode = viewModel::sendVerificationCode,
+    AccountLoginScreen(
+        account = account,
+        password = password,
+        onAccountChange = viewModel::updateAccount,
+        onPasswordChange = viewModel::updatePassword,
         onLoginClick = viewModel::login,
         onBackClick = viewModel::navigateBack,
+        toResetPassword = viewModel::toResetPasswordPage,
+        toRegister = viewModel::toRegisterPage
     )
 }
 
 /**
- * 短信登录界面
+ * 账号密码登录界面
  *
- * @param phone 手机号
- * @param verificationCode 验证码
- * @param onPhoneChange 手机号变更回调
- * @param onVerificationCodeChange 验证码变更回调
- * @param onSendVerificationCode 发送验证码回调
+ * @param account 账号
+ * @param password 密码
+ * @param onAccountChange 账号变更回调
+ * @param onPasswordChange 密码变更回调
  * @param onLoginClick 登录按钮点击回调
  * @param onBackClick 返回上一页回调
+ * @param toResetPassword 导航到重置密码页面
+ * @param toRegister 导航到注册页面
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-internal fun SmsLoginScreen(
-    phone: String = "",
-    verificationCode: String = "",
-    onPhoneChange: (String) -> Unit = {},
-    onVerificationCodeChange: (String) -> Unit = {},
-    onSendVerificationCode: () -> Unit = {},
+internal fun AccountLoginScreen(
+    account: String = "",
+    password: String = "",
+    onAccountChange: (String) -> Unit = {},
+    onPasswordChange: (String) -> Unit = {},
     onLoginClick: () -> Unit = {},
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
+    toResetPassword: () -> Unit = {},
+    toRegister: () -> Unit = {}
 ) {
     // 记录输入框焦点状态
-    val phoneFieldFocused = remember { mutableStateOf(false) }
-    val codeFieldFocused = remember { mutableStateOf(false) }
+    val accountFieldFocused = remember { mutableStateOf(false) }
+    val passwordFieldFocused = remember { mutableStateOf(false) }
 
     AnimatedAuthPage(
         title = stringResource(id = R.string.welcome_login),
@@ -80,22 +83,21 @@ internal fun SmsLoginScreen(
     ) {
         // 使用封装的手机号输入组件
         PhoneInputField(
-            phone = phone,
-            onPhoneChange = onPhoneChange,
-            phoneFieldFocused = phoneFieldFocused,
+            phone = account,
+            onPhoneChange = onAccountChange,
+            phoneFieldFocused = accountFieldFocused,
             placeholder = stringResource(id = R.string.phone_hint),
             nextAction = ImeAction.Next
         )
 
         Spacer(modifier = Modifier.height(42.dp))
 
-        // 使用封装的验证码输入组件
-        VerificationCodeField(
-            verificationCode = verificationCode,
-            onVerificationCodeChange = onVerificationCodeChange,
-            codeFieldFocused = codeFieldFocused,
-            onSendVerificationCode = onSendVerificationCode,
-            placeholder = stringResource(id = R.string.verification_code),
+        // 使用封装的密码输入组件
+        PasswordInputField(
+            password = password,
+            onPasswordChange = onPasswordChange,
+            passwordFieldFocused = passwordFieldFocused,
+            placeholder = stringResource(id = R.string.password_hint),
             nextAction = ImeAction.Done
         )
 
@@ -112,19 +114,21 @@ internal fun SmsLoginScreen(
             onClick = onLoginClick
         )
 
-        // 使用封装的底部导航组件
+        // 使用封装的底部导航组件 - 分隔符样式
         BottomNavigationRow(
-            messageText = stringResource(id = R.string.sms_not_available),
-            actionText = stringResource(id = R.string.use_third_party_login),
-            onActionClick = onBackClick
+            messageText = stringResource(id = R.string.go_register),
+            actionText = stringResource(id = R.string.forgot_password),
+            onCancelClick = toRegister,
+            onActionClick = toResetPassword,
+            divider = true
         )
     }
 }
 
 @Preview(showBackground = true)
 @Composable
-fun SmsLoginScreenPreview() {
+fun AccountLoginScreenPreview() {
     AppTheme {
-        SmsLoginScreen()
+        AccountLoginScreen()
     }
 } 

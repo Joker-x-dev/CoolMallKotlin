@@ -21,13 +21,13 @@ import com.joker.coolmall.core.designsystem.theme.TitleLarge
  */
 @Composable
 fun PrimaryButton(
+    modifier: Modifier = Modifier,
     text: String,
     onClick: () -> Unit,
-    enabled: Boolean = true,
-    modifier: Modifier = Modifier
+    enabled: Boolean = true
 ) {
     SpaceVerticalXLarge()
-    
+
     Button(
         onClick = onClick,
         enabled = enabled,

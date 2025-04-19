@@ -32,6 +32,7 @@ import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
  * @param title 页面标题
  * @param modifier 可选修饰符
  * @param withFadeIn 是否使用淡入效果，默认为false
+ * @param onBackClick 返回按钮点击回调，默认为null（不显示返回按钮）
  * @param content 页面内容
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,6 +41,7 @@ fun AnimatedAuthPage(
     title: String,
     modifier: Modifier = Modifier,
     withFadeIn: Boolean = false,
+    onBackClick: (() -> Unit) = {},
     content: @Composable () -> Unit
 ) {
     // 使用rememberSaveable来保持状态，即使在配置更改时也不会重置
@@ -64,7 +66,8 @@ fun AnimatedAuthPage(
     }
 
     AppScaffold(
-        backgroundColor = MaterialTheme.colorScheme.surface
+        backgroundColor = MaterialTheme.colorScheme.surface,
+        onBackClick = onBackClick
     ) {
         AnimatedVisibility(
             visibleState = animationState,

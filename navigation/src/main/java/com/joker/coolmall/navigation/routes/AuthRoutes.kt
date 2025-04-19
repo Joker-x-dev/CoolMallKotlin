@@ -17,7 +17,7 @@ object AuthRoutes {
     /**
      * 账号密码登录路由
      */
-    const val LOGIN = "$AUTH_ROUTE/login"
+    const val ACCOUNT_LOGIN = "$AUTH_ROUTE/account_login"
 
     /**
      * 短信验证码登录路由

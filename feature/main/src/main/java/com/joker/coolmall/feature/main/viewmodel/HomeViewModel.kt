@@ -35,6 +35,6 @@ class HomeViewModel @Inject constructor(
      * 导航到商品详情页
      */
     fun toGoodsDetail(goodsId: Long) {
-        super.toPge(GoodsRoutes.DETAIL, goodsId)
+        super.toPage(GoodsRoutes.DETAIL, goodsId)
     }
 }

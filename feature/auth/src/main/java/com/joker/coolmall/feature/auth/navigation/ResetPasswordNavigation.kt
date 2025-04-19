@@ -8,11 +8,9 @@ import com.joker.coolmall.navigation.routes.AuthRoutes
 
 /**
  * 找回密码页面导航
- *
- * @param navController 导航控制器
  */
-fun NavGraphBuilder.resetPasswordScreen(navController: NavController) {
+fun NavGraphBuilder.resetPasswordScreen() {
     composable(route = AuthRoutes.RESET_PASSWORD) {
-        ResetPasswordRoute(navController = navController)
+        ResetPasswordRoute()
     }
 } 

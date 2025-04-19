@@ -18,16 +18,18 @@ import com.joker.coolmall.core.designsystem.theme.Primary
  *
  * @param messageText 提示文本
  * @param actionText 操作按钮文本
- * @param onActionClick 点击操作按钮的回调
+ * @param onCancelClick 左侧操作按钮的回调
+ * @param onActionClick 右侧操作按钮的回调
  * @param modifier 可选修饰符
  * @param divider 是否显示分隔符，默认为false
  */
 @Composable
 fun BottomNavigationRow(
+    modifier: Modifier = Modifier,
     messageText: String,
     actionText: String,
+    onCancelClick: () -> Unit = {},
     onActionClick: () -> Unit,
-    modifier: Modifier = Modifier,
     divider: Boolean = false
 ) {
     CenterRow(
@@ -41,7 +43,7 @@ fun BottomNavigationRow(
                 color = Color.Gray
             )
         } else {
-            TextButton(onClick = onActionClick) {
+            TextButton(onClick = onCancelClick) {
                 Text(
                     text = messageText,
                     color = Color.Gray,
@@ -50,7 +52,6 @@ fun BottomNavigationRow(
                 )
             }
         }
-
 
         if (divider) {
             Text(

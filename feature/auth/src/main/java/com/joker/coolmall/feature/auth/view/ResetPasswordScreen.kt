@@ -12,15 +12,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.joker.coolmall.core.designsystem.component.StartRow
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
+import com.joker.coolmall.feature.auth.R
 import com.joker.coolmall.feature.auth.component.AnimatedAuthPage
 import com.joker.coolmall.feature.auth.component.PasswordInputField
 import com.joker.coolmall.feature.auth.component.PhoneInputField
@@ -32,12 +33,10 @@ import com.joker.coolmall.feature.auth.viewmodel.ResetPasswordViewModel
  * 找回密码路由
  *
  * @param viewModel 重置密码ViewModel
- * @param navController 导航控制器
  */
 @Composable
-fun ResetPasswordRoute(
-    viewModel: ResetPasswordViewModel = hiltViewModel(),
-    navController: NavController
+internal fun ResetPasswordRoute(
+    viewModel: ResetPasswordViewModel = hiltViewModel()
 ) {
     val phone by viewModel.phone.collectAsState()
     val newPassword by viewModel.newPassword.collectAsState()
@@ -55,7 +54,7 @@ fun ResetPasswordRoute(
         onVerificationCodeChange = viewModel::updateVerificationCode,
         onSendVerificationCode = viewModel::sendVerificationCode,
         onResetPasswordClick = viewModel::resetPassword,
-        onNavigateBack = { navController.navigateUp() }
+        onBackClick = viewModel::navigateBack
     )
 }
 
@@ -66,18 +65,17 @@ fun ResetPasswordRoute(
  * @param newPassword 新密码
  * @param confirmPassword 确认密码
  * @param verificationCode 验证码
- * @param uiState 当前UI状态
  * @param onPhoneChange 手机号变更回调
  * @param onNewPasswordChange 新密码变更回调
  * @param onConfirmPasswordChange 确认密码变更回调
  * @param onVerificationCodeChange 验证码变更回调
  * @param onSendVerificationCode 发送验证码回调
  * @param onResetPasswordClick 重置密码按钮点击回调
- * @param onNavigateBack 返回上一页回调
+ * @param onBackClick 返回上一页回调
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ResetPasswordScreen(
+internal fun ResetPasswordScreen(
     phone: String = "",
     newPassword: String = "",
     confirmPassword: String = "",
@@ -88,7 +86,7 @@ fun ResetPasswordScreen(
     onVerificationCodeChange: (String) -> Unit = {},
     onSendVerificationCode: () -> Unit = {},
     onResetPasswordClick: () -> Unit = {},
-    onNavigateBack: () -> Unit = {}
+    onBackClick: () -> Unit = {}
 ) {
     // 记录输入框焦点状态
     val phoneFieldFocused = remember { mutableStateOf(false) }
@@ -97,15 +95,16 @@ fun ResetPasswordScreen(
     val confirmPasswordFieldFocused = remember { mutableStateOf(false) }
 
     AnimatedAuthPage(
-        title = "重置密码",
-        withFadeIn = true
+        title = stringResource(id = R.string.reset_password),
+        withFadeIn = true,
+        onBackClick = onBackClick
     ) {
         // 使用封装的手机号输入组件
         PhoneInputField(
             phone = phone,
             onPhoneChange = onPhoneChange,
             phoneFieldFocused = phoneFieldFocused,
-            placeholder = "手机号码",
+            placeholder = stringResource(id = R.string.phone_hint),
             nextAction = ImeAction.Next
         )
 
@@ -117,7 +116,7 @@ fun ResetPasswordScreen(
             onVerificationCodeChange = onVerificationCodeChange,
             codeFieldFocused = codeFieldFocused,
             onSendVerificationCode = onSendVerificationCode,
-            placeholder = "验证码",
+            placeholder = stringResource(id = R.string.verification_code),
             nextAction = ImeAction.Next
         )
 
@@ -128,7 +127,7 @@ fun ResetPasswordScreen(
             password = newPassword,
             onPasswordChange = onNewPasswordChange,
             passwordFieldFocused = newPasswordFieldFocused,
-            placeholder = "请设置新密码",
+            placeholder = stringResource(id = R.string.set_new_password),
             nextAction = ImeAction.Next
         )
 
@@ -139,7 +138,7 @@ fun ResetPasswordScreen(
             password = confirmPassword,
             onPasswordChange = onConfirmPasswordChange,
             passwordFieldFocused = confirmPasswordFieldFocused,
-            placeholder = "请确认新密码",
+            placeholder = stringResource(id = R.string.confirm_new_password),
             nextAction = ImeAction.Done
         )
 
@@ -148,7 +147,7 @@ fun ResetPasswordScreen(
         // 提示信息
         StartRow {
             Text(
-                text = "重置密码后，请使用新密码登录",
+                text = stringResource(id = R.string.reset_password_tip),
                 fontSize = 12.sp,
                 color = Color.Gray
             )
@@ -158,7 +157,7 @@ fun ResetPasswordScreen(
         if (newPassword.isNotEmpty() && confirmPassword.isNotEmpty() && newPassword != confirmPassword) {
             SpaceVerticalMedium()
             Text(
-                text = "两次输入的密码不一致",
+                text = stringResource(id = R.string.password_mismatch),
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.error
             )
@@ -166,7 +165,7 @@ fun ResetPasswordScreen(
 
         // 使用封装的主题色按钮
         PrimaryButton(
-            text = "重置密码",
+            text = stringResource(id = R.string.reset_password_button),
             onClick = onResetPasswordClick
         )
     }

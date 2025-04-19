@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -29,9 +29,8 @@ import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.joker.coolmall.core.designsystem.theme.Primary
-import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
 import com.joker.coolmall.feature.auth.R
+import com.joker.coolmall.feature.auth.component.FocusableDivider
 
 /**
  * 密码输入组件，包含可切换密码显示/隐藏的按钮
@@ -48,7 +47,7 @@ fun PasswordInputField(
     password: String,
     onPasswordChange: (String) -> Unit,
     passwordFieldFocused: MutableState<Boolean>,
-    placeholder: String = "请输入密码",
+    placeholder: String = "",
     nextAction: ImeAction = ImeAction.Done,
     modifier: Modifier = Modifier
 ) {
@@ -76,7 +75,7 @@ fun PasswordInputField(
             Box(modifier = Modifier.fillMaxWidth()) {
                 if (placeholderVisible) {
                     Text(
-                        text = placeholder,
+                        text = placeholder.ifEmpty { stringResource(id = R.string.password_hint) },
                         color = Color.Gray,
                         fontSize = 16.sp,
                         maxLines = 1,
@@ -98,17 +97,13 @@ fun PasswordInputField(
                 painter = painterResource(
                     id = if (passwordVisible) R.drawable.ic_visible else R.drawable.ic_invisible
                 ),
-                contentDescription = if (passwordVisible) "隐藏密码" else "显示密码",
+                contentDescription = if (passwordVisible) 
+                    stringResource(id = R.string.hide_password) else stringResource(id = R.string.show_password),
                 modifier = Modifier.size(20.dp)
             )
         }
     }
 
-    SpaceVerticalLarge()
-
-    // 底部线条
-    HorizontalDivider(
-        thickness = 1.dp,
-        color = if (passwordFieldFocused.value) Primary else MaterialTheme.colorScheme.outline
-    )
+    // 使用封装的底部线条组件
+    FocusableDivider(focusState = passwordFieldFocused)
 } 

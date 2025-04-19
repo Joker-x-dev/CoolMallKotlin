@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -12,15 +11,16 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.joker.coolmall.core.designsystem.component.StartRow
 import com.joker.coolmall.core.designsystem.theme.Primary
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalXLarge
-import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
+import com.joker.coolmall.feature.auth.R
+import com.joker.coolmall.feature.auth.component.FocusableDivider
 
 /**
  * 手机号输入组件，包含国家代码与输入框
@@ -37,14 +37,14 @@ fun PhoneInputField(
     phone: String,
     onPhoneChange: (String) -> Unit,
     phoneFieldFocused: MutableState<Boolean>,
-    placeholder: String = "请输入手机号",
+    placeholder: String = "",
     nextAction: ImeAction = ImeAction.Next,
     modifier: Modifier = Modifier
 ) {
     // 手机号输入框及底部线条
     StartRow(modifier = modifier) {
         Text(
-            text = "+86",
+            text = stringResource(id = R.string.phone_code),
             color = Primary,
             fontSize = 16.sp,
             modifier = Modifier.padding(end = SpaceHorizontalXLarge)
@@ -69,7 +69,7 @@ fun PhoneInputField(
             Box {
                 if (phone.isEmpty()) {
                     Text(
-                        text = placeholder,
+                        text = placeholder.ifEmpty { stringResource(id = R.string.phone_hint) },
                         color = Color.Gray,
                         fontSize = 16.sp
                     )
@@ -79,11 +79,6 @@ fun PhoneInputField(
         }
     }
 
-    SpaceVerticalLarge()
-
-    // 底部线条
-    HorizontalDivider(
-        thickness = 1.dp,
-        color = if (phoneFieldFocused.value) Primary else MaterialTheme.colorScheme.outline
-    )
+    // 使用封装的底部线条组件
+    FocusableDivider(focusState = phoneFieldFocused)
 } 
