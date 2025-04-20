@@ -13,6 +13,7 @@ android {
 dependencies {
     // 引入 model 模块
     implementation(project(":core:model"))
+    implementation(project(":core:datastore"))
 
     // 网络相关
     implementation(libs.kotlinx.serialization.json)

@@ -1,10 +1,13 @@
 package com.joker.coolmall.core.data.state
 
 import User
+import com.joker.coolmall.core.common.result.asResult
 import com.joker.coolmall.core.data.di.ApplicationScope
 import com.joker.coolmall.core.data.repository.AuthStoreRepository
+import com.joker.coolmall.core.data.repository.UserInfoRepository
 import com.joker.coolmall.core.data.repository.UserInfoStoreRepository
 import com.joker.coolmall.core.model.Auth
+import com.joker.coolmall.core.util.network.ResultHandler
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -27,6 +30,7 @@ import javax.inject.Singleton
 class AppState @Inject constructor(
     private val authStoreRepository: AuthStoreRepository,
     private val userInfoStoreRepository: UserInfoStoreRepository,
+    private val userInfoRepository: UserInfoRepository,
     @ApplicationScope private val applicationScope: CoroutineScope
 ) {
     // 用户登录状态
@@ -110,6 +114,9 @@ class AppState @Inject constructor(
 
         // 更新内存中的状态
         _auth.value = auth
+
+        // 设置登录状态
+        _isLoggedIn.value = true
     }
 
     /**
@@ -133,5 +140,21 @@ class AppState @Inject constructor(
      */
     suspend fun shouldRefreshToken(): Boolean {
         return authStoreRepository.shouldRefreshToken()
+    }
+
+    /**
+     * 从网络获取最新的用户信息并更新到状态
+     */
+    fun refreshUserInfo() {
+        if (!_isLoggedIn.value) return
+        ResultHandler.handleResultWithData(
+            scope = applicationScope,
+            flow = userInfoRepository.getPersonInfo().asResult(),
+            onData = { data ->
+                applicationScope.launch {
+                    updateUserInfo(data)
+                }
+            }
+        )
     }
 }

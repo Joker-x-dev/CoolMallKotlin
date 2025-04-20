@@ -21,6 +21,7 @@ dependencies {
     implementation(project(":core:datastore"))
     // 引入数据库模块
     implementation(project(":core:database"))
+    implementation(project(":core:common"))
 
     // kotlin序列化
     implementation(libs.kotlinx.serialization.json)

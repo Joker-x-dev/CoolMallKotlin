@@ -1,5 +1,6 @@
 package com.joker.coolmall.feature.main.view
 
+import User
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -26,6 +27,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -36,6 +38,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.ArrowRightIcon
 import com.joker.coolmall.core.designsystem.theme.Primary
@@ -58,7 +61,14 @@ import com.joker.coolmall.feature.main.viewmodel.MeViewModel
 internal fun MeRoute(
     viewModel: MeViewModel = hiltViewModel(),
 ) {
+    // 收集登录状态
+    val isLoggedIn by viewModel.isLoggedIn.collectAsStateWithLifecycle()
+    // 收集用户信息
+    val userInfo by viewModel.userInfo.collectAsStateWithLifecycle()
+    
     MeScreen(
+        isLoggedIn = isLoggedIn,
+        userInfo = userInfo,
         toLogin = viewModel::toLogin
     )
 }
@@ -66,6 +76,8 @@ internal fun MeRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun MeScreen(
+    isLoggedIn: Boolean = false,
+    userInfo: User? = null,
     toLogin: () -> Unit = {},
 ) {
     CommonScaffold(topBar = { }) {
@@ -78,6 +90,8 @@ internal fun MeScreen(
         ) {
             // 用户信息区域
             UserInfoSection(
+                isLoggedIn = isLoggedIn,
+                userInfo = userInfo,
                 toLogin = toLogin
             )
             SpaceVerticalMedium()
@@ -107,6 +121,8 @@ internal fun MeScreen(
  */
 @Composable
 private fun UserInfoSection(
+    isLoggedIn: Boolean,
+    userInfo: User?,
     toLogin: () -> Unit
 ) {
     Row(
@@ -137,9 +153,9 @@ private fun UserInfoSection(
         Column(
             modifier = Modifier.weight(1f)
         ) {
-            // 用户名
+            // 用户名 - 根据登录状态显示
             Text(
-                text = "Joker.X",
+                text = (if (isLoggedIn && userInfo != null) userInfo.nickName else "未登录").toString(),
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.onSurface
@@ -147,9 +163,12 @@ private fun UserInfoSection(
 
             SpaceVerticalXSmall()
 
-            // 手机号
+            // 手机号 - 根据登录状态显示
             Text(
-                text = "手机号: 18888888888",
+                text = if (isLoggedIn && userInfo != null && !userInfo.phone.isNullOrEmpty()) 
+                    "手机号: ${userInfo.phone}" 
+                else 
+                    "点击登录账号",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )

@@ -191,22 +191,20 @@ class SmsLoginViewModel @Inject constructor(
         ResultHandler.handleResultWithData(
             scope = viewModelScope,
             flow = authRepository.loginByPhone(params).asResult(),
-            onData = { authData ->
-                updateAuth(authData)
-                super.navigateBack()
-                super.navigateBack()
-                ToastUtils.showSuccess(context, R.string.login_success)
-            }
+            onData = { authData -> loginSuccess(authData) }
         )
     }
 
-
     /**
-     * 更新认证状态并且回到首页
+     * 登录成功
      */
-    fun updateAuth(authData: Auth) {
+    fun loginSuccess(authData: Auth) {
         viewModelScope.launch {
+            ToastUtils.showSuccess(context, R.string.login_success)
             appState.updateAuth(authData)
+            appState.refreshUserInfo()
+            super.navigateBack()
+            super.navigateBack()
         }
     }
 
