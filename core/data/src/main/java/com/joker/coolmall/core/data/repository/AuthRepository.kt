@@ -1,6 +1,7 @@
 package com.joker.coolmall.core.data.repository
 
 import com.joker.coolmall.core.model.Auth
+import com.joker.coolmall.core.model.Captcha
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.datasource.auth.AuthNetworkDataSource
 import kotlinx.coroutines.Dispatchers
@@ -32,7 +33,7 @@ class AuthRepository @Inject constructor(
     /**
      * 验证码
      */
-    fun getSmsCode(params: Map<String, String>): Flow<NetworkResponse<Any>> = flow {
+    fun getSmsCode(params: Map<String, String>): Flow<NetworkResponse<String>> = flow {
         emit(authNetworkDataSource.getSmsCode(params))
     }.flowOn(Dispatchers.IO)
 
@@ -60,7 +61,7 @@ class AuthRepository @Inject constructor(
     /**
      * 图片验证码
      */
-    fun getCaptcha(): Flow<NetworkResponse<Any>> = flow {
+    fun getCaptcha(): Flow<NetworkResponse<Captcha>> = flow {
         emit(authNetworkDataSource.getCaptcha())
     }.flowOn(Dispatchers.IO)
 } 

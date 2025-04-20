@@ -55,14 +55,14 @@ class AccountLoginViewModel @Inject constructor(
             // TODO: 实现实际登录逻辑
         }
     }
-    
+
     /**
      * 导航到注册页面
      */
     fun toRegisterPage() {
         super.toPage(AuthRoutes.REGISTER)
     }
-    
+
     /**
      * 导航到重置密码页面
      */

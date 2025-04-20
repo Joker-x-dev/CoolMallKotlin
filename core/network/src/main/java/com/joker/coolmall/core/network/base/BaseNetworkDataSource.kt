@@ -1,7 +1,5 @@
 package com.joker.coolmall.core.network.base
 
-import kotlinx.serialization.json.Json
-import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 
 /**

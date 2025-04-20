@@ -50,4 +50,16 @@
     <!-- 密码可见性 -->
     <string name="hide_password">隐藏密码</string>
     <string name="show_password">显示密码</string>
+    
+    <!-- 图片验证码对话框 -->
+    <string name="security_verification">安全验证</string>
+    <string name="complete_verification">完成验证</string>
+    <string name="image_captcha_hint">请输入图形验证码</string>
+    <string name="image_captcha_description">验证码图片</string>
+    <string name="refresh_captcha">点击刷新</string>
+    
+    <!-- Toast提示 -->
+    <string name="invalid_phone_number">请输入正确的手机号</string>
+    <string name="invalid_verification_code">请输入4位验证码</string>
+    <string name="login_success">登录成功</string>
 </resources> 

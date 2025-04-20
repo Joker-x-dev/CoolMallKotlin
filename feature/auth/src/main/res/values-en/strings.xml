@@ -50,4 +50,16 @@
     <!-- Password visibility -->
     <string name="hide_password">Hide password</string>
     <string name="show_password">Show password</string>
+    
+    <!-- Image Captcha Dialog -->
+    <string name="security_verification">Security Verification</string>
+    <string name="complete_verification">Complete Verification</string>
+    <string name="image_captcha_hint">Please enter captcha code</string>
+    <string name="image_captcha_description">Captcha image</string>
+    <string name="refresh_captcha">Tap to refresh</string>
+    
+    <!-- Toast messages -->
+    <string name="invalid_phone_number">Please enter a valid phone number</string>
+    <string name="invalid_verification_code">Please enter a 4-digit verification code</string>
+    <string name="login_success">Login successful</string>
 </resources> 

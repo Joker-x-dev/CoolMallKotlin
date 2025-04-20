@@ -1,6 +1,7 @@
 package com.joker.coolmall.core.network.service
 
 import com.joker.coolmall.core.model.Auth
+import com.joker.coolmall.core.model.Captcha
 import com.joker.coolmall.core.model.response.NetworkResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -27,7 +28,7 @@ interface AuthService {
      * 验证码
      */
     @POST("user/login/smsCode")
-    suspend fun getSmsCode(@Body params: Map<String, String>): NetworkResponse<Any>
+    suspend fun getSmsCode(@Body params: Map<String, String>): NetworkResponse<String>
 
     /**
      * 刷新token
@@ -51,5 +52,5 @@ interface AuthService {
      * 图片验证码
      */
     @GET("user/login/captcha")
-    suspend fun getCaptcha(): NetworkResponse<Any>
+    suspend fun getCaptcha(): NetworkResponse<Captcha>
 } 

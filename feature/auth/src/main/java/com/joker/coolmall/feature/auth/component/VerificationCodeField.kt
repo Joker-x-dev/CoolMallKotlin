@@ -32,6 +32,7 @@ import com.joker.coolmall.feature.auth.component.FocusableDivider
  * @param onSendVerificationCode 发送验证码回调
  * @param placeholder 提示文本，默认为"验证码"
  * @param nextAction 输入法下一步动作，默认为Next
+ * @param isPhoneValid 手机号是否有效，用于控制发送按钮是否可点击
  * @param modifier 可选修饰符
  */
 @Composable
@@ -42,13 +43,19 @@ fun VerificationCodeField(
     onSendVerificationCode: () -> Unit,
     placeholder: String = "",
     nextAction: ImeAction = ImeAction.Next,
+    isPhoneValid: Boolean = true,
     modifier: Modifier = Modifier
 ) {
     // 验证码输入框和发送按钮
     StartRow(modifier = modifier) {
         BasicTextField(
             value = verificationCode,
-            onValueChange = onVerificationCodeChange,
+            onValueChange = { newValue ->
+                // 只允许输入数字且限制长度为4位
+                if (newValue.length <= 4 && (newValue.isEmpty() || newValue.all { it.isDigit() })) {
+                    onVerificationCodeChange(newValue)
+                }
+            },
             textStyle = TextStyle(
                 fontSize = 16.sp,
                 color = MaterialTheme.colorScheme.onSurface
@@ -76,11 +83,11 @@ fun VerificationCodeField(
 
         Text(
             text = stringResource(id = R.string.get_verification_code),
-            color = ColorWarning,
+            color = if (isPhoneValid) ColorWarning else Color.Gray,
             fontSize = 16.sp,
             modifier = Modifier
                 .padding(start = SpaceHorizontalXLarge)
-                .clickable(onClick = onSendVerificationCode)
+                .clickable(enabled = isPhoneValid, onClick = onSendVerificationCode)
         )
     }
 

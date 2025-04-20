@@ -1,6 +1,7 @@
 package com.joker.coolmall.core.network.datasource.auth
 
 import com.joker.coolmall.core.model.Auth
+import com.joker.coolmall.core.model.Captcha
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.base.BaseNetworkDataSource
 import com.joker.coolmall.core.network.service.AuthService
@@ -42,7 +43,7 @@ class AuthNetworkDataSourceImpl @Inject constructor(
      * @param params 请求参数，包含手机号
      * @return 验证码发送结果响应数据
      */
-    override suspend fun getSmsCode(params: Map<String, String>): NetworkResponse<Any> {
+    override suspend fun getSmsCode(params: Map<String, String>): NetworkResponse<String> {
         return authService.getSmsCode(params)
     }
 
@@ -81,7 +82,7 @@ class AuthNetworkDataSourceImpl @Inject constructor(
      * 
      * @return 图片验证码响应数据
      */
-    override suspend fun getCaptcha(): NetworkResponse<Any> {
+    override suspend fun getCaptcha(): NetworkResponse<Captcha> {
         return authService.getCaptcha()
     }
 } 

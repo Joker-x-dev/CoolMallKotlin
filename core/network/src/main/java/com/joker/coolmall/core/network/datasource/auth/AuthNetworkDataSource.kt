@@ -1,6 +1,7 @@
 package com.joker.coolmall.core.network.datasource.auth
 
 import com.joker.coolmall.core.model.Auth
+import com.joker.coolmall.core.model.Captcha
 import com.joker.coolmall.core.model.response.NetworkResponse
 
 /**
@@ -21,7 +22,7 @@ interface AuthNetworkDataSource {
     /**
      * 验证码
      */
-    suspend fun getSmsCode(params: Map<String, String>): NetworkResponse<Any>
+    suspend fun getSmsCode(params: Map<String, String>): NetworkResponse<String>
 
     /**
      * 刷新token
@@ -41,5 +42,5 @@ interface AuthNetworkDataSource {
     /**
      * 图片验证码
      */
-    suspend fun getCaptcha(): NetworkResponse<Any>
+    suspend fun getCaptcha(): NetworkResponse<Captcha>
 } 
