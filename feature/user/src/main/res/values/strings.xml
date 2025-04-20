@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 个人中心 -->
+    <string name="profile_title">个人中心</string>
+    
+    <!-- 设置 -->
+    <string name="settings_title">设置</string>
+    
+    <!-- 收货地址 -->
+    <string name="address_list_title">收货地址</string>
+    <string name="address_detail_title">地址详情</string>
+    <string name="add_address">添加地址</string>
+    <string name="edit_address">编辑地址</string>
+    <string name="delete_address">删除地址</string>
+    <string name="set_default_address">设为默认地址</string>
+    <string name="default_address">默认地址</string>
+    <string name="save_address">保存地址</string>
+    
+    <!-- 足迹 -->
+    <string name="footprint_title">我的足迹</string>
+</resources> 

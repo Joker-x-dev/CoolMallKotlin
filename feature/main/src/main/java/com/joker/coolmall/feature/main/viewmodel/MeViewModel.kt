@@ -1,11 +1,12 @@
 package com.joker.coolmall.feature.main.viewmodel
 
 import User
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
 import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.AuthRoutes
+import com.joker.coolmall.navigation.routes.UserRoutes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -18,9 +19,11 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class MeViewModel @Inject constructor(
-    private val navigator: AppNavigator,
+    navigator: AppNavigator,
     private val appState: AppState
-) : ViewModel() {
+) : BaseViewModel(
+    navigator = navigator
+) {
 
     // 用户登录状态
     val isLoggedIn: StateFlow<Boolean> = appState.isLoggedIn
@@ -48,11 +51,30 @@ class MeViewModel @Inject constructor(
     }
 
     /**
-     * 跳转到登录页
+     * 跳转到用户足迹
      */
-    fun toLogin() {
-        viewModelScope.launch {
-            navigator.navigateTo(AuthRoutes.HOME)
-        }
+    fun toUserFootprintPage() {
+        super.toPage(UserRoutes.FOOTPRINT)
+    }
+
+    /**
+     * 跳转到收货地址列表
+     */
+    fun toAddressListPage() {
+        super.toPage(UserRoutes.ADDRESS_LIST)
+    }
+
+    /**
+     * 跳转到用户资料页面
+     */
+    fun toProfilePage() {
+        super.toPage(UserRoutes.PROFILE)
+    }
+
+    /**
+     * 跳转到登录页面
+     */
+    fun toLoginPage() {
+        super.toPage(AuthRoutes.HOME)
     }
 }

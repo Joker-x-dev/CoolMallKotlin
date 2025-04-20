@@ -58,6 +58,8 @@ dependencies {
     implementation(project(":feature:goods"))
     // 登录(认证)模块
     implementation(project(":feature:auth"))
+    // 用户模块
+    implementation(project(":feature:user"))
 
     // region 依赖注入
     // https://developer.android.google.cn/training/dependency-injection/hilt-android?hl=zh-cn

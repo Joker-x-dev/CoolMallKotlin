@@ -65,11 +65,12 @@ internal fun MeRoute(
     val isLoggedIn by viewModel.isLoggedIn.collectAsStateWithLifecycle()
     // 收集用户信息
     val userInfo by viewModel.userInfo.collectAsStateWithLifecycle()
-    
+
     MeScreen(
         isLoggedIn = isLoggedIn,
         userInfo = userInfo,
-        toLogin = viewModel::toLogin
+        toLogin = viewModel::toLoginPage,
+        toAddressList = viewModel::toAddressListPage,
     )
 }
 
@@ -79,6 +80,7 @@ internal fun MeScreen(
     isLoggedIn: Boolean = false,
     userInfo: User? = null,
     toLogin: () -> Unit = {},
+    toAddressList: () -> Unit = {},
 ) {
     CommonScaffold(topBar = { }) {
         Column(
@@ -90,9 +92,7 @@ internal fun MeScreen(
         ) {
             // 用户信息区域
             UserInfoSection(
-                isLoggedIn = isLoggedIn,
-                userInfo = userInfo,
-                toLogin = toLogin
+                isLoggedIn = isLoggedIn, userInfo = userInfo, toLogin = toLogin
             )
             SpaceVerticalMedium()
 
@@ -109,7 +109,9 @@ internal fun MeScreen(
             SpaceVerticalMedium()
 
             // 功能菜单区域
-            FunctionMenuSection()
+            FunctionMenuSection(
+                toAddressList = toAddressList
+            )
             SpaceVerticalMedium()
 
         }
@@ -121,9 +123,7 @@ internal fun MeScreen(
  */
 @Composable
 private fun UserInfoSection(
-    isLoggedIn: Boolean,
-    userInfo: User?,
-    toLogin: () -> Unit
+    isLoggedIn: Boolean, userInfo: User?, toLogin: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -165,10 +165,8 @@ private fun UserInfoSection(
 
             // 手机号 - 根据登录状态显示
             Text(
-                text = if (isLoggedIn && userInfo != null && !userInfo.phone.isNullOrEmpty()) 
-                    "手机号: ${userInfo.phone}" 
-                else 
-                    "点击登录账号",
+                text = if (isLoggedIn && userInfo != null && !userInfo.phone.isNullOrEmpty()) "手机号: ${userInfo.phone}"
+                else "点击登录账号",
                 style = MaterialTheme.typography.bodySmall,
                 color = MaterialTheme.colorScheme.onSurfaceVariant
             )
@@ -186,8 +184,7 @@ private fun UserInfoSection(
 @Composable
 private fun MembershipCard() {
     Card(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color(0xFF242424) // 会员卡片保持深色背景
@@ -238,8 +235,7 @@ private fun MembershipCard() {
 @Composable
 private fun OrderSection() {
     Card(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
@@ -294,9 +290,7 @@ private fun OrderSection() {
 
         // 订单状态图标
         Row(
-            modifier = Modifier
-                .fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceEvenly
+            modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             OrderStatusItem(
                 icon = R.drawable.ic_wait_pay,
@@ -337,8 +331,7 @@ private fun OrderSection() {
 @Composable
 private fun MyFootprintSection() {
     Card(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
@@ -382,8 +375,7 @@ private fun MyFootprintSection() {
 
                 Row(
                     verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.clickable { /* 查看更多足迹 */ }
-                ) {
+                    modifier = Modifier.clickable { /* 查看更多足迹 */ }) {
                     Text(
                         text = "6",
                         style = MaterialTheme.typography.bodySmall,
@@ -424,8 +416,7 @@ private fun FootprintItem(imageUrl: String) {
         modifier = Modifier
             .size(100.dp)
             .clip(ShapeSmall)
-            .clickable { /* 点击商品 */ }
-    ) {
+            .clickable { /* 点击商品 */ }) {
         Box(
             modifier = Modifier
                 .size(100.dp)
@@ -446,10 +437,7 @@ private fun FootprintItem(imageUrl: String) {
  */
 @Composable
 private fun OrderStatusItem(
-    modifier: Modifier,
-    icon: Int,
-    label: String,
-    badgeCount: Int = 0
+    modifier: Modifier, icon: Int, label: String, badgeCount: Int = 0
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -473,8 +461,7 @@ private fun OrderStatusItem(
                         .clip(CircleShape)
                         .background(MaterialTheme.colorScheme.error)
                         .offset(x = 10.dp, y = (-6).dp)
-                        .align(Alignment.TopEnd),
-                    contentAlignment = Alignment.Center
+                        .align(Alignment.TopEnd), contentAlignment = Alignment.Center
                 ) {
                     Text(
                         text = badgeCount.toString(),
@@ -500,10 +487,11 @@ private fun OrderStatusItem(
  * 功能菜单区域
  */
 @Composable
-private fun FunctionMenuSection() {
+private fun FunctionMenuSection(
+    toAddressList: () -> Unit
+) {
     Card(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
@@ -514,16 +502,13 @@ private fun FunctionMenuSection() {
     ) {
         Column {
             FunctionMenuItem(
-                icon = R.drawable.ic_coupon_fill,
-                title = "优惠券",
-                iconTint = Color(0xFFFF9800)
+                icon = R.drawable.ic_coupon_fill, title = "优惠券", iconTint = Color(0xFFFF9800)
             )
 
             // 收货人
             FunctionMenuItem(
-                icon = R.drawable.ic_location_fill,
-                title = "收货人",
-                iconTint = Color(0xFF66BB6A)
+                icon = R.drawable.ic_location_fill, title = "收货人", iconTint = Color(0xFF66BB6A),
+                onClick = toAddressList
             )
 
             FunctionMenuItem(
@@ -540,8 +525,7 @@ private fun FunctionMenuSection() {
 
     // 设置选项单独放在一个卡片中
     Card(
-        modifier = Modifier
-            .fillMaxWidth(),
+        modifier = Modifier.fillMaxWidth(),
         shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surface
@@ -569,16 +553,16 @@ private fun FunctionMenuItem(
     title: String,
     trailingText: String = "",
     iconTint: Color = Color.Black,
-    showDivider: Boolean = true
+    showDivider: Boolean = true,
+    onClick: () -> Unit = {}
 ) {
     Column {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .clickable { /* 点击处理 */ }
+                .clickable { onClick() }
                 .padding(vertical = 16.dp, horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
+            verticalAlignment = Alignment.CenterVertically) {
             // 图标
             Icon(
                 painter = painterResource(id = icon),

@@ -11,6 +11,7 @@ import com.joker.coolmall.feature.auth.navigation.authGraph
 import com.joker.coolmall.feature.goods.navigation.goodsGraph
 import com.joker.coolmall.feature.main.navigation.MAIN_ROUTE
 import com.joker.coolmall.feature.main.navigation.mainGraph
+import com.joker.coolmall.feature.user.navigation.userGraph
 import kotlinx.coroutines.flow.collectLatest
 
 /**
@@ -68,5 +69,6 @@ fun AppNavHost(
         mainGraph(navController)
         goodsGraph(navController)
         authGraph(navController)
+        userGraph(navController)
     }
 }

@@ -1,5 +1,5 @@
 plugins {
-    id("com.joker.coolmall.android.library")
+    id("com.joker.coolmall.android.feature")
 }
 
 android {
