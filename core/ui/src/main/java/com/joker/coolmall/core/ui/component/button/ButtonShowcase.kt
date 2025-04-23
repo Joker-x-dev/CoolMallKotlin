@@ -1,8 +1,6 @@
 package com.joker.coolmall.core.ui.component.button
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
@@ -47,12 +45,12 @@ fun ButtonShowcase() {
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
             )
 
-            Spacer(modifier = Modifier.height(SpaceVerticalMedium))
+            SpaceVerticalMedium()
 
             // 按钮类型
             TitleWithLine(text = "按钮类型")
 
-            Spacer(modifier = Modifier.height(SpaceVerticalSmall))
+            SpaceVerticalSmall()
 
             // 不同类型的按钮
             AppButton(
@@ -61,7 +59,7 @@ fun ButtonShowcase() {
                 type = ButtonType.DEFAULT
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            SpaceVerticalSmall()
 
             AppButton(
                 text = "success",
@@ -69,7 +67,7 @@ fun ButtonShowcase() {
                 type = ButtonType.SUCCESS
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            SpaceVerticalSmall()
 
             AppButton(
                 text = "warning",
@@ -77,7 +75,7 @@ fun ButtonShowcase() {
                 type = ButtonType.WARNING
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            SpaceVerticalSmall()
 
             AppButton(
                 text = "danger",
@@ -85,7 +83,7 @@ fun ButtonShowcase() {
                 type = ButtonType.DANGER
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            SpaceVerticalSmall()
 
             AppButton(
                 text = "purple",
@@ -93,7 +91,7 @@ fun ButtonShowcase() {
                 type = ButtonType.PURPLE
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            SpaceVerticalSmall()
 
             AppButtonBordered(
                 text = "链接 link",
@@ -102,12 +100,12 @@ fun ButtonShowcase() {
                 shape = ButtonShape.ROUND
             )
 
-            Spacer(modifier = Modifier.height(SpaceVerticalMedium))
+            SpaceVerticalMedium()
 
             // 禁用状态
             TitleWithLine(text = "禁用状态")
 
-            Spacer(modifier = Modifier.height(SpaceVerticalSmall))
+            SpaceVerticalSmall()
 
             // 禁用状态展示
             AppButton(
@@ -116,7 +114,7 @@ fun ButtonShowcase() {
                 enabled = false
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            SpaceVerticalSmall()
 
             // 带加载图标的按钮
             AppButton(
@@ -125,7 +123,7 @@ fun ButtonShowcase() {
                 loading = true
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            SpaceVerticalSmall()
 
             // 禁用透明按钮
             AppButton(
@@ -135,12 +133,12 @@ fun ButtonShowcase() {
                 style = ButtonStyle.OUTLINED
             )
 
-            Spacer(modifier = Modifier.height(SpaceVerticalMedium))
+            SpaceVerticalMedium()
 
             // 按钮形状
             TitleWithLine(text = "按钮形状")
 
-            Spacer(modifier = Modifier.height(SpaceVerticalSmall))
+            SpaceVerticalSmall()
 
             // 方形按钮
             AppButton(
@@ -149,7 +147,7 @@ fun ButtonShowcase() {
                 shape = ButtonShape.SQUARE
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            SpaceVerticalSmall()
 
             // 圆形按钮
             AppButton(
@@ -158,12 +156,12 @@ fun ButtonShowcase() {
                 shape = ButtonShape.ROUND
             )
 
-            Spacer(modifier = Modifier.height(SpaceVerticalMedium))
+            SpaceVerticalMedium()
 
             // 按钮大小
             TitleWithLine(text = "按钮大小")
 
-            Spacer(modifier = Modifier.height(SpaceVerticalSmall))
+            SpaceVerticalSmall()
 
             // 中型按钮
             AppButton(
@@ -175,7 +173,7 @@ fun ButtonShowcase() {
                 fullWidth = true
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            SpaceVerticalSmall()
 
             // 小型按钮
             AppButtonFixed(
@@ -187,7 +185,7 @@ fun ButtonShowcase() {
                 modifier = Modifier.width(122.dp)
             )
 
-            Spacer(modifier = Modifier.height(12.dp))
+            SpaceVerticalSmall()
 
             // 迷你型按钮
             AppButtonFixed(
@@ -199,12 +197,12 @@ fun ButtonShowcase() {
                 modifier = Modifier.width(86.dp)
             )
 
-            Spacer(modifier = Modifier.height(SpaceVerticalMedium))
+            SpaceVerticalMedium()
 
             // 自定义颜色
             TitleWithLine(text = "自定义颜色")
 
-            Spacer(modifier = Modifier.height(SpaceVerticalSmall))
+            SpaceVerticalSmall()
 
             // 渐变按钮
             AppButton(
@@ -212,8 +210,8 @@ fun ButtonShowcase() {
                 onClick = { },
                 style = ButtonStyle.GRADIENT
             )
-            Spacer(modifier = Modifier.height(32.dp))
-
+            
+            SpaceVerticalMedium()
         }
     }
 }

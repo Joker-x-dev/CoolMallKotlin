@@ -4,9 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -50,11 +48,11 @@ fun TagShowcase() {
                 fontWeight = FontWeight.Bold
             )
 
-            Spacer(modifier = Modifier.height(SpaceVerticalMedium))
+            SpaceVerticalMedium()
 
             TitleWithLine(text = "基础样式")
 
-            Spacer(modifier = Modifier.height(SpaceVerticalSmall))
+            SpaceVerticalSmall()
 
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -68,11 +66,11 @@ fun TagShowcase() {
             }
 
 
-            Spacer(modifier = Modifier.height(SpaceVerticalMedium))
+            SpaceVerticalMedium()
 
             TitleWithLine(text = "浅色样式")
 
-            Spacer(modifier = Modifier.height(SpaceVerticalSmall))
+            SpaceVerticalSmall()
 
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -86,11 +84,11 @@ fun TagShowcase() {
             }
 
 
-            Spacer(modifier = Modifier.height(SpaceVerticalMedium))
+            SpaceVerticalMedium()
 
             TitleWithLine(text = "空心样式")
 
-            Spacer(modifier = Modifier.height(SpaceVerticalSmall))
+            SpaceVerticalSmall()
 
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -103,11 +101,11 @@ fun TagShowcase() {
                 Tag(text = "成功", type = TagType.SUCCESS, style = TagStyle.OUTLINED)
             }
 
-            Spacer(modifier = Modifier.height(SpaceVerticalMedium))
+            SpaceVerticalMedium()
 
             TitleWithLine(text = "不同大小")
 
-            Spacer(modifier = Modifier.height(SpaceVerticalSmall))
+            SpaceVerticalSmall()
 
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -119,11 +117,11 @@ fun TagShowcase() {
                 Tag(text = "大尺寸", type = TagType.PRIMARY, size = TagSize.LARGE)
             }
 
-            Spacer(modifier = Modifier.height(SpaceVerticalMedium))
+            SpaceVerticalMedium()
 
             TitleWithLine(text = "带关闭按钮的标签（可交互）")
 
-            Spacer(modifier = Modifier.height(SpaceVerticalSmall))
+            SpaceVerticalSmall()
 
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -159,7 +157,7 @@ fun TagShowcase() {
 
             // 提示文本
             if (!showTag1 && !showTag2 && !showTag3) {
-                Spacer(modifier = Modifier.height(SpaceVerticalSmall))
+                SpaceVerticalSmall()
                 Text(
                     text = "所有标签已关闭，请刷新预览重新显示",
                     style = MaterialTheme.typography.bodySmall,
@@ -168,11 +166,11 @@ fun TagShowcase() {
             }
 
             // 不同样式的可关闭标签
-            Spacer(modifier = Modifier.height(SpaceVerticalMedium))
+            SpaceVerticalMedium()
 
             TitleWithLine(text = "不同样式的可关闭标签")
 
-            Spacer(modifier = Modifier.height(SpaceVerticalSmall))
+            SpaceVerticalSmall()
 
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -201,8 +199,6 @@ fun TagShowcase() {
             }
         }
     }
-
-
 }
 
 @Preview(showBackground = true)
