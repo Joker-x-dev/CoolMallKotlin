@@ -514,4 +514,12 @@ fun CartScreenPreview() {
     AppTheme {
         CartScreen()
     }
-} 
+}
+
+@Preview(showBackground = true)
+@Composable
+fun CartScreenPreviewDark() {
+    AppTheme(darkTheme = true) {
+        CartScreen()
+    }
+}
