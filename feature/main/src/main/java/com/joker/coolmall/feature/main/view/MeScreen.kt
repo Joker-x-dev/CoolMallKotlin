@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
@@ -39,20 +38,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.joker.coolmall.core.designsystem.component.SpaceEvenlyRow
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.ArrowRightIcon
 import com.joker.coolmall.core.designsystem.theme.Primary
 import com.joker.coolmall.core.designsystem.theme.ShapeSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalLarge
-import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
-import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalXSmall
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
+import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
-import com.joker.coolmall.core.ui.component.divider.WeDivider
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
+import com.joker.coolmall.core.ui.component.list.AppListItem
 import com.joker.coolmall.feature.main.R
 import com.joker.coolmall.feature.main.component.CommonScaffold
 import com.joker.coolmall.feature.main.viewmodel.MeViewModel
@@ -234,64 +233,16 @@ private fun MembershipCard() {
  */
 @Composable
 private fun OrderSection() {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 0.dp
-        )
-    ) {
+    Card {
         // 标题行
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { /* 查看全部 */ }
-                .padding(16.dp),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_order_fill),
-                    contentDescription = "订单",
-                    tint = Primary,
-                    modifier = Modifier.size(18.dp)
-                )
-
-                SpaceHorizontalSmall()
-
-                Text(
-                    text = "我的订单",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold,
-                    color = MaterialTheme.colorScheme.onSurface
-                )
-            }
-
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = "查看全部订单",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-
-                ArrowRightIcon(size = 16.dp)
-            }
-        }
-
-        WeDivider()
-
+        AppListItem(
+            title = "我的订单",
+            trailingText = "查看全部订单",
+            leadingIcon = R.drawable.ic_order_fill,
+            leadingIconTint = Primary
+        )
         // 订单状态图标
-        Row(
-            modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly
-        ) {
+        SpaceEvenlyRow {
             OrderStatusItem(
                 icon = R.drawable.ic_wait_pay,
                 label = "待付款",
@@ -330,78 +281,30 @@ private fun OrderSection() {
  */
 @Composable
 private fun MyFootprintSection() {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 0.dp
+    Card {
+        AppListItem(
+            title = "我的足迹",
+            trailingText = "6",
+            leadingIcon = R.drawable.ic_footprint,
+            leadingIconTint = Color(0xFFFF9800)
         )
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp)
+
+        // 水平滚动的产品列表
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier.padding(SpacePaddingMedium)
         ) {
-            // 标题和计数
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 12.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_footprint),
-                        contentDescription = null,
-                        tint = Color(0xFFFF9800),
-                        modifier = Modifier.size(20.dp)
-                    )
+            val footprintItems = listOf(
+                "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ffcd84baf3d3a4b49b35a03aaf783281e_%E7%BA%A2%E7%B1%B3%2014c.png",
+                "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ffcd84baf3d3a4b49b35a03aaf783281e_%E7%BA%A2%E7%B1%B3%2014c.png",
+                "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ffcd84baf3d3a4b49b35a03aaf783281e_%E7%BA%A2%E7%B1%B3%2014c.png",
+                "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ffcd84baf3d3a4b49b35a03aaf783281e_%E7%BA%A2%E7%B1%B3%2014c.png",
+                "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ffcd84baf3d3a4b49b35a03aaf783281e_%E7%BA%A2%E7%B1%B3%2014c.png",
+                "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ffcd84baf3d3a4b49b35a03aaf783281e_%E7%BA%A2%E7%B1%B3%2014c.png",
+            )
 
-                    SpaceHorizontalSmall()
-
-                    Text(
-                        text = "我的足迹",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface
-                    )
-                }
-
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier.clickable { /* 查看更多足迹 */ }) {
-                    Text(
-                        text = "6",
-                        style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-
-                    ArrowRightIcon(size = 16.dp)
-                }
-            }
-
-            // 水平滚动的产品列表
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(12.dp)
-            ) {
-                val footprintItems = listOf(
-                    "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ffcd84baf3d3a4b49b35a03aaf783281e_%E7%BA%A2%E7%B1%B3%2014c.png",
-                    "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ffcd84baf3d3a4b49b35a03aaf783281e_%E7%BA%A2%E7%B1%B3%2014c.png",
-                    "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ffcd84baf3d3a4b49b35a03aaf783281e_%E7%BA%A2%E7%B1%B3%2014c.png",
-                    "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ffcd84baf3d3a4b49b35a03aaf783281e_%E7%BA%A2%E7%B1%B3%2014c.png",
-                    "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ffcd84baf3d3a4b49b35a03aaf783281e_%E7%BA%A2%E7%B1%B3%2014c.png",
-                    "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ffcd84baf3d3a4b49b35a03aaf783281e_%E7%BA%A2%E7%B1%B3%2014c.png",
-                )
-
-                items(footprintItems) { imageUrl ->
-                    FootprintItem(imageUrl = imageUrl)
-                }
+            items(footprintItems) { imageUrl ->
+                FootprintItem(imageUrl = imageUrl)
             }
         }
     }
@@ -490,116 +393,43 @@ private fun OrderStatusItem(
 private fun FunctionMenuSection(
     toAddressList: () -> Unit
 ) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 0.dp
+    Card {
+        AppListItem(
+            title = "优惠券",
+            leadingIcon = R.drawable.ic_coupon_fill,
+            leadingIconTint = Color(0xFFFF9800),
+            verticalPadding = SpaceVerticalLarge
         )
-    ) {
-        Column {
-            FunctionMenuItem(
-                icon = R.drawable.ic_coupon_fill, title = "优惠券", iconTint = Color(0xFFFF9800)
-            )
 
-            // 收货人
-            FunctionMenuItem(
-                icon = R.drawable.ic_location_fill, title = "收货人", iconTint = Color(0xFF66BB6A),
-                onClick = toAddressList
-            )
+        AppListItem(
+            title = "收货人",
+            leadingIcon = R.drawable.ic_location_fill,
+            leadingIconTint = Color(0xFF66BB6A),
+            verticalPadding = SpaceVerticalLarge,
+            onClick = toAddressList
+        )
 
-            FunctionMenuItem(
-                icon = R.drawable.ic_customer_service_fill,
-                title = "客服",
-                iconTint = Color(0xFFF87C7B),
-                showDivider = false
-            )
-
-        }
+        AppListItem(
+            title = "客服",
+            leadingIcon = R.drawable.ic_customer_service_fill,
+            leadingIconTint = Color(0xFFF87C7B),
+            verticalPadding = SpaceVerticalLarge,
+            showDivider = false
+        )
     }
 
     SpaceVerticalMedium()
 
+
     // 设置选项单独放在一个卡片中
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(8.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 0.dp
-        )
-    ) {
-        // 设置
-        FunctionMenuItem(
-            icon = R.drawable.ic_settings,
+    Card {
+        AppListItem(
             title = "设置",
-            iconTint = Color(0xFF26A69A),
+            leadingIcon = R.drawable.ic_settings,
+            leadingIconTint = Color(0xFF26A69A),
+            verticalPadding = SpaceVerticalLarge,
             showDivider = false
         )
-    }
-}
-
-/**
- * 功能菜单项
- */
-@Composable
-private fun FunctionMenuItem(
-    icon: Int,
-    title: String,
-    trailingText: String = "",
-    iconTint: Color = Color.Black,
-    showDivider: Boolean = true,
-    onClick: () -> Unit = {}
-) {
-    Column {
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clickable { onClick() }
-                .padding(vertical = 16.dp, horizontal = 16.dp),
-            verticalAlignment = Alignment.CenterVertically) {
-            // 图标
-            Icon(
-                painter = painterResource(id = icon),
-                contentDescription = title,
-                modifier = Modifier.size(20.dp),
-                tint = iconTint
-            )
-
-            SpaceHorizontalMedium()
-
-            // 标题
-            Text(
-                text = title,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface
-            )
-
-            Spacer(modifier = Modifier.weight(1f))
-
-            // 尾部文本
-            if (trailingText.isNotEmpty()) {
-                Text(
-                    text = trailingText,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant
-                )
-
-                SpaceHorizontalXSmall()
-            }
-
-            // 右箭头
-            ArrowRightIcon(size = 16.dp)
-        }
-
-        if (showDivider) {
-            WeDivider()
-        }
     }
 }
 
@@ -607,6 +437,14 @@ private fun FunctionMenuItem(
 @Composable
 fun MeScreenPreview() {
     AppTheme {
+        MeScreen()
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun MeScreenPreviewDark() {
+    AppTheme(darkTheme = true) {
         MeScreen()
     }
 }

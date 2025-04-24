@@ -41,12 +41,17 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.Primary
 import com.joker.coolmall.core.designsystem.theme.ShapeCircle
+import com.joker.coolmall.core.designsystem.theme.ShapeMedium
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingSmall
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingXSmall
 import com.joker.coolmall.core.designsystem.theme.TitleLarge
 import com.joker.coolmall.core.ui.component.divider.WeDivider
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
+import com.joker.coolmall.core.ui.component.tag.Tag
+import com.joker.coolmall.core.ui.component.tag.TagSize
+import com.joker.coolmall.core.ui.component.tag.TagStyle
+import com.joker.coolmall.core.ui.component.tag.TagType
 import com.joker.coolmall.feature.user.R
 import com.joker.coolmall.feature.user.viewmodel.AddressListViewModel
 
@@ -301,9 +306,11 @@ private fun AddressItem(
 
                 // 默认地址标签
                 if (isDefault) {
-                    DefaultAddressTag()
+//                    DefaultAddressTag()
+                    Tag(text = "默认地址", type = TagType.PRIMARY, size = TagSize.SMALL ,shape = ShapeMedium)
                 } else {
-                    SetDefaultAddressTag()
+//                    SetDefaultAddressTag()
+                    Tag(text = "设为默认地址", size = TagSize.SMALL ,shape = ShapeMedium)
                 }
             }
         }
@@ -314,6 +321,14 @@ private fun AddressItem(
 @Preview
 internal fun AddressListScreenPreview() {
     AppTheme {
+        AddressListScreen()
+    }
+}
+
+@Composable
+@Preview
+internal fun AddressListScreenPreviewDark() {
+    AppTheme(darkTheme = true) {
         AddressListScreen()
     }
 }

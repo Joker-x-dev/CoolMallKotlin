@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,6 +17,7 @@ import androidx.compose.ui.unit.dp
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
 import com.joker.coolmall.core.designsystem.theme.TitleLarge
+import com.joker.coolmall.core.ui.component.text.AppText
 
 /**
  * 带有垂直装饰线的标题组件
@@ -47,9 +47,9 @@ fun TitleWithLine(
         )
         SpaceHorizontalSmall()
         // 标题文本
-        Text(
+        AppText(
             text = text,
-            style = TitleLarge
+            fontWeight = TitleLarge.fontWeight
         )
     }
 }

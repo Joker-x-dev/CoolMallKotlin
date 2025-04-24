@@ -26,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -54,12 +55,14 @@ import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalXSmall
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingLarge
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingSmall
+import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.ui.component.appbar.CenterTopAppBar
 import com.joker.coolmall.core.ui.component.divider.WeDivider
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
+import com.joker.coolmall.core.ui.component.list.AppListItem
 import com.joker.coolmall.feature.main.R
 import com.joker.coolmall.feature.main.component.CommonScaffold
 
@@ -74,8 +77,8 @@ internal fun CartScreen() {
     // 购物车状态
     var isCheckAll by remember { mutableStateOf(false) }
     var isEditing by remember { mutableStateOf(false) }
-    var selectedCount by remember { mutableStateOf(4) } // 示例数据
-    var totalPrice by remember { mutableStateOf(12997) } // 示例数据，单位为分
+    var selectedCount by remember { mutableIntStateOf(4) } // 示例数据
+    var totalPrice by remember { mutableIntStateOf(12997) } // 示例数据，单位为分
 
     // 示例购物车数据 - 按商品分组
     val groupedCartItems = remember {
@@ -199,36 +202,23 @@ private fun GoodsCard(
     modifier: Modifier = Modifier
 ) {
     Card {
-        Column(modifier = Modifier.fillMaxWidth()) {
-            // 商品标题行
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .clickable { onGoodsClick(goodsTitle) }
-                    .padding(horizontal = SpacePaddingLarge, vertical = SpacePaddingMedium),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = goodsTitle,
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.weight(1f)
-                )
-                ArrowRightIcon()
+
+        AppListItem(
+            title = goodsTitle,
+            onClick = {
             }
+        )
 
-            WeDivider()
+        SpaceVerticalMedium()
 
-            SpaceVerticalMedium()
-
-            // 商品规格项列表
-            specs.forEach { spec ->
-                CartItemRow(
-                    spec = spec,
-                    onCheckChanged = onCheckChanged,
-                    onDecrementCount = onDecrementCount,
-                    onIncrementCount = onIncrementCount
-                )
-            }
+        // 商品规格项列表
+        specs.forEach { spec ->
+            CartItemRow(
+                spec = spec,
+                onCheckChanged = onCheckChanged,
+                onDecrementCount = onDecrementCount,
+                onIncrementCount = onIncrementCount
+            )
         }
     }
 }

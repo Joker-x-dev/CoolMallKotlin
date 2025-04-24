@@ -4,7 +4,6 @@ import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
@@ -41,7 +40,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.designsystem.theme.AppTheme
-import com.joker.coolmall.core.designsystem.theme.ArrowRightIcon
 import com.joker.coolmall.core.designsystem.theme.LogoIcon
 import com.joker.coolmall.core.designsystem.theme.ShapeMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
@@ -56,6 +54,7 @@ import com.joker.coolmall.core.model.Home
 import com.joker.coolmall.core.ui.component.card.AppCard
 import com.joker.coolmall.core.ui.component.goods.GoodsGridItem
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
+import com.joker.coolmall.core.ui.component.list.AppListItem
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkView
 import com.joker.coolmall.core.ui.component.swiper.WeSwiper
 import com.joker.coolmall.core.ui.component.title.TitleWithLine
@@ -279,39 +278,17 @@ private fun CategoryItem(category: Category, modifier: Modifier = Modifier) {
  */
 @Composable
 private fun FlashSale(goods: List<Goods>, toGoodsDetail: (Long) -> Unit) {
-    AppCard {
-        // 标题栏
-        Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(vertical = SpaceVerticalXSmall),
-            horizontalArrangement = Arrangement.SpaceBetween,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Icon(
-                    painter = painterResource(id = R.drawable.ic_clock),
-                    contentDescription = null,
-                    modifier = Modifier.size(20.dp),
-                    tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
-                )
-                SpaceHorizontalSmall()
-                Text(
-                    text = "限时精选",
-                    style = MaterialTheme.typography.titleLarge
-                )
-            }
-            ArrowRightIcon()
-        }
-
-        SpaceVerticalSmall()
+    Card {
+        AppListItem(
+            title = "限时精选",
+            trailingText = "查看全部",
+            leadingIcon = R.drawable.ic_clock,
+        )
 
         // 商品列表 - 使用LazyRow
         LazyRow(
             horizontalArrangement = Arrangement.spacedBy(SpaceHorizontalSmall),
-            contentPadding = PaddingValues(horizontal = SpaceHorizontalSmall)
+            modifier = Modifier.padding(SpacePaddingMedium)
         ) {
             items(goods.size) { index ->
                 val goods = goods[index]
