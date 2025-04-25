@@ -170,7 +170,7 @@ fun AppText(
         color != Color.Unspecified -> color
         type == TextType.PRIMARY -> Color.Unspecified // 使用默认Material颜色
         type == TextType.SECONDARY -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f)
-        type == TextType.TERTIARY -> MaterialTheme.colorScheme.onSurfaceVariant
+        type == TextType.TERTIARY -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
         type == TextType.WHITE -> Color.White
         type == TextType.LINK -> Primary
         type == TextType.SUCCESS -> ColorSuccess
@@ -293,7 +293,7 @@ fun AppText(
         color != Color.Unspecified -> color
         type == TextType.PRIMARY -> Color.Unspecified // 使用默认Material颜色
         type == TextType.SECONDARY -> MaterialTheme.colorScheme.onSurface.copy(alpha = 0.75f)
-        type == TextType.TERTIARY -> MaterialTheme.colorScheme.onSurfaceVariant
+        type == TextType.TERTIARY -> MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
         type == TextType.WHITE -> Color.White
         type == TextType.LINK -> Primary
         type == TextType.SUCCESS -> ColorSuccess

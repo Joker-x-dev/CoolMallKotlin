@@ -31,7 +31,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.joker.coolmall.core.designsystem.component.StartRow
+import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXLarge
 import com.joker.coolmall.core.model.Captcha
+import com.joker.coolmall.core.ui.component.button.AppButton
 import com.joker.coolmall.core.ui.component.modal.BottomModal
 import com.joker.coolmall.feature.auth.R
 
@@ -106,12 +108,12 @@ fun ImageCaptchaDialog(
 
         FocusableDivider(focusState = imageCodeFieldFocused)
 
+        SpaceVerticalXLarge()
+
         // 根据验证码长度启用/禁用按钮
-        PrimaryButton(
+        AppButton(
             text = buttonText,
-            onClick = {
-                onConfirm(imageCode.value)
-            },
+            onClick = { onConfirm(imageCode.value) },
             enabled = imageCode.value.length == 4
         )
     }

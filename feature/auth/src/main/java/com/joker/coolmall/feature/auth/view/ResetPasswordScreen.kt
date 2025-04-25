@@ -21,11 +21,12 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.joker.coolmall.core.designsystem.component.StartRow
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
+import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXLarge
+import com.joker.coolmall.core.ui.component.button.AppButton
 import com.joker.coolmall.feature.auth.R
 import com.joker.coolmall.feature.auth.component.AnimatedAuthPage
 import com.joker.coolmall.feature.auth.component.PasswordInputField
 import com.joker.coolmall.feature.auth.component.PhoneInputField
-import com.joker.coolmall.feature.auth.component.PrimaryButton
 import com.joker.coolmall.feature.auth.component.VerificationCodeField
 import com.joker.coolmall.feature.auth.viewmodel.ResetPasswordViewModel
 
@@ -163,10 +164,12 @@ internal fun ResetPasswordScreen(
             )
         }
 
-        // 使用封装的主题色按钮
-        PrimaryButton(
+        SpaceVerticalXLarge()
+
+        AppButton(
             text = stringResource(id = R.string.reset_password_button),
-            onClick = onResetPasswordClick
+            onClick = onResetPasswordClick,
+            enabled = false
         )
     }
 }

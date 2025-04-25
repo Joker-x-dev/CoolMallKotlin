@@ -16,12 +16,13 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
+import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXLarge
+import com.joker.coolmall.core.ui.component.button.AppButton
 import com.joker.coolmall.feature.auth.R
 import com.joker.coolmall.feature.auth.component.AnimatedAuthPage
 import com.joker.coolmall.feature.auth.component.BottomNavigationRow
 import com.joker.coolmall.feature.auth.component.PasswordInputField
 import com.joker.coolmall.feature.auth.component.PhoneInputField
-import com.joker.coolmall.feature.auth.component.PrimaryButton
 import com.joker.coolmall.feature.auth.component.UserAgreement
 import com.joker.coolmall.feature.auth.viewmodel.AccountLoginViewModel
 
@@ -108,10 +109,12 @@ internal fun AccountLoginScreen(
             prefix = stringResource(id = R.string.login_agreement_prefix)
         )
 
-        // 使用封装的主题色按钮
-        PrimaryButton(
+        SpaceVerticalXLarge()
+
+        AppButton(
             text = stringResource(id = R.string.login),
-            onClick = onLoginClick
+            onClick = onLoginClick,
+            enabled = false
         )
 
         // 使用封装的底部导航组件 - 分隔符样式

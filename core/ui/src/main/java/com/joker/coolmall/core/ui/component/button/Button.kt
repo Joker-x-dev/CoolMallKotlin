@@ -147,7 +147,7 @@ fun AppButton(
     type: ButtonType = ButtonType.DEFAULT,
     style: ButtonStyle = ButtonStyle.FILLED,
     size: ButtonSize = ButtonSize.MEDIUM,
-    shape: ButtonShape = ButtonShape.SQUARE,
+    shape: ButtonShape = ButtonShape.ROUND,
     enabled: Boolean = true,
     loading: Boolean = false,
     fullWidth: Boolean = true
@@ -432,7 +432,7 @@ fun AppButtonBordered(
     modifier: Modifier = Modifier,
     type: ButtonType = ButtonType.DEFAULT,
     size: ButtonSize = ButtonSize.SMALL,
-    shape: ButtonShape = ButtonShape.SQUARE,
+    shape: ButtonShape = ButtonShape.ROUND,
     enabled: Boolean = true,
     loading: Boolean = false,
     contentPadding: PaddingValues = PaddingValues(horizontal = 16.dp)
@@ -513,7 +513,7 @@ fun AppButtonCustomSize(
     style: ButtonStyle = ButtonStyle.FILLED,
     width: Dp? = null,
     height: Dp? = null,
-    shape: ButtonShape = ButtonShape.SQUARE,
+    shape: ButtonShape = ButtonShape.ROUND,
     enabled: Boolean = true,
     loading: Boolean = false
 ) {

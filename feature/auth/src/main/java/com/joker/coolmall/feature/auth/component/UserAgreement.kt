@@ -1,16 +1,14 @@
 package com.joker.coolmall.feature.auth.component
 
-import androidx.compose.foundation.clickable
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.sp
 import com.joker.coolmall.core.designsystem.component.CenterRow
 import com.joker.coolmall.core.designsystem.component.StartRow
-import com.joker.coolmall.core.designsystem.theme.Primary
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
+import com.joker.coolmall.core.ui.component.text.AppText
+import com.joker.coolmall.core.ui.component.text.TextSize
+import com.joker.coolmall.core.ui.component.text.TextType
 import com.joker.coolmall.feature.auth.R
 
 /**
@@ -66,29 +64,29 @@ private fun AgreementContent(
     onUserAgreementClick: () -> Unit,
     onPrivacyPolicyClick: () -> Unit
 ) {
-    Text(
+    AppText(
         text = prefixText,
-        fontSize = 12.sp,
-        color = Color.Gray
+        type = TextType.TERTIARY,
+        size = TextSize.BODY_MEDIUM
     )
 
-    Text(
+    AppText(
         text = stringResource(id = R.string.user_agreement),
-        color = Primary,
-        fontSize = 12.sp,
-        modifier = Modifier.clickable(onClick = onUserAgreementClick)
+        type = TextType.LINK,
+        size = TextSize.BODY_MEDIUM,
+        onClick = onUserAgreementClick
     )
 
-    Text(
+    AppText(
         text = stringResource(id = R.string.and),
-        fontSize = 12.sp,
-        color = Color.Gray
+        type = TextType.TERTIARY,
+        size = TextSize.BODY_MEDIUM
     )
 
-    Text(
+    AppText(
         text = stringResource(id = R.string.privacy_policy),
-        color = Primary,
-        fontSize = 12.sp,
-        modifier = Modifier.clickable(onClick = onPrivacyPolicyClick)
+        type = TextType.LINK,
+        size = TextSize.BODY_MEDIUM,
+        onClick = onPrivacyPolicyClick
     )
 } 

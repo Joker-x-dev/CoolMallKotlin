@@ -16,12 +16,9 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
@@ -40,9 +37,14 @@ import com.joker.coolmall.core.designsystem.component.SpaceBetweenColumn
 import com.joker.coolmall.core.designsystem.component.SpaceEvenlyRow
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.LogoIcon
+import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXLarge
 import com.joker.coolmall.core.designsystem.theme.TextTertiaryLight
-import com.joker.coolmall.core.designsystem.theme.TextWhite
+import com.joker.coolmall.core.ui.component.button.AppButton
+import com.joker.coolmall.core.ui.component.button.ButtonStyle
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
+import com.joker.coolmall.core.ui.component.text.AppText
+import com.joker.coolmall.core.ui.component.text.TextSize
+import com.joker.coolmall.core.ui.component.text.TextType
 import com.joker.coolmall.feature.auth.R
 import com.joker.coolmall.feature.auth.component.UserAgreement
 import com.joker.coolmall.feature.auth.viewmodel.LoginViewModel
@@ -145,43 +147,29 @@ internal fun LoginScreen(
                         .fillMaxWidth()
                 ) {
                     // 验证码登录按钮（主按钮）
-                    Button(
-                        onClick = toSmsLogin,
-                        modifier = Modifier
-                            .height(48.dp)
-                            .fillMaxWidth()
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.sms_login),
-                            style = MaterialTheme.typography.titleMedium.copy(
-                                color = TextWhite
-                            )
-                        )
-                    }
+                    AppButton(
+                        text = stringResource(id = R.string.sms_login),
+                        onClick = toSmsLogin
+                    )
+
+                    SpaceVerticalXLarge()
 
                     // 账号密码登录按钮（次要按钮）
-                    OutlinedButton(
+                    AppButton(
+                        text = stringResource(id = R.string.account_login),
                         onClick = toAccountLogin,
-                        modifier = Modifier
-                            .padding(top = 20.dp)
-                            .height(48.dp)
-                            .fillMaxWidth()
-                    ) {
-                        Text(
-                            text = stringResource(id = R.string.account_login),
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                    }
+                        style = ButtonStyle.OUTLINED
+                    )
 
                     Spacer(modifier = Modifier.height(48.dp))
 
-                    Text(
+                    AppText(
                         text = stringResource(id = R.string.other_login_methods),
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = TextTertiaryLight,
-                        modifier = Modifier
-                            .padding(bottom = 24.dp)
+                        size = TextSize.BODY_MEDIUM,
+                        type = TextType.TERTIARY
                     )
+
+                    SpaceVerticalXLarge()
 
                     // 第三方登录按钮
                     SpaceEvenlyRow() {
@@ -239,10 +227,10 @@ fun ThirdPartyLoginButton(
             )
         }
 
-        Text(
+        AppText(
             text = name,
-            style = MaterialTheme.typography.bodySmall,
-            color = TextTertiaryLight
+            size = TextSize.BODY_MEDIUM,
+            type = TextType.TERTIARY
         )
     }
 }
