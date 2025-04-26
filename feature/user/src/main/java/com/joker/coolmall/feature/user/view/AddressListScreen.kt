@@ -1,57 +1,44 @@
 package com.joker.coolmall.feature.user.view
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.joker.coolmall.core.designsystem.component.SpaceBetweenRow
 import com.joker.coolmall.core.designsystem.theme.AppTheme
-import com.joker.coolmall.core.designsystem.theme.Primary
-import com.joker.coolmall.core.designsystem.theme.ShapeCircle
 import com.joker.coolmall.core.designsystem.theme.ShapeMedium
+import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalLarge
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
-import com.joker.coolmall.core.designsystem.theme.SpacePaddingSmall
-import com.joker.coolmall.core.designsystem.theme.SpacePaddingXSmall
-import com.joker.coolmall.core.designsystem.theme.TitleLarge
+import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
+import com.joker.coolmall.core.ui.component.bottombar.AppBottomButton
 import com.joker.coolmall.core.ui.component.divider.WeDivider
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
 import com.joker.coolmall.core.ui.component.tag.Tag
 import com.joker.coolmall.core.ui.component.tag.TagSize
-import com.joker.coolmall.core.ui.component.tag.TagStyle
 import com.joker.coolmall.core.ui.component.tag.TagType
+import com.joker.coolmall.core.ui.component.text.AppText
+import com.joker.coolmall.core.ui.component.text.TextSize
+import com.joker.coolmall.core.ui.component.text.TextType
 import com.joker.coolmall.feature.user.R
 import com.joker.coolmall.feature.user.viewmodel.AddressListViewModel
 
@@ -89,28 +76,10 @@ internal fun AddressListScreen(
         title = R.string.address_list_title,
         onBackClick = onBackClick,
         bottomBar = {
-            // 底部添加按钮
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                shadowElevation = 4.dp,
-            ) {
-
-                Button(
-                    onClick = toAddressDetail,
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .navigationBarsPadding()
-                        .padding(SpacePaddingMedium)
-                        .height(48.dp),
-                    shape = RoundedCornerShape(24.dp),
-                ) {
-                    Text(
-                        text = stringResource(id = R.string.address_add_new),
-                        style = TitleLarge
-                    )
-                }
-            }
+            AppBottomButton(
+                text = stringResource(id = R.string.address_add_new),
+                onClick = toAddressDetail
+            )
         }
     ) {
         // 地址列表
@@ -171,49 +140,6 @@ internal fun AddressListScreen(
 }
 
 /**
- * 默认地址标签
- */
-@Composable
-private fun DefaultAddressTag() {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .background(
-                color = Primary,
-                shape = ShapeCircle
-            )
-            .padding(horizontal = SpacePaddingSmall, vertical = SpacePaddingXSmall)
-    ) {
-        Text(
-            text = "默认地址",
-            style = MaterialTheme.typography.labelSmall,
-            color = Color.White
-        )
-    }
-}
-
-/**
- * 设为默认地址标签
- */
-@Composable
-private fun SetDefaultAddressTag(onClick: () -> Unit = {}) {
-    Box(
-        contentAlignment = Alignment.Center,
-        modifier = Modifier
-            .clip(RoundedCornerShape(20.dp))
-            .background(Color(0xFFF5F5F5))
-            .clickable(onClick = onClick)
-            .padding(horizontal = SpacePaddingSmall, vertical = SpacePaddingXSmall)
-    ) {
-        Text(
-            text = stringResource(id = R.string.set_default_address),
-            style = MaterialTheme.typography.labelSmall,
-            color = Color.Gray
-        )
-    }
-}
-
-/**
  * 地址项卡片
  */
 @Composable
@@ -233,50 +159,40 @@ private fun AddressItem(
             .padding(horizontal = SpacePaddingMedium)
             .clickable { },
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-        ) {
+        Column {
             // 地址主要部分
-            Row(
+            SpaceBetweenRow(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(SpacePaddingMedium)
             ) {
-                Column(
-                    modifier = Modifier.weight(1f)
-                ) {
+                Column {
                     // 地址第一行
-                    Text(
+                    AppText(
                         text = "$province$city$district",
-                        fontWeight = FontWeight.Medium,
-                        fontSize = 16.sp,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis
+                        size = TextSize.TITLE_LARGE
                     )
 
                     // 地址第二行
-                    Text(
+                    AppText(
                         text = address,
-                        fontWeight = FontWeight.Normal,
-                        fontSize = 15.sp,
-                        color = Color.DarkGray,
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
+                        type = TextType.SECONDARY,
                         modifier = Modifier.padding(top = 4.dp)
                     )
                 }
 
-                // 编辑按钮
-                Icon(
-                    imageVector = Icons.Default.Edit,
-                    contentDescription = "编辑",
-                    tint = Color.Gray,
-                    modifier = Modifier
-                        .padding(start = 8.dp, top = 4.dp)
-                        .size(20.dp)
-                        .clickable { onEditClick() }
-                )
+                // 编辑按钮 使用 draw 图标资源
+                IconButton(
+                    onClick = { onEditClick() }
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_edit_fill),
+                        contentDescription = "编辑",
+                        tint = Color.Gray,
+                        modifier = Modifier
+                            .size(24.dp)
+                    )
+                }
             }
 
             WeDivider()
@@ -285,33 +201,35 @@ private fun AddressItem(
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 12.dp),
+                    .padding(horizontal = SpaceHorizontalLarge, vertical = SpaceVerticalMedium),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Text(
+                AppText(
                     text = name,
-                    fontSize = 14.sp,
-                    color = Color.DarkGray,
+                    type = TextType.SECONDARY
                 )
 
-                Spacer(modifier = Modifier.width(16.dp))
+                SpaceHorizontalLarge()
 
-                Text(
+                AppText(
                     text = phone,
-                    fontSize = 14.sp,
-                    color = Color.DarkGray,
+                    type = TextType.SECONDARY
                 )
 
                 Spacer(modifier = Modifier.weight(1f))
 
                 // 默认地址标签
                 if (isDefault) {
-//                    DefaultAddressTag()
-                    Tag(text = "默认地址", type = TagType.PRIMARY, size = TagSize.SMALL ,shape = ShapeMedium)
-                } else {
-//                    SetDefaultAddressTag()
-                    Tag(text = "设为默认地址", size = TagSize.SMALL ,shape = ShapeMedium)
+                    Tag(
+                        text = "默认地址",
+                        type = TagType.PRIMARY,
+                        size = TagSize.SMALL,
+                        shape = ShapeMedium
+                    )
                 }
+                /*else {
+                    Tag(text = "设为默认地址", size = TagSize.SMALL, shape = ShapeMedium)
+                }*/
             }
         }
     }

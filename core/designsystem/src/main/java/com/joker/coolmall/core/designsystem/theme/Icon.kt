@@ -86,7 +86,7 @@ fun CommonIcon(
  * @param tint 图标着色，默认使用当前内容颜色
  */
 @Composable
-fun CoolIcon(
+fun CommonIcon(
     resId: Int,
     contentDescription: String? = null,
     modifier: Modifier = Modifier,
@@ -133,7 +133,7 @@ fun ArrowLeftIcon(
     size: Dp? = 28.dp,
     tint: Color = LocalContentColor.current
 ) {
-    CoolIcon(
+    CommonIcon(
         resId = R.drawable.ic_arrow_left,
         modifier = modifier,
         size = size,
@@ -154,7 +154,7 @@ fun ArrowRightIcon(
     size: Dp? = 24.dp,
     tint: Color = RightArrowGray
 ) {
-    CoolIcon(
+    CommonIcon(
         resId = R.drawable.ic_arrow_right,
         modifier = modifier,
         size = size,

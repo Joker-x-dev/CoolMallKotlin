@@ -9,14 +9,25 @@
     <!-- 收货地址 -->
     <string name="address_list_title">收货地址</string>
     <string name="address_detail_title">地址详情</string>
+    <string name="address_management">地址管理</string>
     <string name="add_address">添加地址</string>
     <string name="edit_address">编辑地址</string>
     <string name="delete_address">删除地址</string>
-    <string name="set_default_address">设为默认地址</string>
+    <string name="delete_address_confirm">确认删除该地址吗？</string>
+    <string name="set_default_address">设置默认地址</string>
     <string name="default_address">默认地址</string>
-    <string name="save_address">保存地址</string>
+    <string name="default_address_tip">下单会优先使用该地址</string>
+    <string name="save_address">保存</string>
     <string name="address_add_new">新增地址</string>
     <string name="address_edit">编辑地址</string>
+    <string name="contact_person">联系人</string>
+    <string name="please_input_contact">请填写联系人</string>
+    <string name="phone_number">手机号码</string>
+    <string name="please_input_phone">请填写手机号码</string>
+    <string name="region">省市区</string>
+    <string name="please_select_region">请选择所在地区</string>
+    <string name="detail_address">详细地址</string>
+    <string name="street_number_etc">街道、楼牌号等</string>
     
     <!-- 足迹 -->
     <string name="footprint_title">我的足迹</string>

@@ -46,7 +46,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.ArrowRightIcon
-import com.joker.coolmall.core.designsystem.theme.CoolIcon
+import com.joker.coolmall.core.designsystem.theme.CommonIcon
 import com.joker.coolmall.core.designsystem.theme.Primary
 import com.joker.coolmall.core.designsystem.theme.SpaceDivider
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalMedium
@@ -55,14 +55,14 @@ import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalXSmall
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingLarge
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingSmall
-import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.ui.component.appbar.CenterTopAppBar
-import com.joker.coolmall.core.ui.component.divider.WeDivider
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
 import com.joker.coolmall.core.ui.component.list.AppListItem
+import com.joker.coolmall.core.ui.component.text.AppText
+import com.joker.coolmall.core.ui.component.text.TextType
 import com.joker.coolmall.feature.main.R
 import com.joker.coolmall.feature.main.component.CommonScaffold
 
@@ -205,8 +205,7 @@ private fun GoodsCard(
 
         AppListItem(
             title = goodsTitle,
-            onClick = {
-            }
+            onClick = {}
         )
 
         SpaceVerticalMedium()
@@ -238,7 +237,7 @@ private fun CartItemRow(
             .padding(start = SpacePaddingLarge, end = SpacePaddingLarge, bottom = SpacePaddingLarge)
     ) {
         // 选择框
-        CoolIcon(
+        CommonIcon(
             resId = if (spec.selected) R.drawable.ic_checkbox_checked else R.drawable.ic_checkbox_unchecked,
             contentDescription = if (spec.selected) "已选择" else "未选择",
             modifier = Modifier
@@ -276,16 +275,14 @@ private fun CartItemRow(
                     )
                     .padding(horizontal = SpacePaddingSmall, vertical = SpaceVerticalXSmall)
             ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
+                Row {
+                    AppText(
                         text = spec.spec,
                         style = MaterialTheme.typography.bodySmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                        type = TextType.SECONDARY
                     )
                     SpaceHorizontalXSmall()
-                    ArrowRightIcon(size = 16.dp, tint = MaterialTheme.colorScheme.onSurfaceVariant)
+                    ArrowRightIcon(size = 16.dp)
                 }
             }
 
@@ -403,7 +400,7 @@ private fun CartBottomBar(
             .navigationBarsPadding()
     ) {
         // 全选按钮
-        CoolIcon(
+        CommonIcon(
             resId = if (isCheckAll) R.drawable.ic_checkbox_checked else R.drawable.ic_checkbox_unchecked,
             contentDescription = stringResource(id = R.string.select_all),
             modifier = Modifier

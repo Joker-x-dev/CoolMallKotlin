@@ -78,12 +78,13 @@ enum class TagSize {
  * @param style 标签样式
  * @return 包含文本颜色和背景颜色的Pair
  */
+@Composable
 private fun getTagColors(type: TagType, style: TagStyle): Pair<Color, Color> {
     return when (style) {
         TagStyle.FILLED -> {
             // 填充样式：背景使用主色，文字为白色
             when (type) {
-                TagType.DEFAULT -> Pair(TextPrimaryLight, BgContentLight)
+                TagType.DEFAULT -> Pair(MaterialTheme.colorScheme.onSurfaceVariant, MaterialTheme.colorScheme.surfaceVariant)
                 TagType.PRIMARY -> Pair(TextWhite, Primary)
                 TagType.WARNING -> Pair(TextWhite, ColorWarning)
                 TagType.DANGER -> Pair(TextWhite, ColorDanger)
@@ -93,7 +94,7 @@ private fun getTagColors(type: TagType, style: TagStyle): Pair<Color, Color> {
         TagStyle.LIGHT -> {
             // 浅色样式：背景使用透明度降低的主色，文字使用主色
             when (type) {
-                TagType.DEFAULT -> Pair(TextSecondaryLight, BgContentLight)
+                TagType.DEFAULT -> Pair(MaterialTheme.colorScheme.onSurfaceVariant, BgContentLight)
                 TagType.PRIMARY -> Pair(Primary, BgPurpleLight)
                 TagType.WARNING -> Pair(ColorWarning, BgYellowLight)
                 TagType.DANGER -> Pair(ColorDanger, BgRedLight)
@@ -103,7 +104,7 @@ private fun getTagColors(type: TagType, style: TagStyle): Pair<Color, Color> {
         TagStyle.OUTLINED -> {
             // 空心样式：背景透明，使用边框，文字使用主色
             when (type) {
-                TagType.DEFAULT -> Pair(TextSecondaryLight, Color.Transparent)
+                TagType.DEFAULT -> Pair(MaterialTheme.colorScheme.onSurfaceVariant, Color.Transparent)
                 TagType.PRIMARY -> Pair(Primary, Color.Transparent)
                 TagType.WARNING -> Pair(ColorWarning, Color.Transparent)
                 TagType.DANGER -> Pair(ColorDanger, Color.Transparent)

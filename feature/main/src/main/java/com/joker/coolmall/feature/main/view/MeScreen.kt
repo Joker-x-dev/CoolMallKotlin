@@ -17,7 +17,6 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -38,12 +37,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.joker.coolmall.core.designsystem.component.SpaceBetweenRow
 import com.joker.coolmall.core.designsystem.component.SpaceEvenlyRow
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.ArrowRightIcon
 import com.joker.coolmall.core.designsystem.theme.Primary
+import com.joker.coolmall.core.designsystem.theme.ShapeLarge
 import com.joker.coolmall.core.designsystem.theme.ShapeSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalLarge
+import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
@@ -52,6 +54,9 @@ import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
 import com.joker.coolmall.core.ui.component.list.AppListItem
+import com.joker.coolmall.core.ui.component.text.AppText
+import com.joker.coolmall.core.ui.component.text.TextSize
+import com.joker.coolmall.core.ui.component.text.TextType
 import com.joker.coolmall.feature.main.R
 import com.joker.coolmall.feature.main.component.CommonScaffold
 import com.joker.coolmall.feature.main.viewmodel.MeViewModel
@@ -153,21 +158,19 @@ private fun UserInfoSection(
             modifier = Modifier.weight(1f)
         ) {
             // 用户名 - 根据登录状态显示
-            Text(
+            AppText(
                 text = (if (isLoggedIn && userInfo != null) userInfo.nickName else "未登录").toString(),
-                style = MaterialTheme.typography.titleLarge,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.onSurface
+                size = TextSize.DISPLAY_MEDIUM
             )
 
             SpaceVerticalXSmall()
 
             // 手机号 - 根据登录状态显示
-            Text(
+            AppText(
                 text = if (isLoggedIn && userInfo != null && !userInfo.phone.isNullOrEmpty()) "手机号: ${userInfo.phone}"
                 else "点击登录账号",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
+                size = TextSize.BODY_MEDIUM,
+                type = TextType.TERTIARY
             )
         }
 
@@ -184,24 +187,17 @@ private fun UserInfoSection(
 private fun MembershipCard() {
     Card(
         modifier = Modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(8.dp),
         colors = CardDefaults.cardColors(
             containerColor = Color(0xFF242424) // 会员卡片保持深色背景
-        ),
-        elevation = CardDefaults.cardElevation(
-            defaultElevation = 0.dp
         )
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp, vertical = 12.dp)
+        SpaceBetweenRow(
+            modifier = Modifier.padding(
+                horizontal = SpaceHorizontalLarge,
+                vertical = SpaceVerticalMedium
+            )
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
+            Row {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_vip),
                     contentDescription = "会员",
@@ -209,20 +205,19 @@ private fun MembershipCard() {
                     modifier = Modifier.size(20.dp)
                 )
                 SpaceHorizontalSmall()
-                Text(
+                AppText(
                     text = "会员立享5大权益!",
-                    style = MaterialTheme.typography.titleMedium,
-                    color = Color(0xFFE0A472), // 金色
+                    color = Color(0xFFE0A472),
+                    fontWeight = FontWeight.Bold
                 )
             }
-
-            Text(
+            AppText(
                 text = "立即开通",
-                style = MaterialTheme.typography.bodySmall,
-                color = Color(0xFFE0A472), // 金色
+                size = TextSize.BODY_MEDIUM,
+                color = Color(0xFFE0A472),
                 modifier = Modifier
-                    .border(1.dp, Color(0xFFE0A472), RoundedCornerShape(16.dp))
-                    .padding(horizontal = 12.dp, vertical = 6.dp)
+                    .border(1.dp, Color(0xFFE0A472), ShapeLarge)
+                    .padding(horizontal = SpaceHorizontalMedium, vertical = 6.dp)
             )
         }
     }
@@ -346,7 +341,7 @@ private fun OrderStatusItem(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .clickable(onClick = {})
-            .padding(vertical = 16.dp)
+            .padding(vertical = SpaceVerticalMedium)
     ) {
         Box {
             Icon(
@@ -378,10 +373,9 @@ private fun OrderStatusItem(
 
         SpaceVerticalSmall()
 
-        Text(
+        AppText(
             text = label,
-            style = MaterialTheme.typography.bodySmall,
-            color = MaterialTheme.colorScheme.onSurface
+            size = TextSize.BODY_MEDIUM
         )
     }
 }

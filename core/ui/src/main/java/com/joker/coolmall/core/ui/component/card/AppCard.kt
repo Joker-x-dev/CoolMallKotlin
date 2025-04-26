@@ -12,6 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalLarge
+import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.designsystem.theme.TitleLarge
 import com.joker.coolmall.core.ui.component.title.TitleWithLine
 
@@ -33,7 +34,7 @@ fun AppCard(
         Column(
             modifier = modifier
                 .fillMaxWidth()
-                .padding(SpaceHorizontalLarge)
+                .padding(SpacePaddingMedium)
         ) {
             when {
                 // 带装饰线的标题

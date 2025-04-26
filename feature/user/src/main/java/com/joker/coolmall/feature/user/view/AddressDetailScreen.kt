@@ -1,19 +1,33 @@
 package com.joker.coolmall.feature.user.view
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.Button
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.joker.coolmall.core.designsystem.theme.AppTheme
+import com.joker.coolmall.core.designsystem.theme.ShapeMedium
+import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
+import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
+import com.joker.coolmall.core.ui.component.bottombar.AppBottomButton
+import com.joker.coolmall.core.ui.component.list.AppListItem
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
 import com.joker.coolmall.feature.user.R
 import com.joker.coolmall.feature.user.viewmodel.AddressDetailViewModel
@@ -53,33 +67,142 @@ internal fun AddressDetailScreen(
 ) {
     val titleResId = if (isEditMode) R.string.edit_address else R.string.add_address
 
+    // 表单状态
+    var contactName by remember { mutableStateOf("") }
+    var phone by remember { mutableStateOf("") }
+    var region by remember { mutableStateOf("") }
+    var detailAddress by remember { mutableStateOf("") }
+    var isDefaultAddress by remember { mutableStateOf(false) }
+
     AppScaffold(
         title = titleResId,
+        bottomBar = {
+            AppBottomButton(
+                text = stringResource(id = R.string.save_address),
+                onClick = onSaveClick
+            )
+        },
         onBackClick = onBackClick
     ) {
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+                .padding(SpacePaddingMedium)
         ) {
-            if (isEditMode) {
-                Text(text = "正在编辑地址，ID: $addressId")
-            } else {
-                Text(text = "新增地址")
+
+            Card {
+                Column(
+                    modifier = Modifier.padding(SpacePaddingMedium)
+                ) {
+                    // 联系人输入框
+                    OutlinedTextField(
+                        value = contactName,
+                        onValueChange = { contactName = it },
+                        label = { Text(stringResource(id = R.string.contact_person)) },
+                        placeholder = { Text(stringResource(id = R.string.please_input_contact)) },
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Next
+                        ),
+                        shape = ShapeMedium,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = SpacePaddingMedium)
+                    )
+
+                    // 手机号码输入框
+                    OutlinedTextField(
+                        value = phone,
+                        onValueChange = { phone = it },
+                        label = { Text(stringResource(id = R.string.phone_number)) },
+                        placeholder = { Text(stringResource(id = R.string.please_input_phone)) },
+                        keyboardOptions = KeyboardOptions(
+                            keyboardType = KeyboardType.Phone,
+                            imeAction = ImeAction.Next
+                        ),
+                        shape = ShapeMedium,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = SpacePaddingMedium)
+                    )
+
+                    // 省市区选择器
+                    OutlinedTextField(
+                        value = region,
+                        onValueChange = { region = it },
+                        label = { Text(stringResource(id = R.string.region)) },
+                        placeholder = { Text(stringResource(id = R.string.please_select_region)) },
+                        readOnly = true,
+                        trailingIcon = { Text("▼", color = Color.Gray) },
+                        shape = ShapeMedium,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = SpacePaddingMedium)
+                    )
+
+                    // 详细地址输入框
+                    OutlinedTextField(
+                        value = detailAddress,
+                        onValueChange = { detailAddress = it },
+                        label = { Text(stringResource(id = R.string.detail_address)) },
+                        placeholder = { Text(stringResource(id = R.string.street_number_etc)) },
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Done
+                        ),
+                        minLines = 3,
+                        maxLines = 5,
+                        shape = ShapeMedium,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                    )
+                }
             }
 
-            // 这里添加地址表单内容
+            SpaceVerticalLarge()
 
-            Spacer(modifier = Modifier.weight(1f))
-
-            // 底部保存按钮
-            Button(
-                onClick = onSaveClick,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(text = stringResource(id = R.string.save_address))
-            }
+            // 设置默认地址开关
+            DefaultAddressSwitch(
+                isDefault = isDefaultAddress,
+                onValueChange = { isDefaultAddress = it }
+            )
         }
     }
-} 
+}
+
+/**
+ * 默认地址开关
+ */
+@Composable
+private fun DefaultAddressSwitch(
+    isDefault: Boolean,
+    onValueChange: (Boolean) -> Unit,
+) {
+    Card {
+        AppListItem(
+            title = stringResource(id = R.string.set_default_address),
+            description = stringResource(id = R.string.default_address_tip),
+            showArrow = false,
+            trailingContent = {
+                Switch(
+                    checked = isDefault,
+                    onCheckedChange = onValueChange
+                )
+            }
+        )
+    }
+}
+
+@Composable
+@Preview
+internal fun AddressDetailScreenPreview() {
+    AppTheme {
+        AddressDetailScreen()
+    }
+}
+
+@Composable
+@Preview
+internal fun AddressDetailScreenPreviewDark() {
+    AppTheme(darkTheme = true) {
+        AddressDetailScreen()
+    }
+}
