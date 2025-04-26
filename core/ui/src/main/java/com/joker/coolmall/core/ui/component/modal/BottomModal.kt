@@ -5,9 +5,15 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
+import androidx.compose.foundation.layout.WindowInsets
+import androidx.compose.foundation.layout.displayCutout
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.statusBars
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -23,13 +29,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
-import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.TitleLarge
 import kotlinx.coroutines.launch
 
@@ -75,6 +82,29 @@ fun BottomModal(
         }
     }
 
+    // 计算安全区域
+    val density = LocalDensity.current
+    val configuration = LocalConfiguration.current
+
+    // 获取屏幕高度（dp）
+    val screenHeightDp = configuration.screenHeightDp.dp
+
+    // 获取顶部安全区域高度（状态栏和刘海屏）
+    val statusBarHeightPx = WindowInsets.statusBars.getTop(density)
+    val cutoutHeightPx = WindowInsets.displayCutout.getTop(density)
+    val topInsetDp = with(density) {
+        maxOf(statusBarHeightPx, cutoutHeightPx).toDp()
+    }
+
+    // 获取底部安全区域高度（导航栏）
+    val bottomInsetDp = with(density) {
+        WindowInsets.navigationBars.getBottom(density).toDp()
+    }
+
+    // 计算安全内容区域高度
+    // 屏幕高度 - 顶部安全区域 - 底部安全区域 - 额外安全边距(36dp)
+    val maxSafeContentHeight = screenHeightDp - topInsetDp - bottomInsetDp - 36.dp
+
     if (visible || sheetState.isVisible) {
         ModalBottomSheet(
             onDismissRequest = onDismiss,
@@ -103,6 +133,9 @@ fun BottomModal(
             Column(
                 modifier = Modifier
                     .padding(horizontal = horizontalPadding)
+                    .wrapContentHeight()
+                    // 使用计算出的安全区域高度
+                    .heightIn(max = maxSafeContentHeight)
                     .animateContentSize()
             ) {
                 // 标题
@@ -119,9 +152,6 @@ fun BottomModal(
 
                 // 内容
                 content()
-
-                // 底部间距，确保内容不会被系统导航栏遮挡
-                SpaceVerticalMedium()
             }
         }
     }
