@@ -94,7 +94,7 @@ private fun getTagColors(type: TagType, style: TagStyle): Pair<Color, Color> {
         TagStyle.LIGHT -> {
             // 浅色样式：背景使用透明度降低的主色，文字使用主色
             when (type) {
-                TagType.DEFAULT -> Pair(MaterialTheme.colorScheme.onSurfaceVariant, BgContentLight)
+                TagType.DEFAULT -> Pair(MaterialTheme.colorScheme.onSurfaceVariant, MaterialTheme.colorScheme.surfaceVariant)
                 TagType.PRIMARY -> Pair(Primary, BgPurpleLight)
                 TagType.WARNING -> Pair(ColorWarning, BgYellowLight)
                 TagType.DANGER -> Pair(ColorDanger, BgRedLight)

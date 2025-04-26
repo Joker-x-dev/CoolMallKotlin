@@ -1,5 +1,10 @@
 package com.joker.coolmall.core.network.datasource.address
 
+import com.joker.coolmall.core.model.Address
+import com.joker.coolmall.core.model.Id
+import com.joker.coolmall.core.model.Ids
+import com.joker.coolmall.core.model.request.PageRequest
+import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.base.BaseNetworkDataSource
 import com.joker.coolmall.core.network.service.AddressService
@@ -21,7 +26,7 @@ class AddressNetworkDataSourceImpl @Inject constructor(
      * @param params 请求参数，包含地址ID和修改信息
      * @return 修改结果响应数据
      */
-    override suspend fun updateAddress(params: Any): NetworkResponse<Any> {
+    override suspend fun updateAddress(params: Address): NetworkResponse<Unit> {
         return addressService.updateAddress(params)
     }
 
@@ -31,27 +36,26 @@ class AddressNetworkDataSourceImpl @Inject constructor(
      * @param params 请求参数，包含分页信息
      * @return 地址分页列表响应数据
      */
-    override suspend fun getAddressPage(params: Any): NetworkResponse<Any> {
+    override suspend fun getAddressPage(params: PageRequest): NetworkResponse<NetworkPageData<Address>> {
         return addressService.getAddressPage(params)
     }
 
     /**
      * 查询地址列表
      * 
-     * @param params 请求参数
      * @return 地址列表响应数据
      */
-    override suspend fun getAddressList(params: Any): NetworkResponse<Any> {
-        return addressService.getAddressList(params)
+    override suspend fun getAddressList(): NetworkResponse<List<Address>> {
+        return addressService.getAddressList()
     }
 
     /**
      * 删除地址
      * 
-     * @param params 请求参数，包含地址ID
+     * @param params 请求参数，包含地址ID数组
      * @return 删除结果响应数据
      */
-    override suspend fun deleteAddress(params: Any): NetworkResponse<Any> {
+    override suspend fun deleteAddress(params: Ids): NetworkResponse<Unit> {
         return addressService.deleteAddress(params)
     }
 
@@ -59,9 +63,9 @@ class AddressNetworkDataSourceImpl @Inject constructor(
      * 新增地址
      * 
      * @param params 请求参数，包含地址信息
-     * @return 添加结果响应数据
+     * @return 添加结果响应数据，包含新增地址的ID
      */
-    override suspend fun addAddress(params: Any): NetworkResponse<Any> {
+    override suspend fun addAddress(params: Address): NetworkResponse<Id> {
         return addressService.addAddress(params)
     }
 
@@ -71,7 +75,7 @@ class AddressNetworkDataSourceImpl @Inject constructor(
      * @param id 地址ID
      * @return 地址详情响应数据
      */
-    override suspend fun getAddressInfo(id: String): NetworkResponse<Any> {
+    override suspend fun getAddressInfo(id: Long): NetworkResponse<Address> {
         return addressService.getAddressInfo(id)
     }
 
@@ -80,7 +84,7 @@ class AddressNetworkDataSourceImpl @Inject constructor(
      * 
      * @return 默认地址响应数据
      */
-    override suspend fun getDefaultAddress(): NetworkResponse<Any> {
+    override suspend fun getDefaultAddress(): NetworkResponse<Address> {
         return addressService.getDefaultAddress()
     }
 } 

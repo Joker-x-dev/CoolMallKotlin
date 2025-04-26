@@ -1,5 +1,10 @@
 package com.joker.coolmall.core.network.service
 
+import com.joker.coolmall.core.model.Address
+import com.joker.coolmall.core.model.Id
+import com.joker.coolmall.core.model.Ids
+import com.joker.coolmall.core.model.request.PageRequest
+import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -15,41 +20,41 @@ interface AddressService {
      * 修改地址
      */
     @POST("user/address/update")
-    suspend fun updateAddress(@Body params: Any): NetworkResponse<Any>
+    suspend fun updateAddress(@Body params: Address): NetworkResponse<Unit>
 
     /**
      * 分页查询地址
      */
     @POST("user/address/page")
-    suspend fun getAddressPage(@Body params: Any): NetworkResponse<Any>
+    suspend fun getAddressPage(@Body params: PageRequest): NetworkResponse<NetworkPageData<Address>>
 
     /**
      * 查询地址列表
      */
     @POST("user/address/list")
-    suspend fun getAddressList(@Body params: Any): NetworkResponse<Any>
+    suspend fun getAddressList(): NetworkResponse<List<Address>>
 
     /**
      * 删除地址
      */
     @POST("user/address/delete")
-    suspend fun deleteAddress(@Body params: Any): NetworkResponse<Any>
+    suspend fun deleteAddress(@Body params: Ids): NetworkResponse<Unit>
 
     /**
      * 新增地址
      */
     @POST("user/address/add")
-    suspend fun addAddress(@Body params: Any): NetworkResponse<Any>
+    suspend fun addAddress(@Body params: Address): NetworkResponse<Id>
 
     /**
      * 地址信息
      */
     @GET("user/address/info")
-    suspend fun getAddressInfo(@Query("id") id: String): NetworkResponse<Any>
+    suspend fun getAddressInfo(@Query("id") id: Long): NetworkResponse<Address>
 
     /**
      * 默认地址
      */
     @GET("user/address/default")
-    suspend fun getDefaultAddress(): NetworkResponse<Any>
+    suspend fun getDefaultAddress(): NetworkResponse<Address>
 } 

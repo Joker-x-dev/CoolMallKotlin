@@ -227,9 +227,6 @@ private fun AddressItem(
                         shape = ShapeMedium
                     )
                 }
-                /*else {
-                    Tag(text = "设为默认地址", size = TagSize.SMALL, shape = ShapeMedium)
-                }*/
             }
         }
     }

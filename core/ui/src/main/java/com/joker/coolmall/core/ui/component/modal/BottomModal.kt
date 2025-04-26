@@ -37,6 +37,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
+import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.TitleLarge
 import kotlinx.coroutines.launch
 
@@ -152,6 +153,9 @@ fun BottomModal(
 
                 // 内容
                 content()
+
+                // 底部间距，确保内容不会被系统导航栏遮挡
+                SpaceVerticalMedium()
             }
         }
     }

@@ -1,5 +1,10 @@
 package com.joker.coolmall.core.data.repository
 
+import com.joker.coolmall.core.model.Address
+import com.joker.coolmall.core.model.Id
+import com.joker.coolmall.core.model.Ids
+import com.joker.coolmall.core.model.request.PageRequest
+import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.datasource.address.AddressNetworkDataSource
 import kotlinx.coroutines.Dispatchers
@@ -17,49 +22,49 @@ class AddressRepository @Inject constructor(
     /**
      * 修改地址
      */
-    fun updateAddress(params: Any): Flow<NetworkResponse<Any>> = flow {
+    fun updateAddress(params: Address): Flow<NetworkResponse<Unit>> = flow {
         emit(addressNetworkDataSource.updateAddress(params))
     }.flowOn(Dispatchers.IO)
 
     /**
      * 分页查询地址
      */
-    fun getAddressPage(params: Any): Flow<NetworkResponse<Any>> = flow {
+    fun getAddressPage(params: PageRequest): Flow<NetworkResponse<NetworkPageData<Address>>> = flow {
         emit(addressNetworkDataSource.getAddressPage(params))
     }.flowOn(Dispatchers.IO)
 
     /**
      * 查询地址列表
      */
-    fun getAddressList(params: Any): Flow<NetworkResponse<Any>> = flow {
-        emit(addressNetworkDataSource.getAddressList(params))
+    fun getAddressList(): Flow<NetworkResponse<List<Address>>> = flow {
+        emit(addressNetworkDataSource.getAddressList())
     }.flowOn(Dispatchers.IO)
 
     /**
      * 删除地址
      */
-    fun deleteAddress(params: Any): Flow<NetworkResponse<Any>> = flow {
+    fun deleteAddress(params: Ids): Flow<NetworkResponse<Unit>> = flow {
         emit(addressNetworkDataSource.deleteAddress(params))
     }.flowOn(Dispatchers.IO)
 
     /**
      * 新增地址
      */
-    fun addAddress(params: Any): Flow<NetworkResponse<Any>> = flow {
+    fun addAddress(params: Address): Flow<NetworkResponse<Id>> = flow {
         emit(addressNetworkDataSource.addAddress(params))
     }.flowOn(Dispatchers.IO)
 
     /**
      * 地址信息
      */
-    fun getAddressInfo(id: String): Flow<NetworkResponse<Any>> = flow {
+    fun getAddressInfo(id: Long): Flow<NetworkResponse<Address>> = flow {
         emit(addressNetworkDataSource.getAddressInfo(id))
     }.flowOn(Dispatchers.IO)
 
     /**
      * 默认地址
      */
-    fun getDefaultAddress(): Flow<NetworkResponse<Any>> = flow {
+    fun getDefaultAddress(): Flow<NetworkResponse<Address>> = flow {
         emit(addressNetworkDataSource.getDefaultAddress())
     }.flowOn(Dispatchers.IO)
 } 
