@@ -1,5 +1,8 @@
 package com.joker.coolmall.feature.user.view
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,13 +19,13 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.joker.coolmall.core.designsystem.theme.AppTheme
+import com.joker.coolmall.core.designsystem.theme.ArrowRightIcon
 import com.joker.coolmall.core.designsystem.theme.ShapeMedium
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
@@ -30,6 +33,8 @@ import com.joker.coolmall.core.ui.component.bottombar.AppBottomButton
 import com.joker.coolmall.core.ui.component.list.AppListItem
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
 import com.joker.coolmall.feature.user.R
+import com.joker.coolmall.feature.user.component.RegionPickerModal
+import com.joker.coolmall.feature.user.data.RegionData
 import com.joker.coolmall.feature.user.viewmodel.AddressDetailViewModel
 
 /**
@@ -73,6 +78,11 @@ internal fun AddressDetailScreen(
     var region by remember { mutableStateOf("") }
     var detailAddress by remember { mutableStateOf("") }
     var isDefaultAddress by remember { mutableStateOf(false) }
+
+    // 地区选择器状态
+    var showRegionPicker by remember { mutableStateOf(false) }
+    // 创建无涟漪效果的交互源
+    val interactionSource = remember { MutableInteractionSource() }
 
     AppScaffold(
         title = titleResId,
@@ -126,18 +136,31 @@ internal fun AddressDetailScreen(
                     )
 
                     // 省市区选择器
-                    OutlinedTextField(
-                        value = region,
-                        onValueChange = { region = it },
-                        label = { Text(stringResource(id = R.string.region)) },
-                        placeholder = { Text(stringResource(id = R.string.please_select_region)) },
-                        readOnly = true,
-                        trailingIcon = { Text("▼", color = Color.Gray) },
-                        shape = ShapeMedium,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = SpacePaddingMedium)
-                    )
+                    Box {
+                        OutlinedTextField(
+                            value = region,
+                            onValueChange = { region = it },
+                            label = { Text(stringResource(id = R.string.region)) },
+                            placeholder = { Text(stringResource(id = R.string.please_select_region)) },
+                            readOnly = true,
+                            trailingIcon = { ArrowRightIcon() },
+                            shape = ShapeMedium,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(bottom = SpacePaddingMedium)
+                        )
+                        // 添加一个透明覆盖层来捕获点击事件
+                        Box(
+                            modifier = Modifier
+                                .matchParentSize()
+                                .clickable(
+                                    interactionSource = interactionSource,
+                                    indication = null
+                                ) {
+                                    showRegionPicker = true
+                                }
+                        )
+                    }
 
                     // 详细地址输入框
                     OutlinedTextField(
@@ -165,6 +188,17 @@ internal fun AddressDetailScreen(
                 onValueChange = { isDefaultAddress = it }
             )
         }
+
+        // 地区选择对话框
+        RegionPickerModal(
+            visible = showRegionPicker,
+            onDismiss = { showRegionPicker = false },
+            regions = RegionData.getProvinces(),
+            onRegionSelected = { selectedRegion ->
+                region = selectedRegion
+            },
+            initialRegion = region
+        )
     }
 }
 
