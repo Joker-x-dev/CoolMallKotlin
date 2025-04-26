@@ -1,5 +1,6 @@
 package com.joker.coolmall.core.ui.component.modal
 
+import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,6 +16,8 @@ import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,6 +31,7 @@ import com.joker.coolmall.core.designsystem.theme.SpacePaddingLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.TitleLarge
+import kotlinx.coroutines.launch
 
 /**
  * 底部弹出层Modal组件
@@ -59,21 +63,26 @@ fun BottomModal(
     titleStyle: TextStyle = TitleLarge,
     content: @Composable ColumnScope.() -> Unit
 ) {
-    if (visible) {
+    // 添加协程作用域用于动画控制
+    val coroutineScope = rememberCoroutineScope()
+
+    // 监听visible变化，处理关闭动画
+    LaunchedEffect(visible) {
+        if (!visible && sheetState.isVisible) {
+            coroutineScope.launch {
+                sheetState.hide()
+            }
+        }
+    }
+
+    if (visible || sheetState.isVisible) {
         ModalBottomSheet(
             onDismissRequest = onDismiss,
             sheetState = sheetState,
             containerColor = containerColor,
             shape = shape,
-            // 使用标准值，可以保持与系统组件的一致性
-            tonalElevation = 0.dp,
             // 关闭系统默认的拖动指示器
-            dragHandle = null
-        ) {
-            Column(
-                modifier = Modifier.padding(horizontal = horizontalPadding)
-            ) {
-                // 顶部拖动指示器
+            dragHandle = {
                 if (showDragIndicator) {
                     Box(
                         modifier = Modifier
@@ -89,7 +98,13 @@ fun BottomModal(
                         )
                     }
                 }
-
+            }
+        ) {
+            Column(
+                modifier = Modifier
+                    .padding(horizontal = horizontalPadding)
+                    .animateContentSize()
+            ) {
                 // 标题
                 title?.let {
                     Text(

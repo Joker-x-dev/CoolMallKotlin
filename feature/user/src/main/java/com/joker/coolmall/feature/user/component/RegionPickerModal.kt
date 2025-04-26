@@ -1,6 +1,5 @@
 package com.joker.coolmall.feature.user.component
 
-import androidx.compose.animation.animateContentSize
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -185,7 +184,6 @@ fun RegionPickerModal(
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .animateContentSize()
         ) {
             items(displayRegions) { region ->
                 RegionItem(
