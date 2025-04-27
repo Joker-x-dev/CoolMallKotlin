@@ -32,8 +32,8 @@ fun NavGraphBuilder.addressDetailScreen() {
                 defaultValue = false
             },
             navArgument(AddressDetailRoutes.ADDRESS_ID_ARG) {
-                type = NavType.StringType
-                defaultValue = ""
+                type = NavType.LongType
+                defaultValue = 0f
             }
         )
     ) {

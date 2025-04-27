@@ -16,3 +16,4 @@ local.properties
 /.idea/
 /.kotlin/
 /build-logic/.kotlin/
+/design/
