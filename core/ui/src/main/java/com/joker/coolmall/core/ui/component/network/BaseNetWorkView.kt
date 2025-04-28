@@ -1,5 +1,12 @@
 package com.joker.coolmall.core.ui.component.network
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
@@ -34,10 +41,20 @@ fun <T : Any> BaseNetWorkView(
             .fillMaxSize()
             .padding(padding),
     ) {
-        when (uiState) {
-            is BaseNetWorkUiState.Loading -> PageLoading()
-            is BaseNetWorkUiState.Error -> EmptyNetwork(onRetryClick = onRetry)
-            is BaseNetWorkUiState.Success -> content(uiState.data)
+        AnimatedContent(
+            targetState = uiState,
+            transitionSpec = {
+                // 定义进入和退出动画
+                fadeIn(animationSpec = tween(300)) togetherWith
+                fadeOut(animationSpec = tween(300))
+            },
+            label = "NetworkStateAnimation"
+        ) { state ->
+            when (state) {
+                is BaseNetWorkUiState.Loading -> PageLoading()
+                is BaseNetWorkUiState.Error -> EmptyNetwork(onRetryClick = onRetry)
+                is BaseNetWorkUiState.Success -> content(state.data)
+            }
         }
     }
 } 

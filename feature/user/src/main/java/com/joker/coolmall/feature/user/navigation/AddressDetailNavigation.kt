@@ -33,7 +33,7 @@ fun NavGraphBuilder.addressDetailScreen() {
             },
             navArgument(AddressDetailRoutes.ADDRESS_ID_ARG) {
                 type = NavType.LongType
-                defaultValue = 0f
+                defaultValue = 0L
             }
         )
     ) {

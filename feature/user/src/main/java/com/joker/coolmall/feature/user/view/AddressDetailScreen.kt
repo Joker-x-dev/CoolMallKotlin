@@ -2,6 +2,7 @@ package com.joker.coolmall.feature.user.view
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -14,6 +15,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -24,13 +26,17 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.ArrowRightIcon
 import com.joker.coolmall.core.designsystem.theme.ShapeMedium
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
+import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
+import com.joker.coolmall.core.model.Address
 import com.joker.coolmall.core.ui.component.bottombar.AppBottomButton
 import com.joker.coolmall.core.ui.component.list.AppListItem
+import com.joker.coolmall.core.ui.component.network.BaseNetWorkView
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
 import com.joker.coolmall.feature.user.R
 import com.joker.coolmall.feature.user.component.RegionPickerModal
@@ -46,11 +52,34 @@ import com.joker.coolmall.feature.user.viewmodel.AddressDetailViewModel
 internal fun AddressDetailRoute(
     viewModel: AddressDetailViewModel = hiltViewModel()
 ) {
+    val uiState by viewModel.uiState.collectAsState()
+    val contactName by viewModel.contactName.collectAsState()
+    val phone by viewModel.phone.collectAsState()
+    val province by viewModel.province.collectAsState()
+    val city by viewModel.city.collectAsState()
+    val district by viewModel.district.collectAsState()
+    val detailAddress by viewModel.detailAddress.collectAsState()
+    val isDefaultAddress by viewModel.isDefaultAddress.collectAsState()
+
     AddressDetailScreen(
         isEditMode = viewModel.isEditMode,
         addressId = viewModel.addressId,
+        uiState = uiState,
+        contactName = contactName,
+        phone = phone,
+        province = province,
+        city = city,
+        district = district,
+        detailAddress = detailAddress,
+        isDefaultAddress = isDefaultAddress,
+        onContactNameChange = viewModel::updateContactName,
+        onPhoneChange = viewModel::updatePhone,
+        onRegionChange = viewModel::updateRegion,
+        onDetailAddressChange = viewModel::updateDetailAddress,
+        onDefaultAddressChange = viewModel::updateIsDefaultAddress,
         onSaveClick = viewModel::saveAddress,
-        onBackClick = viewModel::navigateBack
+        onBackClick = viewModel::navigateBack,
+        onRetry = viewModel::retryRequest
     )
 }
 
@@ -59,30 +88,46 @@ internal fun AddressDetailRoute(
  *
  * @param isEditMode 是否为编辑模式
  * @param addressId 地址ID，仅在编辑模式下使用
+ * @param uiState 界面状态
+ * @param contactName 联系人
+ * @param phone 手机号
+ * @param province 省
+ * @param city 市
+ * @param district 区
+ * @param detailAddress 详细地址
+ * @param isDefaultAddress 是否为默认地址
+ * @param onContactNameChange 联系人变更回调
+ * @param onPhoneChange 手机号变更回调
+ * @param onRegionChange 地区变更回调
+ * @param onDetailAddressChange 详细地址变更回调
+ * @param onDefaultAddressChange 默认地址变更回调
  * @param onSaveClick 保存按钮点击回调
  * @param onBackClick 返回上一页回调
+ * @param onRetry 重试请求回调
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AddressDetailScreen(
     isEditMode: Boolean = false,
     addressId: Long? = null,
+    uiState: BaseNetWorkUiState<Address> = BaseNetWorkUiState.Loading,
+    contactName: String = "",
+    phone: String = "",
+    province: String = "",
+    city: String = "",
+    district: String = "",
+    detailAddress: String = "",
+    isDefaultAddress: Boolean = false,
+    onContactNameChange: (String) -> Unit = {},
+    onPhoneChange: (String) -> Unit = {},
+    onRegionChange: (String, String, String) -> Unit = { _, _, _ -> },
+    onDetailAddressChange: (String) -> Unit = {},
+    onDefaultAddressChange: (Boolean) -> Unit = {},
     onSaveClick: () -> Unit = {},
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
+    onRetry: () -> Unit = {}
 ) {
     val titleResId = if (isEditMode) R.string.edit_address else R.string.add_address
-
-    // 表单状态
-    var contactName by remember { mutableStateOf("") }
-    var phone by remember { mutableStateOf("") }
-    var region by remember { mutableStateOf("") }
-    var detailAddress by remember { mutableStateOf("") }
-    var isDefaultAddress by remember { mutableStateOf(false) }
-
-    // 地区选择器状态
-    var showRegionPicker by remember { mutableStateOf(false) }
-    // 创建无涟漪效果的交互源
-    val interactionSource = remember { MutableInteractionSource() }
 
     AppScaffold(
         title = titleResId,
@@ -94,112 +139,168 @@ internal fun AddressDetailScreen(
         },
         onBackClick = onBackClick
     ) {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(SpacePaddingMedium)
+        BaseNetWorkView(
+            uiState = uiState,
+            onRetry = onRetry
         ) {
-
-            Card {
-                Column(
-                    modifier = Modifier.padding(SpacePaddingMedium)
-                ) {
-                    // 联系人输入框
-                    OutlinedTextField(
-                        value = contactName,
-                        onValueChange = { contactName = it },
-                        label = { Text(stringResource(id = R.string.contact_person)) },
-                        placeholder = { Text(stringResource(id = R.string.please_input_contact)) },
-                        keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Next
-                        ),
-                        shape = ShapeMedium,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = SpacePaddingMedium)
-                    )
-
-                    // 手机号码输入框
-                    OutlinedTextField(
-                        value = phone,
-                        onValueChange = { phone = it },
-                        label = { Text(stringResource(id = R.string.phone_number)) },
-                        placeholder = { Text(stringResource(id = R.string.please_input_phone)) },
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Phone,
-                            imeAction = ImeAction.Next
-                        ),
-                        shape = ShapeMedium,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = SpacePaddingMedium)
-                    )
-
-                    // 省市区选择器
-                    Box {
-                        OutlinedTextField(
-                            value = region,
-                            onValueChange = { region = it },
-                            label = { Text(stringResource(id = R.string.region)) },
-                            placeholder = { Text(stringResource(id = R.string.please_select_region)) },
-                            readOnly = true,
-                            trailingIcon = { ArrowRightIcon() },
-                            shape = ShapeMedium,
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(bottom = SpacePaddingMedium)
-                        )
-                        // 添加一个透明覆盖层来捕获点击事件
-                        Box(
-                            modifier = Modifier
-                                .matchParentSize()
-                                .clickable(
-                                    interactionSource = interactionSource,
-                                    indication = null
-                                ) {
-                                    showRegionPicker = true
-                                }
-                        )
-                    }
-
-                    // 详细地址输入框
-                    OutlinedTextField(
-                        value = detailAddress,
-                        onValueChange = { detailAddress = it },
-                        label = { Text(stringResource(id = R.string.detail_address)) },
-                        placeholder = { Text(stringResource(id = R.string.street_number_etc)) },
-                        keyboardOptions = KeyboardOptions(
-                            imeAction = ImeAction.Done
-                        ),
-                        minLines = 3,
-                        maxLines = 5,
-                        shape = ShapeMedium,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                    )
-                }
-            }
-
-            SpaceVerticalLarge()
-
-            // 设置默认地址开关
-            DefaultAddressSwitch(
-                isDefault = isDefaultAddress,
-                onValueChange = { isDefaultAddress = it }
+            AddressDetailContentView(
+                contactName = contactName,
+                phone = phone,
+                province = province,
+                city = city,
+                district = district,
+                detailAddress = detailAddress,
+                isDefaultAddress = isDefaultAddress,
+                onContactNameChange = onContactNameChange,
+                onPhoneChange = onPhoneChange,
+                onRegionChange = onRegionChange,
+                onDetailAddressChange = onDetailAddressChange,
+                onDefaultAddressChange = onDefaultAddressChange
             )
         }
+    }
+}
 
-        // 地区选择对话框
-        RegionPickerModal(
-            visible = showRegionPicker,
-            onDismiss = { showRegionPicker = false },
-            regions = RegionData.getProvinces(),
-            onRegionSelected = { selectedRegion ->
-                region = selectedRegion
-            },
-            initialRegion = region
+/**
+ * 收货地址详情内容视图
+ */
+@Composable
+private fun AddressDetailContentView(
+    contactName: String,
+    phone: String,
+    province: String,
+    city: String,
+    district: String,
+    detailAddress: String,
+    isDefaultAddress: Boolean,
+    onContactNameChange: (String) -> Unit,
+    onPhoneChange: (String) -> Unit,
+    onRegionChange: (String, String, String) -> Unit,
+    onDetailAddressChange: (String) -> Unit,
+    onDefaultAddressChange: (Boolean) -> Unit
+) {
+    // 地区选择器状态
+    var showRegionPicker by remember { mutableStateOf(false) }
+    // 创建无涟漪效果的交互源
+    val interactionSource = remember { MutableInteractionSource() }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(SpacePaddingMedium)
+    ) {
+        // 基本信息卡片
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = ShapeMedium
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(SpacePaddingMedium),
+                // 设置每项之间的间隔
+                verticalArrangement = Arrangement.spacedBy(SpaceVerticalMedium)
+            ) {
+                // 联系人
+                OutlinedTextField(
+                    value = contactName,
+                    onValueChange = onContactNameChange,
+                    modifier = Modifier.fillMaxWidth(),
+                    label = { Text(text = stringResource(id = R.string.contact_person)) },
+                    placeholder = { Text(text = stringResource(id = R.string.please_input_contact)) },
+                    singleLine = true,
+                    shape = ShapeMedium,
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Next
+                    )
+                )
+
+                // 手机号
+                OutlinedTextField(
+                    value = phone,
+                    onValueChange = onPhoneChange,
+                    modifier = Modifier.fillMaxWidth(),
+                    label = { Text(text = stringResource(id = R.string.phone_number)) },
+                    placeholder = { Text(text = stringResource(id = R.string.please_input_phone)) },
+                    singleLine = true,
+                    shape = ShapeMedium,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Phone,
+                        imeAction = ImeAction.Next
+                    )
+                )
+
+                // 省市区
+                Box {
+                    OutlinedTextField(
+                        value = if (province.isNotEmpty() && city.isNotEmpty() && district.isNotEmpty()) {
+                            "$province $city $district"
+                        } else "",
+                        onValueChange = {},
+                        modifier = Modifier.fillMaxWidth(),
+                        trailingIcon = { ArrowRightIcon() },
+                        shape = ShapeMedium,
+                        label = { Text(text = stringResource(id = R.string.region)) },
+                        placeholder = { Text(text = stringResource(id = R.string.please_select_region)) },
+                        singleLine = true,
+                        enabled = true
+                    )
+                    // 添加一个透明覆盖层来捕获点击事件
+                    Box(
+                        modifier = Modifier
+                            .matchParentSize()
+                            .clickable(
+                                interactionSource = interactionSource,
+                                indication = null
+                            ) {
+                                showRegionPicker = true
+                            }
+                    )
+                }
+
+                // 详细地址
+                OutlinedTextField(
+                    value = detailAddress,
+                    onValueChange = onDetailAddressChange,
+                    modifier = Modifier.fillMaxWidth(),
+                    label = { Text(text = stringResource(id = R.string.detail_address)) },
+                    placeholder = { Text(text = stringResource(id = R.string.street_number_etc)) },
+//                    singleLine = true,
+                    shape = ShapeMedium,
+                    minLines = 3,
+                    maxLines = 5,
+                    keyboardOptions = KeyboardOptions(
+                        imeAction = ImeAction.Done
+                    )
+                )
+            }
+        }
+
+        SpaceVerticalLarge()
+
+        // 设置默认地址开关
+        DefaultAddressSwitch(
+            isDefault = isDefaultAddress,
+            onValueChange = onDefaultAddressChange
         )
     }
+
+    // 地区选择对话框
+    RegionPickerModal(
+        visible = showRegionPicker,
+        onDismiss = { showRegionPicker = false },
+        regions = RegionData.getProvinces(),
+        onRegionSelected = { selectedRegion ->
+            // 解析选中的地区
+            val parts = selectedRegion.split(" ")
+            if (parts.size == 3) {
+                onRegionChange(parts[0], parts[1], parts[2])
+            }
+        },
+        initialRegion = if (province.isNotEmpty() && city.isNotEmpty() && district.isNotEmpty()) {
+            "$province $city $district"
+        } else ""
+    )
 }
 
 /**

@@ -45,8 +45,8 @@ object ResultHandler {
                         val response = result.data
                         onSuccess(response)
 
-                        if (response.isSucceeded && response.data != null) {
-                            onSuccessWithData(response.data!!)
+                        if (response.isSucceeded) {
+                            onSuccessWithData(response.data ?: Unit as T)
                         } else {
                             val errorMsg = response.message ?: "未知错误"
                             onError(errorMsg, Exception(errorMsg))

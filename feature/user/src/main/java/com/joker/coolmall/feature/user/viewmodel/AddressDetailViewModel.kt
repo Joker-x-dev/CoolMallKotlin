@@ -1,14 +1,20 @@
 package com.joker.coolmall.feature.user.viewmodel
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
+import com.joker.coolmall.core.common.result.asResult
 import com.joker.coolmall.core.data.repository.AddressRepository
 import com.joker.coolmall.core.model.Address
 import com.joker.coolmall.core.model.response.NetworkResponse
+import com.joker.coolmall.core.util.log.LogUtils
+import com.joker.coolmall.core.util.network.ResultHandler
 import com.joker.coolmall.feature.user.navigation.AddressDetailRoutes
 import com.joker.coolmall.navigation.AppNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
 /**
@@ -34,10 +40,55 @@ class AddressDetailViewModel @Inject constructor(
         super.id
     } else null
 
+    /**
+     * 联系人
+     */
+    private val _contactName = MutableStateFlow("")
+    val contactName: StateFlow<String> = _contactName
+
+    /**
+     * 手机号
+     */
+    private val _phone = MutableStateFlow("")
+    val phone: StateFlow<String> = _phone
+
+    /**
+     * 省
+     */
+    private val _province = MutableStateFlow("")
+    val province: StateFlow<String> = _province
+
+    /**
+     * 市
+     */
+    private val _city = MutableStateFlow("")
+    val city: StateFlow<String> = _city
+
+    /**
+     * 区
+     */
+    private val _district = MutableStateFlow("")
+    val district: StateFlow<String> = _district
+
+    /**
+     * 详细地址
+     */
+    private val _detailAddress = MutableStateFlow("")
+    val detailAddress: StateFlow<String> = _detailAddress
+
+    /**
+     * 是否默认地址
+     */
+    private val _isDefaultAddress = MutableStateFlow(false)
+    val isDefaultAddress: StateFlow<Boolean> = _isDefaultAddress
+
     init {
         // 如果是编辑模式且地址ID有效，则执行请求
         if (isEditMode && addressId != null) {
             super.executeRequest()
+        } else {
+            // 新增模式，设置初始状态为成功
+            setSuccessState(Address())
         }
     }
 
@@ -51,11 +102,109 @@ class AddressDetailViewModel @Inject constructor(
     }
 
     /**
+     * 更新表单数据
+     */
+    private fun updateFormData(address: Address) {
+        _contactName.value = address.contact
+        _phone.value = address.phone
+        _province.value = address.province
+        _city.value = address.city
+        _district.value = address.district
+        _detailAddress.value = address.address
+        _isDefaultAddress.value = address.isDefault
+    }
+
+    /**
+     * 更新联系人
+     */
+    fun updateContactName(value: String) {
+        _contactName.value = value
+    }
+
+    /**
+     * 更新手机号
+     */
+    fun updatePhone(value: String) {
+        _phone.value = value
+    }
+
+    /**
+     * 更新省市区
+     */
+    fun updateRegion(province: String, city: String, district: String) {
+        _province.value = province
+        _city.value = city
+        _district.value = district
+    }
+
+    /**
+     * 更新详细地址
+     */
+    fun updateDetailAddress(value: String) {
+        _detailAddress.value = value
+    }
+
+    /**
+     * 更新是否默认地址
+     */
+    fun updateIsDefaultAddress(value: Boolean) {
+        _isDefaultAddress.value = value
+    }
+
+    /**
      * 保存地址信息
      * 根据是否为编辑模式调用不同的保存逻辑
      */
     fun saveAddress() {
-        // 保存成功后返回上一页
-        navigateBack()
+        val address = Address(
+            id = addressId ?: 0,
+            contact = _contactName.value,
+            phone = _phone.value,
+            province = _province.value,
+            city = _city.value,
+            district = _district.value,
+            address = _detailAddress.value,
+            isDefault = _isDefaultAddress.value
+        )
+
+        if (isEditMode) {
+            updateAddress(address)
+        } else {
+            addAddress(address)
+        }
+    }
+
+    /**
+     * 修改地址
+     */
+    private fun updateAddress(address: Address) {
+        ResultHandler.handleResultWithData(
+            scope = viewModelScope,
+            flow = addressRepository.updateAddress(address).asResult(),
+            onData = {
+                super.navigateBack()
+            }
+        )
+    }
+
+    /**
+     * 新增地址
+     */
+    private fun addAddress(address: Address) {
+        ResultHandler.handleResultWithData(
+            scope = viewModelScope,
+            flow = addressRepository.addAddress(address).asResult(),
+            onData = {
+                super.navigateBack()
+            }
+        )
+    }
+
+    /**
+     * 重写请求成功处理方法，用于更新表单数据
+     */
+    override fun onRequestSuccess(data: Address) {
+        updateFormData(data)
+        super.onRequestSuccess(data)
     }
 }

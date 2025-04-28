@@ -1,5 +1,8 @@
 package com.joker.coolmall.core.model
 
+import kotlinx.serialization.EncodeDefault
+import kotlinx.serialization.EncodeDefault.Mode
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**
@@ -50,6 +53,7 @@ data class Address(
     /**
      * 是否默认
      */
+    @EncodeDefault(Mode.ALWAYS) // 关键：无论 true/false 都序列化
     val isDefault: Boolean = false,
     
     /**
