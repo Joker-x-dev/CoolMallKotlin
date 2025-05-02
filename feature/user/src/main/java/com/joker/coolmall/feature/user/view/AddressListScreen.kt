@@ -15,6 +15,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -26,6 +27,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.designsystem.component.SpaceBetweenRow
 import com.joker.coolmall.core.designsystem.theme.AppTheme
@@ -35,6 +37,7 @@ import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.model.Address
 import com.joker.coolmall.core.ui.component.bottombar.AppBottomButton
+import com.joker.coolmall.core.ui.component.dialog.WeDialog
 import com.joker.coolmall.core.ui.component.divider.WeDivider
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkView
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
@@ -54,16 +57,41 @@ import com.joker.coolmall.feature.user.viewmodel.AddressListViewModel
  */
 @Composable
 internal fun AddressListRoute(
-    viewModel: AddressListViewModel = hiltViewModel()
+    viewModel: AddressListViewModel = hiltViewModel(),
+    navController: NavController
 ) {
+    // 注册页面刷新监听
+    val backStackEntry = navController.currentBackStackEntry
     val uiState by viewModel.uiState.collectAsState()
+    val showDeleteDialog by viewModel.showDeleteDialog.collectAsState()
+    val deleteId by viewModel.deleteId.collectAsState()
+
     AddressListScreen(
         uiState = uiState,
         toAddressDetail = viewModel::toAddressDetailPage,
         toAddressDetailEdit = viewModel::toAddressDetailEditPage,
         onBackClick = viewModel::navigateBack,
-        onRetry = viewModel::retryRequest
+        onRetry = viewModel::retryRequest,
+        onDeleteClick = { viewModel.showDeleteDialog(it) }
     )
+
+    // 删除确认对话框
+    if (showDeleteDialog && deleteId != null) {
+        WeDialog(
+            title = stringResource(id = R.string.delete_address),
+            content = stringResource(id = R.string.delete_address_confirm),
+            okText = stringResource(android.R.string.ok),
+            cancelText = stringResource(android.R.string.cancel),
+            onOk = { viewModel.deleteAddress() },
+            onCancel = { viewModel.hideDeleteDialog() },
+            onDismiss = { viewModel.hideDeleteDialog() }
+        )
+    }
+
+    // 只要backStackEntry不为null就注册监听
+    LaunchedEffect(backStackEntry) {
+        viewModel.observeRefreshState(backStackEntry)
+    }
 }
 
 /**
@@ -74,6 +102,7 @@ internal fun AddressListRoute(
  * @param toAddressDetailEdit 导航到收货地址详情（编辑模式）
  * @param onBackClick 返回上一页回调
  * @param onRetry 重试请求回调
+ * @param onDeleteClick 删除地址回调
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -82,7 +111,8 @@ internal fun AddressListScreen(
     toAddressDetail: () -> Unit = {},
     toAddressDetailEdit: (Long) -> Unit = {},
     onBackClick: () -> Unit = {},
-    onRetry: () -> Unit = {}
+    onRetry: () -> Unit = {},
+    onDeleteClick: (Long) -> Unit = {}
 ) {
     AppScaffold(
         title = R.string.address_list_title, onBackClick = onBackClick, bottomBar = {
@@ -96,6 +126,7 @@ internal fun AddressListScreen(
             AddressListContentView(
                 data = data,
                 toAddressDetailEdit = toAddressDetailEdit,
+                onDeleteClick = onDeleteClick
             )
         }
     }
@@ -108,7 +139,9 @@ internal fun AddressListScreen(
  */
 @Composable
 private fun AddressListContentView(
-    data: List<Address>, toAddressDetailEdit: (Long) -> Unit
+    data: List<Address>,
+    toAddressDetailEdit: (Long) -> Unit,
+    onDeleteClick: (Long) -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -127,7 +160,8 @@ private fun AddressListContentView(
                 name = address.contact,
                 phone = address.phone,
                 isDefault = address.isDefault,
-                onEditClick = { toAddressDetailEdit(address.id) }
+                onEditClick = { toAddressDetailEdit(address.id) },
+                onDeleteClick = { onDeleteClick(address.id) }
             )
         }
     }
@@ -145,7 +179,8 @@ private fun AddressItem(
     name: String,
     phone: String,
     isDefault: Boolean = false,
-    onEditClick: () -> Unit
+    onEditClick: () -> Unit,
+    onDeleteClick: () -> Unit
 ) {
     Card(
         modifier = Modifier
@@ -173,15 +208,27 @@ private fun AddressItem(
                     )
                 }
 
-                // 编辑按钮 使用 draw 图标资源
-                IconButton(
-                    onClick = { onEditClick() }) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_edit_fill),
-                        contentDescription = "编辑",
-                        tint = Color.Gray,
-                        modifier = Modifier.size(24.dp)
-                    )
+                Row {
+                    // 编辑按钮
+                    IconButton(
+                        onClick = { onEditClick() }) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_edit_fill),
+                            contentDescription = "编辑",
+                            tint = Color.Gray,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
+                    IconButton(
+                        onClick = onDeleteClick
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_delete_fill),
+                            contentDescription = null,
+                            tint = Color.Gray,
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
                 }
             }
 

@@ -1,7 +1,10 @@
 package com.joker.coolmall.core.common.base.viewmodel
 
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.Observer
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavBackStackEntry
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.common.result.Result
 import com.joker.coolmall.core.common.result.asResult
@@ -154,5 +157,29 @@ abstract class BaseNetWorkViewModel<T>(
      */
     protected open fun setErrorState(message: String? = null, exception: Throwable? = null) {
         _uiState.value = BaseNetWorkUiState.Error(message, exception)
+    }
+
+    /**
+     * 视图层调用此方法，监听页面刷新信号。
+     * @param backStackEntry 当前页面的NavBackStackEntry
+     * @param key 刷新信号的key，默认是"refresh"，可自定义
+     *
+     * 用法：在Composable中调用 viewModel.observeRefreshState(backStackEntry, key = "refreshXXX")
+     * 只需调用一次，自动去重和解绑，无内存泄漏。
+     */
+    fun observeRefreshState(backStackEntry: NavBackStackEntry?, key: String = "refresh") {
+        if (backStackEntry == null) return
+        val owner: LifecycleOwner = backStackEntry
+        backStackEntry.savedStateHandle
+            .getLiveData<Boolean>(key)
+            .observe(owner, object : Observer<Boolean> {
+                override fun onChanged(value: Boolean) {
+                    if (value == true) {
+                        executeRequest()
+                        // 只刷新一次
+                        backStackEntry.savedStateHandle[key] = false
+                    }
+                }
+            })
     }
 }

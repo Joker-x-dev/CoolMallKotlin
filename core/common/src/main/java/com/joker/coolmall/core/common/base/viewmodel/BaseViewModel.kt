@@ -27,6 +27,15 @@ abstract class BaseViewModel(
     }
 
     /**
+     * 导航回上一页并携带结果
+     */
+    fun navigateBack(result: Map<String, Any>) {
+        viewModelScope.launch {
+            navigator.navigateBack(result)
+        }
+    }
+
+    /**
      * 导航到指定路由
      *
      * @param route 目标路由

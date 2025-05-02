@@ -7,7 +7,6 @@ import com.joker.coolmall.core.common.result.asResult
 import com.joker.coolmall.core.data.repository.AddressRepository
 import com.joker.coolmall.core.model.Address
 import com.joker.coolmall.core.model.response.NetworkResponse
-import com.joker.coolmall.core.util.log.LogUtils
 import com.joker.coolmall.core.util.network.ResultHandler
 import com.joker.coolmall.feature.user.navigation.AddressDetailRoutes
 import com.joker.coolmall.navigation.AppNavigator
@@ -182,7 +181,7 @@ class AddressDetailViewModel @Inject constructor(
             scope = viewModelScope,
             flow = addressRepository.updateAddress(address).asResult(),
             onData = {
-                super.navigateBack()
+                super.navigateBack(mapOf("refresh" to true))
             }
         )
     }
@@ -195,7 +194,7 @@ class AddressDetailViewModel @Inject constructor(
             scope = viewModelScope,
             flow = addressRepository.addAddress(address).asResult(),
             onData = {
-                super.navigateBack()
+                super.navigateBack(mapOf("refresh" to true))
             }
         )
     }

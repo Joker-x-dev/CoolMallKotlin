@@ -11,7 +11,7 @@ import androidx.navigation.NavHostController
 fun NavGraphBuilder.userGraph(navController: NavHostController) {
     profileScreen()
     settingsScreen()
-    addressListScreen()
+    addressListScreen(navController)
     addressDetailScreen()
     footprintScreen()
 }

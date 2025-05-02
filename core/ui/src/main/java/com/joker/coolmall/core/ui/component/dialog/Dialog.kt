@@ -66,7 +66,7 @@ fun WeDialog(
             modifier = Modifier
                 .clip(RoundedCornerShape(12.dp))
                 .fillMaxWidth(0.8f)
-                .background(MaterialTheme.colorScheme.onBackground)
+                .background(MaterialTheme.colorScheme.surface)
         ) {
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally,
@@ -82,8 +82,8 @@ fun WeDialog(
                             start = 24.dp,
                             end = 24.dp
                         ),
-                    color = MaterialTheme.colorScheme.onPrimary,
                     fontSize = 17.sp,
+                    color = MaterialTheme.colorScheme.onSurface,
                     fontWeight = FontWeight.Bold,
                     textAlign = TextAlign.Center
                 )
@@ -93,8 +93,8 @@ fun WeDialog(
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(horizontal = 24.dp),
-                        color = MaterialTheme.colorScheme.onSecondary,
                         fontSize = 17.sp,
+                        color = MaterialTheme.colorScheme.onSurface,
                         textAlign = TextAlign.Center
                     )
                 }
@@ -115,7 +115,7 @@ fun WeDialog(
                         ) {
                             Text(
                                 text = cancelText,
-                                color = MaterialTheme.colorScheme.onPrimary,
+                                color = MaterialTheme.colorScheme.onSurface,
                                 fontSize = 17.sp,
                                 fontWeight = FontWeight.Bold
                             )

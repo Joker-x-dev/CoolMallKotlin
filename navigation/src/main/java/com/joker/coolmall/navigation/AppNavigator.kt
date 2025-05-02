@@ -28,7 +28,14 @@ class AppNavigator @Inject constructor() {
      * 返回上一页
      */
     suspend fun navigateBack() {
-        _navigationEvents.emit(NavigationEvent.NavigateBack)
+        _navigationEvents.emit(NavigationEvent.NavigateBack())
+    }
+
+    /**
+     * 返回上一页并携带结果
+     */
+    suspend fun navigateBack(result: Map<String, Any>) {
+        _navigationEvents.emit(NavigationEvent.NavigateBack(result))
     }
 
     /**
@@ -49,6 +56,14 @@ fun NavController.handleNavigationEvent(event: NavigationEvent) {
         }
 
         is NavigationEvent.NavigateBack -> {
+            // 在返回前保存结果
+            event.result?.let { result ->
+                previousBackStackEntry?.savedStateHandle?.apply {
+                    result.forEach { (key, value) ->
+                        set(key, value)
+                    }
+                }
+            }
             this.popBackStack()
         }
 

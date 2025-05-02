@@ -12,7 +12,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
@@ -22,6 +21,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -33,8 +33,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawWithContent
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -48,7 +46,6 @@ import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.ArrowRightIcon
 import com.joker.coolmall.core.designsystem.theme.CommonIcon
 import com.joker.coolmall.core.designsystem.theme.Primary
-import com.joker.coolmall.core.designsystem.theme.SpaceDivider
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalXSmall
@@ -368,127 +365,111 @@ private fun CartBottomBar(
     onSettleClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    val outlineColor = MaterialTheme.colorScheme.outline
-
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
+    Surface(
         modifier = modifier
             .fillMaxWidth()
-            .height(60.dp)
-            .drawWithContent {
-                // 绘制顶部分割线
-                drawLine(
-                    color = outlineColor,
-                    start = Offset(0f, 0f),
-                    end = Offset(size.width, 0f),
-                    strokeWidth = SpaceDivider.toPx()
-                )
-
-                // 先绘制内容
-                drawContent()
-
-                // 绘制底部分割线
-                drawLine(
-                    color = outlineColor,
-                    start = Offset(0f, size.height),
-                    end = Offset(size.width, size.height),
-                    strokeWidth = SpaceDivider.toPx()
-                )
-            }
-            .background(MaterialTheme.colorScheme.surface)
-            .padding(horizontal = SpacePaddingLarge, vertical = SpaceVerticalSmall)
-            .navigationBarsPadding()
+            .height(60.dp),
+        tonalElevation = 2.dp,
+        shadowElevation = 2.dp,
     ) {
-        // 全选按钮
-        CommonIcon(
-            resId = if (isCheckAll) R.drawable.ic_checkbox_checked else R.drawable.ic_checkbox_unchecked,
-            contentDescription = stringResource(id = R.string.select_all),
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .size(24.dp)
-                .clickable { onCheckAllChanged() },
-            tint = if (isCheckAll) Primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(
-                alpha = 0.6f
-            )
-        )
-
-        SpaceHorizontalSmall()
-
-        Text(
-            text = stringResource(id = R.string.select_all),
-            style = MaterialTheme.typography.bodyMedium
-        )
-
-        // 使用正确的方式添加权重空间
-        Spacer(modifier = Modifier.weight(1f))
-
-        if (isEditing) {
-            // 编辑模式 - 显示删除按钮 - 设计稿样式
-            Box(
-                contentAlignment = Alignment.Center,
+                .fillMaxWidth()
+                .background(MaterialTheme.colorScheme.surface)
+                .padding(horizontal = SpacePaddingLarge, vertical = SpaceVerticalSmall)
+        ) {
+            // 全选按钮
+            CommonIcon(
+                resId = if (isCheckAll) R.drawable.ic_checkbox_checked else R.drawable.ic_checkbox_unchecked,
+                contentDescription = stringResource(id = R.string.select_all),
                 modifier = Modifier
-                    .height(34.dp)
-                    .widthIn(min = 90.dp)
-
-                    .border(
-                        width = 1.dp,
-                        color = Color(0xFFDDDDDD),
-                        shape = RoundedCornerShape(20.dp)
-                    )
-                    .clickable(enabled = selectedCount > 0) { onDeleteClick() }
-                    .padding(horizontal = SpacePaddingLarge)
-            ) {
-                Text(
-                    text = stringResource(id = R.string.delete),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = if (selectedCount > 0) MaterialTheme.colorScheme.onSurface else Color(
-                        0xFFCCCCCC
-                    )
+                    .size(24.dp)
+                    .clickable { onCheckAllChanged() },
+                tint = if (isCheckAll) Primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(
+                    alpha = 0.6f
                 )
-            }
-        } else {
-            // 正常模式 - 显示价格和结算按钮
-            Row(
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Text(
-                    text = stringResource(id = R.string.total),
-                    style = MaterialTheme.typography.bodyMedium
-                )
+            )
 
-                Text(
-                    text = "¥${totalPrice / 100.0}",
-                    style = MaterialTheme.typography.titleMedium.copy(
-                        color = MaterialTheme.colorScheme.error,
-                        fontWeight = FontWeight.Bold,
-                        fontSize = 18.sp
-                    )
-                )
+            SpaceHorizontalSmall()
 
-                SpaceHorizontalMedium()
+            Text(
+                text = stringResource(id = R.string.select_all),
+                style = MaterialTheme.typography.bodyMedium
+            )
 
-                // 结算按钮 - 设计稿样式
+            // 使用正确的方式添加权重空间
+            Spacer(modifier = Modifier.weight(1f))
+
+            if (isEditing) {
+                // 编辑模式 - 显示删除按钮 - 设计稿样式
                 Box(
                     contentAlignment = Alignment.Center,
                     modifier = Modifier
                         .height(34.dp)
                         .widthIn(min = 90.dp)
-                        .background(
-                            brush = Brush.horizontalGradient(
-                                colors = listOf(Color(0xFF4F44FF), Color(0xFF7A3CFF))
-                            ),
+
+                        .border(
+                            width = 1.dp,
+                            color = Color(0xFFDDDDDD),
                             shape = RoundedCornerShape(20.dp)
                         )
-                        .clickable(enabled = selectedCount > 0) { onSettleClick() }
+                        .clickable(enabled = selectedCount > 0) { onDeleteClick() }
                         .padding(horizontal = SpacePaddingLarge)
                 ) {
                     Text(
-                        text = if (selectedCount == 0)
-                            stringResource(id = R.string.settle_account)
-                        else
-                            stringResource(id = R.string.settle_account_count, selectedCount),
+                        text = stringResource(id = R.string.delete),
                         style = MaterialTheme.typography.bodyMedium,
-                        color = Color.White
+                        color = if (selectedCount > 0) MaterialTheme.colorScheme.onSurface else Color(
+                            0xFFCCCCCC
+                        )
                     )
+                }
+            } else {
+                // 正常模式 - 显示价格和结算按钮
+                Row(
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.total),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+
+                    Text(
+                        text = "¥${totalPrice / 100.0}",
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            color = MaterialTheme.colorScheme.error,
+                            fontWeight = FontWeight.Bold,
+                            fontSize = 18.sp
+                        )
+                    )
+
+                    SpaceHorizontalMedium()
+
+                    // 结算按钮 - 设计稿样式
+                    Box(
+                        contentAlignment = Alignment.Center,
+                        modifier = Modifier
+                            .height(34.dp)
+                            .widthIn(min = 90.dp)
+                            .background(
+                                brush = Brush.horizontalGradient(
+                                    colors = listOf(Color(0xFF4F44FF), Color(0xFF7A3CFF))
+                                ),
+                                shape = RoundedCornerShape(20.dp)
+                            )
+                            .clickable(enabled = selectedCount > 0) { onSettleClick() }
+                            .padding(horizontal = SpacePaddingLarge)
+                    ) {
+                        Text(
+                            text = if (selectedCount == 0)
+                                stringResource(id = R.string.settle_account)
+                            else
+                                stringResource(id = R.string.settle_account_count, selectedCount),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = Color.White
+                        )
+                    }
                 }
             }
         }
