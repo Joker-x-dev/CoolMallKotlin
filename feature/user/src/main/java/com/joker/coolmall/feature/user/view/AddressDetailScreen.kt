@@ -132,10 +132,12 @@ internal fun AddressDetailScreen(
     AppScaffold(
         title = titleResId,
         bottomBar = {
-            AppBottomButton(
-                text = stringResource(id = R.string.save_address),
-                onClick = onSaveClick
-            )
+            if (uiState is BaseNetWorkUiState.Success) {
+                AppBottomButton(
+                    text = stringResource(id = R.string.save_address),
+                    onClick = onSaveClick
+                )
+            }
         },
         onBackClick = onBackClick
     ) {

@@ -1,7 +1,9 @@
 package com.joker.coolmall.feature.user.view
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -9,11 +11,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -21,8 +24,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -31,6 +32,7 @@ import androidx.navigation.NavController
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.designsystem.component.SpaceBetweenRow
 import com.joker.coolmall.core.designsystem.theme.AppTheme
+import com.joker.coolmall.core.designsystem.theme.CommonIcon
 import com.joker.coolmall.core.designsystem.theme.ShapeMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalLarge
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
@@ -116,9 +118,11 @@ internal fun AddressListScreen(
 ) {
     AppScaffold(
         title = R.string.address_list_title, onBackClick = onBackClick, bottomBar = {
-            AppBottomButton(
-                text = stringResource(id = R.string.address_add_new), onClick = toAddressDetail
-            )
+            if (uiState is BaseNetWorkUiState.Success && uiState.data.isNotEmpty()) {
+                AppBottomButton(
+                    text = stringResource(id = R.string.address_add_new), onClick = toAddressDetail
+                )
+            }
         }) {
         BaseNetWorkView(
             uiState = uiState, onRetry = onRetry
@@ -208,25 +212,39 @@ private fun AddressItem(
                     )
                 }
 
-                Row {
-                    // 编辑按钮
-                    IconButton(
-                        onClick = { onEditClick() }) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_edit_fill),
-                            contentDescription = "编辑",
-                            tint = Color.Gray,
-                            modifier = Modifier.size(24.dp)
+                // 按钮组
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    // 编辑按钮 - 添加圆形背景
+                    Box(
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.surfaceVariant)
+                            .clickable { onEditClick() },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CommonIcon(
+                            resId = R.drawable.ic_edit_fill,
+                            tint = LocalContentColor.current.copy(alpha = 0.5f),
+                            size = 18.dp,
                         )
                     }
-                    IconButton(
-                        onClick = onDeleteClick
+
+                    // 删除按钮 - 添加圆形背景
+                    Box(
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clip(CircleShape)
+                            .background(MaterialTheme.colorScheme.surfaceVariant)
+                            .clickable { onDeleteClick() },
+                        contentAlignment = Alignment.Center
                     ) {
-                        Icon(
-                            painter = painterResource(id = R.drawable.ic_delete_fill),
-                            contentDescription = null,
-                            tint = Color.Gray,
-                            modifier = Modifier.size(24.dp)
+                        CommonIcon(
+                            resId = R.drawable.ic_delete_fill,
+                            tint = LocalContentColor.current.copy(alpha = 0.5f),
+                            size = 18.dp
                         )
                     }
                 }
