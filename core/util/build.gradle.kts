@@ -12,7 +12,6 @@ android {
 
 dependencies {
     // 引入 common 模块
-    implementation(project(":core:common"))
     implementation(project(":core:designsystem"))
     implementation(project(":core:model"))
 

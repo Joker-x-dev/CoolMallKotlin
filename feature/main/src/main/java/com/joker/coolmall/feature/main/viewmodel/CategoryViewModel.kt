@@ -55,7 +55,7 @@ class CategoryViewModel @Inject constructor(
     /**
      * 重写请求失败相关逻辑
      */
-    override fun onRequestError(message: String, exception: Throwable) {
+    override fun onRequestError(message: String, exception: Throwable?) {
         _categoryUiState.value = CategoryUiState.Error()
     }
 

@@ -1,4 +1,4 @@
-package com.joker.coolmall.core.common.result
+package com.joker.coolmall.result
 
 /**
  * 网络请求结果包装类

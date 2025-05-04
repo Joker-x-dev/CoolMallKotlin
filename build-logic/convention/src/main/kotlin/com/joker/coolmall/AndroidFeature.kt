@@ -49,6 +49,7 @@ class AndroidFeature : Plugin<Project> {
                 "implementation"(project(":core:data")) // 数据
                 "implementation"(project(":core:common")) // 公共
                 "implementation"(project(":core:model")) // 模型
+                "implementation"(project(":core:result")) // 结果处理
 
                 // Jetpack Navigation Compose导航框架
                 "implementation"(libs.findLibrary("navigation.compose").get())

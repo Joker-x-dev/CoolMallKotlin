@@ -6,16 +6,14 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavBackStackEntry
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
-import com.joker.coolmall.core.common.result.Result
-import com.joker.coolmall.core.common.result.asResult
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.navigation.AppNavigator
+import com.joker.coolmall.result.ResultHandler
+import com.joker.coolmall.result.asResult
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 
 /**
  * 网络请求ViewModel基类
@@ -41,6 +39,12 @@ abstract class BaseNetWorkViewModel<T>(
     private val _uiState: MutableStateFlow<BaseNetWorkUiState<T>> =
         MutableStateFlow(BaseNetWorkUiState.Loading)
     val uiState: StateFlow<BaseNetWorkUiState<T>> = _uiState.asStateFlow()
+
+    /**
+     * 控制请求失败时是否显示Toast提示
+     * 子类可重写此属性以自定义行为
+     */
+    protected open val showErrorToast: Boolean = true
 
     /**
      * 通用路由参数ID，子类可直接使用
@@ -76,39 +80,30 @@ abstract class BaseNetWorkViewModel<T>(
 
     /**
      * 加载或刷新数据
-     * 自动处理状态管理和错误处理
+     * 使用ResultHandler自动处理状态管理和错误处理
      */
     fun executeRequest() {
-        viewModelScope.launch {
-            try {
-                val flow = requestApiFlow() // 确保调用此方法时子类已完全初始化
-                flow.asResult()
-                    .collectLatest { result ->
-                        when (result) {
-                            is Result.Loading -> setLoadingState()
-                            is Result.Success -> {
-                                val networkResponse = result.data
-                                if (networkResponse.isSucceeded && networkResponse.data != null) {
-                                    onRequestSuccess(networkResponse.data!!)
-                                } else {
-                                    onRequestError(
-                                        networkResponse.message ?: "未知错误",
-                                        Exception(networkResponse.message)
-                                    )
-                                }
-                            }
-
-                            is Result.Error -> {
-                                val message = result.exception.message ?: "未知错误"
-                                onRequestError(message, result.exception)
-                            }
-                        }
-                    }
-            } catch (e: Exception) {
-                // 捕获任何异常，包括NullPointerException
-                onRequestError(e.message ?: "加载数据时发生错误", e)
-            }
+        try {
+            ResultHandler.handleResultWithData(
+                scope = viewModelScope,
+                flow = requestApiFlow().asResult(),
+                showToast = showErrorToast,
+                onLoading = { onRequestStart() },
+                onData = { data -> onRequestSuccess(data) },
+                onError = { message, exception -> onRequestError(message, exception) }
+            )
+        } catch (e: Exception) {
+            // 捕获任何异常，包括NullPointerException
+            onRequestError(e.message ?: "加载数据时发生错误", e)
         }
+    }
+
+    /**
+     * 请求开始前执行的方法
+     * 子类可重写此方法以在请求开始前执行自定义逻辑
+     */
+    protected open fun onRequestStart() {
+        setLoadingState()
     }
 
     /**
@@ -121,7 +116,7 @@ abstract class BaseNetWorkViewModel<T>(
     /**
      * 处理错误结果，子类可重写此方法自定义处理逻辑
      */
-    protected open fun onRequestError(message: String, exception: Throwable) {
+    protected open fun onRequestError(message: String, exception: Throwable?) {
         setErrorState(message, exception)
     }
 

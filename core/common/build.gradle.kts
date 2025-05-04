@@ -17,6 +17,9 @@ dependencies {
     // 引入导航模块
     implementation(project(":navigation"))
 
+    // 引入 result 模块
+    implementation(project(":core:result"))
+
     // 导航
     implementation(libs.navigation.compose)
 

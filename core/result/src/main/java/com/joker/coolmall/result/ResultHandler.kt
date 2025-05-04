@@ -1,6 +1,5 @@
-package com.joker.coolmall.core.util.network
+package com.joker.coolmall.result
 
-import com.joker.coolmall.core.common.result.Result
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.util.toast.ToastUtils
 import kotlinx.coroutines.CoroutineScope
@@ -41,6 +40,7 @@ object ResultHandler {
                     is Result.Loading -> {
                         onLoading()
                     }
+
                     is Result.Success -> {
                         val response = result.data
                         onSuccess(response)
@@ -50,16 +50,17 @@ object ResultHandler {
                         } else {
                             val errorMsg = response.message ?: "未知错误"
                             onError(errorMsg, Exception(errorMsg))
-                            
+
                             if (showToast) {
                                 ToastUtils.showError(errorMsg)
                             }
                         }
                     }
+
                     is Result.Error -> {
                         val errorMsg = result.exception.message ?: "网络请求失败"
                         onError(errorMsg, result.exception)
-                        
+
                         if (showToast) {
                             ToastUtils.showError(errorMsg)
                         }

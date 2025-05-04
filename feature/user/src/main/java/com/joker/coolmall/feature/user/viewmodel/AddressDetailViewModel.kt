@@ -3,13 +3,13 @@ package com.joker.coolmall.feature.user.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
-import com.joker.coolmall.core.common.result.asResult
 import com.joker.coolmall.core.data.repository.AddressRepository
 import com.joker.coolmall.core.model.Address
 import com.joker.coolmall.core.model.response.NetworkResponse
-import com.joker.coolmall.core.util.network.ResultHandler
 import com.joker.coolmall.feature.user.navigation.AddressDetailRoutes
 import com.joker.coolmall.navigation.AppNavigator
+import com.joker.coolmall.result.ResultHandler
+import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow

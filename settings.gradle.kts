@@ -47,6 +47,7 @@ include(":core:model")
 include(":core:network")
 include(":core:ui")
 include(":core:util")
+include(":core:result")
 
 // 导航模块
 include(":navigation")

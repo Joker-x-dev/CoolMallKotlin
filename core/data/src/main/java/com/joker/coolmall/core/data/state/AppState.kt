@@ -1,13 +1,13 @@
 package com.joker.coolmall.core.data.state
 
 import User
-import com.joker.coolmall.core.common.result.asResult
 import com.joker.coolmall.core.data.di.ApplicationScope
 import com.joker.coolmall.core.data.repository.AuthStoreRepository
 import com.joker.coolmall.core.data.repository.UserInfoRepository
 import com.joker.coolmall.core.data.repository.UserInfoStoreRepository
 import com.joker.coolmall.core.model.Auth
-import com.joker.coolmall.core.util.network.ResultHandler
+import com.joker.coolmall.result.ResultHandler
+import com.joker.coolmall.result.asResult
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
