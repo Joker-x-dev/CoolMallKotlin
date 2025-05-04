@@ -1,14 +1,15 @@
 package com.joker.coolmall.feature.main.viewmodel
 
-import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
+import androidx.lifecycle.viewModelScope
+import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
 import com.joker.coolmall.core.data.repository.GoodsRepository
 import com.joker.coolmall.core.model.Category
-import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.feature.main.model.CategoryTree
 import com.joker.coolmall.feature.main.state.CategoryUiState
 import com.joker.coolmall.navigation.AppNavigator
+import com.joker.coolmall.result.ResultHandler
+import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
@@ -17,9 +18,7 @@ import javax.inject.Inject
 class CategoryViewModel @Inject constructor(
     navigator: AppNavigator,
     private val goodsRepository: GoodsRepository
-) : BaseNetWorkViewModel<List<Category>>(
-    navigator = navigator
-) {
+) : BaseViewModel(navigator) {
 
     /**
      * 分类UI状态
@@ -34,36 +33,33 @@ class CategoryViewModel @Inject constructor(
     val selectedCategoryIndex: StateFlow<Int> = _selectedCategoryIndex
 
     init {
-        super.executeRequest()
+        loadCategoryData()
     }
 
     /**
-     * 通过重写来给父类提供API请求的Flow
+     * 获取分类数据
      */
-    override fun requestApiFlow(): Flow<NetworkResponse<List<Category>>> {
-        return goodsRepository.getGoodsTypeList()
+    fun loadCategoryData() {
+        ResultHandler.handleResultWithData(
+            scope = viewModelScope,
+            flow = goodsRepository.getGoodsTypeList().asResult(),
+            showToast = true,
+            onLoading = { _categoryUiState.value = CategoryUiState.Loading },
+            onData = { data ->
+                val categoryTree = convertToTree(data)
+                _categoryUiState.value = CategoryUiState.Success(categoryTree)
+            },
+            onError = { message, exception ->
+                _categoryUiState.value = CategoryUiState.Error()
+            }
+        )
     }
 
     /**
-     * 重写请求成功相关逻辑来处理数据
+     * 重试加载分类数据
      */
-    override fun onRequestSuccess(data: List<Category>) {
-        val categoryTree = convertToTree(data)
-        _categoryUiState.value = CategoryUiState.Success(categoryTree)
-    }
-
-    /**
-     * 重写请求失败相关逻辑
-     */
-    override fun onRequestError(message: String, exception: Throwable?) {
-        _categoryUiState.value = CategoryUiState.Error()
-    }
-
-    /**
-     * 重写设置加载状态相关逻辑
-     */
-    override fun setLoadingState() {
-        _categoryUiState.value = CategoryUiState.Loading
+    fun retryRequest() {
+        loadCategoryData()
     }
 
     /**
