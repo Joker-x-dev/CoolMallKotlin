@@ -52,7 +52,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -68,8 +67,6 @@ import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.BorderLight
 import com.joker.coolmall.core.designsystem.theme.ColorDanger
 import com.joker.coolmall.core.designsystem.theme.DisplayLarge
-import com.joker.coolmall.core.designsystem.theme.GradientPrimaryEnd
-import com.joker.coolmall.core.designsystem.theme.GradientPrimaryStart
 import com.joker.coolmall.core.designsystem.theme.Primary
 import com.joker.coolmall.core.designsystem.theme.ShapeCircle
 import com.joker.coolmall.core.designsystem.theme.ShapeSmall
@@ -85,6 +82,12 @@ import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.model.Goods
+import com.joker.coolmall.core.ui.component.button.AppButtonBordered
+import com.joker.coolmall.core.ui.component.button.AppButtonFixed
+import com.joker.coolmall.core.ui.component.button.ButtonShape
+import com.joker.coolmall.core.ui.component.button.ButtonSize
+import com.joker.coolmall.core.ui.component.button.ButtonStyle
+import com.joker.coolmall.core.ui.component.button.ButtonType
 import com.joker.coolmall.core.ui.component.card.AppCard
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkView
@@ -646,49 +649,24 @@ private fun GoodsActionBar(modifier: Modifier = Modifier) {
 
         Row {
             // 加入购物车按钮（边框样式）
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .height(30.dp)
-                    .border(
-                        width = 1.dp,
-                        color = GradientPrimaryStart,
-                        shape = ShapeSmall
-                    )
-                    .clip(ShapeSmall)
-                    .clickable { /* TODO: 加入购物车 */ }
-                    .padding(horizontal = SpaceHorizontalLarge)
-
-            ) {
-                Text(
-                    text = "加入购物车",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = GradientPrimaryStart
-                )
-            }
+            AppButtonBordered(
+                text = "加入购物车",
+                onClick = { /* TODO: 加入购物车 */ },
+                type = ButtonType.LINK,
+                shape = ButtonShape.SQUARE,
+                size = ButtonSize.MINI,
+            )
 
             SpaceHorizontalLarge()
 
             // 立即购买按钮（渐变背景）
-            Box(
-                contentAlignment = Alignment.Center,
-                modifier = Modifier
-                    .height(30.dp)
-                    .clip(ShapeSmall)
-                    .background(
-                        brush = Brush.horizontalGradient(
-                            colors = listOf(GradientPrimaryStart, GradientPrimaryEnd)
-                        )
-                    )
-                    .clickable { /* TODO: 立即购买 */ }
-                    .padding(horizontal = SpaceHorizontalLarge)
-            ) {
-                Text(
-                    text = "立即购买",
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Color.White
-                )
-            }
+            AppButtonFixed(
+                text = "立即购买",
+                onClick = { /* TODO: 立即购买 */ },
+                size = ButtonSize.MINI,
+                style = ButtonStyle.GRADIENT,
+                shape = ButtonShape.SQUARE
+            )
         }
     }
 }
@@ -697,6 +675,43 @@ private fun GoodsActionBar(modifier: Modifier = Modifier) {
 @Composable
 fun GoodsDetailScreenPreview() {
     AppTheme {
+        GoodsDetailScreen(
+            uiState = BaseNetWorkUiState.Success(
+                data = Goods(
+                    id = 1,
+                    createTime = "2025-03-29 00:17:15",
+                    updateTime = "2025-03-29 23:07:48",
+                    typeId = 11,
+                    title = "Redmi 14C",
+                    subTitle = "【持久续航】5160mAh 大电池",
+                    mainPic = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ffcd84baf3d3a4b49b35a03aaf783281e_%E7%BA%A2%E7%B1%B3%2014c.png",
+                    pics = listOf(
+                        "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png",
+                        "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F32051f923ded432c82ef5934451a601b_b2.jpg",
+                        "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F88bf37e8c9ce42968067cbf3d717f613_b3.jpg",
+                        "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F605b0249e73a4fe185c0a075ee85c7a3_b4.jpeg",
+                        "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ffb3679b641214f9b8af929cc58d1fe87_b5.jpeg",
+                        "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Fd1cbc7c3e2e04aa28ed27b6913dbe05b_b6.jpeg",
+                        "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F3c081339d951490b8d232477d9249ec2_b7.jpeg",
+                        "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ff3b7302aa7944f7caad225fb32652999_b8.jpeg",
+                        "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F54a05d34d02141ee8c05a129a7cb3555_b9.jpeg"
+                    ),
+                    price = 499,
+                    sold = 0,
+                    content = "<p><img src=\"https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F5c161af71062402d8dc7e3193e62d8f5_d1.png\" alt=\"\" data-href=\"\" style=\"width: 100%;\"/><img src=\"https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Fea304cef45b846d2b7fc4e7fbef6d103_d2.jpg\" alt=\"\" data-href=\"\" style=\"\"/></p><p><img src=\"https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ff3d17dae77d144b9aa828537f96d04e4_d3.jpg\" alt=\"\" data-href=\"\" style=\"width: 100%;\"/><img src=\"https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F99710ccacd5443518a9b97386d028b5c_d4.jpg\" alt=\"\" data-href=\"\" style=\"\"/><img src=\"https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Fa180b572f52142d5811dcf4e18c27a95_d5.jpg\" alt=\"\" data-href=\"\" style=\"\"/><img src=\"https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ff5bab785f9d04ac38b35e10a1b63486e_d6.jpg\" alt=\"\" data-href=\"\" style=\"\"/></p><p><img src=\"https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F19f52075481c44a789dcf648e3f8a7aa_d7.jpg\" alt=\"\" data-href=\"\" style=\"\"/></p>",
+                    status = 1,
+                    sortNum = 0,
+                    specs = null
+                )
+            )
+        )
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun GoodsDetailScreenPreviewDark() {
+    AppTheme(darkTheme = true) {
         GoodsDetailScreen(
             uiState = BaseNetWorkUiState.Success(
                 data = Goods(
