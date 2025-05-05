@@ -11,11 +11,14 @@ import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 
 /**
  * 页面加载中
+ * @param modifier 可选修饰符
  */
 @Composable
-fun PageLoading() {
+fun PageLoading(
+    modifier: Modifier = Modifier
+) {
     Column(
-        modifier = Modifier.fillMaxSize(),
+        modifier = modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

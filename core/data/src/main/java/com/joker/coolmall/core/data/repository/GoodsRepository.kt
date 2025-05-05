@@ -2,6 +2,7 @@ package com.joker.coolmall.core.data.repository
 
 import com.joker.coolmall.core.model.Category
 import com.joker.coolmall.core.model.Goods
+import com.joker.coolmall.core.model.GoodsSpec
 import com.joker.coolmall.core.model.response.NetworkPageMeta
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.datasource.goods.GoodsNetworkDataSource
@@ -27,7 +28,7 @@ class GoodsRepository @Inject constructor(
     /**
      * 查询商品规格
      */
-    fun getGoodsSpecList(params: Any): Flow<NetworkResponse<Any>> = flow {
+    fun getGoodsSpecList(params: Map<String, Long>): Flow<NetworkResponse<List<GoodsSpec>>> = flow {
         emit(goodsNetworkDataSource.getGoodsSpecList(params))
     }.flowOn(Dispatchers.IO)
 

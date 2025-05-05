@@ -16,7 +16,7 @@ import androidx.compose.ui.unit.dp
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingLarge
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingSmall
-import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
+import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 
 /**
  * 封装的Column组件，预设了常用的修饰符
@@ -262,7 +262,7 @@ fun WrapColumn(
 @Composable
 fun VerticalList(
     modifier: Modifier = Modifier,
-    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(SpaceVerticalSmall),
+    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(SpaceVerticalMedium),
     horizontalAlignment: Alignment.Horizontal = Alignment.Start,
     fillMaxWidth: Boolean = true,
     padding: Dp = SpacePaddingMedium,
@@ -284,7 +284,7 @@ fun VerticalList(
 @Composable
 fun CardContentList(
     modifier: Modifier = Modifier,
-    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(SpaceVerticalSmall),
+    verticalArrangement: Arrangement.Vertical = Arrangement.spacedBy(SpaceVerticalMedium),
     horizontalAlignment: Alignment.Horizontal = Alignment.Start,
     padding: Dp = SpacePaddingMedium,
     content: @Composable ColumnScope.() -> Unit

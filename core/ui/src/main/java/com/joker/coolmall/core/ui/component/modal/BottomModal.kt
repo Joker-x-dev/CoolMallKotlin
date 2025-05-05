@@ -125,7 +125,7 @@ fun BottomModal(
                             modifier = Modifier
                                 .size(40.dp, 4.dp)
                                 .clip(RoundedCornerShape(2.dp))
-                                .background(MaterialTheme.colorScheme.outline.copy(alpha = 0.5f))
+                                .background(MaterialTheme.colorScheme.outline.copy(alpha = 0.8f))
                         )
                     }
                 }

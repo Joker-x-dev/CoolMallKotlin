@@ -2,6 +2,7 @@ package com.joker.coolmall.core.network.datasource.goods
 
 import com.joker.coolmall.core.model.Category
 import com.joker.coolmall.core.model.Goods
+import com.joker.coolmall.core.model.GoodsSpec
 import com.joker.coolmall.core.model.response.NetworkResponse
 
 /**
@@ -17,7 +18,7 @@ interface GoodsNetworkDataSource {
     /**
      * 查询商品规格
      */
-    suspend fun getGoodsSpecList(params: Any): NetworkResponse<Any>
+    suspend fun getGoodsSpecList(params: Map<String, Long>): NetworkResponse<List<GoodsSpec>>
 
     /**
      * 修改搜索关键词

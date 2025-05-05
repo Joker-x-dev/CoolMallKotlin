@@ -4,12 +4,9 @@ import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
-import androidx.compose.animation.slideInVertically
-import androidx.compose.animation.slideOutVertically
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -26,6 +23,8 @@ import com.joker.coolmall.core.ui.component.loading.PageLoading
  * @param modifier 可选修饰符
  * @param padding 内边距值，通常来自Scaffold
  * @param onRetry 错误状态下重试点击回调
+ * @param customLoading 自定义加载组件，为null时使用默认组件
+ * @param customError 自定义错误组件，为null时使用默认组件
  * @param content 成功状态下显示的内容，接收数据参数
  */
 @Composable
@@ -34,11 +33,12 @@ fun <T : Any> BaseNetWorkView(
     modifier: Modifier = Modifier,
     padding: PaddingValues = PaddingValues(),
     onRetry: () -> Unit = {},
+    customLoading: @Composable (() -> Unit)? = null,
+    customError: @Composable (() -> Unit)? = null,
     content: @Composable (data: T) -> Unit
 ) {
     Box(
         modifier = modifier
-            .fillMaxSize()
             .padding(padding),
     ) {
         AnimatedContent(
@@ -46,13 +46,27 @@ fun <T : Any> BaseNetWorkView(
             transitionSpec = {
                 // 定义进入和退出动画
                 fadeIn(animationSpec = tween(300)) togetherWith
-                fadeOut(animationSpec = tween(300))
+                        fadeOut(animationSpec = tween(300))
             },
             label = "NetworkStateAnimation"
         ) { state ->
             when (state) {
-                is BaseNetWorkUiState.Loading -> PageLoading()
-                is BaseNetWorkUiState.Error -> EmptyNetwork(onRetryClick = onRetry)
+                is BaseNetWorkUiState.Loading -> {
+                    if (customLoading != null) {
+                        customLoading()
+                    } else {
+                        PageLoading()
+                    }
+                }
+
+                is BaseNetWorkUiState.Error -> {
+                    if (customError != null) {
+                        customError()
+                    } else {
+                        EmptyNetwork(onRetryClick = onRetry)
+                    }
+                }
+
                 is BaseNetWorkUiState.Success -> content(state.data)
             }
         }

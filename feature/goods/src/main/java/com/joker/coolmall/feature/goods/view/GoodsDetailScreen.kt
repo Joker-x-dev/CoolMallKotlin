@@ -64,7 +64,6 @@ import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.designsystem.theme.AppTheme
-import com.joker.coolmall.core.designsystem.theme.BorderLight
 import com.joker.coolmall.core.designsystem.theme.ColorDanger
 import com.joker.coolmall.core.designsystem.theme.DisplayLarge
 import com.joker.coolmall.core.designsystem.theme.Primary
@@ -82,6 +81,7 @@ import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.model.Goods
+import com.joker.coolmall.core.model.GoodsSpec
 import com.joker.coolmall.core.ui.component.button.AppButtonBordered
 import com.joker.coolmall.core.ui.component.button.AppButtonFixed
 import com.joker.coolmall.core.ui.component.button.ButtonShape
@@ -90,6 +90,7 @@ import com.joker.coolmall.core.ui.component.button.ButtonStyle
 import com.joker.coolmall.core.ui.component.button.ButtonType
 import com.joker.coolmall.core.ui.component.card.AppCard
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
+import com.joker.coolmall.core.ui.component.modal.SpecSelectModal
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkView
 import com.joker.coolmall.core.ui.component.swiper.WeSwiper
 import com.joker.coolmall.core.ui.htmltext.HtmlText
@@ -106,11 +107,26 @@ internal fun GoodsDetailRoute(
 ) {
     // 从ViewModel收集UI状态
     val uiState by viewModel.uiState.collectAsState()
+    // 收集规格选择弹窗状态
+    val specModalVisible by viewModel.specModalVisible.collectAsState()
+    // 收集规格列表状态
+    val specsModalUiState by viewModel.specsModalUiState.collectAsState()
+    // 收集选中的规格
+    val selectedSpec by viewModel.selectedSpec.collectAsState()
 
     GoodsDetailScreen(
         uiState = uiState,
         onBackClick = { viewModel.navigateBack() },
-        onRetry = viewModel::retryRequest
+        onRetry = viewModel::retryRequest,
+        specModalVisible = specModalVisible,
+        specsModalUiState = specsModalUiState,
+        selectedSpec = selectedSpec,
+        onSpecSelected = viewModel::selectSpec,
+        onShowSpecModal = viewModel::showSpecModal,
+        onHideSpecModal = viewModel::hideSpecModal,
+        onAddToCart = viewModel::addToCart,
+        onBuyNow = viewModel::buyNow,
+        onSpecRetry = viewModel::loadGoodsSpecs
     )
 }
 
@@ -124,7 +140,16 @@ internal fun GoodsDetailRoute(
 internal fun GoodsDetailScreen(
     uiState: BaseNetWorkUiState<Goods> = BaseNetWorkUiState.Loading,
     onBackClick: () -> Unit = {},
-    onRetry: () -> Unit = {}
+    onRetry: () -> Unit = {},
+    onSpecRetry: () -> Unit = {},
+    specModalVisible: Boolean = false,
+    specsModalUiState: BaseNetWorkUiState<List<GoodsSpec>> = BaseNetWorkUiState.Loading,
+    selectedSpec: GoodsSpec? = null,
+    onSpecSelected: (GoodsSpec) -> Unit = {},
+    onShowSpecModal: () -> Unit = {},
+    onHideSpecModal: () -> Unit = {},
+    onAddToCart: (GoodsSpec) -> Unit = {},
+    onBuyNow: (GoodsSpec) -> Unit = {}
 ) {
     Scaffold(
         contentWindowInsets = ScaffoldDefaults
@@ -136,11 +161,26 @@ internal fun GoodsDetailScreen(
             uiState = uiState,
             padding = paddingValues,
             onRetry = onRetry
-        ) {
+        ) { goods ->
             GoodsDetailContentView(
-                data = it,
+                data = goods,
                 onBackClick = onBackClick,
-                paddingValues = paddingValues
+                paddingValues = paddingValues,
+                selectedSpec = selectedSpec,
+                onShowSpecModal = onShowSpecModal
+            )
+
+            // 规格选择底部弹出层
+            SpecSelectModal(
+                visible = specModalVisible,
+                onDismiss = onHideSpecModal,
+                goods = goods,
+                uiState = specsModalUiState,
+                onSpecSelected = onSpecSelected,
+                onAddToCart = onAddToCart,
+                onBuyNow = onBuyNow,
+                onRetry = onSpecRetry,
+                selectedSpec = selectedSpec
             )
         }
     }
@@ -153,7 +193,9 @@ internal fun GoodsDetailScreen(
 private fun GoodsDetailContentView(
     data: Goods,
     onBackClick: () -> Unit,
-    paddingValues: PaddingValues
+    paddingValues: PaddingValues,
+    selectedSpec: GoodsSpec? = null,
+    onShowSpecModal: () -> Unit = {}
 ) {
     // 主内容容器
     var topBarAlpha by remember { mutableIntStateOf(0) }
@@ -166,7 +208,9 @@ private fun GoodsDetailContentView(
         // 内容区域
         GoodsDetailContentWithScroll(
             data = data,
-            onTopBarAlphaChanged = { topBarAlpha = it }
+            selectedSpec = selectedSpec,
+            onTopBarAlphaChanged = { topBarAlpha = it },
+            onShowSpecModal = onShowSpecModal
         )
 
         // 导航栏浮动在顶部
@@ -179,7 +223,9 @@ private fun GoodsDetailContentView(
 
         // 底部操作栏
         GoodsActionBar(
-            modifier = Modifier.align(Alignment.BottomCenter)
+            modifier = Modifier.align(Alignment.BottomCenter),
+            onAddToCartClick = onShowSpecModal,
+            onBuyNowClick = onShowSpecModal
         )
     }
 }
@@ -254,7 +300,9 @@ private fun CircleIconButton(
 @Composable
 private fun GoodsDetailContentWithScroll(
     data: Goods,
-    onTopBarAlphaChanged: (Int) -> Unit
+    selectedSpec: GoodsSpec? = null,
+    onTopBarAlphaChanged: (Int) -> Unit,
+    onShowSpecModal: () -> Unit
 ) {
     val scrollState = rememberScrollState()
 
@@ -284,7 +332,7 @@ private fun GoodsDetailContentWithScroll(
             modifier = Modifier.padding(SpacePaddingMedium)
         ) {
             // 基本信息
-            GoodsInfoCard(data)
+            GoodsInfoCard(data, selectedSpec, onShowSpecModal)
 
             SpaceVerticalMedium()
 
@@ -342,7 +390,11 @@ private fun GoodsBanner(images: List<String>) {
  * 商品信息卡片
  */
 @Composable
-private fun GoodsInfoCard(data: Goods) {
+private fun GoodsInfoCard(
+    data: Goods,
+    selectedSpec: GoodsSpec? = null,
+    onShowSpecModal: () -> Unit
+) {
     AppCard {
         // 价格和已售标签行
         Row(
@@ -350,9 +402,9 @@ private fun GoodsInfoCard(data: Goods) {
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            // 价格
+            // 价格 - 如果有选中规格则显示规格价格，否则显示商品原价
             Text(
-                text = data.price.toString(),
+                text = "¥${selectedSpec?.price ?: data.price}",
                 style = DisplayLarge,
                 color = ColorDanger,
                 fontWeight = FontWeight.Bold
@@ -391,7 +443,10 @@ private fun GoodsInfoCard(data: Goods) {
         }
 
         // 规格选择
-        SpecSelection()
+        SpecSelection(
+            selectedSpec = selectedSpec,
+            onClick = onShowSpecModal
+        )
     }
 }
 
@@ -467,17 +522,20 @@ private fun CouponTag(text: String) {
  * 规格选择
  */
 @Composable
-private fun SpecSelection() {
+private fun SpecSelection(
+    selectedSpec: GoodsSpec? = null,
+    onClick: () -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .clip(ShapeSmall)
             .border(
                 width = 1.2.dp,
-                color = BorderLight,
+                color = MaterialTheme.colorScheme.outline,
                 shape = ShapeSmall
             )
-            .clickable { /* TODO: 打开规格选择 */ }
+            .clickable { onClick() }
             .padding(SpacePaddingMedium),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
@@ -494,8 +552,9 @@ private fun SpecSelection() {
 
             SpaceHorizontalSmall()
 
+            // 根据是否选中规格显示不同的文本
             Text(
-                text = "选择规格",
+                text = if (selectedSpec != null) "已选：${selectedSpec.name}" else "选择规格",
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
             )
@@ -570,7 +629,11 @@ private fun GoodsDetailCard(content: String) {
  * 底部操作栏
  */
 @Composable
-private fun GoodsActionBar(modifier: Modifier = Modifier) {
+private fun GoodsActionBar(
+    modifier: Modifier = Modifier,
+    onAddToCartClick: () -> Unit = {},
+    onBuyNowClick: () -> Unit = {}
+) {
     val outlineColor = MaterialTheme.colorScheme.outline
     Row(
         modifier = modifier
@@ -651,7 +714,7 @@ private fun GoodsActionBar(modifier: Modifier = Modifier) {
             // 加入购物车按钮（边框样式）
             AppButtonBordered(
                 text = "加入购物车",
-                onClick = { /* TODO: 加入购物车 */ },
+                onClick = onAddToCartClick,
                 type = ButtonType.LINK,
                 shape = ButtonShape.SQUARE,
                 size = ButtonSize.MINI,
@@ -662,7 +725,7 @@ private fun GoodsActionBar(modifier: Modifier = Modifier) {
             // 立即购买按钮（渐变背景）
             AppButtonFixed(
                 text = "立即购买",
-                onClick = { /* TODO: 立即购买 */ },
+                onClick = onBuyNowClick,
                 size = ButtonSize.MINI,
                 style = ButtonStyle.GRADIENT,
                 shape = ButtonShape.SQUARE

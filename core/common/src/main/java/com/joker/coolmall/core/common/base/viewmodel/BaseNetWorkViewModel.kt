@@ -44,7 +44,7 @@ abstract class BaseNetWorkViewModel<T>(
      * 控制请求失败时是否显示Toast提示
      * 子类可重写此属性以自定义行为
      */
-    protected open val showErrorToast: Boolean = true
+    protected open val showErrorToast: Boolean = false
 
     /**
      * 通用路由参数ID，子类可直接使用

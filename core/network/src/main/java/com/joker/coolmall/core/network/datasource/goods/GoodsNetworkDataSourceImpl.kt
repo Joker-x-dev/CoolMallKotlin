@@ -2,6 +2,7 @@ package com.joker.coolmall.core.network.datasource.goods
 
 import com.joker.coolmall.core.model.Category
 import com.joker.coolmall.core.model.Goods
+import com.joker.coolmall.core.model.GoodsSpec
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.base.BaseNetworkDataSource
 import com.joker.coolmall.core.network.service.GoodsService
@@ -32,7 +33,7 @@ class GoodsNetworkDataSourceImpl @Inject constructor(
      * @param params 请求参数
      * @return 商品规格列表响应数据
      */
-    override suspend fun getGoodsSpecList(params: Any): NetworkResponse<Any> {
+    override suspend fun getGoodsSpecList(params: Map<String, Long>): NetworkResponse<List<GoodsSpec>> {
         return goodsService.getGoodsSpecList(params)
     }
 
