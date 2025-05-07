@@ -51,6 +51,8 @@ import com.joker.coolmall.core.ui.component.text.TextSize
 import com.joker.coolmall.core.ui.component.text.TextType
 import com.joker.coolmall.feature.user.R
 import com.joker.coolmall.feature.user.viewmodel.AddressListViewModel
+import com.joker.coolmall.core.ui.component.address.AddressCard
+import com.joker.coolmall.core.ui.component.address.AddressActionButton
 
 /**
  * 收货地址列表路由
@@ -156,131 +158,28 @@ private fun AddressListContentView(
     ) {
         // 地址项
         data.forEach { address ->
-            AddressItem(
-                province = address.province,
-                city = address.city,
-                district = address.district,
-                address = address.address,
-                name = address.contact,
-                phone = address.phone,
-                isDefault = address.isDefault,
-                onEditClick = { toAddressDetailEdit(address.id) },
-                onDeleteClick = { onDeleteClick(address.id) }
+            AddressCard(
+                address = address,
+                onClick = { toAddressDetailEdit(address.id) },
+                actionSlot = {
+                    // 自定义操作区域 - 编辑和删除按钮
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
+                        // 编辑按钮
+                        AddressActionButton(
+                            onClick = { toAddressDetailEdit(address.id) },
+                            iconResId = R.drawable.ic_edit_fill
+                        )
+
+                        // 删除按钮
+                        AddressActionButton(
+                            onClick = { onDeleteClick(address.id) },
+                            iconResId = R.drawable.ic_delete_fill
+                        )
+                    }
+                }
             )
-        }
-    }
-}
-
-/**
- * 地址项卡片
- */
-@Composable
-private fun AddressItem(
-    province: String,
-    city: String,
-    district: String,
-    address: String,
-    name: String,
-    phone: String,
-    isDefault: Boolean = false,
-    onEditClick: () -> Unit,
-    onDeleteClick: () -> Unit
-) {
-    Card(
-        modifier = Modifier
-            .clip(ShapeMedium)
-            .clickable { onEditClick() },
-    ) {
-        Column {
-            // 地址主要部分
-            SpaceBetweenRow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(SpacePaddingMedium)
-            ) {
-                Column {
-                    // 地址第一行
-                    AppText(
-                        text = "$province$city$district", size = TextSize.TITLE_LARGE
-                    )
-
-                    // 地址第二行
-                    AppText(
-                        text = address,
-                        type = TextType.SECONDARY,
-                        modifier = Modifier.padding(top = 4.dp)
-                    )
-                }
-
-                // 按钮组
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    // 编辑按钮 - 添加圆形背景
-                    Box(
-                        modifier = Modifier
-                            .size(32.dp)
-                            .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.surfaceVariant)
-                            .clickable { onEditClick() },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CommonIcon(
-                            resId = R.drawable.ic_edit_fill,
-                            tint = LocalContentColor.current.copy(alpha = 0.5f),
-                            size = 18.dp,
-                        )
-                    }
-
-                    // 删除按钮 - 添加圆形背景
-                    Box(
-                        modifier = Modifier
-                            .size(32.dp)
-                            .clip(CircleShape)
-                            .background(MaterialTheme.colorScheme.surfaceVariant)
-                            .clickable { onDeleteClick() },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CommonIcon(
-                            resId = R.drawable.ic_delete_fill,
-                            tint = LocalContentColor.current.copy(alpha = 0.5f),
-                            size = 18.dp
-                        )
-                    }
-                }
-            }
-
-            WeDivider()
-
-            // 联系人信息行
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = SpaceHorizontalLarge, vertical = SpaceVerticalMedium),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                AppText(
-                    text = name, type = TextType.SECONDARY
-                )
-
-                SpaceHorizontalLarge()
-
-                AppText(
-                    text = phone, type = TextType.SECONDARY
-                )
-
-                Spacer(modifier = Modifier.weight(1f))
-
-                // 默认地址标签
-                if (isDefault) {
-                    Tag(
-                        text = "默认地址",
-                        type = TagType.PRIMARY,
-                        size = TagSize.SMALL,
-                        shape = ShapeMedium
-                    )
-                }
-            }
         }
     }
 }

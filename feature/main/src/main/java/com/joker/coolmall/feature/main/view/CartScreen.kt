@@ -62,6 +62,8 @@ import com.joker.coolmall.core.ui.component.text.AppText
 import com.joker.coolmall.core.ui.component.text.TextType
 import com.joker.coolmall.feature.main.R
 import com.joker.coolmall.feature.main.component.CommonScaffold
+import com.joker.coolmall.core.ui.component.goods.OrderGoodsCard
+import com.joker.coolmall.core.ui.component.goods.OrderGoodsItemData
 
 @Composable
 internal fun CartRoute() {
@@ -81,16 +83,18 @@ internal fun CartScreen() {
     val groupedCartItems = remember {
         mapOf(
             "Redmi K80" to listOf(
-                CartItemSpec(
+                OrderGoodsItemData(
                     id = "1",
+                    title = "Redmi K80",
                     spec = "雪岩白 12GB+256GB",
                     price = 249900, // 单位为分
                     count = 2,
                     selected = true,
                     imageUrl = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
                 ),
-                CartItemSpec(
+                OrderGoodsItemData(
                     id = "2",
+                    title = "Redmi K80",
                     spec = "雪岩白 16GB+1TB",
                     price = 359900, // 单位为分
                     count = 1,
@@ -99,8 +103,9 @@ internal fun CartScreen() {
                 )
             ),
             "Redmi 14C" to listOf(
-                CartItemSpec(
+                OrderGoodsItemData(
                     id = "3",
+                    title = "Redmi 14C",
                     spec = "冰川银 4GB+64GB",
                     price = 49900, // 单位为分
                     count = 1,
@@ -109,16 +114,18 @@ internal fun CartScreen() {
                 )
             ),
             "Xiaomi 15 Ultra" to listOf(
-                CartItemSpec(
+                OrderGoodsItemData(
                     id = "4",
+                    title = "Xiaomi 15 Ultra",
                     spec = "经典黑银 16GB+512GB",
                     price = 699900, // 单位为分
                     count = 1,
                     selected = false,
                     imageUrl = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
                 ),
-                CartItemSpec(
+                OrderGoodsItemData(
                     id = "5",
+                    title = "Xiaomi 15 Ultra",
                     spec = "白色 16GB+512GB",
                     price = 699900, // 单位为分
                     count = 1,
@@ -159,15 +166,29 @@ internal fun CartScreen() {
                     .padding(bottom = 60.dp) // 为底部栏留出空间
             ) {
                 // 遍历分组后的商品数据
-                groupedCartItems.forEach { (goodsTitle, specs) ->
+                groupedCartItems.forEach { (goodsTitle, items) ->
                     item {
-                        GoodsCard(
+                        OrderGoodsCard(
                             goodsTitle = goodsTitle,
-                            specs = specs,
+                            items = items,
                             onGoodsClick = { /* 实现商品点击事件 */ },
-                            onCheckChanged = { /* 实现选择状态改变事件 */ },
-                            onDecrementCount = { /* 实现减少数量事件 */ },
-                            onIncrementCount = { /* 实现增加数量事件 */ }
+                            onSpecClick = { /* 规格点击事件 */ },
+                            onQuantityChanged = { itemId, newCount ->
+                                /* 实现数量变更事件 */
+                            },
+                            itemSelectSlot = { item ->
+                                // 选择框
+                                CommonIcon(
+                                    resId = if (item.selected) R.drawable.ic_checkbox_checked else R.drawable.ic_checkbox_unchecked,
+                                    contentDescription = if (item.selected) "已选择" else "未选择",
+                                    modifier = Modifier
+                                        .size(24.dp)
+                                        .clickable { /* 选择状态改变事件 */ },
+                                    tint = if (item.selected) Primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(
+                                        alpha = 0.6f
+                                    )
+                                )
+                            }
                         )
                     }
                 }
@@ -184,172 +205,6 @@ internal fun CartScreen() {
                 onSettleClick = { /* 实现结算事件 */ },
                 modifier = Modifier.align(Alignment.BottomCenter)
             )
-        }
-    }
-}
-
-@Composable
-private fun GoodsCard(
-    goodsTitle: String,
-    specs: List<CartItemSpec>,
-    onGoodsClick: (String) -> Unit,
-    onCheckChanged: (CartItemSpec) -> Unit,
-    onDecrementCount: (CartItemSpec) -> Unit,
-    onIncrementCount: (CartItemSpec) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Card {
-
-        AppListItem(
-            title = goodsTitle,
-            onClick = {}
-        )
-
-        SpaceVerticalMedium()
-
-        // 商品规格项列表
-        specs.forEach { spec ->
-            CartItemRow(
-                spec = spec,
-                onCheckChanged = onCheckChanged,
-                onDecrementCount = onDecrementCount,
-                onIncrementCount = onIncrementCount
-            )
-        }
-    }
-}
-
-@Composable
-private fun CartItemRow(
-    spec: CartItemSpec,
-    onCheckChanged: (CartItemSpec) -> Unit,
-    onDecrementCount: (CartItemSpec) -> Unit,
-    onIncrementCount: (CartItemSpec) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier
-            .fillMaxWidth()
-            .padding(start = SpacePaddingLarge, end = SpacePaddingLarge, bottom = SpacePaddingLarge)
-    ) {
-        // 选择框
-        CommonIcon(
-            resId = if (spec.selected) R.drawable.ic_checkbox_checked else R.drawable.ic_checkbox_unchecked,
-            contentDescription = if (spec.selected) "已选择" else "未选择",
-            modifier = Modifier
-                .size(24.dp)
-                .clickable { onCheckChanged(spec) },
-            tint = if (spec.selected) Primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(
-                alpha = 0.6f
-            )
-        )
-
-        SpaceHorizontalMedium()
-
-        // 商品图片
-        NetWorkImage(
-            model = spec.imageUrl,
-            contentScale = ContentScale.Crop,
-            modifier = Modifier
-                .size(90.dp)
-                .clip(MaterialTheme.shapes.small)
-                .background(MaterialTheme.colorScheme.surfaceVariant)
-        )
-
-        SpaceHorizontalMedium()
-
-        // 商品信息
-        Column(
-            modifier = Modifier.weight(1f)
-        ) {
-            // 商品规格 - 使用卡片样式
-            Box(
-                modifier = Modifier
-                    .background(
-                        color = MaterialTheme.colorScheme.surfaceVariant,
-                        shape = RoundedCornerShape(4.dp)
-                    )
-                    .padding(horizontal = SpacePaddingSmall, vertical = SpaceVerticalXSmall)
-            ) {
-                Row {
-                    AppText(
-                        text = spec.spec,
-                        style = MaterialTheme.typography.bodySmall,
-                        type = TextType.SECONDARY
-                    )
-                    SpaceHorizontalXSmall()
-                    ArrowRightIcon(size = 16.dp)
-                }
-            }
-
-            SpaceVerticalMedium()
-
-            // 价格和数量
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                // 价格
-                Text(
-                    text = "¥${spec.price / 100.0}0",
-                    style = MaterialTheme.typography.bodyLarge.copy(
-                        color = MaterialTheme.colorScheme.error,
-                        fontWeight = FontWeight.Bold
-                    ),
-                    modifier = Modifier.weight(1f)
-                )
-
-                // 数量控制
-                Row(
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    // 减少按钮
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier
-                            .size(24.dp)
-                            .background(
-                                color = MaterialTheme.colorScheme.surfaceVariant,
-                                shape = CircleShape
-                            )
-                            .clickable { onDecrementCount(spec) }
-                    ) {
-                        Text(
-                            text = "-",
-                            style = MaterialTheme.typography.bodyLarge
-                        )
-                    }
-
-                    // 数量
-                    Text(
-                        text = "${spec.count}",
-                        style = MaterialTheme.typography.bodyLarge,
-                        modifier = Modifier
-                            .padding(horizontal = SpacePaddingMedium)
-                            .widthIn(min = 16.dp),
-                        textAlign = TextAlign.Center
-                    )
-
-                    // 增加按钮
-                    Box(
-                        contentAlignment = Alignment.Center,
-                        modifier = Modifier
-                            .size(24.dp)
-                            .background(
-                                color = Primary,
-                                shape = CircleShape
-                            )
-                            .clickable { onIncrementCount(spec) }
-                    ) {
-                        Text(
-                            text = "+",
-                            style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.surface
-                        )
-                    }
-                }
-            }
         }
     }
 }
@@ -475,16 +330,6 @@ private fun CartBottomBar(
         }
     }
 }
-
-// 购物车商品规格数据类
-data class CartItemSpec(
-    val id: String,
-    val spec: String,
-    val price: Int, // 单位为分
-    val count: Int,
-    val selected: Boolean,
-    val imageUrl: String
-)
 
 @Preview(showBackground = true)
 @Composable

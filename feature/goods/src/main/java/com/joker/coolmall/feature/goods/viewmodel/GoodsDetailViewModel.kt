@@ -57,7 +57,6 @@ class GoodsDetailViewModel @Inject constructor(
 
     init {
         super.executeRequest()
-//        loadGoodsSpecs()
     }
 
     /**
