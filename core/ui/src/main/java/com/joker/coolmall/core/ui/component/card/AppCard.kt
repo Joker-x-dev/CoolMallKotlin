@@ -65,6 +65,8 @@ fun AppCard(
 @Composable
 fun AppCardPreview() {
     AppTheme {
-        AppCard {}
+        AppCard(lineTitle = "标题", content = {
+            Text(text = "内容")
+        })
     }
 }

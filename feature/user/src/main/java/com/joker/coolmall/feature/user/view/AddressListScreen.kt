@@ -163,9 +163,9 @@ private fun AddressListContentView(
                 onClick = { toAddressDetailEdit(address.id) },
                 actionSlot = {
                     // 自定义操作区域 - 编辑和删除按钮
-                    Row(
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
+                Row(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
                         // 编辑按钮
                         AddressActionButton(
                             onClick = { toAddressDetailEdit(address.id) },
