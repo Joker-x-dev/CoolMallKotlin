@@ -9,9 +9,10 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.joker.coolmall.feature.auth.navigation.authGraph
 import com.joker.coolmall.feature.goods.navigation.goodsGraph
-import com.joker.coolmall.feature.main.navigation.MAIN_ROUTE
 import com.joker.coolmall.feature.main.navigation.mainGraph
+import com.joker.coolmall.feature.order.navigation.orderGraph
 import com.joker.coolmall.feature.user.navigation.userGraph
+import com.joker.coolmall.navigation.routes.MainRoutes
 import kotlinx.coroutines.flow.collectLatest
 
 /**
@@ -34,7 +35,7 @@ fun AppNavHost(
 
     NavHost(
         navController = navController,
-        startDestination = MAIN_ROUTE,  // 直接引用主页面的路由常量
+        startDestination = MainRoutes.MAIN,
         modifier = modifier,
         // 页面进入动画
         enterTransition = {
@@ -70,5 +71,6 @@ fun AppNavHost(
         goodsGraph(navController)
         authGraph(navController)
         userGraph(navController)
+        orderGraph(navController)
     }
 }

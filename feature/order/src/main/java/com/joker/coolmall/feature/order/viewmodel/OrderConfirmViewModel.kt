@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 /**
- * 收货地址详情ViewModel
+ * 订单确认页面ViewModel
  */
 @HiltViewModel
 class OrderConfirmViewModel @Inject constructor(
