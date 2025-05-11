@@ -19,7 +19,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -61,7 +60,8 @@ internal fun OrderConfirmRoute(
     val uiState by viewModel.uiState.collectAsState()
     OrderConfirmScreen(
         uiState = uiState,
-        onRetry = viewModel::retryRequest
+        onRetry = viewModel::retryRequest,
+
     )
 }
 
@@ -162,11 +162,11 @@ private fun OrderConfirmContentView(totalPrice: Int = 749800) {
         }
 
         // 价格明细卡片
-        Card  {
+        Card {
             TitleWithLine(
                 text = "价格明细",
                 modifier = Modifier
-                   .fillMaxWidth()
+                    .fillMaxWidth()
                     .padding(horizontal = SpacePaddingMedium)
                     .padding(top = SpacePaddingMedium, bottom = SpacePaddingXSmall)
             )

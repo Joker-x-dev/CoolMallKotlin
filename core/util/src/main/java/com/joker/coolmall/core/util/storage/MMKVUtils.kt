@@ -3,6 +3,7 @@ package com.joker.coolmall.core.util.storage
 import android.app.Application
 import android.os.Parcelable
 import com.tencent.mmkv.MMKV
+import kotlinx.serialization.json.Json
 import java.util.Collections
 
 /**
@@ -287,6 +288,38 @@ object MMKVUtils {
      */
     fun <T : Parcelable> getParcelable(key: String, clazz: Class<T>): T? {
         return defaultMMKV.decodeParcelable(key, clazz)
+    }
+
+    /**
+     * 存储任意可序列化对象（基于kotlinx.serialization）
+     * 用法示例：MMKVUtils.putObject("cart", cart)
+     *
+     * @param key 键
+     * @param value 值，需加 @Serializable 注解
+     */
+    inline fun <reified T> putObject(key: String, value: T) {
+        val json = Json.encodeToString(value)
+        putString(key, json)
+    }
+
+    /**
+     * 获取任意可序列化对象（基于kotlinx.serialization）
+     * 用法示例：val cart = MMKVUtils.getObject<Cart>("cart")
+     *
+     * @param key 键
+     * @return 存储的对象，如不存在或解析失败则返回null
+     */
+    inline fun <reified T> getObject(key: String): T? {
+        val json = getString(key, "")
+        return if (json.isNotEmpty()) {
+            try {
+                Json.decodeFromString<T>(json)
+            } catch (e: Exception) {
+                null
+            }
+        } else {
+            null
+        }
     }
 
     /**

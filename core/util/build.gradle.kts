@@ -1,5 +1,6 @@
 plugins {
     id("com.joker.coolmall.android.library")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -14,6 +15,9 @@ dependencies {
     // 引入 common 模块
     implementation(project(":core:designsystem"))
     implementation(project(":core:model"))
+
+    // kotlin序列化
+    implementation(libs.kotlinx.serialization.json)
 
     // 吐司框架：https://github.com/getActivity/Toaster
     api(libs.toaster)

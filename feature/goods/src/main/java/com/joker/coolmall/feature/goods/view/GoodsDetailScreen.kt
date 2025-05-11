@@ -80,6 +80,7 @@ import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
+import com.joker.coolmall.core.model.SelectedGoods
 import com.joker.coolmall.core.model.Goods
 import com.joker.coolmall.core.model.GoodsSpec
 import com.joker.coolmall.core.ui.component.button.AppButtonBordered
@@ -132,8 +133,18 @@ internal fun GoodsDetailRoute(
 
 /**
  * 商品详情页面UI
- * @param uiState 商品详情UI状态
- * @param onBackClick 返回按钮点击回调
+ * @param uiState 商品详情UI状态，包含商品数据的网络请求状态
+ * @param onBackClick 返回按钮点击回调，点击后返回上一页
+ * @param onRetry 商品详情加载失败时的重试回调
+ * @param onSpecRetry 规格列表加载失败时的重试回调
+ * @param specModalVisible 规格选择弹窗是否可见
+ * @param specsModalUiState 规格列表的网络请求状态
+ * @param selectedSpec 当前选中的规格信息
+ * @param onSpecSelected 规格选择回调，当用户选择一个规格时触发
+ * @param onShowSpecModal 显示规格选择弹窗的回调
+ * @param onHideSpecModal 隐藏规格选择弹窗的回调
+ * @param onAddToCart 加入购物车回调，参数为包含商品和规格信息的购物车对象
+ * @param onBuyNow 立即购买回调，参数为包含商品和规格信息的购物车对象
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -148,8 +159,8 @@ internal fun GoodsDetailScreen(
     onSpecSelected: (GoodsSpec) -> Unit = {},
     onShowSpecModal: () -> Unit = {},
     onHideSpecModal: () -> Unit = {},
-    onAddToCart: (GoodsSpec) -> Unit = {},
-    onBuyNow: (GoodsSpec) -> Unit = {}
+    onAddToCart: (SelectedGoods) -> Unit = {},
+    onBuyNow: (SelectedGoods) -> Unit = {}
 ) {
     Scaffold(
         contentWindowInsets = ScaffoldDefaults
@@ -188,6 +199,12 @@ internal fun GoodsDetailScreen(
 
 /**
  * 商品详情主内容
+ * 
+ * @param data 商品详情数据对象
+ * @param onBackClick 返回按钮点击回调
+ * @param paddingValues 页面内边距值，用于适配系统UI（如状态栏、导航栏）
+ * @param selectedSpec 当前选中的商品规格，若为null则表示未选择规格
+ * @param onShowSpecModal 显示规格选择弹窗的回调函数
  */
 @Composable
 private fun GoodsDetailContentView(
@@ -232,6 +249,11 @@ private fun GoodsDetailContentView(
 
 /**
  * 顶部导航栏
+ * 
+ * @param modifier 应用于顶部导航栏的Modifier
+ * @param onBackClick 返回按钮点击回调
+ * @param onShareClick 分享按钮点击回调
+ * @param topBarAlpha 顶部导航栏的透明度值(0-255)，用于实现滚动时的渐变效果
  */
 @Composable
 private fun GoodsDetailTopBar(
@@ -269,6 +291,11 @@ private fun GoodsDetailTopBar(
 
 /**
  * 圆形图标按钮
+ * 
+ * @param modifier 应用于按钮的Modifier
+ * @param icon 图标资源ID
+ * @param onClick 按钮点击回调
+ * @param iconSize 图标大小
  */
 @Composable
 private fun CircleIconButton(
@@ -296,6 +323,11 @@ private fun CircleIconButton(
 
 /**
  * 带滚动功能的商品详情内容
+ * 
+ * @param data 商品详情数据对象
+ * @param selectedSpec 当前选中的商品规格，若为null则表示未选择规格
+ * @param onTopBarAlphaChanged 顶部导航栏透明度变化回调，参数为新的透明度值
+ * @param onShowSpecModal 显示规格选择弹窗的回调函数
  */
 @Composable
 private fun GoodsDetailContentWithScroll(
@@ -354,6 +386,8 @@ private fun GoodsDetailContentWithScroll(
 
 /**
  * 商品轮播图
+ * 
+ * @param images 图片URL列表，用于轮播展示
  */
 @Composable
 private fun GoodsBanner(images: List<String>) {
@@ -388,6 +422,10 @@ private fun GoodsBanner(images: List<String>) {
 
 /**
  * 商品信息卡片
+ * 
+ * @param data 商品详情数据对象
+ * @param selectedSpec 当前选中的商品规格，若为null则表示未选择规格
+ * @param onShowSpecModal 显示规格选择弹窗的回调函数
  */
 @Composable
 private fun GoodsInfoCard(
@@ -452,6 +490,8 @@ private fun GoodsInfoCard(
 
 /**
  * 已售数量标签
+ * 
+ * @param count 已售出的商品数量
  */
 @Composable
 private fun SoldCountTag(count: Int) {
@@ -474,6 +514,8 @@ private fun SoldCountTag(count: Int) {
 
 /**
  * 优惠券列表
+ * 
+ * 展示可用的优惠券信息列表
  */
 @Composable
 private fun CouponList() {
@@ -490,6 +532,8 @@ private fun CouponList() {
 
 /**
  * 优惠券标签
+ * 
+ * @param text 优惠券文本内容，如"满100减10元"
  */
 @Composable
 private fun CouponTag(text: String) {
@@ -520,6 +564,9 @@ private fun CouponTag(text: String) {
 
 /**
  * 规格选择
+ * 
+ * @param selectedSpec 当前选中的商品规格，若为null则表示未选择规格
+ * @param onClick 点击规格选择区域的回调，用于打开规格选择弹窗
  */
 @Composable
 private fun SpecSelection(
@@ -571,6 +618,8 @@ private fun SpecSelection(
 
 /**
  * 配送信息卡片
+ * 
+ * 显示商品的配送相关信息，包括送货地址和服务承诺
  */
 @Composable
 private fun GoodsDeliveryCard() {
@@ -616,6 +665,8 @@ private fun GoodsDeliveryCard() {
 
 /**
  * 商品详情卡片
+ * 
+ * @param content 商品详情的HTML内容，包含图文详情
  */
 @Composable
 private fun GoodsDetailCard(content: String) {
@@ -627,6 +678,10 @@ private fun GoodsDetailCard(content: String) {
 
 /**
  * 底部操作栏
+ * 
+ * @param modifier 应用于底部操作栏的Modifier
+ * @param onAddToCartClick 加入购物车按钮点击回调
+ * @param onBuyNowClick 立即购买按钮点击回调
  */
 @Composable
 private fun GoodsActionBar(

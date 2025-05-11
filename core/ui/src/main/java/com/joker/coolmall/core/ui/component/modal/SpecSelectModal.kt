@@ -61,6 +61,7 @@ import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
+import com.joker.coolmall.core.model.SelectedGoods
 import com.joker.coolmall.core.model.Goods
 import com.joker.coolmall.core.model.GoodsSpec
 import com.joker.coolmall.core.ui.R
@@ -100,8 +101,8 @@ fun SpecSelectModal(
     goods: Goods? = null,
     uiState: BaseNetWorkUiState<List<GoodsSpec>> = BaseNetWorkUiState.Loading,
     onSpecSelected: (GoodsSpec) -> Unit = {},
-    onAddToCart: (GoodsSpec) -> Unit = {},
-    onBuyNow: (GoodsSpec) -> Unit = {},
+    onAddToCart: (SelectedGoods) -> Unit = {},
+    onBuyNow: (SelectedGoods) -> Unit = {},
     onRetry: () -> Unit = {},
     selectedSpec: GoodsSpec? = null, // 添加已选择的规格参数
 ) {
@@ -185,11 +186,25 @@ fun SpecSelectModal(
                     isGridMode = newMode
                 },
                 onAddToCart = { spec ->
-                    onAddToCart(spec)
+                    // 创建Cart对象并传递给回调
+                    val selectedGoods = SelectedGoods().apply {
+                        goodsId = spec.goodsId
+                        goodsInfo = goods
+                        this.spec = spec
+                        count = quantity
+                    }
+                    onAddToCart(selectedGoods)
                     onDismiss()
                 },
                 onBuyNow = { spec ->
-                    onBuyNow(spec)
+                    // 创建Cart对象并传递给回调
+                    val selectedGoods = SelectedGoods().apply {
+                        goodsId = spec.goodsId
+                        goodsInfo = goods
+                        this.spec = spec
+                        count = quantity
+                    }
+                    onBuyNow(selectedGoods)
                     onDismiss()
                 }
             )

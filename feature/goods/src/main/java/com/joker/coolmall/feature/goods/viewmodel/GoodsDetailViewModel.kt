@@ -7,9 +7,12 @@ import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
 import com.joker.coolmall.core.data.repository.GoodsRepository
 import com.joker.coolmall.core.model.Goods
 import com.joker.coolmall.core.model.GoodsSpec
+import com.joker.coolmall.core.model.SelectedGoods
 import com.joker.coolmall.core.model.response.NetworkResponse
+import com.joker.coolmall.core.util.storage.MMKVUtils
 import com.joker.coolmall.feature.goods.navigation.GoodsDetailRoutes
 import com.joker.coolmall.navigation.AppNavigator
+import com.joker.coolmall.navigation.routes.OrderRoutes
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -125,7 +128,7 @@ class GoodsDetailViewModel @Inject constructor(
     /**
      * 加入购物车
      */
-    fun addToCart(spec: GoodsSpec) {
+    fun addToCart(selectedGoods: SelectedGoods) {
         viewModelScope.launch {
             // TODO: 实际项目中应调用Repository的加入购物车方法
             hideSpecModal()
@@ -135,10 +138,12 @@ class GoodsDetailViewModel @Inject constructor(
     /**
      * 立即购买
      */
-    fun buyNow(spec: GoodsSpec) {
+    fun buyNow(selectedGoods: SelectedGoods) {
         viewModelScope.launch {
-            // TODO: 实际项目中应导航到订单确认页面
+            MMKVUtils.putObject("selectedGoodsList", listOf(selectedGoods))
+            // 隐藏规格选择弹窗
             hideSpecModal()
+            super.toPage(OrderRoutes.ORDER_CONFIRM)
         }
     }
 
