@@ -14,7 +14,7 @@ minSdk = "26"
 targetSdk = "35"
 
 # 已有的插件版本可以重用
-agp = "8.9.1"
+agp = "8.10.0"
 kotlin = "2.1.10"
 
 coreKtx = "1.15.0"
