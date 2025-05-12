@@ -32,6 +32,8 @@ import com.joker.coolmall.core.designsystem.theme.ShapeMedium
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingXSmall
 import com.joker.coolmall.core.model.Address
+import com.joker.coolmall.core.model.Cart
+import com.joker.coolmall.core.model.CartGoodsSpec
 import com.joker.coolmall.core.ui.component.address.AddressCard
 import com.joker.coolmall.core.ui.component.button.AppButtonFixed
 import com.joker.coolmall.core.ui.component.button.ButtonShape
@@ -39,7 +41,6 @@ import com.joker.coolmall.core.ui.component.button.ButtonSize
 import com.joker.coolmall.core.ui.component.button.ButtonStyle
 import com.joker.coolmall.core.ui.component.card.AppCard
 import com.joker.coolmall.core.ui.component.goods.OrderGoodsCard
-import com.joker.coolmall.core.ui.component.goods.OrderGoodsItemData
 import com.joker.coolmall.core.ui.component.list.AppListItem
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkView
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
@@ -126,35 +127,47 @@ private fun OrderConfirmContentView(totalPrice: Int = 749800) {
         )
 
         // 商品列表
-        val orderItems = remember {
+        val cartItems = remember {
             listOf(
-                OrderGoodsItemData(
-                    id = "1",
-                    title = "Redmi 14C",
-                    spec = "星岩黑 4GB+64GB",
-                    price = 49900,  // 499元
-                    count = 1,
-                    imageUrl = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
-                ),
-                OrderGoodsItemData(
-                    id = "2",
-                    title = "Xiaomi 15 Ultra",
-                    spec = "经典黑银 16GB+512GB",
-                    price = 699900,  // 6999元
-                    count = 1,
-                    imageUrl = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
-                )
+                Cart().apply {
+                    goodsId = 1L
+                    goodsName = "Redmi 14C"
+                    goodsMainPic = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
+                    spec = listOf(
+                        CartGoodsSpec(
+                            id = 1L,
+                            goodsId = 1L,
+                            name = "星岩黑 4GB+64GB",
+                            price = 49900,
+                            count = 1,
+                            stock = 200,
+                            images = listOf("https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png")
+                        )
+                    )
+                },
+                Cart().apply {
+                    goodsId = 2L
+                    goodsName = "Xiaomi 15 Ultra"
+                    goodsMainPic = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
+                    spec = listOf(
+                        CartGoodsSpec(
+                            id = 2L,
+                            goodsId = 2L,
+                            name = "经典黑银 16GB+512GB",
+                            price = 699900,
+                            count = 1,
+                            stock = 30,
+                            images = listOf("https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png")
+                        )
+                    )
+                }
             )
         }
 
-        // 按商品标题分组
-        val groupedItems = orderItems.groupBy { it.title }
-
         // 订单商品卡片
-        groupedItems.forEach { (title, items) ->
+        cartItems.forEach { cart ->
             OrderGoodsCard(
-                goodsTitle = title,
-                items = items,
+                data = cart,
                 enableQuantityStepper = false, // 确认订单页面不需要调整数量
                 onGoodsClick = { /* 商品点击事件 */ },
                 onSpecClick = { /* 规格点击事件 */ }

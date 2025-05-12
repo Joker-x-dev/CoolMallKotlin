@@ -28,7 +28,7 @@ class OrderConfirmViewModel @Inject constructor(
     val selectedGoods: List<SelectedGoods>? =
         MMKVUtils.getObject<List<SelectedGoods>>("selectedGoodsList")
 
-    val cartList = selectedGoods
+    /*val cartList = selectedGoods
         ?.groupBy { it.goodsId }
         ?.map { (goodsId, group) ->
             Cart().apply {
@@ -38,7 +38,7 @@ class OrderConfirmViewModel @Inject constructor(
                 // 把所有规格都放进 spec 列表
                 this.spec = group.mapNotNull { it.spec }
             }
-        } ?: emptyList()
+        } ?: emptyList()*/
 
     init {
         executeRequest()

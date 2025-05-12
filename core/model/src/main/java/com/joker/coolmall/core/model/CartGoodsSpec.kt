@@ -3,10 +3,11 @@ package com.joker.coolmall.core.model
 import kotlinx.serialization.Serializable
 
 /**
- * 规格模型
+ * 购物车商品规格
+ * 用于购物车中展示商品的规格信息(不来自服务端)
  */
 @Serializable
-data class GoodsSpec(
+data class CartGoodsSpec(
     /**
      * ID
      */
@@ -33,22 +34,12 @@ data class GoodsSpec(
     val stock: Int = 0,
 
     /**
-     * 排序
+     * 购买数量
      */
-    val sortNum: Int = 0,
+    val count: Int = 0,
 
     /**
      * 图片
      */
-    val images: List<String>? = null,
-
-    /**
-     * 创建时间
-     */
-    val createTime: String? = null,
-
-    /**
-     * 更新时间
-     */
-    val updateTime: String? = null
+    val images: List<String>? = null
 )

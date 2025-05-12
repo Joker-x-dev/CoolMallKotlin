@@ -55,6 +55,8 @@ import com.joker.coolmall.core.designsystem.theme.SpacePaddingSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
+import com.joker.coolmall.core.model.Cart
+import com.joker.coolmall.core.model.CartGoodsSpec
 import com.joker.coolmall.core.ui.component.appbar.CenterTopAppBar
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
 import com.joker.coolmall.core.ui.component.list.AppListItem
@@ -63,7 +65,6 @@ import com.joker.coolmall.core.ui.component.text.TextType
 import com.joker.coolmall.feature.main.R
 import com.joker.coolmall.feature.main.component.CommonScaffold
 import com.joker.coolmall.core.ui.component.goods.OrderGoodsCard
-import com.joker.coolmall.core.ui.component.goods.OrderGoodsItemData
 
 @Composable
 internal fun CartRoute() {
@@ -79,60 +80,75 @@ internal fun CartScreen() {
     var selectedCount by remember { mutableIntStateOf(4) } // 示例数据
     var totalPrice by remember { mutableIntStateOf(12997) } // 示例数据，单位为分
 
-    // 示例购物车数据 - 按商品分组
-    val groupedCartItems = remember {
-        mapOf(
-            "Redmi K80" to listOf(
-                OrderGoodsItemData(
-                    id = "1",
-                    title = "Redmi K80",
-                    spec = "雪岩白 12GB+256GB",
-                    price = 249900, // 单位为分
-                    count = 2,
-                    selected = true,
-                    imageUrl = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
-                ),
-                OrderGoodsItemData(
-                    id = "2",
-                    title = "Redmi K80",
-                    spec = "雪岩白 16GB+1TB",
-                    price = 359900, // 单位为分
-                    count = 1,
-                    selected = true,
-                    imageUrl = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
+    // 示例购物车数据
+    val cartItems = remember {
+        listOf(
+            Cart().apply {
+                goodsId = 1L
+                goodsName = "Redmi K80"
+                goodsMainPic = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
+                spec = listOf(
+                    CartGoodsSpec(
+                        id = 1L,
+                        goodsId = 1L,
+                        name = "雪岩白 12GB+256GB",
+                        price = 249900,
+                        count = 2,
+                        stock = 100,
+                        images = listOf("https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png")
+                    ),
+                    CartGoodsSpec(
+                        id = 2L,
+                        goodsId = 1L,
+                        name = "雪岩白 16GB+1TB",
+                        price = 359900,
+                        count = 1,
+                        stock = 50,
+                        images = null
+                    )
                 )
-            ),
-            "Redmi 14C" to listOf(
-                OrderGoodsItemData(
-                    id = "3",
-                    title = "Redmi 14C",
-                    spec = "冰川银 4GB+64GB",
-                    price = 49900, // 单位为分
-                    count = 1,
-                    selected = true,
-                    imageUrl = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
+            },
+            Cart().apply {
+                goodsId = 2L
+                goodsName = "Redmi 14C"
+                goodsMainPic = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
+                spec = listOf(
+                    CartGoodsSpec(
+                        id = 3L,
+                        goodsId = 2L,
+                        name = "冰川银 4GB+64GB",
+                        price = 49900,
+                        count = 1,
+                        stock = 200,
+                        images = listOf("https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png")
+                    )
                 )
-            ),
-            "Xiaomi 15 Ultra" to listOf(
-                OrderGoodsItemData(
-                    id = "4",
-                    title = "Xiaomi 15 Ultra",
-                    spec = "经典黑银 16GB+512GB",
-                    price = 699900, // 单位为分
-                    count = 1,
-                    selected = false,
-                    imageUrl = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
-                ),
-                OrderGoodsItemData(
-                    id = "5",
-                    title = "Xiaomi 15 Ultra",
-                    spec = "白色 16GB+512GB",
-                    price = 699900, // 单位为分
-                    count = 1,
-                    selected = false,
-                    imageUrl = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
+            },
+            Cart().apply {
+                goodsId = 3L
+                goodsName = "Xiaomi 15 Ultra"
+                goodsMainPic = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
+                spec = listOf(
+                    CartGoodsSpec(
+                        id = 4L,
+                        goodsId = 3L,
+                        name = "经典黑银 16GB+512GB",
+                        price = 699900,
+                        count = 1,
+                        stock = 30,
+                        images = listOf("https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png")
+                    ),
+                    CartGoodsSpec(
+                        id = 5L,
+                        goodsId = 3L,
+                        name = "白色 16GB+512GB",
+                        price = 699900,
+                        count = 1,
+                        stock = 25,
+                        images = null
+                    )
                 )
-            )
+            }
         )
     }
 
@@ -165,26 +181,26 @@ internal fun CartScreen() {
                     .fillMaxSize()
                     .padding(bottom = 60.dp) // 为底部栏留出空间
             ) {
-                // 遍历分组后的商品数据
-                groupedCartItems.forEach { (goodsTitle, items) ->
+                // 遍历购物车商品数据
+                cartItems.forEach { cart ->
                     item {
                         OrderGoodsCard(
-                            goodsTitle = goodsTitle,
-                            items = items,
+                            data = cart,
                             onGoodsClick = { /* 实现商品点击事件 */ },
                             onSpecClick = { /* 规格点击事件 */ },
-                            onQuantityChanged = { itemId, newCount ->
+                            onQuantityChanged = { specId, newCount ->
                                 /* 实现数量变更事件 */
                             },
-                            itemSelectSlot = { item ->
-                                // 选择框
+                            itemSelectSlot = { spec ->
+                                // 选择框 - 这里需要在实际应用中维护选择状态
+                                val selected = (spec.id == 1L || spec.id == 2L || spec.id == 3L) // 示例：前三个商品被选中
                                 CommonIcon(
-                                    resId = if (item.selected) R.drawable.ic_checkbox_checked else R.drawable.ic_checkbox_unchecked,
-                                    contentDescription = if (item.selected) "已选择" else "未选择",
+                                    resId = if (selected) R.drawable.ic_checkbox_checked else R.drawable.ic_checkbox_unchecked,
+                                    contentDescription = if (selected) "已选择" else "未选择",
                                     modifier = Modifier
                                         .size(24.dp)
                                         .clickable { /* 选择状态改变事件 */ },
-                                    tint = if (item.selected) Primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(
+                                    tint = if (selected) Primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(
                                         alpha = 0.6f
                                     )
                                 )

@@ -28,6 +28,8 @@ import com.joker.coolmall.core.designsystem.theme.SpacePaddingLarge
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
+import com.joker.coolmall.core.model.Cart
+import com.joker.coolmall.core.model.CartGoodsSpec
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
 import com.joker.coolmall.core.ui.component.list.AppListItem
 import com.joker.coolmall.core.ui.component.stepper.QuantityStepper
@@ -35,24 +37,65 @@ import com.joker.coolmall.core.ui.component.text.AppText
 import com.joker.coolmall.core.ui.component.text.TextType
 
 /**
- * 商品数据模型
+ * 商品卡片组件
+ *
+ * 包含商品标题和多个规格的商品条目
+ *
+ * @param modifier 修饰符
+ * @param data 购物车数据
+ * @param onGoodsClick 商品点击回调
+ * @param onSpecClick 规格点击回调
+ * @param onQuantityChanged 数量变更回调，参数为商品ID和新数量
+ * @param enableQuantityStepper 是否启用数量调节器
+ * @param itemSelectSlot 商品选择框插槽生成器，参数为商品数据
+ * @param itemActionSlot 商品操作区域插槽生成器，参数为商品数据
  */
-data class OrderGoodsItemData(
-    val id: String,
-    val title: String,
-    val spec: String,
-    val price: Int, // 单位为分
-    val count: Int,
-    val selected: Boolean = false,
-    val imageUrl: String
-)
+@Composable
+fun OrderGoodsCard(
+    modifier: Modifier = Modifier,
+    data: Cart,
+    onGoodsClick: (Long) -> Unit = {},
+    onSpecClick: (Long) -> Unit = {},
+    onQuantityChanged: (Long, Int) -> Unit = { _, _ -> },
+    enableQuantityStepper: Boolean = true,
+    itemSelectSlot: (@Composable (CartGoodsSpec) -> Unit)? = null,
+    itemActionSlot: (@Composable (CartGoodsSpec) -> Unit)? = null
+) {
+    Card(modifier = modifier) {
+        // 商品标题
+        AppListItem(
+            title = data.goodsName,
+            onClick = { onGoodsClick(data.goodsId) }
+        )
+
+        SpaceVerticalMedium()
+
+        // 商品规格项列表
+        data.spec.forEach { item ->
+            OrderGoodsItem(
+                data = item,
+                onSpecClick = onSpecClick,
+                onQuantityChanged = { newCount -> onQuantityChanged(item.id, newCount) },
+                enableQuantityStepper = enableQuantityStepper,
+                selectSlot = itemSelectSlot?.let { { it(item) } },
+                actionSlot = itemActionSlot?.let { { it(item) } },
+                goodsId = data.goodsId,
+                goodsName = data.goodsName,
+                goodsMainPic = data.goodsMainPic
+            )
+        }
+    }
+}
 
 /**
  * 订单商品条目组件
  *
  * 该组件可以用于购物车、确认订单和订单详情等多个场景
  * @param modifier 组件修饰符
- * @param data 商品数据
+ * @param data 规格数据
+ * @param goodsId 商品 id
+ * @param goodsName 商品名称
+ * @param goodsMainPic 商品主图
  * @param onSpecClick 规格点击回调
  * @param onQuantityChanged 数量变更回调
  * @param enableQuantityStepper 是否启用数量调节器
@@ -62,8 +105,11 @@ data class OrderGoodsItemData(
 @Composable
 fun OrderGoodsItem(
     modifier: Modifier = Modifier,
-    data: OrderGoodsItemData,
-    onSpecClick: (String) -> Unit = {},
+    data: CartGoodsSpec,
+    goodsId: Long,
+    goodsName: String,
+    goodsMainPic: String,
+    onSpecClick: (Long) -> Unit = {},
     onQuantityChanged: (Int) -> Unit = {},
     enableQuantityStepper: Boolean = true,
     selectSlot: (@Composable () -> Unit)? = null,
@@ -89,7 +135,7 @@ fun OrderGoodsItem(
 
         // 商品图片
         NetWorkImage(
-            model = data.imageUrl,
+            model = data.images?.firstOrNull() ?: goodsMainPic,
             size = 90.dp,
             showBackground = true,
             cornerShape = ShapeSmall
@@ -113,7 +159,7 @@ fun OrderGoodsItem(
             ) {
                 Row {
                     AppText(
-                        text = data.spec,
+                        text = data.name,
                         style = MaterialTheme.typography.bodySmall,
                         type = TextType.SECONDARY
                     )
@@ -155,56 +201,6 @@ fun OrderGoodsItem(
 }
 
 /**
- * 商品卡片组件
- *
- * 包含商品标题和多个规格的商品条目
- *
- * @param modifier 修饰符
- * @param goodsTitle 商品标题
- * @param items 商品规格列表
- * @param onGoodsClick 商品点击回调
- * @param onSpecClick 规格点击回调
- * @param onQuantityChanged 数量变更回调，参数为商品ID和新数量
- * @param enableQuantityStepper 是否启用数量调节器
- * @param itemSelectSlot 商品选择框插槽生成器，参数为商品数据
- * @param itemActionSlot 商品操作区域插槽生成器，参数为商品数据
- */
-@Composable
-fun OrderGoodsCard(
-    modifier: Modifier = Modifier,
-    goodsTitle: String,
-    items: List<OrderGoodsItemData>,
-    onGoodsClick: (String) -> Unit = {},
-    onSpecClick: (String) -> Unit = {},
-    onQuantityChanged: (String, Int) -> Unit = { _, _ -> },
-    enableQuantityStepper: Boolean = true,
-    itemSelectSlot: (@Composable (OrderGoodsItemData) -> Unit)? = null,
-    itemActionSlot: (@Composable (OrderGoodsItemData) -> Unit)? = null
-) {
-    Card(modifier = modifier) {
-        // 商品标题
-        AppListItem(
-            title = goodsTitle,
-            onClick = { onGoodsClick(goodsTitle) }
-        )
-
-        SpaceVerticalMedium()
-
-        // 商品规格项列表
-        items.forEach { item ->
-            OrderGoodsItem(
-                data = item,
-                onSpecClick = onSpecClick,
-                onQuantityChanged = { newCount -> onQuantityChanged(item.id, newCount) },
-                enableQuantityStepper = enableQuantityStepper,
-                selectSlot = itemSelectSlot?.let { { it(item) } },
-                actionSlot = itemActionSlot?.let { { it(item) } }
-            )
-        }
-    }
-}
-
-/**
  * 订单商品条目预览
  *
  * 展示商品条目的基本样式，不包含选择框，启用数量调节器
@@ -213,16 +209,21 @@ fun OrderGoodsCard(
 @Composable
 private fun OrderGoodsItemPreview() {
     AppTheme {
+        val spec = CartGoodsSpec(
+            id = 1L,
+            goodsId = 1L,
+            name = "雪岩白 12GB+256GB",
+            price = 249900,
+            count = 2,
+            stock = 100,
+            images = listOf("https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png")
+        )
+        
         OrderGoodsItem(
-            data = OrderGoodsItemData(
-                id = "1",
-                title = "Redmi K80",
-                spec = "雪岩白 12GB+256GB",
-                price = 249900,
-                count = 2,
-                selected = true,
-                imageUrl = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
-            ),
+            data = spec,
+            goodsId = 1L,
+            goodsName = "Redmi K80",
+            goodsMainPic = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png",
             onSpecClick = {},
             onQuantityChanged = {}
         )
@@ -238,16 +239,21 @@ private fun OrderGoodsItemPreview() {
 @Composable
 private fun OrderGoodsItemWithCheckboxPreview() {
     AppTheme {
+        val spec = CartGoodsSpec(
+            id = 1L,
+            goodsId = 1L,
+            name = "雪岩白 12GB+256GB",
+            price = 249900,
+            count = 2,
+            stock = 100,
+            images = listOf("https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png")
+        )
+        
         OrderGoodsItem(
-            data = OrderGoodsItemData(
-                id = "1",
-                title = "Redmi K80",
-                spec = "雪岩白 12GB+256GB",
-                price = 249900,
-                count = 2,
-                selected = true,
-                imageUrl = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
-            ),
+            data = spec,
+            goodsId = 1L,
+            goodsName = "Redmi K80",
+            goodsMainPic = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png",
             onSpecClick = {},
             onQuantityChanged = {},
             selectSlot = {
@@ -279,16 +285,21 @@ private fun OrderGoodsItemWithCheckboxPreview() {
 @Composable
 private fun OrderGoodsItemNoStepperPreview() {
     AppTheme {
+        val spec = CartGoodsSpec(
+            id = 1L,
+            goodsId = 1L,
+            name = "雪岩白 12GB+256GB",
+            price = 249900,
+            count = 2,
+            stock = 100,
+            images = null
+        )
+        
         OrderGoodsItem(
-            data = OrderGoodsItemData(
-                id = "1",
-                title = "Redmi K80",
-                spec = "雪岩白 12GB+256GB",
-                price = 249900,
-                count = 2,
-                selected = true,
-                imageUrl = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
-            ),
+            data = spec,
+            goodsId = 1L,
+            goodsName = "Redmi K80",
+            goodsMainPic = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png",
             onSpecClick = {},
             enableQuantityStepper = false
         )
@@ -304,28 +315,34 @@ private fun OrderGoodsItemNoStepperPreview() {
 @Composable
 private fun OrderGoodsCardPreview() {
     AppTheme {
-        OrderGoodsCard(
-            goodsTitle = "Redmi K80",
-            items = listOf(
-                OrderGoodsItemData(
-                    id = "1",
-                    title = "Redmi K80",
-                    spec = "雪岩白 12GB+256GB",
+        val cart = Cart().apply {
+            goodsId = 1L
+            goodsName = "Redmi K80"
+            goodsMainPic = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
+            spec = listOf(
+                CartGoodsSpec(
+                    id = 1L,
+                    goodsId = 1L,
+                    name = "雪岩白 12GB+256GB",
                     price = 249900,
                     count = 2,
-                    selected = true,
-                    imageUrl = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
+                    stock = 100,
+                    images = listOf("https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png")
                 ),
-                OrderGoodsItemData(
-                    id = "2",
-                    title = "Redmi K80",
-                    spec = "雪岩白 16GB+1TB",
+                CartGoodsSpec(
+                    id = 2L,
+                    goodsId = 1L,
+                    name = "雪岩白 16GB+1TB",
                     price = 359900,
                     count = 1,
-                    selected = true,
-                    imageUrl = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
+                    stock = 50,
+                    images = null
                 )
             )
+        }
+        
+        OrderGoodsCard(
+            data = cart
         )
     }
 }
@@ -339,28 +356,34 @@ private fun OrderGoodsCardPreview() {
 @Composable
 private fun OrderGoodsCardDarkPreview() {
     AppTheme(darkTheme = true) {
-        OrderGoodsCard(
-            goodsTitle = "Redmi K80",
-            items = listOf(
-                OrderGoodsItemData(
-                    id = "1",
-                    title = "Redmi K80",
-                    spec = "雪岩白 12GB+256GB",
+        val cart = Cart().apply {
+            goodsId = 1L
+            goodsName = "Redmi K80"
+            goodsMainPic = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
+            spec = listOf(
+                CartGoodsSpec(
+                    id = 1L,
+                    goodsId = 1L,
+                    name = "雪岩白 12GB+256GB",
                     price = 249900,
                     count = 2,
-                    selected = true,
-                    imageUrl = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
+                    stock = 100,
+                    images = listOf("https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png")
                 ),
-                OrderGoodsItemData(
-                    id = "2",
-                    title = "Redmi K80",
-                    spec = "雪岩白 16GB+1TB",
+                CartGoodsSpec(
+                    id = 2L,
+                    goodsId = 1L,
+                    name = "雪岩白 16GB+1TB",
                     price = 359900,
                     count = 1,
-                    selected = true,
-                    imageUrl = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
+                    stock = 50,
+                    images = null
                 )
             )
+        }
+        
+        OrderGoodsCard(
+            data = cart
         )
     }
 } 

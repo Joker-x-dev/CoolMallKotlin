@@ -16,15 +16,15 @@ class Cart {
     /**
      * 商品名称
      */
-    var goodsName: String? = null
+    var goodsName: String = ""
 
     /**
      * 商品主图
      */
-    var goodsMainPic: String? = null
+    var goodsMainPic: String = ""
 
     /**
      * 规格
      */
-    var spec: List<GoodsSpec>? = null
+    var spec: List<CartGoodsSpec> = listOf()
 }
