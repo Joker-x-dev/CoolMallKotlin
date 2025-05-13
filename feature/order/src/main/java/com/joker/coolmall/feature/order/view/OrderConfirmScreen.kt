@@ -33,7 +33,8 @@ import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingXSmall
 import com.joker.coolmall.core.model.entity.Address
 import com.joker.coolmall.core.model.entity.Cart
-import com.joker.coolmall.core.model.entity.CartGoodsSpec
+import com.joker.coolmall.core.model.preview.previewAddress
+import com.joker.coolmall.core.model.preview.previewCartList
 import com.joker.coolmall.core.ui.component.address.AddressCard
 import com.joker.coolmall.core.ui.component.button.AppButtonFixed
 import com.joker.coolmall.core.ui.component.button.ButtonShape
@@ -62,7 +63,9 @@ internal fun OrderConfirmRoute(
     OrderConfirmScreen(
         uiState = uiState,
         onRetry = viewModel::retryRequest,
-
+        onBackClick = viewModel::navigateBack,
+        cartList = viewModel.cartList,
+        onSubmitOrderClick = viewModel::onSubmitOrderClick
     )
 }
 
@@ -70,22 +73,34 @@ internal fun OrderConfirmRoute(
  * 确认订单页面
  *
  * @param onRetry 重试请求回调
+ * @param cartList 购物车列表
+ * @param onSubmitOrderClick 提交订单点击回调
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun OrderConfirmScreen(
-    uiState: BaseNetWorkUiState<Any> = BaseNetWorkUiState.Loading,
-    onRetry: () -> Unit = {}
+    uiState: BaseNetWorkUiState<Address> = BaseNetWorkUiState.Loading,
+    onRetry: () -> Unit = {},
+    onBackClick: () -> Unit = {},
+    cartList: List<Cart> = emptyList(),
+    onSubmitOrderClick: () -> Unit = {}
 ) {
-    // 订单总金额（按UI图所示，单位为分）
-    val totalPrice = 749800  // 7498.00元
+    // 计算订单总金额（单位：分）
+    val totalPrice = remember(cartList) {
+        cartList.sumOf { cart ->
+            cart.spec.sumOf { spec ->
+                spec.price * spec.count
+            }
+        }
+    }
 
     AppScaffold(
+        onBackClick = onBackClick,
 //        title = R.string.order_confirm,
         bottomBar = {
             OrderBottomBar(
                 totalPrice = totalPrice,
-                onSubmitClick = { /* 提交订单 */ }
+                onSubmitClick = onSubmitOrderClick
             )
         }
     ) {
@@ -93,7 +108,7 @@ internal fun OrderConfirmScreen(
             uiState = uiState,
             onRetry = onRetry
         ) {
-            OrderConfirmContentView(totalPrice)
+            OrderConfirmContentView(it, totalPrice, cartList)
         }
     }
 }
@@ -103,7 +118,11 @@ internal fun OrderConfirmScreen(
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun OrderConfirmContentView(totalPrice: Int = 749800) {
+private fun OrderConfirmContentView(
+    data: Address,
+    totalPrice: Int,
+    cartList: List<Cart>
+) {
     // 订单备注状态
     var remark by remember { mutableStateOf("") }
 
@@ -112,60 +131,13 @@ private fun OrderConfirmContentView(totalPrice: Int = 749800) {
     ) {
         // 地址选择卡片
         AddressCard(
-            address = Address(
-                id = 1,
-                province = "广东省",
-                city = "广州市",
-                district = "白云区",
-                address = "XXXX街道 XXX 号",
-                contact = "小明",
-                phone = "188****8888",
-                isDefault = true
-            ),
+            address = data,
             onClick = { /* 地址点击回调 */ },
             addressSelected = true
         )
 
-        // 商品列表
-        val cartItems = remember {
-            listOf(
-                Cart().apply {
-                    goodsId = 1L
-                    goodsName = "Redmi 14C"
-                    goodsMainPic = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
-                    spec = listOf(
-                        CartGoodsSpec(
-                            id = 1L,
-                            goodsId = 1L,
-                            name = "星岩黑 4GB+64GB",
-                            price = 49900,
-                            count = 1,
-                            stock = 200,
-                            images = listOf("https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png")
-                        )
-                    )
-                },
-                Cart().apply {
-                    goodsId = 2L
-                    goodsName = "Xiaomi 15 Ultra"
-                    goodsMainPic = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
-                    spec = listOf(
-                        CartGoodsSpec(
-                            id = 2L,
-                            goodsId = 2L,
-                            name = "经典黑银 16GB+512GB",
-                            price = 699900,
-                            count = 1,
-                            stock = 30,
-                            images = listOf("https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png")
-                        )
-                    )
-                }
-            )
-        }
-
         // 订单商品卡片
-        cartItems.forEach { cart ->
+        cartList.forEach { cart ->
             OrderGoodsCard(
                 data = cart,
                 enableQuantityStepper = false, // 确认订单页面不需要调整数量
@@ -185,7 +157,7 @@ private fun OrderConfirmContentView(totalPrice: Int = 749800) {
             )
             AppListItem(
                 title = "商品总价",
-                trailingText = "¥${totalPrice / 100.0}0",
+                trailingText = "¥${totalPrice}",
                 showArrow = false
             )
 
@@ -251,14 +223,14 @@ private fun OrderBottomBar(
         ) {
 
             AppText(
-                text = "¥${totalPrice / 100.0}0",
+                text = "¥${totalPrice}",
                 color = MaterialTheme.colorScheme.error,
                 size = TextSize.TITLE_LARGE
             )
 
             AppButtonFixed(
                 text = "提交订单",
-                onClick = {},
+                onClick = onSubmitClick,
                 size = ButtonSize.MINI,
                 style = ButtonStyle.GRADIENT,
                 shape = ButtonShape.SQUARE
@@ -273,8 +245,9 @@ internal fun OrderConfirmScreenPreview() {
     AppTheme {
         OrderConfirmScreen(
             uiState = BaseNetWorkUiState.Success(
-                data = Any()
-            )
+                data = previewAddress
+            ),
+            cartList = previewCartList
         )
     }
 }
@@ -285,8 +258,9 @@ internal fun OrderConfirmScreenPreviewDark() {
     AppTheme(darkTheme = true) {
         OrderConfirmScreen(
             uiState = BaseNetWorkUiState.Success(
-                data = Any()
-            )
+                data = previewAddress
+            ),
+            cartList = previewCartList
         )
     }
 }

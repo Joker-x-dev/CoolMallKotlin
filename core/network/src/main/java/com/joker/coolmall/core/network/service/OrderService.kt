@@ -1,5 +1,7 @@
 package com.joker.coolmall.core.network.service
 
+import com.joker.coolmall.core.model.entity.Order
+import com.joker.coolmall.core.model.request.CreateOrderRequest
 import com.joker.coolmall.core.model.response.NetworkResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -45,7 +47,7 @@ interface OrderService {
      * 创建订单
      */
     @POST("order/info/create")
-    suspend fun createOrder(@Body params: Any): NetworkResponse<Any>
+    suspend fun createOrder(@Body params: CreateOrderRequest): NetworkResponse<Order>
 
     /**
      * 取消订单

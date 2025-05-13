@@ -174,7 +174,7 @@ fun OrderGoodsItem(
             SpaceBetweenRow {
                 // 价格
                 Text(
-                    text = "¥${data.price / 100.0}0",
+                    text = "¥${data.price}",
                     style = MaterialTheme.typography.bodyLarge.copy(
                         color = MaterialTheme.colorScheme.error,
                         fontWeight = MaterialTheme.typography.bodyLarge.fontWeight

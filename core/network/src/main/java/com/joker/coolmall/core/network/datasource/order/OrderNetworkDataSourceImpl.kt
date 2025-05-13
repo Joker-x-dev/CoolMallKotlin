@@ -1,5 +1,7 @@
 package com.joker.coolmall.core.network.datasource.order
 
+import com.joker.coolmall.core.model.entity.Order
+import com.joker.coolmall.core.model.request.CreateOrderRequest
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.base.BaseNetworkDataSource
 import com.joker.coolmall.core.network.service.OrderService
@@ -71,7 +73,7 @@ class OrderNetworkDataSourceImpl @Inject constructor(
      * @param params 请求参数，包含商品、地址、支付等信息
      * @return 创建结果响应数据
      */
-    override suspend fun createOrder(params: Any): NetworkResponse<Any> {
+    override suspend fun createOrder(params: CreateOrderRequest): NetworkResponse<Order> {
         return orderService.createOrder(params)
     }
 

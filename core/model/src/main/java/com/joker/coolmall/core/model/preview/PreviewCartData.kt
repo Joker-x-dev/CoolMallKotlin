@@ -6,33 +6,42 @@ import com.joker.coolmall.core.model.entity.CartGoodsSpec
 val previewCartList = listOf(
     Cart().apply {
         goodsId = 1L
-        goodsName = "苹果 iPhone 15 Pro"
-        goodsMainPic = "https://example.com/iphone15pro.jpg"
+        goodsName = "Redmi K80"
+        goodsMainPic = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
         spec = listOf(
             CartGoodsSpec(
                 id = 101L,
                 goodsId = 1L,
-                name = "256GB 银色",
-                price = 8999,
-                stock = 10,
+                name = "雪岩白 12GB+256GB",
+                price = 249900,  // 2499.00
+                stock = 100,
+                count = 2,
+                images = listOf("https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png")
+            ),
+            CartGoodsSpec(
+                id = 102L,
+                goodsId = 1L,
+                name = "雪岩白 16GB+1TB",
+                price = 359900,  // 3599.00
+                stock = 50,
                 count = 1,
-                images = listOf("https://example.com/iphone15pro_silver.jpg")
+                images = listOf("https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png")
             )
         )
     },
     Cart().apply {
         goodsId = 2L
-        goodsName = "小米 14 Ultra"
-        goodsMainPic = "https://example.com/xiaomi14ultra.jpg"
+        goodsName = "Redmi Note 13 Pro+"
+        goodsMainPic = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
         spec = listOf(
             CartGoodsSpec(
-                id = 102L,
+                id = 201L,
                 goodsId = 2L,
-                name = "12GB+256GB 黑色",
-                price = 6499,
-                stock = 5,
-                count = 2,
-                images = listOf("https://example.com/xiaomi14ultra_black.jpg")
+                name = "墨羽 12GB+512GB",
+                price = 199900,  // 1999.00
+                stock = 200,
+                count = 1,
+                images = listOf("https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png")
             )
         )
     }

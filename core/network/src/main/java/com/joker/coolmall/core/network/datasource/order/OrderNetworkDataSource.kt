@@ -1,5 +1,7 @@
 package com.joker.coolmall.core.network.datasource.order
 
+import com.joker.coolmall.core.model.entity.Order
+import com.joker.coolmall.core.model.request.CreateOrderRequest
 import com.joker.coolmall.core.model.response.NetworkResponse
 
 /**
@@ -35,7 +37,7 @@ interface OrderNetworkDataSource {
     /**
      * 创建订单
      */
-    suspend fun createOrder(params: Any): NetworkResponse<Any>
+    suspend fun createOrder(params: CreateOrderRequest): NetworkResponse<Order>
 
     /**
      * 取消订单

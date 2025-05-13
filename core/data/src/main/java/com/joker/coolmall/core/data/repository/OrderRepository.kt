@@ -1,5 +1,7 @@
 package com.joker.coolmall.core.data.repository
 
+import com.joker.coolmall.core.model.entity.Order
+import com.joker.coolmall.core.model.request.CreateOrderRequest
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.datasource.order.OrderNetworkDataSource
 import kotlinx.coroutines.Dispatchers
@@ -52,7 +54,7 @@ class OrderRepository @Inject constructor(
     /**
      * 创建订单
      */
-    fun createOrder(params: Any): Flow<NetworkResponse<Any>> = flow {
+    fun createOrder(params: CreateOrderRequest): Flow<NetworkResponse<Order>> = flow {
         emit(orderNetworkDataSource.createOrder(params))
     }.flowOn(Dispatchers.IO)
 
