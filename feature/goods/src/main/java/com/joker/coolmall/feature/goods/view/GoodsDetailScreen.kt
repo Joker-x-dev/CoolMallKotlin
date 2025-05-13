@@ -80,9 +80,9 @@ import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
-import com.joker.coolmall.core.model.SelectedGoods
-import com.joker.coolmall.core.model.Goods
-import com.joker.coolmall.core.model.GoodsSpec
+import com.joker.coolmall.core.model.entity.SelectedGoods
+import com.joker.coolmall.core.model.entity.Goods
+import com.joker.coolmall.core.model.entity.GoodsSpec
 import com.joker.coolmall.core.ui.component.button.AppButtonBordered
 import com.joker.coolmall.core.ui.component.button.AppButtonFixed
 import com.joker.coolmall.core.ui.component.button.ButtonShape

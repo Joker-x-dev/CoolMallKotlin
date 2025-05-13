@@ -1,6 +1,6 @@
 package com.joker.coolmall.feature.goods.state
 
-import com.joker.coolmall.core.model.Goods
+import com.joker.coolmall.core.model.entity.Goods
 
 /**
  * 商品详情UI状态封装类

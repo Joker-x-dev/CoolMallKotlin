@@ -1,6 +1,6 @@
 package com.joker.coolmall.feature.main.model
 
-import com.joker.coolmall.core.model.Category
+import com.joker.coolmall.core.model.entity.Category
 
 /**
  * 商品分类树结构

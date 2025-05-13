@@ -5,9 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
 import com.joker.coolmall.core.data.repository.GoodsRepository
-import com.joker.coolmall.core.model.Goods
-import com.joker.coolmall.core.model.GoodsSpec
-import com.joker.coolmall.core.model.SelectedGoods
+import com.joker.coolmall.core.model.entity.Goods
+import com.joker.coolmall.core.model.entity.GoodsSpec
+import com.joker.coolmall.core.model.entity.SelectedGoods
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.util.storage.MMKVUtils
 import com.joker.coolmall.feature.goods.navigation.GoodsDetailRoutes

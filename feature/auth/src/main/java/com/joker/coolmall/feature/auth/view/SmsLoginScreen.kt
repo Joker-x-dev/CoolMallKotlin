@@ -17,7 +17,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXLarge
-import com.joker.coolmall.core.model.Captcha
+import com.joker.coolmall.core.model.entity.Captcha
 import com.joker.coolmall.core.ui.component.button.AppButton
 import com.joker.coolmall.core.ui.component.button.ButtonShape
 import com.joker.coolmall.feature.auth.R

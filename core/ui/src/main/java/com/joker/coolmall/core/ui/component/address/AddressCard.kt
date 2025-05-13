@@ -28,7 +28,7 @@ import com.joker.coolmall.core.designsystem.theme.ShapeMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalLarge
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
-import com.joker.coolmall.core.model.Address
+import com.joker.coolmall.core.model.entity.Address
 import com.joker.coolmall.core.ui.component.divider.WeDivider
 import com.joker.coolmall.core.ui.component.tag.Tag
 import com.joker.coolmall.core.ui.component.tag.TagSize

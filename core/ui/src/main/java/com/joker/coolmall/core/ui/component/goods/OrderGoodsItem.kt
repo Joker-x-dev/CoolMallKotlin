@@ -28,8 +28,8 @@ import com.joker.coolmall.core.designsystem.theme.SpacePaddingLarge
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
-import com.joker.coolmall.core.model.Cart
-import com.joker.coolmall.core.model.CartGoodsSpec
+import com.joker.coolmall.core.model.entity.Cart
+import com.joker.coolmall.core.model.entity.CartGoodsSpec
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
 import com.joker.coolmall.core.ui.component.list.AppListItem
 import com.joker.coolmall.core.ui.component.stepper.QuantityStepper

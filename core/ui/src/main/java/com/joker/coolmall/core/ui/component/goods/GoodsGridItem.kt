@@ -22,7 +22,7 @@ import com.joker.coolmall.core.designsystem.theme.ColorDanger
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.designsystem.theme.TextTertiaryLight
-import com.joker.coolmall.core.model.Goods
+import com.joker.coolmall.core.model.entity.Goods
 
 /**
  * 商品网格卡片

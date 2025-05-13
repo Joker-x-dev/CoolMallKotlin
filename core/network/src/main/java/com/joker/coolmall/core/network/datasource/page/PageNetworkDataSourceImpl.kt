@@ -1,6 +1,6 @@
 package com.joker.coolmall.core.network.datasource.page
 
-import com.joker.coolmall.core.model.Home
+import com.joker.coolmall.core.model.entity.Home
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.base.BaseNetworkDataSource
 import com.joker.coolmall.core.network.service.PageService

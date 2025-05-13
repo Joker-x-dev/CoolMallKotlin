@@ -1,7 +1,7 @@
 package com.joker.coolmall.core.data.repository
 
 import com.joker.coolmall.core.datastore.datasource.auth.AuthStoreDataSource
-import com.joker.coolmall.core.model.Auth
+import com.joker.coolmall.core.model.entity.Auth
 import javax.inject.Inject
 import javax.inject.Singleton
 

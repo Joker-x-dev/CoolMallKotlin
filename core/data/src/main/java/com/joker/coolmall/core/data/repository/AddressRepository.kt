@@ -1,8 +1,8 @@
 package com.joker.coolmall.core.data.repository
 
-import com.joker.coolmall.core.model.Address
-import com.joker.coolmall.core.model.Id
-import com.joker.coolmall.core.model.Ids
+import com.joker.coolmall.core.model.entity.Address
+import com.joker.coolmall.core.model.common.Id
+import com.joker.coolmall.core.model.common.Ids
 import com.joker.coolmall.core.model.request.PageRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse

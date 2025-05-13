@@ -2,7 +2,7 @@ package com.joker.coolmall.feature.main.viewmodel
 
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
 import com.joker.coolmall.core.data.repository.PageRepository
-import com.joker.coolmall.core.model.Home
+import com.joker.coolmall.core.model.entity.Home
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.GoodsRoutes

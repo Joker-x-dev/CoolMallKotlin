@@ -1,6 +1,6 @@
 package com.joker.coolmall.feature.main.state
 
-import com.joker.coolmall.core.model.Home
+import com.joker.coolmall.core.model.entity.Home
 
 /**
  * 首页UI状态封装类

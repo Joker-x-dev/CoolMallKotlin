@@ -1,6 +1,7 @@
 package com.joker.coolmall.core.datastore.datasource.userinfo
 
-import User
+import com.joker.coolmall.core.model.entity.User
+
 
 /**
  * 本地用户信息相关数据源接口

@@ -1,6 +1,6 @@
 package com.joker.coolmall.core.data.repository
 
-import User
+import com.joker.coolmall.core.model.entity.User
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.datasource.userinfo.UserInfoNetworkDataSource
 import kotlinx.coroutines.Dispatchers

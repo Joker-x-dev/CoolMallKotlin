@@ -1,7 +1,7 @@
 package com.joker.coolmall.core.model.preview
 
-import com.joker.coolmall.core.model.Goods
-import com.joker.coolmall.core.model.GoodsSpec
+import com.joker.coolmall.core.model.entity.Goods
+import com.joker.coolmall.core.model.entity.GoodsSpec
 
 val previewGoodsList = listOf(
     Goods(

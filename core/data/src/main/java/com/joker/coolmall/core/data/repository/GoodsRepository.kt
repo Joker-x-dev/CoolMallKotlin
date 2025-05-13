@@ -1,9 +1,8 @@
 package com.joker.coolmall.core.data.repository
 
-import com.joker.coolmall.core.model.Category
-import com.joker.coolmall.core.model.Goods
-import com.joker.coolmall.core.model.GoodsSpec
-import com.joker.coolmall.core.model.response.NetworkPageMeta
+import com.joker.coolmall.core.model.entity.Category
+import com.joker.coolmall.core.model.entity.Goods
+import com.joker.coolmall.core.model.entity.GoodsSpec
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.datasource.goods.GoodsNetworkDataSource
 import kotlinx.coroutines.Dispatchers

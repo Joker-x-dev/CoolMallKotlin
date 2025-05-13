@@ -1,8 +1,7 @@
-package com.joker.coolmall.core.model
+package com.joker.coolmall.core.model.entity
 
 import kotlinx.serialization.EncodeDefault
 import kotlinx.serialization.EncodeDefault.Mode
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 /**

@@ -1,7 +1,7 @@
 package com.joker.coolmall.core.model.preview
 
-import com.joker.coolmall.core.model.Cart
-import com.joker.coolmall.core.model.CartGoodsSpec
+import com.joker.coolmall.core.model.entity.Cart
+import com.joker.coolmall.core.model.entity.CartGoodsSpec
 
 val previewCartList = listOf(
     Cart().apply {

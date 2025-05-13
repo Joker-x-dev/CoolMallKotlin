@@ -1,6 +1,6 @@
 package com.joker.coolmall.core.datastore.datasource.auth
 
-import com.joker.coolmall.core.model.Auth
+import com.joker.coolmall.core.model.entity.Auth
 
 /**
  * 本地用户认证相关数据源接口

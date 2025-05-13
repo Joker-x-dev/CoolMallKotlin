@@ -5,8 +5,8 @@ import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
 import com.joker.coolmall.core.data.repository.AuthRepository
 import com.joker.coolmall.core.data.state.AppState
-import com.joker.coolmall.core.model.Auth
-import com.joker.coolmall.core.model.Captcha
+import com.joker.coolmall.core.model.entity.Auth
+import com.joker.coolmall.core.model.entity.Captcha
 import com.joker.coolmall.core.util.notification.NotificationUtil
 import com.joker.coolmall.core.util.toast.ToastUtils
 import com.joker.coolmall.core.util.validation.ValidationUtil

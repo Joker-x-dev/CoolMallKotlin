@@ -2,9 +2,8 @@ package com.joker.coolmall.feature.order.viewmodel
 
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
 import com.joker.coolmall.core.data.repository.AddressRepository
-import com.joker.coolmall.core.model.Address
-import com.joker.coolmall.core.model.Cart
-import com.joker.coolmall.core.model.SelectedGoods
+import com.joker.coolmall.core.model.entity.Address
+import com.joker.coolmall.core.model.entity.SelectedGoods
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.util.storage.MMKVUtils
 import com.joker.coolmall.navigation.AppNavigator

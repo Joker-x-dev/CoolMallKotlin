@@ -1,6 +1,6 @@
 package com.joker.coolmall.core.network.datasource.userinfo
 
-import User
+import com.joker.coolmall.core.model.entity.User
 import com.joker.coolmall.core.model.response.NetworkResponse
 
 /**

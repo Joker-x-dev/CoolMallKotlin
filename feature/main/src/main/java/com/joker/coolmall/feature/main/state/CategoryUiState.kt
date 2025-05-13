@@ -1,6 +1,5 @@
 package com.joker.coolmall.feature.main.state
 
-import com.joker.coolmall.core.model.Category
 import com.joker.coolmall.feature.main.model.CategoryTree
 
 /**

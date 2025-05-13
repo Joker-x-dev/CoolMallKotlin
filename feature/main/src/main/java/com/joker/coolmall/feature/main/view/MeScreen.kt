@@ -1,6 +1,5 @@
 package com.joker.coolmall.feature.main.view
 
-import User
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -52,6 +51,7 @@ import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
+import com.joker.coolmall.core.model.entity.User
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
 import com.joker.coolmall.core.ui.component.list.AppListItem
 import com.joker.coolmall.core.ui.component.text.AppText

@@ -47,10 +47,10 @@ import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
-import com.joker.coolmall.core.model.Banner
-import com.joker.coolmall.core.model.Category
-import com.joker.coolmall.core.model.Goods
-import com.joker.coolmall.core.model.Home
+import com.joker.coolmall.core.model.entity.Banner
+import com.joker.coolmall.core.model.entity.Category
+import com.joker.coolmall.core.model.entity.Goods
+import com.joker.coolmall.core.model.entity.Home
 import com.joker.coolmall.core.ui.component.card.AppCard
 import com.joker.coolmall.core.ui.component.goods.GoodsGridItem
 import com.joker.coolmall.core.ui.component.image.NetWorkImage

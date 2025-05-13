@@ -1,9 +1,9 @@
 package com.joker.coolmall.feature.main.viewmodel
 
-import User
 import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
 import com.joker.coolmall.core.data.state.AppState
+import com.joker.coolmall.core.model.entity.User
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.AuthRoutes
 import com.joker.coolmall.navigation.routes.UserRoutes

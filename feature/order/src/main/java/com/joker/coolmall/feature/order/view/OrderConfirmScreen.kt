@@ -31,9 +31,9 @@ import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.ShapeMedium
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingXSmall
-import com.joker.coolmall.core.model.Address
-import com.joker.coolmall.core.model.Cart
-import com.joker.coolmall.core.model.CartGoodsSpec
+import com.joker.coolmall.core.model.entity.Address
+import com.joker.coolmall.core.model.entity.Cart
+import com.joker.coolmall.core.model.entity.CartGoodsSpec
 import com.joker.coolmall.core.ui.component.address.AddressCard
 import com.joker.coolmall.core.ui.component.button.AppButtonFixed
 import com.joker.coolmall.core.ui.component.button.ButtonShape

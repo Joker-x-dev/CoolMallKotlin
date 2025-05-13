@@ -1,6 +1,6 @@
 package com.joker.coolmall.core.network.service
 
-import User
+import com.joker.coolmall.core.model.entity.User
 import com.joker.coolmall.core.model.response.NetworkResponse
 import retrofit2.http.Body
 import retrofit2.http.GET

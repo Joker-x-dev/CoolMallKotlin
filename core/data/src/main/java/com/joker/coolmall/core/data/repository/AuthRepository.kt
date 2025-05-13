@@ -1,7 +1,7 @@
 package com.joker.coolmall.core.data.repository
 
-import com.joker.coolmall.core.model.Auth
-import com.joker.coolmall.core.model.Captcha
+import com.joker.coolmall.core.model.entity.Auth
+import com.joker.coolmall.core.model.entity.Captcha
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.datasource.auth.AuthNetworkDataSource
 import kotlinx.coroutines.Dispatchers
