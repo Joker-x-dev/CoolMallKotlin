@@ -30,7 +30,6 @@ import com.joker.coolmall.core.designsystem.component.VerticalList
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.ShapeMedium
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
-import com.joker.coolmall.core.designsystem.theme.SpacePaddingXSmall
 import com.joker.coolmall.core.model.entity.Address
 import com.joker.coolmall.core.model.entity.Cart
 import com.joker.coolmall.core.model.preview.previewAddress
@@ -148,12 +147,12 @@ private fun OrderConfirmContentView(
 
         // 价格明细卡片
         Card {
-            TitleWithLine(
-                text = "价格明细",
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = SpacePaddingMedium)
-                    .padding(top = SpacePaddingMedium, bottom = SpacePaddingXSmall)
+            AppListItem(
+                title = "",
+                showArrow = false,
+                leadingContent = {
+                    TitleWithLine(text = "价格明细")
+                }
             )
             AppListItem(
                 title = "商品总价",
