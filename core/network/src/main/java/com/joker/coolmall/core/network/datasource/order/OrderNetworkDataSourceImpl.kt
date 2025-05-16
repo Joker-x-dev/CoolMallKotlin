@@ -2,6 +2,8 @@ package com.joker.coolmall.core.network.datasource.order
 
 import com.joker.coolmall.core.model.entity.Order
 import com.joker.coolmall.core.model.request.CreateOrderRequest
+import com.joker.coolmall.core.model.request.OrderPageRequest
+import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.base.BaseNetworkDataSource
 import com.joker.coolmall.core.network.service.OrderService
@@ -63,7 +65,7 @@ class OrderNetworkDataSourceImpl @Inject constructor(
      * @param params 请求参数，包含分页和查询条件
      * @return 订单分页列表响应数据
      */
-    override suspend fun getOrderPage(params: Any): NetworkResponse<Any> {
+    override suspend fun getOrderPage(params: OrderPageRequest): NetworkResponse<NetworkPageData<Order>> {
         return orderService.getOrderPage(params)
     }
 

@@ -2,6 +2,8 @@ package com.joker.coolmall.core.network.datasource.order
 
 import com.joker.coolmall.core.model.entity.Order
 import com.joker.coolmall.core.model.request.CreateOrderRequest
+import com.joker.coolmall.core.model.request.OrderPageRequest
+import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
 
 /**
@@ -32,7 +34,7 @@ interface OrderNetworkDataSource {
     /**
      * 分页查询订单
      */
-    suspend fun getOrderPage(params: Any): NetworkResponse<Any>
+    suspend fun getOrderPage(params: OrderPageRequest): NetworkResponse<NetworkPageData<Order>>
 
     /**
      * 创建订单

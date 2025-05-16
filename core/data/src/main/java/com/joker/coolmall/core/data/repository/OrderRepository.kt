@@ -2,6 +2,8 @@ package com.joker.coolmall.core.data.repository
 
 import com.joker.coolmall.core.model.entity.Order
 import com.joker.coolmall.core.model.request.CreateOrderRequest
+import com.joker.coolmall.core.model.request.OrderPageRequest
+import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.datasource.order.OrderNetworkDataSource
 import kotlinx.coroutines.Dispatchers
@@ -47,9 +49,10 @@ class OrderRepository @Inject constructor(
     /**
      * 分页查询订单
      */
-    fun getOrderPage(params: Any): Flow<NetworkResponse<Any>> = flow {
-        emit(orderNetworkDataSource.getOrderPage(params))
-    }.flowOn(Dispatchers.IO)
+    fun getOrderPage(params: OrderPageRequest): Flow<NetworkResponse<NetworkPageData<Order>>> =
+        flow {
+            emit(orderNetworkDataSource.getOrderPage(params))
+        }.flowOn(Dispatchers.IO)
 
     /**
      * 创建订单

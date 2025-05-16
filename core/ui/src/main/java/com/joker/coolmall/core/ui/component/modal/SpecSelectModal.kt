@@ -76,6 +76,7 @@ import com.joker.coolmall.core.ui.component.loading.PageLoading
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkView
 import com.joker.coolmall.core.ui.component.stepper.QuantityStepper
 import com.joker.coolmall.core.ui.component.text.AppText
+import com.joker.coolmall.core.ui.component.text.PriceText
 import com.joker.coolmall.core.ui.component.text.TextSize
 import com.joker.coolmall.core.ui.component.text.TextType
 import com.joker.coolmall.core.ui.component.title.TitleWithLine
@@ -360,10 +361,15 @@ private fun SpecHeaderInfo(
 
         Column {
             // 价格 - 选中规格时显示规格价格，否则显示商品价格
-            AppText(
+            /*AppText(
                 text = "¥${selectedSpec?.price ?: goods.price}",
                 size = TextSize.DISPLAY_LARGE,
                 color = ColorDanger
+            )*/
+
+            PriceText(
+                selectedSpec?.price ?: goods.price,
+                integerTextSize = TextSize.DISPLAY_LARGE
             )
 
             SpaceVerticalSmall()

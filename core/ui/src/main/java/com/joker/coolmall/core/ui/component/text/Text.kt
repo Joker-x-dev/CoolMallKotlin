@@ -115,7 +115,12 @@ enum class TextSize {
     /**
      * 小号：12sp，用于辅助文字、标签
      */
-    BODY_MEDIUM
+    BODY_MEDIUM,
+
+    /**
+     * 超小：10sp，用于极小的辅助文字
+     */
+    BODY_SMALL
 }
 
 /**
@@ -187,6 +192,7 @@ fun AppText(
         TextSize.TITLE_MEDIUM -> MaterialTheme.typography.titleMedium
         TextSize.BODY_LARGE -> MaterialTheme.typography.bodyLarge
         TextSize.BODY_MEDIUM -> MaterialTheme.typography.bodyMedium
+        TextSize.BODY_SMALL -> MaterialTheme.typography.bodySmall
     }
     
     // 设置字体粗细（如果未指定，使用样式默认值）
@@ -310,6 +316,7 @@ fun AppText(
         TextSize.TITLE_MEDIUM -> MaterialTheme.typography.titleMedium
         TextSize.BODY_LARGE -> MaterialTheme.typography.bodyLarge
         TextSize.BODY_MEDIUM -> MaterialTheme.typography.bodyMedium
+        TextSize.BODY_SMALL -> MaterialTheme.typography.bodySmall
     }
     
     // 设置字体粗细（如果未指定，使用样式默认值）

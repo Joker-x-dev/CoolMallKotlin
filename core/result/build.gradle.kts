@@ -1,5 +1,6 @@
 plugins {
     id("com.joker.coolmall.android.library")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -15,4 +16,6 @@ dependencies {
     implementation(project(":core:model"))
     // 引入 util 模块
     implementation(project(":core:util"))
+    // kotlin序列化
+    implementation(libs.kotlinx.serialization.json)
 }

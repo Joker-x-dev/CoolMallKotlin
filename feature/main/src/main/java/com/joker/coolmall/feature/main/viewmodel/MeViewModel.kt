@@ -6,6 +6,7 @@ import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.entity.User
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.AuthRoutes
+import com.joker.coolmall.navigation.routes.OrderRoutes
 import com.joker.coolmall.navigation.routes.UserRoutes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -48,6 +49,13 @@ class MeViewModel @Inject constructor(
                 appState.refreshUserInfo()
             }
         }
+    }
+
+    /**
+     * 跳转到订单列表
+     */
+    fun toOrderListPage() {
+        super.toPage(OrderRoutes.ORDER_LIST)
     }
 
     /**

@@ -12,11 +12,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
-import com.joker.coolmall.core.designsystem.theme.ColorDanger
 import com.joker.coolmall.core.designsystem.theme.ShapeSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.model.entity.Goods
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
+import com.joker.coolmall.core.ui.component.text.PriceText
+import com.joker.coolmall.core.ui.component.text.TextSize
 
 /**
  * 限时精选卡片项
@@ -47,10 +48,6 @@ fun FlashSaleItem(
             overflow = TextOverflow.Ellipsis
         )
         SpaceVerticalXSmall()
-        Text(
-            text = "¥${goods.price}",
-            style = MaterialTheme.typography.titleMedium,
-            color = ColorDanger
-        )
+        PriceText(goods.price, integerTextSize = TextSize.BODY_LARGE)
     }
 }

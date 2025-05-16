@@ -75,6 +75,8 @@ internal fun MeRoute(
         userInfo = userInfo,
         toLogin = viewModel::toLoginPage,
         toAddressList = viewModel::toAddressListPage,
+        toOrderList = viewModel::toOrderListPage,
+        toUserFootprint = viewModel::toUserFootprintPage,
     )
 }
 
@@ -85,6 +87,8 @@ internal fun MeScreen(
     userInfo: User? = null,
     toLogin: () -> Unit = {},
     toAddressList: () -> Unit = {},
+    toOrderList: () -> Unit = {},
+    toUserFootprint: () -> Unit = {}
 ) {
     CommonScaffold(topBar = { }) {
         Column(
@@ -105,11 +109,15 @@ internal fun MeScreen(
             SpaceVerticalMedium()
 
             // 订单区域
-            OrderSection()
+            OrderSection(
+                toOrderList = toOrderList
+            )
             SpaceVerticalMedium()
 
             // 我的足迹
-            MyFootprintSection()
+            MyFootprintSection(
+                toUserFootprint = toUserFootprint
+            )
             SpaceVerticalMedium()
 
             // 功能菜单区域
@@ -227,14 +235,17 @@ private fun MembershipCard() {
  * 订单区域
  */
 @Composable
-private fun OrderSection() {
+private fun OrderSection(
+    toOrderList: () -> Unit = {}
+) {
     Card {
         // 标题行
         AppListItem(
             title = "我的订单",
             trailingText = "查看全部订单",
             leadingIcon = R.drawable.ic_order_fill,
-            leadingIconTint = Primary
+            leadingIconTint = Primary,
+            onClick = toOrderList
         )
         // 订单状态图标
         SpaceEvenlyRow {
@@ -275,13 +286,16 @@ private fun OrderSection() {
  * 我的足迹区域
  */
 @Composable
-private fun MyFootprintSection() {
+private fun MyFootprintSection(
+    toUserFootprint: () -> Unit = {}
+) {
     Card {
         AppListItem(
             title = "我的足迹",
             trailingText = "6",
             leadingIcon = R.drawable.ic_footprint,
-            leadingIconTint = Color(0xFFFF9800)
+            leadingIconTint = Color(0xFFFF9800),
+            onClick = toUserFootprint
         )
 
         // 水平滚动的产品列表

@@ -2,6 +2,8 @@ package com.joker.coolmall.core.network.service
 
 import com.joker.coolmall.core.model.entity.Order
 import com.joker.coolmall.core.model.request.CreateOrderRequest
+import com.joker.coolmall.core.model.request.OrderPageRequest
+import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -41,7 +43,7 @@ interface OrderService {
      * 分页查询订单
      */
     @POST("order/info/page")
-    suspend fun getOrderPage(@Body params: Any): NetworkResponse<Any>
+    suspend fun getOrderPage(@Body params: OrderPageRequest): NetworkResponse<NetworkPageData<Order>>
 
     /**
      * 创建订单

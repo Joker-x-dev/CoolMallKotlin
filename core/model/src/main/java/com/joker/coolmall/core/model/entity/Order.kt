@@ -46,12 +46,12 @@ data class Order(
     /**
      * 价格
      */
-    val price: Double = 0.0,
+    val price: Int = 0,
 
     /**
      * 优惠金额
      */
-    val discountPrice: Double = 0.0,
+    val discountPrice: Int = 0,
 
     /**
      * 优惠来源
@@ -135,9 +135,60 @@ data class Order(
         val objectId: Long? = null,
 
         /**
-         * 信息
+         * 优惠信息
          */
-        val info: String? = null
+        val info: DiscountInfo? = null
+    )
+
+    /**
+     * 优惠信息详情
+     */
+    @Serializable
+    data class DiscountInfo(
+        /**
+         * ID
+         */
+        val id: Long? = null,
+
+        /**
+         * 数量
+         */
+        val num: Int? = null,
+
+        /**
+         * 类型
+         */
+        val type: Int? = null,
+
+        /**
+         * 标题
+         */
+        val title: String? = null,
+
+        /**
+         * 描述
+         */
+        val description: String? = null,
+
+        /**
+         * 金额
+         */
+        val amount: Double? = null,
+
+        /**
+         * 最低消费
+         */
+        val minAmount: Double? = null,
+
+        /**
+         * 开始时间
+         */
+        val startTime: String? = null,
+
+        /**
+         * 结束时间
+         */
+        val endTime: String? = null
     )
 
     /**

@@ -83,19 +83,14 @@ abstract class BaseNetWorkViewModel<T>(
      * 使用ResultHandler自动处理状态管理和错误处理
      */
     fun executeRequest() {
-        try {
-            ResultHandler.handleResultWithData(
-                scope = viewModelScope,
-                flow = requestApiFlow().asResult(),
-                showToast = showErrorToast,
-                onLoading = { onRequestStart() },
-                onData = { data -> onRequestSuccess(data) },
-                onError = { message, exception -> onRequestError(message, exception) }
-            )
-        } catch (e: Exception) {
-            // 捕获任何异常，包括NullPointerException
-            onRequestError(e.message ?: "加载数据时发生错误", e)
-        }
+        ResultHandler.handleResultWithData(
+            scope = viewModelScope,
+            flow = requestApiFlow().asResult(),
+            showToast = showErrorToast,
+            onLoading = { onRequestStart() },
+            onData = { data -> onRequestSuccess(data) },
+            onError = { message, exception -> onRequestError(message, exception) }
+        )
     }
 
     /**

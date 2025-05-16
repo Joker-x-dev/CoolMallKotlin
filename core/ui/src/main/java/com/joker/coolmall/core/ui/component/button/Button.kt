@@ -166,7 +166,7 @@ fun AppButton(
     val buttonHeight: Dp = when (size) {
         ButtonSize.MEDIUM -> 48.dp
         ButtonSize.SMALL -> 40.dp
-        ButtonSize.MINI -> 32.dp
+        ButtonSize.MINI -> 34.dp
     }
     
     // 按钮形状
@@ -310,7 +310,7 @@ fun AppButtonFixed(
     val buttonHeight: Dp = when (size) {
         ButtonSize.MEDIUM -> 48.dp
         ButtonSize.SMALL -> 40.dp
-        ButtonSize.MINI -> 32.dp
+        ButtonSize.MINI -> 34.dp
     }
     
     // 按钮形状
@@ -451,7 +451,7 @@ fun AppButtonBordered(
     val buttonHeight: Dp = when (size) {
         ButtonSize.MEDIUM -> 48.dp
         ButtonSize.SMALL -> 40.dp
-        ButtonSize.MINI -> 32.dp
+        ButtonSize.MINI -> 34.dp
     }
     
     // 按钮形状

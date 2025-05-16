@@ -34,6 +34,7 @@ import com.joker.coolmall.core.ui.component.image.NetWorkImage
 import com.joker.coolmall.core.ui.component.list.AppListItem
 import com.joker.coolmall.core.ui.component.stepper.QuantityStepper
 import com.joker.coolmall.core.ui.component.text.AppText
+import com.joker.coolmall.core.ui.component.text.PriceText
 import com.joker.coolmall.core.ui.component.text.TextType
 
 /**
@@ -173,13 +174,7 @@ fun OrderGoodsItem(
             // 价格和数量/操作区域
             SpaceBetweenRow {
                 // 价格
-                Text(
-                    text = "¥${data.price}",
-                    style = MaterialTheme.typography.bodyLarge.copy(
-                        color = MaterialTheme.colorScheme.error,
-                        fontWeight = MaterialTheme.typography.bodyLarge.fontWeight
-                    )
-                )
+                PriceText(data.price)
 
                 // 数量控制器或自定义操作区域
                 if (actionSlot != null) {
@@ -218,7 +213,7 @@ private fun OrderGoodsItemPreview() {
             stock = 100,
             images = listOf("https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png")
         )
-        
+
         OrderGoodsItem(
             data = spec,
             goodsId = 1L,
@@ -248,7 +243,7 @@ private fun OrderGoodsItemWithCheckboxPreview() {
             stock = 100,
             images = listOf("https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png")
         )
-        
+
         OrderGoodsItem(
             data = spec,
             goodsId = 1L,
@@ -294,7 +289,7 @@ private fun OrderGoodsItemNoStepperPreview() {
             stock = 100,
             images = null
         )
-        
+
         OrderGoodsItem(
             data = spec,
             goodsId = 1L,
@@ -318,7 +313,8 @@ private fun OrderGoodsCardPreview() {
         val cart = Cart().apply {
             goodsId = 1L
             goodsName = "Redmi K80"
-            goodsMainPic = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
+            goodsMainPic =
+                "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
             spec = listOf(
                 CartGoodsSpec(
                     id = 1L,
@@ -340,7 +336,7 @@ private fun OrderGoodsCardPreview() {
                 )
             )
         }
-        
+
         OrderGoodsCard(
             data = cart
         )
@@ -359,7 +355,8 @@ private fun OrderGoodsCardDarkPreview() {
         val cart = Cart().apply {
             goodsId = 1L
             goodsName = "Redmi K80"
-            goodsMainPic = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
+            goodsMainPic =
+                "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
             spec = listOf(
                 CartGoodsSpec(
                     id = 1L,
@@ -381,7 +378,7 @@ private fun OrderGoodsCardDarkPreview() {
                 )
             )
         }
-        
+
         OrderGoodsCard(
             data = cart
         )

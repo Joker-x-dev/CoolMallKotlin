@@ -23,6 +23,7 @@ import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.designsystem.theme.TextTertiaryLight
 import com.joker.coolmall.core.model.entity.Goods
+import com.joker.coolmall.core.ui.component.text.PriceText
 
 /**
  * 商品网格卡片
@@ -72,11 +73,7 @@ fun GoodsGridItem(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
             ) {
-                Text(
-                    text = "¥${goods.price}",
-                    style = MaterialTheme.typography.displayMedium,
-                    color = ColorDanger
-                )
+                PriceText(goods.price)
                 Text(
                     text = "已售 ${goods.sold}",
                     style = MaterialTheme.typography.bodySmall,
