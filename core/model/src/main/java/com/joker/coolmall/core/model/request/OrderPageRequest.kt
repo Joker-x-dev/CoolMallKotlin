@@ -9,12 +9,17 @@ import kotlinx.serialization.Serializable
 data class OrderPageRequest(
 
     /**
-     * 订单状态
+     * 页码
      */
-    val status: List<String> = listOf(),
+    var page: Int = 1,
 
     /**
-     * 分页请求参数
+     * 每页大小
      */
-    val pageRequest: PageRequest = PageRequest()
+    var size: Int = 20,
+
+    /**
+     * 订单状态列表
+     */
+    var status: List<Int>? = null
 )

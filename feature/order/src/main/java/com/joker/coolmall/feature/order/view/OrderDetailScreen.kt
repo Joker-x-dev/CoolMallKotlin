@@ -10,6 +10,7 @@ import com.joker.coolmall.core.ui.component.network.BaseNetWorkView
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
 import com.joker.coolmall.core.ui.component.text.AppText
 import com.joker.coolmall.core.ui.component.text.TextSize
+import com.joker.coolmall.feature.order.R
 import com.joker.coolmall.feature.order.viewmodel.OrderDetailViewModel
 
 /**
@@ -42,6 +43,7 @@ internal fun OrderDetailScreen(
     onRetry: () -> Unit = {}
 ) {
     AppScaffold(
+        title = R.string.order_detail,
         onBackClick = onBackClick
     ) {
         BaseNetWorkView(

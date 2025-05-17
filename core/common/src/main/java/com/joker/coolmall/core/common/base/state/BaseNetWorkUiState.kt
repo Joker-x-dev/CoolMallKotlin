@@ -15,7 +15,7 @@ sealed class BaseNetWorkUiState<out T> {
      *
      * @param data 成功返回的数据
      */
-    data class Success<T>(val data: T) : BaseNetWorkUiState<T>()
+    data class Success<T>(var data: T) : BaseNetWorkUiState<T>()
 
     /**
      * 错误状态

@@ -36,7 +36,7 @@ abstract class BaseNetWorkViewModel<T>(
      * 通用网络请求UI状态
      * 初始为加载中状态
      */
-    private val _uiState: MutableStateFlow<BaseNetWorkUiState<T>> =
+     val _uiState: MutableStateFlow<BaseNetWorkUiState<T>> =
         MutableStateFlow(BaseNetWorkUiState.Loading)
     val uiState: StateFlow<BaseNetWorkUiState<T>> = _uiState.asStateFlow()
 
