@@ -8,14 +8,12 @@ import com.joker.coolmall.core.data.repository.OrderRepository
 import com.joker.coolmall.core.model.entity.Order
 import com.joker.coolmall.core.model.request.OrderPageRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
-import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.feature.order.model.OrderStatus
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -121,31 +119,21 @@ class OrderListViewModel @Inject constructor(
         }
 
         ResultHandler.handleResult(
+            showToast = false,
             scope = viewModelScope,
-            flow = requestListData(tabIndex, pageIndices[tabIndex], pageSize).asResult(),
+            flow = orderRepository.getOrderPage(
+                OrderPageRequest(
+                    page = pageIndices[tabIndex],
+                    size = pageSize,
+                    status = getStatusFilter(tabIndex)
+                )
+            ).asResult(),
             onSuccess = { response ->
                 handleSuccess(tabIndex, response.data)
             },
             onError = { message, exception ->
                 handleError(tabIndex, message, exception)
             }
-        )
-    }
-
-    /**
-     * 请求特定标签页的数据
-     */
-    private fun requestListData(
-        tabIndex: Int,
-        page: Int,
-        size: Int
-    ): Flow<NetworkResponse<NetworkPageData<Order>>> {
-        return orderRepository.getOrderPage(
-            OrderPageRequest(
-                page = page,
-                size = size,
-                status = getStatusFilter(tabIndex)
-            )
         )
     }
 
@@ -243,8 +231,11 @@ class OrderListViewModel @Inject constructor(
      * 加载更多数据
      */
     fun onLoadMore(tabIndex: Int = _selectedTabIndex.value) {
-        // 只有在可加载更多状态下才能触发加载
-        if (_loadMoreStates[tabIndex].value != LoadMoreState.PullToLoad) {
+        // 只有在可加载更多和加载失败状态下才能触发加载
+        if (_loadMoreStates[tabIndex].value == LoadMoreState.Loading ||
+            _loadMoreStates[tabIndex].value == LoadMoreState.NoMore ||
+            _loadMoreStates[tabIndex].value == LoadMoreState.Success
+        ) {
             return
         }
 

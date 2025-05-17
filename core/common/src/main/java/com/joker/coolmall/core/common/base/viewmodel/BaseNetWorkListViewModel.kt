@@ -86,6 +86,7 @@ abstract class BaseNetWorkListViewModel<T : Any>(
         }
 
         ResultHandler.handleResult(
+            showToast = false,
             scope = viewModelScope,
             flow = requestListData().asResult(),
             onSuccess = { response ->
@@ -191,8 +192,11 @@ abstract class BaseNetWorkListViewModel<T : Any>(
      * 加载更多数据
      */
     fun onLoadMore() {
-        // 只有在可加载更多状态下才能触发加载
-        if (_loadMoreState.value != LoadMoreState.PullToLoad) {
+        // 只有在可加载更多和加载失败状态下才能触发加载
+        if (_loadMoreState.value == LoadMoreState.Loading ||
+            _loadMoreState.value == LoadMoreState.NoMore ||
+            _loadMoreState.value == LoadMoreState.Success
+        ) {
             return
         }
 
