@@ -1,7 +1,9 @@
 package com.joker.coolmall.feature.order.viewmodel
 
+import androidx.lifecycle.viewModelScope
+import com.joker.coolmall.core.common.base.state.BaseNetWorkListUiState
 import com.joker.coolmall.core.common.base.state.LoadMoreState
-import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkListViewModel
+import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
 import com.joker.coolmall.core.data.repository.OrderRepository
 import com.joker.coolmall.core.model.entity.Order
 import com.joker.coolmall.core.model.request.OrderPageRequest
@@ -9,11 +11,15 @@ import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.feature.order.model.OrderStatus
 import com.joker.coolmall.navigation.AppNavigator
+import com.joker.coolmall.result.ResultHandler
+import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -23,7 +29,7 @@ import javax.inject.Inject
 class OrderListViewModel @Inject constructor(
     navigator: AppNavigator,
     private val orderRepository: OrderRepository
-) : BaseNetWorkListViewModel<Order>(navigator) {
+) : BaseViewModel(navigator) {
 
     /**
      * 当前选中的标签索引
@@ -31,21 +37,234 @@ class OrderListViewModel @Inject constructor(
     private val _selectedTabIndex = MutableStateFlow(0)
     val selectedTabIndex: StateFlow<Int> = _selectedTabIndex.asStateFlow()
 
-    init {
-        initLoad()
+    /**
+     * 是否正在进行标签切换动画
+     */
+    private val _isAnimatingTabChange = MutableStateFlow(false)
+    val isAnimatingTabChange: StateFlow<Boolean> = _isAnimatingTabChange.asStateFlow()
+
+    /**
+     * 每个标签页的页码
+     */
+    private val pageIndices = MutableList(OrderStatus.entries.size) { 1 }
+
+    /**
+     * 标记每个标签页是否已加载过数据
+     */
+    private val tabDataLoaded = MutableList(OrderStatus.entries.size) { false }
+
+    /**
+     * 每页大小
+     */
+    private val pageSize = 10
+
+    /**
+     * 每个标签页的网络请求UI状态
+     */
+    private val _uiStates = OrderStatus.entries.map {
+        MutableStateFlow<BaseNetWorkListUiState>(BaseNetWorkListUiState.Loading)
+    }
+    val uiStates: List<StateFlow<BaseNetWorkListUiState>> = _uiStates.map { it.asStateFlow() }
+
+    /**
+     * 每个标签页的列表数据
+     */
+    private val _listDataMap = OrderStatus.entries.map {
+        MutableStateFlow<List<Order>>(emptyList())
+    }
+    val listDataMap: List<StateFlow<List<Order>>> = _listDataMap.map { it.asStateFlow() }
+
+    /**
+     * 每个标签页的加载更多状态
+     */
+    private val _loadMoreStates = OrderStatus.entries.map {
+        MutableStateFlow<LoadMoreState>(LoadMoreState.PullToLoad)
+    }
+    val loadMoreStates: List<StateFlow<LoadMoreState>> = _loadMoreStates.map { it.asStateFlow() }
+
+    /**
+     * 每个标签页的下拉刷新状态
+     */
+    private val _refreshingStates = OrderStatus.entries.map {
+        MutableStateFlow(false)
     }
 
     /**
-     * 实现基类的抽象方法，提供订单列表数据的请求
+     * 每个标签页的下拉刷新状态
      */
-    override fun requestListData(): Flow<NetworkResponse<NetworkPageData<Order>>> {
+    val refreshingStates: List<StateFlow<Boolean>> = _refreshingStates.map { it.asStateFlow() }
+
+    init {
+        // 只加载当前选中标签页的数据
+        loadTabDataIfNeeded(_selectedTabIndex.value)
+    }
+
+    /**
+     * 如果标签页数据尚未加载，则加载数据
+     */
+    private fun loadTabDataIfNeeded(tabIndex: Int) {
+        if (!tabDataLoaded[tabIndex]) {
+            // 标记该标签页已尝试加载数据
+            tabDataLoaded[tabIndex] = true
+            // 加载该标签页的数据
+            loadListData(tabIndex)
+        }
+    }
+
+    /**
+     * 加载指定标签页的列表数据
+     */
+    private fun loadListData(tabIndex: Int) {
+        // 设置UI状态 - 仅首次加载显示加载中状态
+        if (_loadMoreStates[tabIndex].value == LoadMoreState.Loading && pageIndices[tabIndex] == 1) {
+            _uiStates[tabIndex].value = BaseNetWorkListUiState.Loading
+        }
+
+        ResultHandler.handleResult(
+            scope = viewModelScope,
+            flow = requestListData(tabIndex, pageIndices[tabIndex], pageSize).asResult(),
+            onSuccess = { response ->
+                handleSuccess(tabIndex, response.data)
+            },
+            onError = { message, exception ->
+                handleError(tabIndex, message, exception)
+            }
+        )
+    }
+
+    /**
+     * 请求特定标签页的数据
+     */
+    private fun requestListData(
+        tabIndex: Int,
+        page: Int,
+        size: Int
+    ): Flow<NetworkResponse<NetworkPageData<Order>>> {
         return orderRepository.getOrderPage(
             OrderPageRequest(
-                page = super.currentPage,
-                size = super.pageSize,
-                status = getCurrentStatusFilter()
+                page = page,
+                size = size,
+                status = getStatusFilter(tabIndex)
             )
         )
+    }
+
+    /**
+     * 处理成功响应
+     */
+    private fun handleSuccess(tabIndex: Int, data: NetworkPageData<Order>?) {
+        val newList = data?.list ?: emptyList()
+        val pagination = data?.pagination
+
+        // 计算是否还有下一页数据
+        val hasNextPage = if (pagination != null) {
+            val total = pagination.total ?: 0
+            val size = pagination.size ?: pageSize
+            val currentPageNum = pagination.page ?: pageIndices[tabIndex]
+
+            // 当前页的数据量 * 当前页码 < 总数据量，说明还有下一页
+            size * currentPageNum < total
+        } else {
+            false
+        }
+
+        when {
+            pageIndices[tabIndex] == 1 -> {
+                // 刷新或首次加载 - 重置列表
+                _listDataMap[tabIndex].value = newList
+                _refreshingStates[tabIndex].value = false
+
+                // 更新加载状态
+                if (newList.isEmpty()) {
+                    _uiStates[tabIndex].value = BaseNetWorkListUiState.Empty
+                } else {
+                    _uiStates[tabIndex].value = BaseNetWorkListUiState.Success
+                    _loadMoreStates[tabIndex].value =
+                        if (hasNextPage) LoadMoreState.PullToLoad else LoadMoreState.NoMore
+                }
+            }
+
+            else -> {
+                // 加载更多 - 先显示加载成功，延迟更新数据
+                viewModelScope.launch {
+                    _loadMoreStates[tabIndex].value = LoadMoreState.Success
+                    delay(400)
+                    _listDataMap[tabIndex].value = _listDataMap[tabIndex].value + newList
+                    _loadMoreStates[tabIndex].value =
+                        if (hasNextPage) LoadMoreState.PullToLoad else LoadMoreState.NoMore
+                }
+            }
+        }
+    }
+
+    /**
+     * 处理错误响应
+     */
+    private fun handleError(tabIndex: Int, message: String?, exception: Throwable?) {
+        _refreshingStates[tabIndex].value = false
+
+        if (pageIndices[tabIndex] == 1) {
+            // 首次加载或刷新失败
+            if (_listDataMap[tabIndex].value.isEmpty()) {
+                _uiStates[tabIndex].value = BaseNetWorkListUiState.Error
+            }
+            _loadMoreStates[tabIndex].value = LoadMoreState.PullToLoad
+        } else {
+            // 加载更多失败，回退页码
+            pageIndices[tabIndex]--
+            _loadMoreStates[tabIndex].value = LoadMoreState.Error
+        }
+    }
+
+    /**
+     * 重试加载
+     */
+    fun retryRequest(tabIndex: Int = _selectedTabIndex.value) {
+        pageIndices[tabIndex] = 1
+        _loadMoreStates[tabIndex].value = LoadMoreState.Loading
+        loadListData(tabIndex)
+    }
+
+    /**
+     * 触发下拉刷新
+     */
+    fun onRefresh(tabIndex: Int = _selectedTabIndex.value) {
+        // 如果正在加载中，则不重复请求
+        if (_loadMoreStates[tabIndex].value == LoadMoreState.Loading) {
+            return
+        }
+
+        _refreshingStates[tabIndex].value = true
+        pageIndices[tabIndex] = 1
+        loadListData(tabIndex)
+    }
+
+    /**
+     * 加载更多数据
+     */
+    fun onLoadMore(tabIndex: Int = _selectedTabIndex.value) {
+        // 只有在可加载更多状态下才能触发加载
+        if (_loadMoreStates[tabIndex].value != LoadMoreState.PullToLoad) {
+            return
+        }
+
+        _loadMoreStates[tabIndex].value = LoadMoreState.Loading
+        pageIndices[tabIndex]++
+        loadListData(tabIndex)
+    }
+
+    /**
+     * 判断是否应该触发加载更多
+     */
+    fun shouldTriggerLoadMore(
+        lastIndex: Int,
+        totalCount: Int,
+        tabIndex: Int = _selectedTabIndex.value
+    ): Boolean {
+        return lastIndex >= totalCount - 3 &&
+                _loadMoreStates[tabIndex].value != LoadMoreState.Loading &&
+                _loadMoreStates[tabIndex].value != LoadMoreState.NoMore &&
+                _listDataMap[tabIndex].value.isNotEmpty()
     }
 
     /**
@@ -54,17 +273,37 @@ class OrderListViewModel @Inject constructor(
     fun updateSelectedTab(index: Int) {
         if (_selectedTabIndex.value != index) {
             _selectedTabIndex.value = index
-            currentPage = 1
-            _loadMoreState.value = LoadMoreState.Loading
-            loadListData()
+            _isAnimatingTabChange.value = true
+
+            // 当切换到新标签页时，检查并按需加载数据
+            loadTabDataIfNeeded(index)
         }
     }
 
     /**
-     * 获取当前状态的过滤条件
+     * 通知标签切换动画已完成
      */
-    private fun getCurrentStatusFilter(): List<Int>? {
-        return when (OrderStatus.entries[_selectedTabIndex.value]) {
+    fun notifyAnimationCompleted() {
+        _isAnimatingTabChange.value = false
+    }
+
+    /**
+     * 根据页面滑动更新选中的标签
+     */
+    fun updateTabByPage(index: Int) {
+        if (!_isAnimatingTabChange.value) {
+            _selectedTabIndex.value = index
+
+            // 当滑动到新标签页时，检查并按需加载数据
+            loadTabDataIfNeeded(index)
+        }
+    }
+
+    /**
+     * 获取指定标签的状态过滤条件
+     */
+    private fun getStatusFilter(tabIndex: Int): List<Int>? {
+        return when (OrderStatus.entries[tabIndex]) {
             OrderStatus.ALL -> null
             OrderStatus.UNPAID -> listOf(0)
             OrderStatus.UNSHIPPED -> listOf(1)
