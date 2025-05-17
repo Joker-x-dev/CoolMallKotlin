@@ -1,4 +1,4 @@
-package com.joker.coolmall.core.ui.component.loading
+package com.joker.coolmall.core.common.base.state
 
 /**
  * 加载更多状态

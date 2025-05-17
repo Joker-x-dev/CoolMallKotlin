@@ -25,12 +25,4 @@ dependencies {
     
     // jsoup HTML解析库（用于HTML富文本渲染）
     implementation(libs.jsoup)
-
-    // 上拉刷新下拉加载框架：https://github.com/scwang90/SmartRefreshLayout
-    // 核心必须依赖
-    implementation (libs.refresh.layout.kernel)
-    // 经典刷新头
-    implementation (libs.refresh.header.classics)
-    // 经典加载
-    implementation (libs.refresh.footer.classics)
 }

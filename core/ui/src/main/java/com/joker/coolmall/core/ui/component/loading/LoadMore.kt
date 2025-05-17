@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.joker.coolmall.core.common.base.state.LoadMoreState
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.ui.component.divider.WeDivider
 import com.joker.coolmall.core.ui.component.text.AppText

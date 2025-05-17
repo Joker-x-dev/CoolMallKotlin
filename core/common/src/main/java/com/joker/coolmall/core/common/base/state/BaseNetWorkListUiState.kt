@@ -1,7 +1,9 @@
 package com.joker.coolmall.core.common.base.state
 
 /**
- * 列表页面的 UI 状态
+ * 列表页UI状态
+ * 
+ * 封装列表页面的四种状态：加载中、成功、错误和空数据
  */
 sealed class BaseNetWorkListUiState {
     /**
