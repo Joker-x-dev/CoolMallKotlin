@@ -2,4 +2,5 @@
 <resources>
     <string name="order_list">订单列表</string>
     <string name="order_detail">订单详情</string>
+    <string name="order_confirm">确认订单</string>
 </resources>

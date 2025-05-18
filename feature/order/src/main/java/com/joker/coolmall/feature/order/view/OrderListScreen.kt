@@ -11,6 +11,7 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.runtime.Composable
@@ -35,7 +36,6 @@ import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.model.entity.Order
 import com.joker.coolmall.core.ui.component.button.AppButtonBordered
-import com.joker.coolmall.core.ui.component.button.ButtonSize
 import com.joker.coolmall.core.ui.component.button.ButtonType
 import com.joker.coolmall.core.ui.component.divider.WeDivider
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
@@ -337,15 +337,25 @@ private fun OrderTabs(selectedIndex: Int, onTabSelected: (Int) -> Unit) {
  *
  * @param modifier Compose修饰符
  * @param order 订单数据对象，包含订单的所有信息
- * @param onDetailClick 查看详情按钮点击回调
- * @param onPayClick 去支付按钮点击回调
+ * @param toGoodsDetail 跳转到商品详情页面
+ * @param toPay 跳转到支付页面
+ * @param toLogistics 跳转到物流详情页面
+ * @param toComment 跳转到评价页面
+ * @param toRefund 跳转到退款/售后页面
+ * @param onCancelClick 取消订单按钮点击回调
+ * @param onConfirmClick 确认收货按钮点击回调
  */
 @Composable
 private fun OrderCard(
     modifier: Modifier = Modifier,
     order: Order,
-    onDetailClick: () -> Unit = {},
-    onPayClick: () -> Unit = {}
+    toGoodsDetail: () -> Unit = {},
+    toPay: () -> Unit = {},
+    toLogistics: () -> Unit = {},
+    toComment: () -> Unit = {},
+    toRefund: () -> Unit = {},
+    onCancelClick: () -> Unit = {},
+    onConfirmClick: () -> Unit = {}
 ) {
     Card(modifier = modifier) {
         AppListItem(
@@ -405,26 +415,93 @@ private fun OrderCard(
         WeDivider()
 
         EndRow(modifier = Modifier.padding(SpacePaddingMedium)) {
-            AppButtonBordered(
-                text = "查看详情",
-                onClick = onDetailClick,
-                type = ButtonType.LINK,
-                size = ButtonSize.MINI
-            )
-
-            SpaceHorizontalSmall()
-
-            // 只有待付款状态才显示去支付按钮
+            // 待付款状态显示取消订单和立即支付
             if (order.status == 0) {
-                AppButtonBordered(
+                OrderButton(
+                    text = "取消订单",
+                    onClick = onCancelClick
+                )
+                SpaceHorizontalSmall()
+                OrderButton(
                     text = "去支付",
-                    onClick = onPayClick,
-                    type = ButtonType.DANGER,
-                    size = ButtonSize.MINI
+                    onClick = toPay,
+                    isPrimary = true
+                )
+            }
+
+            // 待发货和待收货状态显示售后/退款
+            if (order.status == 1 || order.status == 2) {
+                OrderButton(
+                    text = "售后/退款",
+                    onClick = toRefund
+                )
+                SpaceHorizontalSmall()
+            }
+
+            // 待收货状态显示确认收货
+            if (order.status == 2) {
+                OrderButton(
+                    text = "确认收货",
+                    onClick = onConfirmClick
+                )
+                SpaceHorizontalSmall()
+            }
+
+            // 待收货、待评价、已完成、退款中、已退款状态显示查看物流
+            if (listOf(2, 3, 4, 5, 6).contains(order.status)) {
+                OrderButton(
+                    text = "查看物流",
+                    onClick = toLogistics
+                )
+                SpaceHorizontalSmall()
+            }
+
+            // 待评价和已完成状态显示评价按钮
+            if (order.status == 3 || order.status == 4) {
+                OrderButton(
+                    text = "去评价",
+                    onClick = toComment
+                )
+                SpaceHorizontalSmall()
+            }
+
+            if (order.status != 0) {
+                OrderButton(
+                    text = "再次购买",
+                    onClick = toGoodsDetail,
+                    isPrimary = true
                 )
             }
         }
     }
+}
+
+/**
+ * 订单按钮组件
+ *
+ * @param text 按钮文本
+ * @param onClick 点击回调
+ * @param modifier 修饰符
+ * @param type 按钮类型，默认为DEFAULT
+ * @param isPrimary 是否为主要按钮，主要按钮使用主题色，次要按钮使用灰色
+ */
+@Composable
+private fun OrderButton(
+    text: String,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    type: ButtonType = ButtonType.DEFAULT,
+    isPrimary: Boolean = false
+) {
+    AppButtonBordered(
+        text = text,
+        onClick = onClick,
+        modifier = modifier,
+        type = if (isPrimary) type else ButtonType.DEFAULT,
+        color = if (!isPrimary) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.85f) else null,
+        height = 30.dp,
+        textStyle = MaterialTheme.typography.bodySmall
+    )
 }
 
 @Preview(showBackground = true)

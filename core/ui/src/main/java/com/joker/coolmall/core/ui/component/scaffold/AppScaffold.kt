@@ -13,11 +13,14 @@ import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import com.joker.coolmall.core.ui.component.appbar.CenterTopAppBar
+import com.joker.coolmall.core.ui.component.appbar.LargeTopAppBar
 
 /**
  * 应用通用Scaffold组件
@@ -36,6 +39,8 @@ import com.joker.coolmall.core.ui.component.appbar.CenterTopAppBar
  * @param backgroundColor 页面背景颜色，默认为 MaterialTheme 的 surface 颜色
  * @param bottomBar 底部导航栏的内容，默认为null
  * @param floatingActionButton 浮动操作按钮的内容，默认为null
+ * @param topBar 自定义顶部应用栏，如果提供则优先使用此应用栏
+ * @param useLargeTopBar 是否使用大标题样式的顶部应用栏，如果为true则会自动启用滚动行为
  * @param content 页面主体内容，接收PaddingValues参数以适应顶部应用栏的空间
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -51,22 +56,44 @@ fun AppScaffold(
     backgroundColor: Color = MaterialTheme.colorScheme.background,
     bottomBar: @Composable () -> Unit = {},
     floatingActionButton: @Composable () -> Unit = {},
+    topBar: @Composable (() -> Unit)? = null,
+    useLargeTopBar: Boolean = false,
     content: @Composable (PaddingValues) -> Unit
 ) {
+    val scrollBehavior = if (useLargeTopBar) {
+        TopAppBarDefaults.exitUntilCollapsedScrollBehavior(rememberTopAppBarState())
+    } else null
+
+    val finalModifier = if (scrollBehavior != null) {
+        modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+    } else modifier
+
     Scaffold(
         topBar = {
-            CenterTopAppBar(
-                title = title,
-                colors = topBarColors,
-                actions = topBarActions,
-                onBackClick = onBackClick,
-                showBackIcon = showBackIcon
-            )
+            if (topBar != null) {
+                topBar()
+            } else if (useLargeTopBar) {
+                LargeTopAppBar(
+                    title = title,
+                    actions = topBarActions,
+                    onBackClick = onBackClick,
+                    showBackIcon = showBackIcon,
+                    scrollBehavior = scrollBehavior
+                )
+            } else {
+                CenterTopAppBar(
+                    title = title,
+                    colors = topBarColors,
+                    actions = topBarActions,
+                    onBackClick = onBackClick,
+                    showBackIcon = showBackIcon
+                )
+            }
         },
         snackbarHost = { SnackbarHost(snackbarHostState) },
         bottomBar = bottomBar,
         floatingActionButton = floatingActionButton,
-        modifier = modifier,
+        modifier = finalModifier,
         content = { paddingValues ->
             Box(
                 modifier = Modifier

@@ -23,6 +23,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -43,27 +44,27 @@ enum class ButtonType {
      * 默认蓝色主题按钮
      */
     DEFAULT,
-    
+
     /**
      * 成功绿色按钮
      */
     SUCCESS,
-    
+
     /**
      * 警告黄色按钮
      */
     WARNING,
-    
+
     /**
      * 危险红色按钮
      */
     DANGER,
-    
+
     /**
      * 紫色按钮
      */
     PURPLE,
-    
+
     /**
      * 链接按钮
      */
@@ -78,12 +79,12 @@ enum class ButtonStyle {
      * 填充样式
      */
     FILLED,
-    
+
     /**
      * 轮廓样式
      */
     OUTLINED,
-    
+
     /**
      * 渐变样式
      */
@@ -98,12 +99,12 @@ enum class ButtonSize {
      * 中等尺寸按钮 - 高度48dp
      */
     MEDIUM,
-    
+
     /**
      * 小尺寸按钮 - 高度40dp
      */
     SMALL,
-    
+
     /**
      * 迷你尺寸按钮 - 高度32dp
      */
@@ -118,7 +119,7 @@ enum class ButtonShape {
      * 方形按钮
      */
     SQUARE,
-    
+
     /**
      * 圆形按钮
      */
@@ -161,14 +162,14 @@ fun AppButton(
         ButtonType.PURPLE -> ColorPurple
         ButtonType.LINK -> Primary
     }
-    
+
     // 按钮高度
     val buttonHeight: Dp = when (size) {
         ButtonSize.MEDIUM -> 48.dp
         ButtonSize.SMALL -> 40.dp
         ButtonSize.MINI -> 34.dp
     }
-    
+
     // 按钮形状
     val buttonShape = when (shape) {
         ButtonShape.SQUARE -> RoundedCornerShape(8.dp)
@@ -176,7 +177,9 @@ fun AppButton(
     }
 
     val buttonModifier = if (fullWidth) {
-        modifier.fillMaxWidth().height(buttonHeight)
+        modifier
+            .fillMaxWidth()
+            .height(buttonHeight)
     } else {
         modifier.height(buttonHeight)
     }
@@ -208,6 +211,7 @@ fun AppButton(
                 }
             }
         }
+
         ButtonStyle.OUTLINED -> {
             OutlinedButton(
                 onClick = onClick,
@@ -232,15 +236,16 @@ fun AppButton(
                 }
             }
         }
+
         ButtonStyle.GRADIENT -> {
             // 渐变起点和终点颜色
             val startColor = GradientPrimaryStart
             val endColor = GradientPrimaryEnd
-            
+
             val gradientBrush = Brush.horizontalGradient(
                 colors = listOf(startColor, endColor)
             )
-            
+
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = buttonModifier
@@ -305,14 +310,14 @@ fun AppButtonFixed(
         ButtonType.PURPLE -> ColorPurple
         ButtonType.LINK -> Primary
     }
-    
+
     // 按钮高度
     val buttonHeight: Dp = when (size) {
         ButtonSize.MEDIUM -> 48.dp
         ButtonSize.SMALL -> 40.dp
         ButtonSize.MINI -> 34.dp
     }
-    
+
     // 按钮形状
     val buttonShape = when (shape) {
         ButtonShape.SQUARE -> RoundedCornerShape(8.dp)
@@ -347,6 +352,7 @@ fun AppButtonFixed(
                 }
             }
         }
+
         ButtonStyle.OUTLINED -> {
             OutlinedButton(
                 onClick = onClick,
@@ -372,15 +378,16 @@ fun AppButtonFixed(
                 }
             }
         }
+
         ButtonStyle.GRADIENT -> {
             // 渐变起点和终点颜色
             val startColor = GradientPrimaryStart
             val endColor = GradientPrimaryEnd
-            
+
             val gradientBrush = Brush.horizontalGradient(
                 colors = listOf(startColor, endColor)
             )
-            
+
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = modifier
@@ -424,6 +431,8 @@ fun AppButtonFixed(
  * @param enabled 是否启用，默认为true
  * @param loading 是否显示加载状态，默认为false
  * @param contentPadding 内容内边距
+ * @param color 自定义颜色，优先级比type高
+ * @param textStyle 按钮文本样式
  */
 @Composable
 fun AppButtonBordered(
@@ -435,10 +444,13 @@ fun AppButtonBordered(
     shape: ButtonShape = ButtonShape.ROUND,
     enabled: Boolean = true,
     loading: Boolean = false,
-    contentPadding: PaddingValues = PaddingValues(horizontal = 16.dp)
+    contentPadding: PaddingValues = PaddingValues(horizontal = 16.dp),
+    color: Color? = null,
+    textStyle: TextStyle = MaterialTheme.typography.bodyMedium,
+    height: Dp? = null
 ) {
     // 按钮颜色
-    val buttonColor = when (type) {
+    val buttonColor = color ?: when (type) {
         ButtonType.DEFAULT -> Primary
         ButtonType.SUCCESS -> ColorSuccess
         ButtonType.WARNING -> ColorWarning
@@ -446,14 +458,14 @@ fun AppButtonBordered(
         ButtonType.PURPLE -> ColorPurple
         ButtonType.LINK -> Primary
     }
-    
+
     // 按钮高度
-    val buttonHeight: Dp = when (size) {
+    val buttonHeight: Dp = height ?: when (size) {
         ButtonSize.MEDIUM -> 48.dp
         ButtonSize.SMALL -> 40.dp
         ButtonSize.MINI -> 34.dp
     }
-    
+
     // 按钮形状
     val buttonShape = when (shape) {
         ButtonShape.SQUARE -> RoundedCornerShape(8.dp)
@@ -482,7 +494,7 @@ fun AppButtonBordered(
         } else {
             Text(
                 text = text,
-                style = MaterialTheme.typography.titleMedium,
+                style = textStyle,
                 color = if (enabled) buttonColor else buttonColor.copy(alpha = 0.5f),
                 textAlign = TextAlign.Center
             )
@@ -526,7 +538,7 @@ fun AppButtonCustomSize(
         ButtonType.PURPLE -> ColorPurple
         ButtonType.LINK -> Primary
     }
-    
+
     // 按钮形状
     val buttonShape = when (shape) {
         ButtonShape.SQUARE -> RoundedCornerShape(8.dp)
@@ -569,6 +581,7 @@ fun AppButtonCustomSize(
                 }
             }
         }
+
         ButtonStyle.OUTLINED -> {
             OutlinedButton(
                 onClick = onClick,
@@ -593,15 +606,16 @@ fun AppButtonCustomSize(
                 }
             }
         }
+
         ButtonStyle.GRADIENT -> {
             // 渐变起点和终点颜色
             val startColor = GradientPrimaryStart
             val endColor = GradientPrimaryEnd
-            
+
             val gradientBrush = Brush.horizontalGradient(
                 colors = listOf(startColor, endColor)
             )
-            
+
             Box(
                 contentAlignment = Alignment.Center,
                 modifier = buttonModifier

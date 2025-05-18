@@ -45,8 +45,11 @@ import com.joker.coolmall.core.ui.component.list.AppListItem
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkView
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
 import com.joker.coolmall.core.ui.component.text.AppText
+import com.joker.coolmall.core.ui.component.text.PriceText
 import com.joker.coolmall.core.ui.component.text.TextSize
+import com.joker.coolmall.core.ui.component.text.TextType
 import com.joker.coolmall.core.ui.component.title.TitleWithLine
+import com.joker.coolmall.feature.order.R
 import com.joker.coolmall.feature.order.viewmodel.OrderConfirmViewModel
 
 /**
@@ -84,7 +87,6 @@ internal fun OrderConfirmScreen(
     cartList: List<Cart> = emptyList(),
     onSubmitOrderClick: () -> Unit = {}
 ) {
-    // 计算订单总金额（单位：分）
     val totalPrice = remember(cartList) {
         cartList.sumOf { cart ->
             cart.spec.sumOf { spec ->
@@ -94,8 +96,9 @@ internal fun OrderConfirmScreen(
     }
 
     AppScaffold(
+        title = R.string.order_confirm,
+        useLargeTopBar = true,
         onBackClick = onBackClick,
-//        title = R.string.order_confirm,
         bottomBar = {
             OrderBottomBar(
                 totalPrice = totalPrice,
@@ -154,22 +157,41 @@ private fun OrderConfirmContentView(
                     TitleWithLine(text = "价格明细")
                 }
             )
+
             AppListItem(
                 title = "商品总价",
-                trailingText = "¥${totalPrice}",
+//                trailingText = "¥${totalPrice}",
+                leadingIcon = R.drawable.ic_shop,
+                trailingContent = {
+                    PriceText(
+                        totalPrice, integerTextSize = TextSize.BODY_LARGE,
+                        decimalTextSize = TextSize.BODY_SMALL,
+                        symbolTextSize = TextSize.BODY_SMALL,
+                        type = TextType.PRIMARY
+                    )
+                },
                 showArrow = false
             )
 
             AppListItem(
                 title = "优惠券",
+                leadingIcon = R.drawable.ic_coupon,
                 trailingText = "无可用",
                 showArrow = true,
                 onClick = { /* 选择优惠券 */ }
             )
 
             AppListItem(
-                title = "运费",
-                trailingText = "¥0.00",
+                title = "合计",
+                leadingIcon = R.drawable.ic_bankcard,
+                trailingContent = {
+                    PriceText(
+                        totalPrice, integerTextSize = TextSize.BODY_LARGE,
+                        decimalTextSize = TextSize.BODY_SMALL,
+                        symbolTextSize = TextSize.BODY_SMALL,
+                        type = TextType.PRIMARY
+                    )
+                },
                 showArrow = false,
                 showDivider = false
             )
@@ -221,10 +243,11 @@ private fun OrderBottomBar(
                 .navigationBarsPadding()
         ) {
 
-            AppText(
-                text = "¥${totalPrice}",
-                color = MaterialTheme.colorScheme.error,
-                size = TextSize.TITLE_LARGE
+            PriceText(
+                totalPrice,
+                integerTextSize = TextSize.DISPLAY_LARGE,
+                decimalTextSize = TextSize.TITLE_MEDIUM,
+                symbolTextSize = TextSize.TITLE_MEDIUM,
             )
 
             AppButtonFixed(
