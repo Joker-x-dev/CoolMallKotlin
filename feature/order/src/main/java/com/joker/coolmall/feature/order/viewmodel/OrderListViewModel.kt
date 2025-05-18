@@ -10,6 +10,7 @@ import com.joker.coolmall.core.model.request.OrderPageRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.feature.order.model.OrderStatus
 import com.joker.coolmall.navigation.AppNavigator
+import com.joker.coolmall.navigation.routes.OrderRoutes
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -303,5 +304,12 @@ class OrderListViewModel @Inject constructor(
             OrderStatus.UNEVALUATED -> listOf(3)
             OrderStatus.COMPLETED -> listOf(4)
         }
+    }
+
+    /**
+     * 跳转到订单详情页面
+     */
+    fun toOrderDetailPage(orderId: Long) {
+        super.toPage(OrderRoutes.DETAIL, orderId)
     }
 } 

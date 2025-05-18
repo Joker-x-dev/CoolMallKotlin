@@ -55,7 +55,7 @@ class MeViewModel @Inject constructor(
      * 跳转到订单列表
      */
     fun toOrderListPage() {
-        super.toPage(OrderRoutes.ORDER_LIST)
+        super.toPage(OrderRoutes.LIST)
     }
 
     /**

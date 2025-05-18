@@ -87,7 +87,7 @@ internal fun CartScreen() {
                         id = 2L,
                         goodsId = 1L,
                         name = "雪岩白 16GB+1TB",
-                        price = 359900,
+                        price = 3599,
                         count = 1,
                         stock = 50,
                         images = null
@@ -103,7 +103,7 @@ internal fun CartScreen() {
                         id = 3L,
                         goodsId = 2L,
                         name = "冰川银 4GB+64GB",
-                        price = 49900,
+                        price = 4990,
                         count = 1,
                         stock = 200,
                         images = listOf("https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png")
@@ -119,7 +119,7 @@ internal fun CartScreen() {
                         id = 4L,
                         goodsId = 3L,
                         name = "经典黑银 16GB+512GB",
-                        price = 699900,
+                        price = 6999,
                         count = 1,
                         stock = 30,
                         images = listOf("https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png")
@@ -128,7 +128,7 @@ internal fun CartScreen() {
                         id = 5L,
                         goodsId = 3L,
                         name = "白色 16GB+512GB",
-                        price = 699900,
+                        price = 6999,
                         count = 1,
                         stock = 25,
                         images = null

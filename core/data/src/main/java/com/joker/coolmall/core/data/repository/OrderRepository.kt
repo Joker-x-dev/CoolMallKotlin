@@ -85,14 +85,14 @@ class OrderRepository @Inject constructor(
     /**
      * 订单信息
      */
-    fun getOrderInfo(id: String): Flow<NetworkResponse<Any>> = flow {
+    fun getOrderInfo(id: Long): Flow<NetworkResponse<Order>> = flow {
         emit(orderNetworkDataSource.getOrderInfo(id))
     }.flowOn(Dispatchers.IO)
 
     /**
      * 确认收货
      */
-    fun confirmReceive(id: String): Flow<NetworkResponse<Any>> = flow {
+    fun confirmReceive(id: Long): Flow<NetworkResponse<Any>> = flow {
         emit(orderNetworkDataSource.confirmReceive(id))
     }.flowOn(Dispatchers.IO)
 } 

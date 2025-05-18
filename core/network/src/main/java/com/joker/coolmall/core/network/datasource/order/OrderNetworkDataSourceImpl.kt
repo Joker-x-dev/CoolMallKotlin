@@ -114,7 +114,7 @@ class OrderNetworkDataSourceImpl @Inject constructor(
      * @param id 订单ID
      * @return 订单详情响应数据
      */
-    override suspend fun getOrderInfo(id: String): NetworkResponse<Any> {
+    override suspend fun getOrderInfo(id: Long): NetworkResponse<Order> {
         return orderService.getOrderInfo(id)
     }
 
@@ -124,7 +124,7 @@ class OrderNetworkDataSourceImpl @Inject constructor(
      * @param id 订单ID
      * @return 确认结果响应数据
      */
-    override suspend fun confirmReceive(id: String): NetworkResponse<Any> {
+    override suspend fun confirmReceive(id: Long): NetworkResponse<Any> {
         return orderService.confirmReceive(id)
     }
 } 

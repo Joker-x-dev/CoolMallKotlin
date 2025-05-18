@@ -12,15 +12,15 @@ object OrderRoutes {
     /**
      * 订单列表路由
      */
-    const val ORDER_LIST = "$ORDER_ROUTE/list"
+    const val LIST = "$ORDER_ROUTE/list"
 
     /**
      * 确认订单路由
      */
-    const val ORDER_CONFIRM = "$ORDER_ROUTE/confirm"
+    const val CONFIRM = "$ORDER_ROUTE/confirm"
 
     /**
      * 订单详情路由
      */
-    const val ORDER_DETAIL = "$ORDER_ROUTE/detail"
+    const val DETAIL = "$ORDER_ROUTE/detail"
 }

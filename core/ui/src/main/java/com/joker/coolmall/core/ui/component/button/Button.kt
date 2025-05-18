@@ -34,6 +34,7 @@ import com.joker.coolmall.core.designsystem.theme.ColorWarning
 import com.joker.coolmall.core.designsystem.theme.GradientPrimaryEnd
 import com.joker.coolmall.core.designsystem.theme.GradientPrimaryStart
 import com.joker.coolmall.core.designsystem.theme.Primary
+import com.joker.coolmall.core.designsystem.theme.ShapeSmall
 import com.joker.coolmall.core.designsystem.theme.TextWhite
 
 /**
@@ -172,7 +173,7 @@ fun AppButton(
 
     // 按钮形状
     val buttonShape = when (shape) {
-        ButtonShape.SQUARE -> RoundedCornerShape(8.dp)
+        ButtonShape.SQUARE -> ShapeSmall
         ButtonShape.ROUND -> RoundedCornerShape(buttonHeight / 2)
     }
 
@@ -320,7 +321,7 @@ fun AppButtonFixed(
 
     // 按钮形状
     val buttonShape = when (shape) {
-        ButtonShape.SQUARE -> RoundedCornerShape(8.dp)
+        ButtonShape.SQUARE -> ShapeSmall
         ButtonShape.ROUND -> RoundedCornerShape(buttonHeight / 2)
     }
 
@@ -468,7 +469,7 @@ fun AppButtonBordered(
 
     // 按钮形状
     val buttonShape = when (shape) {
-        ButtonShape.SQUARE -> RoundedCornerShape(8.dp)
+        ButtonShape.SQUARE -> ShapeSmall
         ButtonShape.ROUND -> RoundedCornerShape(buttonHeight / 2)
     }
 
@@ -515,6 +516,7 @@ fun AppButtonBordered(
  * @param shape 按钮形状，默认为SQUARE
  * @param enabled 是否启用，默认为true
  * @param loading 是否显示加载状态，默认为false
+ * @param textStyle 按钮文本样式
  */
 @Composable
 fun AppButtonCustomSize(
@@ -527,7 +529,8 @@ fun AppButtonCustomSize(
     height: Dp? = null,
     shape: ButtonShape = ButtonShape.ROUND,
     enabled: Boolean = true,
-    loading: Boolean = false
+    loading: Boolean = false,
+    textStyle: TextStyle = MaterialTheme.typography.bodyMedium
 ) {
     // 按钮颜色
     val buttonColor = when (type) {
@@ -541,8 +544,8 @@ fun AppButtonCustomSize(
 
     // 按钮形状
     val buttonShape = when (shape) {
-        ButtonShape.SQUARE -> RoundedCornerShape(8.dp)
-        ButtonShape.ROUND -> RoundedCornerShape(height ?: 40.dp / 2)
+        ButtonShape.SQUARE -> ShapeSmall
+        ButtonShape.ROUND -> RoundedCornerShape(height ?: (40.dp / 2))
     }
 
     // 修饰符
@@ -575,7 +578,7 @@ fun AppButtonCustomSize(
                 } else {
                     Text(
                         text = text,
-                        style = MaterialTheme.typography.titleMedium,
+                        style = textStyle,
                         color = TextWhite
                     )
                 }
@@ -601,7 +604,7 @@ fun AppButtonCustomSize(
                 } else {
                     Text(
                         text = text,
-                        style = MaterialTheme.typography.titleMedium
+                        style = textStyle
                     )
                 }
             }
@@ -635,7 +638,7 @@ fun AppButtonCustomSize(
                 } else {
                     Text(
                         text = text,
-                        style = MaterialTheme.typography.titleMedium,
+                        style = textStyle,
                         color = TextWhite
                     )
                 }

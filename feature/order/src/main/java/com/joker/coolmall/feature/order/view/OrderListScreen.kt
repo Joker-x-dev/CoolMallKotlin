@@ -1,6 +1,7 @@
 package com.joker.coolmall.feature.order.view
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -11,7 +12,6 @@ import androidx.compose.foundation.pager.PagerState
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.runtime.Composable
@@ -21,6 +21,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -30,13 +31,11 @@ import com.joker.coolmall.core.designsystem.component.CenterColumn
 import com.joker.coolmall.core.designsystem.component.EndRow
 import com.joker.coolmall.core.designsystem.component.HorizontalScroll
 import com.joker.coolmall.core.designsystem.theme.AppTheme
+import com.joker.coolmall.core.designsystem.theme.ShapeMedium
 import com.joker.coolmall.core.designsystem.theme.ShapeSmall
-import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.model.entity.Order
-import com.joker.coolmall.core.ui.component.button.AppButtonBordered
-import com.joker.coolmall.core.ui.component.button.ButtonType
 import com.joker.coolmall.core.ui.component.divider.WeDivider
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
 import com.joker.coolmall.core.ui.component.list.AppListItem
@@ -50,6 +49,7 @@ import com.joker.coolmall.core.ui.component.text.TextType
 import com.joker.coolmall.feature.order.R
 import com.joker.coolmall.feature.order.model.OrderStatus
 import com.joker.coolmall.feature.order.model.OrderTabState
+import com.joker.coolmall.feature.order.component.OrderButtons
 import com.joker.coolmall.feature.order.viewmodel.OrderListViewModel
 import kotlinx.coroutines.launch
 
@@ -88,6 +88,7 @@ internal fun OrderListRoute(
     }
 
     OrderListScreen(
+        toOrderDetail = viewModel::toOrderDetailPage,
         selectedTabIndex = selectedTabIndex,
         isAnimatingTabChange = isAnimatingTabChange,
         onTabSelected = viewModel::updateSelectedTab,
@@ -104,6 +105,7 @@ internal fun OrderListRoute(
  * 包含AppScaffold和页面整体布局
  * 所有参数都提供默认值，方便预览
  *
+ * @param toOrderDetail 跳转到订单详情页面
  * @param selectedTabIndex 当前选中的标签索引，默认为0
  * @param isAnimatingTabChange 是否正在执行标签切换动画，默认为false
  * @param onTabSelected 标签被选择时的回调，参数为选中的标签索引
@@ -115,6 +117,7 @@ internal fun OrderListRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun OrderListScreen(
+    toOrderDetail: (Long) -> Unit = {},
     selectedTabIndex: Int = 0,
     isAnimatingTabChange: Boolean = false,
     onTabSelected: (Int) -> Unit = {},
@@ -139,6 +142,7 @@ internal fun OrderListScreen(
         onBackClick = onBackClick
     ) {
         OrderListContentView(
+            toOrderDetail = toOrderDetail,
             selectedTabIndex = selectedTabIndex,
             isAnimatingTabChange = isAnimatingTabChange,
             onTabSelected = onTabSelected,
@@ -153,6 +157,7 @@ internal fun OrderListScreen(
  * 订单列表内容视图
  *
  * @param modifier Compose修饰符，用于设置组件样式和布局，默认为Modifier
+ * @param toOrderDetail 跳转到订单详情
  * @param selectedTabIndex 当前选中的标签页索引
  * @param isAnimatingTabChange 是否正在执行标签切换动画
  * @param onTabSelected 标签被点击选择时的回调，参数为选中的标签索引
@@ -164,6 +169,7 @@ internal fun OrderListScreen(
 @Composable
 private fun OrderListContentView(
     modifier: Modifier = Modifier,
+    toOrderDetail: (Long) -> Unit,
     selectedTabIndex: Int,
     isAnimatingTabChange: Boolean,
     onTabSelected: (Int) -> Unit,
@@ -218,6 +224,7 @@ private fun OrderListContentView(
             ) {
                 // 标签页的内容
                 OrderTabContent(
+                    toOrderDetail = toOrderDetail,
                     orderList = tabState.orderList,
                     isRefreshing = tabState.isRefreshing,
                     loadMoreState = tabState.loadMoreState,
@@ -231,49 +238,9 @@ private fun OrderListContentView(
 }
 
 /**
- * 处理页面状态变化的副作用
- *
- * @param pageState 分页器状态，控制标签页的滑动
- * @param selectedTabIndex 当前选中的标签索引
- * @param isAnimatingTabChange 是否正在执行标签切换动画
- * @param onTabByPageChanged 通过页面滑动切换标签时的回调，参数为新的标签索引
- * @param onAnimationCompleted 标签切换动画完成时的回调
- */
-@Composable
-private fun HandlePageStateChanges(
-    pageState: PagerState,
-    selectedTabIndex: Int,
-    isAnimatingTabChange: Boolean,
-    onTabByPageChanged: (Int) -> Unit,
-    onAnimationCompleted: () -> Unit
-) {
-    // 当标签选择变化时，自动滚动到相应页面
-    LaunchedEffect(selectedTabIndex, isAnimatingTabChange) {
-        if (isAnimatingTabChange && pageState.currentPage != selectedTabIndex) {
-            pageState.animateScrollToPage(selectedTabIndex)
-        }
-    }
-
-    // 监听分页器当前页面变化
-    LaunchedEffect(pageState.currentPage) {
-        // 当页面已经切换到新页面，立即更新导航状态
-        if (!isAnimatingTabChange) {
-            onTabByPageChanged(pageState.currentPage)
-        }
-    }
-
-    // 监听滑动动画完成
-    LaunchedEffect(pageState.isScrollInProgress) {
-        if (!pageState.isScrollInProgress && isAnimatingTabChange) {
-            // 当页面滑动动画结束，通知完成
-            onAnimationCompleted()
-        }
-    }
-}
-
-/**
  * 标签页内容
  *
+ * @param toOrderDetail 跳转到订单详情
  * @param orderList 订单列表数据
  * @param isRefreshing 是否正在刷新中
  * @param loadMoreState 加载更多的状态
@@ -283,6 +250,7 @@ private fun HandlePageStateChanges(
  */
 @Composable
 private fun OrderTabContent(
+    toOrderDetail: (Long) -> Unit,
     orderList: List<Order>,
     isRefreshing: Boolean,
     loadMoreState: LoadMoreState,
@@ -299,34 +267,9 @@ private fun OrderTabContent(
     ) {
         // 订单列表项
         items(orderList.size) { index ->
-            OrderCard(order = orderList[index])
-        }
-    }
-}
-
-/**
- * 订单标签栏
- *
- * @param selectedIndex 当前选中的标签索引
- * @param onTabSelected 标签被选择时的回调，参数为选中的标签索引
- */
-@Composable
-private fun OrderTabs(selectedIndex: Int, onTabSelected: (Int) -> Unit) {
-    ScrollableTabRow(
-        selectedTabIndex = selectedIndex,
-        edgePadding = 0.dp,
-        divider = { WeDivider() }
-    ) {
-        OrderStatus.entries.forEachIndexed { index, status ->
-            Tab(
-                selected = selectedIndex == index,
-                onClick = { onTabSelected(index) },
-                text = {
-                    AppText(
-                        text = status.label,
-                        type = if (selectedIndex == index) TextType.PRIMARY else TextType.SECONDARY
-                    )
-                }
+            OrderCard(
+                order = orderList[index],
+                toOrderDetail = toOrderDetail
             )
         }
     }
@@ -349,6 +292,7 @@ private fun OrderTabs(selectedIndex: Int, onTabSelected: (Int) -> Unit) {
 private fun OrderCard(
     modifier: Modifier = Modifier,
     order: Order,
+    toOrderDetail: (Long) -> Unit = {},
     toGoodsDetail: () -> Unit = {},
     toPay: () -> Unit = {},
     toLogistics: () -> Unit = {},
@@ -357,10 +301,20 @@ private fun OrderCard(
     onCancelClick: () -> Unit = {},
     onConfirmClick: () -> Unit = {}
 ) {
-    Card(modifier = modifier) {
+    Card(
+        modifier = modifier
+            .clip(ShapeMedium)
+            .clickable(
+                onClick = {
+                    toOrderDetail(order.id)
+                }
+            )) {
         AppListItem(
             title = order.orderNum,
             showArrow = false,
+            onClick = {
+                toOrderDetail(order.id)
+            },
             trailingText = when (order.status) {
                 0 -> "待付款"
                 1 -> "待发货"
@@ -414,94 +368,89 @@ private fun OrderCard(
 
         WeDivider()
 
-        EndRow(modifier = Modifier.padding(SpacePaddingMedium)) {
-            // 待付款状态显示取消订单和立即支付
-            if (order.status == 0) {
-                OrderButton(
-                    text = "取消订单",
-                    onClick = onCancelClick
-                )
-                SpaceHorizontalSmall()
-                OrderButton(
-                    text = "去支付",
-                    onClick = toPay,
-                    isPrimary = true
-                )
-            }
-
-            // 待发货和待收货状态显示售后/退款
-            if (order.status == 1 || order.status == 2) {
-                OrderButton(
-                    text = "售后/退款",
-                    onClick = toRefund
-                )
-                SpaceHorizontalSmall()
-            }
-
-            // 待收货状态显示确认收货
-            if (order.status == 2) {
-                OrderButton(
-                    text = "确认收货",
-                    onClick = onConfirmClick
-                )
-                SpaceHorizontalSmall()
-            }
-
-            // 待收货、待评价、已完成、退款中、已退款状态显示查看物流
-            if (listOf(2, 3, 4, 5, 6).contains(order.status)) {
-                OrderButton(
-                    text = "查看物流",
-                    onClick = toLogistics
-                )
-                SpaceHorizontalSmall()
-            }
-
-            // 待评价和已完成状态显示评价按钮
-            if (order.status == 3 || order.status == 4) {
-                OrderButton(
-                    text = "去评价",
-                    onClick = toComment
-                )
-                SpaceHorizontalSmall()
-            }
-
-            if (order.status != 0) {
-                OrderButton(
-                    text = "再次购买",
-                    onClick = toGoodsDetail,
-                    isPrimary = true
-                )
-            }
+        EndRow(modifier = modifier.padding(SpacePaddingMedium)) {
+            OrderButtons(
+                order = order,
+                onCancelClick = onCancelClick,
+                onPayClick = toPay,
+                onRefundClick = toRefund,
+                onConfirmClick = onConfirmClick,
+                onLogisticsClick = toLogistics,
+                onCommentClick = toComment,
+                onRebuyClick = toGoodsDetail
+            )
         }
     }
 }
 
 /**
- * 订单按钮组件
+ * 订单标签栏
  *
- * @param text 按钮文本
- * @param onClick 点击回调
- * @param modifier 修饰符
- * @param type 按钮类型，默认为DEFAULT
- * @param isPrimary 是否为主要按钮，主要按钮使用主题色，次要按钮使用灰色
+ * @param selectedIndex 当前选中的标签索引
+ * @param onTabSelected 标签被选择时的回调，参数为选中的标签索引
  */
 @Composable
-private fun OrderButton(
-    text: String,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    type: ButtonType = ButtonType.DEFAULT,
-    isPrimary: Boolean = false
+private fun OrderTabs(selectedIndex: Int, onTabSelected: (Int) -> Unit) {
+    ScrollableTabRow(
+        selectedTabIndex = selectedIndex,
+        edgePadding = 0.dp,
+        divider = { WeDivider() }
+    ) {
+        OrderStatus.entries.forEachIndexed { index, status ->
+            Tab(
+                selected = selectedIndex == index,
+                onClick = { onTabSelected(index) },
+                text = {
+                    AppText(
+                        text = status.label,
+                        type = if (selectedIndex == index) TextType.PRIMARY else TextType.SECONDARY
+                    )
+                }
+            )
+        }
+    }
+}
+
+
+/**
+ * 处理页面状态变化的副作用
+ *
+ * @param pageState 分页器状态，控制标签页的滑动
+ * @param selectedTabIndex 当前选中的标签索引
+ * @param isAnimatingTabChange 是否正在执行标签切换动画
+ * @param onTabByPageChanged 通过页面滑动切换标签时的回调，参数为新的标签索引
+ * @param onAnimationCompleted 标签切换动画完成时的回调
+ */
+@Composable
+private fun HandlePageStateChanges(
+    pageState: PagerState,
+    selectedTabIndex: Int,
+    isAnimatingTabChange: Boolean,
+    onTabByPageChanged: (Int) -> Unit,
+    onAnimationCompleted: () -> Unit
 ) {
-    AppButtonBordered(
-        text = text,
-        onClick = onClick,
-        modifier = modifier,
-        type = if (isPrimary) type else ButtonType.DEFAULT,
-        color = if (!isPrimary) MaterialTheme.colorScheme.onSurface.copy(alpha = 0.85f) else null,
-        height = 30.dp,
-        textStyle = MaterialTheme.typography.bodySmall
-    )
+    // 当标签选择变化时，自动滚动到相应页面
+    LaunchedEffect(selectedTabIndex, isAnimatingTabChange) {
+        if (isAnimatingTabChange && pageState.currentPage != selectedTabIndex) {
+            pageState.animateScrollToPage(selectedTabIndex)
+        }
+    }
+
+    // 监听分页器当前页面变化
+    LaunchedEffect(pageState.currentPage) {
+        // 当页面已经切换到新页面，立即更新导航状态
+        if (!isAnimatingTabChange) {
+            onTabByPageChanged(pageState.currentPage)
+        }
+    }
+
+    // 监听滑动动画完成
+    LaunchedEffect(pageState.isScrollInProgress) {
+        if (!pageState.isScrollInProgress && isAnimatingTabChange) {
+            // 当页面滑动动画结束，通知完成
+            onAnimationCompleted()
+        }
+    }
 }
 
 @Preview(showBackground = true)

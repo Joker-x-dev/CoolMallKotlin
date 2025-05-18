@@ -9,7 +9,7 @@ import com.joker.coolmall.navigation.routes.OrderRoutes
  * 确认订单页面导航
  */
 fun NavGraphBuilder.orderConfirmScreen() {
-    composable(route = OrderRoutes.ORDER_CONFIRM) {
+    composable(route = OrderRoutes.CONFIRM) {
         OrderConfirmRoute()
     }
 }

@@ -9,7 +9,7 @@ import com.joker.coolmall.navigation.routes.OrderRoutes
  * 订单列表页面导航
  */
 fun NavGraphBuilder.orderListScreen() {
-    composable(route = OrderRoutes.ORDER_LIST) {
+    composable(route = OrderRoutes.LIST) {
         OrderListRoute()
     }
 } 

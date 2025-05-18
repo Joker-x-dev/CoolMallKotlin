@@ -59,10 +59,10 @@ interface OrderNetworkDataSource {
     /**
      * 订单信息
      */
-    suspend fun getOrderInfo(id: String): NetworkResponse<Any>
+    suspend fun getOrderInfo(id: Long): NetworkResponse<Order>
 
     /**
      * 确认收货
      */
-    suspend fun confirmReceive(id: String): NetworkResponse<Any>
+    suspend fun confirmReceive(id: Long): NetworkResponse<Any>
 } 

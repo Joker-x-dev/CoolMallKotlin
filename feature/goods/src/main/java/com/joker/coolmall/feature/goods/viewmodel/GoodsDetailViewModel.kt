@@ -143,7 +143,7 @@ class GoodsDetailViewModel @Inject constructor(
             MMKVUtils.putObject("selectedGoodsList", listOf(selectedGoods))
             // 隐藏规格选择弹窗
             hideSpecModal()
-            super.toPage(OrderRoutes.ORDER_CONFIRM)
+            super.toPage(OrderRoutes.CONFIRM)
         }
     }
 

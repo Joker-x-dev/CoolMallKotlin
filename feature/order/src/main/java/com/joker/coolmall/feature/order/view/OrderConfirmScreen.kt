@@ -8,7 +8,6 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -44,7 +43,6 @@ import com.joker.coolmall.core.ui.component.goods.OrderGoodsCard
 import com.joker.coolmall.core.ui.component.list.AppListItem
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkView
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
-import com.joker.coolmall.core.ui.component.text.AppText
 import com.joker.coolmall.core.ui.component.text.PriceText
 import com.joker.coolmall.core.ui.component.text.TextSize
 import com.joker.coolmall.core.ui.component.text.TextType
@@ -160,7 +158,6 @@ private fun OrderConfirmContentView(
 
             AppListItem(
                 title = "商品总价",
-//                trailingText = "¥${totalPrice}",
                 leadingIcon = R.drawable.ic_shop,
                 trailingContent = {
                     PriceText(

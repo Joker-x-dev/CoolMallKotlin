@@ -73,11 +73,11 @@ interface OrderService {
      * 订单信息
      */
     @GET("order/info/info")
-    suspend fun getOrderInfo(@Query("id") id: String): NetworkResponse<Any>
+    suspend fun getOrderInfo(@Query("id") id: Long): NetworkResponse<Order>
 
     /**
      * 确认收货
      */
     @GET("order/info/confirm")
-    suspend fun confirmReceive(@Query("id") id: String): NetworkResponse<Any>
+    suspend fun confirmReceive(@Query("id") id: Long): NetworkResponse<Any>
 } 
