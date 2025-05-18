@@ -1,6 +1,7 @@
 package com.joker.coolmall.core.ui.component.refresh
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -16,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import com.joker.coolmall.core.common.base.state.LoadMoreState
+import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalXXLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.ui.component.loading.LoadMore
@@ -83,8 +85,16 @@ fun RefreshLayout(
         LazyColumn(
             verticalArrangement = Arrangement.spacedBy(SpaceVerticalMedium),
             state = innerListState,
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(horizontal = SpaceHorizontalMedium)
         ) {
+
+            // 顶部占高
+            item {
+                Spacer(modifier = Modifier)
+            }
+
             // 列表内容
             content()
 

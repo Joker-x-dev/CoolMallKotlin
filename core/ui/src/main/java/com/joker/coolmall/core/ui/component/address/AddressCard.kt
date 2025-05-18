@@ -60,6 +60,7 @@ fun AddressCard(
 ) {
     Card(
         modifier = modifier
+            .clip(ShapeMedium)
             .clickable { onClick(address.id) },
     ) {
         Column {

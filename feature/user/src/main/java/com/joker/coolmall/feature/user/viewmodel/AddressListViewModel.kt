@@ -1,11 +1,12 @@
 package com.joker.coolmall.feature.user.viewmodel
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
+import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkListViewModel
 import com.joker.coolmall.core.data.repository.AddressRepository
-import com.joker.coolmall.core.model.entity.Address
 import com.joker.coolmall.core.model.common.Ids
+import com.joker.coolmall.core.model.entity.Address
+import com.joker.coolmall.core.model.request.PageRequest
+import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.feature.user.navigation.AddressDetailRoutes
 import com.joker.coolmall.navigation.AppNavigator
@@ -25,11 +26,9 @@ import javax.inject.Inject
 @HiltViewModel
 class AddressListViewModel @Inject constructor(
     navigator: AppNavigator,
-    savedStateHandle: SavedStateHandle,
     private val addressRepository: AddressRepository,
-) : BaseNetWorkViewModel<List<Address>>(
-    navigator = navigator,
-    savedStateHandle = savedStateHandle
+) : BaseNetWorkListViewModel<Address>(
+    navigator = navigator
 ) {
 
     /**
@@ -45,14 +44,14 @@ class AddressListViewModel @Inject constructor(
     val deleteId: StateFlow<Long?> = _deleteId.asStateFlow()
 
     init {
-        super.executeRequest()
+        initLoad()
     }
 
     /**
      * 通过重写来给父类提供API请求的Flow
      */
-    override fun requestApiFlow(): Flow<NetworkResponse<List<Address>>> {
-        return addressRepository.getAddressList()
+    override fun requestListData(): Flow<NetworkResponse<NetworkPageData<Address>>> {
+        return addressRepository.getAddressPage(PageRequest())
     }
 
     /**
@@ -104,7 +103,7 @@ class AddressListViewModel @Inject constructor(
             scope = viewModelScope,
             flow = addressRepository.deleteAddress(Ids(listOf(id))).asResult(),
             onData = {
-                super.executeRequest()
+                onRefresh()
                 hideDeleteDialog()
             }
         )

@@ -13,6 +13,8 @@
     <string name="add_address">添加地址</string>
     <string name="edit_address">编辑地址</string>
     <string name="delete_address">删除地址</string>
+    <string name="ok">确认</string>
+    <string name="cancel">取消</string>
     <string name="delete_address_confirm">确认删除该地址吗？</string>
     <string name="set_default_address">设置默认地址</string>
     <string name="default_address">默认地址</string>

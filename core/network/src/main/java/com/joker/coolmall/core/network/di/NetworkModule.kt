@@ -33,6 +33,7 @@ object NetworkModule {
         ignoreUnknownKeys = true
         coerceInputValues = true
         isLenient = true
+//        encodeDefaults = true
     }
 
     // 提供OkHttpClient
@@ -54,6 +55,8 @@ object NetworkModule {
                     addInterceptor(ChuckerInterceptor.Builder(context).build())
                 }
             }
+            // 请求失败重试
+            .retryOnConnectionFailure(true)
             .build()
     }
 

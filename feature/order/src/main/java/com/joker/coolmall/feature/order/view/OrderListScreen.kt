@@ -30,10 +30,8 @@ import com.joker.coolmall.core.designsystem.component.EndRow
 import com.joker.coolmall.core.designsystem.component.HorizontalScroll
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.ShapeSmall
-import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
-import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.model.entity.Order
 import com.joker.coolmall.core.ui.component.button.AppButtonBordered
@@ -301,14 +299,7 @@ private fun OrderTabContent(
     ) {
         // 订单列表项
         items(orderList.size) { index ->
-            if (index == 0) {
-                SpaceVerticalMedium()
-            }
-
-            OrderCard(
-                modifier = Modifier.padding(horizontal = SpaceHorizontalMedium),
-                order = orderList[index]
-            )
+            OrderCard(order = orderList[index])
         }
     }
 }

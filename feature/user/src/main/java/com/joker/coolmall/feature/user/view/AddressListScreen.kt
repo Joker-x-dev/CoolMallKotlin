@@ -1,36 +1,31 @@
 package com.joker.coolmall.feature.user.view
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
-import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
+import com.joker.coolmall.core.common.base.state.BaseNetWorkListUiState
+import com.joker.coolmall.core.common.base.state.LoadMoreState
 import com.joker.coolmall.core.designsystem.theme.AppTheme
-import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
-import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.model.entity.Address
+import com.joker.coolmall.core.model.preview.previewAddressList
+import com.joker.coolmall.core.ui.component.address.AddressActionButton
+import com.joker.coolmall.core.ui.component.address.AddressCard
 import com.joker.coolmall.core.ui.component.bottombar.AppBottomButton
 import com.joker.coolmall.core.ui.component.dialog.WeDialog
-import com.joker.coolmall.core.ui.component.network.BaseNetWorkView
+import com.joker.coolmall.core.ui.component.network.BaseNetWorkListView
+import com.joker.coolmall.core.ui.component.refresh.RefreshLayout
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
 import com.joker.coolmall.feature.user.R
 import com.joker.coolmall.feature.user.viewmodel.AddressListViewModel
-import com.joker.coolmall.core.ui.component.address.AddressCard
-import com.joker.coolmall.core.ui.component.address.AddressActionButton
 
 /**
  * 收货地址列表路由
@@ -45,11 +40,20 @@ internal fun AddressListRoute(
     // 注册页面刷新监听
     val backStackEntry = navController.currentBackStackEntry
     val uiState by viewModel.uiState.collectAsState()
+    val listData by viewModel.listData.collectAsState()
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
+    val loadMoreState by viewModel.loadMoreState.collectAsState()
     val showDeleteDialog by viewModel.showDeleteDialog.collectAsState()
     val deleteId by viewModel.deleteId.collectAsState()
 
     AddressListScreen(
         uiState = uiState,
+        listData = listData,
+        isRefreshing = isRefreshing,
+        loadMoreState = loadMoreState,
+        onRefresh = viewModel::onRefresh,
+        onLoadMore = viewModel::onLoadMore,
+        shouldTriggerLoadMore = viewModel::shouldTriggerLoadMore,
         toAddressDetail = viewModel::toAddressDetailPage,
         toAddressDetailEdit = viewModel::toAddressDetailEditPage,
         onBackClick = viewModel::navigateBack,
@@ -62,8 +66,8 @@ internal fun AddressListRoute(
         WeDialog(
             title = stringResource(id = R.string.delete_address),
             content = stringResource(id = R.string.delete_address_confirm),
-            okText = stringResource(android.R.string.ok),
-            cancelText = stringResource(android.R.string.cancel),
+            okText = stringResource(R.string.ok),
+            cancelText = stringResource(R.string.cancel),
             onOk = { viewModel.deleteAddress() },
             onCancel = { viewModel.hideDeleteDialog() },
             onDismiss = { viewModel.hideDeleteDialog() }
@@ -80,6 +84,7 @@ internal fun AddressListRoute(
  * 收货地址列表界面
  *
  * @param uiState 收货地址列表UI状态
+ * @param listData 收货地址列表数据
  * @param toAddressDetail 导航到收货地址详情（新增模式）
  * @param toAddressDetailEdit 导航到收货地址详情（编辑模式）
  * @param onBackClick 返回上一页回调
@@ -89,7 +94,13 @@ internal fun AddressListRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AddressListScreen(
-    uiState: BaseNetWorkUiState<List<Address>> = BaseNetWorkUiState.Loading,
+    uiState: BaseNetWorkListUiState = BaseNetWorkListUiState.Loading,
+    listData: List<Address> = emptyList(),
+    isRefreshing: Boolean = false,
+    loadMoreState: LoadMoreState = LoadMoreState.Success,
+    onRefresh: () -> Unit = {},
+    onLoadMore: () -> Unit = {},
+    shouldTriggerLoadMore: (lastIndex: Int, totalCount: Int) -> Boolean = { _, _ -> false },
     toAddressDetail: () -> Unit = {},
     toAddressDetailEdit: (Long) -> Unit = {},
     onBackClick: () -> Unit = {},
@@ -98,17 +109,23 @@ internal fun AddressListScreen(
 ) {
     AppScaffold(
         title = R.string.address_list_title, onBackClick = onBackClick, bottomBar = {
-            if (uiState is BaseNetWorkUiState.Success && uiState.data.isNotEmpty()) {
+            if (uiState is BaseNetWorkListUiState.Success && listData.isNotEmpty()) {
                 AppBottomButton(
                     text = stringResource(id = R.string.address_add_new), onClick = toAddressDetail
                 )
             }
         }) {
-        BaseNetWorkView(
-            uiState = uiState, onRetry = onRetry
-        ) { data ->
+        BaseNetWorkListView(
+            uiState = uiState,
+            onRetry = onRetry
+        ) {
             AddressListContentView(
-                data = data,
+                data = listData,
+                isRefreshing = isRefreshing,
+                loadMoreState = loadMoreState,
+                onRefresh = onRefresh,
+                onLoadMore = onLoadMore,
+                shouldTriggerLoadMore = shouldTriggerLoadMore,
                 toAddressDetailEdit = toAddressDetailEdit,
                 onDeleteClick = onDeleteClick
             )
@@ -120,39 +137,51 @@ internal fun AddressListScreen(
  * 地址列表内容视图
  *
  * @param data 地址列表数据
+ * @param isRefreshing 是否正在刷新
+ * @param loadMoreState 加载更多状态
+ * @param onRefresh 刷新回调
+ * @param onLoadMore 加载更多回调
+ * @param onRetry 重试请求回调
+ * @param shouldTriggerLoadMore 是否应触发加载更多的判断函数
  */
 @Composable
 private fun AddressListContentView(
     data: List<Address>,
+    isRefreshing: Boolean,
+    loadMoreState: LoadMoreState,
+    onRefresh: () -> Unit,
+    onLoadMore: () -> Unit,
+    onRetry: () -> Unit = {},
+    shouldTriggerLoadMore: (lastIndex: Int, totalCount: Int) -> Boolean,
     toAddressDetailEdit: (Long) -> Unit,
     onDeleteClick: (Long) -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxWidth()
-            .verticalScroll(rememberScrollState())
-            .padding(SpacePaddingMedium),
-        verticalArrangement = Arrangement.spacedBy(SpaceVerticalMedium)
+    RefreshLayout(
+        isRefreshing = isRefreshing,
+        loadMoreState = loadMoreState,
+        onRefresh = onRefresh,
+        onLoadMore = onLoadMore,
+        shouldTriggerLoadMore = shouldTriggerLoadMore,
     ) {
-        // 地址项
-        data.forEach { address ->
+        // 订单列表项
+        items(data.size) { index ->
             AddressCard(
-                address = address,
-                onClick = { toAddressDetailEdit(address.id) },
+                address = data[index],
+                onClick = { toAddressDetailEdit(data[index].id) },
                 actionSlot = {
                     // 自定义操作区域 - 编辑和删除按钮
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    ) {
                         // 编辑按钮
                         AddressActionButton(
-                            onClick = { toAddressDetailEdit(address.id) },
+                            onClick = { toAddressDetailEdit(data[index].id) },
                             iconResId = R.drawable.ic_edit_fill
                         )
 
                         // 删除按钮
                         AddressActionButton(
-                            onClick = { onDeleteClick(address.id) },
+                            onClick = { onDeleteClick(data[index].id) },
                             iconResId = R.drawable.ic_delete_fill
                         )
                     }
@@ -167,29 +196,8 @@ private fun AddressListContentView(
 internal fun AddressListScreenPreview() {
     AppTheme {
         AddressListScreen(
-            uiState = BaseNetWorkUiState.Success(
-                listOf(
-                    Address(
-                        id = 1,
-                        province = "广东省",
-                        city = "深圳市",
-                        district = "南山区",
-                        address = "科技园南区T3栋 8楼",
-                        contact = "张三",
-                        phone = "13800138000",
-                        isDefault = true
-                    ), Address(
-                        id = 2,
-                        province = "广东省",
-                        city = "广州市",
-                        district = "天河区",
-                        address = "天河路299号 天河商务大厦 12楼",
-                        contact = "李四",
-                        phone = "13900139000",
-                        isDefault = false
-                    )
-                )
-            )
+            uiState = BaseNetWorkListUiState.Success,
+            listData = previewAddressList
         )
     }
 }
@@ -199,29 +207,8 @@ internal fun AddressListScreenPreview() {
 internal fun AddressListScreenPreviewDark() {
     AppTheme(darkTheme = true) {
         AddressListScreen(
-            uiState = BaseNetWorkUiState.Success(
-                listOf(
-                    Address(
-                        id = 1,
-                        province = "广东省",
-                        city = "深圳市",
-                        district = "南山区",
-                        address = "科技园南区T3栋 8楼",
-                        contact = "张三",
-                        phone = "13800138000",
-                        isDefault = true
-                    ), Address(
-                        id = 2,
-                        province = "广东省",
-                        city = "广州市",
-                        district = "天河区",
-                        address = "天河路299号 天河商务大厦 12楼",
-                        contact = "李四",
-                        phone = "13900139000",
-                        isDefault = false
-                    )
-                )
-            )
+            uiState = BaseNetWorkListUiState.Success,
+            listData = previewAddressList
         )
     }
 }
