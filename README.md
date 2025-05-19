@@ -48,7 +48,7 @@ _🛍️ 基于 Kotlin 和 Jetpack Compose 的现代化电商应用_
 | 数据序列化 | ![Kotlinx Serialization](https://img.shields.io/badge/Kotlinx%20Serialization-1.8.0-purple?style=flat-square) |
 | 网络请求 | ![Retrofit](https://img.shields.io/badge/Retrofit-2.11.0-success?style=flat-square) ![OkHttp](https://img.shields.io/badge/OkHttp-4.12.0-success?style=flat-square) |
 | 图片加载 | ![Coil](https://img.shields.io/badge/Coil%20Compose-2.7.0-blueviolet?style=flat-square) |
-| 数据库 | ![Room](https://img.shields.io/badge/Room-计划中-yellow?style=flat-square) |
+| 数据库 | ![Room](https://img.shields.io/badge/Room-2.7.1-yellow?style=flat-square) |
 | 数据存储 | ![MMKV](https://img.shields.io/badge/MMKV-2.1.0-yellow?style=flat-square) |
 | 日志框架 | ![Timber](https://img.shields.io/badge/Timber-5.0.1-green?style=flat-square) |
 | 调试工具 | ![Chucker](https://img.shields.io/badge/Chucker-4.0.0-orange?style=flat-square) ![LeakCanary](https://img.shields.io/badge/LeakCanary-2.14-red?style=flat-square) |

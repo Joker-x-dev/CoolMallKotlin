@@ -27,9 +27,7 @@ import javax.inject.Inject
 class AddressListViewModel @Inject constructor(
     navigator: AppNavigator,
     private val addressRepository: AddressRepository,
-) : BaseNetWorkListViewModel<Address>(
-    navigator = navigator
-) {
+) : BaseNetWorkListViewModel<Address>(navigator) {
 
     /**
      * 是否显示删除确认弹窗
@@ -51,7 +49,7 @@ class AddressListViewModel @Inject constructor(
      * 通过重写来给父类提供API请求的Flow
      */
     override fun requestListData(): Flow<NetworkResponse<NetworkPageData<Address>>> {
-        return addressRepository.getAddressPage(PageRequest())
+        return addressRepository.getAddressPage(PageRequest(page = super.currentPage, size = super.pageSize))
     }
 
     /**

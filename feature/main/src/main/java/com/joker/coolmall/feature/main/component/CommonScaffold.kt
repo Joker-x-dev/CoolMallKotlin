@@ -11,10 +11,12 @@ import androidx.compose.runtime.Composable
 @Composable
 internal fun CommonScaffold(
     topBar: @Composable () -> Unit,
+    bottomBar: @Composable () -> Unit = {},
     content: @Composable (PaddingValues) -> Unit
 ) {
     Scaffold(
         topBar = topBar,
+        bottomBar = bottomBar,
         // 排除底部导航栏边距
         contentWindowInsets = ScaffoldDefaults
             .contentWindowInsets

@@ -348,7 +348,8 @@ fun AppButtonFixed(
                     Text(
                         text = text,
                         style = MaterialTheme.typography.titleMedium,
-                        color = TextWhite
+                        color = TextWhite,
+                        textAlign = TextAlign.Center
                     )
                 }
             }
@@ -374,7 +375,8 @@ fun AppButtonFixed(
                 } else {
                     Text(
                         text = text,
-                        style = MaterialTheme.typography.titleMedium
+                        style = MaterialTheme.typography.titleMedium,
+                        textAlign = TextAlign.Center
                     )
                 }
             }

@@ -1,15 +1,20 @@
 package com.joker.coolmall.feature.goods.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
+import com.joker.coolmall.core.data.repository.CartRepository
 import com.joker.coolmall.core.data.repository.GoodsRepository
+import com.joker.coolmall.core.model.entity.Cart
+import com.joker.coolmall.core.model.entity.CartGoodsSpec
 import com.joker.coolmall.core.model.entity.Goods
 import com.joker.coolmall.core.model.entity.GoodsSpec
 import com.joker.coolmall.core.model.entity.SelectedGoods
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.util.storage.MMKVUtils
+import com.joker.coolmall.core.util.toast.ToastUtils
 import com.joker.coolmall.feature.goods.navigation.GoodsDetailRoutes
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.OrderRoutes
@@ -32,6 +37,7 @@ class GoodsDetailViewModel @Inject constructor(
     navigator: AppNavigator,
     savedStateHandle: SavedStateHandle,
     private val goodsRepository: GoodsRepository,
+    private val cartRepository: CartRepository
 ) : BaseNetWorkViewModel<Goods>(
     navigator = navigator,
     savedStateHandle = savedStateHandle,
@@ -57,6 +63,12 @@ class GoodsDetailViewModel @Inject constructor(
      */
     private val _selectedSpec = MutableStateFlow<GoodsSpec?>(null)
     val selectedSpec: StateFlow<GoodsSpec?> = _selectedSpec.asStateFlow()
+    
+    /**
+     * 加入购物车结果状态
+     */
+    private val _addToCartState = MutableStateFlow<AddToCartState>(AddToCartState.Idle)
+    val addToCartState: StateFlow<AddToCartState> = _addToCartState.asStateFlow()
 
     init {
         super.executeRequest()
@@ -130,8 +142,71 @@ class GoodsDetailViewModel @Inject constructor(
      */
     fun addToCart(selectedGoods: SelectedGoods) {
         viewModelScope.launch {
-            // TODO: 实际项目中应调用Repository的加入购物车方法
-            hideSpecModal()
+            try {
+                _addToCartState.value = AddToCartState.Loading
+                Log.d("GoodsDetailViewModel", "开始添加商品到购物车...")
+                Log.d("GoodsDetailViewModel", "商品信息: ID=${selectedGoods.goodsId}, 规格ID=${selectedGoods.spec?.id}, 数量=${selectedGoods.count}")
+                
+                // 检查参数合法性
+                if (selectedGoods.goodsId <= 0 || selectedGoods.spec == null || selectedGoods.count <= 0) {
+                    val errorMsg = "请选择商品规格和数量"
+                    Log.e("GoodsDetailViewModel", "添加购物车失败: $errorMsg")
+                    _addToCartState.value = AddToCartState.Error(errorMsg)
+                    return@launch
+                }
+                
+                // 获取商品当前数据，构建Cart对象
+                val goodsInfo = super.getSuccessData()
+                Log.d("GoodsDetailViewModel", "商品详情: 标题=${goodsInfo.title}, 主图=${goodsInfo.mainPic}")
+
+                // 1. 检查购物车中是否已有该商品
+                val existingCart = cartRepository.getCartByGoodsId(selectedGoods.goodsId)
+                
+                if (existingCart != null) {
+                    Log.d("GoodsDetailViewModel", "购物车中已有该商品")
+                    // 购物车中已有该商品，检查是否有相同规格
+                    val existingSpec = existingCart.spec.find { it.id == selectedGoods.spec?.id }
+                    
+                    if (existingSpec != null) {
+                        Log.d("GoodsDetailViewModel", "更新已有规格数量: ${existingSpec.count} -> ${existingSpec.count + selectedGoods.count}")
+                        // 更新规格数量
+                        cartRepository.updateCartSpecCount(
+                            goodsId = selectedGoods.goodsId,
+                            specId = existingSpec.id,
+                            count = existingSpec.count + selectedGoods.count
+                        )
+                    } else {
+                        Log.d("GoodsDetailViewModel", "添加新规格到已有商品")
+                        // 添加新规格
+                        val updatedSpecs = existingCart.spec.toMutableList().apply {
+                            add(selectedGoods.spec!!.toCartGoodsSpec(selectedGoods.count))
+                        }
+                        
+                        existingCart.spec = updatedSpecs
+                        cartRepository.updateCart(existingCart)
+                    }
+                } else {
+                    Log.d("GoodsDetailViewModel", "创建新的购物车项")
+                    // 购物车中没有该商品，创建新的购物车项
+                    val cart = Cart().apply {
+                        goodsId = selectedGoods.goodsId
+                        goodsName = goodsInfo.title
+                        goodsMainPic = goodsInfo.mainPic
+                        spec = listOf(selectedGoods.spec!!.toCartGoodsSpec(selectedGoods.count))
+                    }
+                    
+                    cartRepository.addToCart(cart)
+                }
+                
+                Log.d("GoodsDetailViewModel", "添加购物车成功")
+                _addToCartState.value = AddToCartState.Success
+                hideSpecModal()
+                ToastUtils.showSuccess("添加购物车成功")
+            } catch (e: Exception) {
+                val errorMsg = e.message ?: "添加购物车失败"
+                Log.e("GoodsDetailViewModel", "添加购物车失败: $errorMsg")
+                _addToCartState.value = AddToCartState.Error(errorMsg)
+            }
         }
     }
 
@@ -146,5 +221,29 @@ class GoodsDetailViewModel @Inject constructor(
             super.toPage(OrderRoutes.CONFIRM)
         }
     }
-
+    
+    /**
+     * 将商品规格转换为购物车商品规格
+     */
+    private fun GoodsSpec.toCartGoodsSpec(count: Int): CartGoodsSpec {
+        return CartGoodsSpec(
+            id = this.id,
+            goodsId = this.goodsId,
+            name = this.name,
+            price = this.price,
+            stock = this.stock,
+            count = count,
+            images = this.images
+        )
+    }
+    
+    /**
+     * 加入购物车状态
+     */
+    sealed class AddToCartState {
+        object Idle : AddToCartState()
+        object Loading : AddToCartState()
+        object Success : AddToCartState()
+        data class Error(val message: String) : AddToCartState()
+    }
 }

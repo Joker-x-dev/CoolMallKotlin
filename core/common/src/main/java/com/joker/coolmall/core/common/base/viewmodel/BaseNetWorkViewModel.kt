@@ -36,7 +36,7 @@ abstract class BaseNetWorkViewModel<T>(
      * 通用网络请求UI状态
      * 初始为加载中状态
      */
-     val _uiState: MutableStateFlow<BaseNetWorkUiState<T>> =
+    val _uiState: MutableStateFlow<BaseNetWorkUiState<T>> =
         MutableStateFlow(BaseNetWorkUiState.Loading)
     val uiState: StateFlow<BaseNetWorkUiState<T>> = _uiState.asStateFlow()
 
@@ -148,6 +148,19 @@ abstract class BaseNetWorkViewModel<T>(
     protected open fun setErrorState(message: String? = null, exception: Throwable? = null) {
         _uiState.value = BaseNetWorkUiState.Error(message, exception)
     }
+
+    /**
+     * 获取当前页面 uiState 成功以后的数据
+     * 注意：此方法仅适用于当前页面的 uiState 为成功状态时
+     *
+     * @return 成功状态下的 T 类型数据
+     * @throws IllegalStateException 当 uiState 不为成功状态时抛出异常
+     */
+    fun getSuccessData(): T {
+        return (uiState.value as? BaseNetWorkUiState.Success)?.data
+            ?: throw IllegalStateException("当前页面的 uiState 不为成功状态，无法获取数据")
+    }
+
 
     /**
      * 视图层调用此方法，监听页面刷新信号。
