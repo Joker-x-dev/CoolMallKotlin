@@ -7,6 +7,7 @@
     <string name="edit">编辑</string>
     <string name="complete">完成</string>
     <string name="delete">删除</string>
+    <string name="delete_count">删除(%d)</string>
     <string name="select_all">全选</string>
     <string name="total">合计:</string>
     <string name="price">¥%.2f</string>

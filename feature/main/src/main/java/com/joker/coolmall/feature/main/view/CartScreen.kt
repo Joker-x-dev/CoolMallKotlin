@@ -1,5 +1,6 @@
 package com.joker.coolmall.feature.main.view
 
+import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -50,6 +51,11 @@ import com.joker.coolmall.feature.main.R
 import com.joker.coolmall.feature.main.component.CommonScaffold
 import com.joker.coolmall.feature.main.viewmodel.CartViewModel
 
+/**
+ * 购物车页面路由
+ *
+ * @param viewModel 购物车ViewModel
+ */
 @Composable
 internal fun CartRoute(
     viewModel: CartViewModel = hiltViewModel(),
@@ -75,11 +81,27 @@ internal fun CartRoute(
         onToggleItemSelection = viewModel::toggleItemSelection,
         onUpdateCartItemCount = viewModel::updateCartItemCount,
         onDeleteSelected = viewModel::deleteSelectedItems,
-        onSettleClick = {
-        }
+        onSettleClick = viewModel::onCheckoutClick
     )
 }
 
+/**
+ * 购物车页面内容
+ *
+ * @param carts 购物车商品列表
+ * @param isEmpty 购物车是否为空
+ * @param isEditing 是否处于编辑模式
+ * @param isAllSelected 是否全选状态
+ * @param selectedCount 已选商品数量
+ * @param selectedTotalAmount 已选商品总金额
+ * @param selectedItems 已选商品和规格ID的映射
+ * @param onToggleEditMode 切换编辑模式回调
+ * @param onToggleSelectAll 切换全选状态回调
+ * @param onToggleItemSelection 切换商品选中状态回调
+ * @param onUpdateCartItemCount 更新商品数量回调
+ * @param onDeleteSelected 删除已选商品回调
+ * @param onSettleClick 结算按钮点击回调
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun CartScreen(
@@ -114,15 +136,17 @@ internal fun CartScreen(
         },
         bottomBar = {
             // 底部结算栏
-            CartBottomBar(
-                isCheckAll = isAllSelected,
-                isEditing = isEditing,
-                selectedCount = selectedCount,
-                totalPrice = selectedTotalAmount,
-                onCheckAllChanged = onToggleSelectAll,
-                onDeleteClick = onDeleteSelected,
-                onSettleClick = onSettleClick,
-            )
+            if (!isEmpty) {
+                CartBottomBar(
+                    isCheckAll = isAllSelected,
+                    isEditing = isEditing,
+                    selectedCount = selectedCount,
+                    totalPrice = selectedTotalAmount,
+                    onCheckAllChanged = onToggleSelectAll,
+                    onDeleteClick = onDeleteSelected,
+                    onSettleClick = onSettleClick,
+                )
+            }
         }
     ) { paddingValues ->
         Box(
@@ -170,6 +194,18 @@ internal fun CartScreen(
     }
 }
 
+/**
+ * 购物车底部结算栏
+ *
+ * @param isCheckAll 是否全选
+ * @param isEditing 是否处于编辑模式
+ * @param selectedCount 已选商品数量
+ * @param totalPrice 已选商品总金额
+ * @param onCheckAllChanged 切换全选状态回调
+ * @param onDeleteClick 删除按钮点击回调
+ * @param onSettleClick 结算按钮点击回调
+ * @param modifier 修饰符
+ */
 @Composable
 private fun CartBottomBar(
     isCheckAll: Boolean,
@@ -184,7 +220,8 @@ private fun CartBottomBar(
     Surface(
         modifier = modifier
             .fillMaxWidth(),
-        shadowElevation = 4.dp,
+        shadowElevation = 1.dp,
+        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline.copy(alpha = 0.6f)),
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -209,10 +246,10 @@ private fun CartBottomBar(
                 PriceText(totalPrice)
                 SpaceHorizontalSmall()
                 AppButtonFixed(
-                    text = if (selectedCount == 0)
-                        stringResource(id = R.string.settle_account)
-                    else
-                        stringResource(id = R.string.settle_account_count, selectedCount),
+                    text = if (selectedCount == 0) stringResource(id = R.string.settle_account) else stringResource(
+                        id = R.string.settle_account_count,
+                        selectedCount
+                    ),
                     onClick = onSettleClick,
                     enabled = selectedCount > 0,
                     size = ButtonSize.MINI,
@@ -223,7 +260,10 @@ private fun CartBottomBar(
                 )
             } else {
                 AppButtonFixed(
-                    text = stringResource(id = R.string.delete),
+                    text = if (selectedCount == 0) stringResource(id = R.string.delete) else stringResource(
+                        id = R.string.delete_count,
+                        selectedCount
+                    ),
                     onClick = onDeleteClick,
                     enabled = selectedCount > 0,
                     size = ButtonSize.MINI,

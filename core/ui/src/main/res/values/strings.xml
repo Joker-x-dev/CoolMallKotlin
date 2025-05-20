@@ -8,4 +8,5 @@
     <string name="empty_network">网络连接失败</string>
     <string name="empty_network_subtitle">请检查网络连接后重试</string>
     <string name="click_retry">重新加载</string>
+    <string name="empty_cart_btn">去逛逛</string>
 </resources>

@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
 import com.joker.coolmall.core.data.repository.AddressRepository
+import com.joker.coolmall.core.data.repository.CartRepository
 import com.joker.coolmall.core.data.repository.OrderRepository
 import com.joker.coolmall.core.model.entity.Address
 import com.joker.coolmall.core.model.entity.Cart
@@ -19,6 +20,10 @@ import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -28,8 +33,20 @@ import javax.inject.Inject
 class OrderConfirmViewModel @Inject constructor(
     navigator: AppNavigator,
     private val addressRepository: AddressRepository,
-    private val orderRepository: OrderRepository
+    private val orderRepository: OrderRepository,
+    private val cartRepository: CartRepository
 ) : BaseNetWorkViewModel<Address>(navigator) {
+
+    /**
+     * 订单备注状态
+     */
+    private val _remark = MutableStateFlow("")
+    val remark: StateFlow<String> = _remark.asStateFlow()
+
+    /**
+     * 从购物车来的商品项
+     */
+    val cachedCarts: List<Cart>? = MMKVUtils.getObject<List<Cart>>("carts")
 
     /**
      * 选中的商品
@@ -40,9 +57,9 @@ class OrderConfirmViewModel @Inject constructor(
 
     /**
      * 购物车列表
-     * 从选中的商品列表中获取购物车列表
+     * 优先从缓存获取，没有则从选中的商品列表中转换
      */
-    val cartList = selectedGoodsList?.let { goods ->
+    val cartList = cachedCarts ?: selectedGoodsList?.let { goods ->
         // 按商品ID分组
         val groupedGoods = goods.groupBy { it.goodsId }
 
@@ -83,6 +100,7 @@ class OrderConfirmViewModel @Inject constructor(
 
     init {
         executeRequest()
+        // 清除选中商品缓存，避免重复使用
         MMKVUtils.remove("selectedGoodsList")
     }
 
@@ -102,7 +120,7 @@ class OrderConfirmViewModel @Inject constructor(
                 addressId = addressId,
                 goodsList = selectedGoodsList ?: emptyList(),
                 title = "购买商品",
-                remark = "顺丰快递"
+                remark = _remark.value // 使用ViewModel中的备注
             )
         )
 
@@ -111,8 +129,56 @@ class OrderConfirmViewModel @Inject constructor(
             flow = orderRepository.createOrder(params).asResult(),
             showToast = true,
             onData = { data ->
+                // 创建订单成功
                 ToastUtils.showSuccess("订单创建成功")
+
+                // 如果是从购物车来的，需要删除对应的购物车项
+                if (cachedCarts != null && cachedCarts.isNotEmpty()) {
+                    deleteCartItems()
+                }
+
+                // 清除缓存
+                MMKVUtils.remove("carts")
             }
         )
+    }
+
+    /**
+     * 删除购物车中已下单的商品
+     */
+    private fun deleteCartItems() {
+        viewModelScope.launch {
+            cachedCarts?.forEach { cart ->
+                val goodsId = cart.goodsId
+
+                // 获取该商品所有的规格ID
+                val specIds = cart.spec.map { it.id }.toSet()
+
+                // 判断是否需要删除整个商品
+                val fullCart = cartRepository.getCartByGoodsId(goodsId)
+
+                if (fullCart != null) {
+                    // 所有规格是否都在订单中
+                    val allSpecIds = fullCart.spec.map { it.id }.toSet()
+
+                    if (specIds.size == allSpecIds.size && specIds.containsAll(allSpecIds)) {
+                        // 删除整个商品
+                        cartRepository.removeFromCart(goodsId)
+                    } else {
+                        // 逐个删除规格
+                        specIds.forEach { specId ->
+                            cartRepository.removeSpecFromCart(goodsId, specId)
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 更新订单备注
+     */
+    fun updateRemark(newRemark: String) {
+        _remark.value = newRemark
     }
 }

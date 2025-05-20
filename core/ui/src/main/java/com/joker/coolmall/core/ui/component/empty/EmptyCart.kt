@@ -19,7 +19,7 @@ fun EmptyCart(
         message = R.string.empty_cart,
         subtitle = R.string.empty_cart_subtitle,
         icon = R.drawable.ic_empty_cart,
-        retryButtonText = R.string.click_retry,
+        retryButtonText = R.string.empty_cart_btn,
         onRetryClick = onRetryClick
     )
 }

@@ -4,8 +4,13 @@ import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
 import com.joker.coolmall.core.data.repository.CartRepository
 import com.joker.coolmall.core.model.entity.Cart
-import com.joker.coolmall.core.util.log.LogUtils
+import com.joker.coolmall.core.model.entity.Goods
+import com.joker.coolmall.core.model.entity.GoodsSpec
+import com.joker.coolmall.core.model.entity.SelectedGoods
+import com.joker.coolmall.core.util.storage.MMKVUtils
+import com.joker.coolmall.core.util.toast.ToastUtils
 import com.joker.coolmall.navigation.AppNavigator
+import com.joker.coolmall.navigation.routes.OrderRoutes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -43,38 +48,11 @@ class CartViewModel @Inject constructor(
      * 购物车列表数据
      */
     val cartItems: StateFlow<List<Cart>> = cartRepository.getAllCarts()
-        .map { carts ->
-            // 每次数据更新时打印日志
-            LogUtils.d("购物车数据更新 >>>>>>>>>>>>>>>>>>>>")
-            LogUtils.d("购物车商品数量: ${carts.size}")
-            carts.forEach { cart ->
-                LogUtils.d("商品: ${cart.goodsName}")
-                LogUtils.d("  ID: ${cart.goodsId}")
-                LogUtils.d("  主图: ${cart.goodsMainPic}")
-                cart.spec.forEach { spec ->
-                    LogUtils.d("  规格: ${spec.name}")
-                    LogUtils.d("    ID: ${spec.id}")
-                    LogUtils.d("    价格: ${spec.price}")
-                    LogUtils.d("    数量: ${spec.count}")
-                }
-            }
-            LogUtils.d("<<<<<<<<<<<<<<<<<<<<")
-            carts
-        }
+        .map { carts -> carts }
         .stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = emptyList()
-        )
-
-    /**
-     * 购物车商品总数量
-     */
-    val cartCount: StateFlow<Int> = cartRepository.getCartCount()
-        .stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(5000),
-            initialValue = 0
         )
 
     /**
@@ -92,15 +70,15 @@ class CartViewModel @Inject constructor(
      */
     val isAllSelected: StateFlow<Boolean> = combine(cartItems, selectedItems) { carts, selected ->
         if (carts.isEmpty()) return@combine false
-        
+
         // 统计所有规格的数量
         val totalSpecCount = carts.sumOf { it.spec.size }
-        
+
         // 统计已选择的规格数量
         val selectedSpecCount = selected.entries.sumOf { (goodsId, specIds) ->
             specIds.size
         }
-        
+
         // 全选状态：所有规格都被选中
         totalSpecCount > 0 && totalSpecCount == selectedSpecCount
     }.stateIn(
@@ -121,16 +99,16 @@ class CartViewModel @Inject constructor(
     )
 
     /**
-     * 已选中商品的总价（分）
+     * 已选中商品的总价
      */
     val selectedTotalAmount: StateFlow<Int> = combine(cartItems, selectedItems) { carts, selected ->
         var total = 0
-        
+
         carts.forEach { cart ->
             val goodsId = cart.goodsId
             // 获取该商品下选中的规格ID集合
             val selectedSpecIds = selected[goodsId]?.toMutableSet() ?: mutableSetOf()
-            
+
             // 计算该商品下选中规格的总价
             cart.spec.forEach { spec ->
                 if (selectedSpecIds.contains(spec.id)) {
@@ -138,7 +116,7 @@ class CartViewModel @Inject constructor(
                 }
             }
         }
-        
+
         total
     }.stateIn(
         scope = viewModelScope,
@@ -147,48 +125,11 @@ class CartViewModel @Inject constructor(
     )
 
     /**
-     * 购物车总金额（分）
-     */
-    val totalAmount: StateFlow<Int> = cartItems.map { carts ->
-        carts.sumOf { cart ->
-            cart.spec.sumOf { spec ->
-                spec.price * spec.count
-            }
-        }
-    }.stateIn(
-        scope = viewModelScope,
-        started = SharingStarted.WhileSubscribed(5000),
-        initialValue = 0
-    )
-
-    init {
-        println("CartViewModel 初始化...")
-        LogUtils.d("开始刷新购物车数据...")
-        // 初始化时主动获取一次购物车数据
-        refreshCartData()
-    }
-
-    /**
-     * 刷新购物车数据
-     */
-    private fun refreshCartData() {
-        LogUtils.d("开始刷新购物车数据...")
-        viewModelScope.launch {
-            try {
-                LogUtils.d("开始获取购物车数据...")
-                cartRepository.getAllCarts().collect { carts ->
-                    LogUtils.d("获取到购物车数据: ${carts.size} 件商品")
-                }
-            } catch (e: Exception) {
-                LogUtils.e("获取购物车数据失败: ${e.message}")
-            }
-        }
-    }
-
-    /**
      * 切换编辑模式
      */
     fun toggleEditMode() {
+        // 清空选择状态
+        _selectedItems.value = emptyMap()
         _isEditing.value = !_isEditing.value
     }
 
@@ -197,42 +138,42 @@ class CartViewModel @Inject constructor(
      */
     fun toggleSelectAll() {
         val currentAllSelected = isAllSelected.value
-        
+
         if (currentAllSelected) {
             // 当前是全选状态，取消全选
             _selectedItems.value = emptyMap()
         } else {
             // 当前非全选状态，设置全选
             val newSelectedMap = mutableMapOf<Long, Set<Long>>()
-            
+
             cartItems.value.forEach { cart ->
                 val specIds = cart.spec.map { it.id }.toSet()
                 if (specIds.isNotEmpty()) {
                     newSelectedMap[cart.goodsId] = specIds
                 }
             }
-            
+
             _selectedItems.value = newSelectedMap
         }
     }
 
     /**
      * 切换商品规格的选中状态
+     *
+     * @param goodsId 商品ID
+     * @param specId 规格ID
      */
     fun toggleItemSelection(goodsId: Long, specId: Long) {
-        LogUtils.d("切换选中状态开始: goodsId=$goodsId, specId=$specId, 当前状态=${isItemSelected(goodsId, specId)}")
-        
         _selectedItems.update { currentSelected ->
             val mutableMap = currentSelected.toMutableMap()
-            
+
             // 获取该商品当前已选中的规格集合
             val currentSpecIds = currentSelected[goodsId]?.toMutableSet() ?: mutableSetOf()
-            
+
             if (currentSpecIds.contains(specId)) {
                 // 如果规格已选中，则取消选中
                 currentSpecIds.remove(specId)
-                LogUtils.d("取消选中: goodsId=$goodsId, specId=$specId")
-                
+
                 // 如果该商品下没有选中的规格了，则从map中移除该商品
                 if (currentSpecIds.isEmpty()) {
                     mutableMap.remove(goodsId)
@@ -242,90 +183,23 @@ class CartViewModel @Inject constructor(
             } else {
                 // 如果规格未选中，则添加选中
                 currentSpecIds.add(specId)
-                LogUtils.d("添加选中: goodsId=$goodsId, specId=$specId")
                 mutableMap[goodsId] = currentSpecIds
             }
-            
-            // 打印更新后的状态
-            val result = mutableMap.toMap()
-            LogUtils.d("选中状态更新后: $result")
-            result
-        }
-    }
 
-    /**
-     * 检查商品规格是否被选中
-     */
-    fun isItemSelected(goodsId: Long, specId: Long): Boolean {
-        val selectedSpecIds = selectedItems.value[goodsId] ?: return false
-        val isSelected = selectedSpecIds.contains(specId)
-        LogUtils.d("检查选中状态: goodsId=$goodsId, specId=$specId, isSelected=$isSelected")
-        return isSelected
+            mutableMap.toMap()
+        }
     }
 
     /**
      * 更新购物车商品规格数量
+     *
+     * @param goodsId 商品ID
+     * @param specId 规格ID
+     * @param count 更新后的数量
      */
     fun updateCartItemCount(goodsId: Long, specId: Long, count: Int) {
         viewModelScope.launch {
-            try {
-                cartRepository.updateCartSpecCount(goodsId, specId, count)
-                LogUtils.d("更新购物车商品数量成功: goodsId=$goodsId, specId=$specId, count=$count")
-            } catch (e: Exception) {
-                LogUtils.e("更新购物车商品数量失败: ${e.message}")
-            }
-        }
-    }
-
-    /**
-     * 从购物车移除商品
-     */
-    fun removeCartItem(goodsId: Long) {
-        viewModelScope.launch {
-            try {
-                cartRepository.removeFromCart(goodsId)
-                LogUtils.d("移除购物车商品成功: goodsId=$goodsId")
-                
-                // 同时从选中集合中移除该商品
-                _selectedItems.update { current ->
-                    val newMap = current.toMutableMap()
-                    newMap.remove(goodsId)
-                    newMap
-                }
-            } catch (e: Exception) {
-                LogUtils.e("移除购物车商品失败: ${e.message}")
-            }
-        }
-    }
-
-    /**
-     * 从购物车移除规格
-     */
-    fun removeCartItemSpec(goodsId: Long, specId: Long) {
-        viewModelScope.launch {
-            try {
-                cartRepository.removeSpecFromCart(goodsId, specId)
-                LogUtils.d("移除购物车商品规格成功: goodsId=$goodsId, specId=$specId")
-                
-                // 同时从选中集合中移除该规格
-                _selectedItems.update { current ->
-                    val newMap = current.toMutableMap()
-                    val specIds = newMap[goodsId]?.toMutableSet()
-                    
-                    if (specIds != null) {
-                        specIds.remove(specId)
-                        if (specIds.isEmpty()) {
-                            newMap.remove(goodsId)
-                        } else {
-                            newMap[goodsId] = specIds
-                        }
-                    }
-                    
-                    newMap
-                }
-            } catch (e: Exception) {
-                LogUtils.e("移除购物车商品规格失败: ${e.message}")
-            }
+            cartRepository.updateCartSpecCount(goodsId, specId, count)
         }
     }
 
@@ -334,54 +208,127 @@ class CartViewModel @Inject constructor(
      */
     fun deleteSelectedItems() {
         viewModelScope.launch {
-            try {
-                val itemsToDelete = selectedItems.value
-                
-                // 遍历所有选中的商品和规格
-                itemsToDelete.forEach { (goodsId, specIds) ->
-                    // 获取该商品当前所有的规格
-                    val cart = cartItems.value.find { it.goodsId == goodsId }
-                    
-                    if (cart != null) {
-                        // 如果该商品的所有规格都被选中，则直接删除整个商品
-                        if (specIds.size == cart.spec.size) {
-                            cartRepository.removeFromCart(goodsId)
-                            LogUtils.d("删除整个商品: goodsId=$goodsId")
-                        } else {
-                            // 否则只删除选中的规格
-                            specIds.forEach { specId ->
-                                cartRepository.removeSpecFromCart(goodsId, specId)
-                                LogUtils.d("删除商品规格: goodsId=$goodsId, specId=$specId")
-                            }
+            val itemsToDelete = selectedItems.value
+
+            // 遍历所有选中的商品和规格
+            itemsToDelete.forEach { (goodsId, specIds) ->
+                // 获取该商品当前所有的规格
+                val cart = cartItems.value.find { it.goodsId == goodsId }
+
+                if (cart != null) {
+                    // 如果该商品的所有规格都被选中，则直接删除整个商品
+                    if (specIds.size == cart.spec.size) {
+                        cartRepository.removeFromCart(goodsId)
+                    } else {
+                        // 否则只删除选中的规格
+                        specIds.forEach { specId ->
+                            cartRepository.removeSpecFromCart(goodsId, specId)
                         }
                     }
                 }
-                
-                // 清空选择状态
-                _selectedItems.value = emptyMap()
-                LogUtils.d("删除选中的商品成功")
-                
-            } catch (e: Exception) {
-                LogUtils.e("删除选中的商品失败: ${e.message}")
             }
+
+            // 清空选择状态
+            _selectedItems.value = emptyMap()
+            _isEditing.value = false
         }
     }
 
     /**
-     * 清空购物车
+     * 去结算按钮点击事件
      */
-    fun clearCart() {
+    fun onCheckoutClick() {
         viewModelScope.launch {
-            try {
-                cartRepository.clearCart()
-                LogUtils.d("清空购物车成功")
-                
-                // 清空选择状态
-                _selectedItems.value = emptyMap()
-            } catch (e: Exception) {
-                LogUtils.e("清空购物车失败: ${e.message}")
+            val selected = selectedItems.value
+            if (selected.isEmpty()) {
+                ToastUtils.showError("请选择要结算的商品")
+                return@launch
+            }
+
+            // 1. 获取选中的购物车项
+            val selectedCarts = getSelectedCarts()
+            if (selectedCarts.isEmpty()) {
+                ToastUtils.showError("获取选中商品失败")
+                return@launch
+            }
+
+            // 2. 缓存选中的购物车项
+            MMKVUtils.putObject("carts", selectedCarts)
+
+            // 3. 将购物车项转换为SelectedGoods
+            val selectedGoodsList = convertCartsToSelectedGoods(selectedCarts)
+
+            // 4. 缓存SelectedGoods
+            MMKVUtils.putObject("selectedGoodsList", selectedGoodsList)
+
+            // 5. 导航到订单确认页面
+            super.toPage(OrderRoutes.CONFIRM)
+        }
+    }
+
+    /**
+     * 获取选中的购物车项
+     *
+     * @return 选中的购物车列表
+     */
+    private fun getSelectedCarts(): List<Cart> {
+        val result = mutableListOf<Cart>()
+        val selected = selectedItems.value
+
+        cartItems.value.forEach { cart ->
+            val goodsId = cart.goodsId
+            val selectedSpecIds = selected[goodsId] ?: return@forEach
+
+            // 创建一个新的Cart对象，只包含选中的规格
+            val newCart = Cart().apply {
+                this.goodsId = cart.goodsId
+                this.goodsName = cart.goodsName
+                this.goodsMainPic = cart.goodsMainPic
+                this.spec = cart.spec.filter { selectedSpecIds.contains(it.id) }
+            }
+
+            if (newCart.spec.isNotEmpty()) {
+                result.add(newCart)
             }
         }
+
+        return result
+    }
+
+    /**
+     * 将购物车项转换为SelectedGoods
+     *
+     * @param carts 购物车列表
+     * @return 转换后的SelectedGoods列表
+     */
+    private fun convertCartsToSelectedGoods(carts: List<Cart>): List<SelectedGoods> {
+        val result = mutableListOf<SelectedGoods>()
+
+        carts.forEach { cart ->
+            cart.spec.forEach { cartSpec ->
+                val selectedGoods = SelectedGoods().apply {
+                    goodsId = cart.goodsId
+                    count = cartSpec.count
+                    spec = GoodsSpec(
+                        id = cartSpec.id,
+                        goodsId = cartSpec.goodsId,
+                        name = cartSpec.name,
+                        price = cartSpec.price,
+                        stock = cartSpec.stock,
+                        images = cartSpec.images
+                    )
+                    goodsInfo = Goods(
+                        id = cart.goodsId,
+                        title = cart.goodsName,
+                        mainPic = cart.goodsMainPic
+                    )
+                }
+
+                result.add(selectedGoods)
+            }
+        }
+
+        return result
     }
 }
 

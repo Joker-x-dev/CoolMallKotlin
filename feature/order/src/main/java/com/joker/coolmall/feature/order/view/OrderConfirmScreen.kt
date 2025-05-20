@@ -14,9 +14,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -60,11 +57,15 @@ internal fun OrderConfirmRoute(
     viewModel: OrderConfirmViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val remark by viewModel.remark.collectAsState()
+    
     OrderConfirmScreen(
         uiState = uiState,
         onRetry = viewModel::retryRequest,
         onBackClick = viewModel::navigateBack,
         cartList = viewModel.cartList,
+        remark = remark,
+        onRemarkChange = viewModel::updateRemark,
         onSubmitOrderClick = viewModel::onSubmitOrderClick
     )
 }
@@ -74,6 +75,8 @@ internal fun OrderConfirmRoute(
  *
  * @param onRetry 重试请求回调
  * @param cartList 购物车列表
+ * @param remark 订单备注
+ * @param onRemarkChange 订单备注变更回调
  * @param onSubmitOrderClick 提交订单点击回调
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -83,9 +86,11 @@ internal fun OrderConfirmScreen(
     onRetry: () -> Unit = {},
     onBackClick: () -> Unit = {},
     cartList: List<Cart> = emptyList(),
+    remark: String = "",
+    onRemarkChange: (String) -> Unit = {},
     onSubmitOrderClick: () -> Unit = {}
 ) {
-    val totalPrice = remember(cartList) {
+    val totalPrice = androidx.compose.runtime.remember(cartList) {
         cartList.sumOf { cart ->
             cart.spec.sumOf { spec ->
                 spec.price * spec.count
@@ -98,17 +103,25 @@ internal fun OrderConfirmScreen(
         useLargeTopBar = true,
         onBackClick = onBackClick,
         bottomBar = {
-            OrderBottomBar(
-                totalPrice = totalPrice,
-                onSubmitClick = onSubmitOrderClick
-            )
+            if (uiState is BaseNetWorkUiState.Success) {
+                OrderBottomBar(
+                    totalPrice = totalPrice,
+                    onSubmitClick = onSubmitOrderClick
+                )
+            }
         }
     ) {
         BaseNetWorkView(
             uiState = uiState,
             onRetry = onRetry
         ) {
-            OrderConfirmContentView(it, totalPrice, cartList)
+            OrderConfirmContentView(
+                address = it,
+                totalPrice = totalPrice, 
+                cartList = cartList,
+                remark = remark,
+                onRemarkChange = onRemarkChange
+            )
         }
     }
 }
@@ -119,19 +132,18 @@ internal fun OrderConfirmScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun OrderConfirmContentView(
-    data: Address,
+    address: Address,
     totalPrice: Int,
-    cartList: List<Cart>
+    cartList: List<Cart>,
+    remark: String,
+    onRemarkChange: (String) -> Unit
 ) {
-    // 订单备注状态
-    var remark by remember { mutableStateOf("") }
-
     VerticalList(
         modifier = Modifier.verticalScroll(rememberScrollState())
     ) {
         // 地址选择卡片
         AddressCard(
-            address = data,
+            address = address,
             onClick = { /* 地址点击回调 */ },
             addressSelected = true
         )
@@ -198,7 +210,7 @@ private fun OrderConfirmContentView(
         AppCard(lineTitle = "订单备注") {
             OutlinedTextField(
                 value = remark,
-                onValueChange = { remark = it },
+                onValueChange = onRemarkChange,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 8.dp),
