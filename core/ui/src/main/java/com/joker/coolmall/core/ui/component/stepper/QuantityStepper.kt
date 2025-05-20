@@ -19,9 +19,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.joker.coolmall.core.designsystem.component.WrapRow
 import com.joker.coolmall.core.designsystem.theme.AppTheme
+import com.joker.coolmall.core.designsystem.theme.CommonIcon
 import com.joker.coolmall.core.designsystem.theme.Primary
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
-import com.joker.coolmall.core.ui.component.text.AppText
+import com.joker.coolmall.core.ui.R
 
 /**
  * 数量控制器组件
@@ -33,7 +34,7 @@ import com.joker.coolmall.core.ui.component.text.AppText
  * @param minValue 最小允许值，默认为1
  * @param maxValue 最大允许值，默认为Int.MAX_VALUE
  * @param onQuantityChanged 数量变更回调，参数为新的数量值
- * @param buttonSize 按钮尺寸，默认为28.dp
+ * @param buttonSize 按钮尺寸，默认为24.dp
  * @param quantityWidth 数量显示区域的最小宽度，默认为24.dp
  */
 @Composable
@@ -42,7 +43,7 @@ fun QuantityStepper(
     minValue: Int = 1,
     maxValue: Int = Int.MAX_VALUE,
     onQuantityChanged: (Int) -> Unit,
-    buttonSize: Int = 28,
+    buttonSize: Int = 24,
     quantityWidth: Int = 24
 ) {
     WrapRow {
@@ -60,14 +61,15 @@ fun QuantityStepper(
                     if (quantity > minValue) onQuantityChanged(quantity - 1)
                 }
         ) {
-            AppText(
-                text = "-",
-                style = MaterialTheme.typography.bodyLarge,
-                color = if (quantity > minValue)
-                    MaterialTheme.colorScheme.onSurface
+            CommonIcon(
+                resId = R.drawable.ic_reduce,
+                tint = if (quantity > minValue)
+                    MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 else
-                    MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f)
+                    MaterialTheme.colorScheme.onSurface.copy(alpha = 0.3f),
+                size = 16.dp
             )
+
         }
 
         // 数量
@@ -94,10 +96,10 @@ fun QuantityStepper(
                     if (quantity < maxValue) onQuantityChanged(quantity + 1)
                 }
         ) {
-            Text(
-                text = "+",
-                style = MaterialTheme.typography.bodyLarge,
-                color = Color.White
+            CommonIcon(
+                resId = R.drawable.ic_add,
+                tint = Color.White,
+                size = 16.dp
             )
         }
     }

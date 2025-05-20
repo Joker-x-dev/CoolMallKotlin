@@ -151,7 +151,7 @@ private fun UserInfoSection(
                 .background(MaterialTheme.colorScheme.surface)
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_user_fill),
+                painter = painterResource(id = R.drawable.ic_my_fill),
                 contentDescription = null,
                 modifier = Modifier
                     .size(36.dp)
@@ -207,7 +207,7 @@ private fun MembershipCard() {
         ) {
             Row {
                 Icon(
-                    painter = painterResource(id = R.drawable.ic_vip),
+                    painter = painterResource(id = R.drawable.ic_vip_fill),
                     contentDescription = "会员",
                     tint = Color(0xFFE0A472),
                     modifier = Modifier.size(20.dp)
@@ -250,25 +250,25 @@ private fun OrderSection(
         // 订单状态图标
         SpaceEvenlyRow {
             OrderStatusItem(
-                icon = R.drawable.ic_wait_pay,
+                icon = R.drawable.ic_pay,
                 label = "待付款",
                 modifier = Modifier.weight(1f),
             )
 
             OrderStatusItem(
-                icon = R.drawable.ic_wait_ship,
+                icon = R.drawable.ic_receipt,
                 label = "待发货",
                 modifier = Modifier.weight(1f),
             )
 
             OrderStatusItem(
-                icon = R.drawable.ic_wait_receive,
+                icon = R.drawable.ic_logistics,
                 label = "待收货",
                 modifier = Modifier.weight(1f),
             )
 
             OrderStatusItem(
-                icon = R.drawable.ic_wait_review,
+                icon = R.drawable.ic_message,
                 label = "待评价",
                 modifier = Modifier.weight(1f),
             )
@@ -293,7 +293,7 @@ private fun MyFootprintSection(
         AppListItem(
             title = "我的足迹",
             trailingText = "6",
-            leadingIcon = R.drawable.ic_footprint,
+            leadingIcon = R.drawable.ic_footprint_fill,
             leadingIconTint = Color(0xFFFF9800),
             onClick = toUserFootprint
         )
@@ -419,7 +419,7 @@ private fun FunctionMenuSection(
 
         AppListItem(
             title = "客服",
-            leadingIcon = R.drawable.ic_customer_service_fill,
+            leadingIcon = R.drawable.ic_service_fill,
             leadingIconTint = Color(0xFFF87C7B),
             verticalPadding = SpaceVerticalLarge,
             showDivider = false
@@ -433,7 +433,7 @@ private fun FunctionMenuSection(
     Card {
         AppListItem(
             title = "设置",
-            leadingIcon = R.drawable.ic_settings,
+            leadingIcon = R.drawable.ic_set_fill,
             leadingIconTint = Color(0xFF26A69A),
             verticalPadding = SpaceVerticalLarge,
             showDivider = false

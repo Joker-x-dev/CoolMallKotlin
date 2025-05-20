@@ -262,7 +262,7 @@ private fun SpecSelectModalContentView(
         SpaceBetweenRow {
             TitleWithLine("规格分类")
             CommonIcon(
-                resId = if (isGridMode) R.drawable.ic_list else R.drawable.ic_classify,
+                resId = if (isGridMode) R.drawable.ic_menu_list else R.drawable.ic_menu,
                 tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                 modifier = Modifier
                     .clickable(

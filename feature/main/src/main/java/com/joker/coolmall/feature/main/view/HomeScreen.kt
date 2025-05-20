@@ -282,7 +282,7 @@ private fun FlashSale(goods: List<Goods>, toGoodsDetail: (Long) -> Unit) {
         AppListItem(
             title = "限时精选",
             trailingText = "查看全部",
-            leadingIcon = R.drawable.ic_clock,
+            leadingIcon = R.drawable.ic_time,
         )
 
         // 商品列表 - 使用LazyRow

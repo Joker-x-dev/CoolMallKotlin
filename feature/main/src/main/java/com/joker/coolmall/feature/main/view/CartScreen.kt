@@ -295,7 +295,7 @@ private fun CartCheckButton(
     shape: Shape = ShapeCircle
 ) {
     CommonIcon(
-        resId = if (selected) R.drawable.ic_checkbox_checked else R.drawable.ic_checkbox_unchecked,
+        resId = if (selected) R.drawable.ic_success_circle else R.drawable.ic_circle,
         contentDescription = if (selected) "已选择" else "未选择",
         modifier = modifier
             .size(size.dp)
