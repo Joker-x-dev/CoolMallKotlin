@@ -54,6 +54,11 @@ _🛍️ 基于 Kotlin 和 Jetpack Compose 的现代化电商应用_
 | 调试工具 | ![Chucker](https://img.shields.io/badge/Chucker-4.0.0-orange?style=flat-square) ![LeakCanary](https://img.shields.io/badge/LeakCanary-2.14-red?style=flat-square) |
 | 测试框架 | ![Testing](https://img.shields.io/badge/JUnit-计划中-yellow?style=flat-square) |
 
+## 📚 资源与参考
+
+- **资源说明**: 项目中的部分素材来自网络，仅用于学习交流
+- **图标来源**: 项目使用的图标库来自[图鸟 icon](https://github.com/tuniaoTech)
+
 ## ✨ 项目特点
 
 - 采用模块化架构设计，各功能模块高度解耦
