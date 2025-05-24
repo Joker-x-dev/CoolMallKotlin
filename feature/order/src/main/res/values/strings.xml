@@ -3,7 +3,8 @@
     <string name="order_list">订单列表</string>
     <string name="order_detail">订单详情</string>
     <string name="order_confirm">确认订单</string>
-    
+    <string name="order_pay">收银台</string>
+
     <!-- 订单状态标题 -->
     <string name="order_status_pending_payment">待付款</string>
     <string name="order_status_pending_shipment">待发货</string>

@@ -73,6 +73,9 @@ leakcanaryAndroid = "2.14"
 # Room 数据库
 room = "2.7.1"
 
+# 支付宝支付
+alipaysdkAndroid = "15.8.33"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -157,6 +160,9 @@ androidx-room-compiler = { group = "androidx.room", name = "room-compiler", vers
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 androidx-room-testing = { group = "androidx.room", name = "room-testing", version.ref = "room" }
 androidx-room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
+
+# 支付宝支付
+alipaysdk-android = { module = "com.alipay.sdk:alipaysdk-android", version.ref = "alipaysdkAndroid" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

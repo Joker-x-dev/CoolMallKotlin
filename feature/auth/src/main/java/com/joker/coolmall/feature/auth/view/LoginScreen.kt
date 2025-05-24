@@ -38,7 +38,6 @@ import com.joker.coolmall.core.designsystem.component.SpaceEvenlyRow
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.LogoIcon
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXLarge
-import com.joker.coolmall.core.designsystem.theme.TextTertiaryLight
 import com.joker.coolmall.core.ui.component.button.AppButton
 import com.joker.coolmall.core.ui.component.button.ButtonStyle
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
@@ -175,19 +174,19 @@ internal fun LoginScreen(
                     SpaceEvenlyRow() {
                         // 微信登录
                         ThirdPartyLoginButton(
-                            icon = R.drawable.ic_wechat,
+                            icon = com.joker.coolmall.core.ui.R.drawable.ic_wechat,
                             name = stringResource(id = R.string.wechat),
                             onClick = { /* 微信登录逻辑 */ })
 
                         // QQ登录
                         ThirdPartyLoginButton(
-                            icon = R.drawable.ic_qq,
+                            icon = com.joker.coolmall.core.ui.R.drawable.ic_qq,
                             name = stringResource(id = R.string.qq),
                             onClick = { /* QQ登录逻辑 */ })
 
                         // 支付宝登录
                         ThirdPartyLoginButton(
-                            icon = R.drawable.ic_alipay,
+                            icon = com.joker.coolmall.core.ui.R.drawable.ic_alipay,
                             name = stringResource(id = R.string.alipay),
                             onClick = { /* 支付宝登录逻辑 */ })
                     }

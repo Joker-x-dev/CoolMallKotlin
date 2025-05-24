@@ -57,7 +57,7 @@ internal fun OrderDetailRoute(
         onBackClick = viewModel::navigateBack,
         onRetry = viewModel::retryRequest,
         onCancelClick = { /* 取消订单 */ },
-        onPayClick = { /* 去支付 */ },
+        onPayClick = viewModel::navigateToPayment,
         onRefundClick = { /* 申请退款 */ },
         onConfirmClick = { /* 确认收货 */ },
         onLogisticsClick = { /* 查看物流 */ },

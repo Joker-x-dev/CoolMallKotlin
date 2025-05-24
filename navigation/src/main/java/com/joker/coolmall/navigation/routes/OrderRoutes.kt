@@ -23,4 +23,9 @@ object OrderRoutes {
      * 订单详情路由
      */
     const val DETAIL = "$ORDER_ROUTE/detail"
+
+    /**
+     * 订单支付路由
+     */
+    const val PAY = "$ORDER_ROUTE/pay"
 }

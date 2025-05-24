@@ -12,14 +12,9 @@ import com.joker.coolmall.core.model.response.NetworkResponse
 interface OrderNetworkDataSource {
 
     /**
-     * 支付回调通知处理
+     * 支付宝APP支付
      */
-    suspend fun wxPayNotify(params: Any): NetworkResponse<Any>
-
-    /**
-     * 微信APP支付
-     */
-    suspend fun wxAppPay(params: Any): NetworkResponse<Any>
+    suspend fun alipayAppPay(params: Map<String, Long>): NetworkResponse<String>
 
     /**
      * 修改订单

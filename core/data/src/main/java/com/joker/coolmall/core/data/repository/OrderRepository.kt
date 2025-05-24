@@ -18,18 +18,12 @@ import javax.inject.Inject
 class OrderRepository @Inject constructor(
     private val orderNetworkDataSource: OrderNetworkDataSource
 ) {
-    /**
-     * 支付回调通知处理
-     */
-    fun wxPayNotify(params: Any): Flow<NetworkResponse<Any>> = flow {
-        emit(orderNetworkDataSource.wxPayNotify(params))
-    }.flowOn(Dispatchers.IO)
 
     /**
-     * 微信APP支付
+     * 支付宝APP支付
      */
-    fun wxAppPay(params: Any): Flow<NetworkResponse<Any>> = flow {
-        emit(orderNetworkDataSource.wxAppPay(params))
+    fun alipayAppPay(params: Map<String, Long>): Flow<NetworkResponse<String>> = flow {
+        emit(orderNetworkDataSource.alipayAppPay(params))
     }.flowOn(Dispatchers.IO)
 
     /**

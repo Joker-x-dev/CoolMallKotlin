@@ -8,6 +8,7 @@ import com.joker.coolmall.core.model.entity.CartGoodsSpec
 import com.joker.coolmall.core.model.entity.Order
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.feature.order.navigation.OrderDetailRoutes
+import com.joker.coolmall.feature.order.navigation.OrderPayRoutes
 import com.joker.coolmall.navigation.AppNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
@@ -49,6 +50,23 @@ class OrderDetailViewModel @Inject constructor(
     override fun onRequestSuccess(data: Order) {
         _cartList.value = convertOrderGoodsToCart(data)
         super.setSuccessState(data)
+    }
+
+    /**
+     * 跳转到支付页面
+     */
+    fun navigateToPayment() {
+        val order = super.getSuccessData()
+        val orderId = order.id
+        val paymentPrice = order.price - order.discountPrice // 实付金额
+
+        // 构建带参数的支付路由：/order/pay/{orderId}/{paymentPrice}
+        val paymentRoute = OrderPayRoutes.ORDER_PAY_PATTERN
+            .replace("{${OrderPayRoutes.ORDER_ID_ARG}}", orderId.toString())
+            .replace("{${OrderPayRoutes.PRICE_ARG}}", paymentPrice.toString())
+
+        toPage(paymentRoute)
+
     }
 
     /**

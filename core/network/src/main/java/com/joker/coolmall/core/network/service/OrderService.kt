@@ -16,16 +16,10 @@ import retrofit2.http.Query
 interface OrderService {
 
     /**
-     * 支付回调通知处理
+     * 支付宝APP支付
      */
-    @POST("order/pay/wxNotify")
-    suspend fun wxPayNotify(@Body params: Any): NetworkResponse<Any>
-
-    /**
-     * 微信APP支付
-     */
-    @POST("order/pay/wxAppPay")
-    suspend fun wxAppPay(@Body params: Any): NetworkResponse<Any>
+    @POST("order/pay/alipayAppPay")
+    suspend fun alipayAppPay(@Body params: Map<String, Long>): NetworkResponse<String>
 
     /**
      * 修改订单

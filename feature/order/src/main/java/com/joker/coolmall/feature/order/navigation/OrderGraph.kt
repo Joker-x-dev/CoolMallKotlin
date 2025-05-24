@@ -17,4 +17,7 @@ fun NavGraphBuilder.orderGraph(navController: NavHostController) {
     
     // 订单详情页面
     orderDetailScreen()
+
+    // 订单支付页面
+    orderPayScreen()
 }

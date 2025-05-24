@@ -9,3 +9,8 @@ android {
         buildConfig = true
     }
 }
+
+dependencies {
+    //支付宝支付
+    implementation(libs.alipaysdk.android)
+}

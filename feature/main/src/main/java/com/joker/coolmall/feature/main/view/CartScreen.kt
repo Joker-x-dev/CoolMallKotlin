@@ -1,7 +1,6 @@
 package com.joker.coolmall.feature.main.view
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -24,16 +22,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.joker.coolmall.core.designsystem.theme.AppTheme
-import com.joker.coolmall.core.designsystem.theme.CommonIcon
-import com.joker.coolmall.core.designsystem.theme.Primary
-import com.joker.coolmall.core.designsystem.theme.ShapeCircle
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
@@ -44,6 +37,7 @@ import com.joker.coolmall.core.ui.component.button.AppButtonFixed
 import com.joker.coolmall.core.ui.component.button.ButtonShape
 import com.joker.coolmall.core.ui.component.button.ButtonSize
 import com.joker.coolmall.core.ui.component.button.ButtonType
+import com.joker.coolmall.core.ui.component.button.CheckButton
 import com.joker.coolmall.core.ui.component.empty.EmptyCart
 import com.joker.coolmall.core.ui.component.goods.OrderGoodsCard
 import com.joker.coolmall.core.ui.component.text.PriceText
@@ -179,7 +173,7 @@ internal fun CartScreen(
                                 // 每次渲染时都会重新计算选中状态
                                 val selected =
                                     selectedItems[cart.goodsId]?.contains(spec.id) == true
-                                CartCheckButton(
+                                CheckButton(
                                     selected = selected,
                                     onClick = { onToggleItemSelection(cart.goodsId, spec.id) }
                                 )
@@ -229,7 +223,7 @@ private fun CartBottomBar(
                 .fillMaxWidth()
                 .padding(SpacePaddingMedium)
         ) {
-            CartCheckButton(
+            CheckButton(
                 selected = isCheckAll,
                 onClick = onCheckAllChanged
             )
@@ -277,35 +271,7 @@ private fun CartBottomBar(
     }
 }
 
-/**
- * 购物车选择按钮组件
- *
- * @param selected 是否选中
- * @param onClick 点击回调
- * @param modifier 修饰符
- * @param size 按钮大小
- * @param shape 按钮形状
- */
-@Composable
-private fun CartCheckButton(
-    selected: Boolean,
-    onClick: () -> Unit,
-    modifier: Modifier = Modifier,
-    size: Int = 24,
-    shape: Shape = ShapeCircle
-) {
-    CommonIcon(
-        resId = if (selected) R.drawable.ic_success_circle else R.drawable.ic_circle,
-        contentDescription = if (selected) "已选择" else "未选择",
-        modifier = modifier
-            .size(size.dp)
-            .clip(shape)
-            .clickable(onClick = onClick),
-        tint = if (selected) Primary else MaterialTheme.colorScheme.onSurfaceVariant.copy(
-            alpha = 0.6f
-        )
-    )
-}
+
 
 @Preview(showBackground = true)
 @Composable
