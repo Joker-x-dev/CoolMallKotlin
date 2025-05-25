@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.joker.coolmall.feature.market"
+    namespace = "com.joker.coolmall.feature.cs"
 
     buildFeatures {
         buildConfig = true

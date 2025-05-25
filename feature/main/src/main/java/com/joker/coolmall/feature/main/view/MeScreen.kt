@@ -78,6 +78,7 @@ internal fun MeRoute(
         toOrderList = viewModel::toOrderListPage,
         toOrderListByTab = viewModel::toOrderListPage,
         toUserFootprint = viewModel::toUserFootprintPage,
+        toChat = viewModel::toChatPage,
     )
 }
 
@@ -90,7 +91,8 @@ internal fun MeScreen(
     toAddressList: () -> Unit = {},
     toOrderList: () -> Unit = {},
     toOrderListByTab: (Int) -> Unit = {},
-    toUserFootprint: () -> Unit = {}
+    toUserFootprint: () -> Unit = {},
+    toChat: () -> Unit = {}
 ) {
     CommonScaffold(topBar = { }) {
         Column(
@@ -125,7 +127,8 @@ internal fun MeScreen(
 
             // 功能菜单区域
             FunctionMenuSection(
-                toAddressList = toAddressList
+                toAddressList = toAddressList,
+                toChat = toChat
             )
             SpaceVerticalMedium()
 
@@ -358,9 +361,9 @@ private fun FootprintItem(imageUrl: String) {
  */
 @Composable
 private fun OrderStatusItem(
-    modifier: Modifier, 
-    icon: Int, 
-    label: String, 
+    modifier: Modifier,
+    icon: Int,
+    label: String,
     badgeCount: Int = 0,
     onClick: () -> Unit = {}
 ) {
@@ -412,7 +415,8 @@ private fun OrderStatusItem(
  */
 @Composable
 private fun FunctionMenuSection(
-    toAddressList: () -> Unit
+    toAddressList: () -> Unit,
+    toChat: () -> Unit
 ) {
     Card {
         AppListItem(
@@ -435,7 +439,8 @@ private fun FunctionMenuSection(
             leadingIcon = R.drawable.ic_service_fill,
             leadingIconTint = Color(0xFFF87C7B),
             verticalPadding = SpaceVerticalLarge,
-            showDivider = false
+            showDivider = false,
+            onClick = toChat
         )
     }
 

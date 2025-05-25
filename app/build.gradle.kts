@@ -62,6 +62,8 @@ dependencies {
     implementation(project(":feature:user"))
     // 订单模块
     implementation(project(":feature:order"))
+    // 客服模块
+    implementation(project(":feature:cs"))
 
     // region 依赖注入
     // https://developer.android.google.cn/training/dependency-injection/hilt-android?hl=zh-cn

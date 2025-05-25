@@ -6,6 +6,7 @@ import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.entity.User
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.AuthRoutes
+import com.joker.coolmall.navigation.routes.CsRoutes
 import com.joker.coolmall.navigation.routes.OrderRoutes
 import com.joker.coolmall.navigation.routes.UserRoutes
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -57,10 +58,10 @@ class MeViewModel @Inject constructor(
     fun toOrderListPage() {
         super.toPage(OrderRoutes.LIST)
     }
-    
+
     /**
      * 跳转到指定状态的订单列表
-     * 
+     *
      * @param tabIndex 订单标签索引：0-全部，1-待付款，2-待发货，3-待收货，4-售后，5-待评价，6-已完成
      */
     fun toOrderListPage(tabIndex: Int) {
@@ -94,5 +95,12 @@ class MeViewModel @Inject constructor(
      */
     fun toLoginPage() {
         super.toPage(AuthRoutes.HOME)
+    }
+
+    /**
+     * 跳转到客服聊天页面
+     */
+    fun toChatPage() {
+        super.toPage(CsRoutes.CHAT)
     }
 }

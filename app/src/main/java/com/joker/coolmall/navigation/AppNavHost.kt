@@ -8,6 +8,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import com.joker.coolmall.feature.auth.navigation.authGraph
+import com.joker.coolmall.feature.cs.navigation.csGraph
 import com.joker.coolmall.feature.goods.navigation.goodsGraph
 import com.joker.coolmall.feature.main.navigation.mainGraph
 import com.joker.coolmall.feature.order.navigation.orderGraph
@@ -72,5 +73,6 @@ fun AppNavHost(
         authGraph(navController)
         userGraph(navController)
         orderGraph(navController)
+        csGraph(navController)
     }
 }

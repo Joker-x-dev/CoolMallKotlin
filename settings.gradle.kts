@@ -69,3 +69,5 @@ include(":feature:market")
 include(":feature:order")
 // 用户模块
 include(":feature:user")
+// 客服模块
+include(":feature:cs")
