@@ -25,6 +25,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.joker.coolmall.core.common.base.state.BaseNetWorkListUiState
 import com.joker.coolmall.core.common.base.state.LoadMoreState
 import com.joker.coolmall.core.designsystem.component.CenterColumn
@@ -61,7 +62,8 @@ import kotlinx.coroutines.launch
  */
 @Composable
 internal fun OrderListRoute(
-    viewModel: OrderListViewModel = hiltViewModel()
+    viewModel: OrderListViewModel = hiltViewModel(),
+    navController: NavController
 ) {
     val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
     val isAnimatingTabChange by viewModel.isAnimatingTabChange.collectAsState()
@@ -89,6 +91,7 @@ internal fun OrderListRoute(
 
     OrderListScreen(
         toOrderDetail = viewModel::toOrderDetailPage,
+        toPay = viewModel::toPaymentPage,
         selectedTabIndex = selectedTabIndex,
         isAnimatingTabChange = isAnimatingTabChange,
         onTabSelected = viewModel::updateSelectedTab,
@@ -106,6 +109,7 @@ internal fun OrderListRoute(
  * 所有参数都提供默认值，方便预览
  *
  * @param toOrderDetail 跳转到订单详情页面
+ * @param toPay 跳转到支付页面
  * @param selectedTabIndex 当前选中的标签索引，默认为0
  * @param isAnimatingTabChange 是否正在执行标签切换动画，默认为false
  * @param onTabSelected 标签被选择时的回调，参数为选中的标签索引
@@ -118,6 +122,7 @@ internal fun OrderListRoute(
 @Composable
 internal fun OrderListScreen(
     toOrderDetail: (Long) -> Unit = {},
+    toPay: (Order) -> Unit = {},
     selectedTabIndex: Int = 0,
     isAnimatingTabChange: Boolean = false,
     onTabSelected: (Int) -> Unit = {},
@@ -143,6 +148,7 @@ internal fun OrderListScreen(
     ) {
         OrderListContentView(
             toOrderDetail = toOrderDetail,
+            toPay = toPay,
             selectedTabIndex = selectedTabIndex,
             isAnimatingTabChange = isAnimatingTabChange,
             onTabSelected = onTabSelected,
@@ -158,6 +164,7 @@ internal fun OrderListScreen(
  *
  * @param modifier Compose修饰符，用于设置组件样式和布局，默认为Modifier
  * @param toOrderDetail 跳转到订单详情
+ * @param toPay 跳转到支付页面
  * @param selectedTabIndex 当前选中的标签页索引
  * @param isAnimatingTabChange 是否正在执行标签切换动画
  * @param onTabSelected 标签被点击选择时的回调，参数为选中的标签索引
@@ -170,6 +177,7 @@ internal fun OrderListScreen(
 private fun OrderListContentView(
     modifier: Modifier = Modifier,
     toOrderDetail: (Long) -> Unit,
+    toPay: (Order) -> Unit,
     selectedTabIndex: Int,
     isAnimatingTabChange: Boolean,
     onTabSelected: (Int) -> Unit,
@@ -225,6 +233,7 @@ private fun OrderListContentView(
                 // 标签页的内容
                 OrderTabContent(
                     toOrderDetail = toOrderDetail,
+                    toPay = toPay,
                     orderList = tabState.orderList,
                     isRefreshing = tabState.isRefreshing,
                     loadMoreState = tabState.loadMoreState,
@@ -241,6 +250,7 @@ private fun OrderListContentView(
  * 标签页内容
  *
  * @param toOrderDetail 跳转到订单详情
+ * @param toPay 跳转到支付页面
  * @param orderList 订单列表数据
  * @param isRefreshing 是否正在刷新中
  * @param loadMoreState 加载更多的状态
@@ -251,6 +261,7 @@ private fun OrderListContentView(
 @Composable
 private fun OrderTabContent(
     toOrderDetail: (Long) -> Unit,
+    toPay: (Order) -> Unit,
     orderList: List<Order>,
     isRefreshing: Boolean,
     loadMoreState: LoadMoreState,
@@ -269,7 +280,8 @@ private fun OrderTabContent(
         items(orderList.size) { index ->
             OrderCard(
                 order = orderList[index],
-                toOrderDetail = toOrderDetail
+                toOrderDetail = toOrderDetail,
+                toPay = { toPay(orderList[index]) }
             )
         }
     }
@@ -280,6 +292,7 @@ private fun OrderTabContent(
  *
  * @param modifier Compose修饰符
  * @param order 订单数据对象，包含订单的所有信息
+ * @param toOrderDetail 跳转到订单详情页面
  * @param toGoodsDetail 跳转到商品详情页面
  * @param toPay 跳转到支付页面
  * @param toLogistics 跳转到物流详情页面

@@ -9,13 +9,15 @@ import com.joker.coolmall.core.data.repository.OrderRepository
 import com.joker.coolmall.core.model.entity.Address
 import com.joker.coolmall.core.model.entity.Cart
 import com.joker.coolmall.core.model.entity.CartGoodsSpec
+import com.joker.coolmall.core.model.entity.Order
 import com.joker.coolmall.core.model.entity.SelectedGoods
 import com.joker.coolmall.core.model.request.CreateOrderRequest
 import com.joker.coolmall.core.model.request.CreateOrderRequest.CreateOrder
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.util.storage.MMKVUtils
-import com.joker.coolmall.core.util.toast.ToastUtils
+import com.joker.coolmall.feature.order.navigation.OrderPayRoutes
 import com.joker.coolmall.navigation.AppNavigator
+import com.joker.coolmall.navigation.routes.OrderRoutes
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -130,7 +132,7 @@ class OrderConfirmViewModel @Inject constructor(
             showToast = true,
             onData = { data ->
                 // 创建订单成功
-                ToastUtils.showSuccess("订单创建成功")
+//                ToastUtils.showSuccess("订单创建成功")
 
                 // 如果是从购物车来的，需要删除对应的购物车项
                 if (cachedCarts != null && cachedCarts.isNotEmpty()) {
@@ -139,8 +141,28 @@ class OrderConfirmViewModel @Inject constructor(
 
                 // 清除缓存
                 MMKVUtils.remove("carts")
+
+                // 跳转到支付页面
+                navigateToPayment(data)
             }
         )
+    }
+
+    /**
+     * 跳转到支付页面并关闭当前页面
+     */
+    fun navigateToPayment(order: Order) {
+        val orderId = order.id
+        val paymentPrice = order.price - order.discountPrice // 实付金额
+
+        // 构建带参数的支付路由：/order/pay/{orderId}/{paymentPrice}
+        val paymentRoute = OrderPayRoutes.ORDER_PAY_PATTERN
+            .replace("{${OrderPayRoutes.ORDER_ID_ARG}}", orderId.toString())
+            .replace("{${OrderPayRoutes.PRICE_ARG}}", paymentPrice.toString())
+
+        // 使用封装方法跳转到支付页面并关闭当前页面
+        // 传入当前页面的路由 OrderRoutes.CONFIRM (order/confirm)
+        toPageAndCloseCurrent(paymentRoute, OrderRoutes.CONFIRM)
     }
 
     /**

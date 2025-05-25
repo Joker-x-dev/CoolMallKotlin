@@ -1,5 +1,6 @@
 package com.joker.coolmall.feature.order.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.base.state.BaseNetWorkListUiState
 import com.joker.coolmall.core.common.base.state.LoadMoreState
@@ -9,6 +10,7 @@ import com.joker.coolmall.core.model.entity.Order
 import com.joker.coolmall.core.model.request.OrderPageRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.feature.order.model.OrderStatus
+import com.joker.coolmall.feature.order.navigation.OrderPayRoutes
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.OrderRoutes
 import com.joker.coolmall.result.ResultHandler
@@ -27,7 +29,8 @@ import javax.inject.Inject
 @HiltViewModel
 class OrderListViewModel @Inject constructor(
     navigator: AppNavigator,
-    private val orderRepository: OrderRepository
+    private val orderRepository: OrderRepository,
+    savedStateHandle: SavedStateHandle
 ) : BaseViewModel(navigator) {
 
     /**
@@ -94,7 +97,14 @@ class OrderListViewModel @Inject constructor(
     val refreshingStates: List<StateFlow<Boolean>> = _refreshingStates.map { it.asStateFlow() }
 
     init {
-        // 只加载当前选中标签页的数据
+        // 从URL参数中获取初始标签索引
+        savedStateHandle.get<String>("tab")?.toIntOrNull()?.let { tabIndex ->
+            if (tabIndex in OrderStatus.entries.indices) {
+                _selectedTabIndex.value = tabIndex
+            }
+        }
+        
+        // 加载当前选中标签页的数据
         loadTabDataIfNeeded(_selectedTabIndex.value)
     }
 
@@ -311,5 +321,22 @@ class OrderListViewModel @Inject constructor(
      */
     fun toOrderDetailPage(orderId: Long) {
         super.toPage(OrderRoutes.DETAIL, orderId)
+    }
+
+    /**
+     * 跳转到支付页面
+     *
+     * @param order 订单对象
+     */
+    fun toPaymentPage(order: Order) {
+        val orderId = order.id
+        val paymentPrice = order.price - order.discountPrice // 实付金额
+
+        // 构建带参数的支付路由：/order/pay/{orderId}/{paymentPrice}
+        val paymentRoute = OrderPayRoutes.ORDER_PAY_PATTERN
+            .replace("{${OrderPayRoutes.ORDER_ID_ARG}}", orderId.toString())
+            .replace("{${OrderPayRoutes.PRICE_ARG}}", paymentPrice.toString())
+
+        toPage(paymentRoute)
     }
 } 

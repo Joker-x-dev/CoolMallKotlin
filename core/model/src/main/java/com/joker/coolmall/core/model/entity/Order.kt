@@ -54,6 +54,11 @@ data class Order(
     val discountPrice: Int = 0,
 
     /**
+     * 实际支付金额
+     */
+    val realPrice: Int = 0,
+
+    /**
      * 优惠来源
      */
     val discountSource: DiscountSource? = null,

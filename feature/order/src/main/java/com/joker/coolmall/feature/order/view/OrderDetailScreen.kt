@@ -9,12 +9,14 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.designsystem.component.EndRow
 import com.joker.coolmall.core.designsystem.component.VerticalList
@@ -46,10 +48,13 @@ import com.joker.coolmall.feature.order.viewmodel.OrderDetailViewModel
  */
 @Composable
 internal fun OrderDetailRoute(
-    viewModel: OrderDetailViewModel = hiltViewModel()
+    viewModel: OrderDetailViewModel = hiltViewModel(),
+    navController: NavController
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val cartList by viewModel.cartList.collectAsState()
+    // 注册页面刷新监听
+    val backStackEntry = navController.currentBackStackEntry
 
     OrderDetailScreen(
         uiState = uiState,
@@ -64,6 +69,11 @@ internal fun OrderDetailRoute(
         onCommentClick = { /* 去评价 */ },
         onRebuyClick = { /* 再次购买 */ }
     )
+
+    // 只要backStackEntry不为null就注册监听
+    LaunchedEffect(backStackEntry) {
+        viewModel.observeRefreshState(backStackEntry)
+    }
 }
 
 /**

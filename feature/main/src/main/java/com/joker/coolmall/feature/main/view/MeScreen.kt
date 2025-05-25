@@ -76,6 +76,7 @@ internal fun MeRoute(
         toLogin = viewModel::toLoginPage,
         toAddressList = viewModel::toAddressListPage,
         toOrderList = viewModel::toOrderListPage,
+        toOrderListByTab = viewModel::toOrderListPage,
         toUserFootprint = viewModel::toUserFootprintPage,
     )
 }
@@ -88,6 +89,7 @@ internal fun MeScreen(
     toLogin: () -> Unit = {},
     toAddressList: () -> Unit = {},
     toOrderList: () -> Unit = {},
+    toOrderListByTab: (Int) -> Unit = {},
     toUserFootprint: () -> Unit = {}
 ) {
     CommonScaffold(topBar = { }) {
@@ -110,7 +112,8 @@ internal fun MeScreen(
 
             // 订单区域
             OrderSection(
-                toOrderList = toOrderList
+                toOrderList = toOrderList,
+                toOrderListByTab = toOrderListByTab
             )
             SpaceVerticalMedium()
 
@@ -236,7 +239,8 @@ private fun MembershipCard() {
  */
 @Composable
 private fun OrderSection(
-    toOrderList: () -> Unit = {}
+    toOrderList: () -> Unit = {},
+    toOrderListByTab: (Int) -> Unit = {}
 ) {
     Card {
         // 标题行
@@ -253,30 +257,35 @@ private fun OrderSection(
                 icon = R.drawable.ic_pay,
                 label = "待付款",
                 modifier = Modifier.weight(1f),
+                onClick = { toOrderListByTab(1) } // 待付款对应的标签索引为1
             )
 
             OrderStatusItem(
                 icon = R.drawable.ic_receipt,
                 label = "待发货",
                 modifier = Modifier.weight(1f),
+                onClick = { toOrderListByTab(2) } // 待发货对应的标签索引为2
             )
 
             OrderStatusItem(
                 icon = R.drawable.ic_logistics,
                 label = "待收货",
                 modifier = Modifier.weight(1f),
+                onClick = { toOrderListByTab(3) } // 待收货对应的标签索引为3
             )
 
             OrderStatusItem(
                 icon = R.drawable.ic_message,
                 label = "待评价",
                 modifier = Modifier.weight(1f),
+                onClick = { toOrderListByTab(5) } // 待评价对应的标签索引为5
             )
 
             OrderStatusItem(
                 icon = R.drawable.ic_refund,
                 label = "退款/售后",
                 modifier = Modifier.weight(1f),
+                onClick = { toOrderListByTab(4) } // 售后对应的标签索引为4
             )
         }
     }
@@ -349,12 +358,16 @@ private fun FootprintItem(imageUrl: String) {
  */
 @Composable
 private fun OrderStatusItem(
-    modifier: Modifier, icon: Int, label: String, badgeCount: Int = 0
+    modifier: Modifier, 
+    icon: Int, 
+    label: String, 
+    badgeCount: Int = 0,
+    onClick: () -> Unit = {}
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
-            .clickable(onClick = {})
+            .clickable(onClick = onClick)
             .padding(vertical = SpaceVerticalMedium)
     ) {
         Box {

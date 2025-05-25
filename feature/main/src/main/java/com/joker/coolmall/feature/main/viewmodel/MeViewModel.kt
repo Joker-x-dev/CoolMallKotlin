@@ -57,6 +57,16 @@ class MeViewModel @Inject constructor(
     fun toOrderListPage() {
         super.toPage(OrderRoutes.LIST)
     }
+    
+    /**
+     * 跳转到指定状态的订单列表
+     * 
+     * @param tabIndex 订单标签索引：0-全部，1-待付款，2-待发货，3-待收货，4-售后，5-待评价，6-已完成
+     */
+    fun toOrderListPage(tabIndex: Int) {
+        val route = "${OrderRoutes.LIST}?tab=$tabIndex"
+        super.toPage(route)
+    }
 
     /**
      * 跳转到用户足迹

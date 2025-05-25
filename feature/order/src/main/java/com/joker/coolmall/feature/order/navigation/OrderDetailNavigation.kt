@@ -1,6 +1,7 @@
 package com.joker.coolmall.feature.order.navigation
 
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
@@ -22,13 +23,13 @@ object OrderDetailRoutes {
 /**
  * 订单详情导航
  */
-fun NavGraphBuilder.orderDetailScreen() {
+fun NavGraphBuilder.orderDetailScreen(navController: NavHostController) {
     composable(
         route = OrderDetailRoutes.ORDER_DETAIL_PATTERN,
         arguments = listOf(navArgument(OrderDetailRoutes.ORDER_ID_ARG) {
             type = NavType.LongType
         })
     ) {
-        OrderDetailRoute()
+        OrderDetailRoute(navController = navController)
     }
 } 

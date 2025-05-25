@@ -69,6 +69,7 @@ class OrderPayViewModel @Inject constructor(
             Alipay.RESULT_STATUS_CANCEL -> ToastUtils.showError("支付取消")
             Alipay.RESULT_STATUS_SUCCESS -> {
                 ToastUtils.showSuccess("支付成功")
+                navigateBack(mapOf("refresh" to true))
             }
 
             else -> ToastUtils.showError("支付失败")
