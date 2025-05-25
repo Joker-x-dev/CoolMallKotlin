@@ -68,6 +68,9 @@ internal fun OrderListRoute(
     val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
     val isAnimatingTabChange by viewModel.isAnimatingTabChange.collectAsState()
 
+    // 注册页面刷新监听
+    val backStackEntry = navController.currentBackStackEntry
+
     // 获取标签页状态提供者
     val tabStateProvider: @Composable (Int) -> OrderTabState = { index ->
         val uiState by viewModel.uiStates[index].collectAsState()
@@ -100,6 +103,11 @@ internal fun OrderListRoute(
         onBackClick = viewModel::navigateBack,
         tabStateProvider = tabStateProvider
     )
+
+    // 只要backStackEntry不为null就注册监听
+    LaunchedEffect(backStackEntry) {
+        viewModel.observeRefreshState(backStackEntry)
+    }
 }
 
 /**

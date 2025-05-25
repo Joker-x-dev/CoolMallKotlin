@@ -2,6 +2,7 @@ package com.joker.coolmall.feature.order.viewmodel
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavBackStackEntry
 import com.joker.coolmall.core.common.base.state.BaseNetWorkListUiState
 import com.joker.coolmall.core.common.base.state.LoadMoreState
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
@@ -106,6 +107,41 @@ class OrderListViewModel @Inject constructor(
         
         // 加载当前选中标签页的数据
         loadTabDataIfNeeded(_selectedTabIndex.value)
+    }
+
+    /**
+     * 观察来自支付页面的刷新状态
+     * 当从支付页面返回时，如果支付成功，则刷新订单列表
+     */
+    fun observeRefreshState(backStackEntry: NavBackStackEntry?) {
+        backStackEntry?.savedStateHandle?.let { savedStateHandle ->
+            viewModelScope.launch {
+                savedStateHandle.getStateFlow<Boolean>("refresh", false).collect { shouldRefresh ->
+                    if (shouldRefresh) {
+                        // 重置"全部"、"待付款"、"待发货"标签页的加载状态
+                        resetTabLoadState(0) // 全部
+                        resetTabLoadState(1) // 待付款
+                        resetTabLoadState(2) // 待发货
+
+                        // 刷新当前显示的标签页
+                        retryRequest(_selectedTabIndex.value)
+                        
+                        // 重置刷新标志，避免重复刷新
+                        savedStateHandle["refresh"] = false
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 重置指定标签页的加载状态
+     */
+    private fun resetTabLoadState(tabIndex: Int) {
+        if (tabIndex in tabDataLoaded.indices) {
+            tabDataLoaded[tabIndex] = false
+            pageIndices[tabIndex] = 1
+        }
     }
 
     /**

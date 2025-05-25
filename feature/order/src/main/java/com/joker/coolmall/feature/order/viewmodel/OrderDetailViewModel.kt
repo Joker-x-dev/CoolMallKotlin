@@ -1,6 +1,8 @@
 package com.joker.coolmall.feature.order.viewmodel
 
 import androidx.lifecycle.SavedStateHandle
+import androidx.lifecycle.viewModelScope
+import androidx.navigation.NavBackStackEntry
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
 import com.joker.coolmall.core.data.repository.OrderRepository
 import com.joker.coolmall.core.model.entity.Cart
@@ -14,6 +16,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -32,6 +35,9 @@ class OrderDetailViewModel @Inject constructor(
 
     private val _cartList = MutableStateFlow<List<Cart>>(emptyList())
     val cartList = _cartList.asStateFlow()
+    
+    // 标记是否需要在返回时刷新列表
+    private var shouldRefreshListOnBack = false
 
     init {
         super.executeRequest()
@@ -66,7 +72,45 @@ class OrderDetailViewModel @Inject constructor(
             .replace("{${OrderPayRoutes.PRICE_ARG}}", paymentPrice.toString())
 
         toPage(paymentRoute)
+    }
 
+    /**
+     * 观察来自支付页面的刷新状态
+     * 当从支付页面返回时，如果支付成功，则刷新订单详情
+     */
+    fun observeRefreshState(backStackEntry: NavBackStackEntry?) {
+        backStackEntry?.savedStateHandle?.let { savedStateHandle ->
+            viewModelScope.launch {
+                savedStateHandle.getStateFlow<Boolean>("refresh", false).collect { shouldRefresh ->
+                    if (shouldRefresh) {
+                        // 刷新订单详情
+                        retryRequest()
+
+                        // 标记需要在返回时刷新列表
+                        shouldRefreshListOnBack = true
+
+                        // 重置刷新标志，避免重复刷新
+                        savedStateHandle["refresh"] = false
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * 处理返回按钮点击
+     * 根据是否需要刷新列表决定传递参数
+     */
+    fun handleBackClick() {
+        if (shouldRefreshListOnBack) {
+            // 如果需要刷新列表，则传递刷新标志
+            navigateBack(mapOf("refresh" to true))
+            // 重置标志
+            shouldRefreshListOnBack = false
+        } else {
+            // 正常返回
+            navigateBack()
+        }
     }
 
     /**

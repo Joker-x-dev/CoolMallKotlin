@@ -155,10 +155,12 @@ class OrderConfirmViewModel @Inject constructor(
         val orderId = order.id
         val paymentPrice = order.price - order.discountPrice // 实付金额
 
-        // 构建带参数的支付路由：/order/pay/{orderId}/{paymentPrice}
+        // 构建带参数的支付路由：/order/pay/{orderId}/{paymentPrice}?from=confirm
         val paymentRoute = OrderPayRoutes.ORDER_PAY_PATTERN
             .replace("{${OrderPayRoutes.ORDER_ID_ARG}}", orderId.toString())
-            .replace("{${OrderPayRoutes.PRICE_ARG}}", paymentPrice.toString())
+            .replace("{${OrderPayRoutes.PRICE_ARG}}", paymentPrice.toString()) +
+            // 添加来源参数，表示从确认订单页面来
+            "?${OrderPayRoutes.FROM_ARG}=${OrderPayRoutes.FROM_ORDER_CONFIRM}"
 
         // 使用封装方法跳转到支付页面并关闭当前页面
         // 传入当前页面的路由 OrderRoutes.CONFIRM (order/confirm)

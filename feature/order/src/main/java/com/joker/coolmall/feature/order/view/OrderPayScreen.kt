@@ -1,5 +1,6 @@
 package com.joker.coolmall.feature.order.view
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -54,7 +55,7 @@ internal fun OrderPayRoute(
 
     OrderPayScreen(
         price = price,
-        onBackClick = viewModel::navigateBack,
+        onBackClick = viewModel::handleBackClick,
         onPayClick = viewModel::startAlipayPayment
     )
 
@@ -71,6 +72,11 @@ internal fun OrderPayRoute(
             // 处理支付结果
             viewModel.processAlipayResult(result)
         }
+    }
+
+    // 拦截系统返回按钮，使用自定义返回逻辑
+    BackHandler {
+        viewModel.handleBackClick()
     }
 }
 

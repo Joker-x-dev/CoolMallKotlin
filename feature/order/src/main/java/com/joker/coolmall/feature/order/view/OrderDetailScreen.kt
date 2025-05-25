@@ -1,5 +1,6 @@
 package com.joker.coolmall.feature.order.view
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
@@ -59,7 +60,7 @@ internal fun OrderDetailRoute(
     OrderDetailScreen(
         uiState = uiState,
         cartList = cartList,
-        onBackClick = viewModel::navigateBack,
+        onBackClick = viewModel::handleBackClick,
         onRetry = viewModel::retryRequest,
         onCancelClick = { /* 取消订单 */ },
         onPayClick = viewModel::navigateToPayment,
@@ -73,6 +74,11 @@ internal fun OrderDetailRoute(
     // 只要backStackEntry不为null就注册监听
     LaunchedEffect(backStackEntry) {
         viewModel.observeRefreshState(backStackEntry)
+    }
+
+    // 拦截系统返回按钮，使用自定义返回逻辑
+    BackHandler {
+        viewModel.handleBackClick()
     }
 }
 
