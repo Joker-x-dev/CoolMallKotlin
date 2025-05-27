@@ -1,0 +1,223 @@
+package com.joker.coolmall.feature.cs.component
+
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsFocusedAsState
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.TextButton
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.SolidColor
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.dp
+import com.joker.coolmall.core.designsystem.component.AppRow
+import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
+import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
+import com.joker.coolmall.core.designsystem.theme.SpacePaddingSmall
+import com.joker.coolmall.core.designsystem.theme.RadiusExtraLarge
+import com.joker.coolmall.core.ui.component.text.AppText
+import com.joker.coolmall.core.ui.component.text.TextSize
+import com.joker.coolmall.feature.cs.R
+
+/**
+ * 聊天输入栏组件
+ *
+ * @param inputText 输入文本
+ * @param onInputTextChange 输入文本改变回调
+ * @param showEmojiSelector 是否显示表情选择器
+ * @param onEmojiSelectorToggle 表情选择器显示状态切换回调
+ * @param onSendMessage 发送消息回调
+ * @param onFunctionSelectorToggle 功能选择器显示状态切换回调
+ * @param showFunctionSelector 是否显示功能选择器
+ * @param focusRequester 输入框焦点请求器
+ * @param modifier 修饰符
+ */
+@Composable
+fun ChatInputBar(
+    inputText: String,
+    onInputTextChange: (String) -> Unit,
+    showEmojiSelector: Boolean,
+    onEmojiSelectorToggle: (Boolean) -> Unit,
+    onSendMessage: () -> Unit,
+    onFunctionSelectorToggle: (Boolean) -> Unit,
+    showFunctionSelector: Boolean,
+    focusRequester: FocusRequester,
+    modifier: Modifier = Modifier
+) {
+    // 创建交互源以监听焦点状态
+    val interactionSource = remember { MutableInteractionSource() }
+    val isFocused by interactionSource.collectIsFocusedAsState()
+    val keyboardController = LocalSoftwareKeyboardController.current
+    
+    // 检查输入框是否有内容
+    val hasInputContent = inputText.isNotEmpty()
+    
+    // 当输入框获得焦点且面板打开时，关闭面板
+    LaunchedEffect(isFocused) {
+        if (isFocused && (showEmojiSelector || showFunctionSelector)) {
+            // 如果面板已打开且输入框获得焦点，隐藏键盘但保持焦点
+            keyboardController?.hide()
+        }
+    }
+    
+    Surface(
+        modifier = modifier,
+        color = MaterialTheme.colorScheme.surface,
+        shadowElevation = 1.dp
+    ) {
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = SpacePaddingMedium, vertical = SpacePaddingSmall)
+        ) {
+            AppRow(
+                modifier = Modifier.fillMaxWidth(),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // 自定义输入框
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(36.dp)
+                        .background(
+                            color = MaterialTheme.colorScheme.surfaceVariant,
+                            shape = RoundedCornerShape(RadiusExtraLarge)
+                        )
+                        .clickable(
+                            interactionSource = interactionSource,
+                            indication = null // 移除水波纹效果
+                        ) {
+                            // 点击输入框区域时的处理逻辑
+                            if (showEmojiSelector || showFunctionSelector) {
+                                // 如果面板已打开，只获取焦点但不显示键盘
+                                focusRequester.requestFocus()
+                                keyboardController?.hide()
+                            } else {
+                                // 如果面板未打开，正常获取焦点并显示键盘
+                                focusRequester.requestFocus()
+                            }
+                        }
+                        .padding(horizontal = SpacePaddingMedium, vertical = 6.dp),
+                    contentAlignment = Alignment.CenterStart
+                ) {
+                    BasicTextField(
+                        value = inputText,
+                        onValueChange = onInputTextChange,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .focusRequester(focusRequester),
+                        textStyle = MaterialTheme.typography.bodyMedium.copy(
+                            color = MaterialTheme.colorScheme.onSurface
+                        ),
+                        cursorBrush = SolidColor(MaterialTheme.colorScheme.primary),
+                        decorationBox = { innerTextField ->
+                            Box {
+                                if (inputText.isEmpty()) {
+                                    AppText(
+                                        text = "发送消息...",
+                                        color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                                        size = TextSize.BODY_SMALL
+                                    )
+                                }
+                                innerTextField()
+                            }
+                        },
+                        singleLine = true
+                    )
+                }
+
+                SpaceHorizontalSmall()
+
+                // 表情按钮
+                Box(
+                    modifier = Modifier
+                        .size(32.dp)
+                        .clickable {
+                            // 点击表情按钮时隐藏键盘
+                            keyboardController?.hide()
+                            onEmojiSelectorToggle(!showEmojiSelector)
+                        },
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(
+                        painter = painterResource(id = R.drawable.ic_emoji_good),
+                        contentDescription = "表情",
+                        modifier = Modifier.size(24.dp),
+                        tint = if (showEmojiSelector) 
+                            MaterialTheme.colorScheme.primary 
+                        else 
+                            MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
+                
+                SpaceHorizontalSmall()
+                
+                // 根据输入框内容显示发送按钮或加号按钮
+                if (hasInputContent) {
+                    // 发送按钮
+                    TextButton(
+                        onClick = { 
+                            onSendMessage()
+                        },
+                        modifier = Modifier
+                            .height(32.dp)
+                            .padding(horizontal = 0.dp),
+                        contentPadding = PaddingValues(horizontal = 8.dp, vertical = 0.dp),
+                        colors = ButtonDefaults.textButtonColors(
+                            contentColor = MaterialTheme.colorScheme.primary
+                        )
+                    ) {
+                        AppText(
+                            text = "发送",
+                            color = MaterialTheme.colorScheme.primary,
+                            size = TextSize.BODY_MEDIUM
+                        )
+                    }
+                } else {
+                    // 加号按钮
+                    Box(
+                        modifier = Modifier
+                            .size(32.dp)
+                            .clickable {
+                                // 点击加号按钮时隐藏键盘
+                                keyboardController?.hide()
+                                onFunctionSelectorToggle(!showFunctionSelector)
+                            },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            painter = painterResource(id = R.drawable.ic_add_circle),
+                            contentDescription = "更多功能",
+                            modifier = Modifier.size(24.dp),
+                            tint = if (showFunctionSelector) 
+                                MaterialTheme.colorScheme.primary 
+                            else 
+                                MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    }
+                }
+            }
+        }
+    }
+} 

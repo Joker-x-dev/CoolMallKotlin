@@ -52,6 +52,7 @@ import com.joker.coolmall.core.designsystem.component.FullScreenBox
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.RadiusLarge
 import com.joker.coolmall.core.designsystem.theme.ShapeMedium
+import com.joker.coolmall.core.designsystem.theme.ShapeSmall
 import com.joker.coolmall.core.ui.component.appbar.CenterTopAppBar
 import com.joker.coolmall.core.ui.component.empty.EmptyNetwork
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
@@ -556,6 +557,7 @@ private fun SubCategoryItem(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = modifier
             .padding(8.dp)
+            .clip(ShapeSmall)
             .clickable(onClick = onClick)
     ) {
         // 使用NetWorkImage替代Image

@@ -12,4 +12,7 @@ import javax.inject.Inject
 class ChatViewModel @Inject constructor(
     navigator: AppNavigator,
 ) : BaseViewModel(navigator) {
+    init {
+
+    }
 }

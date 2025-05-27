@@ -41,7 +41,9 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.LogoIcon
+import com.joker.coolmall.core.designsystem.theme.RadiusSmall
 import com.joker.coolmall.core.designsystem.theme.ShapeMedium
+import com.joker.coolmall.core.designsystem.theme.ShapeSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
@@ -230,17 +232,21 @@ private fun Banner(banners: List<Banner>) {
 @Composable
 private fun Category(categories: List<Category>) {
     AppCard {
-        // 将分类列表限制为前10个并按每行5个进行分组
-        val rows = categories.take(10).chunked(5)
+        // 每行5个进行分组
+        val rows = categories.chunked(5)
 
         // 遍历每一行分类
         rows.forEach { rowCategories ->
             Row(
                 horizontalArrangement = Arrangement.spacedBy(4.dp),
-                modifier = Modifier.fillMaxWidth()
+                modifier = Modifier
+                    .fillMaxWidth()
             ) {
                 rowCategories.forEach { category ->
-                    CategoryItem(category, Modifier.weight(1f))
+                    CategoryItem(category, Modifier
+                        .weight(1f)
+                        .clip(ShapeSmall)
+                        .clickable(onClick = { }))
                 }
 
                 // 如果一行不满5个，添加空白占位
