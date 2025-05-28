@@ -62,6 +62,77 @@ object LogUtils {
         Timber.uproot(tree)
     }
 
+    // ==================== 带TAG的日志方法 ====================
+
+    /**
+     * 记录 VERBOSE 级别日志，带TAG
+     * 用法示例：LogUtils.v(TAG, "消息内容")
+     *
+     * @param tag 日志标签
+     * @param message 日志消息
+     */
+    fun v(tag: String, message: String) {
+        Log.v(tag, message)
+    }
+
+    /**
+     * 记录 DEBUG 级别日志，带TAG
+     * 用法示例：LogUtils.d(TAG, "消息内容")
+     *
+     * @param tag 日志标签
+     * @param message 日志消息
+     */
+    fun d(tag: String, message: String) {
+        Log.d(tag, message)
+    }
+
+    /**
+     * 记录 INFO 级别日志，带TAG
+     * 用法示例：LogUtils.i(TAG, "消息内容")
+     *
+     * @param tag 日志标签
+     * @param message 日志消息
+     */
+    fun i(tag: String, message: String) {
+        Log.i(tag, message)
+    }
+
+    /**
+     * 记录 WARN 级别日志，带TAG
+     * 用法示例：LogUtils.w(TAG, "消息内容")
+     *
+     * @param tag 日志标签
+     * @param message 日志消息
+     */
+    fun w(tag: String, message: String) {
+        Log.w(tag, message)
+    }
+
+    /**
+     * 记录 ERROR 级别日志，带TAG
+     * 用法示例：LogUtils.e(TAG, "消息内容")
+     *
+     * @param tag 日志标签
+     * @param message 日志消息
+     */
+    fun e(tag: String, message: String) {
+        Log.e(tag, message)
+    }
+
+    /**
+     * 记录 ERROR 级别日志，带TAG和异常
+     * 用法示例：LogUtils.e(TAG, "消息内容", throwable)
+     *
+     * @param tag 日志标签
+     * @param message 日志消息
+     * @param t 异常对象
+     */
+    fun e(tag: String, message: String, t: Throwable) {
+        Log.e(tag, message, t)
+    }
+
+    // ==================== 原有日志方法 ====================
+
     /**
      * 记录 VERBOSE 级别日志
      * 用法示例：LogUtils.v("消息内容")

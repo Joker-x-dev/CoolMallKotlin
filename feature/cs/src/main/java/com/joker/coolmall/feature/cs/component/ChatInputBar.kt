@@ -83,8 +83,8 @@ fun ChatInputBar(
     
     Surface(
         modifier = modifier,
-        color = MaterialTheme.colorScheme.surface,
-        shadowElevation = 1.dp
+//        color = MaterialTheme.colorScheme.surface,
+//        shadowElevation = 1.dp
     ) {
         Box(
             modifier = Modifier

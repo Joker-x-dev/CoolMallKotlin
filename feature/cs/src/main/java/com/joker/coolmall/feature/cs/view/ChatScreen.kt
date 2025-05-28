@@ -20,17 +20,26 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Refresh
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,6 +48,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.LastBaseline
@@ -62,11 +72,7 @@ import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingSmall
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingXSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
-import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
-import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalMedium
 import com.joker.coolmall.core.model.entity.CsMsg
-import com.joker.coolmall.core.model.preview.PreviewChatData
-import com.joker.coolmall.core.model.preview.PreviewChatData.refundProblemChat
 import com.joker.coolmall.core.ui.component.appbar.CenterTopAppBar
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
 import com.joker.coolmall.core.ui.component.tag.Tag
@@ -77,6 +83,7 @@ import com.joker.coolmall.core.ui.component.text.TextSize
 import com.joker.coolmall.core.ui.component.text.TextType
 import com.joker.coolmall.feature.cs.component.ChatInputArea
 import com.joker.coolmall.feature.cs.viewmodel.ChatViewModel
+import com.joker.coolmall.feature.cs.viewmodel.WebSocketConnectionState
 import kotlinx.coroutines.launch
 
 /**
@@ -89,29 +96,28 @@ internal fun ChatRoute(
     viewModel: ChatViewModel = hiltViewModel()
 ) {
     ChatScreen(
-        onBackClick = viewModel::navigateBack,
-        onRetry = {}
+        viewModel = viewModel,
+        onBackClick = viewModel::navigateBack
     )
 }
 
 /**
  * 客服聊天界面
  *
+ * @param viewModel 客服聊天 ViewModel
  * @param uiState UI状态
  * @param onBackClick 返回按钮回调
- * @param onRetry 重试请求回调
- * @param mockMessages 可选的聊天记录参数，默认使用订单问题聊天记录
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun ChatScreen(
-    uiState: BaseNetWorkUiState<Any> = BaseNetWorkUiState.Success(
-        data = Any()
-    ),
+    viewModel: ChatViewModel = hiltViewModel(),
+    uiState: BaseNetWorkUiState<Any> = BaseNetWorkUiState.Success(data = Any()),
     onBackClick: () -> Unit = {},
-    onRetry: () -> Unit = {},
-    mockMessages: List<CsMsg> = PreviewChatData.orderProblemChat
 ) {
+    val messages by viewModel.messages.collectAsState()
+    val connectionState by viewModel.connectionState.collectAsState()
+    val isLoadingHistory by viewModel.isLoadingHistory.collectAsState()
 
     val scrollState = rememberLazyListState()
     val topBarState = rememberTopAppBarState()
@@ -120,13 +126,57 @@ internal fun ChatScreen(
     // 管理输入框状态
     var inputText by remember { mutableStateOf("") }
 
+    // 进入页面标记已读
+    DisposableEffect(Unit) {
+        viewModel.markMessagesAsRead()
+        onDispose { /* 页面销毁时清理资源 */ }
+    }
+
     Scaffold(
         topBar = {
-            CenterTopAppBar()
+            CenterTopAppBar(
+//                title = "客服聊天",
+                onBackClick = onBackClick,
+                actions = {
+                    // 显示连接状态指示器
+                    when (connectionState) {
+                        WebSocketConnectionState.Connected -> {
+                            Box(
+                                modifier = Modifier.size(12.dp),
+                                contentAlignment = Alignment.Center
+                            ) {
+                                Surface(
+                                    color = Color.Green,
+                                    shape = ShapeCircle,
+                                    modifier = Modifier.size(8.dp)
+                                ) {}
+                            }
+                        }
+
+                        WebSocketConnectionState.Connecting -> {
+                            CircularProgressIndicator(
+                                modifier = Modifier.size(16.dp),
+                                strokeWidth = 2.dp
+                            )
+                        }
+
+                        is WebSocketConnectionState.Error, WebSocketConnectionState.Disconnected -> {
+                            Icon(
+                                imageVector = Icons.Default.Refresh,
+                                contentDescription = "重新连接",
+                                tint = MaterialTheme.colorScheme.error,
+                                modifier = Modifier
+                                    .size(20.dp)
+                                    .clickable { viewModel.connectWebSocket() }
+                            )
+                        }
+                    }
+                }
+            )
         },
         contentWindowInsets = ScaffoldDefaults
             .contentWindowInsets
-            .exclude(WindowInsets.navigationBars)
+//            .exclude(WindowInsets.navigationBars)
             .exclude(WindowInsets.ime),
         modifier = Modifier
             .fillMaxSize()
@@ -140,20 +190,29 @@ internal fun ChatScreen(
             AppColumn(
                 modifier = Modifier.fillMaxSize()
             ) {
-                Messages(
-                    messages = refundProblemChat,
-                    navigateToProfile = { /* 不实现 */ },
-                    modifier = Modifier.weight(1f),
-                    scrollState = scrollState,
-                )
+                // 消息列表
+                Box(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                ) {
+                    MessageList(
+                        messages = messages,
+                        isLoading = isLoadingHistory,
+                        scrollState = scrollState,
+                        onRefresh = { viewModel.loadHistoryMessages() }
+                    )
+                }
 
                 // 使用封装后的输入区域组件
                 ChatInputArea(
                     inputText = inputText,
                     onInputTextChange = { inputText = it },
                     onSendMessage = {
-                        // TODO: 发送消息逻辑
-                        inputText = ""
+                        if (inputText.isNotBlank()) {
+                            viewModel.sendMessage(inputText)
+                            inputText = ""
+                        }
                     },
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -163,42 +222,64 @@ internal fun ChatScreen(
 }
 
 @Composable
-fun Messages(
+fun MessageList(
     messages: List<CsMsg>,
-    navigateToProfile: (String) -> Unit,
+    isLoading: Boolean = false,
     scrollState: LazyListState,
-    modifier: Modifier = Modifier
+    onRefresh: () -> Unit = {},
 ) {
     val scope = rememberCoroutineScope()
-    Box(modifier = modifier) {
+
+    Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
             reverseLayout = true,
             state = scrollState,
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(vertical = SpacePaddingSmall)
         ) {
-            for (index in messages.indices) {
-                val prevAuthor = messages.getOrNull(index - 1)?.type
-                val nextAuthor = messages.getOrNull(index + 1)?.type
-                val content = messages[index]
-                val isFirstMessageByAuthor = prevAuthor != content.type
-                val isLastMessageByAuthor = nextAuthor != content.type
-
-                // 简化的日期分隔符
-                if (index == messages.size - 1) {
-                    item {
-                        DayHeader("今天")
+            if (isLoading) {
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(SpacePaddingMedium),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(24.dp),
+                            strokeWidth = 2.dp
+                        )
                     }
                 }
-
-                item {
+            } else {
+                items(
+                    items = messages,
+                    key = { it.id }
+                ) { message ->
                     Message(
-                        onAuthorClick = { name -> navigateToProfile(name) },
-                        msg = content,
-                        isUserMe = content.type == 0, // 0-反馈(用户), 1-回复(客服)
-                        isFirstMessageByAuthor = isFirstMessageByAuthor,
-                        isLastMessageByAuthor = isLastMessageByAuthor,
+                        onAuthorClick = { /* 点击用户头像 */ },
+                        msg = message,
+                        isUserMe = message.type == 0, // 0-反馈(用户), 1-回复(客服)
+                        isFirstMessageByAuthor = true, // 简化处理
+                        isLastMessageByAuthor = true, // 简化处理
                     )
+                }
+
+                // 上拉加载更多
+                item {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(SpacePaddingMedium)
+                            .clickable { onRefresh() },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Refresh,
+                            contentDescription = "加载更多",
+                            tint = MaterialTheme.colorScheme.primary
+                        )
+                    }
                 }
             }
         }
@@ -238,7 +319,7 @@ fun Message(
 ) {
     val spaceBetweenAuthors =
         if (isLastMessageByAuthor) Modifier.padding(top = SpaceVerticalSmall) else Modifier
-    
+
     AppRow(
         modifier = spaceBetweenAuthors
             .fillMaxWidth()
@@ -256,7 +337,7 @@ fun Message(
                 cornerShape = ShapeCircle,
                 contentScale = ContentScale.Crop,
             )
-            
+
             // 头像与消息之间的间距
             SpaceHorizontalSmall()
         } else if (!isUserMe && !isLastMessageByAuthor) {
@@ -277,7 +358,7 @@ fun Message(
         if (isUserMe && isLastMessageByAuthor) {
             // 头像与消息之间的间距
             SpaceHorizontalSmall()
-            
+
             // 用户头像，右侧显示
             NetWorkImage(
                 model = msg.avatarUrl,
@@ -311,9 +392,9 @@ fun AuthorAndTextMessage(
         if (isLastMessageByAuthor) {
             AuthorNameTimestamp(msg, isUserMe)
         }
-        
+
         ChatItemBubble(msg, isUserMe)
-        
+
         if (isFirstMessageByAuthor) {
             // 下一个作者之前的最后一个气泡
             SpaceVerticalSmall()
@@ -331,7 +412,8 @@ private fun AuthorNameTimestamp(msg: CsMsg, isUserMe: Boolean) {
         modifier = Modifier
             .padding(bottom = SpacePaddingXSmall)
             .semantics(mergeDescendants = true) {},
-        horizontalArrangement = if (isUserMe) Arrangement.End else Arrangement.Start
+        horizontalArrangement = if (isUserMe) Arrangement.End else Arrangement.Start,
+        verticalAlignment = Alignment.CenterVertically
     ) {
         if (!isUserMe) {
             AppText(
@@ -426,7 +508,7 @@ fun ChatItemBubble(message: CsMsg, isUserMe: Boolean) {
     ) {
         AppText(
             text = message.content.data,
-            size = TextSize.BODY_MEDIUM,
+            size = TextSize.BODY_LARGE,
             color = textColor,
             modifier = Modifier
                 .padding(horizontal = SpacePaddingLarge)
@@ -445,7 +527,7 @@ fun JumpToBottom(
         Tag(
             "回到底部",
             shape = ShapeExtraLarge,
-            type = TagType.PRIMARY, 
+            type = TagType.PRIMARY,
             style = TagStyle.LIGHT,
             modifier = modifier
                 .padding(bottom = SpacePaddingSmall)

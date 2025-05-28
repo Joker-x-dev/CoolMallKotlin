@@ -1,5 +1,10 @@
 package com.joker.coolmall.core.data.repository
 
+import com.joker.coolmall.core.model.entity.CsMsg
+import com.joker.coolmall.core.model.entity.CsSession
+import com.joker.coolmall.core.model.request.MessagePageRequest
+import com.joker.coolmall.core.model.request.ReadMessageRequest
+import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.datasource.cs.CustomerServiceNetworkDataSource
 import kotlinx.coroutines.Dispatchers
@@ -17,35 +22,35 @@ class CustomerServiceRepository @Inject constructor(
     /**
      * 创建会话
      */
-    fun createSession(params: Any): Flow<NetworkResponse<Any>> = flow {
-        emit(customerServiceNetworkDataSource.createSession(params))
+    fun createSession(): Flow<NetworkResponse<CsSession>> = flow {
+        emit(customerServiceNetworkDataSource.createSession())
     }.flowOn(Dispatchers.IO)
 
     /**
      * 会话详情
      */
-    fun getSessionDetail(id: String): Flow<NetworkResponse<Any>> = flow {
-        emit(customerServiceNetworkDataSource.getSessionDetail(id))
+    fun getSessionDetail(): Flow<NetworkResponse<CsSession>> = flow {
+        emit(customerServiceNetworkDataSource.getSessionDetail())
     }.flowOn(Dispatchers.IO)
 
     /**
-     * 消息已读
+     * 消息标记为已读
      */
-    fun readMessage(params: Any): Flow<NetworkResponse<Any>> = flow {
+    fun readMessage(params: ReadMessageRequest): Flow<NetworkResponse<Boolean>> = flow {
         emit(customerServiceNetworkDataSource.readMessage(params))
     }.flowOn(Dispatchers.IO)
 
     /**
      * 分页查询消息
      */
-    fun getMessagePage(params: Any): Flow<NetworkResponse<Any>> = flow {
+    fun getMessagePage(params: MessagePageRequest): Flow<NetworkResponse<NetworkPageData<CsMsg>>> = flow {
         emit(customerServiceNetworkDataSource.getMessagePage(params))
     }.flowOn(Dispatchers.IO)
 
     /**
      * 未读消息数
      */
-    fun getUnreadCount(): Flow<NetworkResponse<Any>> = flow {
+    fun getUnreadCount(): Flow<NetworkResponse<Int>> = flow {
         emit(customerServiceNetworkDataSource.getUnreadCount())
     }.flowOn(Dispatchers.IO)
 } 

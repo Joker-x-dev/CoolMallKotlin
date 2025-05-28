@@ -1,5 +1,10 @@
 package com.joker.coolmall.core.network.datasource.cs
 
+import com.joker.coolmall.core.model.entity.CsMsg
+import com.joker.coolmall.core.model.entity.CsSession
+import com.joker.coolmall.core.model.request.MessagePageRequest
+import com.joker.coolmall.core.model.request.ReadMessageRequest
+import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.base.BaseNetworkDataSource
 import com.joker.coolmall.core.network.service.CustomerServiceService
@@ -18,21 +23,19 @@ class CustomerServiceNetworkDataSourceImpl @Inject constructor(
     /**
      * 创建客服会话
      * 
-     * @param params 请求参数，包含用户信息等
      * @return 会话创建结果响应数据
      */
-    override suspend fun createSession(params: Any): NetworkResponse<Any> {
-        return customerServiceService.createSession(params)
+    override suspend fun createSession(): NetworkResponse<CsSession> {
+        return customerServiceService.createSession()
     }
 
     /**
      * 获取会话详情
      * 
-     * @param id 会话ID
      * @return 会话详情响应数据
      */
-    override suspend fun getSessionDetail(id: String): NetworkResponse<Any> {
-        return customerServiceService.getSessionDetail(id)
+    override suspend fun getSessionDetail(): NetworkResponse<CsSession> {
+        return customerServiceService.getSessionDetail()
     }
 
     /**
@@ -41,7 +44,7 @@ class CustomerServiceNetworkDataSourceImpl @Inject constructor(
      * @param params 请求参数，包含消息ID等
      * @return 操作结果响应数据
      */
-    override suspend fun readMessage(params: Any): NetworkResponse<Any> {
+    override suspend fun readMessage(params: ReadMessageRequest): NetworkResponse<Boolean> {
         return customerServiceService.readMessage(params)
     }
 
@@ -51,7 +54,7 @@ class CustomerServiceNetworkDataSourceImpl @Inject constructor(
      * @param params 请求参数，包含分页和会话ID等
      * @return 消息分页列表响应数据
      */
-    override suspend fun getMessagePage(params: Any): NetworkResponse<Any> {
+    override suspend fun getMessagePage(params: MessagePageRequest): NetworkResponse<NetworkPageData<CsMsg>> {
         return customerServiceService.getMessagePage(params)
     }
 
@@ -60,7 +63,7 @@ class CustomerServiceNetworkDataSourceImpl @Inject constructor(
      * 
      * @return 未读消息数响应数据
      */
-    override suspend fun getUnreadCount(): NetworkResponse<Any> {
+    override suspend fun getUnreadCount(): NetworkResponse<Int> {
         return customerServiceService.getUnreadCount()
     }
 } 
