@@ -1,6 +1,7 @@
 package com.joker.coolmall.feature.cs.viewmodel
 
 import androidx.lifecycle.viewModelScope
+import com.joker.coolmall.core.common.base.state.LoadMoreState
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
 import com.joker.coolmall.core.data.repository.CustomerServiceRepository
 import com.joker.coolmall.core.data.state.AppState
@@ -8,23 +9,21 @@ import com.joker.coolmall.core.model.entity.CsMsg
 import com.joker.coolmall.core.model.request.MessagePageRequest
 import com.joker.coolmall.core.model.request.ReadMessageRequest
 import com.joker.coolmall.core.util.log.LogUtils
+import com.joker.coolmall.feature.cs.state.WebSocketConnectionState
+import com.joker.coolmall.feature.cs.util.WebSocketManager
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.Json
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
-import okhttp3.WebSocket
-import okhttp3.WebSocketListener
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 private const val TAG = "ChatViewModel"
@@ -39,34 +38,60 @@ class ChatViewModel @Inject constructor(
     navigator: AppNavigator,
 ) : BaseViewModel(navigator) {
 
-    // 会话ID
+    // 会话ID (内部使用)
     private val _sessionId = MutableStateFlow<Long>(0)
-    val sessionId: StateFlow<Long> = _sessionId.asStateFlow()
 
     // 聊天消息列表 (倒序排列，最新的在前面)
     private val _messages = MutableStateFlow<List<CsMsg>>(emptyList())
     val messages: StateFlow<List<CsMsg>> = _messages.asStateFlow()
 
-    // WebSocket连接状态
+    // WebSocket连接状态 (内部使用)
     private val _connectionState =
         MutableStateFlow<WebSocketConnectionState>(WebSocketConnectionState.Disconnected)
-    val connectionState: StateFlow<WebSocketConnectionState> = _connectionState.asStateFlow()
 
     // 是否正在加载历史消息
     private val _isLoadingHistory = MutableStateFlow(false)
     val isLoadingHistory: StateFlow<Boolean> = _isLoadingHistory.asStateFlow()
 
-    // WebSocket客户端
-    private var webSocketClient: OkHttpClient? = null
-    private var webSocket: WebSocket? = null
+    // 加载更多状态
+    private val _loadMoreState = MutableStateFlow<LoadMoreState>(LoadMoreState.PullToLoad)
+    val loadMoreState: StateFlow<LoadMoreState> = _loadMoreState.asStateFlow()
 
-    // 重试次数计数
-    private var retryCount = 0
-    private val maxRetries = 3
+    // 新消息事件流
+    private val _newMessageEvent = MutableSharedFlow<Unit>()
+    val newMessageEvent: SharedFlow<Unit> = _newMessageEvent.asSharedFlow()
+
+    // 输入框文本状态
+    private val _inputText = MutableStateFlow("")
+    val inputText: StateFlow<String> = _inputText.asStateFlow()
+
+    // 分页相关
+    private var currentPage = 0
+    private val pageSize = 10
+    private var hasMoreData = true
+
+    // WebSocket管理器
+    private val webSocketManager = WebSocketManager()
 
     init {
+        // 设置WebSocket回调
+        setupWebSocketCallbacks()
+
         // 创建会话
         createSession()
+    }
+
+    /**
+     * 设置WebSocket回调
+     */
+    private fun setupWebSocketCallbacks() {
+        webSocketManager.setOnMessageReceived { message ->
+            addNewMessage(message)
+        }
+
+        webSocketManager.setOnConnectionStateChanged { state ->
+            _connectionState.value = state
+        }
     }
 
     /**
@@ -86,6 +111,9 @@ class ChatViewModel @Inject constructor(
 
                 // 建立WebSocket连接
                 connectWebSocket()
+
+                // 标记消息为已读
+                markMessagesAsRead()
             },
             onError = { message, _ ->
                 LogUtils.e(TAG, "会话创建失败: $message")
@@ -103,182 +131,101 @@ class ChatViewModel @Inject constructor(
         val sessionId = _sessionId.value
         if (sessionId <= 0) return
 
-        LogUtils.d(TAG, "开始加载历史消息: sessionId = $sessionId")
+        LogUtils.d(TAG, "开始加载历史消息: sessionId = $sessionId, page = $currentPage")
         _isLoadingHistory.value = true
+
+        // 如果是加载更多，设置加载状态
+        if (currentPage > 1) {
+            _loadMoreState.value = LoadMoreState.Loading
+        }
 
         val params = MessagePageRequest(
             sessionId = sessionId,
-            page = 1,
-            size = 20
+            page = currentPage,
+            size = pageSize
         )
 
         ResultHandler.handleResultWithData(
             scope = viewModelScope,
             flow = customerServiceRepository.getMessagePage(params).asResult(),
             onData = { data ->
-                val messages = data.list ?: emptyList()
-                LogUtils.d(TAG, "历史消息加载成功: ${messages.size} 条消息")
-                _messages.value = messages
+                val newMessages = data.list ?: emptyList()
+                val pagination = data.pagination
+
+                LogUtils.d(TAG, "历史消息加载成功: ${newMessages.size} 条消息")
+
+                // 计算是否还有更多数据
+                hasMoreData = if (pagination != null) {
+                    val total = pagination.total ?: 0
+                    val size = pagination.size ?: pageSize
+                    val currentPageNum = pagination.page ?: currentPage
+                    size * currentPageNum < total
+                } else {
+                    newMessages.size >= pageSize
+                }
+
+                if (currentPage == 1) {
+                    // 首次加载或刷新
+                    _messages.value = newMessages
+                } else {
+                    // 加载更多 - 将新消息添加到列表末尾（因为是倒序显示）
+                    _messages.value = _messages.value + newMessages
+                }
+
                 _isLoadingHistory.value = false
+
+                // 更新加载更多状态
+                _loadMoreState.value =
+                    if (hasMoreData) LoadMoreState.PullToLoad else LoadMoreState.NoMore
             },
             onError = { message, _ ->
                 LogUtils.e(TAG, "历史消息加载失败: $message")
                 _isLoadingHistory.value = false
+
+                if (currentPage > 1) {
+                    // 加载更多失败，回退页码
+                    currentPage--
+                    _loadMoreState.value = LoadMoreState.Error
+                }
             }
         )
+    }
+
+    /**
+     * 加载更多历史消息
+     */
+    fun loadMoreMessages() {
+        // 检查是否可以加载更多
+        if (_loadMoreState.value == LoadMoreState.Loading ||
+            _loadMoreState.value == LoadMoreState.NoMore ||
+            !hasMoreData
+        ) {
+            return
+        }
+
+        currentPage++
+        loadHistoryMessages()
+    }
+
+    /**
+     * 刷新消息列表
+     */
+    fun refreshMessages() {
+        if (_isLoadingHistory.value) return
+
+        currentPage = 1
+        hasMoreData = true
+        loadHistoryMessages()
     }
 
     /**
      * 建立WebSocket连接
      */
     fun connectWebSocket() {
-        if (_connectionState.value == WebSocketConnectionState.Connecting) {
-            LogUtils.d(TAG, "WebSocket正在连接中，忽略重复连接请求")
-            return
-        }
-
-        _connectionState.value = WebSocketConnectionState.Connecting
-        LogUtils.d(TAG, "开始建立WebSocket连接")
-
-        viewModelScope.launch {
-            val token = appState.auth.value?.token ?: ""
-            LogUtils.d(TAG, "用户Token: ${token.take(15)}...")
-
-            val request = Request.Builder()
-                .url("wss://mall.dusksnow.top/socket.io/?EIO=4&transport=websocket")
-                .build()
-
-            // 配置超时和心跳间隔
-            // 注意：禁用OkHttp的自动ping机制，我们自己处理心跳
-            webSocketClient = OkHttpClient.Builder()
-                .pingInterval(0, TimeUnit.SECONDS) // 禁用OkHttp的自动ping
-                .connectTimeout(15, TimeUnit.SECONDS)
-                .readTimeout(60, TimeUnit.SECONDS) // 增加读取超时时间，避免长时间无消息导致断开
-                .writeTimeout(15, TimeUnit.SECONDS)
-                .build()
-
-            webSocket = webSocketClient?.newWebSocket(request, object : WebSocketListener() {
-                override fun onOpen(webSocket: WebSocket, response: Response) {
-                    LogUtils.d(TAG, "WebSocket连接成功: ${response.code}")
-                    retryCount = 0
-
-                    // 发送认证消息
-                    val authMessage = """40/cs,{"isAdmin":false,"token":"$token"}"""
-                    LogUtils.d(TAG, "发送认证消息: ${authMessage.take(20)}...")
-                    webSocket.send(authMessage)
-                }
-
-                override fun onMessage(webSocket: WebSocket, text: String) {
-                    LogUtils.d(TAG, "收到WebSocket消息: ${text.take(50)}...")
-                    // 如果收到心跳包，立即响应
-                    if (text == "2") {
-                        LogUtils.d(TAG, "收到心跳包")
-                        val success = webSocket.send("3")
-                        // 检查心跳响应是否发送成功
-                        if (success) {
-                            LogUtils.d(TAG, "心跳响应发送成功")
-                        } else {
-                            LogUtils.e(TAG, "心跳响应发送失败")
-                        }
-                    }
-                    handleWebSocketMessage(text)
-                }
-
-                override fun onFailure(webSocket: WebSocket, t: Throwable, response: Response?) {
-                    LogUtils.e(TAG, "WebSocket连接失败: ${t.message}", t)
-                    _connectionState.value = WebSocketConnectionState.Error(t.message ?: "连接错误")
-
-                    // 尝试重连
-                    if (retryCount < maxRetries) {
-                        retryCount++
-                        retryConnection()
-                    }
-                }
-
-                override fun onClosed(webSocket: WebSocket, code: Int, reason: String) {
-                    LogUtils.d(TAG, "WebSocket连接关闭: code=$code, reason=$reason")
-                    _connectionState.value = WebSocketConnectionState.Disconnected
-                }
-            })
-        }
+        val token = appState.auth.value?.token ?: ""
+        webSocketManager.connect(token, viewModelScope)
     }
 
-    /**
-     * 重试连接
-     */
-    private fun retryConnection() {
-        viewModelScope.launch {
-            LogUtils.d(
-                TAG,
-                "WebSocket连接失败，${1000 * retryCount}毫秒后尝试重连 (第$retryCount)次"
-            )
-            delay(1000L * retryCount) // 延迟时间随重试次数增加
-            connectWebSocket()
-        }
-    }
-
-    /**
-     * 处理WebSocket消息
-     */
-    private fun handleWebSocketMessage(text: String) {
-        try {
-            when {
-                // 连接成功消息: 40/cs,{"sid":"708fb2ed-6d08-445c-9264-c57c521eb3f7"}
-                text.startsWith("40/cs,") -> {
-                    LogUtils.d(TAG, "WebSocket认证成功")
-                    _connectionState.value = WebSocketConnectionState.Connected
-                }
-
-                // 握手消息: 0{"sid":"708fb2ed-6d08-445c-9264-c57c521eb3f7","upgrades":[],"pingInterval":25000,"pingTimeout":6000000}
-                text.startsWith("0{") -> {
-                    LogUtils.d(TAG, "WebSocket握手成功")
-                    // 握手成功，不做特殊处理
-                }
-
-                // 心跳消息: 2
-                // 注意：这个处理已经移到onMessage中直接处理，以确保及时响应
-                text == "2" -> {
-                    // 心跳包的处理已移至onMessage回调中
-                    // 这里不再需要额外处理
-                }
-
-                // 消息通知: 42["msg",{消息内容}]
-                text.startsWith("42[\"msg\",") -> {
-                    val messageContent = text.substringAfter("42[\"msg\",").substringBeforeLast("]")
-                    val message = Json.decodeFromString<CsMsg>(messageContent)
-                    LogUtils.d(TAG, "收到消息通知(42): id=${message.id}, type=${message.type}")
-                    addNewMessage(message)
-                }
-
-                // 消息通知: 42/cs,["msg",{消息内容}]
-                text.startsWith("42/cs,[\"msg\",") -> {
-                    val messageContent =
-                        text.substringAfter("42/cs,[\"msg\",").substringBeforeLast("]")
-                    val message = Json.decodeFromString<CsMsg>(messageContent)
-                    LogUtils.d(TAG, "收到消息通知(42/cs): id=${message.id}, type=${message.type}")
-                    addNewMessage(message)
-                }
-
-                // 连接成功消息: 42/cs,["message","连接成功"]
-                text.contains("42/cs,[\"message\",\"连接成功\"]") -> {
-                    LogUtils.d(TAG, "收到连接成功消息: $text")
-                    _connectionState.value = WebSocketConnectionState.Connected
-                }
-
-                // 其他连接状态消息
-                text.startsWith("42/cs,[\"message\",") -> {
-                    LogUtils.d(TAG, "收到连接状态消息: $text")
-                    // 其他连接状态消息，已经在上一个条件处理了连接成功的情况
-                }
-
-                else -> {
-                    LogUtils.d(TAG, "收到未处理的消息类型: $text")
-                }
-            }
-        } catch (e: Exception) {
-            LogUtils.e(TAG, "解析WebSocket消息失败", e)
-        }
-    }
 
     /**
      * 添加新消息到列表
@@ -290,37 +237,52 @@ class ChatViewModel @Inject constructor(
         if (currentMessages.none { it.id == message.id }) {
             currentMessages.add(0, message) // 新消息在顶部，因为列表是倒序显示
             _messages.value = currentMessages
+
+            // 触发新消息事件
+            viewModelScope.launch {
+                _newMessageEvent.emit(Unit)
+            }
         }
+    }
+
+    /**
+     * 更新输入框文本
+     */
+    fun updateInputText(text: String) {
+        _inputText.value = text
     }
 
     /**
      * 发送消息
      */
-    fun sendMessage(content: String, type: String = "text") {
+    fun sendMessage(content: String = _inputText.value, type: String = "text") {
+        if (content.isBlank()) return
+
         val sessionId = _sessionId.value
         if (sessionId <= 0) {
             LogUtils.e(TAG, "发送消息失败: 无效的会话ID")
             return
         }
 
-        if (_connectionState.value != WebSocketConnectionState.Connected) {
+        if (!webSocketManager.isConnected()) {
             LogUtils.e(TAG, "发送消息失败: WebSocket未连接")
             connectWebSocket() // 尝试重新连接
             return
         }
 
-        // 构建发送消息
-        val sendMessage =
-            """42/cs,["send",{"sessionId":$sessionId,"content":{"type":"$type","data":"$content"}}]"""
-
-        LogUtils.d(TAG, "发送消息: ${sendMessage.take(50)}...")
-
-        // 通过WebSocket发送
-        val success = webSocket?.send(sendMessage) ?: false
-        if (!success) {
-            LogUtils.e(TAG, "消息发送失败")
-            _connectionState.value = WebSocketConnectionState.Error("消息发送失败")
-
+        // 通过WebSocketManager发送消息
+        val success = webSocketManager.sendMessage(sessionId, content, type)
+        if (success) {
+            LogUtils.d(TAG, "消息发送成功")
+            // 清空输入框
+            _inputText.value = ""
+            // 发送成功后触发新消息事件（让UI滚动到底部）
+            viewModelScope.launch {
+                // 添加延迟确保消息已经通过WebSocket返回并添加到列表
+                delay(100)
+                _newMessageEvent.emit(Unit)
+            }
+        } else {
             // 尝试重新连接
             connectWebSocket()
         }
@@ -352,26 +314,11 @@ class ChatViewModel @Inject constructor(
      * 断开WebSocket连接
      */
     fun disconnectWebSocket() {
-        LogUtils.d(TAG, "断开WebSocket连接")
-        webSocket?.close(1000, "正常关闭")
-        webSocket = null
-        webSocketClient?.dispatcher?.executorService?.shutdown()
-        webSocketClient = null
-        _connectionState.value = WebSocketConnectionState.Disconnected
+        webSocketManager.disconnect()
     }
 
     override fun onCleared() {
         disconnectWebSocket()
         super.onCleared()
     }
-}
-
-/**
- * WebSocket连接状态
- */
-sealed class WebSocketConnectionState {
-    object Disconnected : WebSocketConnectionState()
-    object Connecting : WebSocketConnectionState()
-    object Connected : WebSocketConnectionState()
-    data class Error(val message: String) : WebSocketConnectionState()
 }

@@ -23,32 +23,25 @@ import androidx.compose.foundation.lazy.LazyListState
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Refresh
-import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberTopAppBarState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.LastBaseline
@@ -57,7 +50,7 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
+import com.joker.coolmall.core.common.base.state.LoadMoreState
 import com.joker.coolmall.core.designsystem.component.AppColumn
 import com.joker.coolmall.core.designsystem.component.AppRow
 import com.joker.coolmall.core.designsystem.component.FullScreenBox
@@ -81,9 +74,10 @@ import com.joker.coolmall.core.ui.component.tag.TagType
 import com.joker.coolmall.core.ui.component.text.AppText
 import com.joker.coolmall.core.ui.component.text.TextSize
 import com.joker.coolmall.core.ui.component.text.TextType
+import com.joker.coolmall.feature.cs.R
 import com.joker.coolmall.feature.cs.component.ChatInputArea
+import com.joker.coolmall.feature.cs.component.ChatLoadMore
 import com.joker.coolmall.feature.cs.viewmodel.ChatViewModel
-import com.joker.coolmall.feature.cs.viewmodel.WebSocketConnectionState
 import kotlinx.coroutines.launch
 
 /**
@@ -95,88 +89,83 @@ import kotlinx.coroutines.launch
 internal fun ChatRoute(
     viewModel: ChatViewModel = hiltViewModel()
 ) {
+    val messages by viewModel.messages.collectAsState()
+    val isLoadingHistory by viewModel.isLoadingHistory.collectAsState()
+    val loadMoreState by viewModel.loadMoreState.collectAsState()
+    val inputText by viewModel.inputText.collectAsState()
+
     ChatScreen(
-        viewModel = viewModel,
-        onBackClick = viewModel::navigateBack
+        messages = messages,
+        isLoadingHistory = isLoadingHistory,
+        loadMoreState = loadMoreState,
+        inputText = inputText,
+        onBackClick = viewModel::navigateBack,
+        onRefresh = viewModel::refreshMessages,
+        onLoadMore = viewModel::loadMoreMessages,
+        onSendMessage = viewModel::sendMessage,
+        onInputTextChange = viewModel::updateInputText,
+        onMarkAsRead = viewModel::markMessagesAsRead,
+        newMessageEvent = viewModel.newMessageEvent
     )
 }
 
 /**
  * 客服聊天界面
  *
- * @param viewModel 客服聊天 ViewModel
- * @param uiState UI状态
+ * @param messages 消息列表
+ * @param isLoadingHistory 是否正在加载历史消息
+ * @param loadMoreState 加载更多状态
+ * @param inputText 输入框文本
  * @param onBackClick 返回按钮回调
+ * @param onRefresh 刷新消息回调
+ * @param onLoadMore 加载更多消息回调
+ * @param onSendMessage 发送消息回调
+ * @param onInputTextChange 输入框文本变化回调
+ * @param onMarkAsRead 标记消息已读回调
+ * @param newMessageEvent 新消息事件流
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun ChatScreen(
-    viewModel: ChatViewModel = hiltViewModel(),
-    uiState: BaseNetWorkUiState<Any> = BaseNetWorkUiState.Success(data = Any()),
+    messages: List<CsMsg> = emptyList(),
+    isLoadingHistory: Boolean = false,
+    loadMoreState: LoadMoreState = LoadMoreState.Success,
+    inputText: String = "",
     onBackClick: () -> Unit = {},
+    onRefresh: () -> Unit = {},
+    onLoadMore: () -> Unit = {},
+    onSendMessage: () -> Unit = {},
+    onInputTextChange: (String) -> Unit = {},
+    onMarkAsRead: () -> Unit = {},
+    newMessageEvent: kotlinx.coroutines.flow.Flow<Unit>? = null
 ) {
-    val messages by viewModel.messages.collectAsState()
-    val connectionState by viewModel.connectionState.collectAsState()
-    val isLoadingHistory by viewModel.isLoadingHistory.collectAsState()
-
     val scrollState = rememberLazyListState()
     val topBarState = rememberTopAppBarState()
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(topBarState)
 
-    // 管理输入框状态
-    var inputText by remember { mutableStateOf("") }
-
-    // 进入页面标记已读
-    DisposableEffect(Unit) {
-        viewModel.markMessagesAsRead()
-        onDispose { /* 页面销毁时清理资源 */ }
+    // 监听新消息事件，自动滚动到底部
+    LaunchedEffect(newMessageEvent) {
+        newMessageEvent?.collect {
+            // 滚动到列表顶部（因为是倒序排列，所以顶部是最新消息）
+            try {
+                scrollState.animateScrollToItem(0)
+            } catch (_: Exception) {
+                // 如果动画滚动失败，尝试立即滚动
+                scrollState.scrollToItem(0)
+            }
+        }
     }
 
     Scaffold(
         topBar = {
             CenterTopAppBar(
-//                title = "客服聊天",
-                onBackClick = onBackClick,
-                actions = {
-                    // 显示连接状态指示器
-                    when (connectionState) {
-                        WebSocketConnectionState.Connected -> {
-                            Box(
-                                modifier = Modifier.size(12.dp),
-                                contentAlignment = Alignment.Center
-                            ) {
-                                Surface(
-                                    color = Color.Green,
-                                    shape = ShapeCircle,
-                                    modifier = Modifier.size(8.dp)
-                                ) {}
-                            }
-                        }
-
-                        WebSocketConnectionState.Connecting -> {
-                            CircularProgressIndicator(
-                                modifier = Modifier.size(16.dp),
-                                strokeWidth = 2.dp
-                            )
-                        }
-
-                        is WebSocketConnectionState.Error, WebSocketConnectionState.Disconnected -> {
-                            Icon(
-                                imageVector = Icons.Default.Refresh,
-                                contentDescription = "重新连接",
-                                tint = MaterialTheme.colorScheme.error,
-                                modifier = Modifier
-                                    .size(20.dp)
-                                    .clickable { viewModel.connectWebSocket() }
-                            )
-                        }
-                    }
-                }
+                title = R.string.customer_service_chat,
+                onBackClick = onBackClick
             )
         },
         contentWindowInsets = ScaffoldDefaults
             .contentWindowInsets
-//            .exclude(WindowInsets.navigationBars)
+            .exclude(WindowInsets.navigationBars)
             .exclude(WindowInsets.ime),
         modifier = Modifier
             .fillMaxSize()
@@ -199,20 +188,21 @@ internal fun ChatScreen(
                     MessageList(
                         messages = messages,
                         isLoading = isLoadingHistory,
+                        loadMoreState = loadMoreState,
                         scrollState = scrollState,
-                        onRefresh = { viewModel.loadHistoryMessages() }
+                        onRefresh = onRefresh,
+                        onLoadMore = onLoadMore
                     )
                 }
 
                 // 使用封装后的输入区域组件
                 ChatInputArea(
                     inputText = inputText,
-                    onInputTextChange = { inputText = it },
+                    onInputTextChange = onInputTextChange,
                     onSendMessage = {
-                        if (inputText.isNotBlank()) {
-                            viewModel.sendMessage(inputText)
-                            inputText = ""
-                        }
+                        // 发送消息逻辑已在ViewModel中处理，包括清空输入框
+                        onSendMessage()
+                        // 滚动逻辑由LaunchedEffect中的newMessageEvent处理
                     },
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -221,14 +211,44 @@ internal fun ChatScreen(
     }
 }
 
+/**
+ * 消息列表组件
+ *
+ * @param messages 消息列表数据
+ * @param isLoading 是否正在加载
+ * @param loadMoreState 加载更多状态
+ * @param scrollState 滚动状态
+ * @param onRefresh 刷新回调
+ * @param onLoadMore 加载更多回调
+ */
 @Composable
 fun MessageList(
     messages: List<CsMsg>,
     isLoading: Boolean = false,
+    loadMoreState: LoadMoreState = LoadMoreState.PullToLoad,
     scrollState: LazyListState,
     onRefresh: () -> Unit = {},
+    onLoadMore: () -> Unit = {}
 ) {
     val scope = rememberCoroutineScope()
+
+    // 监听滚动状态，自动触发加载更多
+    LaunchedEffect(scrollState, loadMoreState) {
+        snapshotFlow {
+            scrollState.layoutInfo
+        }.collect { layoutInfo ->
+            val totalItems = layoutInfo.totalItemsCount
+            val lastVisibleItemIndex = layoutInfo.visibleItemsInfo.lastOrNull()?.index ?: -1
+
+            // 当LoadMore组件可见且状态为PullToLoad时触发加载
+            if (totalItems > 0 &&
+                lastVisibleItemIndex >= totalItems - 1 &&
+                loadMoreState == LoadMoreState.PullToLoad
+            ) {
+                onLoadMore()
+            }
+        }
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
         LazyColumn(
@@ -237,50 +257,26 @@ fun MessageList(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(vertical = SpacePaddingSmall)
         ) {
-            if (isLoading) {
-                item {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(SpacePaddingMedium),
-                        contentAlignment = Alignment.Center
-                    ) {
-                        CircularProgressIndicator(
-                            modifier = Modifier.size(24.dp),
-                            strokeWidth = 2.dp
-                        )
-                    }
-                }
-            } else {
-                items(
-                    items = messages,
-                    key = { it.id }
-                ) { message ->
-                    Message(
-                        onAuthorClick = { /* 点击用户头像 */ },
-                        msg = message,
-                        isUserMe = message.type == 0, // 0-反馈(用户), 1-回复(客服)
-                        isFirstMessageByAuthor = true, // 简化处理
-                        isLastMessageByAuthor = true, // 简化处理
-                    )
-                }
+            items(
+                items = messages,
+                key = { it.id }
+            ) { message ->
+                Message(
+                    onAuthorClick = { /* 点击用户头像 */ },
+                    msg = message,
+                    isUserMe = message.type == 0, // 0-反馈(用户), 1-回复(客服)
+                    isFirstMessageByAuthor = true, // 简化处理
+                    isLastMessageByAuthor = true, // 简化处理
+                )
+            }
 
-                // 上拉加载更多
-                item {
-                    Box(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(SpacePaddingMedium)
-                            .clickable { onRefresh() },
-                        contentAlignment = Alignment.Center
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Refresh,
-                            contentDescription = "加载更多",
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                    }
-                }
+            // 加载更多组件
+            item {
+                ChatLoadMore(
+                    state = loadMoreState,
+                    listState = scrollState,
+                    onRetry = onLoadMore
+                )
             }
         }
 
@@ -309,6 +305,15 @@ fun MessageList(
     }
 }
 
+/**
+ * 单条消息组件
+ *
+ * @param onAuthorClick 点击作者头像回调
+ * @param msg 消息数据
+ * @param isUserMe 是否为当前用户发送的消息
+ * @param isFirstMessageByAuthor 是否为该作者的第一条消息
+ * @param isLastMessageByAuthor 是否为该作者的最后一条消息
+ */
 @Composable
 fun Message(
     onAuthorClick: (String) -> Unit,
@@ -328,10 +333,13 @@ fun Message(
     ) {
         if (!isUserMe && isLastMessageByAuthor) {
             // 客服头像，左侧显示
+            // 根据消息类型使用不同的头像
+            val imageUrl =
+                if (msg.adminUserHeadImg.isEmpty()) msg.avatarUrl else msg.adminUserHeadImg
             NetWorkImage(
-                model = msg.adminUserHeadImg,
+                model = imageUrl,
                 modifier = Modifier
-                    .clickable(onClick = { onAuthorClick(msg.adminUserName) })
+                    .clickable(onClick = { onAuthorClick(if (msg.adminUserName.isEmpty()) msg.nickName else msg.adminUserName) })
                     .size(36.dp)
                     .align(Alignment.Top),
                 cornerShape = ShapeCircle,
@@ -376,6 +384,16 @@ fun Message(
     }
 }
 
+/**
+ * 作者信息和文本消息组件
+ *
+ * @param msg 消息数据
+ * @param isUserMe 是否为当前用户发送的消息
+ * @param isFirstMessageByAuthor 是否为该作者的第一条消息
+ * @param isLastMessageByAuthor 是否为该作者的最后一条消息
+ * @param authorClicked 点击作者回调
+ * @param modifier 修饰符
+ */
 @Composable
 fun AuthorAndTextMessage(
     msg: CsMsg,
@@ -405,6 +423,12 @@ fun AuthorAndTextMessage(
     }
 }
 
+/**
+ * 作者名称和时间戳组件
+ *
+ * @param msg 消息数据
+ * @param isUserMe 是否为当前用户发送的消息
+ */
 @Composable
 private fun AuthorNameTimestamp(msg: CsMsg, isUserMe: Boolean) {
     // 为了无障碍而结合作者和时间戳
@@ -416,8 +440,11 @@ private fun AuthorNameTimestamp(msg: CsMsg, isUserMe: Boolean) {
         verticalAlignment = Alignment.CenterVertically
     ) {
         if (!isUserMe) {
+            // 为客服消息显示名称，优先使用adminUserName，如果为空则使用nickName
+            val displayName =
+                if (msg.adminUserName.isEmpty()) msg.nickName else msg.adminUserName
             AppText(
-                text = msg.adminUserName,
+                text = displayName,
                 size = TextSize.BODY_MEDIUM,
                 modifier = Modifier
                     .alignBy(LastBaseline)
@@ -460,6 +487,11 @@ private val OtherChatBubbleShape = RoundedCornerShape(
     bottomEnd = 18.dp
 )
 
+/**
+ * 日期头部组件
+ *
+ * @param dayString 日期字符串
+ */
 @Composable
 fun DayHeader(dayString: String) {
     SpaceBetweenRow(
@@ -478,16 +510,25 @@ fun DayHeader(dayString: String) {
     }
 }
 
+/**
+ * 日期头部分割线组件
+ */
 @Composable
 private fun RowScope.DayHeaderLine() {
-    Divider(
+    HorizontalDivider(
         modifier = Modifier
             .weight(1f)
             .align(Alignment.CenterVertically),
-        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f),
+        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
     )
 }
 
+/**
+ * 聊天气泡组件
+ *
+ * @param message 消息数据
+ * @param isUserMe 是否为当前用户发送的消息
+ */
 @Composable
 fun ChatItemBubble(message: CsMsg, isUserMe: Boolean) {
     val backgroundBubbleColor = if (isUserMe) {
@@ -517,6 +558,13 @@ fun ChatItemBubble(message: CsMsg, isUserMe: Boolean) {
     }
 }
 
+/**
+ * 跳转到底部按钮组件
+ *
+ * @param enabled 是否启用按钮
+ * @param onClicked 点击回调
+ * @param modifier 修饰符
+ */
 @Composable
 fun JumpToBottom(
     enabled: Boolean,
@@ -531,6 +579,7 @@ fun JumpToBottom(
             style = TagStyle.LIGHT,
             modifier = modifier
                 .padding(bottom = SpacePaddingSmall)
+                .clip(ShapeExtraLarge)
                 .clickable(onClick = onClicked)
         )
     }
@@ -543,11 +592,7 @@ fun JumpToBottom(
 @Composable
 internal fun ChatScreenPreview() {
     AppTheme {
-        ChatScreen(
-            uiState = BaseNetWorkUiState.Success(
-                data = Any()
-            )
-        )
+        ChatScreen()
     }
 }
 
@@ -558,10 +603,6 @@ internal fun ChatScreenPreview() {
 @Composable
 internal fun ChatScreenPreviewDark() {
     AppTheme(darkTheme = true) {
-        ChatScreen(
-            uiState = BaseNetWorkUiState.Success(
-                data = Any()
-            )
-        )
+        ChatScreen()
     }
 }
