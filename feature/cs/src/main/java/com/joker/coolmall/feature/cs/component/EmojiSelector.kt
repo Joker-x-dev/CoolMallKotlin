@@ -1,7 +1,15 @@
 package com.joker.coolmall.feature.cs.component
 
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.runtime.remember
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -38,14 +46,29 @@ fun EmojiSelector(
     )
 
     Surface(
-        modifier = modifier,
-        shadowElevation = 4.dp,
-        shape = ShapeMedium
+        modifier = modifier
     ) {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(8),
-            modifier = Modifier.padding(SpacePaddingSmall)
-        ) {
+        val outlineColor = MaterialTheme.colorScheme.outline
+        
+        Column {
+            // 上边框
+            Canvas(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+            ) {
+                drawLine(
+                    color = outlineColor,
+                    start = Offset(0f, 0f),
+                    end = Offset(size.width, 0f),
+                    strokeWidth = 1.dp.toPx()
+                )
+            }
+            
+            LazyVerticalGrid(
+                columns = GridCells.Fixed(8),
+                modifier = Modifier.padding(SpacePaddingSmall)
+            ) {
             items(emojis.size) { index ->
                 Box(
                     modifier = Modifier
@@ -61,5 +84,6 @@ fun EmojiSelector(
                 }
             }
         }
+        }
     }
-} 
+}

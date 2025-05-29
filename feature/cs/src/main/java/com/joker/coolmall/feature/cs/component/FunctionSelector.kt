@@ -1,13 +1,17 @@
 package com.joker.coolmall.feature.cs.component
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
@@ -42,10 +46,26 @@ fun FunctionSelector(
     modifier: Modifier = Modifier
 ) {
     Surface(
-        modifier = modifier,
-        shadowElevation = 4.dp,
+        modifier = modifier
     ) {
-        AppRow(
+        val outlineColor = MaterialTheme.colorScheme.outline
+        
+        Column {
+            // 上边框
+            Canvas(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+            ) {
+                drawLine(
+                    color = outlineColor,
+                    start = Offset(0f, 0f),
+                    end = Offset(size.width, 0f),
+                    strokeWidth = 1.dp.toPx()
+                )
+            }
+            
+            AppRow(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(SpacePaddingMedium),
@@ -69,6 +89,7 @@ fun FunctionSelector(
             )
 
             Spacer(modifier = Modifier.weight(1f))
+        }
         }
     }
 }
@@ -118,4 +139,4 @@ fun FunctionItem(
             size = TextSize.BODY_SMALL,
         )
     }
-} 
+}
