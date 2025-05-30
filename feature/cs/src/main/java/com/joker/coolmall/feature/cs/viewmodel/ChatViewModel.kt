@@ -1,6 +1,8 @@
 package com.joker.coolmall.feature.cs.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.viewModelScope
+import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.common.base.state.LoadMoreState
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
 import com.joker.coolmall.core.data.repository.CustomerServiceRepository
@@ -10,12 +12,13 @@ import com.joker.coolmall.core.model.request.MessagePageRequest
 import com.joker.coolmall.core.model.request.ReadMessageRequest
 import com.joker.coolmall.core.util.log.LogUtils
 import com.joker.coolmall.feature.cs.state.WebSocketConnectionState
+import com.joker.coolmall.feature.cs.util.ChatSoundManager
 import com.joker.coolmall.feature.cs.util.WebSocketManager
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
@@ -35,8 +38,13 @@ private const val TAG = "ChatViewModel"
 class ChatViewModel @Inject constructor(
     private val customerServiceRepository: CustomerServiceRepository,
     private val appState: AppState,
+    @ApplicationContext private val context: Context,
     navigator: AppNavigator,
 ) : BaseViewModel(navigator) {
+
+    // 页面UI状态
+    private val _uiState = MutableStateFlow<BaseNetWorkUiState<Unit>>(BaseNetWorkUiState.Loading)
+    val uiState: StateFlow<BaseNetWorkUiState<Unit>> = _uiState.asStateFlow()
 
     // 会话ID (内部使用)
     private val _sessionId = MutableStateFlow<Long>(0)
@@ -44,6 +52,10 @@ class ChatViewModel @Inject constructor(
     // 聊天消息列表 (倒序排列，最新的在前面)
     private val _messages = MutableStateFlow<List<CsMsg>>(emptyList())
     val messages: StateFlow<List<CsMsg>> = _messages.asStateFlow()
+
+    // 新消息ID集合，用于控制动画
+    private val _newMessageIds = MutableStateFlow<Set<Long>>(emptySet())
+    val newMessageIds: StateFlow<Set<Long>> = _newMessageIds.asStateFlow()
 
     // WebSocket连接状态 (内部使用)
     private val _connectionState =
@@ -66,12 +78,15 @@ class ChatViewModel @Inject constructor(
     val inputText: StateFlow<String> = _inputText.asStateFlow()
 
     // 分页相关
-    private var currentPage = 0
+    private var currentPage = 1
     private val pageSize = 10
     private var hasMoreData = true
 
     // WebSocket管理器
     private val webSocketManager = WebSocketManager()
+
+    // 音效管理器
+    private val chatSoundManager = ChatSoundManager(context)
 
     init {
         // 设置WebSocket回调
@@ -99,12 +114,16 @@ class ChatViewModel @Inject constructor(
      */
     private fun createSession() {
         LogUtils.d(TAG, "开始创建会话")
+
         ResultHandler.handleResultWithData(
             scope = viewModelScope,
             flow = customerServiceRepository.createSession().asResult(),
             onData = { session ->
                 _sessionId.value = session.id
                 LogUtils.d(TAG, "会话创建成功: sessionId = ${session.id}")
+
+                // 设置成功状态
+                _uiState.value = BaseNetWorkUiState.Success(Unit)
 
                 // 获取历史消息
                 loadHistoryMessages()
@@ -115,8 +134,9 @@ class ChatViewModel @Inject constructor(
                 // 标记消息为已读
                 markMessagesAsRead()
             },
-            onError = { message, _ ->
+            onError = { message, exception ->
                 LogUtils.e(TAG, "会话创建失败: $message")
+                _uiState.value = BaseNetWorkUiState.Error(message, exception)
                 _connectionState.value = WebSocketConnectionState.Error("创建会话失败")
             }
         )
@@ -169,7 +189,11 @@ class ChatViewModel @Inject constructor(
                     _messages.value = newMessages
                 } else {
                     // 加载更多 - 将新消息添加到列表末尾（因为是倒序显示）
-                    _messages.value = _messages.value + newMessages
+                    // 去重处理：过滤掉已存在的消息
+                    val currentMessages = _messages.value
+                    val existingIds = currentMessages.map { it.id }.toSet()
+                    val uniqueNewMessages = newMessages.filter { it.id !in existingIds }
+                    _messages.value = currentMessages + uniqueNewMessages
                 }
 
                 _isLoadingHistory.value = false
@@ -238,6 +262,14 @@ class ChatViewModel @Inject constructor(
             currentMessages.add(0, message) // 新消息在顶部，因为列表是倒序显示
             _messages.value = currentMessages
 
+            // 将新消息ID添加到集合中，用于控制动画
+            _newMessageIds.value = _newMessageIds.value + message.id
+
+            // 播放接收消息音效（客服回复）
+            if (message.type == 1) { // 1-回复(客服)
+                chatSoundManager.playMessageReceivedSound()
+            }
+
             // 触发新消息事件
             viewModelScope.launch {
                 _newMessageEvent.emit(Unit)
@@ -250,6 +282,13 @@ class ChatViewModel @Inject constructor(
      */
     fun updateInputText(text: String) {
         _inputText.value = text
+    }
+
+    /**
+     * 清除消息动画状态
+     */
+    fun clearMessageAnimation(messageId: Long) {
+        _newMessageIds.value = _newMessageIds.value - messageId
     }
 
     /**
@@ -274,14 +313,10 @@ class ChatViewModel @Inject constructor(
         val success = webSocketManager.sendMessage(sessionId, content, type)
         if (success) {
             LogUtils.d(TAG, "消息发送成功")
+            // 播放发送消息音效
+            chatSoundManager.playMessageSentSound()
             // 清空输入框
             _inputText.value = ""
-            // 发送成功后触发新消息事件（让UI滚动到底部）
-            viewModelScope.launch {
-                // 添加延迟确保消息已经通过WebSocket返回并添加到列表
-                delay(100)
-                _newMessageEvent.emit(Unit)
-            }
         } else {
             // 尝试重新连接
             connectWebSocket()
@@ -311,6 +346,17 @@ class ChatViewModel @Inject constructor(
     }
 
     /**
+     * 重试请求
+     */
+    fun retryRequest() {
+        if (_uiState.value is BaseNetWorkUiState.Error) {
+            _uiState.value = BaseNetWorkUiState.Loading
+        }
+        // 重试创建会话
+        createSession()
+    }
+
+    /**
      * 断开WebSocket连接
      */
     fun disconnectWebSocket() {
@@ -319,6 +365,7 @@ class ChatViewModel @Inject constructor(
 
     override fun onCleared() {
         disconnectWebSocket()
+        chatSoundManager.release()
         super.onCleared()
     }
 }

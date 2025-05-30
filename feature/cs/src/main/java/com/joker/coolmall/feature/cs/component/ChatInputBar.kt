@@ -202,6 +202,7 @@ fun ChatInputBar(
                         Box(
                             modifier = Modifier
                                 .size(32.dp)
+                                .clip(ShapeCircle)
                                 .clickable {
                                     // 点击加号按钮时隐藏键盘
                                     keyboardController?.hide()
