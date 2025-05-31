@@ -1,5 +1,8 @@
 package com.joker.coolmall.feature.main.view
 
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
@@ -27,8 +30,11 @@ import kotlinx.coroutines.launch
 /**
  * 主界面路由入口
  */
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 internal fun MainRoute(
+    sharedTransitionScope: SharedTransitionScope,
+    animatedContentScope: AnimatedContentScope,
     viewModel: MainViewModel = hiltViewModel()
 ) {
     // 从ViewModel获取当前导航状态
@@ -37,22 +43,27 @@ internal fun MainRoute(
     val isAnimatingPageChange by viewModel.isAnimatingPageChange.collectAsState()
 
     MainScreen(
-        currentDestination = currentDestination,
-        currentPageIndex = currentPageIndex,
-        isAnimatingPageChange = isAnimatingPageChange,
-        onPageChanged = viewModel::updatePageIndex,
-        onNavigationItemSelected = viewModel::updateDestination,
-        onPageOffsetChanged = viewModel::previewPageChange,
-        onAnimationCompleted = viewModel::notifyAnimationCompleted
-    )
+            sharedTransitionScope = sharedTransitionScope,
+            animatedContentScope = animatedContentScope,
+            currentDestination = currentDestination,
+            currentPageIndex = currentPageIndex,
+            isAnimatingPageChange = isAnimatingPageChange,
+            onPageChanged = viewModel::updatePageIndex,
+            onNavigationItemSelected = viewModel::updateDestination,
+            onPageOffsetChanged = viewModel::previewPageChange,
+            onAnimationCompleted = viewModel::notifyAnimationCompleted
+        )
 }
 
 /**
  * 主界面
  * 包含底部导航栏和四个主要页面（首页、分类、购物车、我的）
  */
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 internal fun MainScreen(
+    sharedTransitionScope: SharedTransitionScope? = null,
+    animatedContentScope: AnimatedContentScope? = null,
     currentDestination: String = TopLevelDestination.HOME.route,
     currentPageIndex: Int = 0,
     isAnimatingPageChange: Boolean = false,
@@ -113,7 +124,10 @@ internal fun MainScreen(
                 0 -> HomeRoute()
                 1 -> CategoryRoute()
                 2 -> CartRoute()
-                3 -> MeRoute()
+                3 -> MeRoute(
+                    sharedTransitionScope = sharedTransitionScope,
+                    animatedContentScope = animatedContentScope
+                )
             }
         }
     }
@@ -177,6 +191,6 @@ private fun HandlePageStateChanges(
 @Composable
 fun MainScreenPreview() {
     AppTheme {
-        MainScreen()
+//        MainScreen()
     }
 }

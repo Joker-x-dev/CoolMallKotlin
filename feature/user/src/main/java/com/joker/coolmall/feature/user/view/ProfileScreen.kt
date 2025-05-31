@@ -1,25 +1,29 @@
 package com.joker.coolmall.feature.user.view
 
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.joker.coolmall.core.model.entity.User
 import com.joker.coolmall.core.designsystem.component.CenterBox
 import com.joker.coolmall.core.designsystem.component.VerticalList
 import com.joker.coolmall.core.designsystem.theme.AppTheme
-import com.joker.coolmall.core.designsystem.theme.ShapeCircle
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
-import com.joker.coolmall.core.ui.component.image.NetWorkImage
+import com.joker.coolmall.core.ui.component.image.SmallAvatar
 import com.joker.coolmall.core.ui.component.list.AppListItem
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
 import com.joker.coolmall.core.ui.component.text.AppText
@@ -31,14 +35,28 @@ import com.joker.coolmall.feature.user.viewmodel.ProfileViewModel
 /**
  * 个人中心路由
  *
+ * @param sharedTransitionScope 共享转换作用域
+ * @param animatedContentScope 动画内容作用域
  * @param viewModel 个人中心ViewModel
  */
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 internal fun ProfileRoute(
+    sharedTransitionScope: SharedTransitionScope,
+    animatedContentScope: AnimatedContentScope,
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
+    // 收集登录状态
+    val isLoggedIn by viewModel.isLoggedIn.collectAsStateWithLifecycle()
+    // 收集用户信息
+    val userInfo by viewModel.userInfo.collectAsStateWithLifecycle()
+
     ProfileScreen(
-        onBackClick = viewModel::navigateBack
+        onBackClick = viewModel::navigateBack,
+        sharedTransitionScope = sharedTransitionScope,
+        animatedContentScope = animatedContentScope,
+        isLoggedIn = isLoggedIn,
+        userInfo = userInfo
     )
 }
 
@@ -46,11 +64,17 @@ internal fun ProfileRoute(
  * 个人中心界面
  *
  * @param onBackClick 返回上一页回调
+ * @param isLoggedIn 登录状态
+ * @param userInfo 用户信息
  */
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
 internal fun ProfileScreen(
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
+    sharedTransitionScope: SharedTransitionScope? = null,
+    animatedContentScope: AnimatedContentScope? = null,
+    isLoggedIn: Boolean = false,
+    userInfo: User? = null
 ) {
     AppScaffold(
         title = R.string.profile_title,
@@ -67,10 +91,20 @@ internal fun ProfileScreen(
                     verticalPadding = SpaceVerticalXSmall,
                     horizontalPadding = SpaceHorizontalLarge,
                     trailingContent = {
-                        NetWorkImage(
-                            model = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F6d416005e44546d581f5a9189a69c756_5%E5%A4%B4%E5%83%8F.png",
-                            size = 38.dp,
-                            cornerShape = ShapeCircle
+                        SmallAvatar(
+                            avatarUrl = userInfo?.avatarUrl,
+                            modifier = Modifier.let { modifier ->
+                                if (sharedTransitionScope != null && animatedContentScope != null) {
+                                    with(sharedTransitionScope) {
+                                        modifier.sharedElement(
+                                            state = rememberSharedContentState(key = "user_avatar"),
+                                            animatedVisibilityScope = animatedContentScope
+                                        )
+                                    }
+                                } else {
+                                    modifier
+                                }
+                            }
                         )
                     }
                 )
@@ -82,7 +116,7 @@ internal fun ProfileScreen(
                     horizontalPadding = SpaceHorizontalLarge,
                     trailingContent = {
                         AppText(
-                            "Joker.X",
+                            userInfo?.nickName ?: "未设置",
                             type = TextType.TERTIARY
                         )
                     }
@@ -101,7 +135,7 @@ internal fun ProfileScreen(
                     horizontalPadding = SpaceHorizontalLarge,
                     trailingContent = {
                         AppText(
-                            "18888888888",
+                            userInfo?.phone ?: "未绑定",
                             type = TextType.TERTIARY
                         )
                     }
@@ -114,7 +148,7 @@ internal fun ProfileScreen(
                     horizontalPadding = SpaceHorizontalLarge,
                     trailingContent = {
                         AppText(
-                            " 100001",
+                            userInfo?.id?.toString() ?: "未设置",
                             type = TextType.TERTIARY
                         )
                     }
@@ -191,7 +225,7 @@ internal fun ProfileScreen(
 @Preview(showBackground = true)
 fun ProfileScreenPreview() {
     AppTheme {
-        ProfileScreen()
+//        ProfileScreen()
     }
 }
 
@@ -202,6 +236,6 @@ fun ProfileScreenPreview() {
 @Preview(showBackground = true)
 fun ProfileScreenPreviewDark() {
     AppTheme(darkTheme = true) {
-        ProfileScreen()
+//        ProfileScreen()
     }
 }

@@ -1,5 +1,8 @@
 package com.joker.coolmall.feature.main.view
 
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -51,6 +54,7 @@ import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.model.entity.User
+import com.joker.coolmall.core.ui.component.image.Avatar
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
 import com.joker.coolmall.core.ui.component.list.AppListItem
 import com.joker.coolmall.core.ui.component.text.AppText
@@ -60,8 +64,11 @@ import com.joker.coolmall.feature.main.R
 import com.joker.coolmall.feature.main.component.CommonScaffold
 import com.joker.coolmall.feature.main.viewmodel.MeViewModel
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 internal fun MeRoute(
+    sharedTransitionScope: SharedTransitionScope? = null,
+    animatedContentScope: AnimatedContentScope? = null,
     viewModel: MeViewModel = hiltViewModel(),
 ) {
     // 收集登录状态
@@ -70,6 +77,8 @@ internal fun MeRoute(
     val userInfo by viewModel.userInfo.collectAsStateWithLifecycle()
 
     MeScreen(
+        sharedTransitionScope = sharedTransitionScope,
+        animatedContentScope = animatedContentScope,
         isLoggedIn = isLoggedIn,
         userInfo = userInfo,
         onHeadClick = viewModel::onHeadClick,
@@ -81,9 +90,11 @@ internal fun MeRoute(
     )
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
 internal fun MeScreen(
+    sharedTransitionScope: SharedTransitionScope? = null,
+    animatedContentScope: AnimatedContentScope? = null,
     isLoggedIn: Boolean = false,
     userInfo: User? = null,
     onHeadClick: () -> Unit = {},
@@ -101,6 +112,8 @@ internal fun MeScreen(
         ) {
             // 用户信息区域
             UserInfoSection(
+                sharedTransitionScope = sharedTransitionScope,
+                animatedContentScope = animatedContentScope,
                 isLoggedIn = isLoggedIn, userInfo = userInfo, onHeadClick = onHeadClick
             )
 
@@ -131,9 +144,14 @@ internal fun MeScreen(
 /**
  * 用户信息区域
  */
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun UserInfoSection(
-    isLoggedIn: Boolean, userInfo: User?, onHeadClick: () -> Unit
+    sharedTransitionScope: SharedTransitionScope? = null,
+    animatedContentScope: AnimatedContentScope? = null,
+    isLoggedIn: Boolean,
+    userInfo: User?,
+    onHeadClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
@@ -142,21 +160,22 @@ private fun UserInfoSection(
         verticalAlignment = Alignment.CenterVertically
     ) {
         // 头像
-        Box(
-            modifier = Modifier
-                .size(72.dp)
-                .clip(CircleShape)
-                .background(MaterialTheme.colorScheme.surface)
-        ) {
-            Icon(
-                painter = painterResource(id = R.drawable.ic_my_fill),
-                contentDescription = null,
-                modifier = Modifier
-                    .size(36.dp)
-                    .align(Alignment.Center),
-                tint = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-        }
+        Avatar(
+            avatarUrl = userInfo?.avatarUrl,
+            size = 72.dp,
+            modifier = Modifier.let { modifier ->
+                if (sharedTransitionScope != null && animatedContentScope != null) {
+                    with(sharedTransitionScope) {
+                        modifier.sharedElement(
+                            state = rememberSharedContentState(key = "user_avatar"),
+                            animatedVisibilityScope = animatedContentScope
+                        )
+                    }
+                } else {
+                    modifier
+                }
+            },
+        )
 
         SpaceHorizontalLarge()
 
@@ -452,7 +471,7 @@ private fun FunctionMenuSection(
 @Composable
 fun MeScreenPreview() {
     AppTheme {
-        MeScreen()
+//        MeScreen()
     }
 }
 
@@ -460,6 +479,6 @@ fun MeScreenPreview() {
 @Composable
 fun MeScreenPreviewDark() {
     AppTheme(darkTheme = true) {
-        MeScreen()
+//        MeScreen()
     }
 }
