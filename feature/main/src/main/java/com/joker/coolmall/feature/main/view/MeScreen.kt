@@ -14,9 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -38,6 +36,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.joker.coolmall.core.designsystem.component.SpaceBetweenRow
 import com.joker.coolmall.core.designsystem.component.SpaceEvenlyRow
+import com.joker.coolmall.core.designsystem.component.VerticalList
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.ArrowRightIcon
 import com.joker.coolmall.core.designsystem.theme.Primary
@@ -73,7 +72,7 @@ internal fun MeRoute(
     MeScreen(
         isLoggedIn = isLoggedIn,
         userInfo = userInfo,
-        toLogin = viewModel::toLoginPage,
+        onHeadClick = viewModel::onHeadClick,
         toAddressList = viewModel::toAddressListPage,
         toOrderList = viewModel::toOrderListPage,
         toOrderListByTab = viewModel::toOrderListPage,
@@ -87,7 +86,7 @@ internal fun MeRoute(
 internal fun MeScreen(
     isLoggedIn: Boolean = false,
     userInfo: User? = null,
-    toLogin: () -> Unit = {},
+    onHeadClick: () -> Unit = {},
     toAddressList: () -> Unit = {},
     toOrderList: () -> Unit = {},
     toOrderListByTab: (Int) -> Unit = {},
@@ -95,42 +94,35 @@ internal fun MeScreen(
     toChat: () -> Unit = {}
 ) {
     CommonScaffold(topBar = { }) {
-        Column(
+        VerticalList(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(rememberScrollState())
                 .padding(it)
-                .padding(SpacePaddingMedium)
         ) {
             // 用户信息区域
             UserInfoSection(
-                isLoggedIn = isLoggedIn, userInfo = userInfo, toLogin = toLogin
+                isLoggedIn = isLoggedIn, userInfo = userInfo, onHeadClick = onHeadClick
             )
-            SpaceVerticalMedium()
 
             // 会员权益卡片
             MembershipCard()
-            SpaceVerticalMedium()
 
             // 订单区域
             OrderSection(
                 toOrderList = toOrderList,
                 toOrderListByTab = toOrderListByTab
             )
-            SpaceVerticalMedium()
 
             // 我的足迹
             MyFootprintSection(
                 toUserFootprint = toUserFootprint
             )
-            SpaceVerticalMedium()
 
             // 功能菜单区域
             FunctionMenuSection(
                 toAddressList = toAddressList,
                 toChat = toChat
             )
-            SpaceVerticalMedium()
 
         }
     }
@@ -141,12 +133,12 @@ internal fun MeScreen(
  */
 @Composable
 private fun UserInfoSection(
-    isLoggedIn: Boolean, userInfo: User?, toLogin: () -> Unit
+    isLoggedIn: Boolean, userInfo: User?, onHeadClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { toLogin() },
+            .clickable { onHeadClick() },
         verticalAlignment = Alignment.CenterVertically
     ) {
         // 头像
@@ -443,9 +435,6 @@ private fun FunctionMenuSection(
             onClick = toChat
         )
     }
-
-    SpaceVerticalMedium()
-
 
     // 设置选项单独放在一个卡片中
     Card {

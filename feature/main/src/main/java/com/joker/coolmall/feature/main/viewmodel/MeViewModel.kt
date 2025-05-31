@@ -70,6 +70,17 @@ class MeViewModel @Inject constructor(
     }
 
     /**
+     * 用户资料点击
+     */
+    fun onHeadClick() {
+        if (isLoggedIn.value) {
+            toProfilePage()
+        } else {
+            toLoginPage()
+        }
+    }
+
+    /**
      * 跳转到用户足迹
      */
     fun toUserFootprintPage() {
