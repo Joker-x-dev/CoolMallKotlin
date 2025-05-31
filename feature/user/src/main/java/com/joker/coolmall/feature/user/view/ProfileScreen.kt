@@ -15,7 +15,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.joker.coolmall.core.model.entity.User
 import com.joker.coolmall.core.designsystem.component.CenterBox
 import com.joker.coolmall.core.designsystem.component.VerticalList
 import com.joker.coolmall.core.designsystem.theme.AppTheme
@@ -23,6 +22,7 @@ import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
+import com.joker.coolmall.core.model.entity.User
 import com.joker.coolmall.core.ui.component.image.SmallAvatar
 import com.joker.coolmall.core.ui.component.list.AppListItem
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
@@ -56,7 +56,8 @@ internal fun ProfileRoute(
         sharedTransitionScope = sharedTransitionScope,
         animatedContentScope = animatedContentScope,
         isLoggedIn = isLoggedIn,
-        userInfo = userInfo
+        userInfo = userInfo,
+        routeAvatarUrl = viewModel.routeAvatarUrl
     )
 }
 
@@ -74,7 +75,8 @@ internal fun ProfileScreen(
     sharedTransitionScope: SharedTransitionScope? = null,
     animatedContentScope: AnimatedContentScope? = null,
     isLoggedIn: Boolean = false,
-    userInfo: User? = null
+    userInfo: User? = null,
+    routeAvatarUrl: String? = null
 ) {
     AppScaffold(
         title = R.string.profile_title,
@@ -92,7 +94,7 @@ internal fun ProfileScreen(
                     horizontalPadding = SpaceHorizontalLarge,
                     trailingContent = {
                         SmallAvatar(
-                            avatarUrl = userInfo?.avatarUrl,
+                            avatarUrl = routeAvatarUrl ?: userInfo?.avatarUrl,
                             modifier = Modifier.let { modifier ->
                                 if (sharedTransitionScope != null && animatedContentScope != null) {
                                     with(sharedTransitionScope) {

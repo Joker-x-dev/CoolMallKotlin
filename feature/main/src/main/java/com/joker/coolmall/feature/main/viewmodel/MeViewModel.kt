@@ -98,7 +98,13 @@ class MeViewModel @Inject constructor(
      * 跳转到用户资料页面
      */
     fun toProfilePage() {
-        super.toPage(UserRoutes.PROFILE)
+        val avatarUrl = userInfo.value?.avatarUrl
+        val route = if (avatarUrl?.isNotEmpty() == true) {
+            "${UserRoutes.PROFILE}/${java.net.URLEncoder.encode(avatarUrl, "UTF-8")}"
+        } else {
+            UserRoutes.PROFILE
+        }
+        super.toPage(route)
     }
 
     /**
