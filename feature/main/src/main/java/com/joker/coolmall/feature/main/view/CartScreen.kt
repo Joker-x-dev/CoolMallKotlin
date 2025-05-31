@@ -1,5 +1,9 @@
 package com.joker.coolmall.feature.main.view
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -18,8 +22,12 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -44,6 +52,7 @@ import com.joker.coolmall.core.ui.component.text.PriceText
 import com.joker.coolmall.feature.main.R
 import com.joker.coolmall.feature.main.component.CommonScaffold
 import com.joker.coolmall.feature.main.viewmodel.CartViewModel
+import kotlinx.coroutines.delay
 
 /**
  * 购物车页面路由
@@ -113,6 +122,22 @@ internal fun CartScreen(
     onDeleteSelected: () -> Unit,
     onSettleClick: () -> Unit
 ) {
+    // 跟踪正在删除的商品
+    var deletingItems by remember { mutableStateOf(emptyMap<Long, Set<Long>>()) }
+
+    // 处理删除动画
+    val handleDeleteWithAnimation = {
+        deletingItems = selectedItems.toMap()
+    }
+
+    // 监听deletingItems变化，延迟后执行实际删除
+    LaunchedEffect(deletingItems) {
+        if (deletingItems.isNotEmpty()) {
+            delay(300) // 等待动画完成
+            onDeleteSelected()
+            deletingItems = emptyMap()
+        }
+    }
     CommonScaffold(
         topBar = {
             CenterTopAppBar(
@@ -137,7 +162,7 @@ internal fun CartScreen(
                     selectedCount = selectedCount,
                     totalPrice = selectedTotalAmount,
                     onCheckAllChanged = onToggleSelectAll,
-                    onDeleteClick = onDeleteSelected,
+                    onDeleteClick = handleDeleteWithAnimation,
                     onSettleClick = onSettleClick,
                 )
             }
@@ -162,23 +187,39 @@ internal fun CartScreen(
                         items = carts,
                         key = { "cart-${it.goodsId}" },
                     ) { cart ->
-                        OrderGoodsCard(
-                            data = cart,
-                            onGoodsClick = { /* 实现商品点击事件 */ },
-                            onSpecClick = { /* 规格点击事件 */ },
-                            onQuantityChanged = { specId, newCount ->
-                                onUpdateCartItemCount(cart.goodsId, specId, newCount)
-                            },
-                            itemSelectSlot = { spec ->
-                                // 每次渲染时都会重新计算选中状态
-                                val selected =
-                                    selectedItems[cart.goodsId]?.contains(spec.id) == true
-                                CheckButton(
-                                    selected = selected,
-                                    onClick = { onToggleItemSelection(cart.goodsId, spec.id) }
-                                )
-                            }
-                        )
+                        // 检查整个商品是否正在删除
+                        val cartSelectedSpecs = selectedItems[cart.goodsId] ?: emptySet()
+                        val cartDeletingSpecs = deletingItems[cart.goodsId] ?: emptySet()
+                        val isCartDeleting = cartSelectedSpecs.isNotEmpty() &&
+                                cartSelectedSpecs == cart.spec.map { it.id }.toSet() &&
+                                cartDeletingSpecs == cartSelectedSpecs
+
+                        AnimatedVisibility(
+                            visible = !isCartDeleting,
+                            exit = slideOutHorizontally(
+                                targetOffsetX = { -it },
+                                animationSpec = tween(300)
+                            ) + fadeOut(animationSpec = tween(300))
+                        ) {
+                            OrderGoodsCard(
+                                data = cart,
+                                deletingSpecIds = cartDeletingSpecs,
+                                onGoodsClick = { /* 实现商品点击事件 */ },
+                                onSpecClick = { /* 规格点击事件 */ },
+                                onQuantityChanged = { specId, newCount ->
+                                    onUpdateCartItemCount(cart.goodsId, specId, newCount)
+                                },
+                                itemSelectSlot = { spec ->
+                                    // 每次渲染时都会重新计算选中状态
+                                    val selected =
+                                        selectedItems[cart.goodsId]?.contains(spec.id) == true
+                                    CheckButton(
+                                        selected = selected,
+                                        onClick = { onToggleItemSelection(cart.goodsId, spec.id) }
+                                    )
+                                }
+                            )
+                        }
                     }
                 }
 
@@ -270,7 +311,6 @@ private fun CartBottomBar(
         }
     }
 }
-
 
 
 @Preview(showBackground = true)

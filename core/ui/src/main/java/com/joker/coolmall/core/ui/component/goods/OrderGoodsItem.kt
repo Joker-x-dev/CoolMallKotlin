@@ -1,5 +1,9 @@
 package com.joker.coolmall.core.ui.component.goods
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideOutHorizontally
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -55,6 +59,7 @@ import com.joker.coolmall.core.ui.component.text.TextType
 fun OrderGoodsCard(
     modifier: Modifier = Modifier,
     data: Cart,
+    deletingSpecIds: Set<Long> = emptySet(),
     onGoodsClick: (Long) -> Unit = {},
     onSpecClick: (Long) -> Unit = {},
     onQuantityChanged: (Long, Int) -> Unit = { _, _ -> },
@@ -73,17 +78,27 @@ fun OrderGoodsCard(
 
         // 商品规格项列表
         data.spec.forEach { item ->
-            OrderGoodsItem(
-                data = item,
-                onSpecClick = onSpecClick,
-                onQuantityChanged = { newCount -> onQuantityChanged(item.id, newCount) },
-                enableQuantityStepper = enableQuantityStepper,
-                selectSlot = itemSelectSlot?.let { { it(item) } },
-                actionSlot = itemActionSlot?.let { { it(item) } },
-                goodsId = data.goodsId,
-                goodsName = data.goodsName,
-                goodsMainPic = data.goodsMainPic
-            )
+            val isSpecDeleting = deletingSpecIds.contains(item.id)
+
+            AnimatedVisibility(
+                visible = !isSpecDeleting,
+                exit = slideOutHorizontally(
+                    targetOffsetX = { -it },
+                    animationSpec = tween(300)
+                ) + fadeOut(animationSpec = tween(300))
+            ) {
+                OrderGoodsItem(
+                    data = item,
+                    onSpecClick = onSpecClick,
+                    onQuantityChanged = { newCount -> onQuantityChanged(item.id, newCount) },
+                    enableQuantityStepper = enableQuantityStepper,
+                    selectSlot = itemSelectSlot?.let { { it(item) } },
+                    actionSlot = itemActionSlot?.let { { it(item) } },
+                    goodsId = data.goodsId,
+                    goodsName = data.goodsName,
+                    goodsMainPic = data.goodsMainPic
+                )
+            }
         }
     }
 }
@@ -383,4 +398,4 @@ private fun OrderGoodsCardDarkPreview() {
             data = cart
         )
     }
-} 
+}
