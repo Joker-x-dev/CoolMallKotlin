@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.room.Room
 import com.joker.coolmall.core.database.AppDatabase
 import com.joker.coolmall.core.database.dao.CartDao
+import com.joker.coolmall.core.database.dao.FootprintDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -40,5 +41,14 @@ object DatabaseModule {
     @Singleton
     fun provideCartDao(database: AppDatabase): CartDao {
         return database.cartDao()
+    }
+
+    /**
+     * 提供足迹DAO
+     */
+    @Provides
+    @Singleton
+    fun provideFootprintDao(database: AppDatabase): FootprintDao {
+        return database.footprintDao()
     }
 }

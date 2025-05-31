@@ -2,11 +2,14 @@ package com.joker.coolmall.feature.main.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
+import com.joker.coolmall.core.data.repository.FootprintRepository
 import com.joker.coolmall.core.data.state.AppState
+import com.joker.coolmall.core.model.entity.Footprint
 import com.joker.coolmall.core.model.entity.User
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.AuthRoutes
 import com.joker.coolmall.navigation.routes.CsRoutes
+import com.joker.coolmall.navigation.routes.GoodsRoutes
 import com.joker.coolmall.navigation.routes.OrderRoutes
 import com.joker.coolmall.navigation.routes.UserRoutes
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,7 +25,8 @@ import javax.inject.Inject
 @HiltViewModel
 class MeViewModel @Inject constructor(
     navigator: AppNavigator,
-    private val appState: AppState
+    private val appState: AppState,
+    private val footprintRepository: FootprintRepository
 ) : BaseViewModel(
     navigator = navigator
 ) {
@@ -41,6 +45,14 @@ class MeViewModel @Inject constructor(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = null
+        )
+
+    // 最新的8个足迹记录
+    val recentFootprints: StateFlow<List<Footprint>> = footprintRepository.getRecentFootprints(8)
+        .stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(5000),
+            initialValue = emptyList()
         )
 
     init {
@@ -78,6 +90,13 @@ class MeViewModel @Inject constructor(
         } else {
             toLoginPage()
         }
+    }
+
+    /**
+     * 跳转到商品详情
+     */
+    fun toGoodsDetailPage(goodsId: Long) {
+        super.toPage(GoodsRoutes.DETAIL, goodsId)
     }
 
     /**

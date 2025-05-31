@@ -5,9 +5,11 @@ import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
 import com.joker.coolmall.core.data.repository.CartRepository
+import com.joker.coolmall.core.data.repository.FootprintRepository
 import com.joker.coolmall.core.data.repository.GoodsRepository
 import com.joker.coolmall.core.model.entity.Cart
 import com.joker.coolmall.core.model.entity.CartGoodsSpec
+import com.joker.coolmall.core.model.entity.Footprint
 import com.joker.coolmall.core.model.entity.Goods
 import com.joker.coolmall.core.model.entity.GoodsSpec
 import com.joker.coolmall.core.model.entity.SelectedGoods
@@ -36,7 +38,8 @@ class GoodsDetailViewModel @Inject constructor(
     navigator: AppNavigator,
     savedStateHandle: SavedStateHandle,
     private val goodsRepository: GoodsRepository,
-    private val cartRepository: CartRepository
+    private val cartRepository: CartRepository,
+    private val footprintRepository: FootprintRepository
 ) : BaseNetWorkViewModel<Goods>(
     navigator = navigator,
     savedStateHandle = savedStateHandle,
@@ -72,6 +75,38 @@ class GoodsDetailViewModel @Inject constructor(
      */
     override fun requestApiFlow(): Flow<NetworkResponse<Goods>> {
         return goodsRepository.getGoodsInfo(requiredId.toString())
+    }
+
+    /**
+     * 处理成功结果，重写此方法添加足迹记录
+     */
+    override fun onRequestSuccess(data: Goods) {
+        super.onRequestSuccess(data)
+        // 添加足迹记录
+        addToFootprint(data)
+    }
+
+    /**
+     * 添加商品到足迹
+     */
+    private fun addToFootprint(goods: Goods) {
+        viewModelScope.launch {
+            try {
+                val footprint = Footprint(
+                    goodsId = goods.id,
+                    goodsName = goods.title,
+                    goodsSubTitle = goods.subTitle,
+                    goodsMainPic = goods.mainPic,
+                    goodsPrice = goods.price,
+                    goodsSold = goods.sold,
+                    viewTime = System.currentTimeMillis()
+                )
+                footprintRepository.addFootprint(footprint)
+            } catch (e: Exception) {
+                // 足迹添加失败不影响主要功能，只记录错误
+                e.printStackTrace()
+            }
+        }
     }
 
     /**

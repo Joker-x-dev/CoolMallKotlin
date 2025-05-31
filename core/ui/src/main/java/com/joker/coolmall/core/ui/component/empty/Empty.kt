@@ -66,18 +66,20 @@ fun Empty(
             )
         }
 
-        SpaceVerticalXLarge()
-
-        OutlinedButton(
-            onClick = onRetryClick,
-            border = BorderStroke(0.5.dp, MaterialTheme.colorScheme.primary),
-            modifier = Modifier
-                .padding(horizontal = 50.dp)
-                .widthIn(200.dp)
-        ) {
-            Text(
-                text = stringResource(id = retryButtonText)
-            )
+        // 如果没有传递重试方法，则不显示重试按钮
+        if (onRetryClick == {}) {
+            SpaceVerticalXLarge()
+            OutlinedButton(
+                onClick = onRetryClick,
+                border = BorderStroke(0.5.dp, MaterialTheme.colorScheme.primary),
+                modifier = Modifier
+                    .padding(horizontal = 50.dp)
+                    .widthIn(200.dp)
+            ) {
+                Text(
+                    text = stringResource(id = retryButtonText)
+                )
+            }
         }
     }
 }

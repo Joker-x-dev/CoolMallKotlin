@@ -53,6 +53,7 @@ import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
+import com.joker.coolmall.core.model.entity.Footprint
 import com.joker.coolmall.core.model.entity.User
 import com.joker.coolmall.core.ui.component.image.Avatar
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
@@ -75,17 +76,21 @@ internal fun MeRoute(
     val isLoggedIn by viewModel.isLoggedIn.collectAsStateWithLifecycle()
     // 收集用户信息
     val userInfo by viewModel.userInfo.collectAsStateWithLifecycle()
+    // 收集足迹数据
+    val recentFootprints by viewModel.recentFootprints.collectAsStateWithLifecycle()
 
     MeScreen(
         sharedTransitionScope = sharedTransitionScope,
         animatedContentScope = animatedContentScope,
         isLoggedIn = isLoggedIn,
         userInfo = userInfo,
+        recentFootprints = recentFootprints,
         onHeadClick = viewModel::onHeadClick,
         toAddressList = viewModel::toAddressListPage,
         toOrderList = viewModel::toOrderListPage,
         toOrderListByTab = viewModel::toOrderListPage,
         toUserFootprint = viewModel::toUserFootprintPage,
+        toGoodsDetail = viewModel::toGoodsDetailPage,
         toChat = viewModel::toChatPage,
     )
 }
@@ -97,11 +102,13 @@ internal fun MeScreen(
     animatedContentScope: AnimatedContentScope? = null,
     isLoggedIn: Boolean = false,
     userInfo: User? = null,
+    recentFootprints: List<Footprint> = emptyList(),
     onHeadClick: () -> Unit = {},
     toAddressList: () -> Unit = {},
     toOrderList: () -> Unit = {},
     toOrderListByTab: (Int) -> Unit = {},
     toUserFootprint: () -> Unit = {},
+    toGoodsDetail: (Long) -> Unit = {},
     toChat: () -> Unit = {}
 ) {
     CommonScaffold(topBar = { }) {
@@ -127,9 +134,13 @@ internal fun MeScreen(
             )
 
             // 我的足迹
-            MyFootprintSection(
-                toUserFootprint = toUserFootprint
-            )
+            if (recentFootprints.isNotEmpty()) {
+                MyFootprintSection(
+                    footprints = recentFootprints,
+                    toUserFootprint = toUserFootprint,
+                    toGoodsDetail = toGoodsDetail
+                )
+            }
 
             // 功能菜单区域
             FunctionMenuSection(
@@ -310,33 +321,45 @@ private fun OrderSection(
  */
 @Composable
 private fun MyFootprintSection(
-    toUserFootprint: () -> Unit = {}
+    footprints: List<Footprint> = emptyList(),
+    toUserFootprint: () -> Unit = {},
+    toGoodsDetail: (Long) -> Unit = {}
 ) {
     Card {
         AppListItem(
             title = "我的足迹",
-            trailingText = "6",
+            trailingText = if (footprints.isNotEmpty()) "查看全部" else "暂无足迹",
             leadingIcon = R.drawable.ic_footprint_fill,
             leadingIconTint = Color(0xFFFF9800),
             onClick = toUserFootprint
         )
 
-        // 水平滚动的产品列表
-        LazyRow(
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            modifier = Modifier.padding(SpacePaddingMedium)
-        ) {
-            val footprintItems = listOf(
-                "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ffcd84baf3d3a4b49b35a03aaf783281e_%E7%BA%A2%E7%B1%B3%2014c.png",
-                "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ffcd84baf3d3a4b49b35a03aaf783281e_%E7%BA%A2%E7%B1%B3%2014c.png",
-                "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ffcd84baf3d3a4b49b35a03aaf783281e_%E7%BA%A2%E7%B1%B3%2014c.png",
-                "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ffcd84baf3d3a4b49b35a03aaf783281e_%E7%BA%A2%E7%B1%B3%2014c.png",
-                "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ffcd84baf3d3a4b49b35a03aaf783281e_%E7%BA%A2%E7%B1%B3%2014c.png",
-                "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ffcd84baf3d3a4b49b35a03aaf783281e_%E7%BA%A2%E7%B1%B3%2014c.png",
-            )
-
-            items(footprintItems) { imageUrl ->
-                FootprintItem(imageUrl = imageUrl)
+        if (footprints.isNotEmpty()) {
+            // 水平滚动的产品列表
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.padding(SpacePaddingMedium)
+            ) {
+                items(footprints) { footprint ->
+                    FootprintItem(
+                        footprint = footprint,
+                        onClick = { toGoodsDetail(footprint.goodsId) }
+                    )
+                }
+            }
+        } else {
+            // 空状态提示
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(SpaceVerticalLarge),
+                contentAlignment = Alignment.Center
+            ) {
+                AppText(
+                    text = "暂无浏览记录",
+                    type = TextType.TERTIARY,
+                    size = TextSize.BODY_MEDIUM
+                )
             }
         }
     }
@@ -346,19 +369,23 @@ private fun MyFootprintSection(
  * 足迹项
  */
 @Composable
-private fun FootprintItem(imageUrl: String) {
+private fun FootprintItem(
+    footprint: Footprint,
+    onClick: () -> Unit = {}
+) {
     Box(
         modifier = Modifier
             .size(100.dp)
             .clip(ShapeSmall)
-            .clickable { /* 点击商品 */ }) {
+            .clickable { onClick() }
+    ) {
         Box(
             modifier = Modifier
                 .size(100.dp)
                 .background(MaterialTheme.colorScheme.surfaceVariant)
         )
         NetWorkImage(
-            model = imageUrl,
+            model = footprint.goodsMainPic,
             contentScale = androidx.compose.ui.layout.ContentScale.Crop,
             modifier = Modifier
                 .size(100.dp)
