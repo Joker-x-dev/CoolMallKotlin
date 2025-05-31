@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavBackStackEntry
 import com.joker.coolmall.core.common.base.state.BaseNetWorkListUiState
 import com.joker.coolmall.core.common.base.state.LoadMoreState
+import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.navigation.AppNavigator
@@ -29,7 +30,8 @@ import kotlinx.coroutines.launch
  */
 abstract class BaseNetWorkListViewModel<T : Any>(
     navigator: AppNavigator,
-) : BaseViewModel(navigator) {
+    appState: AppState
+) : BaseViewModel(navigator, appState) {
 
     /**
      * 当前页码
@@ -246,4 +248,4 @@ abstract class BaseNetWorkListViewModel<T : Any>(
                 }
             })
     }
-} 
+}

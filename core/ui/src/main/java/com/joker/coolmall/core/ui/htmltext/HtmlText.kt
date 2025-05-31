@@ -28,7 +28,7 @@ import org.jsoup.nodes.TextNode
 
 /**
  * HTML富文本渲染组件，用于将HTML字符串渲染为Compose UI
- * 
+ *
  * 基于 https://github.com/thenothinghappened/HtmlText 修改
  */
 @OptIn(ExperimentalLayoutApi::class)

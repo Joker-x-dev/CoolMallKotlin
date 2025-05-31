@@ -31,12 +31,12 @@ object ToastUtils {
     fun init(application: Application, isDarkTheme: Boolean = false) {
         // 保存当前主题模式
         isDarkMode = isDarkTheme
-        
+
         // 根据主题选择默认样式
         val style = if (isDarkTheme) WhiteToastStyle() else BlackToastStyle()
         Toaster.init(application, style)
     }
-    
+
     /**
      * 设置为黑色样式
      * 用法示例：ToastUtils.setBlackStyle()
@@ -45,7 +45,7 @@ object ToastUtils {
         isDarkMode = false
         Toaster.setStyle(BlackToastStyle())
     }
-    
+
     /**
      * 设置为白色样式
      * 用法示例：ToastUtils.setWhiteStyle()
@@ -110,11 +110,11 @@ object ToastUtils {
     fun showSuccess(@StringRes resId: Int) {
         // 保存当前样式
         val currentStyle = if (isDarkMode) WhiteToastStyle() else BlackToastStyle()
-        
+
         // 设置成功样式
         Toaster.setStyle(CustomToastStyle(R.layout.toast_success))
         Toaster.show(resId)
-        
+
         // 恢复默认样式
         Toaster.setStyle(currentStyle)
     }
@@ -154,11 +154,11 @@ object ToastUtils {
     fun showError(@StringRes resId: Int) {
         // 保存当前样式
         val currentStyle = if (isDarkMode) WhiteToastStyle() else BlackToastStyle()
-        
+
         // 设置错误样式
         Toaster.setStyle(CustomToastStyle(R.layout.toast_error))
         Toaster.show(resId)
-        
+
         // 恢复默认样式
         Toaster.setStyle(currentStyle)
     }
@@ -198,70 +198,70 @@ object ToastUtils {
     fun showWarning(@StringRes resId: Int) {
         // 保存当前样式
         val currentStyle = if (isDarkMode) WhiteToastStyle() else BlackToastStyle()
-        
+
         // 设置警告样式
         Toaster.setStyle(CustomToastStyle(R.layout.toast_warn))
         Toaster.show(resId)
-        
+
         // 恢复默认样式
         Toaster.setStyle(currentStyle)
     }
-    
+
     /**
      * 显示短时间Toast
      * 用法示例：ToastUtils.showShort("这是短时间提示")
-     * 
+     *
      * @param text 文本内容
      */
     fun showShort(text: CharSequence) {
         Toaster.showShort(text)
     }
-    
+
     /**
      * 显示短时间Toast（资源ID）
      * 用法示例：ToastUtils.showShort(R.string.short_message)
-     * 
+     *
      * @param resId 字符串资源ID
      */
     fun showShort(@StringRes resId: Int) {
         Toaster.showShort(resId)
     }
-    
+
     /**
      * 显示长时间Toast
      * 用法示例：ToastUtils.showLong("这是长时间提示")
-     * 
+     *
      * @param text 文本内容
      */
     fun showLong(text: CharSequence) {
         Toaster.showLong(text)
     }
-    
+
     /**
      * 显示长时间Toast（资源ID）
      * 用法示例：ToastUtils.showLong(R.string.long_message)
-     * 
+     *
      * @param resId 字符串资源ID
      */
     fun showLong(@StringRes resId: Int) {
         Toaster.showLong(resId)
     }
-    
+
     /**
      * 延迟显示Toast
      * 用法示例：ToastUtils.delayedShow("这是延迟显示的提示", 2000)
-     * 
+     *
      * @param text 文本内容
      * @param delayMillis 延迟时间，单位毫秒
      */
     fun delayedShow(text: CharSequence, delayMillis: Long) {
         Toaster.delayedShow(text, delayMillis)
     }
-    
+
     /**
      * 延迟显示Toast（资源ID）
      * 用法示例：ToastUtils.delayedShow(R.string.delayed_message, 2000)
-     * 
+     *
      * @param resId 字符串资源ID
      * @param delayMillis 延迟时间，单位毫秒
      */

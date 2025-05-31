@@ -1,6 +1,7 @@
 package com.joker.coolmall.feature.main.viewmodel
 
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
+import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.data.repository.PageRepository
 import com.joker.coolmall.core.model.entity.Home
 import com.joker.coolmall.core.model.response.NetworkResponse
@@ -16,9 +17,11 @@ import javax.inject.Inject
 @HiltViewModel
 class HomeViewModel @Inject constructor(
     navigator: AppNavigator,
+    appState: AppState,
     private val pageRepository: PageRepository,
 ) : BaseNetWorkViewModel<Home>(
-    navigator = navigator
+    navigator = navigator,
+    appState = appState
 ) {
     init {
         super.executeRequest()

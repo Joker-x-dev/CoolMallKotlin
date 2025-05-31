@@ -1,6 +1,7 @@
 # ToastUtils 使用指南
 
-ToastUtils 是基于 [Toaster](https://github.com/getActivity/Toaster) 框架封装的吐司工具类，提供了统一的吐司显示接口，支持多种样式的吐司消息。
+ToastUtils 是基于 [Toaster](https://github.com/getActivity/Toaster)
+框架封装的吐司工具类，提供了统一的吐司显示接口，支持多种样式的吐司消息。
 
 ## 特性
 
@@ -136,14 +137,14 @@ ToastUtils.init(application, isDarkTheme)
 ## 最佳实践
 
 1. 根据消息类型选择合适的样式：
-   - 普通提示信息：使用 `show()`
-   - 操作成功提示：使用 `showSuccess()`
-   - 操作失败提示：使用 `showError()`
-   - 需要注意的提示：使用 `showWarning()`
+    - 普通提示信息：使用 `show()`
+    - 操作成功提示：使用 `showSuccess()`
+    - 操作失败提示：使用 `showError()`
+    - 需要注意的提示：使用 `showWarning()`
 
 2. 合理使用短时间和长时间显示：
-   - 短时间（`showShort()`）：简单、不太重要的提示
-   - 长时间（`showLong()`）：需要用户注意的重要提示
+    - 短时间（`showShort()`）：简单、不太重要的提示
+    - 长时间（`showLong()`）：需要用户注意的重要提示
 
 3. 避免连续多次调用，这会导致吐司叠加显示
 

@@ -20,7 +20,7 @@ class AuthStoreRepository @Inject constructor(
     suspend fun saveAuth(auth: Auth) {
         authStoreDataSource.saveAuth(auth)
     }
-    
+
     /**
      * 从本地获取认证信息
      * @return 认证信息，如不存在则返回null
@@ -28,7 +28,7 @@ class AuthStoreRepository @Inject constructor(
     suspend fun getAuth(): Auth? {
         return authStoreDataSource.getAuth()
     }
-    
+
     /**
      * 从本地获取Token
      * @return Token，如不存在则返回null
@@ -36,14 +36,14 @@ class AuthStoreRepository @Inject constructor(
     suspend fun getToken(): String? {
         return authStoreDataSource.getToken()
     }
-    
+
     /**
      * 清除本地认证信息
      */
     suspend fun clearAuth() {
         authStoreDataSource.clearAuth()
     }
-    
+
     /**
      * 检查用户是否已登录
      * @return 是否已登录
@@ -51,7 +51,7 @@ class AuthStoreRepository @Inject constructor(
     suspend fun isLoggedIn(): Boolean {
         return authStoreDataSource.isLoggedIn()
     }
-    
+
     /**
      * 检查Token是否需要刷新
      * @return 是否需要刷新Token

@@ -1,14 +1,14 @@
 package com.joker.coolmall.core.designsystem.theme
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Stable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.ui.graphics.Color
 
 /**
  * 文字排版规范
@@ -19,7 +19,7 @@ import androidx.compose.ui.graphics.Color
 /**
  * 文字颜色集合，包含适应深色和浅色模式的文字颜色
  * 使用此类可以在组件中根据当前主题获取适合的文字颜色
- * 
+ *
  * @param primary 主要文字颜色，用于标题、重要内容
  * @param secondary 次要文字颜色，用于正文内容
  * @param tertiary 三级文字颜色，用于辅助说明
@@ -40,7 +40,7 @@ class AppTextColors(
 /**
  * 根据当前主题获取文字颜色集合
  * 在Composable中调用此函数获取基于当前主题的文字颜色
- * 
+ *
  * 使用示例:
  * ```
  * val textColors = appTextColors()
@@ -49,7 +49,7 @@ class AppTextColors(
  *     color = textColors.primary
  * )
  * ```
- * 
+ *
  * @return 返回与当前主题匹配的AppTextColors实例
  */
 @Composable

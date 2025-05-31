@@ -21,7 +21,6 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
-import com.joker.coolmall.core.designsystem.component.AppColumn
 
 /**
  * 聊天输入区域组件，包含输入栏、表情选择器和功能选择器
@@ -39,9 +38,17 @@ fun ChatInputArea(
     modifier: Modifier = Modifier
 ) {
     // 是否显示表情选择器
-    val (showEmojiSelector, setShowEmojiSelector) = remember { androidx.compose.runtime.mutableStateOf(false) }
+    val (showEmojiSelector, setShowEmojiSelector) = remember {
+        androidx.compose.runtime.mutableStateOf(
+            false
+        )
+    }
     // 是否显示功能选择器
-    val (showFunctionSelector, setShowFunctionSelector) = remember { androidx.compose.runtime.mutableStateOf(false) }
+    val (showFunctionSelector, setShowFunctionSelector) = remember {
+        androidx.compose.runtime.mutableStateOf(
+            false
+        )
+    }
 
     // 键盘控制器
     val keyboardController = LocalSoftwareKeyboardController.current

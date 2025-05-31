@@ -1,6 +1,7 @@
 package com.joker.coolmall.feature.user.viewmodel
 
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
+import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.navigation.AppNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -10,8 +11,10 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class SettingsViewModel @Inject constructor(
-    navigator: AppNavigator
+    navigator: AppNavigator,
+    appState: AppState
 ) : BaseViewModel(
-    navigator = navigator
+    navigator = navigator,
+    appState = appState
 ) {
 }

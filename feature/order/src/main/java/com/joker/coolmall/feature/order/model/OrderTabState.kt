@@ -6,7 +6,7 @@ import com.joker.coolmall.core.model.entity.Order
 
 /**
  * 订单标签页状态
- * 
+ *
  * 用于封装每个标签页的状态数据和回调
  */
 data class OrderTabState(

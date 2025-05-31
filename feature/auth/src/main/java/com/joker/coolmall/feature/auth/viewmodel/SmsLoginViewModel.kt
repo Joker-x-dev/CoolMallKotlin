@@ -28,11 +28,12 @@ import javax.inject.Inject
 @HiltViewModel
 class SmsLoginViewModel @Inject constructor(
     navigator: AppNavigator,
-    private val appState: AppState,
+    appState: AppState,
     private val authRepository: AuthRepository,
     @ApplicationContext private val context: Context
 ) : BaseViewModel(
-    navigator = navigator
+    navigator = navigator,
+    appState = appState
 ) {
     /**
      * 手机号输入
@@ -201,8 +202,8 @@ class SmsLoginViewModel @Inject constructor(
     fun loginSuccess(authData: Auth) {
         viewModelScope.launch {
             ToastUtils.showSuccess(context, R.string.login_success)
-            appState.updateAuth(authData)
-            appState.refreshUserInfo()
+            appState?.updateAuth(authData)
+            appState?.refreshUserInfo()
             super.navigateBack()
             super.navigateBack()
         }

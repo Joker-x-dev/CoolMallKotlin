@@ -37,10 +37,10 @@ private const val TAG = "ChatViewModel"
 @HiltViewModel
 class ChatViewModel @Inject constructor(
     private val customerServiceRepository: CustomerServiceRepository,
-    private val appState: AppState,
+    appState: AppState,
     @ApplicationContext private val context: Context,
     navigator: AppNavigator,
-) : BaseViewModel(navigator) {
+) : BaseViewModel(navigator, appState) {
 
     // 页面UI状态
     private val _uiState = MutableStateFlow<BaseNetWorkUiState<Unit>>(BaseNetWorkUiState.Loading)
@@ -246,10 +246,9 @@ class ChatViewModel @Inject constructor(
      * 建立WebSocket连接
      */
     fun connectWebSocket() {
-        val token = appState.auth.value?.token ?: ""
+        val token = appState?.auth?.value?.token ?: ""
         webSocketManager.connect(token, viewModelScope)
     }
-
 
     /**
      * 添加新消息到列表

@@ -21,7 +21,6 @@ import com.joker.coolmall.core.designsystem.component.StartRow
 import com.joker.coolmall.core.designsystem.theme.ColorWarning
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalXLarge
 import com.joker.coolmall.feature.auth.R
-import com.joker.coolmall.feature.auth.component.FocusableDivider
 
 /**
  * 验证码输入组件，包含输入框与获取验证码按钮

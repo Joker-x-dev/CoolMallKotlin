@@ -11,17 +11,18 @@ CoolMall 应用的设计系统，提供统一的设计规范、主题系统和�
 - [圆角规范](#圆角规范)
 - [图标系统](#图标系统)
 - [组件库](#组件库)
-  - [Box 组件](#box-组件)
-  - [Column 组件](#column-组件)
-  - [Row 组件](#row-组件)
-  - [LazyList 组件](#lazylist-组件)
-  - [Scroll 组件](#scroll-组件)
+    - [Box 组件](#box-组件)
+    - [Column 组件](#column-组件)
+    - [Row 组件](#row-组件)
+    - [LazyList 组件](#lazylist-组件)
+    - [Scroll 组件](#scroll-组件)
 - [主题系统](#主题系统)
 - [使用示例](#使用示例)
 
 ## 🎯 概述
 
 本设计系统基于 Material Design 3 构建，提供：
+
 - 📐 **统一的设计规范**：颜色、字体、间距、圆角等
 - 🎨 **深浅主题支持**：自动适配系统深色模式
 - 🧩 **组件化设计**：预设常用布局组件
@@ -30,11 +31,13 @@ CoolMall 应用的设计系统，提供统一的设计规范、主题系统和�
 ## 🎨 颜色系统
 
 ### 主色调
+
 ```kotlin
 val Primary = Color(0xFF465CFF) // 品牌主色
 ```
 
 ### 功能色
+
 ```kotlin
 val ColorDanger = Color(0xFFFF2B2B)   // 危险色/红色
 val ColorWarning = Color(0xFFFFB703)  // 警告色/黄色
@@ -45,6 +48,7 @@ val ColorSuccess = Color(0xFF09BE4F)  // 成功色/绿色
 ### 文字颜色
 
 #### 浅色模式
+
 ```kotlin
 val TextPrimaryLight = Color(0xFF181818)     // 主要文字
 val TextSecondaryLight = Color(0xFF333333)   // 次要文字
@@ -53,6 +57,7 @@ val TextQuaternaryLight = Color(0xFFCCCCCC)  // 四级文字
 ```
 
 #### 深色模式
+
 ```kotlin
 val TextPrimaryDark = Color(0xFFD1D1D1)      // 主要文字
 val TextSecondaryDark = Color(0xFFA3A3A3)    // 次要文字
@@ -63,6 +68,7 @@ val TextQuaternaryDark = Color(0xFF5E5E5E)   // 四级文字
 ### 背景色
 
 #### 浅色模式
+
 ```kotlin
 val BgGreyLight = Color(0xFFF1F4FA)    // 页面背景
 val BgWhiteLight = Color(0xFFFFFFFF)   // 白色背景
@@ -70,6 +76,7 @@ val BgContentLight = Color(0xFFF8F8F8) // 内容模块背景
 ```
 
 #### 深色模式
+
 ```kotlin
 val BgGreyDark = Color(0xFF111111)     // 页面背景
 val BgWhiteDark = Color(0xFF1B1B1B)    // 白色背景
@@ -77,6 +84,7 @@ val BgContentDark = Color(0xFF222222)  // 内容模块背景
 ```
 
 ### 使用方式
+
 ```kotlin
 @Composable
 fun MyComponent() {
@@ -92,16 +100,17 @@ fun MyComponent() {
 
 ### 字体规格
 
-| 样式 | 大小 | 行高 | 字重 | 用途 |
-|-----|------|------|------|------|
-| DisplayLarge | 22sp | 31sp | SemiBold | 超大标题、启动页标题 |
+| 样式            | 大小   | 行高   | 字重       | 用途          |
+|---------------|------|------|----------|-------------|
+| DisplayLarge  | 22sp | 31sp | SemiBold | 超大标题、启动页标题  |
 | DisplayMedium | 18sp | 27sp | SemiBold | 页面大标题、模块主标题 |
-| TitleLarge | 16sp | 24sp | Bold | 二级标题、导航栏标题 |
-| TitleMedium | 14sp | 22sp | Bold | 分类名称、卡片标题 |
-| BodyLarge | 14sp | 22sp | Normal | 正文内容、段落文字 |
-| BodyMedium | 12sp | 18sp | Normal | 辅助文字、标签文字 |
+| TitleLarge    | 16sp | 24sp | Bold     | 二级标题、导航栏标题  |
+| TitleMedium   | 14sp | 22sp | Bold     | 分类名称、卡片标题   |
+| BodyLarge     | 14sp | 22sp | Normal   | 正文内容、段落文字   |
+| BodyMedium    | 12sp | 18sp | Normal   | 辅助文字、标签文字   |
 
 ### 使用示例
+
 ```kotlin
 Text(
     text = "页面标题",
@@ -117,6 +126,7 @@ Text(
 ## 📏 尺寸间距
 
 ### 垂直间距
+
 ```kotlin
 val SpaceVerticalXXLarge = 32.dp  // 超大间距
 val SpaceVerticalXLarge = 24.dp   // 特大间距
@@ -127,6 +137,7 @@ val SpaceVerticalXSmall = 4.dp    // 超小间距
 ```
 
 ### 水平间距
+
 ```kotlin
 val SpaceHorizontalXXLarge = 32.dp  // 超大间距
 val SpaceHorizontalXLarge = 24.dp   // 特大间距
@@ -137,6 +148,7 @@ val SpaceHorizontalXSmall = 4.dp    // 超小间距
 ```
 
 ### 内边距
+
 ```kotlin
 val SpacePaddingLarge = 16.dp   // 大内边距
 val SpacePaddingMedium = 12.dp  // 中等内边距
@@ -145,6 +157,7 @@ val SpacePaddingXSmall = 4.dp   // 超小内边距
 ```
 
 ### 间距组件
+
 ```kotlin
 // 垂直间距
 SpaceVerticalLarge()  // 16dp 垂直间距
@@ -173,6 +186,7 @@ val ShapeCircle = RoundedCornerShape(percent = 50)     // 头像、图标按钮
 ## 🎯 图标系统
 
 ### 通用图标组件
+
 ```kotlin
 // 使用资源ID
 CommonIcon(
@@ -195,6 +209,7 @@ CommonIcon(
 ```
 
 ### 预定义图标
+
 ```kotlin
 // Logo图标
 LogoIcon(size = 24.dp)
@@ -211,6 +226,7 @@ ArrowRightIcon(size = 24.dp)
 ### Box 组件
 
 #### AppBox - 基础Box组件
+
 ```kotlin
 AppBox(
     fillMaxWidth = true,
@@ -222,6 +238,7 @@ AppBox(
 ```
 
 #### 预设对齐Box
+
 ```kotlin
 // 居中Box
 CenterBox {
@@ -250,6 +267,7 @@ CenterEndBox {
 ```
 
 #### 特殊Box组件
+
 ```kotlin
 // 全屏Box
 FullScreenBox(
@@ -285,6 +303,7 @@ BorderBox(
 ```
 
 #### 内边距Box
+
 ```kotlin
 // 小内边距
 SmallPaddingBox { Text("小间距") }
@@ -299,6 +318,7 @@ LargePaddingBox { Text("大间距") }
 ### Column 组件
 
 #### AppColumn - 基础Column组件
+
 ```kotlin
 AppColumn(
     verticalArrangement = Arrangement.spacedBy(12.dp),
@@ -311,6 +331,7 @@ AppColumn(
 ```
 
 #### 预设布局Column
+
 ```kotlin
 // 全屏Column
 FullScreenColumn(
@@ -350,6 +371,7 @@ SpaceEvenlyColumn {
 ```
 
 #### 对齐Column
+
 ```kotlin
 // 左对齐
 StartAlignColumn {
@@ -363,6 +385,7 @@ EndAlignColumn {
 ```
 
 #### 特殊Column
+
 ```kotlin
 // 内容包裹Column
 WrapColumn {
@@ -384,6 +407,7 @@ CardContentList {
 ```
 
 #### 内边距Column
+
 ```kotlin
 // 小内边距
 SmallPaddingColumn { Text("小间距") }
@@ -398,6 +422,7 @@ LargePaddingColumn { Text("大间距") }
 ### Row 组件
 
 #### AppRow - 基础Row组件
+
 ```kotlin
 AppRow(
     horizontalArrangement = Arrangement.spacedBy(8.dp),
@@ -409,6 +434,7 @@ AppRow(
 ```
 
 #### 预设布局Row
+
 ```kotlin
 // 居中Row
 CenterRow {
@@ -447,6 +473,7 @@ EndRow {
 ```
 
 #### 特殊Row
+
 ```kotlin
 // 内容包裹Row
 WrapRow {
@@ -462,6 +489,7 @@ HorizontalList {
 ```
 
 #### 内边距Row
+
 ```kotlin
 // 小内边距
 SmallPaddingRow { Text("小间距") }
@@ -476,6 +504,7 @@ LargePaddingRow { Text("大间距") }
 ### LazyList 组件
 
 #### AppLazyColumn - 垂直懒加载列表
+
 ```kotlin
 AppLazyColumn(
     contentPadding = PaddingValues(16.dp),
@@ -488,6 +517,7 @@ AppLazyColumn(
 ```
 
 #### 内边距LazyColumn
+
 ```kotlin
 // 小内边距
 SmallPaddingLazyColumn {
@@ -512,6 +542,7 @@ LargePaddingLazyColumn {
 ```
 
 #### 垂直列表项目
+
 ```kotlin
 VerticalListItems(
     itemSpacing = 8.dp,
@@ -529,6 +560,7 @@ VerticalListItems(
 ```
 
 #### AppLazyRow - 水平懒加载列表
+
 ```kotlin
 AppLazyRow(
     contentPadding = PaddingValues(horizontal = 16.dp),
@@ -546,6 +578,7 @@ AppLazyRow(
 ```
 
 #### 内边距LazyRow
+
 ```kotlin
 // 小内边距
 SmallPaddingLazyRow {
@@ -565,6 +598,7 @@ MediumPaddingLazyRow {
 ### Scroll 组件
 
 #### VerticalScroll - 垂直滚动
+
 ```kotlin
 VerticalScroll(
     padding = 16.dp,
@@ -578,6 +612,7 @@ VerticalScroll(
 ```
 
 #### 内边距VerticalScroll
+
 ```kotlin
 // 小内边距
 SmallPaddingVerticalScroll {
@@ -596,6 +631,7 @@ LargePaddingVerticalScroll {
 ```
 
 #### HorizontalScroll - 水平滚动
+
 ```kotlin
 HorizontalScroll(
     padding = 16.dp
@@ -612,6 +648,7 @@ HorizontalScroll(
 ```
 
 #### 内边距HorizontalScroll
+
 ```kotlin
 // 小内边距
 SmallPaddingHorizontalScroll {
@@ -627,6 +664,7 @@ MediumPaddingHorizontalScroll {
 ## 🎨 主题系统
 
 ### 应用主题
+
 ```kotlin
 @Composable
 fun MyApp() {
@@ -640,6 +678,7 @@ fun MyApp() {
 ```
 
 ### 主题特性
+
 - ✅ **自动深色模式**：跟随系统设置
 - ✅ **Material 3**：基于最新设计规范
 - ✅ **动态颜色**：支持 Android 12+ 动态颜色（可选）
@@ -648,6 +687,7 @@ fun MyApp() {
 ## 📱 使用示例
 
 ### 订单确认页面布局示例
+
 ```kotlin
 @Composable
 fun OrderConfirmScreen() {
@@ -721,6 +761,7 @@ fun OrderConfirmScreen() {
 ```
 
 ### 订单详情页面布局示例
+
 ```kotlin
 @Composable
 fun OrderDetailScreen() {
@@ -788,6 +829,7 @@ fun OrderDetailScreen() {
 ```
 
 ### 简单卡片布局示例
+
 ```kotlin
 @Composable
 fun SimpleCard() {
@@ -832,6 +874,7 @@ fun SimpleCard() {
 ## 🚀 最佳实践
 
 ### 1. 使用设计系统组件
+
 ```kotlin
 // ✅ 推荐：使用设计系统组件
 AppColumn(
@@ -850,6 +893,7 @@ Column(
 ```
 
 ### 2. 使用主题颜色
+
 ```kotlin
 // ✅ 推荐：使用主题颜色
 val textColors = appTextColors()
@@ -866,6 +910,7 @@ Text(
 ```
 
 ### 3. 使用预设间距
+
 ```kotlin
 // ✅ 推荐：使用预设间距组件
 Column {
@@ -883,6 +928,7 @@ Column {
 ```
 
 ### 4. 选择合适的组件
+
 ```kotlin
 // ✅ 推荐：根据需求选择合适的组件
 VerticalList {  // 自动带间距的垂直列表

@@ -7,6 +7,7 @@ import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
 import com.joker.coolmall.core.data.repository.CartRepository
 import com.joker.coolmall.core.data.repository.FootprintRepository
 import com.joker.coolmall.core.data.repository.GoodsRepository
+import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.entity.Cart
 import com.joker.coolmall.core.model.entity.CartGoodsSpec
 import com.joker.coolmall.core.model.entity.Footprint
@@ -36,12 +37,14 @@ import javax.inject.Inject
 @HiltViewModel
 class GoodsDetailViewModel @Inject constructor(
     navigator: AppNavigator,
+    appState: AppState,
     savedStateHandle: SavedStateHandle,
     private val goodsRepository: GoodsRepository,
     private val cartRepository: CartRepository,
     private val footprintRepository: FootprintRepository
 ) : BaseNetWorkViewModel<Goods>(
     navigator = navigator,
+    appState = appState,
     savedStateHandle = savedStateHandle,
     idKey = GoodsDetailRoutes.GOODS_ID_ARG
 ) {

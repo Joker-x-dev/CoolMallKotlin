@@ -11,10 +11,10 @@ import androidx.navigation.NavHostController
 fun NavGraphBuilder.orderGraph(navController: NavHostController) {
     // 订单列表页面
     orderListScreen(navController)
-    
+
     // 订单确认页面
     orderConfirmScreen()
-    
+
     // 订单详情页面
     orderDetailScreen(navController)
 

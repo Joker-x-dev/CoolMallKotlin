@@ -16,19 +16,19 @@
 ## 2. 核心组件
 
 - **NetworkResponse\<T\>**: 网络响应的通用模型，包含：
-  - `data: T?`: 响应数据
-  - `isSucceeded: Boolean`: 请求是否成功
-  - `message: String?`: 错误消息或成功提示
+    - `data: T?`: 响应数据
+    - `isSucceeded: Boolean`: 请求是否成功
+    - `message: String?`: 错误消息或成功提示
 
 - **Result\<T\>**: 包装网络请求状态的密封类：
-  - `Loading`: 加载中
-  - `Success`: 成功，包含数据
-  - `Error`: 错误，包含异常
+    - `Loading`: 加载中
+    - `Success`: 成功，包含数据
+    - `Error`: 错误，包含异常
 
 - **BaseNetWorkUiState\<T\>**: 网络UI状态的泛型密封类：
-  - `Loading`: 加载中
-  - `Success<T>`: 成功，包含泛型数据T
-  - `Error`: 错误，包含错误信息
+    - `Loading`: 加载中
+    - `Success<T>`: 成功，包含泛型数据T
+    - `Error`: 错误，包含错误信息
 
 ## 3. 使用方法
 
@@ -52,13 +52,13 @@ class HomeViewModel @Inject constructor(
     override fun requestApiFlow(): Flow<NetworkResponse<Home>> {
         return repository.getHomeData()
     }
-    
+
     // 可选：自定义处理成功数据
     override fun onRequestSuccess(data: Home) {
         // 在这里处理数据，例如转换或过滤
         super.onRequestSuccess(data)
     }
-    
+
     // 导航到详情页
     fun toGoodsDetail(goodsId: Long) {
         super.toPge(GoodsRoutes.DETAIL, goodsId)
@@ -89,7 +89,7 @@ class GoodsDetailViewModel @Inject constructor(
     override fun requestApiFlow(): Flow<NetworkResponse<Goods>> {
         // 直接使用基类提供的requiredId获取路由参数
         return goodsRepository.getGoodsInfo(requiredId.toString())
-        
+
         // 如果参数可能为空，也可以使用id属性
         // return if (id != null) {
         //     goodsRepository.getGoodsInfo(id.toString())
@@ -114,37 +114,37 @@ class LoginViewModel @Inject constructor(
     // 用户名和密码
     private val _username = MutableStateFlow("")
     val username = _username.asStateFlow()
-    
+
     private val _password = MutableStateFlow("")
     val password = _password.asStateFlow()
-    
+
     // 更新用户名
     fun updateUsername(value: String) {
         _username.value = value
     }
-    
+
     // 更新密码
     fun updatePassword(value: String) {
         _password.value = value
     }
-    
+
     // 重写API请求流方法
     override fun requestApiFlow(): Flow<NetworkResponse<UserInfo>> {
         return authRepository.login(username.value, password.value)
     }
-    
+
     // 重写成功回调，处理登录成功后的操作
     override fun onRequestSuccess(data: UserInfo) {
         // 保存用户信息到本地
         authRepository.saveUserInfo(data)
-        
+
         // 调用父类方法更新状态
         super.onRequestSuccess(data)
-        
+
         // 登录成功后导航到首页
         navigator.navigateTo(MainRoutes.HOME)
     }
-    
+
     // 登录按钮点击
     fun login() {
         executeRequest()
@@ -207,14 +207,14 @@ fun HomeScreen(viewModel: HomeViewModel = hiltViewModel()) {
 1. 子类实现 `requestApiFlow()` 方法，返回 `Flow<NetworkResponse<T>>`
 2. 子类在 `init` 块中调用 `super.executeRequest()` 方法，或在特定事件（如按钮点击）时调用
 3. `executeRequest()` 方法执行以下步骤：
-   - 调用子类实现的 `requestApiFlow()` 方法获取API请求流
-   - 使用 `asResult()` 扩展函数将数据流转换为 `Result` 类型
-   - 根据结果设置相应的状态：
-     - `Result.Loading` → `BaseNetWorkUiState.Loading`
-     - `Result.Success` → 检查网络响应是否成功:
-       - 成功且有数据 → 调用 `onRequestSuccess()` → `BaseNetWorkUiState.Success(data)`
-       - 失败或无数据 → 调用 `onRequestError()` → `BaseNetWorkUiState.Error`
-     - `Result.Error` → 调用 `onRequestError()` → `BaseNetWorkUiState.Error`
+    - 调用子类实现的 `requestApiFlow()` 方法获取API请求流
+    - 使用 `asResult()` 扩展函数将数据流转换为 `Result` 类型
+    - 根据结果设置相应的状态：
+        - `Result.Loading` → `BaseNetWorkUiState.Loading`
+        - `Result.Success` → 检查网络响应是否成功:
+            - 成功且有数据 → 调用 `onRequestSuccess()` → `BaseNetWorkUiState.Success(data)`
+            - 失败或无数据 → 调用 `onRequestError()` → `BaseNetWorkUiState.Error`
+        - `Result.Error` → 调用 `onRequestError()` → `BaseNetWorkUiState.Error`
 
 ## 5. 路由参数ID获取
 

@@ -21,7 +21,7 @@ object AppStateModule {
     /**
      * 提供应用级别的协程作用域
      * 使用SupervisorJob确保一个子协程的失败不会影响到其他协程
-     * 
+     *
      * @return 应用级别的协程作用域
      */
     @ApplicationScope

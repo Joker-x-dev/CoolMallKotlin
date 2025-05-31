@@ -30,7 +30,6 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.joker.coolmall.feature.auth.R
-import com.joker.coolmall.feature.auth.component.FocusableDivider
 
 /**
  * 密码输入组件，包含可切换密码显示/隐藏的按钮
@@ -97,7 +96,7 @@ fun PasswordInputField(
                 painter = painterResource(
                     id = if (passwordVisible) R.drawable.ic_visible else R.drawable.ic_invisible
                 ),
-                contentDescription = if (passwordVisible) 
+                contentDescription = if (passwordVisible)
                     stringResource(id = R.string.hide_password) else stringResource(id = R.string.show_password),
                 modifier = Modifier.size(20.dp)
             )

@@ -1,6 +1,7 @@
 # ResultHandler - 网络请求结果处理工具类
 
-这是一个用于简化ViewModel中网络请求结果处理的工具类，特别是处理网络请求的`Loading`、`Success`和`Error`三种状态的逻辑。
+这是一个用于简化ViewModel中网络请求结果处理的工具类，特别是处理网络请求的`Loading`、`Success`和`Error`
+三种状态的逻辑。
 
 ## 功能特点
 

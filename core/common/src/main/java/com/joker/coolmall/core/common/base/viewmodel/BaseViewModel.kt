@@ -3,7 +3,9 @@ package com.joker.coolmall.core.common.base.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavOptions
+import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.navigation.AppNavigator
+import com.joker.coolmall.navigation.RouteInterceptor
 import kotlinx.coroutines.launch
 
 /**
@@ -11,9 +13,12 @@ import kotlinx.coroutines.launch
  *
  * 提供所有ViewModel通用的功能：
  * 1. 导航
+ * 2. 路由拦截
  */
 abstract class BaseViewModel(
-    protected val navigator: AppNavigator
+    protected val navigator: AppNavigator,
+    protected val appState: AppState,
+    protected val routeInterceptor: RouteInterceptor = RouteInterceptor()
 ) : ViewModel() {
 
     /**
@@ -36,23 +41,27 @@ abstract class BaseViewModel(
 
     /**
      * 导航到指定路由
+     * 自动处理登录拦截逻辑
      *
      * @param route 目标路由
      */
     fun toPage(route: String) {
         viewModelScope.launch {
-            navigator.navigateTo(route)
+            val targetRoute = checkRouteInterception(route)
+            navigator.navigateTo(targetRoute)
         }
     }
 
     /**
      * 关闭当前页面并导航到指定路由
-     * 
+     * 自动处理登录拦截逻辑
+     *
      * @param route 目标路由
      * @param currentRoute 当前页面路由，将被关闭
      */
     fun toPageAndCloseCurrent(route: String, currentRoute: String) {
         viewModelScope.launch {
+            val targetRoute = checkRouteInterception(route)
             val navOptions = NavOptions.Builder()
                 .setPopUpTo(
                     route = currentRoute,
@@ -60,12 +69,13 @@ abstract class BaseViewModel(
                     saveState = false  // 不保存状态
                 )
                 .build()
-            navigator.navigateTo(route, navOptions)
+            navigator.navigateTo(targetRoute, navOptions)
         }
     }
 
     /**
      * 携带ID参数导航到指定路由
+     * 自动处理登录拦截逻辑
      *
      * @param route 基础路由
      * @param id ID参数值
@@ -76,6 +86,7 @@ abstract class BaseViewModel(
 
     /**
      * 携带ID参数导航到指定路由并关闭当前页面
+     * 自动处理登录拦截逻辑
      *
      * @param route 基础路由
      * @param id ID参数值
@@ -87,6 +98,7 @@ abstract class BaseViewModel(
 
     /**
      * 携带参数导航到指定路由
+     * 自动处理登录拦截逻辑
      *
      * @param route 基础路由
      * @param args 参数Map
@@ -94,12 +106,14 @@ abstract class BaseViewModel(
     fun toPage(route: String, args: Map<String, Any>) {
         viewModelScope.launch {
             val fullRoute = buildRouteWithArgs(route, args)
-            navigator.navigateTo(fullRoute)
+            val targetRoute = checkRouteInterception(fullRoute)
+            navigator.navigateTo(targetRoute)
         }
     }
 
     /**
      * 携带参数导航到指定路由并关闭当前页面
+     * 自动处理登录拦截逻辑
      *
      * @param route 基础路由
      * @param args 参数Map
@@ -108,6 +122,7 @@ abstract class BaseViewModel(
     fun toPageAndCloseCurrent(route: String, args: Map<String, Any>, currentRoute: String) {
         viewModelScope.launch {
             val fullRoute = buildRouteWithArgs(route, args)
+            val targetRoute = checkRouteInterception(fullRoute)
             val navOptions = NavOptions.Builder()
                 .setPopUpTo(
                     route = currentRoute,
@@ -115,7 +130,23 @@ abstract class BaseViewModel(
                     saveState = false  // 不保存状态
                 )
                 .build()
-            navigator.navigateTo(fullRoute, navOptions)
+            navigator.navigateTo(targetRoute, navOptions)
+        }
+    }
+
+    /**
+     * 检查路由是否需要登录拦截
+     *
+     * @param route 目标路由
+     * @return 如果需要拦截返回登录页面路由，否则返回原路由
+     */
+    private fun checkRouteInterception(route: String): String {
+        return if (routeInterceptor.requiresLogin(route) && !appState.isLoggedIn.value) {
+            // 需要登录但未登录，跳转到登录页面
+            routeInterceptor.getLoginRoute()
+        } else {
+            // 不需要登录或已登录，正常跳转
+            route
         }
     }
 

@@ -4,7 +4,6 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -14,7 +13,6 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import com.joker.coolmall.core.designsystem.theme.ShapeSmall
-import com.joker.coolmall.core.designsystem.theme.SpacePaddingXSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.model.entity.Goods
 import com.joker.coolmall.core.ui.component.image.NetWorkImage

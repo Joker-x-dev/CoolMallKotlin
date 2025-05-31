@@ -20,7 +20,6 @@ import com.joker.coolmall.core.designsystem.component.StartRow
 import com.joker.coolmall.core.designsystem.theme.Primary
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalXLarge
 import com.joker.coolmall.feature.auth.R
-import com.joker.coolmall.feature.auth.component.FocusableDivider
 
 /**
  * 手机号输入组件，包含国家代码与输入框

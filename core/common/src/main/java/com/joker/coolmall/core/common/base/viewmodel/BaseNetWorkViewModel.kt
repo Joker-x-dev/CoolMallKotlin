@@ -6,6 +6,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavBackStackEntry
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
+import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.result.ResultHandler
@@ -28,9 +29,10 @@ import kotlinx.coroutines.flow.asStateFlow
  */
 abstract class BaseNetWorkViewModel<T>(
     navigator: AppNavigator,
+    appState: AppState,
     protected val savedStateHandle: SavedStateHandle? = null,
     protected val idKey: String? = null
-) : BaseViewModel(navigator) {
+) : BaseViewModel(navigator, appState) {
 
     /**
      * 通用网络请求UI状态

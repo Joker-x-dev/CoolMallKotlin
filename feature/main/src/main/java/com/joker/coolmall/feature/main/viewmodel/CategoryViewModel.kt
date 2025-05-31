@@ -2,6 +2,7 @@ package com.joker.coolmall.feature.main.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
+import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.data.repository.GoodsRepository
 import com.joker.coolmall.core.model.entity.Category
 import com.joker.coolmall.feature.main.model.CategoryTree
@@ -17,8 +18,9 @@ import javax.inject.Inject
 @HiltViewModel
 class CategoryViewModel @Inject constructor(
     navigator: AppNavigator,
+    appState: AppState,
     private val goodsRepository: GoodsRepository
-) : BaseViewModel(navigator) {
+) : BaseViewModel(navigator, appState) {
 
     /**
      * 分类UI状态

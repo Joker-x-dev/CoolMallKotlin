@@ -2,6 +2,7 @@ package com.joker.coolmall.feature.auth.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
+import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.AuthRoutes
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,9 +16,11 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class AccountLoginViewModel @Inject constructor(
-    navigator: AppNavigator
+    navigator: AppNavigator,
+    appState: AppState
 ) : BaseViewModel(
-    navigator = navigator
+    navigator = navigator,
+    appState = appState
 ) {
 
     /**
@@ -69,4 +72,4 @@ class AccountLoginViewModel @Inject constructor(
     fun toResetPasswordPage() {
         super.toPage(AuthRoutes.RESET_PASSWORD)
     }
-} 
+}

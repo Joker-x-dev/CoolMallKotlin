@@ -14,7 +14,7 @@ object OrderPayRoutes {
     const val ORDER_ID_ARG = "order_id"
     const val PRICE_ARG = "price"
     const val FROM_ARG = "from"
-    
+
     // 来源类型常量
     const val FROM_ORDER_CONFIRM = "confirm" // 从确认订单页面来
 
@@ -22,7 +22,7 @@ object OrderPayRoutes {
      * 带参数的路由模式 - 基本路径
      */
     const val ORDER_PAY_PATTERN = "${OrderRoutes.PAY}/{$ORDER_ID_ARG}/{$PRICE_ARG}"
-    
+
     /**
      * 带参数的路由模式 - 包含可选的来源参数
      */

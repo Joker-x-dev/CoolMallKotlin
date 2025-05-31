@@ -1,6 +1,7 @@
 # MMKVUtils 使用指南
 
-MMKVUtils 是基于腾讯 [MMKV](https://github.com/Tencent/MMKV) 封装的高性能键值存储工具类，提供了统一的接口进行数据存取，支持多种数据类型和多实例模式。
+MMKVUtils 是基于腾讯 [MMKV](https://github.com/Tencent/MMKV)
+封装的高性能键值存储工具类，提供了统一的接口进行数据存取，支持多种数据类型和多实例模式。
 
 ## 特性
 

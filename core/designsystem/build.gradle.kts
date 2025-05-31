@@ -5,7 +5,7 @@ plugins {
 
 android {
     namespace = "com.joker.coolmall.core.designsystem"
-    
+
     buildFeatures {
         buildConfig = true
     }

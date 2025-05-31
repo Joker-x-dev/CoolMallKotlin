@@ -46,7 +46,7 @@ data class CategoryTree(
      * 更新时间
      */
     val updateTime: String?,
-    
+
     /**
      * 子分类列表
      */

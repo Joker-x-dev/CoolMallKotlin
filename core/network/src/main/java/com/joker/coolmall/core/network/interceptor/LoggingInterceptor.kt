@@ -1,7 +1,6 @@
 package com.joker.coolmall.core.network.interceptor
 
 import okhttp3.logging.HttpLoggingInterceptor
-import timber.log.Timber
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -10,7 +9,7 @@ import javax.inject.Singleton
  */
 @Singleton
 class LoggingInterceptor @Inject constructor() {
-    
+
     @Inject
     fun init(): HttpLoggingInterceptor {
         val loggingInterceptor = HttpLoggingInterceptor()

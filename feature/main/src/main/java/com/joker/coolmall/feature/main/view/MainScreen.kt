@@ -43,16 +43,16 @@ internal fun MainRoute(
     val isAnimatingPageChange by viewModel.isAnimatingPageChange.collectAsState()
 
     MainScreen(
-            sharedTransitionScope = sharedTransitionScope,
-            animatedContentScope = animatedContentScope,
-            currentDestination = currentDestination,
-            currentPageIndex = currentPageIndex,
-            isAnimatingPageChange = isAnimatingPageChange,
-            onPageChanged = viewModel::updatePageIndex,
-            onNavigationItemSelected = viewModel::updateDestination,
-            onPageOffsetChanged = viewModel::previewPageChange,
-            onAnimationCompleted = viewModel::notifyAnimationCompleted
-        )
+        sharedTransitionScope = sharedTransitionScope,
+        animatedContentScope = animatedContentScope,
+        currentDestination = currentDestination,
+        currentPageIndex = currentPageIndex,
+        isAnimatingPageChange = isAnimatingPageChange,
+        onPageChanged = viewModel::updatePageIndex,
+        onNavigationItemSelected = viewModel::updateDestination,
+        onPageOffsetChanged = viewModel::previewPageChange,
+        onAnimationCompleted = viewModel::notifyAnimationCompleted
+    )
 }
 
 /**

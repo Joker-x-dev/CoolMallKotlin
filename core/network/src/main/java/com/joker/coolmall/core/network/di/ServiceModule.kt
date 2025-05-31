@@ -27,7 +27,7 @@ object ServiceModule {
 
     /**
      * 提供页面相关服务接口
-     * 
+     *
      * @param retrofit Retrofit实例
      * @return 页面服务接口实现
      */
@@ -39,7 +39,7 @@ object ServiceModule {
 
     /**
      * 提供认证相关服务接口
-     * 
+     *
      * @param retrofit Retrofit实例
      * @return 认证服务接口实现
      */
@@ -51,7 +51,7 @@ object ServiceModule {
 
     /**
      * 提供用户信息相关服务接口
-     * 
+     *
      * @param retrofit Retrofit实例
      * @return 用户信息服务接口实现
      */
@@ -63,7 +63,7 @@ object ServiceModule {
 
     /**
      * 提供地址相关服务接口
-     * 
+     *
      * @param retrofit Retrofit实例
      * @return 地址服务接口实现
      */
@@ -75,7 +75,7 @@ object ServiceModule {
 
     /**
      * 提供订单相关服务接口
-     * 
+     *
      * @param retrofit Retrofit实例
      * @return 订单服务接口实现
      */
@@ -87,7 +87,7 @@ object ServiceModule {
 
     /**
      * 提供商品相关服务接口
-     * 
+     *
      * @param retrofit Retrofit实例
      * @return 商品服务接口实现
      */
@@ -99,7 +99,7 @@ object ServiceModule {
 
     /**
      * 提供优惠券相关服务接口
-     * 
+     *
      * @param retrofit Retrofit实例
      * @return 优惠券服务接口实现
      */
@@ -111,7 +111,7 @@ object ServiceModule {
 
     /**
      * 提供轮播图相关服务接口
-     * 
+     *
      * @param retrofit Retrofit实例
      * @return 轮播图服务接口实现
      */
@@ -123,7 +123,7 @@ object ServiceModule {
 
     /**
      * 提供客服相关服务接口
-     * 
+     *
      * @param retrofit Retrofit实例
      * @return 客服服务接口实现
      */
@@ -135,7 +135,7 @@ object ServiceModule {
 
     /**
      * 提供通用基础服务接口
-     * 
+     *
      * @param retrofit Retrofit实例
      * @return 通用基础服务接口实现
      */

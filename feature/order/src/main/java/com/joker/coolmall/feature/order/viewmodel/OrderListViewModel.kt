@@ -6,6 +6,7 @@ import androidx.navigation.NavBackStackEntry
 import com.joker.coolmall.core.common.base.state.BaseNetWorkListUiState
 import com.joker.coolmall.core.common.base.state.LoadMoreState
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
+import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.data.repository.OrderRepository
 import com.joker.coolmall.core.model.entity.Order
 import com.joker.coolmall.core.model.request.OrderPageRequest
@@ -30,9 +31,10 @@ import javax.inject.Inject
 @HiltViewModel
 class OrderListViewModel @Inject constructor(
     navigator: AppNavigator,
+    appState: AppState,
     private val orderRepository: OrderRepository,
     savedStateHandle: SavedStateHandle
-) : BaseViewModel(navigator) {
+) : BaseViewModel(navigator, appState) {
 
     /**
      * 当前选中的标签索引
@@ -104,7 +106,7 @@ class OrderListViewModel @Inject constructor(
                 _selectedTabIndex.value = tabIndex
             }
         }
-        
+
         // 加载当前选中标签页的数据
         loadTabDataIfNeeded(_selectedTabIndex.value)
     }
@@ -125,7 +127,7 @@ class OrderListViewModel @Inject constructor(
 
                         // 刷新当前显示的标签页
                         retryRequest(_selectedTabIndex.value)
-                        
+
                         // 重置刷新标志，避免重复刷新
                         savedStateHandle["refresh"] = false
                     }
@@ -375,4 +377,4 @@ class OrderListViewModel @Inject constructor(
 
         toPage(paymentRoute)
     }
-} 
+}

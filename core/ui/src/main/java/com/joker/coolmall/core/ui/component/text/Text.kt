@@ -1,7 +1,6 @@
 package com.joker.coolmall.core.ui.component.text
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.LocalTextStyle
@@ -26,14 +25,6 @@ import com.joker.coolmall.core.designsystem.theme.ColorDanger
 import com.joker.coolmall.core.designsystem.theme.ColorSuccess
 import com.joker.coolmall.core.designsystem.theme.ColorWarning
 import com.joker.coolmall.core.designsystem.theme.Primary
-import com.joker.coolmall.core.designsystem.theme.TextPrimaryDark
-import com.joker.coolmall.core.designsystem.theme.TextPrimaryLight
-import com.joker.coolmall.core.designsystem.theme.TextSecondaryDark
-import com.joker.coolmall.core.designsystem.theme.TextSecondaryLight
-import com.joker.coolmall.core.designsystem.theme.TextTertiaryDark
-import com.joker.coolmall.core.designsystem.theme.TextTertiaryLight
-import com.joker.coolmall.core.designsystem.theme.TextWhite
-import com.joker.coolmall.core.designsystem.theme.appTextColors
 
 /**
  * 文本类型
@@ -44,39 +35,39 @@ enum class TextType {
      * 使用Material Theme的onBackground颜色
      */
     PRIMARY,
-    
+
     /**
      * 次要文本，用于正文内容
      * 使用Material Theme的onSurface颜色带透明度
      */
     SECONDARY,
-    
+
     /**
      * 辅助文本，用于辅助说明
      * 使用Material Theme的onSurfaceVariant颜色
      */
     TERTIARY,
-    
+
     /**
      * 白色文本，用于深色背景
      */
     WHITE,
-    
+
     /**
      * 链接文本，可点击
      */
     LINK,
-    
+
     /**
      * 成功文本，通常为绿色
      */
     SUCCESS,
-    
+
     /**
      * 警告文本，通常为黄色
      */
     WARNING,
-    
+
     /**
      * 错误文本，通常为红色
      */
@@ -91,27 +82,27 @@ enum class TextSize {
      * 特大：22sp，用于大标题
      */
     DISPLAY_LARGE,
-    
+
     /**
      * 大号：18sp，用于页面标题
      */
     DISPLAY_MEDIUM,
-    
+
     /**
      * 中大：16sp，用于二级标题
      */
     TITLE_LARGE,
-    
+
     /**
      * 中号：14sp，用于分类标题、强调内容
      */
     TITLE_MEDIUM,
-    
+
     /**
      * 正常：14sp，用于正文内容
      */
     BODY_LARGE,
-    
+
     /**
      * 小号：12sp，用于辅助文字、标签
      */
@@ -183,7 +174,7 @@ fun AppText(
         type == TextType.ERROR -> ColorDanger
         else -> Color.Unspecified
     }
-    
+
     // 根据大小设置文本样式
     val textStyle = style ?: when (size) {
         TextSize.DISPLAY_LARGE -> MaterialTheme.typography.displayLarge
@@ -194,10 +185,10 @@ fun AppText(
         TextSize.BODY_MEDIUM -> MaterialTheme.typography.bodyMedium
         TextSize.BODY_SMALL -> MaterialTheme.typography.bodySmall
     }
-    
+
     // 设置字体粗细（如果未指定，使用样式默认值）
     val finalFontWeight = fontWeight ?: textStyle.fontWeight
-    
+
     // 创建修改后的样式
     val finalStyle = textStyle.copy(
         color = textColor,
@@ -209,14 +200,14 @@ fun AppText(
         textAlign = textAlign ?: textStyle.textAlign,
         lineHeight = if (lineHeight != TextUnit.Unspecified) lineHeight else textStyle.lineHeight
     )
-    
+
     // 处理可点击状态
     val clickableModifier = if (onClick != null) {
         modifier.clickable { onClick() }
     } else {
         modifier
     }
-    
+
     // 处理可选择状态
     if (selectable) {
         SelectionContainer {
@@ -307,7 +298,7 @@ fun AppText(
         type == TextType.ERROR -> ColorDanger
         else -> Color.Unspecified
     }
-    
+
     // 根据大小设置文本样式
     val textStyle = style ?: when (size) {
         TextSize.DISPLAY_LARGE -> MaterialTheme.typography.displayLarge
@@ -318,10 +309,10 @@ fun AppText(
         TextSize.BODY_MEDIUM -> MaterialTheme.typography.bodyMedium
         TextSize.BODY_SMALL -> MaterialTheme.typography.bodySmall
     }
-    
+
     // 设置字体粗细（如果未指定，使用样式默认值）
     val finalFontWeight = fontWeight ?: textStyle.fontWeight
-    
+
     // 创建修改后的样式
     val finalStyle = textStyle.copy(
         color = textColor,
@@ -333,14 +324,14 @@ fun AppText(
         textAlign = textAlign ?: textStyle.textAlign,
         lineHeight = if (lineHeight != TextUnit.Unspecified) lineHeight else textStyle.lineHeight
     )
-    
+
     // 处理可点击状态
     val clickableModifier = if (onClick != null) {
         modifier.clickable { onClick() }
     } else {
         modifier
     }
-    
+
     // 处理可选择状态
     if (selectable) {
         SelectionContainer {

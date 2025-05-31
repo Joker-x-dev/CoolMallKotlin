@@ -25,10 +25,11 @@ import javax.inject.Inject
 @HiltViewModel
 class MeViewModel @Inject constructor(
     navigator: AppNavigator,
-    private val appState: AppState,
+    appState: AppState,
     private val footprintRepository: FootprintRepository
 ) : BaseViewModel(
-    navigator = navigator
+    navigator = navigator,
+    appState = appState
 ) {
 
     // 用户登录状态
@@ -85,11 +86,7 @@ class MeViewModel @Inject constructor(
      * 用户资料点击
      */
     fun onHeadClick() {
-        if (isLoggedIn.value) {
-            toProfilePage()
-        } else {
-            toLoginPage()
-        }
+        toProfilePage()
     }
 
     /**

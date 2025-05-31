@@ -4,6 +4,7 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavBackStackEntry
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
+import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.data.repository.OrderRepository
 import com.joker.coolmall.core.model.entity.Cart
 import com.joker.coolmall.core.model.entity.CartGoodsSpec
@@ -25,17 +26,19 @@ import javax.inject.Inject
 @HiltViewModel
 class OrderDetailViewModel @Inject constructor(
     navigator: AppNavigator,
+    appState: AppState,
     savedStateHandle: SavedStateHandle,
     private val orderRepository: OrderRepository
 ) : BaseNetWorkViewModel<Order>(
     navigator = navigator,
+    appState = appState,
     savedStateHandle = savedStateHandle,
     idKey = OrderDetailRoutes.ORDER_ID_ARG
 ) {
 
     private val _cartList = MutableStateFlow<List<Cart>>(emptyList())
     val cartList = _cartList.asStateFlow()
-    
+
     // 标记是否需要在返回时刷新列表
     private var shouldRefreshListOnBack = false
 

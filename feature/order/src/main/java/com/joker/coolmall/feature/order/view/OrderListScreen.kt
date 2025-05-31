@@ -48,9 +48,9 @@ import com.joker.coolmall.core.ui.component.text.PriceText
 import com.joker.coolmall.core.ui.component.text.TextSize
 import com.joker.coolmall.core.ui.component.text.TextType
 import com.joker.coolmall.feature.order.R
+import com.joker.coolmall.feature.order.component.OrderButtons
 import com.joker.coolmall.feature.order.model.OrderStatus
 import com.joker.coolmall.feature.order.model.OrderTabState
-import com.joker.coolmall.feature.order.component.OrderButtons
 import com.joker.coolmall.feature.order.viewmodel.OrderListViewModel
 import kotlinx.coroutines.launch
 

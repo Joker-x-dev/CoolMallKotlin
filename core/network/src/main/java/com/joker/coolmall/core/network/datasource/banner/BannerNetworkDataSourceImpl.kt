@@ -8,7 +8,7 @@ import javax.inject.Inject
 /**
  * 轮播图相关数据源实现类
  * 负责处理所有与轮播图相关的网络请求
- * 
+ *
  * @property bannerService 轮播图服务接口，用于发起实际的网络请求
  */
 class BannerNetworkDataSourceImpl @Inject constructor(
@@ -17,7 +17,7 @@ class BannerNetworkDataSourceImpl @Inject constructor(
 
     /**
      * 查询轮播图列表
-     * 
+     *
      * @param params 请求参数，可包含位置、类型等筛选条件
      * @return 轮播图列表响应数据
      */

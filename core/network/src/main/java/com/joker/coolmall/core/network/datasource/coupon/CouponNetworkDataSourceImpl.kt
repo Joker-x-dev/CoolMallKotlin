@@ -8,7 +8,7 @@ import javax.inject.Inject
 /**
  * 优惠券相关数据源实现类
  * 负责处理所有与优惠券相关的网络请求
- * 
+ *
  * @property couponService 优惠券服务接口，用于发起实际的网络请求
  */
 class CouponNetworkDataSourceImpl @Inject constructor(
@@ -17,7 +17,7 @@ class CouponNetworkDataSourceImpl @Inject constructor(
 
     /**
      * 领取优惠券
-     * 
+     *
      * @param params 请求参数，包含优惠券ID等信息
      * @return 领取结果响应数据
      */
@@ -27,7 +27,7 @@ class CouponNetworkDataSourceImpl @Inject constructor(
 
     /**
      * 分页查询用户优惠券
-     * 
+     *
      * @param params 请求参数，包含分页和查询条件
      * @return 用户优惠券分页列表响应数据
      */
@@ -37,7 +37,7 @@ class CouponNetworkDataSourceImpl @Inject constructor(
 
     /**
      * 查询用户优惠券列表
-     * 
+     *
      * @param params 请求参数，包含查询条件
      * @return 用户优惠券列表响应数据
      */
@@ -47,7 +47,7 @@ class CouponNetworkDataSourceImpl @Inject constructor(
 
     /**
      * 获取用户优惠券详情
-     * 
+     *
      * @param id 用户优惠券ID
      * @return 用户优惠券详情响应数据
      */
@@ -57,7 +57,7 @@ class CouponNetworkDataSourceImpl @Inject constructor(
 
     /**
      * 分页查询优惠券信息
-     * 
+     *
      * @param params 请求参数，包含分页和查询条件
      * @return 优惠券信息分页列表响应数据
      */

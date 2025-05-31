@@ -21,9 +21,10 @@ import javax.inject.Inject
 class ProfileViewModel @Inject constructor(
     navigator: AppNavigator,
     savedStateHandle: SavedStateHandle,
-    private val appState: AppState
+    appState: AppState
 ) : BaseViewModel(
-    navigator = navigator
+    navigator = navigator,
+    appState = appState
 ) {
 
     // 从路由传递过来的头像URL

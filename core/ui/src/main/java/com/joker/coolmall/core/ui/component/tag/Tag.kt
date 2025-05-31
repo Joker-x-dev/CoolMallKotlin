@@ -25,21 +25,17 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.joker.coolmall.core.designsystem.theme.AppTheme
-import com.joker.coolmall.core.designsystem.theme.BgContentLight
 import com.joker.coolmall.core.designsystem.theme.BgGreenLight
 import com.joker.coolmall.core.designsystem.theme.BgPurpleLight
 import com.joker.coolmall.core.designsystem.theme.BgRedLight
 import com.joker.coolmall.core.designsystem.theme.BgYellowLight
 import com.joker.coolmall.core.designsystem.theme.ColorDanger
-import com.joker.coolmall.core.designsystem.theme.ColorPurple
 import com.joker.coolmall.core.designsystem.theme.ColorSuccess
 import com.joker.coolmall.core.designsystem.theme.ColorWarning
 import com.joker.coolmall.core.designsystem.theme.Primary
 import com.joker.coolmall.core.designsystem.theme.ShapeSmall
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingSmall
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingXSmall
-import com.joker.coolmall.core.designsystem.theme.TextPrimaryLight
-import com.joker.coolmall.core.designsystem.theme.TextSecondaryLight
 import com.joker.coolmall.core.designsystem.theme.TextWhite
 
 /**
@@ -84,27 +80,41 @@ private fun getTagColors(type: TagType, style: TagStyle): Pair<Color, Color> {
         TagStyle.FILLED -> {
             // 填充样式：背景使用主色，文字为白色
             when (type) {
-                TagType.DEFAULT -> Pair(MaterialTheme.colorScheme.onSurfaceVariant, MaterialTheme.colorScheme.surfaceVariant)
+                TagType.DEFAULT -> Pair(
+                    MaterialTheme.colorScheme.onSurfaceVariant,
+                    MaterialTheme.colorScheme.surfaceVariant
+                )
+
                 TagType.PRIMARY -> Pair(TextWhite, Primary)
                 TagType.WARNING -> Pair(TextWhite, ColorWarning)
                 TagType.DANGER -> Pair(TextWhite, ColorDanger)
                 TagType.SUCCESS -> Pair(TextWhite, ColorSuccess)
             }
         }
+
         TagStyle.LIGHT -> {
             // 浅色样式：背景使用透明度降低的主色，文字使用主色
             when (type) {
-                TagType.DEFAULT -> Pair(MaterialTheme.colorScheme.onSurfaceVariant, MaterialTheme.colorScheme.surfaceVariant)
+                TagType.DEFAULT -> Pair(
+                    MaterialTheme.colorScheme.onSurfaceVariant,
+                    MaterialTheme.colorScheme.surfaceVariant
+                )
+
                 TagType.PRIMARY -> Pair(Primary, BgPurpleLight)
                 TagType.WARNING -> Pair(ColorWarning, BgYellowLight)
                 TagType.DANGER -> Pair(ColorDanger, BgRedLight)
                 TagType.SUCCESS -> Pair(ColorSuccess, BgGreenLight)
             }
         }
+
         TagStyle.OUTLINED -> {
             // 空心样式：背景透明，使用边框，文字使用主色
             when (type) {
-                TagType.DEFAULT -> Pair(MaterialTheme.colorScheme.onSurfaceVariant, Color.Transparent)
+                TagType.DEFAULT -> Pair(
+                    MaterialTheme.colorScheme.onSurfaceVariant,
+                    Color.Transparent
+                )
+
                 TagType.PRIMARY -> Pair(Primary, Color.Transparent)
                 TagType.WARNING -> Pair(ColorWarning, Color.Transparent)
                 TagType.DANGER -> Pair(ColorDanger, Color.Transparent)
@@ -137,14 +147,14 @@ fun Tag(
 ) {
     // 获取颜色配置
     val (textColor, backgroundColor) = getTagColors(type, style)
-    
+
     // 根据大小调整内边距
     val padding = when (size) {
         TagSize.SMALL -> SpacePaddingXSmall
         TagSize.MEDIUM -> SpacePaddingSmall
         TagSize.LARGE -> SpacePaddingSmall.times(1.5f)
     }
-    
+
     // 修复空心样式异常的问题：先应用clip和border，再应用background和padding
     var tagModifier = if (style == TagStyle.OUTLINED) {
         Modifier
@@ -158,10 +168,10 @@ fun Tag(
             .background(backgroundColor)
             .padding(horizontal = padding.times(1.5f), vertical = padding)
     }
-    
+
     // 合并传入的修饰符
     tagModifier = modifier.then(tagModifier)
-    
+
     Box(
         contentAlignment = Alignment.Center,
         modifier = tagModifier
@@ -201,21 +211,21 @@ fun TagClosable(
 ) {
     // 获取颜色配置
     val (textColor, backgroundColor) = getTagColors(type, style)
-    
+
     // 根据大小调整内边距
     val padding = when (size) {
         TagSize.SMALL -> SpacePaddingXSmall
         TagSize.MEDIUM -> SpacePaddingSmall
         TagSize.LARGE -> SpacePaddingSmall.times(1.5f)
     }
-    
+
     // 图标大小
     val iconSize = when (size) {
         TagSize.SMALL -> 12.dp
         TagSize.MEDIUM -> 16.dp
         TagSize.LARGE -> 18.dp
     }
-    
+
     // 修复空心样式异常的问题：先应用clip和border，再应用background和padding
     var tagModifier = if (style == TagStyle.OUTLINED) {
         Modifier
@@ -239,10 +249,10 @@ fun TagClosable(
                 end = padding
             )
     }
-    
+
     // 合并传入的修饰符
     tagModifier = modifier.then(tagModifier)
-    
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = tagModifier
@@ -252,9 +262,9 @@ fun TagClosable(
             color = textColor,
             style = textStyle
         )
-        
+
         Spacer(modifier = Modifier.width(4.dp))
-        
+
         Icon(
             imageVector = closeIcon,
             contentDescription = "关闭",

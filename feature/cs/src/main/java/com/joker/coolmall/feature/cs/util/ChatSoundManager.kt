@@ -1,8 +1,8 @@
 package com.joker.coolmall.feature.cs.util
 
 import android.content.Context
-import android.media.SoundPool
 import android.media.AudioAttributes
+import android.media.SoundPool
 import com.joker.coolmall.feature.cs.R
 
 /**
@@ -10,16 +10,16 @@ import com.joker.coolmall.feature.cs.R
  * 负责播放发送和接收消息的提示音
  */
 class ChatSoundManager(private val context: Context) {
-    
+
     private var soundPool: SoundPool? = null
     private var sendSoundId: Int = 0
     private var receiveSoundId: Int = 0
     private var isInitialized = false
-    
+
     init {
         initSoundPool()
     }
-    
+
     /**
      * 初始化SoundPool
      */
@@ -29,17 +29,17 @@ class ChatSoundManager(private val context: Context) {
                 .setUsage(AudioAttributes.USAGE_NOTIFICATION)
                 .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
                 .build()
-            
+
             soundPool = SoundPool.Builder()
                 .setMaxStreams(2) // 最多同时播放2个音效
                 .setAudioAttributes(audioAttributes)
                 .build()
-            
+
             soundPool?.let { pool ->
                 // 加载音效文件
                 sendSoundId = pool.load(context, R.raw.send, 1)
                 receiveSoundId = pool.load(context, R.raw.receive, 1)
-                
+
                 // 设置加载完成监听器
                 pool.setOnLoadCompleteListener { _, _, status ->
                     if (status == 0) {
@@ -51,7 +51,7 @@ class ChatSoundManager(private val context: Context) {
             e.printStackTrace()
         }
     }
-    
+
     /**
      * 播放发送消息音效
      */
@@ -67,7 +67,7 @@ class ChatSoundManager(private val context: Context) {
             )
         }
     }
-    
+
     /**
      * 播放接收消息音效
      */
@@ -83,7 +83,7 @@ class ChatSoundManager(private val context: Context) {
             )
         }
     }
-    
+
     /**
      * 释放资源
      */

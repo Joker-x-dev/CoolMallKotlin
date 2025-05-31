@@ -16,7 +16,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.material3.SheetState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -26,7 +25,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
@@ -39,7 +37,7 @@ enum class ModalType {
      * 底部弹出模式
      */
     BOTTOM,
-    
+
     /**
      * 居中弹出模式
      */
@@ -69,11 +67,11 @@ fun Modal(
     content: @Composable ColumnScope.() -> Unit
 ) {
     var localVisible by remember { mutableStateOf(false) }
-    
+
     LaunchedEffect(visible) {
         localVisible = visible
     }
-    
+
     if (visible || localVisible) {
         when (modalType) {
             ModalType.BOTTOM -> {
@@ -88,6 +86,7 @@ fun Modal(
                     content()
                 }
             }
+
             ModalType.CENTER -> {
                 Dialog(
                     onDismissRequest = onDismiss,

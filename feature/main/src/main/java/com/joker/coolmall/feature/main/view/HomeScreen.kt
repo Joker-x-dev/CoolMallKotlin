@@ -41,7 +41,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.LogoIcon
-import com.joker.coolmall.core.designsystem.theme.RadiusSmall
 import com.joker.coolmall.core.designsystem.theme.ShapeMedium
 import com.joker.coolmall.core.designsystem.theme.ShapeSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
@@ -243,10 +242,12 @@ private fun Category(categories: List<Category>) {
                     .fillMaxWidth()
             ) {
                 rowCategories.forEach { category ->
-                    CategoryItem(category, Modifier
-                        .weight(1f)
-                        .clip(ShapeSmall)
-                        .clickable(onClick = { }))
+                    CategoryItem(
+                        category, Modifier
+                            .weight(1f)
+                            .clip(ShapeSmall)
+                            .clickable(onClick = { })
+                    )
                 }
 
                 // 如果一行不满5个，添加空白占位

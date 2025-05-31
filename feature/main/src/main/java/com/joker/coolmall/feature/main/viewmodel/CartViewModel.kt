@@ -3,6 +3,7 @@ package com.joker.coolmall.feature.main.viewmodel
 import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
 import com.joker.coolmall.core.data.repository.CartRepository
+import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.entity.Cart
 import com.joker.coolmall.core.model.entity.Goods
 import com.joker.coolmall.core.model.entity.GoodsSpec
@@ -28,8 +29,9 @@ import javax.inject.Inject
 @HiltViewModel
 class CartViewModel @Inject constructor(
     navigator: AppNavigator,
+    appState: AppState,
     private val cartRepository: CartRepository
-) : BaseViewModel(navigator) {
+) : BaseViewModel(navigator, appState) {
 
     /**
      * 编辑模式状态

@@ -2,6 +2,7 @@ package com.joker.coolmall.feature.user.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkListViewModel
+import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.data.repository.AddressRepository
 import com.joker.coolmall.core.model.common.Ids
 import com.joker.coolmall.core.model.entity.Address
@@ -26,8 +27,9 @@ import javax.inject.Inject
 @HiltViewModel
 class AddressListViewModel @Inject constructor(
     navigator: AppNavigator,
+    appState: AppState,
     private val addressRepository: AddressRepository,
-) : BaseNetWorkListViewModel<Address>(navigator) {
+) : BaseNetWorkListViewModel<Address>(navigator, appState) {
 
     /**
      * 是否显示删除确认弹窗
@@ -49,7 +51,12 @@ class AddressListViewModel @Inject constructor(
      * 通过重写来给父类提供API请求的Flow
      */
     override fun requestListData(): Flow<NetworkResponse<NetworkPageData<Address>>> {
-        return addressRepository.getAddressPage(PageRequest(page = super.currentPage, size = super.pageSize))
+        return addressRepository.getAddressPage(
+            PageRequest(
+                page = super.currentPage,
+                size = super.pageSize
+            )
+        )
     }
 
     /**

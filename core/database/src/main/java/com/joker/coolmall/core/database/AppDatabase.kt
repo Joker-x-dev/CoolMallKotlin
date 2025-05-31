@@ -22,17 +22,17 @@ import com.joker.coolmall.core.database.util.CartSpecConverter
 )
 @TypeConverters(CartSpecConverter::class)
 abstract class AppDatabase : RoomDatabase() {
-    
+
     /**
      * 获取购物车DAO
      */
     abstract fun cartDao(): CartDao
-    
+
     /**
      * 获取足迹DAO
      */
     abstract fun footprintDao(): FootprintDao
-    
+
     companion object {
         const val DATABASE_NAME = "coolmall-database"
     }

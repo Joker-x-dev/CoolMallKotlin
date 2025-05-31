@@ -46,7 +46,7 @@ object DataSourceModule {
 
     /**
      * 提供页面相关网络数据源
-     * 
+     *
      * @param pageService 页面服务接口
      * @return 页面网络数据源实现
      */
@@ -58,7 +58,7 @@ object DataSourceModule {
 
     /**
      * 提供认证相关网络数据源
-     * 
+     *
      * @param authService 认证服务接口
      * @return 认证网络数据源实现
      */
@@ -70,7 +70,7 @@ object DataSourceModule {
 
     /**
      * 提供用户信息相关网络数据源
-     * 
+     *
      * @param userInfoService 用户信息服务接口
      * @return 用户信息网络数据源实现
      */
@@ -82,7 +82,7 @@ object DataSourceModule {
 
     /**
      * 提供地址相关网络数据源
-     * 
+     *
      * @param addressService 地址服务接口
      * @return 地址网络数据源实现
      */
@@ -94,7 +94,7 @@ object DataSourceModule {
 
     /**
      * 提供订单相关网络数据源
-     * 
+     *
      * @param orderService 订单服务接口
      * @return 订单网络数据源实现
      */
@@ -106,7 +106,7 @@ object DataSourceModule {
 
     /**
      * 提供商品相关网络数据源
-     * 
+     *
      * @param goodsService 商品服务接口
      * @return 商品网络数据源实现
      */
@@ -118,7 +118,7 @@ object DataSourceModule {
 
     /**
      * 提供优惠券相关网络数据源
-     * 
+     *
      * @param couponService 优惠券服务接口
      * @return 优惠券网络数据源实现
      */
@@ -130,7 +130,7 @@ object DataSourceModule {
 
     /**
      * 提供轮播图相关网络数据源
-     * 
+     *
      * @param bannerService 轮播图服务接口
      * @return 轮播图网络数据源实现
      */
@@ -142,7 +142,7 @@ object DataSourceModule {
 
     /**
      * 提供客服相关网络数据源
-     * 
+     *
      * @param customerServiceService 客服服务接口
      * @return 客服网络数据源实现
      */
@@ -154,7 +154,7 @@ object DataSourceModule {
 
     /**
      * 提供通用基础网络数据源
-     * 
+     *
      * @param commonService 通用基础服务接口
      * @return 通用基础网络数据源实现
      */

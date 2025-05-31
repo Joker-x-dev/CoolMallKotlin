@@ -54,7 +54,7 @@ data class Address(
      */
     @EncodeDefault(Mode.ALWAYS) // 关键：无论 true/false 都序列化
     val isDefault: Boolean = false,
-    
+
     /**
      * 创建时间
      */

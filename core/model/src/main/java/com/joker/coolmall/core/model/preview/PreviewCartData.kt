@@ -7,7 +7,8 @@ val previewCartList = listOf(
     Cart().apply {
         goodsId = 1L
         goodsName = "Redmi K80"
-        goodsMainPic = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
+        goodsMainPic =
+            "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
         spec = listOf(
             CartGoodsSpec(
                 id = 101L,
@@ -32,7 +33,8 @@ val previewCartList = listOf(
     Cart().apply {
         goodsId = 2L
         goodsName = "Redmi Note 13 Pro+"
-        goodsMainPic = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
+        goodsMainPic =
+            "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
         spec = listOf(
             CartGoodsSpec(
                 id = 201L,

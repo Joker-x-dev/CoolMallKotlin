@@ -17,7 +17,8 @@ object AddressDetailRoutes {
     /**
      * 带参数的路由模式
      */
-    const val ADDRESS_DETAIL_PATTERN = "${UserRoutes.ADDRESS_DETAIL}?${IS_EDIT_MODE_ARG}={${IS_EDIT_MODE_ARG}}&${ADDRESS_ID_ARG}={${ADDRESS_ID_ARG}}"
+    const val ADDRESS_DETAIL_PATTERN =
+        "${UserRoutes.ADDRESS_DETAIL}?${IS_EDIT_MODE_ARG}={${IS_EDIT_MODE_ARG}}&${ADDRESS_ID_ARG}={${ADDRESS_ID_ARG}}"
 }
 
 /**

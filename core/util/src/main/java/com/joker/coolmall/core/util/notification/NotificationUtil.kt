@@ -6,7 +6,6 @@ import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.joker.coolmall.core.designsystem.R
@@ -23,11 +22,12 @@ object NotificationUtil {
     /**
      * 初始化通知渠道
      * 建议在应用启动时调用此方法
-     * 
+     *
      * @param context 上下文
      */
     fun initNotificationChannels(context: Context) {
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         // 创建默认通知渠道
         val defaultChannel = NotificationChannel(
@@ -48,7 +48,12 @@ object NotificationUtil {
         }
 
         // 注册通知渠道
-        notificationManager.createNotificationChannels(listOf(defaultChannel, verificationCodeChannel))
+        notificationManager.createNotificationChannels(
+            listOf(
+                defaultChannel,
+                verificationCodeChannel
+            )
+        )
     }
 
     /**
@@ -72,7 +77,12 @@ object NotificationUtil {
         autoCancel: Boolean = true
     ): Int {
         // 确保通知渠道已创建（Android 8.0及以上需要）
-        ensureChannelExists(context, DEFAULT_CHANNEL_ID, "默认通知", NotificationManager.IMPORTANCE_DEFAULT)
+        ensureChannelExists(
+            context,
+            DEFAULT_CHANNEL_ID,
+            "默认通知",
+            NotificationManager.IMPORTANCE_DEFAULT
+        )
 
         // 构建通知
         val builder = NotificationCompat.Builder(context, DEFAULT_CHANNEL_ID)
@@ -81,26 +91,26 @@ object NotificationUtil {
             .setContentText(content)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setAutoCancel(autoCancel)
-        
+
         // 设置点击意图
         intent?.let {
             val pendingIntent = PendingIntent.getActivity(
-                context, 
-                0, 
-                it, 
+                context,
+                0,
+                it,
                 PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
             )
             builder.setContentIntent(pendingIntent)
         }
-        
+
         // 生成通知ID
         val notificationId = System.currentTimeMillis().toInt()
-        
+
         // 发送通知
         NotificationManagerCompat.from(context).apply {
             notify(notificationId, builder.build())
         }
-        
+
         return notificationId
     }
 
@@ -119,7 +129,12 @@ object NotificationUtil {
         iconResId: Int = R.drawable.ic_logo
     ): Int {
         // 确保通知渠道已创建（Android 8.0及以上需要）
-        ensureChannelExists(context, VERIFICATION_CODE_CHANNEL_ID, "验证码通知", NotificationManager.IMPORTANCE_HIGH)
+        ensureChannelExists(
+            context,
+            VERIFICATION_CODE_CHANNEL_ID,
+            "验证码通知",
+            NotificationManager.IMPORTANCE_HIGH
+        )
 
         // 构建通知
         val builder = NotificationCompat.Builder(context, VERIFICATION_CODE_CHANNEL_ID)
@@ -128,15 +143,15 @@ object NotificationUtil {
             .setContentText("您的验证码是: $code")
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
-        
+
         // 生成通知ID
         val notificationId = System.currentTimeMillis().toInt()
-        
+
         // 发送通知
         NotificationManagerCompat.from(context).apply {
             notify(notificationId, builder.build())
         }
-        
+
         return notificationId
     }
 
@@ -158,7 +173,7 @@ object NotificationUtil {
     fun cancelAllNotifications(context: Context) {
         NotificationManagerCompat.from(context).cancelAll()
     }
-    
+
     /**
      * 确保通知渠道存在（仅适用于Android 8.0及以上）
      *
@@ -168,12 +183,13 @@ object NotificationUtil {
      * @param importance 重要性级别
      */
     private fun ensureChannelExists(
-        context: Context, 
-        channelId: String, 
-        channelName: String, 
+        context: Context,
+        channelId: String,
+        channelName: String,
         importance: Int
     ) {
-        val notificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val notificationManager =
+            context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
         // 检查渠道是否已存在
         val existingChannel = notificationManager.getNotificationChannel(channelId)

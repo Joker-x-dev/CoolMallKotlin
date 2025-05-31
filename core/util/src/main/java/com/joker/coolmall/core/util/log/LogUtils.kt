@@ -24,7 +24,7 @@ object LogUtils {
      */
     fun init(application: Application, isDebug: Boolean = false) {
         isDebugMode = isDebug
-        
+
         if (isDebug) {
             // 调试模式下植入 DebugTree，自动标记调用类名作为标签
             Timber.plant(Timber.DebugTree())
@@ -407,12 +407,12 @@ object LogUtils {
                 // 低级别日志在生产环境不记录
                 return
             }
-            
+
             // 只上报错误和警告日志
             if (priority == Log.ERROR || priority == Log.WARN) {
                 // 这里可以替换为实际的崩溃上报实现
                 // 例如：Crashlytics.log(priority, tag, message)
-                
+
                 if (t != null) {
                     // 上报异常
                     // 例如：Crashlytics.logException(t)

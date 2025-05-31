@@ -2,7 +2,7 @@
 <resources>
     <!-- Common strings -->
     <string name="app_name">Cool Mall</string>
-    
+
     <!-- Login/Register shared -->
     <string name="welcome_login">Hello,\nWelcome to Cool Mall</string>
     <string name="welcome_register">Hello,\nWelcome to register Cool Mall</string>
@@ -15,7 +15,7 @@
     <string name="user_agreement">User Agreement</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="and">and</string>
-    
+
     <!-- Login page -->
     <string name="login">Login</string>
     <string name="go_register">Register</string>
@@ -23,7 +23,7 @@
     <string name="password_hint">Please enter password</string>
     <string name="sms_not_available">SMS unavailable?</string>
     <string name="use_third_party_login">Use third-party login</string>
-    
+
     <!-- Login Home -->
     <string name="sms_login">SMS Login</string>
     <string name="account_login">Account Login</string>
@@ -31,14 +31,14 @@
     <string name="wechat">WeChat</string>
     <string name="qq">QQ</string>
     <string name="alipay">Alipay</string>
-    
+
     <!-- Register page -->
     <string name="register">Register</string>
     <string name="set_password">Please set password</string>
     <string name="confirm_password">Please confirm password</string>
     <string name="have_account">Already have an account?</string>
     <string name="go_login">Go to login</string>
-    
+
     <!-- Reset password page -->
     <string name="reset_password">Reset Password</string>
     <string name="set_new_password">Please set new password</string>
@@ -46,18 +46,18 @@
     <string name="reset_password_button">Reset Password</string>
     <string name="reset_password_tip">After resetting, please login with the new password</string>
     <string name="password_mismatch">The passwords don\'t match</string>
-    
+
     <!-- Password visibility -->
     <string name="hide_password">Hide password</string>
     <string name="show_password">Show password</string>
-    
+
     <!-- Image Captcha Dialog -->
     <string name="security_verification">Security Verification</string>
     <string name="complete_verification">Complete Verification</string>
     <string name="image_captcha_hint">Please enter captcha code</string>
     <string name="image_captcha_description">Captcha image</string>
     <string name="refresh_captcha">Tap to refresh</string>
-    
+
     <!-- Toast messages -->
     <string name="invalid_phone_number">Please enter a valid phone number</string>
     <string name="invalid_verification_code">Please enter a 4-digit verification code</string>

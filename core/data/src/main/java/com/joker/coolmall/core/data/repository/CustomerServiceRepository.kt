@@ -43,9 +43,10 @@ class CustomerServiceRepository @Inject constructor(
     /**
      * 分页查询消息
      */
-    fun getMessagePage(params: MessagePageRequest): Flow<NetworkResponse<NetworkPageData<CsMsg>>> = flow {
-        emit(customerServiceNetworkDataSource.getMessagePage(params))
-    }.flowOn(Dispatchers.IO)
+    fun getMessagePage(params: MessagePageRequest): Flow<NetworkResponse<NetworkPageData<CsMsg>>> =
+        flow {
+            emit(customerServiceNetworkDataSource.getMessagePage(params))
+        }.flowOn(Dispatchers.IO)
 
     /**
      * 未读消息数

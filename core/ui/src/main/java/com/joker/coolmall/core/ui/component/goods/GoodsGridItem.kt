@@ -18,7 +18,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
-import com.joker.coolmall.core.designsystem.theme.ColorDanger
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.designsystem.theme.TextTertiaryLight

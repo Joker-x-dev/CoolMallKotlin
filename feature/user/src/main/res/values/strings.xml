@@ -2,10 +2,10 @@
 <resources>
     <!-- 个人中心 -->
     <string name="profile_title">个人中心</string>
-    
+
     <!-- 设置 -->
     <string name="settings_title">设置</string>
-    
+
     <!-- 收货地址 -->
     <string name="address_list_title">收货地址</string>
     <string name="address_detail_title">地址详情</string>
@@ -30,7 +30,7 @@
     <string name="please_select_region">请选择所在地区</string>
     <string name="detail_address">详细地址</string>
     <string name="street_number_etc">街道、楼牌号等</string>
-    
+
     <!-- 足迹 -->
     <string name="footprint_title">我的足迹</string>
 </resources> 

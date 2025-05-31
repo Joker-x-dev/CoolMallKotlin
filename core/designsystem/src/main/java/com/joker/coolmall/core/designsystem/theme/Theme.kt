@@ -68,7 +68,7 @@ private val LightColorScheme = lightColorScheme(
 /**
  * 应用主题 Composable 函数
  * 根据系统设置决定使用深色或浅色主题，并应用所有设计系统元素
- * 
+ *
  * @param darkTheme 是否使用深色主题，默认跟随系统设置
  * @param dynamicColor 是否使用动态颜色（Android 12+特性），默认关闭
  * @param content 需要应用主题的内容

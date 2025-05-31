@@ -2,7 +2,8 @@
 
 ## 简介
 
-`AppState` 是一个基于 Kotlin 协程和 StateFlow 实现的全局状态管理解决方案，专为 Android 应用设计，用于管理和同步整个应用中的用户相关状态。它采用响应式编程模式，确保状态变化能够自动传播到所有订阅者。
+`AppState` 是一个基于 Kotlin 协程和 StateFlow 实现的全局状态管理解决方案，专为 Android
+应用设计，用于管理和同步整个应用中的用户相关状态。它采用响应式编程模式，确保状态变化能够自动传播到所有订阅者。
 
 ## 核心特性
 
@@ -155,23 +156,23 @@ suspend fun shouldRefreshToken(): Boolean
 ## 最佳实践
 
 1. **职责分离**：
-   - AppState 只负责状态管理，不处理业务逻辑
-   - ViewModel 处理业务逻辑并调用 AppState 更新状态
-   - UI 层只负责展示状态和捕获用户交互
+    - AppState 只负责状态管理，不处理业务逻辑
+    - ViewModel 处理业务逻辑并调用 AppState 更新状态
+    - UI 层只负责展示状态和捕获用户交互
 
 2. **状态订阅**：
-   - 在 ViewModel 中使用 `stateIn` 操作符将 StateFlow 转换为热流
-   - 在 Composable 中使用 `collectAsStateWithLifecycle()` 收集状态
+    - 在 ViewModel 中使用 `stateIn` 操作符将 StateFlow 转换为热流
+    - 在 Composable 中使用 `collectAsStateWithLifecycle()` 收集状态
 
 3. **状态更新**：
-   - 所有涉及用户状态的更新都应通过 AppState 进行
-   - 不要直接从 Repository 更新状态
+    - 所有涉及用户状态的更新都应通过 AppState 进行
+    - 不要直接从 Repository 更新状态
 
 4. **使用时机**：
-   - 登录/注册成功后：`updateUserState()`
-   - 更新用户资料后：`updateUserInfo()`
-   - 刷新 token 后：`updateAuth()`
-   - 退出登录后：`logout()`
+    - 登录/注册成功后：`updateUserState()`
+    - 更新用户资料后：`updateUserInfo()`
+    - 刷新 token 后：`updateAuth()`
+    - 退出登录后：`logout()`
 
 ## 完整流程示例
 

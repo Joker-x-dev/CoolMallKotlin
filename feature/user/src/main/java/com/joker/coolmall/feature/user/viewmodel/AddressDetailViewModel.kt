@@ -3,6 +3,7 @@ package com.joker.coolmall.feature.user.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
+import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.data.repository.AddressRepository
 import com.joker.coolmall.core.model.entity.Address
 import com.joker.coolmall.core.model.response.NetworkResponse
@@ -22,10 +23,12 @@ import javax.inject.Inject
 @HiltViewModel
 class AddressDetailViewModel @Inject constructor(
     navigator: AppNavigator,
+    appState: AppState,
     savedStateHandle: SavedStateHandle,
     private val addressRepository: AddressRepository
 ) : BaseNetWorkViewModel<Address>(
     navigator = navigator,
+    appState = appState,
     savedStateHandle = savedStateHandle,
     idKey = AddressDetailRoutes.ADDRESS_ID_ARG
 ) {

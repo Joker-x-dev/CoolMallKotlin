@@ -3,6 +3,7 @@ package com.joker.coolmall.feature.order.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
+import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.data.repository.OrderRepository
 import com.joker.coolmall.core.util.toast.ToastUtils
 import com.joker.coolmall.feature.order.model.Alipay
@@ -22,9 +23,10 @@ import javax.inject.Inject
 @HiltViewModel
 class OrderPayViewModel @Inject constructor(
     navigator: AppNavigator,
+    appState: AppState,
     savedStateHandle: SavedStateHandle,
     private val orderRepository: OrderRepository
-) : BaseViewModel(navigator) {
+) : BaseViewModel(navigator, appState) {
 
     /**
      * 订单ID
@@ -42,7 +44,7 @@ class OrderPayViewModel @Inject constructor(
      */
     private val _alipayPayInfo = MutableStateFlow("")
     val alipayPayInfo = _alipayPayInfo.asStateFlow()
-    
+
     /**
      * 来源参数，用于判断返回行为
      */
@@ -52,7 +54,7 @@ class OrderPayViewModel @Inject constructor(
         // 从路由参数中获取订单ID和价格
         orderId = savedStateHandle.get<Long>(OrderPayRoutes.ORDER_ID_ARG) ?: 0L
         _price.value = savedStateHandle.get<Int>(OrderPayRoutes.PRICE_ARG) ?: 0
-        
+
         // 获取来源参数
         fromSource = savedStateHandle.get<String>(OrderPayRoutes.FROM_ARG)
     }
@@ -80,11 +82,13 @@ class OrderPayViewModel @Inject constructor(
                 // 支付取消后，根据来源判断是否需要跳转到订单详情
                 handleBackAfterPayment(false)
             }
+
             Alipay.RESULT_STATUS_SUCCESS -> {
                 ToastUtils.showSuccess("支付成功")
                 // 支付成功，如果是从确认订单页面来，也跳转到详情页面
                 handleBackAfterPayment(true)
             }
+
             else -> {
                 ToastUtils.showError("支付失败")
                 // 支付失败后，根据来源判断是否需要跳转到订单详情
@@ -92,17 +96,17 @@ class OrderPayViewModel @Inject constructor(
             }
         }
     }
-    
+
     /**
      * 处理系统返回按钮点击
      */
     fun handleBackClick() {
         handleBackAfterPayment(false)
     }
-    
+
     /**
      * 处理支付后的返回逻辑
-     * 
+     *
      * @param isPaySuccess 支付是否成功
      */
     private fun handleBackAfterPayment(isPaySuccess: Boolean) {

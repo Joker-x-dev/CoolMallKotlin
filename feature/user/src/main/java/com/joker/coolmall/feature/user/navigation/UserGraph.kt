@@ -11,7 +11,10 @@ import androidx.navigation.NavHostController
  * 整合用户模块下所有页面的导航
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
-fun NavGraphBuilder.userGraph(navController: NavHostController, sharedTransitionScope: SharedTransitionScope) {
+fun NavGraphBuilder.userGraph(
+    navController: NavHostController,
+    sharedTransitionScope: SharedTransitionScope
+) {
     profileScreen(sharedTransitionScope)
     settingsScreen()
     addressListScreen(navController)

@@ -58,7 +58,7 @@ internal fun OrderConfirmRoute(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val remark by viewModel.remark.collectAsState()
-    
+
     OrderConfirmScreen(
         uiState = uiState,
         onRetry = viewModel::retryRequest,
@@ -117,7 +117,7 @@ internal fun OrderConfirmScreen(
         ) {
             OrderConfirmContentView(
                 address = it,
-                totalPrice = totalPrice, 
+                totalPrice = totalPrice,
                 cartList = cartList,
                 remark = remark,
                 onRemarkChange = onRemarkChange

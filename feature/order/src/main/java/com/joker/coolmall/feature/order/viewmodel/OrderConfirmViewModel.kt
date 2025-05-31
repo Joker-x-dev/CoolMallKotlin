@@ -3,6 +3,7 @@ package com.joker.coolmall.feature.order.viewmodel
 import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
+import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.data.repository.AddressRepository
 import com.joker.coolmall.core.data.repository.CartRepository
 import com.joker.coolmall.core.data.repository.OrderRepository
@@ -34,10 +35,11 @@ import javax.inject.Inject
 @HiltViewModel
 class OrderConfirmViewModel @Inject constructor(
     navigator: AppNavigator,
+    appState: AppState,
     private val addressRepository: AddressRepository,
     private val orderRepository: OrderRepository,
     private val cartRepository: CartRepository
-) : BaseNetWorkViewModel<Address>(navigator) {
+) : BaseNetWorkViewModel<Address>(navigator, appState) {
 
     /**
      * 订单备注状态
@@ -159,8 +161,8 @@ class OrderConfirmViewModel @Inject constructor(
         val paymentRoute = OrderPayRoutes.ORDER_PAY_PATTERN
             .replace("{${OrderPayRoutes.ORDER_ID_ARG}}", orderId.toString())
             .replace("{${OrderPayRoutes.PRICE_ARG}}", paymentPrice.toString()) +
-            // 添加来源参数，表示从确认订单页面来
-            "?${OrderPayRoutes.FROM_ARG}=${OrderPayRoutes.FROM_ORDER_CONFIRM}"
+                // 添加来源参数，表示从确认订单页面来
+                "?${OrderPayRoutes.FROM_ARG}=${OrderPayRoutes.FROM_ORDER_CONFIRM}"
 
         // 使用封装方法跳转到支付页面并关闭当前页面
         // 传入当前页面的路由 OrderRoutes.CONFIRM (order/confirm)

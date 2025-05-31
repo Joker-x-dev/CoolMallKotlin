@@ -19,7 +19,7 @@ import com.joker.coolmall.core.ui.component.loading.PageLoading
  * 基础网络列表视图组件
  *
  * 用于处理列表页的四种状态：加载中、错误、空数据和成功
- * 
+ *
  * @param uiState 列表页UI状态
  * @param modifier 修饰符
  * @param padding 内边距
@@ -60,7 +60,7 @@ fun BaseNetWorkListView(
                         PageLoading()
                     }
                 }
-                
+
                 is BaseNetWorkListUiState.Error -> {
                     if (customError != null) {
                         customError()
@@ -68,7 +68,7 @@ fun BaseNetWorkListView(
                         EmptyNetwork(onRetryClick = onRetry)
                     }
                 }
-                
+
                 is BaseNetWorkListUiState.Empty -> {
                     if (customEmpty != null) {
                         customEmpty()
@@ -76,7 +76,7 @@ fun BaseNetWorkListView(
                         EmptyData(onRetryClick = onRetry)
                     }
                 }
-                
+
                 is BaseNetWorkListUiState.Success -> content()
             }
         }

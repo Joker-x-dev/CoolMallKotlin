@@ -4,7 +4,7 @@ import com.joker.coolmall.core.model.entity.Goods
 
 /**
  * 商品详情UI状态封装类
- * 
+ *
  * 该接口使用sealed interface来表示商品详情页所有可能的UI状态：
  * - 加载中状态 [Loading]
  * - 加载成功状态 [Success]

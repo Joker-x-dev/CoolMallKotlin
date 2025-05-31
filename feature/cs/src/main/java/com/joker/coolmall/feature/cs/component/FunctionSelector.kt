@@ -1,7 +1,7 @@
 package com.joker.coolmall.feature.cs.component
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.Canvas
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -10,26 +10,22 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.ui.geometry.Offset
-import androidx.compose.ui.graphics.Color
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.joker.coolmall.core.designsystem.component.AppColumn
 import com.joker.coolmall.core.designsystem.component.AppRow
+import com.joker.coolmall.core.designsystem.theme.ShapeCircle
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalMedium
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
-import com.joker.coolmall.core.designsystem.theme.ShapeMedium
-import com.joker.coolmall.core.designsystem.theme.ShapeCircle
 import com.joker.coolmall.core.ui.component.text.AppText
 import com.joker.coolmall.core.ui.component.text.TextSize
 import com.joker.coolmall.feature.cs.R
@@ -49,7 +45,7 @@ fun FunctionSelector(
         modifier = modifier
     ) {
         val outlineColor = MaterialTheme.colorScheme.outline
-        
+
         Column {
             // 上边框
             Canvas(
@@ -64,32 +60,32 @@ fun FunctionSelector(
                     strokeWidth = 1.dp.toPx()
                 )
             }
-            
+
             AppRow(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(SpacePaddingMedium),
-            horizontalArrangement = Arrangement.Start,
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            // 相册功能
-            FunctionItem(
-                icon = R.drawable.ic_image_fill,
-                label = "相册",
-                onClick = { onFunctionSelected("相册") }
-            )
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(SpacePaddingMedium),
+                horizontalArrangement = Arrangement.Start,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                // 相册功能
+                FunctionItem(
+                    icon = R.drawable.ic_image_fill,
+                    label = "相册",
+                    onClick = { onFunctionSelected("相册") }
+                )
 
-            SpaceHorizontalMedium()
+                SpaceHorizontalMedium()
 
-            // 拍摄功能
-            FunctionItem(
-                icon = R.drawable.ic_camera_fill,
-                label = "拍摄",
-                onClick = { onFunctionSelected("拍摄") }
-            )
+                // 拍摄功能
+                FunctionItem(
+                    icon = R.drawable.ic_camera_fill,
+                    label = "拍摄",
+                    onClick = { onFunctionSelected("拍摄") }
+                )
 
-            Spacer(modifier = Modifier.weight(1f))
-        }
+                Spacer(modifier = Modifier.weight(1f))
+            }
         }
     }
 }
