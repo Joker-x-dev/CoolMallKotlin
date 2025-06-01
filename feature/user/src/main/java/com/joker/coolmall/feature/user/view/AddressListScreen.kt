@@ -109,7 +109,7 @@ internal fun AddressListScreen(
 ) {
     AppScaffold(
         title = R.string.address_list_title, onBackClick = onBackClick, bottomBar = {
-            if (uiState is BaseNetWorkListUiState.Success && listData.isNotEmpty()) {
+            if (uiState != BaseNetWorkListUiState.Loading) {
                 AppBottomButton(
                     text = stringResource(id = R.string.address_add_new), onClick = toAddressDetail
                 )
