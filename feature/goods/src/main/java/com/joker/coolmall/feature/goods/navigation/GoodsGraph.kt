@@ -8,5 +8,7 @@ import androidx.navigation.NavHostController
  */
 fun NavGraphBuilder.goodsGraph(navController: NavHostController) {
     goodsDetailScreen()
+    goodsSearchScreen()
+    goodsCommentScreen()
+    goodsCategoryScreen()
 }
-

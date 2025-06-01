@@ -17,12 +17,12 @@ object AuthRoutes {
     /**
      * 账号密码登录路由
      */
-    const val ACCOUNT_LOGIN = "$AUTH_ROUTE/account_login"
+    const val ACCOUNT_LOGIN = "$AUTH_ROUTE/account-login"
 
     /**
      * 短信验证码登录路由
      */
-    const val SMS_LOGIN = "$AUTH_ROUTE/sms_login"
+    const val SMS_LOGIN = "$AUTH_ROUTE/sms-login"
 
     /**
      * 注册页面路由
@@ -32,5 +32,5 @@ object AuthRoutes {
     /**
      * 找回密码路由
      */
-    const val RESET_PASSWORD = "$AUTH_ROUTE/reset_password"
+    const val RESET_PASSWORD = "$AUTH_ROUTE/reset-password"
 }

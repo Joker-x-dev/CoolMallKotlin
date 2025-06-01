@@ -3,6 +3,8 @@ package com.joker.coolmall.core.network.datasource.goods
 import com.joker.coolmall.core.model.entity.Category
 import com.joker.coolmall.core.model.entity.Goods
 import com.joker.coolmall.core.model.entity.GoodsSpec
+import com.joker.coolmall.core.model.request.GoodsSearchRequest
+import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.base.BaseNetworkDataSource
 import com.joker.coolmall.core.network.service.GoodsService
@@ -103,7 +105,7 @@ class GoodsNetworkDataSourceImpl @Inject constructor(
      * @param params 请求参数，包含分页和筛选信息
      * @return 商品分页列表响应数据
      */
-    override suspend fun getGoodsPage(params: Any): NetworkResponse<Any> {
+    override suspend fun getGoodsPage(params: GoodsSearchRequest): NetworkResponse<NetworkPageData<Goods>> {
         return goodsService.getGoodsPage(params)
     }
 

@@ -81,7 +81,7 @@ internal fun CategoryRoute(
         uiState = uiState,
         selectedIndex = selectedIndex,
         onCategorySelected = viewModel::selectCategory,
-        onSubCategoryClick = {},
+        toGoodsCategory = viewModel::toGoodsCategoryPage,
         onRetry = viewModel::retryRequest
     )
 }
@@ -92,7 +92,7 @@ internal fun CategoryRoute(
  * @param uiState 当前UI状态
  * @param selectedIndex 当前选中的分类索引
  * @param onCategorySelected 分类选中回调
- * @param onSubCategoryClick 子分类点击回调
+ * @param toGoodsCategory 跳转到商品分类页面
  * @param onRetry 重试加载数据回调
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -101,7 +101,7 @@ internal fun CategoryScreen(
     uiState: CategoryUiState = CategoryUiState.Loading,
     selectedIndex: Int = 0,
     onCategorySelected: (Int) -> Unit = {},
-    onSubCategoryClick: (Long) -> Unit = {},
+    toGoodsCategory: (Long) -> Unit = {},
     onRetry: () -> Unit = {}
 ) {
     CommonScaffold(
@@ -117,7 +117,7 @@ internal fun CategoryScreen(
                     categoryTrees = uiState.data,
                     selectedIndex = selectedIndex,
                     onCategorySelected = onCategorySelected,
-                    onSubCategoryClick = onSubCategoryClick
+                    toGoodsCategory = toGoodsCategory
                 )
             }
         }
@@ -130,14 +130,14 @@ internal fun CategoryScreen(
  * @param categoryTrees 分类树数据列表
  * @param selectedIndex 当前选中的分类索引
  * @param onCategorySelected 分类选中回调
- * @param onSubCategoryClick 子分类点击回调
+ * @param toGoodsCategory 跳转到商品分类页面
  */
 @Composable
 private fun CategoryContentView(
     categoryTrees: List<CategoryTree>,
     selectedIndex: Int,
     onCategorySelected: (Int) -> Unit,
-    onSubCategoryClick: (Long) -> Unit
+    toGoodsCategory: (Long) -> Unit
 ) {
     // 记住协程作用域，用于滚动操作
     val coroutineScope = rememberCoroutineScope()
@@ -220,7 +220,7 @@ private fun CategoryContentView(
         RightCategoryContent(
             categoryTrees = categoryTrees,
             listState = rightListState,
-            onSubCategoryClick = onSubCategoryClick,
+            toGoodsCategory = toGoodsCategory,
             modifier = Modifier
                 .weight(1f)
                 .fillMaxHeight()
@@ -453,14 +453,14 @@ private fun BottomPlaceholderItem(
  * @param modifier 修饰符
  * @param categoryTrees 分类树列表
  * @param listState 列表滚动状态
- * @param onSubCategoryClick 子分类点击回调
+ * @param toGoodsCategory 跳转到商品分类页面
  */
 @Composable
 private fun RightCategoryContent(
     modifier: Modifier = Modifier,
     categoryTrees: List<CategoryTree>,
     listState: LazyListState,
-    onSubCategoryClick: (Long) -> Unit,
+    toGoodsCategory: (Long) -> Unit,
 ) {
     AppLazyColumn(
         listState = listState,
@@ -489,7 +489,7 @@ private fun RightCategoryContent(
                 if (category.children.isNotEmpty()) {
                     CategorySection(
                         categoryTree = category,
-                        onSubCategoryClick = onSubCategoryClick
+                        toGoodsCategory = toGoodsCategory
                     )
                 }
             }
@@ -502,13 +502,13 @@ private fun RightCategoryContent(
  *
  * @param modifier 修饰符
  * @param categoryTree 分类树数据
- * @param onSubCategoryClick 子分类点击回调
+ * @param toGoodsCategory 跳转到商品分类页面
  */
 @Composable
 private fun CategorySection(
     modifier: Modifier = Modifier,
     categoryTree: CategoryTree,
-    onSubCategoryClick: (Long) -> Unit = {},
+    toGoodsCategory: (Long) -> Unit = {},
 ) {
     AppColumn(modifier = modifier.fillMaxWidth()) {
         // 子分类网格
@@ -524,7 +524,7 @@ private fun CategorySection(
                     SubCategoryItem(
                         name = subCategory.name,
                         imageUrl = subCategory.pic ?: "",
-                        onClick = { onSubCategoryClick(subCategory.id) },
+                        onClick = { toGoodsCategory(subCategory.id) },
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -664,7 +664,7 @@ fun CategoryScreenPreview() {
             uiState = CategoryUiState.Success(categoryTrees),
             selectedIndex = 1,
             onCategorySelected = { /* 预览时不执行任何操作 */ },
-            onSubCategoryClick = { /* 预览时不执行任何操作 */ }
+            toGoodsCategory = { /* 预览时不执行任何操作 */ }
         )
     }
 } 

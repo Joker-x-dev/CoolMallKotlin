@@ -2,12 +2,13 @@ package com.joker.coolmall.feature.main.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
-import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.data.repository.GoodsRepository
+import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.entity.Category
 import com.joker.coolmall.feature.main.model.CategoryTree
 import com.joker.coolmall.feature.main.state.CategoryUiState
 import com.joker.coolmall.navigation.AppNavigator
+import com.joker.coolmall.navigation.routes.GoodsRoutes
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -70,6 +71,13 @@ class CategoryViewModel @Inject constructor(
      */
     fun selectCategory(index: Int) {
         _selectedCategoryIndex.value = index
+    }
+
+    /**
+     * 跳转到商品分类页面
+     */
+    fun toGoodsCategoryPage(id: Long) {
+        toPage(GoodsRoutes.CATEGORY, id)
     }
 
     /**

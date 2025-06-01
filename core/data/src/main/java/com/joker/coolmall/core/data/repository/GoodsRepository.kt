@@ -3,6 +3,8 @@ package com.joker.coolmall.core.data.repository
 import com.joker.coolmall.core.model.entity.Category
 import com.joker.coolmall.core.model.entity.Goods
 import com.joker.coolmall.core.model.entity.GoodsSpec
+import com.joker.coolmall.core.model.request.GoodsSearchRequest
+import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.datasource.goods.GoodsNetworkDataSource
 import kotlinx.coroutines.Dispatchers
@@ -76,9 +78,10 @@ class GoodsRepository @Inject constructor(
     /**
      * 分页查询商品
      */
-    fun getGoodsPage(params: Any): Flow<NetworkResponse<Any>> = flow {
-        emit(goodsNetworkDataSource.getGoodsPage(params))
-    }.flowOn(Dispatchers.IO)
+    fun getGoodsPage(params: GoodsSearchRequest): Flow<NetworkResponse<NetworkPageData<Goods>>> =
+        flow {
+            emit(goodsNetworkDataSource.getGoodsPage(params))
+        }.flowOn(Dispatchers.IO)
 
     /**
      * 商品信息

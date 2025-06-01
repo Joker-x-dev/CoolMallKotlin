@@ -336,7 +336,7 @@ private fun HomeTopAppBar() {
                     horizontalArrangement = Arrangement.Center
                 ) {
                     Icon(
-                        painter = painterResource(id = R.drawable.ic_search),
+                        painter = painterResource(id = com.joker.coolmall.core.ui.R.drawable.ic_search),
                         contentDescription = "搜索",
                         tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                         modifier = Modifier.size(18.dp)

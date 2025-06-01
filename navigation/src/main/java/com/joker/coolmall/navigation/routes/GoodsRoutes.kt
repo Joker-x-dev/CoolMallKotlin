@@ -12,7 +12,7 @@ object GoodsRoutes {
     /**
      * 商品详情路由
      */
-    const val DETAIL = "goods_detail"
+    const val DETAIL = "${GOODS_ROUTE}/detail"
     
     /**
      * 商品搜索路由

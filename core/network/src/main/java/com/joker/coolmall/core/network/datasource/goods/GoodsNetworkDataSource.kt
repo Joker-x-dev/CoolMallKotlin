@@ -3,6 +3,8 @@ package com.joker.coolmall.core.network.datasource.goods
 import com.joker.coolmall.core.model.entity.Category
 import com.joker.coolmall.core.model.entity.Goods
 import com.joker.coolmall.core.model.entity.GoodsSpec
+import com.joker.coolmall.core.model.request.GoodsSearchRequest
+import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
 
 /**
@@ -53,7 +55,7 @@ interface GoodsNetworkDataSource {
     /**
      * 分页查询商品
      */
-    suspend fun getGoodsPage(params: Any): NetworkResponse<Any>
+    suspend fun getGoodsPage(params: GoodsSearchRequest): NetworkResponse<NetworkPageData<Goods>>
 
     /**
      * 商品信息
