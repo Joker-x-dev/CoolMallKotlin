@@ -9,12 +9,10 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.ime
 import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBars
@@ -23,11 +21,10 @@ import androidx.compose.foundation.layout.paddingFrom
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
@@ -59,7 +56,6 @@ import com.joker.coolmall.core.common.base.state.LoadMoreState
 import com.joker.coolmall.core.designsystem.component.AppColumn
 import com.joker.coolmall.core.designsystem.component.AppRow
 import com.joker.coolmall.core.designsystem.component.FullScreenBox
-import com.joker.coolmall.core.designsystem.component.SpaceBetweenRow
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.ShapeCircle
 import com.joker.coolmall.core.designsystem.theme.ShapeExtraLarge
@@ -73,6 +69,7 @@ import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.model.entity.CsMsg
 import com.joker.coolmall.core.ui.component.appbar.CenterTopAppBar
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
+import com.joker.coolmall.core.ui.component.image.Avatar
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkView
 import com.joker.coolmall.core.ui.component.tag.Tag
 import com.joker.coolmall.core.ui.component.tag.TagStyle
@@ -80,6 +77,7 @@ import com.joker.coolmall.core.ui.component.tag.TagType
 import com.joker.coolmall.core.ui.component.text.AppText
 import com.joker.coolmall.core.ui.component.text.TextSize
 import com.joker.coolmall.core.ui.component.text.TextType
+import com.joker.coolmall.core.util.time.TimeUtils
 import com.joker.coolmall.feature.cs.R
 import com.joker.coolmall.feature.cs.component.ChatInputArea
 import com.joker.coolmall.feature.cs.component.ChatLoadMore
@@ -326,12 +324,22 @@ fun MessageList(
             modifier = Modifier.fillMaxSize(),
             contentPadding = PaddingValues(vertical = SpacePaddingSmall)
         ) {
-            items(
+            itemsIndexed(
                 items = messages,
-                key = { it.id }
-            ) { message ->
+                key = { _, message -> message.id }
+            ) { index, message ->
+                // 使用新的方法来判断是否显示时间头部，解决分页加载问题
+                val shouldShowTimeHeader = TimeUtils.shouldShowTimeHeaderInList(messages, index)
+
+                // 显示时间头部（如果需要且时间字符串有效）
+                if (shouldShowTimeHeader) {
+                    val timeString = TimeUtils.formatChatTime(message.createTime)
+                    if (timeString.isNotEmpty()) {
+                        DayHeader(dayString = timeString)
+                    }
+                }
+
                 Message(
-                    onAuthorClick = { /* 点击用户头像 */ },
                     msg = message,
                     isUserMe = message.type == 0, // 0-反馈(用户), 1-回复(客服)
                     isFirstMessageByAuthor = true, // 简化处理
@@ -375,7 +383,6 @@ fun MessageList(
 /**
  * 单条消息组件
  *
- * @param onAuthorClick 点击作者头像回调
  * @param msg 消息数据
  * @param isUserMe 是否为当前用户发送的消息
  * @param isFirstMessageByAuthor 是否为该作者的第一条消息
@@ -385,7 +392,6 @@ fun MessageList(
  */
 @Composable
 fun Message(
-    onAuthorClick: (String) -> Unit,
     msg: CsMsg,
     isUserMe: Boolean,
     isFirstMessageByAuthor: Boolean,
@@ -440,14 +446,10 @@ fun Message(
                 // 根据消息类型使用不同的头像
                 val imageUrl =
                     if (msg.adminUserHeadImg.isEmpty()) msg.avatarUrl else msg.adminUserHeadImg
-                NetWorkImage(
-                    model = imageUrl,
-                    modifier = Modifier
-                        .clickable(onClick = { onAuthorClick(if (msg.adminUserName.isEmpty()) msg.nickName else msg.adminUserName) })
-                        .size(36.dp)
-                        .align(Alignment.Top),
-                    cornerShape = ShapeCircle,
-                    contentScale = ContentScale.Crop,
+                Avatar(
+                    avatarUrl = imageUrl,
+                    size = 36.dp,
+                    modifier = Modifier.align(Alignment.Top)
                 )
 
                 // 头像与消息之间的间距
@@ -459,9 +461,7 @@ fun Message(
                 isUserMe = isUserMe,
                 isFirstMessageByAuthor = isFirstMessageByAuthor,
                 isLastMessageByAuthor = isLastMessageByAuthor,
-                authorClicked = onAuthorClick,
-                modifier = Modifier
-                    .weight(1f, fill = false),
+                modifier = Modifier.weight(1f, fill = false),
             )
 
             if (isUserMe && isLastMessageByAuthor) {
@@ -469,14 +469,10 @@ fun Message(
                 SpaceHorizontalSmall()
 
                 // 用户头像，右侧显示
-                NetWorkImage(
-                    model = msg.avatarUrl,
-                    modifier = Modifier
-                        .clickable(onClick = { onAuthorClick(msg.nickName) })
-                        .size(36.dp)
-                        .align(Alignment.Top),
-                    cornerShape = ShapeCircle,
-                    contentScale = ContentScale.Crop,
+                Avatar(
+                    avatarUrl = msg.avatarUrl,
+                    size = 36.dp,
+                    modifier = Modifier.align(Alignment.Top)
                 )
             }
         }
@@ -490,7 +486,6 @@ fun Message(
  * @param isUserMe 是否为当前用户发送的消息
  * @param isFirstMessageByAuthor 是否为该作者的第一条消息
  * @param isLastMessageByAuthor 是否为该作者的最后一条消息
- * @param authorClicked 点击作者回调
  * @param modifier 修饰符
  */
 @Composable
@@ -499,7 +494,6 @@ fun AuthorAndTextMessage(
     isUserMe: Boolean,
     isFirstMessageByAuthor: Boolean,
     isLastMessageByAuthor: Boolean,
-    authorClicked: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
     AppColumn(
@@ -523,14 +517,14 @@ fun AuthorAndTextMessage(
 }
 
 /**
- * 作者名称和时间戳组件
+ * 作者名称组件（移除时间戳显示）
  *
  * @param msg 消息数据
  * @param isUserMe 是否为当前用户发送的消息
  */
 @Composable
 private fun AuthorNameTimestamp(msg: CsMsg, isUserMe: Boolean) {
-    // 为了无障碍而结合作者和时间戳
+    // 只显示用户名，不显示时间
     AppRow(
         modifier = Modifier
             .padding(bottom = SpacePaddingXSmall)
@@ -549,18 +543,8 @@ private fun AuthorNameTimestamp(msg: CsMsg, isUserMe: Boolean) {
                     .alignBy(LastBaseline)
                     .paddingFrom(LastBaseline, after = SpaceHorizontalXSmall), // 到第一个气泡的空间
             )
-            SpaceHorizontalXSmall()
-        }
-
-        AppText(
-            text = msg.createTime ?: "",
-            size = TextSize.BODY_SMALL,
-            type = TextType.TERTIARY,
-            modifier = Modifier.alignBy(LastBaseline),
-        )
-
-        if (isUserMe) {
-            SpaceHorizontalXSmall()
+        } else {
+            // 为用户消息显示用户名
             AppText(
                 text = msg.nickName,
                 size = TextSize.BODY_MEDIUM,
@@ -593,33 +577,28 @@ private val OtherChatBubbleShape = RoundedCornerShape(
  */
 @Composable
 fun DayHeader(dayString: String) {
-    SpaceBetweenRow(
+    Box(
         modifier = Modifier
-            .padding(vertical = SpaceVerticalSmall, horizontal = SpacePaddingMedium)
-            .height(16.dp),
+            .fillMaxWidth()
+            .padding(vertical = SpacePaddingSmall),
+        contentAlignment = Alignment.Center
     ) {
-        DayHeaderLine()
-        AppText(
-            text = dayString,
-            size = TextSize.BODY_SMALL,
-            type = TextType.TERTIARY,
-            modifier = Modifier.padding(horizontal = SpacePaddingSmall),
-        )
-        DayHeaderLine()
+        Surface(
+            color = MaterialTheme.colorScheme.surfaceContainerHigh,
+            shape = RoundedCornerShape(8.dp),
+            modifier = Modifier.padding(horizontal = SpacePaddingMedium)
+        ) {
+            AppText(
+                text = dayString,
+                size = TextSize.BODY_SMALL,
+                type = TextType.TERTIARY,
+                modifier = Modifier.padding(
+                    horizontal = SpacePaddingSmall,
+                    vertical = 4.dp
+                ),
+            )
+        }
     }
-}
-
-/**
- * 日期头部分割线组件
- */
-@Composable
-private fun RowScope.DayHeaderLine() {
-    HorizontalDivider(
-        modifier = Modifier
-            .weight(1f)
-            .align(Alignment.CenterVertically),
-        color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.12f)
-    )
 }
 
 /**
@@ -646,14 +625,31 @@ fun ChatItemBubble(message: CsMsg, isUserMe: Boolean) {
         color = backgroundBubbleColor,
         shape = if (isUserMe) UserChatBubbleShape else OtherChatBubbleShape,
     ) {
-        AppText(
-            text = message.content.data,
-            size = TextSize.BODY_LARGE,
-            color = textColor,
-            modifier = Modifier
-                .padding(horizontal = SpacePaddingLarge)
-                .padding(vertical = SpacePaddingMedium)
-        )
+        // 根据消息内容类型显示不同内容
+        when (message.content.type.lowercase()) {
+            "image" -> {
+                // 显示图片消息
+                NetWorkImage(
+                    model = message.content.data,
+                    modifier = Modifier
+                        .padding(4.dp)
+                        .size(200.dp),
+                    cornerShape = RoundedCornerShape(12.dp),
+                    contentScale = ContentScale.Crop
+                )
+            }
+            else -> {
+                // 显示文本消息
+                AppText(
+                    text = message.content.data,
+                    size = TextSize.BODY_LARGE,
+                    color = textColor,
+                    modifier = Modifier
+                        .padding(horizontal = SpacePaddingLarge)
+                        .padding(vertical = SpacePaddingMedium)
+                )
+            }
+        }
     }
 }
 
