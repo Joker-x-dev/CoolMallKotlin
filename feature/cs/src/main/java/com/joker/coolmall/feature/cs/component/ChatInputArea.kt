@@ -21,6 +21,7 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.unit.dp
+import com.joker.coolmall.core.util.log.LogUtils
 
 /**
  * 聊天输入区域组件，包含输入栏、表情选择器和功能选择器
@@ -115,6 +116,11 @@ fun ChatInputArea(
             onFunctionSelectorToggle = handleFunctionSelectorToggle,
             showFunctionSelector = showFunctionSelector,
             focusRequester = inputFieldFocusRequester,
+            onFocusRequested = {
+                // 在输入框聚焦前关闭表情选择器和功能选择器
+                setShowEmojiSelector(false)
+                setShowFunctionSelector(false)
+            },
             modifier = Modifier.fillMaxWidth()
         )
 

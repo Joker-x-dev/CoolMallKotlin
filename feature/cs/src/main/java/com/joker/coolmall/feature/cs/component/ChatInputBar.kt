@@ -8,8 +8,6 @@ import androidx.compose.animation.scaleOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
-import androidx.compose.foundation.interaction.collectIsFocusedAsState
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,14 +18,12 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
@@ -55,6 +51,7 @@ import com.joker.coolmall.feature.cs.R
  * @param onFunctionSelectorToggle 功能选择器显示状态切换回调
  * @param showFunctionSelector 是否显示功能选择器
  * @param focusRequester 输入框焦点请求器
+ * @param onFocusRequested 输入框聚焦前的回调，用于处理前置逻辑
  * @param modifier 修饰符
  */
 @Composable
@@ -67,29 +64,16 @@ fun ChatInputBar(
     onFunctionSelectorToggle: (Boolean) -> Unit,
     showFunctionSelector: Boolean,
     focusRequester: FocusRequester,
+    onFocusRequested: (() -> Unit)? = null,
     modifier: Modifier = Modifier
 ) {
-    // 创建交互源以监听焦点状态
-    val interactionSource = remember { MutableInteractionSource() }
-    val isFocused by interactionSource.collectIsFocusedAsState()
+    // 软键盘控制器，用于显示和隐藏键盘
     val keyboardController = LocalSoftwareKeyboardController.current
 
     // 检查输入框是否有内容
     val hasInputContent = inputText.isNotEmpty()
 
-    // 当输入框获得焦点且面板打开时，关闭面板
-    LaunchedEffect(isFocused) {
-        if (isFocused && (showEmojiSelector || showFunctionSelector)) {
-            // 如果面板已打开且输入框获得焦点，隐藏键盘但保持焦点
-            keyboardController?.hide()
-        }
-    }
-
-    Surface(
-        modifier = modifier,
-//        color = MaterialTheme.colorScheme.surface,
-//        shadowElevation = 1.dp
-    ) {
+    Surface(modifier = modifier) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -108,20 +92,6 @@ fun ChatInputBar(
                             color = MaterialTheme.colorScheme.surfaceVariant,
                             shape = ShapeExtraLarge
                         )
-                        .clickable(
-                            interactionSource = interactionSource,
-                            indication = null // 移除水波纹效果
-                        ) {
-                            // 点击输入框区域时的处理逻辑
-                            if (showEmojiSelector || showFunctionSelector) {
-                                // 如果面板已打开，只获取焦点但不显示键盘
-                                focusRequester.requestFocus()
-                                keyboardController?.hide()
-                            } else {
-                                // 如果面板未打开，正常获取焦点并显示键盘
-                                focusRequester.requestFocus()
-                            }
-                        }
                         .padding(horizontal = SpacePaddingMedium, vertical = 6.dp),
                     contentAlignment = Alignment.CenterStart
                 ) {
@@ -130,7 +100,12 @@ fun ChatInputBar(
                         onValueChange = onInputTextChange,
                         modifier = Modifier
                             .fillMaxWidth()
-                            .focusRequester(focusRequester),
+                            .focusRequester(focusRequester)
+                            .onFocusChanged { focusState ->
+                                if (focusState.isFocused) {
+                                    onFocusRequested?.invoke()
+                                }
+                            },
                         textStyle = MaterialTheme.typography.bodyMedium.copy(
                             color = MaterialTheme.colorScheme.onSurface
                         ),

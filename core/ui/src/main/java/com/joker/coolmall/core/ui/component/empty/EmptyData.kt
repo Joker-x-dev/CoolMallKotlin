@@ -12,7 +12,7 @@ import com.joker.coolmall.core.ui.R
 @Composable
 fun EmptyData(
     modifier: Modifier = Modifier,
-    onRetryClick: () -> Unit = {}
+    onRetryClick: (() -> Unit)? = null
 ) {
     Empty(
         modifier = modifier,

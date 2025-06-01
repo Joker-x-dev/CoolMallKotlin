@@ -35,7 +35,7 @@ fun Empty(
     subtitle: Int? = null,
     retryButtonText: Int = R.string.click_retry,
     icon: Int = R.drawable.ic_empty_error,
-    onRetryClick: () -> Unit = {}
+    onRetryClick: (() -> Unit)? = null
 ) {
     Column(
         verticalArrangement = Arrangement.Center,
@@ -67,7 +67,7 @@ fun Empty(
         }
 
         // 如果没有传递重试方法，则不显示重试按钮
-        if (onRetryClick == {}) {
+        if (onRetryClick != null) {
             SpaceVerticalXLarge()
             OutlinedButton(
                 onClick = onRetryClick,

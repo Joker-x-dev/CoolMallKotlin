@@ -144,11 +144,13 @@ internal fun CartScreen(
                 title = R.string.cart,
                 showBackIcon = false,
                 actions = {
-                    TextButton(onClick = onToggleEditMode) {
-                        Text(
-                            text = stringResource(id = if (isEditing) R.string.complete else R.string.edit),
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
+                    if (!isEmpty) {
+                        TextButton(onClick = onToggleEditMode) {
+                            Text(
+                                text = stringResource(id = if (isEditing) R.string.complete else R.string.edit),
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
                     }
                 }
             )
