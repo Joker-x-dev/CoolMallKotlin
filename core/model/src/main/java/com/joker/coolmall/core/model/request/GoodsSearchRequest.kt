@@ -23,7 +23,7 @@ data class GoodsSearchRequest(
     /**
      * 商品分类ID列表
      */
-    val typeId: List<Int>? = null,
+    val typeId: List<Long>? = null,
 
     /**
      * 最低价格

@@ -16,12 +16,15 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
+import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.designsystem.theme.TextTertiaryLight
 import com.joker.coolmall.core.model.entity.Goods
+import com.joker.coolmall.core.model.preview.previewGoods
 import com.joker.coolmall.core.ui.component.text.PriceText
 
 /**
@@ -80,5 +83,15 @@ fun GoodsGridItem(
                 )
             }
         }
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun GoodsGridItemPreview() {
+    AppTheme {
+        GoodsGridItem(
+            goods = previewGoods
+        )
     }
 }

@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -21,6 +23,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.joker.coolmall.core.designsystem.component.CenterRow
@@ -42,13 +46,19 @@ import com.joker.coolmall.core.ui.component.text.TextType
 @Composable
 fun SearchTopAppBar(
     onBackClick: () -> Unit,
-    onSearch: (String) -> Unit
+    onSearch: (String) -> Unit,
+    actions: @Composable () -> Unit = {}
 ) {
     var searchText by rememberSaveable { mutableStateOf("") }
+    val focusManager = LocalFocusManager.current
+
+    val performSearch = {
+        onSearch(searchText)
+        focusManager.clearFocus()
+    }
 
     TopAppBar(
         title = {
-            // 搜索输入框（包含内部搜索按钮）
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -75,10 +85,16 @@ fun SearchTopAppBar(
                             .weight(1f)
                             .padding(horizontal = SpaceHorizontalSmall),
                         singleLine = true,
+                        keyboardOptions = KeyboardOptions(
+                            imeAction = ImeAction.Search
+                        ),
+                        keyboardActions = KeyboardActions(
+                            onSearch = { performSearch() }
+                        ),
                         decorationBox = { innerTextField ->
                             if (searchText.isEmpty()) {
                                 AppText(
-                                    text = "请输入商品名称",
+                                    text = "输入内容进行搜索",
                                     type = TextType.TERTIARY
                                 )
                             }
@@ -91,7 +107,7 @@ fun SearchTopAppBar(
                         modifier = Modifier
                             .clip(ShapeCircle)
                             .background(MaterialTheme.colorScheme.primary)
-                            .clickable { onSearch(searchText) }
+                            .clickable { performSearch() }
                             .height(34.dp)
                             .padding(horizontal = SpaceHorizontalXLarge),
                         contentAlignment = Alignment.Center
@@ -109,6 +125,9 @@ fun SearchTopAppBar(
                 ArrowLeftIcon()
             }
         },
+        actions = {
+            actions()
+        },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.surface
         )
@@ -117,7 +136,7 @@ fun SearchTopAppBar(
 
 @Preview(showBackground = true)
 @Composable
-fun SearchTopAppBarPreview(){
+fun SearchTopAppBarPreview() {
     AppTheme {
         SearchTopAppBar(
             onSearch = {},

@@ -1,5 +1,13 @@
 package com.joker.coolmall.core.ui.component.refresh
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
@@ -73,24 +81,44 @@ fun RefreshLayout(
         onRefresh = onRefresh,
         modifier = modifier
     ) {
-        if (isGrid) {
-            // 网格模式
-            RefreshGridContent(
-                gridState = gridState,
-                loadMoreState = loadMoreState,
-                onLoadMore = onLoadMore,
-                shouldTriggerLoadMore = shouldTriggerLoadMore,
-                content = gridContent
-            )
-        } else {
-            // 列表模式
-            RefreshListContent(
-                listState = listState,
-                loadMoreState = loadMoreState,
-                onLoadMore = onLoadMore,
-                shouldTriggerLoadMore = shouldTriggerLoadMore,
-                content = content
-            )
+        // 添加布局切换动画
+        AnimatedContent(
+            targetState = isGrid,
+            transitionSpec = {
+                (fadeIn(animationSpec = tween(300, easing = LinearEasing)) +
+                        scaleIn(
+                            initialScale = 0.92f,
+                            animationSpec = tween(300, easing = LinearEasing)
+                        ))
+                    .togetherWith(
+                        fadeOut(animationSpec = tween(300, easing = LinearEasing)) +
+                                scaleOut(
+                                    targetScale = 0.92f,
+                                    animationSpec = tween(300, easing = LinearEasing)
+                                )
+                    )
+            },
+            label = "layout_switch_animation"
+        ) { targetIsGrid ->
+            if (targetIsGrid) {
+                // 网格模式
+                RefreshGridContent(
+                    gridState = gridState,
+                    loadMoreState = loadMoreState,
+                    onLoadMore = onLoadMore,
+                    shouldTriggerLoadMore = shouldTriggerLoadMore,
+                    content = gridContent
+                )
+            } else {
+                // 列表模式
+                RefreshListContent(
+                    listState = listState,
+                    loadMoreState = loadMoreState,
+                    onLoadMore = onLoadMore,
+                    shouldTriggerLoadMore = shouldTriggerLoadMore,
+                    content = content
+                )
+            }
         }
     }
 }

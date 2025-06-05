@@ -18,9 +18,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -34,18 +31,24 @@ import com.joker.coolmall.core.designsystem.theme.CommonIcon
 import com.joker.coolmall.core.designsystem.theme.ShapeCircle
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalMedium
+import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
+import com.joker.coolmall.core.designsystem.theme.SpacePaddingXSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.model.entity.Goods
 import com.joker.coolmall.core.ui.component.appbar.SearchTopAppBar
 import com.joker.coolmall.core.ui.component.goods.GoodsGridItem
+import com.joker.coolmall.core.ui.component.goods.GoodsListItem
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkListView
 import com.joker.coolmall.core.ui.component.refresh.RefreshLayout
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
 import com.joker.coolmall.core.ui.component.text.AppText
 import com.joker.coolmall.feature.goods.R
 import com.joker.coolmall.feature.goods.component.FilterDialog
+import com.joker.coolmall.feature.goods.model.SortState
+import com.joker.coolmall.feature.goods.model.SortType
 import com.joker.coolmall.feature.goods.viewmodel.GoodsCategoryViewModel
+import com.joker.coolmall.core.ui.R as CoreUiR
 
 /**
  * 商品分类路由
@@ -58,11 +61,17 @@ internal fun GoodsCategoryRoute(
     viewModel: GoodsCategoryViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val categoryUiState by viewModel.categoryUiState.collectAsState()
     val listData by viewModel.listData.collectAsState()
     val isRefreshing by viewModel.isRefreshing.collectAsState()
     val loadMoreState by viewModel.loadMoreState.collectAsState()
-
-    var filtersVisible by remember { mutableStateOf(false) }
+    val filtersVisible by viewModel.filtersVisible.collectAsState()
+    val selectedCategoryIds by viewModel.selectedCategoryIds.collectAsState()
+    val minPrice by viewModel.minPrice.collectAsState()
+    val maxPrice by viewModel.maxPrice.collectAsState()
+    val currentSortType by viewModel.currentSortType.collectAsState()
+    val currentSortState by viewModel.currentSortState.collectAsState()
+    val isGridLayout by viewModel.isGridLayout.collectAsState()
 
     SharedTransitionLayout {
         GoodsCategoryScreen(
@@ -75,11 +84,15 @@ internal fun GoodsCategoryRoute(
             shouldTriggerLoadMore = viewModel::shouldTriggerLoadMore,
             onBackClick = viewModel::navigateBack,
             onRetry = viewModel::retryRequest,
-            onSearch = { searchText ->
-                // TODO: 实现搜索逻辑
-            },
+            onSearch = viewModel::onSearch,
             filtersVisible = filtersVisible,
-            onFiltersClick = { filtersVisible = true },
+            onFiltersClick = viewModel::showFilters,
+            currentSortType = currentSortType,
+            currentSortState = currentSortState,
+            onSortClick = viewModel::onSortClick,
+            toGoodsDetail = viewModel::toGoodsDetailPage,
+            isGridLayout = isGridLayout,
+            onToggleLayout = viewModel::toggleLayoutMode,
             sharedTransitionScope = this@SharedTransitionLayout
         )
 
@@ -91,7 +104,13 @@ internal fun GoodsCategoryRoute(
             FilterDialog(
                 sharedTransitionScope = this@SharedTransitionLayout,
                 animatedVisibilityScope = this@AnimatedVisibility,
-                onDismiss = { filtersVisible = false }
+                onDismiss = viewModel::hideFilters,
+                uiState = categoryUiState,
+                selectedCategoryIds = selectedCategoryIds,
+                minPrice = minPrice,
+                maxPrice = maxPrice,
+                onApplyFilters = viewModel::applyFilters,
+                onResetFilters = viewModel::resetFilters,
             )
         }
     }
@@ -100,10 +119,25 @@ internal fun GoodsCategoryRoute(
 /**
  * 商品分类界面
  *
- * @param uiState 收货地址列表UI状态
- * @param listData 收货地址列表数据
+ * @param uiState 网络请求UI状态
+ * @param listData 商品列表数据
+ * @param isRefreshing 是否正在刷新
+ * @param loadMoreState 加载更多状态
+ * @param onRefresh 下拉刷新回调
+ * @param onLoadMore 加载更多回调
+ * @param shouldTriggerLoadMore 是否应该触发加载更多的判断函数
  * @param onBackClick 返回按钮回调
  * @param onRetry 重试请求回调
+ * @param onSearch 搜索回调
+ * @param filtersVisible 筛选弹窗是否可见
+ * @param onFiltersClick 筛选按钮点击回调
+ * @param currentSortType 当前排序类型
+ * @param currentSortState 当前排序状态
+ * @param onSortClick 排序按钮点击回调
+ * @param toGoodsDetail 跳转到商品详情回调
+ * @param isGridLayout 是否为网格布局
+ * @param onToggleLayout 切换布局模式回调
+ * @param sharedTransitionScope 共享转场作用域
  */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
@@ -120,6 +154,12 @@ internal fun GoodsCategoryScreen(
     onSearch: (String) -> Unit = {},
     filtersVisible: Boolean = false,
     onFiltersClick: () -> Unit = {},
+    currentSortType: SortType = SortType.COMPREHENSIVE,
+    currentSortState: SortState = SortState.NONE,
+    onSortClick: (SortType) -> Unit = {},
+    toGoodsDetail: (Long) -> Unit = {},
+    isGridLayout: Boolean = true,
+    onToggleLayout: () -> Unit = {},
     sharedTransitionScope: SharedTransitionScope
 ) {
     AppScaffold(
@@ -130,11 +170,32 @@ internal fun GoodsCategoryScreen(
             ) {
                 SearchTopAppBar(
                     onBackClick = onBackClick,
-                    onSearch = onSearch
+                    onSearch = onSearch,
+                    actions = {
+                        Box(
+                            modifier = Modifier
+                                .padding(end = SpaceHorizontalSmall)
+                                .clip(ShapeCircle)
+                                .clickable {
+                                    onToggleLayout()
+                                }
+                                .padding(SpacePaddingXSmall)
+                        ) {
+                            CommonIcon(
+                                resId = if (isGridLayout) CoreUiR.drawable.ic_menu_list else CoreUiR.drawable.ic_menu,
+                                size = 24.dp,
+                                tint = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+                    }
                 )
+
                 FilterBar(
                     filtersVisible = filtersVisible,
                     onFiltersClick = onFiltersClick,
+                    currentSortType = currentSortType,
+                    currentSortState = currentSortState,
+                    onSortClick = onSortClick,
                     sharedTransitionScope = sharedTransitionScope
                 )
                 SpaceVerticalSmall()
@@ -152,6 +213,8 @@ internal fun GoodsCategoryScreen(
                 onRefresh = onRefresh,
                 onLoadMore = onLoadMore,
                 shouldTriggerLoadMore = shouldTriggerLoadMore,
+                toGoodsDetail = toGoodsDetail,
+                isGridLayout = isGridLayout
             )
         }
     }
@@ -159,6 +222,15 @@ internal fun GoodsCategoryScreen(
 
 /**
  * 商品分类内容视图
+ *
+ * @param data 商品列表数据
+ * @param isRefreshing 是否正在刷新
+ * @param loadMoreState 加载更多状态
+ * @param onRefresh 下拉刷新回调
+ * @param onLoadMore 加载更多回调
+ * @param shouldTriggerLoadMore 是否应该触发加载更多的判断函数
+ * @param toGoodsDetail 跳转到商品详情回调
+ * @param isGridLayout 是否为网格布局
  */
 @Composable
 private fun GoodsCategoryContentView(
@@ -168,6 +240,8 @@ private fun GoodsCategoryContentView(
     onRefresh: () -> Unit,
     onLoadMore: () -> Unit,
     shouldTriggerLoadMore: (lastIndex: Int, totalCount: Int) -> Boolean,
+    toGoodsDetail: (Long) -> Unit,
+    isGridLayout: Boolean
 ) {
     RefreshLayout(
         isRefreshing = isRefreshing,
@@ -175,13 +249,21 @@ private fun GoodsCategoryContentView(
         onRefresh = onRefresh,
         onLoadMore = onLoadMore,
         shouldTriggerLoadMore = shouldTriggerLoadMore,
-        isGrid = true,
+        isGrid = isGridLayout,
         gridContent = {
             items(data.size) { index ->
-                GoodsGridItem(goods = data[index])
+                GoodsGridItem(goods = data[index], onClick = {
+                    toGoodsDetail(data[index].id)
+                })
             }
         }
-    )
+    ) {
+        items(data.size) { index ->
+            GoodsListItem(goods = data[index], onClick = {
+                toGoodsDetail(data[index].id)
+            })
+        }
+    }
 }
 
 /**
@@ -192,10 +274,12 @@ private fun GoodsCategoryContentView(
 private fun FilterBar(
     filtersVisible: Boolean,
     onFiltersClick: () -> Unit,
+    currentSortType: SortType,
+    currentSortState: SortState,
+    onSortClick: (SortType) -> Unit,
     sharedTransitionScope: SharedTransitionScope
 ) {
     Row(
-//        horizontalArrangement = Arrangement.spacedBy(SpaceHorizontalLarge),
         modifier = Modifier
             .padding(horizontal = SpaceHorizontalMedium)
     ) {
@@ -230,78 +314,130 @@ private fun FilterBar(
             }
         }
 
-        Box(
-            modifier = Modifier
-                .padding(start = SpaceHorizontalLarge)
-                .clip(ShapeCircle)
-                .background(MaterialTheme.colorScheme.background)
-                .padding(horizontal = SpaceHorizontalLarge)
-                .height(32.dp),
-            contentAlignment = Alignment.Center,
+        FilterButton(
+            isSelected = currentSortType == SortType.COMPREHENSIVE,
+            onClick = { onSortClick(SortType.COMPREHENSIVE) }
         ) {
-            AppText("综合")
+            AppText(
+                text = "综合",
+                color = if (currentSortType == SortType.COMPREHENSIVE)
+                    MaterialTheme.colorScheme.primary
+                else
+                    MaterialTheme.colorScheme.onSurface
+            )
         }
 
-        Box(
-            modifier = Modifier
-                .padding(start = SpaceHorizontalLarge)
-                .clip(ShapeCircle)
-                .background(MaterialTheme.colorScheme.background)
-                .padding(horizontal = SpaceHorizontalLarge)
-                .height(32.dp),
-            contentAlignment = Alignment.Center,
-        ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                modifier = Modifier.height(28.dp)
-            ) {
-                AppText("销量")
-                Column(
-                    modifier = Modifier.padding(start = SpaceVerticalXSmall)
-                ) {
-                    CommonIcon(
-                        resId = R.drawable.ic_up_triangle,
-                        size = 8.dp,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
-                    )
-                    CommonIcon(
-                        resId = R.drawable.ic_down_triangle,
-                        size = 8.dp,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
-                    )
-                }
-            }
-        }
+        SortButtonWithArrows(
+            text = "销量",
+            sortType = SortType.SALES,
+            currentSortType = currentSortType,
+            currentSortState = currentSortState,
+            onSortClick = onSortClick
+        )
 
-        Box(
-            modifier = Modifier
-                .padding(start = SpaceHorizontalLarge)
-                .clip(ShapeCircle)
-                .background(MaterialTheme.colorScheme.background)
-                .padding(horizontal = SpaceHorizontalLarge)
-                .height(32.dp),
-            contentAlignment = Alignment.Center,
+        SortButtonWithArrows(
+            text = "价格",
+            sortType = SortType.PRICE,
+            currentSortType = currentSortType,
+            currentSortState = currentSortState,
+            onSortClick = onSortClick
+        )
+    }
+}
+
+/**
+ * 通用筛选按钮组件
+ */
+@Composable
+private fun FilterButton(
+    isSelected: Boolean,
+    onClick: () -> Unit,
+    content: @Composable () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .padding(start = SpaceHorizontalLarge)
+            .clip(ShapeCircle)
+            .background(
+                if (isSelected)
+                    MaterialTheme.colorScheme.primary.copy(alpha = 0.1f)
+                else
+                    MaterialTheme.colorScheme.background
+            )
+            .clickable { onClick() }
+            .padding(horizontal = SpaceHorizontalLarge)
+            .height(32.dp),
+        contentAlignment = Alignment.Center,
+    ) {
+        content()
+    }
+}
+
+/**
+ * 带箭头的排序按钮组件
+ */
+@Composable
+private fun SortButtonWithArrows(
+    text: String,
+    sortType: SortType,
+    currentSortType: SortType,
+    currentSortState: SortState,
+    onSortClick: (SortType) -> Unit
+) {
+    val isSelected = currentSortType == sortType && currentSortState != SortState.NONE
+
+    FilterButton(
+        isSelected = isSelected,
+        onClick = { onSortClick(sortType) }
+    ) {
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.height(28.dp)
         ) {
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                AppText("价格")
-                Column(
-                    modifier = Modifier.padding(start = SpaceVerticalXSmall)
-                ) {
-                    CommonIcon(
-                        resId = R.drawable.ic_up_triangle,
-                        size = 8.dp,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
-                    )
-                    CommonIcon(
-                        resId = R.drawable.ic_down_triangle,
-                        size = 8.dp,
-                        tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
-                    )
-                }
-            }
+            AppText(
+                text = text,
+                color = if (isSelected)
+                    MaterialTheme.colorScheme.primary
+                else
+                    MaterialTheme.colorScheme.onSurface
+            )
+            SortArrows(
+                sortType = sortType,
+                currentSortType = currentSortType,
+                currentSortState = currentSortState
+            )
         }
+    }
+}
+
+/**
+ * 排序箭头组件
+ */
+@Composable
+private fun SortArrows(
+    sortType: SortType,
+    currentSortType: SortType,
+    currentSortState: SortState
+) {
+    Column(
+        modifier = Modifier.padding(start = SpaceVerticalXSmall)
+    ) {
+        CommonIcon(
+            resId = R.drawable.ic_up_triangle,
+            size = 8.dp,
+            tint = if (currentSortType == sortType && currentSortState == SortState.ASC)
+                MaterialTheme.colorScheme.primary
+            else
+                MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
+        )
+        CommonIcon(
+            resId = R.drawable.ic_down_triangle,
+            size = 8.dp,
+            tint = if (currentSortType == sortType && currentSortState == SortState.DESC)
+                MaterialTheme.colorScheme.primary
+            else
+                MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.4f)
+        )
     }
 }
 

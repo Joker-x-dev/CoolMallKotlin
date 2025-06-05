@@ -11,13 +11,18 @@ import com.joker.coolmall.core.model.request.GoodsSearchRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.feature.goods.model.CategoryTree
+import com.joker.coolmall.feature.goods.model.SortState
+import com.joker.coolmall.feature.goods.model.SortType
 import com.joker.coolmall.navigation.AppNavigator
+import com.joker.coolmall.navigation.routes.GoodsRoutes
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
@@ -36,27 +41,221 @@ class GoodsCategoryViewModel @Inject constructor(
     private val _categoryUiState = MutableStateFlow<CategoryUiState>(CategoryUiState.Loading)
     val categoryUiState: StateFlow<CategoryUiState> = _categoryUiState
 
+    /**
+     * 筛选对话框可见性状态
+     */
+    private val _filtersVisible = MutableStateFlow(false)
+    val filtersVisible: StateFlow<Boolean> = _filtersVisible
+
+    /**
+     * 分类数据是否已加载
+     */
+    private var categoryDataLoaded = false
+
+    /**
+     * 选中的分类ID列表
+     */
+    private val _selectedCategoryIds = MutableStateFlow<List<Long>>(emptyList())
+    val selectedCategoryIds: StateFlow<List<Long>> = _selectedCategoryIds
+
+    /**
+     * 最低价格
+     */
+    private val _minPrice = MutableStateFlow("")
+    val minPrice: StateFlow<String> = _minPrice
+
+    /**
+     * 最高价格
+     */
+    private val _maxPrice = MutableStateFlow("")
+    val maxPrice: StateFlow<String> = _maxPrice
+
+    /**
+     * 当前选中的排序类型
+     */
+    private val _currentSortType = MutableStateFlow(SortType.COMPREHENSIVE)
+    val currentSortType: StateFlow<SortType> = _currentSortType
+
+    /**
+     * 当前排序状态
+     */
+    private val _currentSortState = MutableStateFlow(SortState.NONE)
+    val currentSortState: StateFlow<SortState> = _currentSortState
+
+    /**
+     * 搜索关键词
+     */
+    private val _searchKeyword = MutableStateFlow("")
+    val searchKeyword: StateFlow<String> = _searchKeyword
+
+    /**
+     * 是否为网格布局
+     */
+    private val _isGridLayout = MutableStateFlow(false)
+    val isGridLayout: StateFlow<Boolean> = _isGridLayout
+
     init {
         initLoad()
-        loadGoodsCategory()
     }
 
     /**
      * 通过重写来给父类提供API请求的Flow
      */
     override fun requestListData(): Flow<NetworkResponse<NetworkPageData<Goods>>> {
+        val (order, sort) = when (_currentSortType.value) {
+            SortType.COMPREHENSIVE -> null to null
+            SortType.SALES -> {
+                when (_currentSortState.value) {
+                    SortState.ASC -> "sold" to "asc"
+                    SortState.DESC -> "sold" to "desc"
+                    SortState.NONE -> null to null
+                }
+            }
+
+            SortType.PRICE -> {
+                when (_currentSortState.value) {
+                    SortState.ASC -> "price" to "asc"
+                    SortState.DESC -> "price" to "desc"
+                    SortState.NONE -> null to null
+                }
+            }
+        }
+
         return goodsRepository.getGoodsPage(
             GoodsSearchRequest(
                 page = super.currentPage,
-                size = super.pageSize
+                size = super.pageSize,
+                typeId = _selectedCategoryIds.value.takeIf { it.isNotEmpty() },
+                minPrice = _minPrice.value.takeIf { it.isNotBlank() },
+                maxPrice = _maxPrice.value.takeIf { it.isNotBlank() },
+                order = order,
+                sort = sort,
+                keyWord = _searchKeyword.value.takeIf { it.isNotBlank() }
             )
         )
     }
 
     /**
+     * 显示筛选对话框
+     */
+    fun showFilters() {
+        _filtersVisible.value = true
+        // 只在第一次显示时加载分类数据
+        if (categoryDataLoaded) return
+        // 计时 360 毫秒等待动画结束后加载分类数据
+        viewModelScope.launch {
+            delay(340)
+            loadGoodsCategory()
+        }
+    }
+
+    /**
+     * 隐藏筛选对话框
+     */
+    fun hideFilters() {
+        _filtersVisible.value = false
+    }
+
+    /**
+     * 更新选中的分类ID列表
+     */
+    fun updateSelectedCategoryIds(categoryIds: List<Long>) {
+        _selectedCategoryIds.value = categoryIds
+    }
+
+    /**
+     * 更新最低价格
+     */
+    fun updateMinPrice(price: String) {
+        _minPrice.value = price
+    }
+
+    /**
+     * 更新最高价格
+     */
+    fun updateMaxPrice(price: String) {
+        _maxPrice.value = price
+    }
+
+    /**
+     * 应用筛选条件并刷新数据
+     */
+    fun applyFilters(categoryIds: List<Long>, minPrice: String, maxPrice: String) {
+        _selectedCategoryIds.value = categoryIds
+        _minPrice.value = minPrice
+        _maxPrice.value = maxPrice
+        hideFilters()
+        // 重新加载数据
+        onRefresh()
+    }
+
+    /**
+     * 重置筛选条件
+     */
+    fun resetFilters() {
+        _selectedCategoryIds.value = emptyList()
+        _minPrice.value = ""
+        _maxPrice.value = ""
+        // 重新加载数据
+        onRefresh()
+    }
+
+    /**
+     * 处理排序点击事件
+     * @param sortType 点击的排序类型
+     */
+    fun onSortClick(sortType: SortType) {
+        when (sortType) {
+            SortType.COMPREHENSIVE -> {
+                // 综合排序：直接设置为综合，状态为NONE
+                _currentSortType.value = SortType.COMPREHENSIVE
+                _currentSortState.value = SortState.NONE
+            }
+
+            SortType.SALES, SortType.PRICE -> {
+                if (_currentSortType.value == sortType) {
+                    // 同一个排序类型，切换状态：NONE -> ASC -> DESC -> NONE
+                    _currentSortState.value = when (_currentSortState.value) {
+                        SortState.NONE -> SortState.ASC
+                        SortState.ASC -> SortState.DESC
+                        SortState.DESC -> SortState.NONE
+                    }
+                    // 如果状态变为NONE，则切换回综合排序
+                    if (_currentSortState.value == SortState.NONE) {
+                        _currentSortType.value = SortType.COMPREHENSIVE
+                    }
+                } else {
+                    // 不同排序类型，设置新的排序类型并设置为ASC
+                    _currentSortType.value = sortType
+                    _currentSortState.value = SortState.ASC
+                }
+            }
+        }
+        // 重新加载数据
+        onRefresh()
+    }
+
+    /**
+     * 执行搜索
+     * @param keyword 搜索关键词
+     */
+    fun onSearch(keyword: String) {
+        _searchKeyword.value = keyword
+        // 重新加载数据
+        onRefresh()
+    }
+
+    /**
+     * 切换布局模式
+     */
+    fun toggleLayoutMode() {
+        _isGridLayout.value = !_isGridLayout.value
+    }
+
+    /**
      * 加载商品分类
      */
-    fun loadGoodsCategory() {
+    private fun loadGoodsCategory() {
         ResultHandler.handleResultWithData(
             scope = viewModelScope,
             flow = goodsRepository.getGoodsTypeList().asResult(),
@@ -65,11 +264,19 @@ class GoodsCategoryViewModel @Inject constructor(
             onData = { data ->
                 val categoryTree = convertToTree(data)
                 _categoryUiState.value = CategoryUiState.Success(categoryTree)
+                categoryDataLoaded = true
             },
             onError = { message, exception ->
                 _categoryUiState.value = CategoryUiState.Error()
             }
         )
+    }
+
+    /**
+     * 跳转到商品详情页面
+     */
+    fun toGoodsDetailPage(goodsId: Long) {
+        super.toPage(GoodsRoutes.DETAIL, goodsId)
     }
 
     /**
