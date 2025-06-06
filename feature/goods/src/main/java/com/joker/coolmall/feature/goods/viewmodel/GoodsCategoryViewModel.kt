@@ -1,6 +1,7 @@
 package com.joker.coolmall.feature.goods.viewmodel
 
 import CategoryUiState
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkListViewModel
 import com.joker.coolmall.core.data.repository.GoodsRepository
@@ -32,6 +33,7 @@ import javax.inject.Inject
 class GoodsCategoryViewModel @Inject constructor(
     navigator: AppNavigator,
     appState: AppState,
+    savedStateHandle: SavedStateHandle,
     private val goodsRepository: GoodsRepository
 ) : BaseNetWorkListViewModel<Goods>(navigator, appState) {
 
@@ -85,16 +87,40 @@ class GoodsCategoryViewModel @Inject constructor(
     /**
      * 搜索关键词
      */
-    private val _searchKeyword = MutableStateFlow("")
-    val searchKeyword: StateFlow<String> = _searchKeyword
+    private var searchKeyword = ""
 
     /**
      * 是否为网格布局
      */
-    private val _isGridLayout = MutableStateFlow(false)
+    private val _isGridLayout = MutableStateFlow(true)
     val isGridLayout: StateFlow<Boolean> = _isGridLayout
 
+    /**
+     * 是否为限时精选
+     */
+    private var isFeatured = false
+
+    /**
+     * 是否为推荐商品
+     */
+    private var isRecommend = false
+
     init {
+        // 从路由参数获取分类ID并设置
+        val typeIdParam = savedStateHandle.get<String>("type_id")
+        if (!typeIdParam.isNullOrBlank()) {
+            val categoryIds = typeIdParam.split(",")
+                .mapNotNull { it.trim().toLongOrNull() }
+            _selectedCategoryIds.value = categoryIds
+        }
+
+        // 从路由参数获取featured参数
+        isFeatured = savedStateHandle.get<Boolean>("featured") ?: false
+
+        // 从路由参数获取recommend参数
+        isRecommend = savedStateHandle.get<Boolean>("recommend") ?: false
+
+        // 加载数据
         initLoad()
     }
 
@@ -125,12 +151,14 @@ class GoodsCategoryViewModel @Inject constructor(
             GoodsSearchRequest(
                 page = super.currentPage,
                 size = super.pageSize,
+                featured = isFeatured,
+                recommend = isRecommend,
                 typeId = _selectedCategoryIds.value.takeIf { it.isNotEmpty() },
                 minPrice = _minPrice.value.takeIf { it.isNotBlank() },
                 maxPrice = _maxPrice.value.takeIf { it.isNotBlank() },
                 order = order,
                 sort = sort,
-                keyWord = _searchKeyword.value.takeIf { it.isNotBlank() }
+                keyWord = searchKeyword.takeIf { it.isNotBlank() }
             )
         )
     }
@@ -154,27 +182,6 @@ class GoodsCategoryViewModel @Inject constructor(
      */
     fun hideFilters() {
         _filtersVisible.value = false
-    }
-
-    /**
-     * 更新选中的分类ID列表
-     */
-    fun updateSelectedCategoryIds(categoryIds: List<Long>) {
-        _selectedCategoryIds.value = categoryIds
-    }
-
-    /**
-     * 更新最低价格
-     */
-    fun updateMinPrice(price: String) {
-        _minPrice.value = price
-    }
-
-    /**
-     * 更新最高价格
-     */
-    fun updateMaxPrice(price: String) {
-        _maxPrice.value = price
     }
 
     /**
@@ -240,7 +247,7 @@ class GoodsCategoryViewModel @Inject constructor(
      * @param keyword 搜索关键词
      */
     fun onSearch(keyword: String) {
-        _searchKeyword.value = keyword
+        searchKeyword = keyword
         // 重新加载数据
         onRefresh()
     }

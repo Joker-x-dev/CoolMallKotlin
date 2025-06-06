@@ -75,6 +75,8 @@ internal fun HomeRoute(
     HomeScreen(
         uiState = uiState,
         toGoodsDetail = viewModel::toGoodsDetail,
+        toGoodsCategory = viewModel::toGoodsCategoryPage,
+        toFlashSalePage = viewModel::toFlashSalePage,
         onRetry = viewModel::retryRequest
     )
 }
@@ -87,6 +89,8 @@ internal fun HomeRoute(
 internal fun HomeScreen(
     uiState: BaseNetWorkUiState<Home> = BaseNetWorkUiState.Loading,
     toGoodsDetail: (Long) -> Unit = {},
+    toGoodsCategory: (Long) -> Unit = {},
+    toFlashSalePage: () -> Unit = {},
     onRetry: () -> Unit = {}
 ) {
     CommonScaffold(
@@ -99,7 +103,9 @@ internal fun HomeScreen(
         ) {
             HomeContentView(
                 data = it,
-                toGoodsDetail = toGoodsDetail
+                toGoodsDetail = toGoodsDetail,
+                toGoodsCategory = toGoodsCategory,
+                toFlashSalePage = toFlashSalePage
             )
         }
     }
@@ -109,7 +115,12 @@ internal fun HomeScreen(
  * 主页内容
  */
 @Composable
-private fun HomeContentView(data: Home, toGoodsDetail: (Long) -> Unit) {
+private fun HomeContentView(
+    data: Home, 
+    toGoodsDetail: (Long) -> Unit,
+    toGoodsCategory: (Long) -> Unit,
+    toFlashSalePage: () -> Unit
+) {
     // 创建一个主垂直滚动容器
     val scrollState = rememberScrollState()
     // 所有内容放在一个垂直滚动的Column中
@@ -127,7 +138,10 @@ private fun HomeContentView(data: Home, toGoodsDetail: (Long) -> Unit) {
 
         // 分类
         data.category.let {
-            Category(it!!)
+            Category(
+                categories = it!!,
+                onCategoryClick = toGoodsCategory
+            )
             SpaceVerticalMedium()
         }
 
@@ -135,7 +149,8 @@ private fun HomeContentView(data: Home, toGoodsDetail: (Long) -> Unit) {
         data.flashSale.let {
             FlashSale(
                 goods = it!!,
-                toGoodsDetail = toGoodsDetail
+                toGoodsDetail = toGoodsDetail,
+                toFlashSalePage = toFlashSalePage
             )
             SpaceVerticalMedium()
         }
@@ -229,7 +244,10 @@ private fun Banner(banners: List<Banner>) {
  * 分类
  */
 @Composable
-private fun Category(categories: List<Category>) {
+private fun Category(
+    categories: List<Category>,
+    onCategoryClick: (Long) -> Unit = {}
+) {
     AppCard {
         // 每行5个进行分组
         val rows = categories.chunked(5)
@@ -243,10 +261,11 @@ private fun Category(categories: List<Category>) {
             ) {
                 rowCategories.forEach { category ->
                     CategoryItem(
-                        category, Modifier
+                        category = category,
+                        onClick = { onCategoryClick(category.id) },
+                        modifier = Modifier
                             .weight(1f)
                             .clip(ShapeSmall)
-                            .clickable(onClick = { })
                     )
                 }
 
@@ -263,10 +282,16 @@ private fun Category(categories: List<Category>) {
  * 分类项
  */
 @Composable
-private fun CategoryItem(category: Category, modifier: Modifier = Modifier) {
+private fun CategoryItem(
+    category: Category, 
+    onClick: () -> Unit = {},
+    modifier: Modifier = Modifier
+) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        modifier = modifier.padding(vertical = 4.dp)
+        modifier = modifier
+            .clickable(onClick = onClick)
+            .padding(vertical = 4.dp)
     ) {
         NetWorkImage(
             model = category.pic,
@@ -284,12 +309,17 @@ private fun CategoryItem(category: Category, modifier: Modifier = Modifier) {
  * 限时精选卡片 - 使用LazyRow
  */
 @Composable
-private fun FlashSale(goods: List<Goods>, toGoodsDetail: (Long) -> Unit) {
+private fun FlashSale(
+    goods: List<Goods>, 
+    toGoodsDetail: (Long) -> Unit,
+    toFlashSalePage: () -> Unit
+) {
     Card {
         AppListItem(
             title = "限时精选",
             trailingText = "查看全部",
             leadingIcon = R.drawable.ic_time,
+            onClick = toFlashSalePage
         )
 
         // 商品列表 - 使用LazyRow

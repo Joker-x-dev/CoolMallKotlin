@@ -48,5 +48,15 @@ data class GoodsSearchRequest(
     /**
      * 排序方式："asc"升序，"desc"降序
      */
-    val sort: String? = null
+    val sort: String? = null,
+
+    /**
+     * 推荐
+     */
+    val recommend: Boolean = false,
+
+    /**
+     * 精选
+     */
+    val featured: Boolean = false,
 )

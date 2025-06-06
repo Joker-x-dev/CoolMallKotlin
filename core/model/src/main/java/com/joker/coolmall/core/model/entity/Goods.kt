@@ -54,6 +54,16 @@ data class Goods(
     val content: String? = null,
 
     /**
+     * 推荐
+     */
+    val recommend: Boolean = false,
+
+    /**
+     * 精选
+     */
+    val featured: Boolean = false,
+
+    /**
      * 状态 0-下架 1-上架
      */
     val status: Int = 0,

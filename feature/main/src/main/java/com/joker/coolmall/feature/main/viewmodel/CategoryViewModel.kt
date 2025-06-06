@@ -75,9 +75,10 @@ class CategoryViewModel @Inject constructor(
 
     /**
      * 跳转到商品分类页面
+     * @param categoryId 点击的分类ID
      */
-    fun toGoodsCategoryPage(id: Long) {
-        toPage(GoodsRoutes.CATEGORY, id)
+    fun toGoodsCategoryPage(categoryId: Long) {
+        toPage("${GoodsRoutes.CATEGORY}?type_id=$categoryId")
     }
 
     /**

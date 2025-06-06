@@ -19,9 +19,19 @@ data class Home(
     val category: List<Category>? = null,
 
     /**
-     * 限时商品
+     * 全部分类
+     */
+    val categoryAll: List<Category>? = null,
+
+    /**
+     * 限时精选商品
      */
     val flashSale: List<Goods>? = null,
+
+    /**
+     * 推荐商品
+     */
+    val recommend: List<Goods>? = null,
 
     /**
      * 商品
