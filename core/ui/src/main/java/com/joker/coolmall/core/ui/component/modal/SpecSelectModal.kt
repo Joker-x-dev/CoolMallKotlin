@@ -154,10 +154,10 @@ fun SpecSelectModal(
         BaseNetWorkView(
             uiState = uiState,
             customLoading = {
-                PageLoading(modifier = Modifier.height(460.dp))
+                PageLoading(modifier = Modifier.height(300.dp))
             },
             customError = {
-                EmptyNetwork(modifier = Modifier.height(460.dp), onRetryClick = onRetry)
+                EmptyNetwork(modifier = Modifier.height(300.dp), onRetryClick = onRetry)
             },
         ) { specs ->
             SpecSelectModalContentView(

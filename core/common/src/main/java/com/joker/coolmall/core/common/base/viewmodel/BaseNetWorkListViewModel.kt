@@ -46,7 +46,7 @@ abstract class BaseNetWorkListViewModel<T : Any>(
     /**
      * 网络请求UI状态
      */
-    private val _uiState = MutableStateFlow<BaseNetWorkListUiState>(BaseNetWorkListUiState.Loading)
+    val _uiState = MutableStateFlow<BaseNetWorkListUiState>(BaseNetWorkListUiState.Loading)
     val uiState: StateFlow<BaseNetWorkListUiState> = _uiState.asStateFlow()
 
     /**
@@ -64,7 +64,7 @@ abstract class BaseNetWorkListViewModel<T : Any>(
     /**
      * 下拉刷新状态 (仅用于PullToRefresh组件)
      */
-    private val _isRefreshing = MutableStateFlow(false)
+    val _isRefreshing = MutableStateFlow(false)
     val isRefreshing: StateFlow<Boolean> = _isRefreshing.asStateFlow()
 
     /**
@@ -182,7 +182,7 @@ abstract class BaseNetWorkListViewModel<T : Any>(
     /**
      * 触发下拉刷新
      */
-    fun onRefresh() {
+    open fun onRefresh() {
         // 如果正在加载中，则不重复请求
         if (_loadMoreState.value == LoadMoreState.Loading) {
             return
@@ -196,7 +196,7 @@ abstract class BaseNetWorkListViewModel<T : Any>(
     /**
      * 加载更多数据
      */
-    fun onLoadMore() {
+    open fun onLoadMore() {
         // 只有在可加载更多和加载失败状态下才能触发加载
         if (_loadMoreState.value == LoadMoreState.Loading ||
             _loadMoreState.value == LoadMoreState.NoMore ||

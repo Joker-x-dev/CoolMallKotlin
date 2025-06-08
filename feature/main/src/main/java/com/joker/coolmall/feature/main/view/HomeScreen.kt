@@ -13,11 +13,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridItemSpan
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -38,14 +37,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
+import com.joker.coolmall.core.common.base.state.BaseNetWorkListUiState
+import com.joker.coolmall.core.common.base.state.LoadMoreState
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.LogoIcon
 import com.joker.coolmall.core.designsystem.theme.ShapeMedium
 import com.joker.coolmall.core.designsystem.theme.ShapeSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
-import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.model.entity.Banner
@@ -56,7 +55,8 @@ import com.joker.coolmall.core.ui.component.card.AppCard
 import com.joker.coolmall.core.ui.component.goods.GoodsGridItem
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
 import com.joker.coolmall.core.ui.component.list.AppListItem
-import com.joker.coolmall.core.ui.component.network.BaseNetWorkView
+import com.joker.coolmall.core.ui.component.network.BaseNetWorkListView
+import com.joker.coolmall.core.ui.component.refresh.RefreshLayout
 import com.joker.coolmall.core.ui.component.swiper.WeSwiper
 import com.joker.coolmall.core.ui.component.title.TitleWithLine
 import com.joker.coolmall.feature.main.R
@@ -72,8 +72,20 @@ internal fun HomeRoute(
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
+    val pageData by viewModel.pageData.collectAsState()
+    val listData by viewModel.listData.collectAsState()
+    val isRefreshing by viewModel.isRefreshing.collectAsState()
+    val loadMoreState by viewModel.loadMoreState.collectAsState()
+
     HomeScreen(
         uiState = uiState,
+        pageData = pageData,
+        listData = listData,
+        isRefreshing = isRefreshing,
+        loadMoreState = loadMoreState,
+        onRefresh = viewModel::onRefresh,
+        onLoadMore = viewModel::onLoadMore,
+        shouldTriggerLoadMore = viewModel::shouldTriggerLoadMore,
         toGoodsDetail = viewModel::toGoodsDetail,
         toGoodsCategory = viewModel::toGoodsCategoryPage,
         toFlashSalePage = viewModel::toFlashSalePage,
@@ -83,11 +95,30 @@ internal fun HomeRoute(
 
 /**
  * 首页UI
+ * @param uiState 网络请求UI状态
+ * @param pageData 页面数据
+ * @param listData 商品列表数据
+ * @param isRefreshing 是否正在刷新
+ * @param loadMoreState 加载更多状态
+ * @param onRefresh 下拉刷新回调
+ * @param onLoadMore 加载更多回调
+ * @param shouldTriggerLoadMore 是否应该触发加载更多的判断函数
+ * @param toGoodsDetail 跳转到商品详情页
+ * @param toGoodsCategory 跳转到商品分类页
+ * @param toFlashSalePage 跳转到限时精选页
+ * @param onRetry 重试请求回调
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun HomeScreen(
-    uiState: BaseNetWorkUiState<Home> = BaseNetWorkUiState.Loading,
+    uiState: BaseNetWorkListUiState = BaseNetWorkListUiState.Loading,
+    pageData: Home = Home(),
+    listData: List<Goods> = emptyList(),
+    isRefreshing: Boolean = false,
+    loadMoreState: LoadMoreState = LoadMoreState.Success,
+    onRefresh: () -> Unit = {},
+    onLoadMore: () -> Unit = {},
+    shouldTriggerLoadMore: (lastIndex: Int, totalCount: Int) -> Boolean = { _, _ -> false },
     toGoodsDetail: (Long) -> Unit = {},
     toGoodsCategory: (Long) -> Unit = {},
     toFlashSalePage: () -> Unit = {},
@@ -96,13 +127,19 @@ internal fun HomeScreen(
     CommonScaffold(
         topBar = { HomeTopAppBar() }
     ) {
-        BaseNetWorkView(
+        BaseNetWorkListView(
             uiState = uiState,
             padding = it,
             onRetry = onRetry
         ) {
             HomeContentView(
-                data = it,
+                data = pageData,
+                listData = listData,
+                isRefreshing = isRefreshing,
+                loadMoreState = loadMoreState,
+                onRefresh = onRefresh,
+                onLoadMore = onLoadMore,
+                shouldTriggerLoadMore = shouldTriggerLoadMore,
                 toGoodsDetail = toGoodsDetail,
                 toGoodsCategory = toGoodsCategory,
                 toFlashSalePage = toFlashSalePage
@@ -113,95 +150,88 @@ internal fun HomeScreen(
 
 /**
  * 主页内容
+ * @param data 页面数据
+ * @param listData 商品列表数据
+ * @param isRefreshing 是否正在刷新
+ * @param loadMoreState 加载更多状态
+ * @param onRefresh 下拉刷新回调
+ * @param onLoadMore 加载更多回调
+ * @param shouldTriggerLoadMore 是否应该触发加载更多的判断函数
+ * @param toGoodsDetail 跳转到商品详情页
+ * @param toGoodsCategory 跳转到商品分类页
+ * @param toFlashSalePage 跳转到限时精选页
  */
 @Composable
 private fun HomeContentView(
-    data: Home, 
+    data: Home,
+    listData: List<Goods>,
+    isRefreshing: Boolean,
+    loadMoreState: LoadMoreState,
+    onRefresh: () -> Unit,
+    onLoadMore: () -> Unit,
+    shouldTriggerLoadMore: (lastIndex: Int, totalCount: Int) -> Boolean,
     toGoodsDetail: (Long) -> Unit,
     toGoodsCategory: (Long) -> Unit,
     toFlashSalePage: () -> Unit
 ) {
-    // 创建一个主垂直滚动容器
-    val scrollState = rememberScrollState()
-    // 所有内容放在一个垂直滚动的Column中
-    Column(
-        modifier = Modifier
-            .verticalScroll(scrollState)
-            .padding(SpacePaddingMedium)
-    ) {
 
-        // 轮播图
-        data.banner.let {
-            Banner(it!!)
-            SpaceVerticalMedium()
-        }
+    RefreshLayout(
+        isGrid = true,
+        isRefreshing = isRefreshing,
+        loadMoreState = loadMoreState,
+        onRefresh = onRefresh,
+        onLoadMore = onLoadMore,
+        shouldTriggerLoadMore = shouldTriggerLoadMore,
+        gridContent = {
 
-        // 分类
-        data.category.let {
-            Category(
-                categories = it!!,
-                onCategoryClick = toGoodsCategory
-            )
-            SpaceVerticalMedium()
-        }
+            // 轮播图
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                data.banner?.let { banners ->
+                    Banner(banners)
+                }
+            }
 
-        // 限时精选
-        data.flashSale.let {
-            FlashSale(
-                goods = it!!,
-                toGoodsDetail = toGoodsDetail,
-                toFlashSalePage = toFlashSalePage
-            )
-            SpaceVerticalMedium()
-        }
-
-        // 推荐商品标题和列表
-        data.goods.let {
-            TitleWithLine(
-                text = "推荐商品",
-                modifier = Modifier.padding(vertical = SpaceVerticalSmall)
-            )
-            // 商品列表 - 使用Row+Column布局
-            ProductsGrid(
-                goods = it!!,
-                toGoodsDetail = toGoodsDetail
-            )
-        }
-    }
-}
-
-/**
- * 商品网格实现
- */
-@Composable
-private fun ProductsGrid(goods: List<Goods>, toGoodsDetail: (Long) -> Unit) {
-    // 将商品列表按每行2个进行分组
-    val rows = goods.chunked(2)
-
-    // 使用Column+Row组合布局
-    Column(
-        verticalArrangement = Arrangement.spacedBy(SpaceVerticalSmall)
-    ) {
-        rows.forEach { rowItems ->
-            Row(
-                horizontalArrangement = Arrangement.spacedBy(SpaceHorizontalSmall),
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                rowItems.forEach { goods ->
-                    GoodsGridItem(
-                        goods = goods,
-                        onClick = toGoodsDetail,
-                        modifier = Modifier.weight(1f)
+            // 分类
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                data.category?.let { categories ->
+                    Category(
+                        categories = categories,
+                        onCategoryClick = toGoodsCategory
                     )
                 }
+            }
 
-                // 如果一行只有一个商品，添加空白占位
-                if (rowItems.size == 1) {
-                    Spacer(modifier = Modifier.weight(1f))
+            // 限时精选
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                data.flashSale?.let { flashSaleGoods ->
+                    FlashSale(
+                        goods = flashSaleGoods,
+                        toGoodsDetail = toGoodsDetail,
+                        toFlashSalePage = toFlashSalePage
+                    )
+                }
+            }
+
+            // 推荐商品标题
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                data.goods?.let {
+                    TitleWithLine(
+                        text = "推荐商品",
+                        modifier = Modifier.padding(vertical = SpaceVerticalSmall)
+                    )
+                }
+            }
+
+            // 推荐商品列表
+            listData.let { goods ->
+                items(goods.size) { index ->
+                    GoodsGridItem(goods = goods[index], onClick = {
+                        toGoodsDetail(goods[index].id)
+                    })
                 }
             }
         }
-    }
+    )
 }
 
 /**
@@ -283,7 +313,7 @@ private fun Category(
  */
 @Composable
 private fun CategoryItem(
-    category: Category, 
+    category: Category,
     onClick: () -> Unit = {},
     modifier: Modifier = Modifier
 ) {
@@ -310,7 +340,7 @@ private fun CategoryItem(
  */
 @Composable
 private fun FlashSale(
-    goods: List<Goods>, 
+    goods: List<Goods>,
     toGoodsDetail: (Long) -> Unit,
     toFlashSalePage: () -> Unit
 ) {
