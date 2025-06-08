@@ -15,6 +15,7 @@ import com.joker.coolmall.core.model.entity.SelectedGoods
 import com.joker.coolmall.core.model.request.CreateOrderRequest
 import com.joker.coolmall.core.model.request.CreateOrderRequest.CreateOrder
 import com.joker.coolmall.core.model.response.NetworkResponse
+import com.joker.coolmall.core.util.log.LogUtils
 import com.joker.coolmall.core.util.storage.MMKVUtils
 import com.joker.coolmall.feature.order.navigation.OrderPayRoutes
 import com.joker.coolmall.navigation.AppNavigator
@@ -106,6 +107,7 @@ class OrderConfirmViewModel @Inject constructor(
         executeRequest()
         // 清除选中商品缓存，避免重复使用
         MMKVUtils.remove("selectedGoodsList")
+        MMKVUtils.remove("carts")
     }
 
     override fun requestApiFlow(): Flow<NetworkResponse<Address>> {
@@ -140,9 +142,6 @@ class OrderConfirmViewModel @Inject constructor(
                 if (cachedCarts != null && cachedCarts.isNotEmpty()) {
                     deleteCartItems()
                 }
-
-                // 清除缓存
-                MMKVUtils.remove("carts")
 
                 // 跳转到支付页面
                 navigateToPayment(data)

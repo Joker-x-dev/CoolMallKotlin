@@ -22,7 +22,4 @@ dependencies {
     // lottie 动画
     // https://airbnb.io/lottie/#/android-compose
     implementation(libs.lottie.compose)
-
-    // jsoup HTML解析库（用于HTML富文本渲染）
-    implementation(libs.jsoup)
 }

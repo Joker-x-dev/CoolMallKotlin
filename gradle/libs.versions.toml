@@ -65,9 +65,6 @@ mmkv = "2.1.0"
 # lottie
 lottieCompose = "6.3.0"
 
-# html 解析
-jsoup = "1.17.2"
-
 leakcanaryAndroid = "2.14"
 
 # Room 数据库
@@ -146,9 +143,6 @@ mmkv = { group = "com.tencent", name = "mmkv", version.ref = "mmkv" }
 
 # lottie
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottieCompose" }
-
-# html 解析
-jsoup = { module = "org.jsoup:jsoup", version.ref = "jsoup" }
 
 # LeakCanary - 内存泄漏检测工具
 # https://github.com/square/leakcanary

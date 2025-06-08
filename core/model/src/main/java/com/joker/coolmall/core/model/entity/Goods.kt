@@ -49,9 +49,14 @@ data class Goods(
     val sold: Int = 0,
 
     /**
-     * 详情
+     * 详情富文本(已弃用)
      */
     val content: String? = null,
+
+    /**
+     * 详情图片
+     */
+    val contentPics: List<String>? = null,
 
     /**
      * 推荐

@@ -31,6 +31,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -54,6 +55,7 @@ import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -90,12 +92,13 @@ import com.joker.coolmall.core.ui.component.button.ButtonStyle
 import com.joker.coolmall.core.ui.component.button.ButtonType
 import com.joker.coolmall.core.ui.component.card.AppCard
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
+import com.joker.coolmall.core.ui.component.list.AppListItem
 import com.joker.coolmall.core.ui.component.modal.SpecSelectModal
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkView
 import com.joker.coolmall.core.ui.component.swiper.WeSwiper
 import com.joker.coolmall.core.ui.component.text.PriceText
 import com.joker.coolmall.core.ui.component.text.TextSize
-import com.joker.coolmall.core.ui.htmltext.HtmlText
+import com.joker.coolmall.core.ui.component.title.TitleWithLine
 import com.joker.coolmall.feature.goods.R
 import com.joker.coolmall.feature.goods.viewmodel.GoodsDetailViewModel
 import kotlinx.coroutines.flow.collectLatest
@@ -375,8 +378,8 @@ private fun GoodsDetailContentWithScroll(
             SpaceVerticalMedium()
 
             // 图文详情
-            data.content.let {
-                GoodsDetailCard(data.content!!)
+            if (data.contentPics != null) {
+                GoodsDetailCard(data.contentPics!!)
             }
 
             // 底部安全区域（为底部操作栏留出空间）
@@ -622,56 +625,54 @@ private fun SpecSelection(
  */
 @Composable
 private fun GoodsDeliveryCard() {
-    AppCard(lineTitle = "发货与服务") {
+    Card {
+        AppListItem(
+            title = "",
+            showArrow = false,
+            leadingContent = {
+                TitleWithLine(text = "发货与服务")
+            }
+        )
 
-        SpaceVerticalMedium()
+        AppListItem(
+            title = "送至",
+            showArrow = false,
+            trailingText = "广州市 天河区"
+        )
 
-        Row(verticalAlignment = Alignment.CenterVertically) {
-            Text(
-                text = "送至",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-            )
-
-            SpaceVerticalMedium()
-
-            Text(
-                text = "广州市 天河区",
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
-
-        SpaceVerticalSmall()
-
-        Row(
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            Text(
-                text = "服务",
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
-            )
-
-            SpaceVerticalMedium()
-
-            Text(
-                text = "7天无理由退货·运费险·48小时发货",
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
+        AppListItem(
+            title = "服务",
+            showArrow = false,
+            showDivider = false,
+            trailingText = "7天无理由退货·运费险·48小时发货"
+        )
     }
 }
 
 /**
  * 商品详情卡片
  *
- * @param content 商品详情的HTML内容，包含图文详情
+ * @param contentPics 商品详情图片列表
  */
 @Composable
-private fun GoodsDetailCard(content: String) {
-    AppCard(lineTitle = R.string.goods_detail) {
-        // 详情富文本
-        HtmlText(content)
+private fun GoodsDetailCard(contentPics: List<String>) {
+    Card {
+        AppListItem(
+            title = "",
+            showArrow = false,
+            leadingContent = {
+                TitleWithLine(text = stringResource(id = R.string.goods_detail))
+            }
+        )
+
+        // 循环图片
+        contentPics.forEachIndexed { index, pic ->
+            NetWorkImage(
+                model = pic,
+                modifier = Modifier
+                    .fillMaxWidth()
+            )
+        }
     }
 }
 
