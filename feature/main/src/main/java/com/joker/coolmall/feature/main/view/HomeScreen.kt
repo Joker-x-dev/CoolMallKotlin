@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.grid.GridItemSpan
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -187,14 +187,14 @@ private fun HomeContentView(
         gridContent = {
 
             // 轮播图
-            item(span = { GridItemSpan(maxLineSpan) }) {
+            item(span = StaggeredGridItemSpan.FullLine) {
                 data.banner?.let { banners ->
                     Banner(banners)
                 }
             }
 
             // 分类
-            item(span = { GridItemSpan(maxLineSpan) }) {
+            item(span = StaggeredGridItemSpan.FullLine) {
                 data.category?.let { categories ->
                     Category(
                         categories = categories,
@@ -204,7 +204,7 @@ private fun HomeContentView(
             }
 
             // 限时精选
-            item(span = { GridItemSpan(maxLineSpan) }) {
+            item(span = StaggeredGridItemSpan.FullLine) {
                 data.flashSale?.let { flashSaleGoods ->
                     FlashSale(
                         goods = flashSaleGoods,
@@ -215,7 +215,7 @@ private fun HomeContentView(
             }
 
             // 推荐商品标题
-            item(span = { GridItemSpan(maxLineSpan) }) {
+            item(span = StaggeredGridItemSpan.FullLine) {
                 data.goods?.let {
                     TitleWithLine(
                         text = "推荐商品",
@@ -225,7 +225,7 @@ private fun HomeContentView(
             }
 
             // 推荐商品列表
-            item(span = { GridItemSpan(maxLineSpan) }) {
+            item(span = StaggeredGridItemSpan.FullLine) {
                 VerticalList(padding = 0.dp) {
                     data.recommend?.forEach { goods ->
                         GoodsListItem(
@@ -237,7 +237,7 @@ private fun HomeContentView(
             }
 
             // 全部商品标题
-            item(span = { GridItemSpan(maxLineSpan) }) {
+            item(span = StaggeredGridItemSpan.FullLine) {
                 data.goods?.let {
                     TitleWithLine(
                         text = "全部商品",

@@ -16,13 +16,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.GridItemSpan
-import androidx.compose.foundation.lazy.grid.LazyGridScope
-import androidx.compose.foundation.lazy.grid.LazyGridState
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.rememberLazyGridState
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridScope
+import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
+import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
@@ -66,13 +66,13 @@ fun RefreshLayout(
     modifier: Modifier = Modifier,
     isGrid: Boolean = false,
     listState: LazyListState? = null,
-    gridState: LazyGridState? = null,
+    gridState: LazyStaggeredGridState? = null,
     isRefreshing: Boolean = false,
     loadMoreState: LoadMoreState = LoadMoreState.PullToLoad,
     onRefresh: () -> Unit = {},
     onLoadMore: () -> Unit = {},
     shouldTriggerLoadMore: (lastIndex: Int, totalCount: Int) -> Boolean = { _, _ -> false },
-    gridContent: LazyGridScope.() -> Unit = {},
+    gridContent: LazyStaggeredGridScope.() -> Unit = {},
     content: LazyListScope.() -> Unit = {},
 ) {
     // 下拉刷新容器
@@ -187,18 +187,19 @@ private fun RefreshListContent(
 }
 
 /**
- * 网格内容组件
+ * 网格内容组件（已改为交错瀑布流 StaggeredGrid）
  */
 @Composable
 private fun RefreshGridContent(
-    gridState: LazyGridState?,
+    gridState: LazyStaggeredGridState? = null,
     loadMoreState: LoadMoreState,
     onLoadMore: () -> Unit,
     shouldTriggerLoadMore: (lastIndex: Int, totalCount: Int) -> Boolean,
-    content: LazyGridScope.() -> Unit
+    content: LazyStaggeredGridScope.() -> Unit
 ) {
-    // 如果未提供网格状态，则创建一个
-    val actualGridState = gridState ?: rememberLazyGridState()
+
+    // 如果未提供列表状态，则创建一个
+    val actualGridState = gridState ?: rememberLazyStaggeredGridState()
 
     // 监听是否需要加载更多
     val shouldLoadMore by remember {
@@ -221,23 +222,24 @@ private fun RefreshGridContent(
     }
 
     // 网格模式
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
+    LazyVerticalStaggeredGrid(
+        columns = StaggeredGridCells.Fixed(2),
         modifier = Modifier.fillMaxSize(),
         contentPadding = PaddingValues(SpacePaddingMedium),
         horizontalArrangement = Arrangement.spacedBy(SpacePaddingMedium),
-        verticalArrangement = Arrangement.spacedBy(SpacePaddingMedium),
+        verticalItemSpacing = SpacePaddingMedium,
         state = actualGridState
     ) {
-        // 网格内容
+
+        // 内容
         content()
 
-        // 添加加载更多组件，跨越所有列
-        item(span = { GridItemSpan(maxLineSpan) }) {
+        // 添加加载更多组件
+        item(span = StaggeredGridItemSpan.FullLine) {
             LoadMore(
                 modifier = Modifier.padding(horizontal = SpaceHorizontalXXLarge),
                 state = loadMoreState,
-                listState = null, // 网格模式下不需要传递 listState
+                listState = null,
                 onRetry = onLoadMore
             )
         }
