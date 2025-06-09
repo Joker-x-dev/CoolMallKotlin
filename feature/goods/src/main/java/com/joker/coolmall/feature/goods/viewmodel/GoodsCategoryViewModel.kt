@@ -7,11 +7,11 @@ import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkListViewModel
 import com.joker.coolmall.core.data.repository.GoodsRepository
 import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.entity.Category
+import com.joker.coolmall.core.model.entity.CategoryTree
 import com.joker.coolmall.core.model.entity.Goods
 import com.joker.coolmall.core.model.request.GoodsSearchRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
-import com.joker.coolmall.feature.goods.model.CategoryTree
 import com.joker.coolmall.feature.goods.model.SortState
 import com.joker.coolmall.feature.goods.model.SortType
 import com.joker.coolmall.navigation.AppNavigator

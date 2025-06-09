@@ -6,8 +6,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -15,17 +13,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.AsyncImage
 import com.joker.coolmall.core.designsystem.theme.AppTheme
+import com.joker.coolmall.core.designsystem.theme.ShapeSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.designsystem.theme.TextTertiaryLight
 import com.joker.coolmall.core.model.entity.Goods
 import com.joker.coolmall.core.model.preview.previewGoods
+import com.joker.coolmall.core.ui.component.image.NetWorkImage
 import com.joker.coolmall.core.ui.component.text.PriceText
 
 /**
@@ -48,16 +46,13 @@ fun GoodsListItem(
             horizontalArrangement = Arrangement.spacedBy(SpaceHorizontalSmall)
         ) {
             // 商品图片
-            AsyncImage(
+            NetWorkImage(
                 model = goods.mainPic,
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
+                size = 100.dp,
                 modifier = Modifier
-                    .width(100.dp)
-                    .height(100.dp)
-                    .clip(RoundedCornerShape(6.dp))
+                    .clip(ShapeSmall)
             )
-            
+
             // 商品信息
             Column(
                 modifier = Modifier
@@ -84,7 +79,7 @@ fun GoodsListItem(
                         )
                     }
                 }
-                
+
                 // 价格和销量
                 Row(
                     horizontalArrangement = Arrangement.SpaceBetween,

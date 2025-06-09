@@ -1,6 +1,6 @@
 package com.joker.coolmall.feature.main.state
 
-import com.joker.coolmall.feature.main.model.CategoryTree
+import com.joker.coolmall.core.model.entity.CategoryTree
 
 /**
  * 分类页面UI状态

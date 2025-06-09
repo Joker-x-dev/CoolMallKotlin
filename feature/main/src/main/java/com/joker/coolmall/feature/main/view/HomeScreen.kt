@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.joker.coolmall.core.common.base.state.BaseNetWorkListUiState
 import com.joker.coolmall.core.common.base.state.LoadMoreState
+import com.joker.coolmall.core.designsystem.component.VerticalList
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.LogoIcon
 import com.joker.coolmall.core.designsystem.theme.ShapeMedium
@@ -53,6 +54,7 @@ import com.joker.coolmall.core.model.entity.Goods
 import com.joker.coolmall.core.model.entity.Home
 import com.joker.coolmall.core.ui.component.card.AppCard
 import com.joker.coolmall.core.ui.component.goods.GoodsGridItem
+import com.joker.coolmall.core.ui.component.goods.GoodsListItem
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
 import com.joker.coolmall.core.ui.component.list.AppListItem
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkListView
@@ -223,6 +225,28 @@ private fun HomeContentView(
             }
 
             // 推荐商品列表
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                VerticalList(padding = 0.dp) {
+                    data.recommend?.forEach { goods ->
+                        GoodsListItem(
+                            goods = goods,
+                            onClick = { toGoodsDetail(goods.id) },
+                        )
+                    }
+                }
+            }
+
+            // 全部商品标题
+            item(span = { GridItemSpan(maxLineSpan) }) {
+                data.goods?.let {
+                    TitleWithLine(
+                        text = "全部商品",
+                        modifier = Modifier.padding(vertical = SpaceVerticalSmall)
+                    )
+                }
+            }
+
+            // 全部商品列表
             listData.let { goods ->
                 items(goods.size) { index ->
                     GoodsGridItem(goods = goods[index], onClick = {

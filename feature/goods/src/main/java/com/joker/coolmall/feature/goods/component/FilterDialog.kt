@@ -63,6 +63,8 @@ import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingSmall
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingXSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
+import com.joker.coolmall.core.model.entity.CategoryTree
+import com.joker.coolmall.core.model.preview.previewCategoryTreeList
 import com.joker.coolmall.core.ui.component.button.AppButton
 import com.joker.coolmall.core.ui.component.button.AppButtonBordered
 import com.joker.coolmall.core.ui.component.button.ButtonSize
@@ -74,7 +76,6 @@ import com.joker.coolmall.core.ui.component.loading.PageLoading
 import com.joker.coolmall.core.ui.component.text.AppText
 import com.joker.coolmall.core.ui.component.text.TextSize
 import com.joker.coolmall.core.ui.component.text.TextType
-import com.joker.coolmall.feature.goods.model.CategoryTree
 
 /**
  * 筛选对话框
@@ -461,77 +462,22 @@ private fun CategoryChip(
 @Preview(showBackground = true)
 @Composable
 fun FilterDialogPreview() {
-    val categoryTrees = listOf(
-        CategoryTree(
-            id = 1L,
-            name = "手机",
-            parentId = null,
-            sortNum = 0,
-            pic = null,
-            status = 1,
-            createTime = null,
-            updateTime = null,
-            children = listOf(
-                CategoryTree(
-                    id = 11L,
-                    name = "小米手机",
-                    parentId = 1,
-                    sortNum = 0,
-                    pic = "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ef2bf8a1400af4698a3e61fc7f4e340e.png",
-                    status = 1,
-                    createTime = null,
-                    updateTime = null
-                ),
-                CategoryTree(
-                    id = 12L,
-                    name = "Redmi手机",
-                    parentId = 1,
-                    sortNum = 0,
-                    pic = "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ef2bf8a1400af4698a3e61fc7f4e340e.png",
-                    status = 1,
-                    createTime = null,
-                    updateTime = null
-                )
-            )
-        ),
-        CategoryTree(
-            id = 2L,
-            name = "电脑",
-            parentId = null,
-            sortNum = 0,
-            pic = null,
-            status = 1,
-            createTime = null,
-            updateTime = null,
-            children = listOf(
-                CategoryTree(
-                    id = 21L,
-                    name = "笔记本",
-                    parentId = 2,
-                    sortNum = 0,
-                    pic = "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ef2bf8a1400af4698a3e61fc7f4e340e.png",
-                    status = 1,
-                    createTime = null,
-                    updateTime = null
-                ),
-                CategoryTree(
-                    id = 22L,
-                    name = "台式机",
-                    parentId = 2,
-                    sortNum = 0,
-                    pic = "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ef2bf8a1400af4698a3e61fc7f4e340e.png",
-                    status = 1,
-                    createTime = null,
-                    updateTime = null
-                )
-            )
-        )
-    )
-
     AppTheme {
         FilterContentView(
             onDismiss = {},
-            data = categoryTrees
+            data = previewCategoryTreeList
+        )
+    }
+}
+
+@OptIn(ExperimentalSharedTransitionApi::class)
+@Preview(showBackground = true)
+@Composable
+fun FilterDialogPreviewDark() {
+    AppTheme(darkTheme = true) {
+        FilterContentView(
+            onDismiss = {},
+            data = previewCategoryTreeList
         )
     }
 }

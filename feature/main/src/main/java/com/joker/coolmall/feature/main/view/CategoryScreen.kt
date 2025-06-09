@@ -53,6 +53,8 @@ import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.RadiusLarge
 import com.joker.coolmall.core.designsystem.theme.ShapeMedium
 import com.joker.coolmall.core.designsystem.theme.ShapeSmall
+import com.joker.coolmall.core.model.entity.CategoryTree
+import com.joker.coolmall.core.model.preview.previewCategoryTreeList
 import com.joker.coolmall.core.ui.component.appbar.CenterTopAppBar
 import com.joker.coolmall.core.ui.component.empty.EmptyNetwork
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
@@ -60,7 +62,6 @@ import com.joker.coolmall.core.ui.component.loading.PageLoading
 import com.joker.coolmall.core.ui.component.title.TitleWithLine
 import com.joker.coolmall.feature.main.R
 import com.joker.coolmall.feature.main.component.CommonScaffold
-import com.joker.coolmall.feature.main.model.CategoryTree
 import com.joker.coolmall.feature.main.state.CategoryUiState
 import com.joker.coolmall.feature.main.viewmodel.CategoryViewModel
 import kotlinx.coroutines.launch
@@ -591,77 +592,9 @@ private val RightTopRoundedShape = RoundedCornerShape(
 @Preview(showBackground = true)
 @Composable
 fun CategoryScreenPreview() {
-    // 创建预览用的分类树
-    val categoryTrees = listOf(
-        CategoryTree(
-            id = 1L,
-            name = "手机",
-            parentId = null,
-            sortNum = 0,
-            pic = null,
-            status = 1,
-            createTime = null,
-            updateTime = null,
-            children = listOf(
-                CategoryTree(
-                    id = 11L,
-                    name = "小米手机",
-                    parentId = 1,
-                    sortNum = 0,
-                    pic = "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ef2bf8a1400af4698a3e61fc7f4e340e.png",
-                    status = 1,
-                    createTime = null,
-                    updateTime = null
-                ),
-                CategoryTree(
-                    id = 12L,
-                    name = "Redmi手机",
-                    parentId = 1,
-                    sortNum = 0,
-                    pic = "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ef2bf8a1400af4698a3e61fc7f4e340e.png",
-                    status = 1,
-                    createTime = null,
-                    updateTime = null
-                )
-            )
-        ),
-        CategoryTree(
-            id = 2L,
-            name = "电脑",
-            parentId = null,
-            sortNum = 0,
-            pic = null,
-            status = 1,
-            createTime = null,
-            updateTime = null,
-            children = listOf(
-                CategoryTree(
-                    id = 21L,
-                    name = "笔记本",
-                    parentId = 2,
-                    sortNum = 0,
-                    pic = "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ef2bf8a1400af4698a3e61fc7f4e340e.png",
-                    status = 1,
-                    createTime = null,
-                    updateTime = null
-                ),
-                CategoryTree(
-                    id = 22L,
-                    name = "台式机",
-                    parentId = 2,
-                    sortNum = 0,
-                    pic = "https://cdn.cnbj1.fds.api.mi-img.com/mi-mall/ef2bf8a1400af4698a3e61fc7f4e340e.png",
-                    status = 1,
-                    createTime = null,
-                    updateTime = null
-                )
-            )
-        )
-    )
-
     AppTheme {
         CategoryScreen(
-            uiState = CategoryUiState.Success(categoryTrees),
+            uiState = CategoryUiState.Success(previewCategoryTreeList),
             selectedIndex = 1,
             onCategorySelected = { /* 预览时不执行任何操作 */ },
             toGoodsCategory = { /* 预览时不执行任何操作 */ }

@@ -1,5 +1,4 @@
-
-import com.joker.coolmall.feature.goods.model.CategoryTree
+import com.joker.coolmall.core.model.entity.CategoryTree
 
 /**
  * 分类页面UI状态

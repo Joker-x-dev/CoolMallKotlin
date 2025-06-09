@@ -20,11 +20,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.joker.coolmall.core.designsystem.theme.AppTheme
+import com.joker.coolmall.core.designsystem.theme.ShapeSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.designsystem.theme.TextTertiaryLight
 import com.joker.coolmall.core.model.entity.Goods
 import com.joker.coolmall.core.model.preview.previewGoods
+import com.joker.coolmall.core.ui.component.image.NetWorkImage
 import com.joker.coolmall.core.ui.component.text.PriceText
 
 /**
@@ -43,14 +45,12 @@ fun GoodsGridItem(
         Column(
             modifier = Modifier.padding(SpaceHorizontalSmall)
         ) {
-            AsyncImage(
+            NetWorkImage(
                 model = goods.mainPic,
-                contentDescription = null,
-                contentScale = ContentScale.Crop,
                 modifier = Modifier
                     .fillMaxWidth()
                     .aspectRatio(1f)
-                    .clip(RoundedCornerShape(6.dp))
+                    .clip(ShapeSmall)
             )
             SpaceVerticalXSmall()
             Text(

@@ -5,7 +5,7 @@ import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
 import com.joker.coolmall.core.data.repository.GoodsRepository
 import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.entity.Category
-import com.joker.coolmall.feature.main.model.CategoryTree
+import com.joker.coolmall.core.model.entity.CategoryTree
 import com.joker.coolmall.feature.main.state.CategoryUiState
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.GoodsRoutes

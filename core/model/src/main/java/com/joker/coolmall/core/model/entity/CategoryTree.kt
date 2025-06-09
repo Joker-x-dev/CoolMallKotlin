@@ -1,4 +1,4 @@
-package com.joker.coolmall.feature.main.model
+package com.joker.coolmall.core.model.entity
 
 import com.joker.coolmall.core.model.entity.Category
 
