@@ -14,11 +14,12 @@ object GoodsCategoryRoutes {
     const val GOODS_TYPE_ID_ARG = "type_id"
     const val GOODS_FEATURED_ARG = "featured"
     const val GOODS_RECOMMEND_ARG = "recommend"
+    const val GOODS_KEYWORD_ARG = "keyword"
 
     /**
      * 带参数的路由模式
      */
-    const val GOODS_CATEGORY_PATTERN = "${GoodsRoutes.CATEGORY}?$GOODS_TYPE_ID_ARG={$GOODS_TYPE_ID_ARG}&$GOODS_FEATURED_ARG={$GOODS_FEATURED_ARG}&$GOODS_RECOMMEND_ARG={$GOODS_RECOMMEND_ARG}"
+    const val GOODS_CATEGORY_PATTERN = "${GoodsRoutes.CATEGORY}?$GOODS_TYPE_ID_ARG={$GOODS_TYPE_ID_ARG}&$GOODS_FEATURED_ARG={$GOODS_FEATURED_ARG}&$GOODS_RECOMMEND_ARG={$GOODS_RECOMMEND_ARG}&$GOODS_KEYWORD_ARG={$GOODS_KEYWORD_ARG}"
 }
 
 /**
@@ -43,6 +44,11 @@ fun NavGraphBuilder.goodsCategoryScreen() {
                 type = NavType.BoolType
                 nullable = false
                 defaultValue = false
+            },
+            navArgument(GoodsCategoryRoutes.GOODS_KEYWORD_ARG) {
+                type = NavType.StringType
+                nullable = true
+                defaultValue = null
             }
         )
     ) {

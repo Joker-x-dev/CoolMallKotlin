@@ -88,6 +88,7 @@ internal fun HomeRoute(
         onRefresh = viewModel::onRefresh,
         onLoadMore = viewModel::onLoadMore,
         shouldTriggerLoadMore = viewModel::shouldTriggerLoadMore,
+        toGoodsSearch = viewModel::toGoodsSearch,
         toGoodsDetail = viewModel::toGoodsDetail,
         toGoodsCategory = viewModel::toGoodsCategoryPage,
         toFlashSalePage = viewModel::toFlashSalePage,
@@ -105,6 +106,7 @@ internal fun HomeRoute(
  * @param onRefresh 下拉刷新回调
  * @param onLoadMore 加载更多回调
  * @param shouldTriggerLoadMore 是否应该触发加载更多的判断函数
+ * @param toGoodsSearch 跳转到商品搜索页
  * @param toGoodsDetail 跳转到商品详情页
  * @param toGoodsCategory 跳转到商品分类页
  * @param toFlashSalePage 跳转到限时精选页
@@ -121,13 +123,18 @@ internal fun HomeScreen(
     onRefresh: () -> Unit = {},
     onLoadMore: () -> Unit = {},
     shouldTriggerLoadMore: (lastIndex: Int, totalCount: Int) -> Boolean = { _, _ -> false },
+    toGoodsSearch: () -> Unit = {},
     toGoodsDetail: (Long) -> Unit = {},
     toGoodsCategory: (Long) -> Unit = {},
     toFlashSalePage: () -> Unit = {},
     onRetry: () -> Unit = {}
 ) {
     CommonScaffold(
-        topBar = { HomeTopAppBar() }
+        topBar = {
+            HomeTopAppBar(
+                toGoodsSearch = toGoodsSearch
+            )
+        }
     ) {
         BaseNetWorkListView(
             uiState = uiState,
@@ -391,10 +398,13 @@ private fun FlashSale(
 
 /**
  * 首页顶部导航栏
+ * @param toGoodsSearch 跳转到商品搜索页
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun HomeTopAppBar() {
+private fun HomeTopAppBar(
+    toGoodsSearch: () -> Unit
+) {
     TopAppBar(
         navigationIcon = {
             LogoIcon(
@@ -410,7 +420,7 @@ private fun HomeTopAppBar() {
                     .fillMaxWidth()
                     .height(38.dp)
                     .clip(ShapeMedium)
-                    .clickable { }
+                    .clickable { toGoodsSearch() }
             ) {
                 Row(
                     modifier = Modifier

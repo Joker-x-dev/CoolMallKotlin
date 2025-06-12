@@ -2,6 +2,7 @@ package com.joker.coolmall.core.network.service
 
 import com.joker.coolmall.core.model.entity.Category
 import com.joker.coolmall.core.model.entity.Goods
+import com.joker.coolmall.core.model.entity.GoodsSearchKeyword
 import com.joker.coolmall.core.model.entity.GoodsSpec
 import com.joker.coolmall.core.model.request.GoodsSearchRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
@@ -29,40 +30,10 @@ interface GoodsService {
     suspend fun getGoodsSpecList(@Body params: Map<String, Long>): NetworkResponse<List<GoodsSpec>>
 
     /**
-     * 修改搜索关键词
-     */
-    @POST("goods/search/keyword/update")
-    suspend fun updateSearchKeyword(@Body params: Any): NetworkResponse<Any>
-
-    /**
-     * 分页查询搜索关键词
-     */
-    @POST("goods/search/keyword/page")
-    suspend fun getSearchKeywordPage(@Body params: Any): NetworkResponse<Any>
-
-    /**
      * 查询搜索关键词列表
      */
     @POST("goods/search/keyword/list")
-    suspend fun getSearchKeywordList(@Body params: Any): NetworkResponse<Any>
-
-    /**
-     * 删除搜索关键词
-     */
-    @POST("goods/search/keyword/delete")
-    suspend fun deleteSearchKeyword(@Body params: Any): NetworkResponse<Any>
-
-    /**
-     * 添加搜索关键词
-     */
-    @POST("goods/search/keyword/add")
-    suspend fun addSearchKeyword(@Body params: Any): NetworkResponse<Any>
-
-    /**
-     * 搜索关键词信息
-     */
-    @GET("goods/search/keyword/info")
-    suspend fun getSearchKeywordInfo(@Query("id") id: String): NetworkResponse<Any>
+    suspend fun getSearchKeywordList(): NetworkResponse<List<GoodsSearchKeyword>>
 
     /**
      * 分页查询商品
@@ -87,10 +58,4 @@ interface GoodsService {
      */
     @POST("goods/comment/page")
     suspend fun getGoodsCommentPage(@Body params: Any): NetworkResponse<Any>
-
-    /**
-     * 查询商品列表
-     */
-    @POST("app/goods/list")
-    suspend fun getGoodsList(@Body params: Any): NetworkResponse<Any>
 } 

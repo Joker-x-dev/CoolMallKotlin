@@ -105,6 +105,13 @@ class HomeViewModel @Inject constructor(
     }
 
     /**
+     * 跳转到商品搜索页面
+     */
+    fun toGoodsSearch() {
+        super.toPage(GoodsRoutes.SEARCH)
+    }
+
+    /**
      * 导航到商品详情页
      */
     fun toGoodsDetail(goodsId: Long) {

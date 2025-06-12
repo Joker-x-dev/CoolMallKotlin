@@ -85,6 +85,7 @@ internal fun GoodsCategoryRoute(
             onBackClick = viewModel::navigateBack,
             onRetry = viewModel::retryRequest,
             onSearch = viewModel::onSearch,
+            initialSearchText = viewModel.getCurrentSearchKeyword(),
             filtersVisible = filtersVisible,
             onFiltersClick = viewModel::showFilters,
             currentSortType = currentSortType,
@@ -152,6 +153,7 @@ internal fun GoodsCategoryScreen(
     onBackClick: () -> Unit = {},
     onRetry: () -> Unit = {},
     onSearch: (String) -> Unit = {},
+    initialSearchText: String = "",
     filtersVisible: Boolean = false,
     onFiltersClick: () -> Unit = {},
     currentSortType: SortType = SortType.COMPREHENSIVE,
@@ -171,6 +173,7 @@ internal fun GoodsCategoryScreen(
                 SearchTopAppBar(
                     onBackClick = onBackClick,
                     onSearch = onSearch,
+                    initialSearchText = initialSearchText,
                     actions = {
                         Box(
                             modifier = Modifier

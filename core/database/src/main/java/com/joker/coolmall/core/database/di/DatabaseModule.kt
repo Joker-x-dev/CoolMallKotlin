@@ -5,6 +5,7 @@ import androidx.room.Room
 import com.joker.coolmall.core.database.AppDatabase
 import com.joker.coolmall.core.database.dao.CartDao
 import com.joker.coolmall.core.database.dao.FootprintDao
+import com.joker.coolmall.core.database.dao.SearchHistoryDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -50,5 +51,14 @@ object DatabaseModule {
     @Singleton
     fun provideFootprintDao(database: AppDatabase): FootprintDao {
         return database.footprintDao()
+    }
+
+    /**
+     * 提供搜索历史DAO
+     */
+    @Provides
+    @Singleton
+    fun provideSearchHistoryDao(database: AppDatabase): SearchHistoryDao {
+        return database.searchHistoryDao()
     }
 }

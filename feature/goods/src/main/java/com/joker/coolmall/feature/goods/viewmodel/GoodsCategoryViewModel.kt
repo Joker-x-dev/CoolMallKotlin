@@ -87,7 +87,12 @@ class GoodsCategoryViewModel @Inject constructor(
     /**
      * 搜索关键词
      */
-    private var searchKeyword = ""
+    private var searchKeyword = savedStateHandle.get<String>("keyword") ?: ""
+
+    /**
+     * 获取当前搜索关键词
+     */
+    fun getCurrentSearchKeyword(): String = searchKeyword
 
     /**
      * 是否为网格布局
@@ -119,6 +124,9 @@ class GoodsCategoryViewModel @Inject constructor(
 
         // 从路由参数获取recommend参数
         isRecommend = savedStateHandle.get<Boolean>("recommend") ?: false
+
+        // 从路由参数获取搜索关键词
+        searchKeyword = savedStateHandle.get<String>("keyword") ?: ""
 
         // 加载数据
         initLoad()
@@ -243,12 +251,10 @@ class GoodsCategoryViewModel @Inject constructor(
     }
 
     /**
-     * 执行搜索
-     * @param keyword 搜索关键词
+     * 搜索
      */
     fun onSearch(keyword: String) {
         searchKeyword = keyword
-        // 重新加载数据
         onRefresh()
     }
 

@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
@@ -14,6 +15,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.ShapeSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
@@ -44,6 +46,7 @@ fun GoodsGridItem(
                 model = goods.mainPic,
                 modifier = Modifier
                     .fillMaxWidth()
+                    .heightIn(min = 100.dp)
                     .clip(ShapeSmall)
             )
             SpaceVerticalXSmall()

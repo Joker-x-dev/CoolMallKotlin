@@ -5,8 +5,10 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import com.joker.coolmall.core.database.dao.CartDao
 import com.joker.coolmall.core.database.dao.FootprintDao
+import com.joker.coolmall.core.database.dao.SearchHistoryDao
 import com.joker.coolmall.core.database.entity.CartEntity
 import com.joker.coolmall.core.database.entity.FootprintEntity
+import com.joker.coolmall.core.database.entity.SearchHistoryEntity
 import com.joker.coolmall.core.database.util.CartSpecConverter
 
 /**
@@ -15,7 +17,8 @@ import com.joker.coolmall.core.database.util.CartSpecConverter
 @Database(
     entities = [
         CartEntity::class,
-        FootprintEntity::class
+        FootprintEntity::class,
+        SearchHistoryEntity::class
     ],
     version = 1,
     exportSchema = false
@@ -32,6 +35,11 @@ abstract class AppDatabase : RoomDatabase() {
      * 获取足迹DAO
      */
     abstract fun footprintDao(): FootprintDao
+
+    /**
+     * 获取搜索历史DAO
+     */
+    abstract fun searchHistoryDao(): SearchHistoryDao
 
     companion object {
         const val DATABASE_NAME = "coolmall-database"

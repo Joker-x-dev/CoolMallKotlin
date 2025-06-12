@@ -2,6 +2,7 @@ package com.joker.coolmall.core.network.datasource.goods
 
 import com.joker.coolmall.core.model.entity.Category
 import com.joker.coolmall.core.model.entity.Goods
+import com.joker.coolmall.core.model.entity.GoodsSearchKeyword
 import com.joker.coolmall.core.model.entity.GoodsSpec
 import com.joker.coolmall.core.model.request.GoodsSearchRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
@@ -40,63 +41,12 @@ class GoodsNetworkDataSourceImpl @Inject constructor(
     }
 
     /**
-     * 修改搜索关键词
-     *
-     * @param params 请求参数，包含关键词信息
-     * @return 修改结果响应数据
-     */
-    override suspend fun updateSearchKeyword(params: Any): NetworkResponse<Any> {
-        return goodsService.updateSearchKeyword(params)
-    }
-
-    /**
-     * 分页查询搜索关键词
-     *
-     * @param params 请求参数，包含分页信息
-     * @return 搜索关键词分页列表响应数据
-     */
-    override suspend fun getSearchKeywordPage(params: Any): NetworkResponse<Any> {
-        return goodsService.getSearchKeywordPage(params)
-    }
-
-    /**
      * 查询搜索关键词列表
      *
-     * @param params 请求参数
      * @return 搜索关键词列表响应数据
      */
-    override suspend fun getSearchKeywordList(params: Any): NetworkResponse<Any> {
-        return goodsService.getSearchKeywordList(params)
-    }
-
-    /**
-     * 删除搜索关键词
-     *
-     * @param params 请求参数，包含关键词ID
-     * @return 删除结果响应数据
-     */
-    override suspend fun deleteSearchKeyword(params: Any): NetworkResponse<Any> {
-        return goodsService.deleteSearchKeyword(params)
-    }
-
-    /**
-     * 添加搜索关键词
-     *
-     * @param params 请求参数，包含关键词信息
-     * @return 添加结果响应数据
-     */
-    override suspend fun addSearchKeyword(params: Any): NetworkResponse<Any> {
-        return goodsService.addSearchKeyword(params)
-    }
-
-    /**
-     * 获取搜索关键词详情
-     *
-     * @param id 关键词ID
-     * @return 搜索关键词详情响应数据
-     */
-    override suspend fun getSearchKeywordInfo(id: String): NetworkResponse<Any> {
-        return goodsService.getSearchKeywordInfo(id)
+    override suspend fun getSearchKeywordList(): NetworkResponse<List<GoodsSearchKeyword>> {
+        return goodsService.getSearchKeywordList()
     }
 
     /**
@@ -137,15 +87,5 @@ class GoodsNetworkDataSourceImpl @Inject constructor(
      */
     override suspend fun getGoodsCommentPage(params: Any): NetworkResponse<Any> {
         return goodsService.getGoodsCommentPage(params)
-    }
-
-    /**
-     * 查询商品列表
-     *
-     * @param params 请求参数，包含筛选条件
-     * @return 商品列表响应数据
-     */
-    override suspend fun getGoodsList(params: Any): NetworkResponse<Any> {
-        return goodsService.getGoodsList(params)
     }
 } 

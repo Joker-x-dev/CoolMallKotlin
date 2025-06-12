@@ -47,9 +47,10 @@ import com.joker.coolmall.core.ui.component.text.TextType
 fun SearchTopAppBar(
     onBackClick: () -> Unit,
     onSearch: (String) -> Unit,
+    initialSearchText: String = "",
     actions: @Composable () -> Unit = {}
 ) {
-    var searchText by rememberSaveable { mutableStateOf("") }
+    var searchText by rememberSaveable { mutableStateOf(initialSearchText) }
     val focusManager = LocalFocusManager.current
 
     val performSearch = {

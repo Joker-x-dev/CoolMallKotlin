@@ -2,6 +2,7 @@ package com.joker.coolmall.core.network.datasource.goods
 
 import com.joker.coolmall.core.model.entity.Category
 import com.joker.coolmall.core.model.entity.Goods
+import com.joker.coolmall.core.model.entity.GoodsSearchKeyword
 import com.joker.coolmall.core.model.entity.GoodsSpec
 import com.joker.coolmall.core.model.request.GoodsSearchRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
@@ -23,34 +24,9 @@ interface GoodsNetworkDataSource {
     suspend fun getGoodsSpecList(params: Map<String, Long>): NetworkResponse<List<GoodsSpec>>
 
     /**
-     * 修改搜索关键词
-     */
-    suspend fun updateSearchKeyword(params: Any): NetworkResponse<Any>
-
-    /**
-     * 分页查询搜索关键词
-     */
-    suspend fun getSearchKeywordPage(params: Any): NetworkResponse<Any>
-
-    /**
      * 查询搜索关键词列表
      */
-    suspend fun getSearchKeywordList(params: Any): NetworkResponse<Any>
-
-    /**
-     * 删除搜索关键词
-     */
-    suspend fun deleteSearchKeyword(params: Any): NetworkResponse<Any>
-
-    /**
-     * 添加搜索关键词
-     */
-    suspend fun addSearchKeyword(params: Any): NetworkResponse<Any>
-
-    /**
-     * 搜索关键词信息
-     */
-    suspend fun getSearchKeywordInfo(id: String): NetworkResponse<Any>
+    suspend fun getSearchKeywordList(): NetworkResponse<List<GoodsSearchKeyword>>
 
     /**
      * 分页查询商品
@@ -71,9 +47,4 @@ interface GoodsNetworkDataSource {
      * 分页查询商品评论
      */
     suspend fun getGoodsCommentPage(params: Any): NetworkResponse<Any>
-
-    /**
-     * 查询商品列表
-     */
-    suspend fun getGoodsList(params: Any): NetworkResponse<Any>
 } 

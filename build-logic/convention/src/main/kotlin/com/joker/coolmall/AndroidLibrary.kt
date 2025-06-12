@@ -81,6 +81,7 @@ class AndroidLibrary : Plugin<Project> {
                         dimension = "env"
                         // 开发环境地址跟生产环境的地址暂时一样
                         buildConfigField("String", "BASE_URL", "\"https://mall.dusksnow.top/app/\"")
+//                        buildConfigField("String", "BASE_URL", "\"http://10.0.2.2:8001/app/\"")
                         buildConfigField("Boolean", "DEBUG", "true")
                     }
                     create("prod") {

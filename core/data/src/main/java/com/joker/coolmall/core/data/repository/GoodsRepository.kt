@@ -2,6 +2,7 @@ package com.joker.coolmall.core.data.repository
 
 import com.joker.coolmall.core.model.entity.Category
 import com.joker.coolmall.core.model.entity.Goods
+import com.joker.coolmall.core.model.entity.GoodsSearchKeyword
 import com.joker.coolmall.core.model.entity.GoodsSpec
 import com.joker.coolmall.core.model.request.GoodsSearchRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
@@ -34,45 +35,10 @@ class GoodsRepository @Inject constructor(
     }.flowOn(Dispatchers.IO)
 
     /**
-     * 修改搜索关键词
-     */
-    fun updateSearchKeyword(params: Any): Flow<NetworkResponse<Any>> = flow {
-        emit(goodsNetworkDataSource.updateSearchKeyword(params))
-    }.flowOn(Dispatchers.IO)
-
-    /**
-     * 分页查询搜索关键词
-     */
-    fun getSearchKeywordPage(params: Any): Flow<NetworkResponse<Any>> = flow {
-        emit(goodsNetworkDataSource.getSearchKeywordPage(params))
-    }.flowOn(Dispatchers.IO)
-
-    /**
      * 查询搜索关键词列表
      */
-    fun getSearchKeywordList(params: Any): Flow<NetworkResponse<Any>> = flow {
-        emit(goodsNetworkDataSource.getSearchKeywordList(params))
-    }.flowOn(Dispatchers.IO)
-
-    /**
-     * 删除搜索关键词
-     */
-    fun deleteSearchKeyword(params: Any): Flow<NetworkResponse<Any>> = flow {
-        emit(goodsNetworkDataSource.deleteSearchKeyword(params))
-    }.flowOn(Dispatchers.IO)
-
-    /**
-     * 添加搜索关键词
-     */
-    fun addSearchKeyword(params: Any): Flow<NetworkResponse<Any>> = flow {
-        emit(goodsNetworkDataSource.addSearchKeyword(params))
-    }.flowOn(Dispatchers.IO)
-
-    /**
-     * 搜索关键词信息
-     */
-    fun getSearchKeywordInfo(id: String): Flow<NetworkResponse<Any>> = flow {
-        emit(goodsNetworkDataSource.getSearchKeywordInfo(id))
+    fun getSearchKeywordList(): Flow<NetworkResponse<List<GoodsSearchKeyword>>> = flow {
+        emit(goodsNetworkDataSource.getSearchKeywordList())
     }.flowOn(Dispatchers.IO)
 
     /**
@@ -102,12 +68,5 @@ class GoodsRepository @Inject constructor(
      */
     fun getGoodsCommentPage(params: Any): Flow<NetworkResponse<Any>> = flow {
         emit(goodsNetworkDataSource.getGoodsCommentPage(params))
-    }.flowOn(Dispatchers.IO)
-
-    /**
-     * 查询商品列表
-     */
-    fun getGoodsList(params: Any): Flow<NetworkResponse<Any>> = flow {
-        emit(goodsNetworkDataSource.getGoodsList(params))
     }.flowOn(Dispatchers.IO)
 } 

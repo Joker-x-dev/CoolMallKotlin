@@ -7,9 +7,9 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -121,16 +121,16 @@ private fun FootprintContentView(
     onFootprintClick: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    LazyVerticalGrid(
-        columns = GridCells.Fixed(2),
-        modifier = modifier,
+    LazyVerticalStaggeredGrid(
+        columns = StaggeredGridCells.Fixed(2),
+        modifier = modifier.fillMaxSize(),
         contentPadding = PaddingValues(SpacePaddingMedium),
         horizontalArrangement = Arrangement.spacedBy(SpacePaddingMedium),
-        verticalArrangement = Arrangement.spacedBy(SpacePaddingMedium)
+        verticalItemSpacing = SpacePaddingMedium
     ) {
-        items(footprints) { footprint ->
+        items(footprints.size) { index ->
             GoodsGridItem(
-                goods = footprint.toGoods(),
+                goods = footprints[index].toGoods(),
                 onClick = onFootprintClick
             )
         }
