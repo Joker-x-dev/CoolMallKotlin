@@ -73,6 +73,9 @@ room = "2.7.1"
 # 支付宝支付
 alipaysdkAndroid = "15.8.33"
 
+# 权限框架
+xxpermissions = "23.0"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -157,6 +160,9 @@ androidx-room-paging = { group = "androidx.room", name = "room-paging", version.
 
 # 支付宝支付
 alipaysdk-android = { module = "com.alipay.sdk:alipaysdk-android", version.ref = "alipaysdkAndroid" }
+
+# 权限框架：https://github.com/getActivity/XXPermissions
+xxpermissions = { module = "com.github.getActivity:XXPermissions", version.ref = "xxpermissions" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

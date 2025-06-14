@@ -1,5 +1,6 @@
 package com.joker.coolmall.feature.auth.view
 
+import android.app.Activity
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -9,6 +10,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
@@ -20,6 +22,8 @@ import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXLarge
 import com.joker.coolmall.core.model.entity.Captcha
 import com.joker.coolmall.core.ui.component.button.AppButton
 import com.joker.coolmall.core.ui.component.button.ButtonShape
+import com.joker.coolmall.core.util.permission.PermissionUtils
+import com.joker.coolmall.core.util.toast.ToastUtils
 import com.joker.coolmall.feature.auth.R
 import com.joker.coolmall.feature.auth.component.AnimatedAuthPage
 import com.joker.coolmall.feature.auth.component.BottomNavigationRow
@@ -39,6 +43,7 @@ import com.joker.coolmall.feature.auth.viewmodel.SmsLoginViewModel
 internal fun SmsLoginRoute(
     viewModel: SmsLoginViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
     val phone by viewModel.phone.collectAsState()
     val verificationCode by viewModel.verificationCode.collectAsState()
     val showImageCodePopup by viewModel.showImageCodePopup.collectAsState()
@@ -46,6 +51,25 @@ internal fun SmsLoginRoute(
     val isLoadingCaptcha by viewModel.isLoadingCaptcha.collectAsState()
     val isPhoneValid by viewModel.isPhoneValid.collectAsState(initial = false)
     val isLoginEnabled by viewModel.isLoginEnabled.collectAsState(initial = false)
+
+    // 包装发送验证码函数，先申请权限再发送
+    val onSendVerificationCodeWithPermission = {
+        if (context is Activity) {
+            // 获取通知权限
+            PermissionUtils.requestNotificationPermission(context) { granted ->
+                if (granted) {
+                    // 权限获取成功，发送验证码
+                    viewModel.onSendCodeButtonClick()
+                } else {
+                    // 权限获取失败，提示用户
+                    ToastUtils.showError("需要通知权限才能接收验证码")
+                }
+            }
+        } else {
+            // 如果不是 Activity Context，直接发送验证码
+            viewModel.onSendCodeButtonClick()
+        }
+    }
 
     SmsLoginScreen(
         phone = phone,
@@ -58,7 +82,7 @@ internal fun SmsLoginRoute(
         onHideImageCodePopup = viewModel::onHideImageCodePopup,
         onPhoneChange = viewModel::updatePhone,
         onVerificationCodeChange = viewModel::updateVerificationCode,
-        onSendVerificationCode = viewModel::onSendCodeButtonClick,
+        onSendVerificationCode = onSendVerificationCodeWithPermission,
         onImageCodeConfirm = viewModel::onImageCodeConfirm,
         onRefreshCaptcha = viewModel::getCaptcha,
         onLoginClick = viewModel::login,
@@ -174,4 +198,4 @@ fun SmsLoginScreenPreview() {
     AppTheme {
         SmsLoginScreen()
     }
-} 
+}

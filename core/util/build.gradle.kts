@@ -20,7 +20,10 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     // 吐司框架：https://github.com/getActivity/Toaster
-    api(libs.toaster)
+    implementation(libs.toaster)
+
+    // 权限框架：https://github.com/getActivity/XXPermissions
+    implementation(libs.xxpermissions)
 
     // 腾讯存储 https://github.com/Tencent/MMKV
     implementation(libs.mmkv)
