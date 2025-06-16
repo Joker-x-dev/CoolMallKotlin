@@ -22,3 +22,6 @@
 
 # toast 混淆规则
 -keep class com.hjq.toast.** {*;}
+
+# 权限混淆规则
+-keep class com.hjq.permissions.** { *; }
