@@ -61,5 +61,6 @@
     <!-- Toast提示 -->
     <string name="invalid_phone_number">请输入正确的手机号</string>
     <string name="invalid_verification_code">请输入4位验证码</string>
+    <string name="invalid_password">请输入正确的密码</string>
     <string name="login_success">登录成功</string>
-</resources> 
+</resources>

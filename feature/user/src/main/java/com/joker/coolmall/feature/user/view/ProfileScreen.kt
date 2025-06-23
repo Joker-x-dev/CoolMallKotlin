@@ -3,6 +3,7 @@ package com.joker.coolmall.feature.user.view
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -53,6 +54,7 @@ internal fun ProfileRoute(
 
     ProfileScreen(
         onBackClick = viewModel::navigateBack,
+        onLogoutClick = viewModel::logout,
         sharedTransitionScope = sharedTransitionScope,
         animatedContentScope = animatedContentScope,
         isLoggedIn = isLoggedIn,
@@ -72,6 +74,7 @@ internal fun ProfileRoute(
 @Composable
 internal fun ProfileScreen(
     onBackClick: () -> Unit = {},
+    onLogoutClick: () -> Unit = {},
     sharedTransitionScope: SharedTransitionScope? = null,
     animatedContentScope: AnimatedContentScope? = null,
     isLoggedIn: Boolean = false,
@@ -204,7 +207,9 @@ internal fun ProfileScreen(
                 )
             }
 
-            Card {
+            Card(
+                modifier = Modifier.clickable { onLogoutClick() }
+            ) {
                 CenterBox(
                     padding = SpaceVerticalLarge,
                     fillMaxSize = false

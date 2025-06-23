@@ -56,4 +56,14 @@ class ProfileViewModel @Inject constructor(
             }
         }
     }
+
+    /**
+     * 用户退出登录
+     */
+    fun logout() {
+        viewModelScope.launch {
+            appState.logout()
+            super.navigateBack()
+        }
+    }
 }

@@ -116,7 +116,7 @@ class MeViewModel @Inject constructor(
     fun toProfilePage() {
         val avatarUrl = userInfo.value?.avatarUrl
         val route = if (avatarUrl?.isNotEmpty() == true) {
-            "${UserRoutes.PROFILE}/${java.net.URLEncoder.encode(avatarUrl, "UTF-8")}"
+            "${UserRoutes.PROFILE}?avatar_url=${java.net.URLEncoder.encode(avatarUrl, "UTF-8")}"
         } else {
             UserRoutes.PROFILE
         }

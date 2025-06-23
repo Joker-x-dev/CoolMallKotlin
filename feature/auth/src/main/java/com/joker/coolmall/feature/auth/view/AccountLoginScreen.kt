@@ -37,10 +37,12 @@ internal fun AccountLoginRoute(
 ) {
     val account by viewModel.account.collectAsState()
     val password by viewModel.password.collectAsState()
+    val isLoginEnabled by viewModel.isLoginEnabled.collectAsState(initial = false)
 
     AccountLoginScreen(
         account = account,
         password = password,
+        isLoginEnabled = isLoginEnabled,
         onAccountChange = viewModel::updateAccount,
         onPasswordChange = viewModel::updatePassword,
         onLoginClick = viewModel::login,
@@ -67,6 +69,7 @@ internal fun AccountLoginRoute(
 internal fun AccountLoginScreen(
     account: String = "",
     password: String = "",
+    isLoginEnabled: Boolean = false,
     onAccountChange: (String) -> Unit = {},
     onPasswordChange: (String) -> Unit = {},
     onLoginClick: () -> Unit = {},
@@ -114,7 +117,7 @@ internal fun AccountLoginScreen(
         AppButton(
             text = stringResource(id = R.string.login),
             onClick = onLoginClick,
-            enabled = false
+            enabled = isLoginEnabled
         )
 
         // 使用封装的底部导航组件 - 分隔符样式
@@ -134,4 +137,4 @@ fun AccountLoginScreenPreview() {
     AppTheme {
         AccountLoginScreen()
     }
-} 
+}

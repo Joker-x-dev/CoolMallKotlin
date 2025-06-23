@@ -8,6 +8,7 @@ import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.entity.Auth
 import com.joker.coolmall.core.model.entity.Captcha
 import com.joker.coolmall.core.util.notification.NotificationUtil
+import com.joker.coolmall.core.util.storage.MMKVUtils
 import com.joker.coolmall.core.util.toast.ToastUtils
 import com.joker.coolmall.core.util.validation.ValidationUtil
 import com.joker.coolmall.feature.auth.R
@@ -35,11 +36,20 @@ class SmsLoginViewModel @Inject constructor(
     navigator = navigator,
     appState = appState
 ) {
+
+    companion object {
+        private const val KEY_SAVED_PHONE = "saved_phone"
+    }
     /**
      * 手机号输入
      */
     private val _phone = MutableStateFlow("")
     val phone: StateFlow<String> = _phone
+
+    init {
+        // 加载已保存的手机号
+        loadSavedPhone()
+    }
 
     /**
      * 验证码输入
@@ -92,7 +102,7 @@ class SmsLoginViewModel @Inject constructor(
     fun onSendCodeButtonClick() {
         // 检查手机号是否有效
         if (!ValidationUtil.isValidPhone(_phone.value)) {
-            ToastUtils.showError(context, R.string.invalid_phone_number)
+            ToastUtils.showError(R.string.invalid_phone_number)
             return
         }
 
@@ -175,12 +185,12 @@ class SmsLoginViewModel @Inject constructor(
     fun login() {
         // 再次验证手机号和验证码是否有效
         if (!ValidationUtil.isValidPhone(_phone.value)) {
-            ToastUtils.showError(context, R.string.invalid_phone_number)
+            ToastUtils.showError(R.string.invalid_phone_number)
             return
         }
 
         if (!ValidationUtil.isValidSmsCode(_verificationCode.value)) {
-            ToastUtils.showError(context, R.string.invalid_verification_code)
+            ToastUtils.showError(R.string.invalid_verification_code)
             return
         }
 
@@ -201,12 +211,32 @@ class SmsLoginViewModel @Inject constructor(
      */
     fun loginSuccess(authData: Auth) {
         viewModelScope.launch {
-            ToastUtils.showSuccess(context, R.string.login_success)
+            // 保存手机号
+            savePhone(_phone.value)
+            
+            ToastUtils.showSuccess(R.string.login_success)
             appState?.updateAuth(authData)
             appState?.refreshUserInfo()
             super.navigateBack()
             super.navigateBack()
         }
+    }
+
+    /**
+     * 加载已保存的手机号
+     */
+    private fun loadSavedPhone() {
+        val savedPhone = MMKVUtils.getString(KEY_SAVED_PHONE, "")
+        if (savedPhone.isNotEmpty()) {
+            _phone.value = savedPhone
+        }
+    }
+
+    /**
+     * 保存手机号
+     */
+    private fun savePhone(phone: String) {
+        MMKVUtils.putString(KEY_SAVED_PHONE, phone)
     }
 
     /**

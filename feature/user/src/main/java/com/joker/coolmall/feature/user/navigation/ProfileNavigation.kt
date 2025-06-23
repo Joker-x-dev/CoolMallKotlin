@@ -16,9 +16,9 @@ object ProfileRoutes {
     const val AVATAR_URL = "avatar_url"
 
     /**
-     * 带参数的路由模式
+     * 带参数的路由模式（URL参数可选）
      */
-    const val PROFILE_PATTERN = "${UserRoutes.PROFILE}/{${AVATAR_URL}}"
+    const val PROFILE_PATTERN = "${UserRoutes.PROFILE}?${AVATAR_URL}={${AVATAR_URL}}"
 }
 
 /**
@@ -31,6 +31,7 @@ fun NavGraphBuilder.profileScreen(sharedTransitionScope: SharedTransitionScope) 
         arguments = listOf(navArgument(ProfileRoutes.AVATAR_URL) {
             type = NavType.StringType
             nullable = true
+            defaultValue = null
         })
     ) {
         ProfileRoute(sharedTransitionScope, this@composable)
