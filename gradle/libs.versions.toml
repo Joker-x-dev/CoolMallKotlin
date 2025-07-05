@@ -1,88 +1,148 @@
+# CoolMall Android 项目依赖版本管理
+# 该文件统一管理项目所有依赖的版本号和相关文档链接
+# 更新依赖时请参考对应的官方文档链接
+
 [versions]
 
-# 项目公共配置
+# 项目基础配置
 # 构建版本
 versionCode = "1"
 # 版本号
 versionName = "1.0.0"
-# 名称
+# 包名
 namespace = "com.joker.coolmall"
-# sdk 配置
-compileSdk = "35"
-# 最低支持的 sdk 版本
-minSdk = "26"
-targetSdk = "35"
 
-# 已有的插件版本可以重用
-agp = "8.10.0"
+# Android SDK 配置
+# 编译 SDK 版本
+compileSdk = "36"
+# 最低支持的 SDK 版本
+minSdk = "26"
+# 目标 SDK 版本
+targetSdk = "36"
+
+# 构建工具版本
+# Android Gradle Plugin: https://developer.android.com/studio/releases/gradle-plugin
+agp = "8.11.0"
+# Kotlin 编译器: https://kotlinlang.org/docs/releases.html
+# 注意: 当前版本为 2.1.10，Hilt 2.56.2 最高支持此版本
 kotlin = "2.1.10"
 
-coreKtx = "1.15.0"
-junit = "4.13.2"
-junitVersion = "1.2.1"
-espressoCore = "3.6.1"
+# Android 核心库版本
+# AndroidX Core KTX: https://developer.android.com/jetpack/androidx/releases/core
+coreKtx = "1.16.0"
+# AndroidX Activity Compose: https://developer.android.com/jetpack/androidx/releases/activity
+activityCompose = "1.10.1"
+# AndroidX Lifecycle Runtime KTX: https://developer.android.com/jetpack/androidx/releases/lifecycle
 lifecycleRuntimeKtx = "2.8.7"
-activityCompose = "1.9.3"
-composeBom = "2024.12.01"
 
-# 导航
+# 测试框架版本
+# JUnit 4 测试框架: https://junit.org/junit4/
+junit = "4.13.2"
+# AndroidX JUnit 扩展: https://developer.android.com/jetpack/androidx/releases/test
+junitVersion = "1.2.1"
+# AndroidX Espresso 测试框架: https://developer.android.com/training/testing/espresso
+espressoCore = "3.6.1"
+
+# Jetpack Compose 相关版本
+# Compose BOM: https://developer.android.com/jetpack/compose/bom
+# 说明: BOM 统一管理所有 Compose 库版本，确保兼容性
+composeBom = "2025.05.00"
+
+# 导航相关版本
+# Navigation Compose: https://developer.android.com/jetpack/androidx/releases/navigation
 navigationCompose = "2.8.9"
 
-# 序列化
-kotlinxSerializationJson = "1.8.0"
+# 序列化相关版本
+# Kotlinx Serialization JSON: https://github.com/Kotlin/kotlinx.serialization
+kotlinxSerializationJson = "1.9.0"
 
-# 网络请求
+# 网络请求相关版本
+# OkHttp HTTP 客户端: https://square.github.io/okhttp/
 okhttp = "4.12.0"
-retrofit = "2.11.0"
+# Retrofit HTTP 客户端: https://square.github.io/retrofit/
+retrofit = "3.0.0"
+# Retrofit Kotlinx Serialization 转换器: https://github.com/JakeWharton/retrofit2-kotlinx-serialization-converter
 retrofit2KotlinxSerializationConverter = "1.0.0"
-# 网络请求框架日志框架
+# OkHttp 日志拦截器: https://github.com/square/okhttp/tree/master/okhttp-logging-interceptor
 loggingInterceptor = "4.12.0"
-chucker = "4.0.0"
-# 日志框架
+# Chucker 网络调试工具: https://github.com/ChuckerTeam/chucker
+# 说明: 通过 OkHttp 拦截器机制在应用通知栏显示网络请求功能
+chucker = "4.1.0"
+
+# 日志框架版本
+# Timber 日志库: https://github.com/JakeWharton/timber
 timber = "5.0.1"
 
-# 依赖注入相关
+# 依赖注入相关版本
+# Hilt 依赖注入框架: https://developer.android.com/training/dependency-injection/hilt-android
+# GitHub: https://github.com/google/dagger
+# 说明: 基于 Dagger 的 Android 依赖注入库
 hilt = "2.56"
+# Hilt Navigation Compose: https://developer.android.com/jetpack/androidx/releases/hilt
 hiltNavigationCompose = "1.2.0"
+# KSP (Kotlin Symbol Processing): https://github.com/google/ksp
+# 说明: Kotlin 注解处理器，用于代码生成
 ksp = "2.1.10-1.0.31"
 
-# 图片加载
+# 图片加载相关版本
+# Coil Compose 图片加载库: https://coil-kt.github.io/coil/compose/
 coilCompose = "2.7.0"
 
-# 模块化
+# UI 相关版本
+# AndroidX AppCompat: https://developer.android.com/jetpack/androidx/releases/appcompat
 appcompat = "1.7.0"
-material = "1.10.0"
+# Material Design Components: https://github.com/material-components/material-components-android
+material = "1.12.0"
 
-# 启动页
+# 启动页相关版本
+# AndroidX Core Splashscreen: https://developer.android.com/jetpack/androidx/releases/core
+# 说明: 提供启动画面 API，兼容 Android 12+ 的启动画面
 androidxCoreSplashscreen = "1.0.1"
 
-# Toast框架
-toaster = "12.8"
+# Toast 相关版本
+# Toaster 吐司框架: https://github.com/getActivity/Toaster
+toaster = "13.0"
 
-# 腾讯mmkv
-mmkv = "2.1.0"
+# 数据存储相关版本
+# 腾讯 MMKV 高性能存储: https://github.com/Tencent/MMKV
+mmkv = "2.2.2"
 
-# lottie
-lottieCompose = "6.3.0"
+# 动画相关版本
+# Lottie Compose 动画库: https://airbnb.io/lottie/#/android-compose
+# 说明: 支持 After Effects 动画的 Compose 库
+lottieCompose = "6.6.7"
 
+# 调试工具相关版本
+# LeakCanary 内存泄漏检测工具: https://github.com/square/leakcanary
+# 说明: 仅在 debug 构建中使用，用于检测内存泄漏
 leakcanaryAndroid = "2.14"
 
-# Room 数据库
+# 数据库相关版本
+# Room 数据库框架: https://developer.android.com/training/data-storage/room
+# 说明: SQLite 的抽象层，提供流畅的数据库访问
 room = "2.7.1"
 
-# 支付宝支付
-alipaysdkAndroid = "15.8.33"
+# 支付相关版本
+# 支付宝支付 SDK: https://opendocs.alipay.com/open/54/104509
+alipaysdkAndroid = "15.8.35"
 
-# 权限框架
+# 权限相关版本
+# XXPermissions 权限框架: https://github.com/getActivity/XXPermissions
 xxpermissions = "23.0"
 
 [libraries]
+
+# Android 核心库
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
+androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+
+# 测试相关库
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
-androidx-lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycleRuntimeKtx" }
-androidx-activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activityCompose" }
+
+# Jetpack Compose 相关库
 androidx-compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
 androidx-ui = { group = "androidx.compose.ui", name = "ui" }
 androidx-ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics" }
@@ -92,88 +152,94 @@ androidx-ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-man
 androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 
-# 导航
+# 导航相关库
 navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
 
-# 序列化
+# 序列化相关库
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 
-# okhttp
+# 网络请求相关库
 okhttp = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp" }
-
-# retrofit
 retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
-
-# 网络请求框架日志框架
 logging-interceptor = { module = "com.squareup.okhttp3:logging-interceptor", version.ref = "loggingInterceptor" }
-
-# 让Retrofit支持Kotlinx Serialization
 retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit2KotlinxSerializationConverter" }
 
 # 日志框架
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 
-# 依赖注入相关
+# 依赖注入相关库
 ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
 hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
 hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 
-# 图片加载框架
+# 图片加载相关库
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }
-# 模块化
+
+# UI 相关库
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 
-# 构建工具 - 使用已有的版本引用
+# 构建工具相关库
 android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
 kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
 
-# 通过OkHttp的拦截器机制
-# 实现在应用通知栏显示网络请求功能
+# 网络调试相关库
 chucker = { group = "com.github.chuckerteam.chucker", name = "library", version.ref = "chucker" }
 chucker-no-op = { group = "com.github.chuckerteam.chucker", name = "library-no-op", version.ref = "chucker" }
 
-# 启动页
+# 启动页相关库
 androidx-core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "androidxCoreSplashscreen" }
 
-# Toast框架
+# Toast 相关库
 toaster = { group = "com.github.getActivity", name = "Toaster", version.ref = "toaster" }
 
-# 腾讯mmkv
+# 数据存储相关库
 mmkv = { group = "com.tencent", name = "mmkv", version.ref = "mmkv" }
 
-# lottie
+# 动画相关库
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottieCompose" }
 
-# LeakCanary - 内存泄漏检测工具
-# https://github.com/square/leakcanary
+# 调试工具相关库
 leakcanary-android = { module = "com.squareup.leakcanary:leakcanary-android", version.ref = "leakcanaryAndroid" }
 
-# Room 数据库
+# 数据库相关库
 androidx-room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 androidx-room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 androidx-room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 androidx-room-testing = { group = "androidx.room", name = "room-testing", version.ref = "room" }
 androidx-room-paging = { group = "androidx.room", name = "room-paging", version.ref = "room" }
 
-# 支付宝支付
+# 支付相关库
 alipaysdk-android = { module = "com.alipay.sdk:alipaysdk-android", version.ref = "alipaysdkAndroid" }
 
-# 权限框架：https://github.com/getActivity/XXPermissions
+# 权限相关库
 xxpermissions = { module = "com.github.getActivity:XXPermissions", version.ref = "xxpermissions" }
 
 [plugins]
+
+# Android 相关插件
 android-application = { id = "com.android.application", version.ref = "agp" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+
+# Kotlin 相关插件
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
 kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 
-# 依赖注入相关
+# 依赖注入相关插件
 hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 
-# 序列化
-kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
-# 模块化
-android-library = { id = "com.android.library", version.ref = "agp" }
+# 版本更新说明
+# 1. 更新 Kotlin 版本时，需要同时更新 KSP 版本
+# 2. 更新 Hilt 版本时，需要检查与 Kotlin 版本的兼容性  
+# 3. 更新 Compose BOM 时，所有 Compose 相关库版本会自动更新
+# 4. 更新 Room 版本时，确保所有 Room 相关库使用相同版本
+# 5. 更新网络库时，确保 OkHttp、Retrofit 版本兼容
+#
+# 官方版本兼容性参考：
+# - Compose Compiler 兼容性: https://developer.android.com/jetpack/androidx/releases/compose-kotlin
+# - KSP 兼容性: https://github.com/google/ksp/releases  
+# - Hilt 兼容性: https://developer.android.com/jetpack/androidx/releases/hilt

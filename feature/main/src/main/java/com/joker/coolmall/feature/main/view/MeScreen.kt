@@ -178,7 +178,7 @@ private fun UserInfoSection(
                 if (sharedTransitionScope != null && animatedContentScope != null) {
                     with(sharedTransitionScope) {
                         modifier.sharedElement(
-                            state = rememberSharedContentState(key = "user_avatar"),
+                            sharedContentState = rememberSharedContentState(key = "user_avatar"),
                             animatedVisibilityScope = animatedContentScope
                         )
                     }

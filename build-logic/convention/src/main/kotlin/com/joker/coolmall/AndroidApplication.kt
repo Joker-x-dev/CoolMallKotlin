@@ -13,7 +13,7 @@ import org.gradle.kotlin.dsl.configure
  * - 应用ID和版本信息
  * - SDK版本配置
  * - Java编译选项
- * - 构建类型配置
+ * - 产品变体配置
  *
  * 主要通过扩展Android Gradle Plugin的ApplicationExtension来实现配置
  */
@@ -53,22 +53,6 @@ class AndroidApplication : Plugin<Project> {
 
                     // 设置Android测试运行器
                     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-                }
-
-                // 构建类型配置
-                buildTypes {
-                    // 发布构建配置
-                    release {
-                        // 是否启用代码压缩
-                        isMinifyEnabled = true
-                        // 资源压缩
-                        isShrinkResources = true
-                        // 配置ProGuard规则文件
-                        proguardFiles(
-                            getDefaultProguardFile("proguard-android-optimize.txt"), // 默认的Android优化规则
-                            "proguard-rules.pro" // 项目特定的ProGuard规则
-                        )
-                    }
                 }
 
                 // Java编译选项配置
