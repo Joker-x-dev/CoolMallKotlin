@@ -17,5 +17,5 @@ object CommonRoutes {
     /**
      * WebView 页面路由
      */
-    const val WEB_VIEW = "$COMMON_ROUTE/web-view"
+    const val WEB = "$COMMON_ROUTE/web"
 }

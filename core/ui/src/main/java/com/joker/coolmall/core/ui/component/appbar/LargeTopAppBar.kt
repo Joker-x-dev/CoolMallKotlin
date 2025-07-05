@@ -22,6 +22,7 @@ import com.joker.coolmall.core.designsystem.theme.ArrowLeftIcon
  * 支持滚动时标题字体大小的动态变化。主要用于页面主标题。
  *
  * @param title 顶部应用栏标题的资源ID，如果为null则不显示标题
+ * @param titleText 顶部应用栏标题的字符串，如果为null则不显示标题
  * @param colors 顶部应用栏的颜色配置
  * @param actions 顶部应用栏右侧的操作按钮区域
  * @param onBackClick 点击返回按钮时的回调函数
@@ -32,6 +33,7 @@ import com.joker.coolmall.core.designsystem.theme.ArrowLeftIcon
 @Composable
 fun LargeTopAppBar(
     title: Int? = null,
+    titleText: String? = null,
     actions: @Composable (RowScope.() -> Unit) = {},
     onBackClick: () -> Unit = {},
     showBackIcon: Boolean = true,
@@ -46,10 +48,10 @@ fun LargeTopAppBar(
 
     MediumTopAppBar(
         title = {
-            val titleText = title?.let { stringResource(it) } ?: ""
-            if (titleText.isNotBlank()) {
+            val finalTitle = titleText ?: title?.let { stringResource(it) } ?: ""
+            if (finalTitle.isNotBlank()) {
                 Text(
-                    text = titleText,
+                    text = finalTitle,
                     fontSize = titleFontSize,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis

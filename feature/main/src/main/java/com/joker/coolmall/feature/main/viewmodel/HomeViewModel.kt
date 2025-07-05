@@ -14,6 +14,7 @@ import com.joker.coolmall.core.model.request.GoodsSearchRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.navigation.AppNavigator
+import com.joker.coolmall.navigation.routes.CommonRoutes
 import com.joker.coolmall.navigation.routes.GoodsRoutes
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
@@ -143,6 +144,15 @@ class HomeViewModel @Inject constructor(
      */
     fun toRecommendPage() {
         super.toPage("${GoodsRoutes.CATEGORY}?recommend=true")
+    }
+
+    /**
+     * 跳转到 GitHub 页面
+     */
+    fun toGitHubPage() {
+        val url = "https://github.com/Joker-x-dev/CoolMallKotlin"
+        val title = "GitHub"
+        super.toPage("${CommonRoutes.WEB}?url=${java.net.URLEncoder.encode(url, "UTF-8")}&title=${java.net.URLEncoder.encode(title, "UTF-8")}")
     }
 
     /**

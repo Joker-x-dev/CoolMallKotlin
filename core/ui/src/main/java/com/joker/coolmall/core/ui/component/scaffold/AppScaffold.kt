@@ -31,6 +31,7 @@ import com.joker.coolmall.core.ui.component.appbar.LargeTopAppBar
  *
  * @param modifier 应用于Scaffold的修饰符
  * @param title 顶部应用栏标题的资源ID，如果为null则不显示标题
+ * @param titleText 顶部应用栏标题的字符串，如果为null则不显示标题
  * @param topBarColors 顶部应用栏的颜色配置
  * @param topBarActions 顶部应用栏右侧的操作按钮区域
  * @param showBackIcon 是否显示返回按钮，默认为true
@@ -48,6 +49,7 @@ import com.joker.coolmall.core.ui.component.appbar.LargeTopAppBar
 fun AppScaffold(
     modifier: Modifier = Modifier,
     title: Int? = null,
+    titleText: String? = null,
     topBarColors: TopAppBarColors = TopAppBarDefaults.centerAlignedTopAppBarColors(),
     topBarActions: @Composable (RowScope.() -> Unit) = {},
     showBackIcon: Boolean = true,
@@ -75,6 +77,7 @@ fun AppScaffold(
             } else if (useLargeTopBar) {
                 LargeTopAppBar(
                     title = title,
+                    titleText = titleText,
                     actions = topBarActions,
                     onBackClick = onBackClick,
                     showBackIcon = showBackIcon,
@@ -83,6 +86,7 @@ fun AppScaffold(
             } else {
                 CenterTopAppBar(
                     title = title,
+                    titleText = titleText,
                     colors = topBarColors,
                     actions = topBarActions,
                     onBackClick = onBackClick,

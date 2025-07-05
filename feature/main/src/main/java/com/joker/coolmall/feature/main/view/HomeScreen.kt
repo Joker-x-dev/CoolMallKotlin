@@ -92,6 +92,7 @@ internal fun HomeRoute(
         toGoodsDetail = viewModel::toGoodsDetail,
         toGoodsCategory = viewModel::toGoodsCategoryPage,
         toFlashSalePage = viewModel::toFlashSalePage,
+        toGitHubPage = viewModel::toGitHubPage,
         onRetry = viewModel::retryRequest
     )
 }
@@ -110,6 +111,7 @@ internal fun HomeRoute(
  * @param toGoodsDetail 跳转到商品详情页
  * @param toGoodsCategory 跳转到商品分类页
  * @param toFlashSalePage 跳转到限时精选页
+ * @param toGitHubPage 跳转到GitHub页
  * @param onRetry 重试请求回调
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -127,12 +129,14 @@ internal fun HomeScreen(
     toGoodsDetail: (Long) -> Unit = {},
     toGoodsCategory: (Long) -> Unit = {},
     toFlashSalePage: () -> Unit = {},
+    toGitHubPage: () -> Unit = {},
     onRetry: () -> Unit = {}
 ) {
     CommonScaffold(
         topBar = {
             HomeTopAppBar(
-                toGoodsSearch = toGoodsSearch
+                toGoodsSearch = toGoodsSearch,
+                toGitHubPage = toGitHubPage
             )
         }
     ) {
@@ -151,7 +155,8 @@ internal fun HomeScreen(
                 shouldTriggerLoadMore = shouldTriggerLoadMore,
                 toGoodsDetail = toGoodsDetail,
                 toGoodsCategory = toGoodsCategory,
-                toFlashSalePage = toFlashSalePage
+                toFlashSalePage = toFlashSalePage,
+                toGitHubPage = toGitHubPage
             )
         }
     }
@@ -169,6 +174,7 @@ internal fun HomeScreen(
  * @param toGoodsDetail 跳转到商品详情页
  * @param toGoodsCategory 跳转到商品分类页
  * @param toFlashSalePage 跳转到限时精选页
+ * @param toGitHubPage 跳转到GitHub页
  */
 @Composable
 private fun HomeContentView(
@@ -181,7 +187,8 @@ private fun HomeContentView(
     shouldTriggerLoadMore: (lastIndex: Int, totalCount: Int) -> Boolean,
     toGoodsDetail: (Long) -> Unit,
     toGoodsCategory: (Long) -> Unit,
-    toFlashSalePage: () -> Unit
+    toFlashSalePage: () -> Unit,
+    toGitHubPage: () -> Unit
 ) {
 
     RefreshLayout(
@@ -399,11 +406,13 @@ private fun FlashSale(
 /**
  * 首页顶部导航栏
  * @param toGoodsSearch 跳转到商品搜索页
+ * @param toGitHubPage 跳转到GitHub页
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HomeTopAppBar(
-    toGoodsSearch: () -> Unit
+    toGoodsSearch: () -> Unit,
+    toGitHubPage: () -> Unit
 ) {
     TopAppBar(
         navigationIcon = {
@@ -447,7 +456,7 @@ private fun HomeTopAppBar(
         },
         actions = {
             IconButton(
-                onClick = { },
+                onClick = toGitHubPage,
                 modifier = Modifier
                     .padding(horizontal = 8.dp)
                     .size(27.dp)

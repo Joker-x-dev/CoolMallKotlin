@@ -12,6 +12,6 @@ import javax.inject.Inject
 @HiltViewModel
 class AboutViewModel @Inject constructor(
     navigator: AppNavigator,
-    appState: AppState
+    appState: AppState,
 ) : BaseViewModel(navigator, appState) {
 }

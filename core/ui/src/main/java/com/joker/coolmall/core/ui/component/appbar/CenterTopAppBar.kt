@@ -21,6 +21,7 @@ import com.joker.coolmall.core.designsystem.theme.ArrowLeftIcon
  * 支持显示返回按钮、自定义操作按钮等功能。主要用于二级页面的导航栏。
  *
  * @param title 顶部应用栏标题的资源ID，如果为null则不显示标题
+ * @param titleText 顶部应用栏标题的字符串，如果为null则不显示标题
  * @param colors 顶部应用栏的颜色配置，默认使用 Material3 的居中对齐顶部应用栏颜色
  * @param actions 顶部应用栏右侧的操作按钮区域，默认为空
  * @param onBackClick 点击返回按钮时的回调函数
@@ -32,6 +33,7 @@ import com.joker.coolmall.core.designsystem.theme.ArrowLeftIcon
 @Composable
 fun CenterTopAppBar(
     title: Int? = null,
+    titleText: String? = null,
     colors: TopAppBarColors = TopAppBarDefaults.centerAlignedTopAppBarColors(),
     actions: @Composable (RowScope.() -> Unit) = {},
     onBackClick: () -> Unit = {},
@@ -46,10 +48,10 @@ fun CenterTopAppBar(
             }
         },
         title = {
-            val title = title?.let { stringResource(it) } ?: ""
-            if (title.isNotBlank()) {
+            val finalTitle = titleText ?: title?.let { stringResource(it) } ?: ""
+            if (finalTitle.isNotBlank()) {
                 Text(
-                    text = title,
+                    text = finalTitle,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )

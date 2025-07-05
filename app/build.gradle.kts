@@ -91,6 +91,8 @@ dependencies {
     implementation(project(":feature:order"))
     // 客服模块
     implementation(project(":feature:cs"))
+    // 通用模块
+    implementation(project(":feature:common"))
 
     // region 依赖注入
     // https://developer.android.google.cn/training/dependency-injection/hilt-android?hl=zh-cn
