@@ -29,8 +29,9 @@ import com.joker.coolmall.core.ui.component.text.AppText
 @Composable
 fun TitleWithLine(
     text: String,
+    textColor: Color = MaterialTheme.colorScheme.onSurface,
     modifier: Modifier = Modifier,
-    lineColor: Color = MaterialTheme.colorScheme.primary
+    lineColor: Color = MaterialTheme.colorScheme.primary,
 ) {
     Row(
         modifier = modifier,
@@ -49,7 +50,8 @@ fun TitleWithLine(
         // 标题文本
         AppText(
             text = text,
-            fontWeight = TitleLarge.fontWeight
+            fontWeight = TitleLarge.fontWeight,
+            color = textColor
         )
     }
 }
