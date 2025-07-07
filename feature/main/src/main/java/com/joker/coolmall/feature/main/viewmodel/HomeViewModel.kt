@@ -156,6 +156,13 @@ class HomeViewModel @Inject constructor(
     }
 
     /**
+     * 跳转到关于页面
+     */
+    fun toAboutPage() {
+        super.toPage(CommonRoutes.ABOUT)
+    }
+
+    /**
      * 查找指定分类的所有子分类ID
      * @param parentId 父分类ID
      * @param allCategories 所有分类列表

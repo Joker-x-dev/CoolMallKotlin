@@ -93,6 +93,7 @@ internal fun HomeRoute(
         toGoodsCategory = viewModel::toGoodsCategoryPage,
         toFlashSalePage = viewModel::toFlashSalePage,
         toGitHubPage = viewModel::toGitHubPage,
+        toAboutPage = viewModel::toAboutPage,
         onRetry = viewModel::retryRequest
     )
 }
@@ -112,6 +113,7 @@ internal fun HomeRoute(
  * @param toGoodsCategory 跳转到商品分类页
  * @param toFlashSalePage 跳转到限时精选页
  * @param toGitHubPage 跳转到GitHub页
+ * @param toAboutPage 跳转到关于页
  * @param onRetry 重试请求回调
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -130,13 +132,15 @@ internal fun HomeScreen(
     toGoodsCategory: (Long) -> Unit = {},
     toFlashSalePage: () -> Unit = {},
     toGitHubPage: () -> Unit = {},
+    toAboutPage: () -> Unit = {},
     onRetry: () -> Unit = {}
 ) {
     CommonScaffold(
         topBar = {
             HomeTopAppBar(
                 toGoodsSearch = toGoodsSearch,
-                toGitHubPage = toGitHubPage
+                toGitHubPage = toGitHubPage,
+                toAboutPage = toAboutPage
             )
         }
     ) {
@@ -407,17 +411,21 @@ private fun FlashSale(
  * 首页顶部导航栏
  * @param toGoodsSearch 跳转到商品搜索页
  * @param toGitHubPage 跳转到GitHub页
+ * @param toAboutPage 跳转到关于页
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HomeTopAppBar(
     toGoodsSearch: () -> Unit,
-    toGitHubPage: () -> Unit
+    toGitHubPage: () -> Unit,
+    toAboutPage: () -> Unit
 ) {
     TopAppBar(
         navigationIcon = {
             LogoIcon(
-                modifier = Modifier.padding(horizontal = 8.dp),
+                modifier = Modifier
+                    .padding(horizontal = 8.dp)
+                    .clickable { toAboutPage() },
                 size = 34.dp
             )
         },
