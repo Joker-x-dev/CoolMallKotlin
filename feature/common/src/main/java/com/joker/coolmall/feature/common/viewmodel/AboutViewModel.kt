@@ -47,8 +47,12 @@ class AboutViewModel @Inject constructor(
                     LinkItem(
                         title = "GitHub",
                         url = "https://github.com/Joker-x-dev/CoolMallKotlin",
+                        description = "https://github.com/Joker-x-dev/CoolMallKotlin"
                     ),
-                    LinkItem(title = "Gitee", url = "https://gitee.com/Joker-x-dev/CoolMallKotlin"),
+                    LinkItem(
+                        title = "Gitee", url = "https://gitee.com/Joker-x-dev/CoolMallKotlin",
+                        description = "https://gitee.com/Joker-x-dev/CoolMallKotlin"
+                    ),
                 )
             ),
             LinkCategory(
@@ -62,7 +66,7 @@ class AboutViewModel @Inject constructor(
                     LinkItem(
                         title = "Demo 下载",
                         url = "https://www.pgyer.com/CoolMallKotlinProdRelease",
-                        description = "下载最新的安卓应用安装包进行体验"
+                        description = "不定时更新，可能不会同步最新代码变更"
                     ),
                     LinkItem(
                         title = "图标来源",

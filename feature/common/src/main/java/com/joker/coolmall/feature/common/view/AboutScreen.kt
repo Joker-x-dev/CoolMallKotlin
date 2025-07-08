@@ -64,12 +64,12 @@ import com.joker.coolmall.core.designsystem.theme.ArrowLeftIcon
 import com.joker.coolmall.core.designsystem.theme.LogoIcon
 import com.joker.coolmall.core.designsystem.theme.ShapeExtraLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalLarge
+import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalMedium
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXLarge
-import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.ui.component.list.AppListItem
 import com.joker.coolmall.core.ui.component.text.AppText
 import com.joker.coolmall.core.ui.component.text.TextSize
@@ -432,17 +432,16 @@ private fun AboutBottomScrollableContent(
                         painter = painterResource(id = R.drawable.avatar),
                         contentDescription = "Joker.x",
                         modifier = Modifier
-                            .size(52.dp)
+                            .size(36.dp)
                             .clip(CircleShape)
                     )
                     Column(
-                        modifier = Modifier.padding(start = SpaceHorizontalLarge)
+                        modifier = Modifier.padding(start = SpaceHorizontalMedium)
                     ) {
                         AppText(
                             text = "Joker.X",
                             size = TextSize.TITLE_LARGE,
                         )
-                        SpaceVerticalXSmall()
                         AppText(
                             text = "joker.x.dev@gmail.com",
                             type = TextType.TERTIARY,

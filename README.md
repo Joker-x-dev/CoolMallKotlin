@@ -24,7 +24,10 @@ Android 开发感兴趣，无论是学习还是共同创造，都欢迎加入。
 
 ## 📱 项目预览
 
-<img src="docs/images/preview.png"  alt="青商城应用预览"/>
+<img src="docs/images/preview1.png"  alt="青商城应用预览1"/>
+<img src="docs/images/preview2.png"  alt="青商城应用预览2"/>
+<img src="docs/images/preview3.png"  alt="青商城应用预览3"/>
+<img src="docs/images/preview4.png"  alt="青商城应用预览4"/>
 
 ### 📍 项目地址
 
@@ -160,8 +163,8 @@ Android 开发感兴趣，无论是学习还是共同创造，都欢迎加入。
 
 
 - **通用模块 (common)**
-    - 关于我们 (about) `待开发`
-    - WebView 页面 (web) `待开发`
+    - 关于我们 (about) `仅页面`
+    - WebView 页面 (web) `已完成`
 
 
 - **启动流程模块 (launch)**
