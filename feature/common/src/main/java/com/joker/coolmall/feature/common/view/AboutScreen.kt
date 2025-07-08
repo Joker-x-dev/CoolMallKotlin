@@ -33,7 +33,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -76,8 +75,6 @@ import com.joker.coolmall.core.ui.component.text.TextSize
 import com.joker.coolmall.core.ui.component.text.TextType
 import com.joker.coolmall.core.ui.component.title.TitleWithLine
 import com.joker.coolmall.feature.common.R
-import com.joker.coolmall.feature.common.model.LinkCategory
-import com.joker.coolmall.feature.common.model.LinkItem
 import com.joker.coolmall.feature.common.viewmodel.AboutViewModel
 import kotlinx.coroutines.delay
 import kotlin.math.PI
@@ -86,30 +83,78 @@ import kotlin.math.sin
 
 /**
  * 关于我们路由
+ *
+ * @param viewModel 关于我们 ViewModel
  */
 @Composable
 internal fun AboutRoute(
     viewModel: AboutViewModel = hiltViewModel()
 ) {
-    val appDetails by viewModel.appDetails.collectAsState()
-    val linkCategories by viewModel.linkCategories.collectAsState()
-
     AboutScreen(
-        appDetails = appDetails,
-        linkCategories = linkCategories,
-        onBackClick = viewModel::navigateBack
+        onBackClick = viewModel::navigateBack,
+        onDeveloperClick = viewModel::onDeveloperClick,
+        onContributorsClick = viewModel::onContributorsClick,
+        onGitHubClick = viewModel::onGitHubClick,
+        onGiteeClick = viewModel::onGiteeClick,
+        onApiDocClick = viewModel::onApiDocClick,
+        onDemoDownloadClick = viewModel::onDemoDownloadClick,
+        onIconSourceClick = viewModel::onIconSourceClick,
+        onGitHubDiscussionClick = viewModel::onGitHubDiscussionClick,
+        onQQGroupClick = viewModel::onQQGroupClick,
+        onWeChatGroupClick = viewModel::onWeChatGroupClick,
+        onTranslationClick = viewModel::onTranslationClick,
+        onSupportClick = viewModel::onSupportClick,
+        onHelpClick = viewModel::onHelpClick,
+        onCitationClick = viewModel::onCitationClick,
+        onUserAgreementClick = viewModel::onUserAgreementClick,
+        onPrivacyPolicyClick = viewModel::onPrivacyPolicyClick,
+        onOpenSourceLicenseClick = viewModel::onOpenSourceLicenseClick
     )
 }
 
 /**
  * 关于我们界面
+ *
+ * @param onBackClick 返回按钮回调
+ * @param onDeveloperClick 点击开发者信息回调
+ * @param onContributorsClick 点击贡献者列表回调
+ * @param onGitHubClick 点击GitHub项目地址回调
+ * @param onGiteeClick 点击Gitee项目地址回调
+ * @param onApiDocClick 点击API文档回调
+ * @param onDemoDownloadClick 点击Demo下载回调
+ * @param onIconSourceClick 点击图标来源回调
+ * @param onGitHubDiscussionClick 点击GitHub讨论区回调
+ * @param onQQGroupClick 点击QQ交流群回调
+ * @param onWeChatGroupClick 点击微信交流群回调
+ * @param onTranslationClick 点击翻译帮助回调
+ * @param onSupportClick 点击支持项目回调
+ * @param onHelpClick 点击帮助与反馈回调
+ * @param onCitationClick 点击引用致谢回调
+ * @param onUserAgreementClick 点击用户协议回调
+ * @param onPrivacyPolicyClick 点击隐私政策回调
+ * @param onOpenSourceLicenseClick 点击开源许可回调
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AboutScreen(
-    appDetails: List<Pair<String, String>>,
-    linkCategories: List<LinkCategory>,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit = {},
+    onDeveloperClick: () -> Unit = {},
+    onContributorsClick: () -> Unit = {},
+    onGitHubClick: () -> Unit = {},
+    onGiteeClick: () -> Unit = {},
+    onApiDocClick: () -> Unit = {},
+    onDemoDownloadClick: () -> Unit = {},
+    onIconSourceClick: () -> Unit = {},
+    onGitHubDiscussionClick: () -> Unit = {},
+    onQQGroupClick: () -> Unit = {},
+    onWeChatGroupClick: () -> Unit = {},
+    onTranslationClick: () -> Unit = {},
+    onSupportClick: () -> Unit = {},
+    onHelpClick: () -> Unit = {},
+    onCitationClick: () -> Unit = {},
+    onUserAgreementClick: () -> Unit = {},
+    onPrivacyPolicyClick: () -> Unit = {},
+    onOpenSourceLicenseClick: () -> Unit = {}
 ) {
     val scrollState = rememberScrollState(0)
     val uriHandler = LocalUriHandler.current
@@ -177,15 +222,24 @@ internal fun AboutScreen(
         // 底部滚动内容
         AboutBottomScrollableContent(
             scrollState = scrollState,
-            appDetails = appDetails,
-            linkCategories = linkCategories,
-            onLinkClick = { url ->
-                if (url.isNotBlank()) {
-                    uriHandler.openUri(url)
-                } else {
-                    // TODO: 导航到开源许可页面
-                }
-            }
+            uriHandler = uriHandler,
+            onDeveloperClick = onDeveloperClick,
+            onContributorsClick = onContributorsClick,
+            onGitHubClick = onGitHubClick,
+            onGiteeClick = onGiteeClick,
+            onApiDocClick = onApiDocClick,
+            onDemoDownloadClick = onDemoDownloadClick,
+            onIconSourceClick = onIconSourceClick,
+            onGitHubDiscussionClick = onGitHubDiscussionClick,
+            onQQGroupClick = onQQGroupClick,
+            onWeChatGroupClick = onWeChatGroupClick,
+            onTranslationClick = onTranslationClick,
+            onSupportClick = onSupportClick,
+            onHelpClick = onHelpClick,
+            onCitationClick = onCitationClick,
+            onUserAgreementClick = onUserAgreementClick,
+            onPrivacyPolicyClick = onPrivacyPolicyClick,
+            onOpenSourceLicenseClick = onOpenSourceLicenseClick
         )
 
         // 动画工具栏
@@ -390,13 +444,48 @@ private fun AboutTopSection() {
 
 /**
  * 底部可滚动内容区域
+ *
+ * @param scrollState 滚动状态
+ * @param uriHandler URI处理器，用于打开外部链接
+ * @param onDeveloperClick 点击开发者信息回调
+ * @param onContributorsClick 点击贡献者列表回调
+ * @param onGitHubClick 点击GitHub项目地址回调
+ * @param onGiteeClick 点击Gitee项目地址回调
+ * @param onApiDocClick 点击API文档回调
+ * @param onDemoDownloadClick 点击Demo下载回调
+ * @param onIconSourceClick 点击图标来源回调
+ * @param onGitHubDiscussionClick 点击GitHub讨论区回调
+ * @param onQQGroupClick 点击QQ交流群回调
+ * @param onWeChatGroupClick 点击微信交流群回调
+ * @param onTranslationClick 点击翻译帮助回调
+ * @param onSupportClick 点击支持项目回调
+ * @param onHelpClick 点击帮助与反馈回调
+ * @param onCitationClick 点击引用致谢回调
+ * @param onUserAgreementClick 点击用户协议回调
+ * @param onPrivacyPolicyClick 点击隐私政策回调
+ * @param onOpenSourceLicenseClick 点击开源许可回调
  */
 @Composable
 private fun AboutBottomScrollableContent(
     scrollState: ScrollState,
-    appDetails: List<Pair<String, String>>,
-    linkCategories: List<LinkCategory>,
-    onLinkClick: (String) -> Unit
+    uriHandler: androidx.compose.ui.platform.UriHandler,
+    onDeveloperClick: () -> Unit,
+    onContributorsClick: () -> Unit,
+    onGitHubClick: () -> Unit,
+    onGiteeClick: () -> Unit,
+    onApiDocClick: () -> Unit,
+    onDemoDownloadClick: () -> Unit,
+    onIconSourceClick: () -> Unit,
+    onGitHubDiscussionClick: () -> Unit,
+    onQQGroupClick: () -> Unit,
+    onWeChatGroupClick: () -> Unit,
+    onTranslationClick: () -> Unit,
+    onSupportClick: () -> Unit,
+    onHelpClick: () -> Unit,
+    onCitationClick: () -> Unit,
+    onUserAgreementClick: () -> Unit,
+    onPrivacyPolicyClick: () -> Unit,
+    onOpenSourceLicenseClick: () -> Unit
 ) {
     Column(
         modifier = Modifier
@@ -406,25 +495,45 @@ private fun AboutBottomScrollableContent(
         // 顶部占位间距，使内容从动态背景下方开始
         Spacer(modifier = Modifier.height(360.dp))
 
+        // 应用详情卡片（不可点击）
         Card {
-            appDetails.forEachIndexed { index, (title, value) ->
-                AppListItem(
-                    title = title,
-                    trailingText = value,
-                    showArrow = false,
-                    showDivider = index < appDetails.size - 1,
-                    horizontalPadding = SpaceHorizontalLarge,
-                    verticalPadding = SpaceVerticalLarge
-                )
-            }
+            // 应用名称
+            AppListItem(
+                title = "应用名称",
+                trailingText = "青商城",
+                showArrow = false,
+                showDivider = true,
+                horizontalPadding = SpaceHorizontalLarge,
+                verticalPadding = SpaceVerticalLarge
+            )
+            // 版本号
+            AppListItem(
+                title = "版本号",
+                trailingText = "1.0.0",
+                showArrow = false,
+                showDivider = true,
+                horizontalPadding = SpaceHorizontalLarge,
+                verticalPadding = SpaceVerticalLarge
+            )
+            // 版本代码
+            AppListItem(
+                title = "版本代码",
+                trailingText = "2025070701",
+                showArrow = false,
+                showDivider = false,
+                horizontalPadding = SpaceHorizontalLarge,
+                verticalPadding = SpaceVerticalLarge
+            )
         }
 
         SpaceVerticalXLarge()
 
+        // 开发者部分
         TitleWithLine("开发者")
         SpaceVerticalMedium()
 
         Card {
+            // 开发者信息
             AppListItem(
                 title = "",
                 leadingContent = {
@@ -452,36 +561,234 @@ private fun AboutBottomScrollableContent(
                 showArrow = true,
                 showDivider = true,
                 horizontalPadding = SpaceHorizontalLarge,
+                onClick = {
+                    onDeveloperClick()
+                }
             )
+            // 贡献者
             AppListItem(
                 title = "贡献者",
                 showArrow = true,
                 showDivider = false,
                 horizontalPadding = SpaceHorizontalLarge,
-                verticalPadding = SpaceVerticalLarge
+                verticalPadding = SpaceVerticalLarge,
+                onClick = {
+                    onContributorsClick()
+                }
             )
         }
 
         SpaceVerticalXLarge()
 
-        linkCategories.forEach { category ->
-            TitleWithLine(category.title)
-            SpaceVerticalMedium()
-            Card {
-                category.links.forEachIndexed { index, link ->
-                    AppListItem(
-                        title = link.title,
-                        description = link.description,
-                        showArrow = true,
-                        showDivider = index < category.links.size - 1,
-                        onClick = { onLinkClick(link.url) },
-                        horizontalPadding = SpaceHorizontalLarge,
-                        verticalPadding = SpaceVerticalLarge
-                    )
-                }
-            }
-            SpaceVerticalXLarge()
+        // 项目地址部分
+        TitleWithLine("项目地址")
+        SpaceVerticalMedium()
+        Card {
+            // GitHub
+            AppListItem(
+                title = "GitHub",
+                description = "https://github.com/Joker-x-dev/CoolMallKotlin",
+                showArrow = true,
+                showDivider = true,
+                onClick = {
+                    onGitHubClick()
+                },
+                horizontalPadding = SpaceHorizontalLarge,
+                verticalPadding = SpaceVerticalLarge
+            )
+            // Gitee
+            AppListItem(
+                title = "Gitee",
+                description = "https://gitee.com/Joker-x-dev/CoolMallKotlin",
+                showArrow = true,
+                showDivider = false,
+                onClick = {
+                    onGiteeClick()
+                },
+                horizontalPadding = SpaceHorizontalLarge,
+                verticalPadding = SpaceVerticalLarge
+            )
         }
+        SpaceVerticalXLarge()
+
+        // 相关资源部分
+        TitleWithLine("相关资源")
+        SpaceVerticalMedium()
+        Card {
+            // API 文档
+            AppListItem(
+                title = "API 文档",
+                description = "查看项目后端接口的详细定义",
+                showArrow = true,
+                showDivider = true,
+                onClick = {
+                    onApiDocClick()
+                },
+                horizontalPadding = SpaceHorizontalLarge,
+                verticalPadding = SpaceVerticalLarge
+            )
+            // Demo 下载
+            AppListItem(
+                title = "Demo 下载",
+                description = "不定时更新，可能不会同步最新代码变更",
+                showArrow = true,
+                showDivider = true,
+                onClick = {
+                    onDemoDownloadClick()
+                },
+                horizontalPadding = SpaceHorizontalLarge,
+                verticalPadding = SpaceVerticalLarge
+            )
+            // 图标来源
+            AppListItem(
+                title = "图标来源",
+                description = "项目使用的图标库来自图鸟 Icon",
+                showArrow = true,
+                showDivider = false,
+                onClick = {
+                    onIconSourceClick()
+                },
+                horizontalPadding = SpaceHorizontalLarge,
+                verticalPadding = SpaceVerticalLarge
+            )
+        }
+        SpaceVerticalXLarge()
+
+        // 讨论部分
+        TitleWithLine("讨论")
+        SpaceVerticalMedium()
+        Card {
+            // GitHub 讨论区
+            AppListItem(
+                title = "GitHub 讨论区",
+                description = "在 GitHub 上参与项目讨论",
+                showArrow = true,
+                showDivider = true,
+                onClick = {
+                    onGitHubDiscussionClick()
+                },
+                horizontalPadding = SpaceHorizontalLarge,
+                verticalPadding = SpaceVerticalLarge
+            )
+            // QQ 交流群
+            AppListItem(
+                title = "QQ 交流群",
+                showArrow = true,
+                showDivider = true,
+                onClick = {
+                    onQQGroupClick()
+                },
+                horizontalPadding = SpaceHorizontalLarge,
+                verticalPadding = SpaceVerticalLarge
+            )
+            // 微信交流群
+            AppListItem(
+                title = "微信交流群",
+                showArrow = true,
+                showDivider = false,
+                onClick = {
+                    onWeChatGroupClick()
+                },
+                horizontalPadding = SpaceHorizontalLarge,
+                verticalPadding = SpaceVerticalLarge
+            )
+        }
+        SpaceVerticalXLarge()
+
+        // 支持与帮助部分
+        TitleWithLine("支持与帮助")
+        SpaceVerticalMedium()
+        Card {
+            // 翻译
+            AppListItem(
+                title = "翻译",
+                description = "帮助我将应用翻译为您的语言",
+                showArrow = true,
+                showDivider = true,
+                onClick = {
+                    onTranslationClick()
+                },
+                horizontalPadding = SpaceHorizontalLarge,
+                verticalPadding = SpaceVerticalLarge
+            )
+            // 支持
+            AppListItem(
+                title = "支持",
+                description = "您可以在此赞助以支持我",
+                showArrow = true,
+                showDivider = true,
+                onClick = {
+                    onSupportClick()
+                },
+                horizontalPadding = SpaceHorizontalLarge,
+                verticalPadding = SpaceVerticalLarge
+            )
+            // 帮助
+            AppListItem(
+                title = "帮助",
+                description = "有任何问题或建议，欢迎提交 Issue",
+                showArrow = true,
+                showDivider = false,
+                onClick = {
+                    onHelpClick()
+                },
+                horizontalPadding = SpaceHorizontalLarge,
+                verticalPadding = SpaceVerticalLarge
+            )
+        }
+        SpaceVerticalXLarge()
+
+        // 其他部分
+        TitleWithLine("其他")
+        SpaceVerticalMedium()
+        Card {
+            // 引用
+            AppListItem(
+                title = "引用",
+                description = "项目中使用的第三方库和资源致谢",
+                showArrow = true,
+                showDivider = true,
+                onClick = {
+                    onCitationClick()
+                },
+                horizontalPadding = SpaceHorizontalLarge,
+                verticalPadding = SpaceVerticalLarge
+            )
+            // 用户协议
+            AppListItem(
+                title = "用户协议",
+                showArrow = true,
+                showDivider = true,
+                onClick = {
+                    onUserAgreementClick()
+                },
+                horizontalPadding = SpaceHorizontalLarge,
+                verticalPadding = SpaceVerticalLarge
+            )
+            // 隐私政策
+            AppListItem(
+                title = "隐私政策",
+                showArrow = true,
+                showDivider = true,
+                onClick = {
+                    onPrivacyPolicyClick()
+                },
+                horizontalPadding = SpaceHorizontalLarge,
+                verticalPadding = SpaceVerticalLarge
+            )
+            // 开源许可
+            AppListItem(
+                title = "开源许可",
+                showArrow = true,
+                showDivider = false,
+                onClick = {
+                    onOpenSourceLicenseClick()
+                },
+                horizontalPadding = SpaceHorizontalLarge,
+                verticalPadding = SpaceVerticalLarge
+            )
+        }
+        SpaceVerticalXLarge()
 
         AppText(
             text = "© 2025 Joker.X & CoolMallKotlin Contributors",
@@ -497,6 +804,9 @@ private fun AboutBottomScrollableContent(
 
 /**
  * 动画工具栏
+ *
+ * @param onBackClick 返回按钮回调
+ * @param toolbarAlpha 工具栏透明度
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -537,29 +847,7 @@ private fun AboutAnimatedToolBar(
 @Composable
 internal fun AboutScreenPreview() {
     AppTheme {
-        AboutScreen(
-            appDetails = listOf(
-                "应用名称" to "青商城",
-                "版本号" to "1.0.0",
-                "开发者" to "Joker.x"
-            ),
-            linkCategories = listOf(
-                LinkCategory(
-                    title = "项目地址",
-                    links = listOf(
-                        LinkItem(title = "GitHub", url = "...", description = "本项目为开源项目"),
-                        LinkItem(title = "Gitee", url = "...")
-                    )
-                ),
-                LinkCategory(
-                    title = "其他",
-                    links = listOf(
-                        LinkItem(title = "开源许可", url = "")
-                    )
-                )
-            ),
-            onBackClick = {}
-        )
+        AboutScreen()
     }
 }
 
@@ -570,28 +858,6 @@ internal fun AboutScreenPreview() {
 @Composable
 internal fun AboutScreenPreviewDark() {
     AppTheme(darkTheme = true) {
-        AboutScreen(
-            appDetails = listOf(
-                "应用名称" to "青商城",
-                "版本号" to "1.0.0",
-                "开发者" to "Joker.x"
-            ),
-            linkCategories = listOf(
-                LinkCategory(
-                    title = "项目地址",
-                    links = listOf(
-                        LinkItem(title = "GitHub", url = "...", description = "本项目为开源项目"),
-                        LinkItem(title = "Gitee", url = "...")
-                    )
-                ),
-                LinkCategory(
-                    title = "其他",
-                    links = listOf(
-                        LinkItem(title = "开源许可", url = "")
-                    )
-                )
-            ),
-            onBackClick = {}
-        )
+        AboutScreen()
     }
 } 

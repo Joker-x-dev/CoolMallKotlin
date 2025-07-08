@@ -8,13 +8,23 @@ import android.webkit.WebViewClient
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -38,14 +48,23 @@ internal fun WebRoute(
     val webViewData by viewModel.webViewData.collectAsState()
     val pageTitle by viewModel.pageTitle.collectAsState()
     val currentProgress by viewModel.currentProgress.collectAsState()
+    val shouldRefresh by viewModel.shouldRefresh.collectAsState()
+    val showDropdownMenu by viewModel.showDropdownMenu.collectAsState()
 
     WebScreen(
         webViewData = webViewData,
         pageTitle = pageTitle,
         currentProgress = currentProgress,
+        shouldRefresh = shouldRefresh,
+        showDropdownMenu = showDropdownMenu,
         onBackClick = viewModel::navigateBack,
         onTitleChange = viewModel::updatePageTitle,
-        onProgressChange = viewModel::updateProgress
+        onProgressChange = viewModel::updateProgress,
+        onRefreshClick = viewModel::refreshPage,
+        onResetRefreshState = viewModel::resetRefreshState,
+        onOpenInBrowser = viewModel::openInBrowser,
+        onShowDropdownMenu = viewModel::showDropdownMenu,
+        onDismissDropdownMenu = viewModel::dismissDropdownMenu
     )
 }
 
@@ -55,9 +74,16 @@ internal fun WebRoute(
  * @param webViewData WebView 数据
  * @param pageTitle 页面标题
  * @param currentProgress 当前加载进度
+ * @param shouldRefresh 是否应该刷新页面
+ * @param showDropdownMenu 是否显示下拉菜单
  * @param onBackClick 返回按钮回调
  * @param onTitleChange 标题变化回调
  * @param onProgressChange 进度变化回调
+ * @param onRefreshClick 刷新按钮回调
+ * @param onResetRefreshState 重置刷新状态回调
+ * @param onOpenInBrowser 用浏览器打开回调
+ * @param onShowDropdownMenu 显示下拉菜单回调
+ * @param onDismissDropdownMenu 隐藏下拉菜单回调
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,39 +91,119 @@ internal fun WebScreen(
     webViewData: WebViewData = WebViewData(),
     pageTitle: String = "网页",
     currentProgress: Int = 0,
+    shouldRefresh: Boolean = false,
+    showDropdownMenu: Boolean = false,
     onBackClick: () -> Unit = {},
     onTitleChange: (String) -> Unit = {},
-    onProgressChange: (Int) -> Unit = {}
+    onProgressChange: (Int) -> Unit = {},
+    onRefreshClick: () -> Unit = {},
+    onResetRefreshState: () -> Unit = {},
+    onOpenInBrowser: () -> Unit = {},
+    onShowDropdownMenu: () -> Unit = {},
+    onDismissDropdownMenu: () -> Unit = {}
 ) {
     AppScaffold(
         titleText = pageTitle,
-        onBackClick = onBackClick
+        onBackClick = onBackClick,
+        topBarActions = {
+            WebScreenTopBarActions(
+                showDropdownMenu = showDropdownMenu,
+                onShowDropdownMenu = onShowDropdownMenu,
+                onDismissDropdownMenu = onDismissDropdownMenu,
+                onRefreshClick = onRefreshClick,
+                onOpenInBrowser = onOpenInBrowser
+            )
+        }
     ) {
         WebViewContent(
             url = webViewData.url,
             currentProgress = currentProgress,
+            shouldRefresh = shouldRefresh,
             onTitleChange = onTitleChange,
-            onProgressChange = onProgressChange
+            onProgressChange = onProgressChange,
+            onResetRefreshState = onResetRefreshState
+        )
+    }
+}
+
+/**
+ * WebScreen 顶部栏操作按钮组件
+ *
+ * @param showDropdownMenu 是否显示下拉菜单
+ * @param onShowDropdownMenu 显示下拉菜单回调
+ * @param onDismissDropdownMenu 隐藏下拉菜单回调
+ * @param onRefreshClick 刷新按钮回调
+ * @param onOpenInBrowser 用浏览器打开回调
+ */
+@Composable
+private fun WebScreenTopBarActions(
+    showDropdownMenu: Boolean,
+    onShowDropdownMenu: () -> Unit,
+    onDismissDropdownMenu: () -> Unit,
+    onRefreshClick: () -> Unit,
+    onOpenInBrowser: () -> Unit
+) {
+    // 溢出菜单按钮
+    IconButton(onClick = onShowDropdownMenu) {
+        Icon(
+            imageVector = Icons.Default.MoreVert,
+            contentDescription = "更多选项"
+        )
+    }
+
+    // 下拉菜单
+    DropdownMenu(
+        expanded = showDropdownMenu,
+        onDismissRequest = onDismissDropdownMenu
+    ) {
+        // 刷新选项
+        DropdownMenuItem(
+            text = { Text("刷新") },
+            onClick = onRefreshClick
+        )
+
+        // 用浏览器打开选项
+        DropdownMenuItem(
+            text = { Text("用浏览器打开") },
+            onClick = onOpenInBrowser
         )
     }
 }
 
 /**
  * WebView 内容组件
+ *
+ * @param url 要加载的网页URL
+ * @param currentProgress 当前加载进度(0-100)
+ * @param shouldRefresh 是否应该刷新页面
+ * @param onTitleChange 标题变化回调
+ * @param onProgressChange 进度变化回调
+ * @param onResetRefreshState 重置刷新状态回调
  */
 @Composable
 private fun WebViewContent(
     url: String,
     currentProgress: Int,
+    shouldRefresh: Boolean,
     onTitleChange: (String) -> Unit,
-    onProgressChange: (Int) -> Unit
+    onProgressChange: (Int) -> Unit,
+    onResetRefreshState: () -> Unit
 ) {
-    val context = LocalContext.current
+    var webView by remember { mutableStateOf<WebView?>(null) }
+
+    // 处理刷新逻辑
+    LaunchedEffect(shouldRefresh) {
+        if (shouldRefresh) {
+            webView?.reload()
+            onResetRefreshState()
+        }
+    }
 
     FullScreenBox {
         AndroidView(
             factory = { context ->
                 WebView(context).apply {
+                    webView = this
                     settings.apply {
                         layoutParams = ViewGroup.LayoutParams(
                             ViewGroup.LayoutParams.MATCH_PARENT,
@@ -132,7 +238,7 @@ private fun WebViewContent(
                                     context.startActivity(intent)
                                     return true
                                 } catch (_: Exception) {
-                                    // 如果无法打开，返回 false 让 WebView 处理
+                                    // 如果无法打开浏览器的情况
                                     return false
                                 }
                             }
