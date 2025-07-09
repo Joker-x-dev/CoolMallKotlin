@@ -36,7 +36,15 @@ Android 开发感兴趣，无论是学习还是共同创造，都欢迎加入。
 
 ### Demo 下载
 
-- **蒲公英下载**：[点击下载体验](https://www.pgyer.com/CoolMallKotlinProdRelease)
+- **Release 版本 (推荐)**：[点击下载体验](https://www.pgyer.com/CoolMallKotlinProdRelease)
+  - 这是为日常使用和体验优化的稳定版本，具有最佳性能。
+
+- **Debug 版本 (开发者)**：[点击下载体验](https://www.pgyer.com/CoolMallKotlinDebug)
+  - **注意**：Debug 版本的包名带有 `.debug` 后缀，与 Release 版本不同，可以共存安装。
+  - **内置工具**：集成了 LeakCanary (内存泄漏检测) 和 Chucker (网络请求监控) 等调试工具。
+  - **性能与体积**：由于开启了调试功能且未进行代码压缩，此版本性能会低于 Release 版本，且 APK 体积更大。
+  - **快捷访问**：长按桌面图标可快速访问 `Leaks` (内存泄漏) 和 `Open Chucker` (网络监控)。为确保能接收到 Chucker 的实时网络请求通知，建议开启应用的通知权限。
+
 - **支持系统**：Android 8.0 及以上
 - **更新说明**：预览版本会不定时更新，可能不会完全同步最新的代码变更
 

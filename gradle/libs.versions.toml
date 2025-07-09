@@ -58,13 +58,13 @@ kotlinxSerializationJson = "1.9.0"
 
 # 网络请求相关版本
 # OkHttp HTTP 客户端: https://square.github.io/okhttp/
-okhttp = "4.12.0"
+okhttp = "5.1.0"
 # Retrofit HTTP 客户端: https://square.github.io/retrofit/
 retrofit = "3.0.0"
 # Retrofit Kotlinx Serialization 转换器: https://github.com/JakeWharton/retrofit2-kotlinx-serialization-converter
 retrofit2KotlinxSerializationConverter = "1.0.0"
 # OkHttp 日志拦截器: https://github.com/square/okhttp/tree/master/okhttp-logging-interceptor
-loggingInterceptor = "4.12.0"
+loggingInterceptor = "5.1.0"
 # Chucker 网络调试工具: https://github.com/ChuckerTeam/chucker
 # 说明: 通过 OkHttp 拦截器机制在应用通知栏显示网络请求功能
 chucker = "4.1.0"

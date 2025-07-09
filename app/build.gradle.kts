@@ -53,6 +53,8 @@ android {
         debug {
             // debug 模式下也使用正式签名配置 - 方便调试支付以及三方登录等功能
             signingConfig = signingConfigs.getByName("common")
+            // debug 模式下包名后缀
+            applicationIdSuffix = ".debug"
         }
 
         release {
