@@ -60,7 +60,7 @@ Android 开发感兴趣，无论是学习还是共同创造，都欢迎加入。
 | 类别     | 技术选型                                                                                                                      | 说明                     |
 |--------|---------------------------------------------------------------------------------------------------------------------------|------------------------|
 | 编程语言   | ![Kotlin](https://img.shields.io/badge/Kotlin-2.1.10-blue?style=flat-square&logo=kotlin)                                 | 100% Kotlin 开发         |
-| UI 框架  | ![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-2025.05.00-brightgreen?style=flat-square&logo=android) | 声明式 UI 框架             |
+| UI 框架  | ![Jetpack Compose](https://img.shields.io/badge/Jetpack%20Compose-2025.06.01-brightgreen?style=flat-square&logo=android) | 声明式 UI 框架             |
 | 架构模式   | ![MVVM](https://img.shields.io/badge/MVVM-Clean%20Architecture-lightgrey?style=flat-square)                              | MVVM + Clean 架构        |
 | 依赖注入   | ![Hilt](https://img.shields.io/badge/Hilt-2.56-orange?style=flat-square)                                                | 基于 Dagger 的依赖注入框架     |
 | 异步处理   | ![Coroutines](https://img.shields.io/badge/Coroutines-Flow-blue?style=flat-square)                                      | 协程 + Flow 响应式编程       |
@@ -69,9 +69,9 @@ Android 开发感兴趣，无论是学习还是共同创造，都欢迎加入。
 
 | 类别     | 技术选型                                                                                                                                                                      | 说明           |
 |--------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------|
-| 导航     | ![Navigation](https://img.shields.io/badge/Navigation%20Compose-2.8.9-green?style=flat-square)                                                                            | Compose 导航组件 |
+| 导航     | ![Navigation](https://img.shields.io/badge/Navigation%20Compose-2.9.1-green?style=flat-square)                                                                            | Compose 导航组件 |
 | 数据序列化  | ![Kotlinx Serialization](https://img.shields.io/badge/Kotlinx%20Serialization-1.9.0-purple?style=flat-square)                                                            | JSON 序列化处理   |
-| 网络请求   | ![Retrofit](https://img.shields.io/badge/Retrofit-3.0.0-success?style=flat-square) ![OkHttp](https://img.shields.io/badge/OkHttp-4.12.0-success?style=flat-square)      | HTTP 客户端     |
+| 网络请求   | ![Retrofit](https://img.shields.io/badge/Retrofit-3.0.0-success?style=flat-square) ![OkHttp](https://img.shields.io/badge/OkHttp-5.1.0-success?style=flat-square)      | HTTP 客户端     |
 | 图片加载   | ![Coil](https://img.shields.io/badge/Coil%20Compose-2.7.0-blueviolet?style=flat-square)                                                                                   | 图片加载与缓存      |
 | 动画效果   | ![Lottie](https://img.shields.io/badge/Lottie%20Compose-6.6.7-ff69b4?style=flat-square)                                                                                   | After Effects 动画 |
 | 权限管理   | ![XXPermissions](https://img.shields.io/badge/XXPermissions-23.0-blue?style=flat-square)                                                                                  | 动态权限申请       |
@@ -80,7 +80,7 @@ Android 开发感兴趣，无论是学习还是共同创造，都欢迎加入。
 
 | 类别     | 技术选型                                                                                                    | 说明         |
 |--------|---------------------------------------------------------------------------------------------------------|------------|
-| 数据库    | ![Room](https://img.shields.io/badge/Room-2.7.1-yellow?style=flat-square)                               | SQLite 数据库 |
+| 数据库    | ![Room](https://img.shields.io/badge/Room-2.7.2-yellow?style=flat-square)                               | SQLite 数据库 |
 | 本地存储   | ![MMKV](https://img.shields.io/badge/MMKV-2.2.2-yellow?style=flat-square)                               | 高性能键值存储    |
 
 ### 开发工具
@@ -88,7 +88,7 @@ Android 开发感兴趣，无论是学习还是共同创造，都欢迎加入。
 | 类别     | 技术选型                                                                                                                                                                  | 说明        |
 |--------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------|-----------|
 | 日志框架   | ![Timber](https://img.shields.io/badge/Timber-5.0.1-green?style=flat-square)                                                                                          | 日志管理      |
-| 网络调试   | ![Chucker](https://img.shields.io/badge/Chucker-4.1.0-orange?style=flat-square)                                                                                       | 网络请求监控    |
+| 网络调试   | ![Chucker](https://img.shields.io/badge/Chucker-4.2.0-orange?style=flat-square)                                                                                       | 网络请求监控    |
 | 内存检测   | ![LeakCanary](https://img.shields.io/badge/LeakCanary-2.14-red?style=flat-square)                                                                                      | 内存泄漏检测    |
 | 测试框架   | ![Testing](https://img.shields.io/badge/JUnit-计划中-yellow?style=flat-square)                                                                                           | 单元测试 + UI测试 |
 

@@ -52,13 +52,13 @@ android {
     buildTypes {
         debug {
             // debug 模式下也使用正式签名配置 - 方便调试支付以及三方登录等功能
-            signingConfig = signingConfigs.getByName("common")
+            signingConfig = signingConfigs["common"]
             // debug 模式下包名后缀
             applicationIdSuffix = ".debug"
         }
 
         release {
-            signingConfig = signingConfigs.getByName("common")
+            signingConfig = signingConfigs["common"]
             // 是否启用代码压缩
             isMinifyEnabled = true
             // 资源压缩
