@@ -43,7 +43,7 @@ import com.joker.coolmall.core.ui.component.text.TextType
  * 该组件可用于收货地址列表、确认订单等多个场景
  *
  * @param modifier 修饰符
- * @param address 地址数据
+ * @param address 地址数据，为null时显示选择地址布局
  * @param onClick 卡片点击回调
  * @param actionSlot 右上角操作区域插槽，可根据场景定制
  * @param showBottomBar 是否显示底部栏，包含联系人和标签
@@ -52,7 +52,7 @@ import com.joker.coolmall.core.ui.component.text.TextType
 @Composable
 fun AddressCard(
     modifier: Modifier = Modifier,
-    address: Address,
+    address: Address? = null,
     onClick: (Long) -> Unit = {},
     actionSlot: (@Composable () -> Unit)? = null,
     showBottomBar: Boolean = true,
@@ -61,72 +61,110 @@ fun AddressCard(
     Card(
         modifier = modifier
             .clip(ShapeMedium)
-            .clickable { onClick(address.id) },
+            .clickable { onClick(address?.id ?: 0) },
     ) {
-        Column {
-            // 地址主要部分
-            SpaceBetweenRow(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(SpacePaddingMedium)
-            ) {
-                Column {
-                    // 地址第一行
-                    AppText(
-                        text = "${address.province}${address.city}${address.district}",
-                        size = TextSize.TITLE_LARGE
-                    )
+        if (address != null) {
+            // 有地址数据时显示正常布局
+            Column {
+                // 地址主要部分
+                SpaceBetweenRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(SpacePaddingMedium)
+                ) {
+                    Column {
+                        // 地址第一行
+                        AppText(
+                            text = "${address.province}${address.city}${address.district}",
+                            size = TextSize.TITLE_LARGE
+                        )
 
-                    // 地址第二行
-                    AppText(
-                        text = address.address,
-                        type = TextType.SECONDARY,
-                        modifier = Modifier.padding(top = 4.dp)
-                    )
+                        // 地址第二行
+                        AppText(
+                            text = address.address,
+                            type = TextType.SECONDARY,
+                            modifier = Modifier.padding(top = 4.dp)
+                        )
+                    }
+
+                    // 右侧操作区域插槽，传入null则显示默认的箭头图标
+                    if (actionSlot != null) {
+                        actionSlot()
+                    } else if (addressSelected) {
+                        // 订单确认页面选中时显示箭头
+                        ArrowRightIcon()
+                    }
                 }
 
-                // 右侧操作区域插槽，传入null则显示默认的箭头图标
-                if (actionSlot != null) {
-                    actionSlot()
-                } else if (addressSelected) {
-                    // 订单确认页面选中时显示箭头
-                    ArrowRightIcon()
+                // 底部联系人信息栏，可选显示
+                if (showBottomBar) {
+                    WeDivider()
+
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                horizontal = SpaceHorizontalLarge,
+                                vertical = SpaceVerticalMedium
+                            ),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        AppText(
+                            text = address.contact,
+                            type = TextType.SECONDARY
+                        )
+
+                        SpaceHorizontalLarge()
+
+                        AppText(
+                            text = address.phone,
+                            type = TextType.SECONDARY
+                        )
+
+                        Spacer(modifier = Modifier.weight(1f))
+
+                        // 默认地址标签
+                        if (address.isDefault) {
+                            Tag(
+                                text = "默认地址",
+                                type = TagType.PRIMARY,
+                                size = TagSize.SMALL,
+                                shape = ShapeMedium
+                            )
+                        }
+                    }
                 }
             }
+        } else {
+            // 没有地址数据时显示选择地址布局
+            Column {
+                SpaceBetweenRow(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(SpacePaddingMedium)
+                ) {
+                    AppText(
+                        text = "您还没有选择收货地址",
+                        size = TextSize.TITLE_LARGE
+                    )
+                    ArrowRightIcon()
+                }
 
-            // 底部联系人信息栏，可选显示
-            if (showBottomBar) {
                 WeDivider()
 
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(horizontal = SpaceHorizontalLarge, vertical = SpaceVerticalMedium),
+                        .padding(
+                            horizontal = SpaceHorizontalLarge,
+                            vertical = SpaceVerticalMedium
+                        ),
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     AppText(
-                        text = address.contact,
+                        text = "点击添加收货地址",
                         type = TextType.SECONDARY
                     )
-
-                    SpaceHorizontalLarge()
-
-                    AppText(
-                        text = address.phone,
-                        type = TextType.SECONDARY
-                    )
-
-                    Spacer(modifier = Modifier.weight(1f))
-
-                    // 默认地址标签
-                    if (address.isDefault) {
-                        Tag(
-                            text = "默认地址",
-                            type = TagType.PRIMARY,
-                            size = TagSize.SMALL,
-                            shape = ShapeMedium
-                        )
-                    }
                 }
             }
         }
@@ -264,4 +302,32 @@ private fun AddressCardDarkPreview() {
             )
         )
     }
-} 
+}
+
+/**
+ * 空地址状态的收货地址卡片预览
+ */
+@Preview(showBackground = true)
+@Composable
+private fun AddressCardEmptyPreview() {
+    AppTheme {
+        AddressCard(
+            address = null,
+            onClick = { /* 点击选择地址 */ }
+        )
+    }
+}
+
+/**
+ * 深色主题下空地址状态的收货地址卡片预览
+ */
+@Preview(showBackground = true)
+@Composable
+private fun AddressCardEmptyDarkPreview() {
+    AppTheme(darkTheme = true) {
+        AddressCard(
+            address = null,
+            onClick = { /* 点击选择地址 */ }
+        )
+    }
+}

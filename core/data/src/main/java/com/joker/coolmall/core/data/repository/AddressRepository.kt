@@ -65,7 +65,7 @@ class AddressRepository @Inject constructor(
     /**
      * 默认地址
      */
-    fun getDefaultAddress(): Flow<NetworkResponse<Address>> = flow {
+    fun getDefaultAddress(): Flow<NetworkResponse<Address?>> = flow {
         emit(addressNetworkDataSource.getDefaultAddress())
     }.flowOn(Dispatchers.IO)
 } 

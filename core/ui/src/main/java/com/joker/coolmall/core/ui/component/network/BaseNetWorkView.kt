@@ -28,7 +28,7 @@ import com.joker.coolmall.core.ui.component.loading.PageLoading
  * @param content 成功状态下显示的内容，接收数据参数
  */
 @Composable
-fun <T : Any> BaseNetWorkView(
+fun <T> BaseNetWorkView(
     uiState: BaseNetWorkUiState<T>,
     modifier: Modifier = Modifier,
     padding: PaddingValues = PaddingValues(),
@@ -71,4 +71,4 @@ fun <T : Any> BaseNetWorkView(
             }
         }
     }
-} 
+}

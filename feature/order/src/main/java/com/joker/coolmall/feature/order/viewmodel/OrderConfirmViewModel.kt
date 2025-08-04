@@ -40,7 +40,7 @@ class OrderConfirmViewModel @Inject constructor(
     private val addressRepository: AddressRepository,
     private val orderRepository: OrderRepository,
     private val cartRepository: CartRepository
-) : BaseNetWorkViewModel<Address>(navigator, appState) {
+) : BaseNetWorkViewModel<Address?>(navigator, appState) {
 
     /**
      * 订单备注状态
@@ -110,7 +110,7 @@ class OrderConfirmViewModel @Inject constructor(
         MMKVUtils.remove("carts")
     }
 
-    override fun requestApiFlow(): Flow<NetworkResponse<Address>> {
+    override fun requestApiFlow(): Flow<NetworkResponse<Address?>> {
         return addressRepository.getDefaultAddress()
     }
 

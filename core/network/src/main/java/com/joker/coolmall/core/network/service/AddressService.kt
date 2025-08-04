@@ -56,5 +56,5 @@ interface AddressService {
      * 默认地址
      */
     @GET("user/address/default")
-    suspend fun getDefaultAddress(): NetworkResponse<Address>
+    suspend fun getDefaultAddress(): NetworkResponse<Address?>
 } 

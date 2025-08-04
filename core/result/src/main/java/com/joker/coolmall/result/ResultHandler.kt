@@ -174,7 +174,8 @@ object ResultHandler {
     ) {
         onSuccess(response)
         if (response.isSucceeded) {
-            onSuccessWithData(response.data ?: Unit as T)
+            val data = response.data
+            onSuccessWithData(data as T)
         } else {
             val errorMsg = response.message ?: "未知错误"
             handleError(errorMsg, Exception(errorMsg), showToast, onError)

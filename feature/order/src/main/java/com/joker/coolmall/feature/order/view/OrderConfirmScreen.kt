@@ -82,7 +82,7 @@ internal fun OrderConfirmRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun OrderConfirmScreen(
-    uiState: BaseNetWorkUiState<Address> = BaseNetWorkUiState.Loading,
+    uiState: BaseNetWorkUiState<Address?> = BaseNetWorkUiState.Loading,
     onRetry: () -> Unit = {},
     onBackClick: () -> Unit = {},
     cartList: List<Cart> = emptyList(),
@@ -132,7 +132,7 @@ internal fun OrderConfirmScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun OrderConfirmContentView(
-    address: Address,
+    address: Address?,
     totalPrice: Int,
     cartList: List<Cart>,
     remark: String,

@@ -84,7 +84,7 @@ class AddressNetworkDataSourceImpl @Inject constructor(
      *
      * @return 默认地址响应数据
      */
-    override suspend fun getDefaultAddress(): NetworkResponse<Address> {
+    override suspend fun getDefaultAddress(): NetworkResponse<Address?> {
         return addressService.getDefaultAddress()
     }
 } 

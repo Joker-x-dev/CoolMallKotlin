@@ -45,5 +45,5 @@ interface AddressNetworkDataSource {
     /**
      * 默认地址
      */
-    suspend fun getDefaultAddress(): NetworkResponse<Address>
+    suspend fun getDefaultAddress(): NetworkResponse<Address?>
 } 
