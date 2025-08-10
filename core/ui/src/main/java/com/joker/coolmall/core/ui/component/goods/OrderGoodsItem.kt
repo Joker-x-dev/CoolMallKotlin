@@ -24,16 +24,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.joker.coolmall.core.designsystem.component.SpaceBetweenRow
 import com.joker.coolmall.core.designsystem.theme.AppTheme
-import com.joker.coolmall.core.designsystem.theme.ArrowRightIcon
 import com.joker.coolmall.core.designsystem.theme.ShapeSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalMedium
-import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalXSmall
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingLarge
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.model.entity.Cart
 import com.joker.coolmall.core.model.entity.CartGoodsSpec
+import com.joker.coolmall.core.model.preview.previewCart
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
 import com.joker.coolmall.core.ui.component.list.AppListItem
 import com.joker.coolmall.core.ui.component.stepper.QuantityStepper
@@ -173,15 +172,11 @@ fun OrderGoodsItem(
                     .clickable { onSpecClick(data.id) }
                     .padding(horizontal = SpacePaddingSmall, vertical = SpaceVerticalXSmall)
             ) {
-                Row {
-                    AppText(
-                        text = data.name,
-                        style = MaterialTheme.typography.bodySmall,
-                        type = TextType.SECONDARY
-                    )
-                    SpaceHorizontalXSmall()
-                    ArrowRightIcon(size = 16.dp)
-                }
+                AppText(
+                    text = data.name,
+                    style = MaterialTheme.typography.bodySmall,
+                    type = TextType.SECONDARY
+                )
             }
 
             SpaceVerticalMedium()
@@ -325,36 +320,7 @@ private fun OrderGoodsItemNoStepperPreview() {
 @Composable
 private fun OrderGoodsCardPreview() {
     AppTheme {
-        val cart = Cart().apply {
-            goodsId = 1L
-            goodsName = "Redmi K80"
-            goodsMainPic =
-                "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
-            spec = listOf(
-                CartGoodsSpec(
-                    id = 1L,
-                    goodsId = 1L,
-                    name = "雪岩白 12GB+256GB",
-                    price = 249900,
-                    count = 2,
-                    stock = 100,
-                    images = listOf("https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png")
-                ),
-                CartGoodsSpec(
-                    id = 2L,
-                    goodsId = 1L,
-                    name = "雪岩白 16GB+1TB",
-                    price = 359900,
-                    count = 1,
-                    stock = 50,
-                    images = null
-                )
-            )
-        }
-
-        OrderGoodsCard(
-            data = cart
-        )
+        OrderGoodsCard(data = previewCart)
     }
 }
 
@@ -367,35 +333,6 @@ private fun OrderGoodsCardPreview() {
 @Composable
 private fun OrderGoodsCardDarkPreview() {
     AppTheme(darkTheme = true) {
-        val cart = Cart().apply {
-            goodsId = 1L
-            goodsName = "Redmi K80"
-            goodsMainPic =
-                "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png"
-            spec = listOf(
-                CartGoodsSpec(
-                    id = 1L,
-                    goodsId = 1L,
-                    name = "雪岩白 12GB+256GB",
-                    price = 249900,
-                    count = 2,
-                    stock = 100,
-                    images = listOf("https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png")
-                ),
-                CartGoodsSpec(
-                    id = 2L,
-                    goodsId = 1L,
-                    name = "雪岩白 16GB+1TB",
-                    price = 359900,
-                    count = 1,
-                    stock = 50,
-                    images = null
-                )
-            )
-        }
-
-        OrderGoodsCard(
-            data = cart
-        )
+        OrderGoodsCard(data = previewCart)
     }
 }

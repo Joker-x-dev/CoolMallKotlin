@@ -11,6 +11,7 @@ import com.joker.coolmall.core.model.entity.SelectedGoods
 import com.joker.coolmall.core.util.storage.MMKVUtils
 import com.joker.coolmall.core.util.toast.ToastUtils
 import com.joker.coolmall.navigation.AppNavigator
+import com.joker.coolmall.navigation.routes.GoodsRoutes
 import com.joker.coolmall.navigation.routes.OrderRoutes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -331,6 +332,13 @@ class CartViewModel @Inject constructor(
         }
 
         return result
+    }
+
+    /**
+     * 跳转到商品详情
+     */
+    fun toGoodsDetailPage(goodsId: Long) {
+        super.toPage(GoodsRoutes.DETAIL, goodsId)
     }
 }
 

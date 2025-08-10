@@ -271,7 +271,7 @@ private fun OrderSection(
         // 标题行
         AppListItem(
             title = "我的订单",
-            trailingText = "查看全部订单",
+            trailingText = "查看全部",
             leadingIcon = R.drawable.ic_order_fill,
             leadingIconTint = Primary,
             onClick = toOrderList

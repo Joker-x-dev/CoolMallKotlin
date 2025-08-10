@@ -84,7 +84,8 @@ internal fun CartRoute(
         onToggleItemSelection = viewModel::toggleItemSelection,
         onUpdateCartItemCount = viewModel::updateCartItemCount,
         onDeleteSelected = viewModel::deleteSelectedItems,
-        onSettleClick = viewModel::onCheckoutClick
+        onSettleClick = viewModel::onCheckoutClick,
+        toGoodsDetailPage = viewModel::toGoodsDetailPage
     )
 }
 
@@ -104,6 +105,7 @@ internal fun CartRoute(
  * @param onUpdateCartItemCount 更新商品数量回调
  * @param onDeleteSelected 删除已选商品回调
  * @param onSettleClick 结算按钮点击回调
+ * @param toGoodsDetailPage 跳转到商品详情
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -120,7 +122,8 @@ internal fun CartScreen(
     onToggleItemSelection: (Long, Long) -> Unit,
     onUpdateCartItemCount: (Long, Long, Int) -> Unit,
     onDeleteSelected: () -> Unit,
-    onSettleClick: () -> Unit
+    onSettleClick: () -> Unit,
+    toGoodsDetailPage: (Long) -> Unit,
 ) {
     // 跟踪正在删除的商品
     var deletingItems by remember { mutableStateOf(emptyMap<Long, Set<Long>>()) }
@@ -206,8 +209,9 @@ internal fun CartScreen(
                             OrderGoodsCard(
                                 data = cart,
                                 deletingSpecIds = cartDeletingSpecs,
-                                onGoodsClick = { /* 实现商品点击事件 */ },
-                                onSpecClick = { /* 规格点击事件 */ },
+                                onGoodsClick = {
+                                    toGoodsDetailPage(cart.goodsId)
+                                },
                                 onQuantityChanged = { specId, newCount ->
                                     onUpdateCartItemCount(cart.goodsId, specId, newCount)
                                 },
@@ -332,7 +336,8 @@ fun CartScreenPreview() {
             onToggleItemSelection = { _, _ -> },
             onUpdateCartItemCount = { _, _, _ -> },
             onDeleteSelected = { },
-            onSettleClick = { }
+            onSettleClick = { },
+            toGoodsDetailPage = {}
         )
     }
 }
@@ -354,7 +359,8 @@ fun EmptyCartScreenPreview() {
             onToggleItemSelection = { _, _ -> },
             onUpdateCartItemCount = { _, _, _ -> },
             onDeleteSelected = { },
-            onSettleClick = { }
+            onSettleClick = { },
+            toGoodsDetailPage = {}
         )
     }
 }
@@ -376,7 +382,8 @@ fun CartScreenEditingPreview() {
             onToggleItemSelection = { _, _ -> },
             onUpdateCartItemCount = { _, _, _ -> },
             onDeleteSelected = { },
-            onSettleClick = { }
+            onSettleClick = { },
+            toGoodsDetailPage = {}
         )
     }
 }
@@ -398,7 +405,8 @@ fun CartScreenDarkPreview() {
             onToggleItemSelection = { _, _ -> },
             onUpdateCartItemCount = { _, _, _ -> },
             onDeleteSelected = { },
-            onSettleClick = { }
+            onSettleClick = { },
+            toGoodsDetailPage = {}
         )
     }
 }

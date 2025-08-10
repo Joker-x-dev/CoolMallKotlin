@@ -94,7 +94,7 @@ internal fun HomeRoute(
         toFlashSalePage = viewModel::toFlashSalePage,
         toGitHubPage = viewModel::toGitHubPage,
         toAboutPage = viewModel::toAboutPage,
-        onRetry = viewModel::retryRequest
+        onRetry = viewModel::loadHomeData
     )
 }
 

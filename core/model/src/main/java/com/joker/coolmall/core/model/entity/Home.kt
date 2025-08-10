@@ -34,7 +34,12 @@ data class Home(
     val recommend: List<Goods>? = null,
 
     /**
-     * 商品
+     * 优惠券
+     */
+    val coupon: List<Coupon>? = null,
+
+    /**
+     * 第一页全部商品
      */
     val goods: List<Goods>? = null,
 )
