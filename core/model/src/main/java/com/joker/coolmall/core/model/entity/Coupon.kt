@@ -74,13 +74,3 @@ data class Coupon(
     val updateTime: String? = null
 )
 
-/**
- * 优惠券条件
- */
-@Serializable
-data class Condition(
-    /**
-     * 满多少金额
-     */
-    val fullAmount: Double = 0.0
-)
