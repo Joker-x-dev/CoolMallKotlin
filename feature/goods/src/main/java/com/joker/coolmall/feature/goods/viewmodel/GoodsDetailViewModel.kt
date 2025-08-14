@@ -69,6 +69,12 @@ class GoodsDetailViewModel @Inject constructor(
     private val _selectedSpec = MutableStateFlow<GoodsSpec?>(null)
     val selectedSpec: StateFlow<GoodsSpec?> = _selectedSpec.asStateFlow()
 
+    /**
+     * 动画状态管理 - 确保动画只播放一次
+     */
+    private val _hasAnimated = MutableStateFlow(false)
+    val hasAnimated: StateFlow<Boolean> = _hasAnimated.asStateFlow()
+
     init {
         super.executeRequest()
     }
@@ -166,6 +172,15 @@ class GoodsDetailViewModel @Inject constructor(
      */
     fun hideSpecModal() {
         _specModalVisible.value = false
+    }
+
+    /**
+     * 触发动画播放
+     */
+    fun triggerAnimation() {
+        if (!_hasAnimated.value) {
+            _hasAnimated.value = true
+        }
     }
 
     /**

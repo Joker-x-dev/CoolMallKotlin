@@ -1,6 +1,8 @@
 package com.joker.coolmall.feature.goods.view
 
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.animateOffsetAsState
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -19,6 +21,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
+import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
@@ -44,6 +47,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
@@ -54,6 +58,7 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -118,6 +123,8 @@ internal fun GoodsDetailRoute(
     val specsModalUiState by viewModel.specsModalUiState.collectAsState()
     // 收集选中的规格
     val selectedSpec by viewModel.selectedSpec.collectAsState()
+    // 收集动画状态
+    val hasAnimated by viewModel.hasAnimated.collectAsState()
 
     GoodsDetailScreen(
         uiState = uiState,
@@ -131,7 +138,9 @@ internal fun GoodsDetailRoute(
         onHideSpecModal = viewModel::hideSpecModal,
         onAddToCart = viewModel::addToCart,
         onBuyNow = viewModel::buyNow,
-        onSpecRetry = viewModel::loadGoodsSpecs
+        onSpecRetry = viewModel::loadGoodsSpecs,
+        hasAnimated = hasAnimated,
+        onTriggerAnimation = viewModel::triggerAnimation
     )
 }
 
@@ -164,7 +173,9 @@ internal fun GoodsDetailScreen(
     onShowSpecModal: () -> Unit = {},
     onHideSpecModal: () -> Unit = {},
     onAddToCart: (SelectedGoods) -> Unit = {},
-    onBuyNow: (SelectedGoods) -> Unit = {}
+    onBuyNow: (SelectedGoods) -> Unit = {},
+    hasAnimated: Boolean = false,
+    onTriggerAnimation: () -> Unit = {}
 ) {
     Scaffold(
         contentWindowInsets = ScaffoldDefaults
@@ -182,7 +193,9 @@ internal fun GoodsDetailScreen(
                 onBackClick = onBackClick,
                 paddingValues = paddingValues,
                 selectedSpec = selectedSpec,
-                onShowSpecModal = onShowSpecModal
+                onShowSpecModal = onShowSpecModal,
+                hasAnimated = hasAnimated,
+                onTriggerAnimation = onTriggerAnimation
             )
 
             // 规格选择底部弹出层
@@ -216,10 +229,17 @@ private fun GoodsDetailContentView(
     onBackClick: () -> Unit,
     paddingValues: PaddingValues,
     selectedSpec: GoodsSpec? = null,
-    onShowSpecModal: () -> Unit = {}
+    onShowSpecModal: () -> Unit = {},
+    hasAnimated: Boolean = false,
+    onTriggerAnimation: () -> Unit = {}
 ) {
     // 主内容容器
     var topBarAlpha by remember { mutableIntStateOf(0) }
+    
+    // 启动动画
+    LaunchedEffect(Unit) {
+        onTriggerAnimation()
+    }
 
     Box(
         modifier = Modifier
@@ -239,6 +259,7 @@ private fun GoodsDetailContentView(
             onBackClick = onBackClick,
             onShareClick = { /* TODO: 分享功能 */ },
             topBarAlpha = topBarAlpha,
+            hasAnimated = hasAnimated,
             modifier = Modifier.zIndex(1f)
         )
 
@@ -246,7 +267,8 @@ private fun GoodsDetailContentView(
         GoodsActionBar(
             modifier = Modifier.align(Alignment.BottomCenter),
             onAddToCartClick = onShowSpecModal,
-            onBuyNowClick = onShowSpecModal
+            onBuyNowClick = onShowSpecModal,
+            hasAnimated = hasAnimated
         )
     }
 }
@@ -264,8 +286,15 @@ private fun GoodsDetailTopBar(
     modifier: Modifier = Modifier,
     onBackClick: () -> Unit = {},
     onShareClick: () -> Unit = {},
-    topBarAlpha: Int = 0
+    topBarAlpha: Int = 0,
+    hasAnimated: Boolean = false
 ) {
+    // 按钮缩放动画
+    val buttonScale by animateFloatAsState(
+        targetValue = if (hasAnimated) 1f else 0f,
+        animationSpec = tween(durationMillis = 600),
+        label = "button_scale"
+    )
     Row(
         modifier = modifier
             .fillMaxWidth()
@@ -281,14 +310,16 @@ private fun GoodsDetailTopBar(
         CircleIconButton(
             icon = com.joker.coolmall.core.designsystem.R.drawable.ic_arrow_left,
             onClick = onBackClick,
-            iconSize = 28.dp
+            iconSize = 28.dp,
+            scale = buttonScale
         )
 
         Spacer(modifier = Modifier.weight(1f))
 
         CircleIconButton(
             icon = R.drawable.ic_share_fill,
-            onClick = onShareClick
+            onClick = onShareClick,
+            scale = buttonScale
         )
     }
 }
@@ -306,12 +337,14 @@ private fun CircleIconButton(
     modifier: Modifier = Modifier,
     icon: Int,
     onClick: () -> Unit = {},
-    iconSize: Dp = 20.dp
+    iconSize: Dp = 20.dp,
+    scale: Float = 1f
 ) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = modifier
             .size(38.dp)
+            .scale(scale)
             .clip(CircleShape)
             .clickable { onClick() }
             .background(Color.Black.copy(alpha = 0.3f))
@@ -682,17 +715,26 @@ private fun GoodsDetailCard(contentPics: List<String>) {
  * @param modifier 应用于底部操作栏的Modifier
  * @param onAddToCartClick 加入购物车按钮点击回调
  * @param onBuyNowClick 立即购买按钮点击回调
+ * @param hasAnimated 是否已经播放过动画
  */
 @Composable
 private fun GoodsActionBar(
     modifier: Modifier = Modifier,
     onAddToCartClick: () -> Unit = {},
-    onBuyNowClick: () -> Unit = {}
+    onBuyNowClick: () -> Unit = {},
+    hasAnimated: Boolean = false
 ) {
+    // 底部操作栏从底部升起的动画
+    val bottomBarOffset by animateOffsetAsState(
+        targetValue = if (hasAnimated) Offset(0f, 0f) else Offset(0f, 200f),
+        animationSpec = tween(durationMillis = 800),
+        label = "bottom_bar_offset"
+    )
     val outlineColor = MaterialTheme.colorScheme.outline
     Row(
         modifier = modifier
             .fillMaxWidth()
+            .offset { IntOffset(bottomBarOffset.x.toInt(), bottomBarOffset.y.toInt()) }
             // 绘制上边框
             .drawWithContent {
                 drawContent() // 先绘制内容
