@@ -1,20 +1,27 @@
 package com.joker.coolmall.feature.main.viewmodel
 
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
 import com.joker.coolmall.core.data.repository.FootprintRepository
+import com.joker.coolmall.core.data.repository.OrderRepository
 import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.entity.Footprint
+import com.joker.coolmall.core.model.entity.OrderCount
 import com.joker.coolmall.core.model.entity.User
 import com.joker.coolmall.navigation.AppNavigator
-import com.joker.coolmall.navigation.routes.AuthRoutes
 import com.joker.coolmall.navigation.routes.CsRoutes
 import com.joker.coolmall.navigation.routes.GoodsRoutes
 import com.joker.coolmall.navigation.routes.OrderRoutes
 import com.joker.coolmall.navigation.routes.UserRoutes
+import com.joker.coolmall.result.ResultHandler
+import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -26,11 +33,12 @@ import javax.inject.Inject
 class MeViewModel @Inject constructor(
     navigator: AppNavigator,
     appState: AppState,
-    private val footprintRepository: FootprintRepository
+    footprintRepository: FootprintRepository,
+    private val orderRepository: OrderRepository
 ) : BaseViewModel(
     navigator = navigator,
     appState = appState
-) {
+), DefaultLifecycleObserver {
 
     // 用户登录状态
     val isLoggedIn: StateFlow<Boolean> = appState.isLoggedIn
@@ -56,6 +64,10 @@ class MeViewModel @Inject constructor(
             initialValue = emptyList()
         )
 
+    // 订单统计数据
+    private val _orderCount = MutableStateFlow<OrderCount?>(null)
+    val orderCount: StateFlow<OrderCount?> = _orderCount.asStateFlow()
+
     init {
         // 如果已登录但没有用户信息，则刷新用户信息
         viewModelScope.launch {
@@ -63,6 +75,24 @@ class MeViewModel @Inject constructor(
                 appState.refreshUserInfo()
             }
         }
+    }
+
+    override fun onResume(owner: LifecycleOwner) {
+        super.onResume(owner)
+        getUserOrderStatistics()
+    }
+
+    /**
+     * 用户订单统计
+     */
+    fun getUserOrderStatistics() {
+        // 只有已经登录了才去请求订单统计数据
+        if (!appState.isLoggedIn.value) return
+        ResultHandler.handleResultWithData(
+            scope = viewModelScope,
+            flow = orderRepository.getUserOrderCount().asResult(),
+            onData = { data -> _orderCount.value = data }
+        )
     }
 
     /**
@@ -121,13 +151,6 @@ class MeViewModel @Inject constructor(
             UserRoutes.PROFILE
         }
         super.toPage(route)
-    }
-
-    /**
-     * 跳转到登录页面
-     */
-    fun toLoginPage() {
-        super.toPage(AuthRoutes.HOME)
     }
 
     /**

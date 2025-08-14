@@ -1,6 +1,7 @@
 package com.joker.coolmall.core.network.datasource.order
 
 import com.joker.coolmall.core.model.entity.Order
+import com.joker.coolmall.core.model.entity.OrderCount
 import com.joker.coolmall.core.model.request.CreateOrderRequest
 import com.joker.coolmall.core.model.request.OrderPageRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
@@ -84,7 +85,7 @@ class OrderNetworkDataSourceImpl @Inject constructor(
      *
      * @return 订单统计信息响应数据
      */
-    override suspend fun getUserOrderCount(): NetworkResponse<Any> {
+    override suspend fun getUserOrderCount(): NetworkResponse<OrderCount> {
         return orderService.getUserOrderCount()
     }
 
@@ -117,4 +118,4 @@ class OrderNetworkDataSourceImpl @Inject constructor(
     override suspend fun confirmReceive(id: Long): NetworkResponse<Any> {
         return orderService.confirmReceive(id)
     }
-} 
+}

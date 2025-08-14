@@ -12,19 +12,17 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,7 +32,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.joker.coolmall.core.designsystem.component.SpaceBetweenRow
@@ -54,7 +51,9 @@ import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.model.entity.Footprint
+import com.joker.coolmall.core.model.entity.OrderCount
 import com.joker.coolmall.core.model.entity.User
+import com.joker.coolmall.core.ui.component.badge.WeBadge
 import com.joker.coolmall.core.ui.component.image.Avatar
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
 import com.joker.coolmall.core.ui.component.list.AppListItem
@@ -72,18 +71,32 @@ internal fun MeRoute(
     animatedContentScope: AnimatedContentScope? = null,
     viewModel: MeViewModel = hiltViewModel(),
 ) {
+    // 获取生命周期所有者
+    val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
+
+    // 注册生命周期观察者
+    DisposableEffect(lifecycleOwner) {
+        lifecycleOwner.lifecycle.addObserver(viewModel)
+        onDispose {
+            lifecycleOwner.lifecycle.removeObserver(viewModel)
+        }
+    }
+
     // 收集登录状态
     val isLoggedIn by viewModel.isLoggedIn.collectAsStateWithLifecycle()
     // 收集用户信息
     val userInfo by viewModel.userInfo.collectAsStateWithLifecycle()
     // 收集足迹数据
     val recentFootprints by viewModel.recentFootprints.collectAsStateWithLifecycle()
+    // 收集订单统计数据
+    val orderCount by viewModel.orderCount.collectAsStateWithLifecycle()
 
     MeScreen(
         sharedTransitionScope = sharedTransitionScope,
         animatedContentScope = animatedContentScope,
         isLoggedIn = isLoggedIn,
         userInfo = userInfo,
+        orderCount = orderCount,
         recentFootprints = recentFootprints,
         onHeadClick = viewModel::onHeadClick,
         toAddressList = viewModel::toAddressListPage,
@@ -102,6 +115,7 @@ internal fun MeScreen(
     animatedContentScope: AnimatedContentScope? = null,
     isLoggedIn: Boolean = false,
     userInfo: User? = null,
+    orderCount: OrderCount? = null,
     recentFootprints: List<Footprint> = emptyList(),
     onHeadClick: () -> Unit = {},
     toAddressList: () -> Unit = {},
@@ -129,6 +143,7 @@ internal fun MeScreen(
 
             // 订单区域
             OrderSection(
+                orderCount = orderCount,
                 toOrderList = toOrderList,
                 toOrderListByTab = toOrderListByTab
             )
@@ -264,6 +279,7 @@ private fun MembershipCard() {
  */
 @Composable
 private fun OrderSection(
+    orderCount: OrderCount? = null,
     toOrderList: () -> Unit = {},
     toOrderListByTab: (Int) -> Unit = {}
 ) {
@@ -281,6 +297,7 @@ private fun OrderSection(
             OrderStatusItem(
                 icon = R.drawable.ic_pay,
                 label = "待付款",
+                badgeCount = orderCount?.pendingPayment ?: 0,
                 modifier = Modifier.weight(1f),
                 onClick = { toOrderListByTab(1) } // 待付款对应的标签索引为1
             )
@@ -288,6 +305,7 @@ private fun OrderSection(
             OrderStatusItem(
                 icon = R.drawable.ic_receipt,
                 label = "待发货",
+                badgeCount = orderCount?.pendingShipment ?: 0,
                 modifier = Modifier.weight(1f),
                 onClick = { toOrderListByTab(2) } // 待发货对应的标签索引为2
             )
@@ -295,6 +313,7 @@ private fun OrderSection(
             OrderStatusItem(
                 icon = R.drawable.ic_logistics,
                 label = "待收货",
+                badgeCount = orderCount?.pendingReceive ?: 0,
                 modifier = Modifier.weight(1f),
                 onClick = { toOrderListByTab(3) } // 待收货对应的标签索引为3
             )
@@ -302,6 +321,7 @@ private fun OrderSection(
             OrderStatusItem(
                 icon = R.drawable.ic_message,
                 label = "待评价",
+                badgeCount = orderCount?.pendingReview ?: 0,
                 modifier = Modifier.weight(1f),
                 onClick = { toOrderListByTab(5) } // 待评价对应的标签索引为5
             )
@@ -309,6 +329,7 @@ private fun OrderSection(
             OrderStatusItem(
                 icon = R.drawable.ic_refund,
                 label = "退款/售后",
+                badgeCount = (orderCount?.refunding ?: 0) + (orderCount?.refunded ?: 0),
                 modifier = Modifier.weight(1f),
                 onClick = { toOrderListByTab(4) } // 售后对应的标签索引为4
             )
@@ -411,32 +432,28 @@ private fun OrderStatusItem(
             .clickable(onClick = onClick)
             .padding(vertical = SpaceVerticalMedium)
     ) {
-        Box {
+
+        if (badgeCount > 0) {
+            WeBadge(
+                content = badgeCount.toString(),
+                size = 16.dp,
+                color = MaterialTheme.colorScheme.error,
+                alignment = Alignment.TopEnd
+            ) {
+                Icon(
+                    painter = painterResource(id = icon),
+                    contentDescription = label,
+                    modifier = Modifier.size(24.dp),
+                    tint = MaterialTheme.colorScheme.onSurface
+                )
+            }
+        } else {
             Icon(
                 painter = painterResource(id = icon),
                 contentDescription = label,
                 modifier = Modifier.size(24.dp),
                 tint = MaterialTheme.colorScheme.onSurface
             )
-
-            // 如果有角标数字，则显示
-            if (badgeCount > 0) {
-                Box(
-                    modifier = Modifier
-                        .size(14.dp)
-                        .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.error)
-                        .offset(x = 10.dp, y = (-6).dp)
-                        .align(Alignment.TopEnd), contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = badgeCount.toString(),
-                        color = MaterialTheme.colorScheme.onError,
-                        fontSize = 8.sp,
-                        fontWeight = FontWeight.Bold
-                    )
-                }
-            }
         }
 
         SpaceVerticalSmall()

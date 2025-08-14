@@ -1,6 +1,7 @@
 package com.joker.coolmall.core.network.datasource.order
 
 import com.joker.coolmall.core.model.entity.Order
+import com.joker.coolmall.core.model.entity.OrderCount
 import com.joker.coolmall.core.model.request.CreateOrderRequest
 import com.joker.coolmall.core.model.request.OrderPageRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
@@ -44,7 +45,7 @@ interface OrderNetworkDataSource {
     /**
      * 用户订单统计
      */
-    suspend fun getUserOrderCount(): NetworkResponse<Any>
+    suspend fun getUserOrderCount(): NetworkResponse<OrderCount>
 
     /**
      * 物流信息
@@ -60,4 +61,4 @@ interface OrderNetworkDataSource {
      * 确认收货
      */
     suspend fun confirmReceive(id: Long): NetworkResponse<Any>
-} 
+}

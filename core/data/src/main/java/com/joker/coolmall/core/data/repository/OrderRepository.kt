@@ -1,6 +1,7 @@
 package com.joker.coolmall.core.data.repository
 
 import com.joker.coolmall.core.model.entity.Order
+import com.joker.coolmall.core.model.entity.OrderCount
 import com.joker.coolmall.core.model.request.CreateOrderRequest
 import com.joker.coolmall.core.model.request.OrderPageRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
@@ -65,7 +66,7 @@ class OrderRepository @Inject constructor(
     /**
      * 用户订单统计
      */
-    fun getUserOrderCount(): Flow<NetworkResponse<Any>> = flow {
+    fun getUserOrderCount(): Flow<NetworkResponse<OrderCount>> = flow {
         emit(orderNetworkDataSource.getUserOrderCount())
     }.flowOn(Dispatchers.IO)
 
@@ -89,4 +90,4 @@ class OrderRepository @Inject constructor(
     fun confirmReceive(id: Long): Flow<NetworkResponse<Any>> = flow {
         emit(orderNetworkDataSource.confirmReceive(id))
     }.flowOn(Dispatchers.IO)
-} 
+}

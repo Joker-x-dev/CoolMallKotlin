@@ -1,6 +1,7 @@
 package com.joker.coolmall.core.network.service
 
 import com.joker.coolmall.core.model.entity.Order
+import com.joker.coolmall.core.model.entity.OrderCount
 import com.joker.coolmall.core.model.request.CreateOrderRequest
 import com.joker.coolmall.core.model.request.OrderPageRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
@@ -55,7 +56,7 @@ interface OrderService {
      * 用户订单统计
      */
     @GET("order/info/userCount")
-    suspend fun getUserOrderCount(): NetworkResponse<Any>
+    suspend fun getUserOrderCount(): NetworkResponse<OrderCount>
 
     /**
      * 物流信息
@@ -74,4 +75,4 @@ interface OrderService {
      */
     @GET("order/info/confirm")
     suspend fun confirmReceive(@Query("id") id: Long): NetworkResponse<Any>
-} 
+}

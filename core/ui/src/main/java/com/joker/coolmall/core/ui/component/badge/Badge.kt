@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -81,7 +82,13 @@ fun WeBadge(
             contentAlignment = Alignment.Center
         ) {
             content?.let {
-                Text(text = it, color = Color.White, fontSize = 12.sp)
+                Text(
+                    text = it, 
+                    color = Color.White, 
+                    fontSize = 10.sp,
+                    textAlign = TextAlign.Center,
+                    lineHeight = 10.sp
+                )
             }
         }
     }
