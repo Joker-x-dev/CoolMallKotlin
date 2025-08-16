@@ -4,15 +4,19 @@ import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.base.state.BaseNetWorkListUiState
 import com.joker.coolmall.core.common.base.state.LoadMoreState
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkListViewModel
+import com.joker.coolmall.core.data.repository.CouponRepository
 import com.joker.coolmall.core.data.repository.GoodsRepository
 import com.joker.coolmall.core.data.repository.PageRepository
 import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.entity.Category
+import com.joker.coolmall.core.model.entity.Coupon
 import com.joker.coolmall.core.model.entity.Goods
 import com.joker.coolmall.core.model.entity.Home
 import com.joker.coolmall.core.model.request.GoodsSearchRequest
+import com.joker.coolmall.core.model.request.ReceiveCouponRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
+import com.joker.coolmall.core.util.toast.ToastUtils
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.CommonRoutes
 import com.joker.coolmall.navigation.routes.GoodsRoutes
@@ -33,17 +37,21 @@ class HomeViewModel @Inject constructor(
     navigator: AppNavigator,
     appState: AppState,
     private val pageRepository: PageRepository,
-    private val goodsRepository: GoodsRepository
-) : BaseNetWorkListViewModel<Goods>(
-    navigator = navigator,
-    appState = appState
-) {
+    private val goodsRepository: GoodsRepository,
+    private val couponRepository: CouponRepository
+) : BaseNetWorkListViewModel<Goods>(navigator, appState) {
 
     /**
      * 页面数据
      */
     private val _pageData = MutableStateFlow<Home>(Home())
     val pageData: StateFlow<Home> = _pageData.asStateFlow()
+
+    /**
+     * 优惠券领取弹出层的显示状态
+     */
+    private val _couponModalVisible = MutableStateFlow(false)
+    val couponModalVisible: StateFlow<Boolean> = _couponModalVisible.asStateFlow()
 
     init {
         loadHomeData()
@@ -152,7 +160,14 @@ class HomeViewModel @Inject constructor(
     fun toGitHubPage() {
         val url = "https://github.com/Joker-x-dev/CoolMallKotlin"
         val title = "GitHub"
-        super.toPage("${CommonRoutes.WEB}?url=${java.net.URLEncoder.encode(url, "UTF-8")}&title=${java.net.URLEncoder.encode(title, "UTF-8")}")
+        super.toPage(
+            "${CommonRoutes.WEB}?url=${
+                java.net.URLEncoder.encode(
+                    url,
+                    "UTF-8"
+                )
+            }&title=${java.net.URLEncoder.encode(title, "UTF-8")}"
+        )
     }
 
     /**
@@ -160,6 +175,34 @@ class HomeViewModel @Inject constructor(
      */
     fun toAboutPage() {
         super.toPage(CommonRoutes.ABOUT)
+    }
+
+    /**
+     * 显示优惠券弹出层
+     */
+    fun showCouponModal() {
+        _couponModalVisible.value = true
+    }
+
+    /**
+     * 隐藏优惠券领取弹出层
+     */
+    fun hideCouponModal() {
+        _couponModalVisible.value = false
+    }
+
+    /**
+     * 领取优惠券
+     * @param coupon 要领取的优惠券
+     */
+    fun receiveCoupon(coupon: Coupon) {
+        val request = ReceiveCouponRequest(couponId = coupon.id)
+        ResultHandler.handleResultWithData(
+            scope = viewModelScope,
+            flow = couponRepository.receiveCoupon(request).asResult(),
+            showToast = true,
+            onData = { data -> ToastUtils.showSuccess(data) },
+        )
     }
 
     /**

@@ -13,6 +13,7 @@ import com.joker.coolmall.core.model.entity.User
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.CsRoutes
 import com.joker.coolmall.navigation.routes.GoodsRoutes
+import com.joker.coolmall.navigation.routes.MarketRoutes
 import com.joker.coolmall.navigation.routes.OrderRoutes
 import com.joker.coolmall.navigation.routes.UserRoutes
 import com.joker.coolmall.result.ResultHandler
@@ -138,6 +139,13 @@ class MeViewModel @Inject constructor(
      */
     fun toAddressListPage() {
         super.toPage(UserRoutes.ADDRESS_LIST)
+    }
+
+    /**
+     * 跳转到我的优惠券
+     */
+    fun toCouponPage() {
+        super.toPage(MarketRoutes.COUPON)
     }
 
     /**

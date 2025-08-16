@@ -71,6 +71,12 @@ data class Coupon(
     /**
      * 更新时间
      */
-    val updateTime: String? = null
+    val updateTime: String? = null,
+
+    /**
+     * 使用状态 0-未使用 1-已使用 2-已过期
+     * 注意：此字段仅在"我的优惠券"接口中返回，领取优惠券时不包含此字段
+     */
+    val useStatus: Int? = null
 )
 

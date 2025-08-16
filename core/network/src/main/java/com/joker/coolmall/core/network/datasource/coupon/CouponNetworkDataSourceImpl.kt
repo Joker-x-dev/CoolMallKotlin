@@ -1,5 +1,9 @@
 package com.joker.coolmall.core.network.datasource.coupon
 
+import com.joker.coolmall.core.model.entity.Coupon
+import com.joker.coolmall.core.model.request.PageRequest
+import com.joker.coolmall.core.model.request.ReceiveCouponRequest
+import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.base.BaseNetworkDataSource
 import com.joker.coolmall.core.network.service.CouponService
@@ -18,11 +22,11 @@ class CouponNetworkDataSourceImpl @Inject constructor(
     /**
      * 领取优惠券
      *
-     * @param params 请求参数，包含优惠券ID等信息
+     * @param request 领取优惠券请求参数
      * @return 领取结果响应数据
      */
-    override suspend fun receiveCoupon(params: Any): NetworkResponse<Any> {
-        return couponService.receiveCoupon(params)
+    override suspend fun receiveCoupon(request: ReceiveCouponRequest): NetworkResponse<String> {
+        return couponService.receiveCoupon(request)
     }
 
     /**
@@ -31,7 +35,7 @@ class CouponNetworkDataSourceImpl @Inject constructor(
      * @param params 请求参数，包含分页和查询条件
      * @return 用户优惠券分页列表响应数据
      */
-    override suspend fun getUserCouponPage(params: Any): NetworkResponse<Any> {
+    override suspend fun getUserCouponPage(params: PageRequest): NetworkResponse<NetworkPageData<Coupon>> {
         return couponService.getUserCouponPage(params)
     }
 
@@ -41,27 +45,7 @@ class CouponNetworkDataSourceImpl @Inject constructor(
      * @param params 请求参数，包含查询条件
      * @return 用户优惠券列表响应数据
      */
-    override suspend fun getUserCouponList(params: Any): NetworkResponse<Any> {
+    override suspend fun getUserCouponList(params: Any): NetworkResponse<List<Coupon>> {
         return couponService.getUserCouponList(params)
     }
-
-    /**
-     * 获取用户优惠券详情
-     *
-     * @param id 用户优惠券ID
-     * @return 用户优惠券详情响应数据
-     */
-    override suspend fun getUserCouponInfo(id: String): NetworkResponse<Any> {
-        return couponService.getUserCouponInfo(id)
-    }
-
-    /**
-     * 分页查询优惠券信息
-     *
-     * @param params 请求参数，包含分页和查询条件
-     * @return 优惠券信息分页列表响应数据
-     */
-    override suspend fun getCouponInfoPage(params: Any): NetworkResponse<Any> {
-        return couponService.getCouponInfoPage(params)
-    }
-} 
+}

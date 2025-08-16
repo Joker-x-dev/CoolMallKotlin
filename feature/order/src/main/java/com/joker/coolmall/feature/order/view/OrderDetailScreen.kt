@@ -41,6 +41,7 @@ import com.joker.coolmall.core.ui.component.title.TitleWithLine
 import com.joker.coolmall.feature.order.R
 import com.joker.coolmall.feature.order.component.OrderButtons
 import com.joker.coolmall.feature.order.viewmodel.OrderDetailViewModel
+import com.joker.coolmall.core.ui.R as CoreUiR
 
 /**
  * 订单详情路由
@@ -221,7 +222,7 @@ private fun OrderDetailContentView(
 
             AppListItem(
                 title = "优惠金额",
-                leadingIcon = R.drawable.ic_coupon,
+                leadingIcon = CoreUiR.drawable.ic_coupon,
                 description = data.discountSource?.info?.title ?: "",
                 showArrow = false,
                 trailingContent = {

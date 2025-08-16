@@ -1,6 +1,7 @@
 package com.joker.coolmall.core.network.datasource.page
 
 import com.joker.coolmall.core.model.entity.Home
+import com.joker.coolmall.core.model.entity.GoodsDetail
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.base.BaseNetworkDataSource
 import com.joker.coolmall.core.network.service.PageService
@@ -23,5 +24,15 @@ class PageNetworkDataSourceImpl @Inject constructor(
      */
     override suspend fun getHomeData(): NetworkResponse<Home> {
         return pageService.getHomeData()
+    }
+
+    /**
+     * 获取商品详情
+     *
+     * @param goodsId 商品ID
+     * @return 商品详情响应信息，包含商品信息、优惠券列表和评论列表
+     */
+    override suspend fun getGoodsDetail(goodsId: Long): NetworkResponse<GoodsDetail> {
+        return pageService.getGoodsDetail(goodsId)
     }
 }

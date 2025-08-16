@@ -55,6 +55,7 @@ import kotlinx.coroutines.launch
  * @param containerColor 容器背景色
  * @param shape 容器形状
  * @param titleStyle 标题样式
+ * @param indicatorColor 指示条颜色
  * @param content 内容
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -69,6 +70,7 @@ fun BottomModal(
     containerColor: Color = MaterialTheme.colorScheme.surface,
     shape: Shape = RoundedCornerShape(topStart = 16.dp, topEnd = 16.dp),
     titleStyle: TextStyle = TitleLarge,
+    indicatorColor: Color = MaterialTheme.colorScheme.outline.copy(alpha = 0.8f),
     content: @Composable ColumnScope.() -> Unit
 ) {
     // 添加协程作用域用于动画控制
@@ -125,7 +127,7 @@ fun BottomModal(
                             modifier = Modifier
                                 .size(40.dp, 4.dp)
                                 .clip(RoundedCornerShape(2.dp))
-                                .background(MaterialTheme.colorScheme.outline.copy(alpha = 0.8f))
+                                .background(indicatorColor)
                         )
                     }
                 }

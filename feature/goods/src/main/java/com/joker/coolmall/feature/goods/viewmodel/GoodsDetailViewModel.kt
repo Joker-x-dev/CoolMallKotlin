@@ -5,15 +5,20 @@ import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
 import com.joker.coolmall.core.data.repository.CartRepository
+import com.joker.coolmall.core.data.repository.CouponRepository
 import com.joker.coolmall.core.data.repository.FootprintRepository
 import com.joker.coolmall.core.data.repository.GoodsRepository
+import com.joker.coolmall.core.data.repository.PageRepository
 import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.entity.Cart
 import com.joker.coolmall.core.model.entity.CartGoodsSpec
+import com.joker.coolmall.core.model.entity.Coupon
 import com.joker.coolmall.core.model.entity.Footprint
 import com.joker.coolmall.core.model.entity.Goods
+import com.joker.coolmall.core.model.entity.GoodsDetail
 import com.joker.coolmall.core.model.entity.GoodsSpec
 import com.joker.coolmall.core.model.entity.SelectedGoods
+import com.joker.coolmall.core.model.request.ReceiveCouponRequest
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.util.storage.MMKVUtils
 import com.joker.coolmall.core.util.toast.ToastUtils
@@ -41,8 +46,10 @@ class GoodsDetailViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     private val goodsRepository: GoodsRepository,
     private val cartRepository: CartRepository,
-    private val footprintRepository: FootprintRepository
-) : BaseNetWorkViewModel<Goods>(
+    private val footprintRepository: FootprintRepository,
+    private val pageRepository: PageRepository,
+    private val couponRepository: CouponRepository,
+) : BaseNetWorkViewModel<GoodsDetail>(
     navigator = navigator,
     appState = appState,
     savedStateHandle = savedStateHandle,
@@ -75,6 +82,12 @@ class GoodsDetailViewModel @Inject constructor(
     private val _hasAnimated = MutableStateFlow(false)
     val hasAnimated: StateFlow<Boolean> = _hasAnimated.asStateFlow()
 
+    /**
+     * 优惠券弹窗的显示状态
+     */
+    private val _couponModalVisible = MutableStateFlow(false)
+    val couponModalVisible: StateFlow<Boolean> = _couponModalVisible.asStateFlow()
+
     init {
         super.executeRequest()
     }
@@ -82,17 +95,17 @@ class GoodsDetailViewModel @Inject constructor(
     /**
      * 通过重写来给父类提供API请求的Flow
      */
-    override fun requestApiFlow(): Flow<NetworkResponse<Goods>> {
-        return goodsRepository.getGoodsInfo(requiredId.toString())
+    override fun requestApiFlow(): Flow<NetworkResponse<GoodsDetail>> {
+        return pageRepository.getGoodsDetail(requiredId)
     }
 
     /**
      * 处理成功结果，重写此方法添加足迹记录
      */
-    override fun onRequestSuccess(data: Goods) {
+    override fun onRequestSuccess(data: GoodsDetail) {
         super.onRequestSuccess(data)
         // 添加足迹记录
-        addToFootprint(data)
+        addToFootprint(data.goodsInfo)
     }
 
     /**
@@ -175,12 +188,40 @@ class GoodsDetailViewModel @Inject constructor(
     }
 
     /**
-     * 触发动画播放
+     * 触发动画
      */
     fun triggerAnimation() {
         if (!_hasAnimated.value) {
             _hasAnimated.value = true
         }
+    }
+
+    /**
+     * 显示优惠券弹出层
+     */
+    fun showCouponModal() {
+        _couponModalVisible.value = true
+    }
+
+    /**
+     * 隐藏优惠券领取弹出层
+     */
+    fun hideCouponModal() {
+        _couponModalVisible.value = false
+    }
+
+    /**
+     * 领取优惠券
+     * @param coupon 要领取的优惠券
+     */
+    fun receiveCoupon(coupon: Coupon) {
+        val request = ReceiveCouponRequest(couponId = coupon.id)
+        ResultHandler.handleResultWithData(
+            scope = viewModelScope,
+            flow = couponRepository.receiveCoupon(request).asResult(),
+            showToast = true,
+            onData = { data -> ToastUtils.showSuccess(data) },
+        )
     }
 
     /**
@@ -195,7 +236,7 @@ class GoodsDetailViewModel @Inject constructor(
             }
 
             // 获取商品当前数据，构建Cart对象
-            val goodsInfo = super.getSuccessData()
+            val goodsInfo = super.getSuccessData().goodsInfo
 
             // 1. 检查购物车中是否已有该商品
             val existingCart = cartRepository.getCartByGoodsId(selectedGoods.goodsId)

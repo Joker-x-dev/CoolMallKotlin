@@ -1,10 +1,6 @@
 package com.joker.coolmall.feature.main.view
 
-import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.expandVertically
-import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -23,77 +19,64 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LocalContentColor
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
-import androidx.compose.ui.graphics.Brush.Companion.linearGradient
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.joker.coolmall.core.common.base.state.BaseNetWorkListUiState
 import com.joker.coolmall.core.common.base.state.LoadMoreState
-import com.joker.coolmall.core.designsystem.component.SpaceBetweenRow
 import com.joker.coolmall.core.designsystem.component.VerticalList
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.CommonIcon
 import com.joker.coolmall.core.designsystem.theme.LogoIcon
-import com.joker.coolmall.core.designsystem.theme.Primary
 import com.joker.coolmall.core.designsystem.theme.ShapeMedium
 import com.joker.coolmall.core.designsystem.theme.ShapeSmall
-import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
-import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalXSmall
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
-import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
+import com.joker.coolmall.core.designsystem.theme.SpacePaddingXSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
-import com.joker.coolmall.core.designsystem.theme.TextWhite
 import com.joker.coolmall.core.model.entity.Banner
 import com.joker.coolmall.core.model.entity.Category
 import com.joker.coolmall.core.model.entity.Coupon
 import com.joker.coolmall.core.model.entity.Goods
 import com.joker.coolmall.core.model.entity.Home
-import com.joker.coolmall.core.ui.component.button.AppButton
-import com.joker.coolmall.core.ui.component.button.ButtonSize
 import com.joker.coolmall.core.ui.component.card.AppCard
-import com.joker.coolmall.core.ui.component.divider.WeDivider
 import com.joker.coolmall.core.ui.component.goods.GoodsGridItem
 import com.joker.coolmall.core.ui.component.goods.GoodsListItem
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
 import com.joker.coolmall.core.ui.component.list.AppListItem
+import com.joker.coolmall.core.ui.component.modal.CouponReceiveModal
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkListView
 import com.joker.coolmall.core.ui.component.refresh.RefreshLayout
 import com.joker.coolmall.core.ui.component.swiper.WeSwiper
 import com.joker.coolmall.core.ui.component.text.AppText
-import com.joker.coolmall.core.ui.component.text.PriceText
-import com.joker.coolmall.core.ui.component.text.TextSize
 import com.joker.coolmall.core.ui.component.text.TextType
 import com.joker.coolmall.core.ui.component.title.TitleWithLine
 import com.joker.coolmall.feature.main.R
 import com.joker.coolmall.feature.main.component.CommonScaffold
 import com.joker.coolmall.feature.main.component.FlashSaleItem
 import com.joker.coolmall.feature.main.viewmodel.HomeViewModel
+import com.joker.coolmall.core.ui.R as CoreUiR
 
 /**
  * 首页路由入口
@@ -107,6 +90,7 @@ internal fun HomeRoute(
     val listData by viewModel.listData.collectAsState()
     val isRefreshing by viewModel.isRefreshing.collectAsState()
     val loadMoreState by viewModel.loadMoreState.collectAsState()
+    val couponModalVisible by viewModel.couponModalVisible.collectAsState()
 
     HomeScreen(
         uiState = uiState,
@@ -114,6 +98,8 @@ internal fun HomeRoute(
         listData = listData,
         isRefreshing = isRefreshing,
         loadMoreState = loadMoreState,
+        couponModalVisible = couponModalVisible,
+
         onRefresh = viewModel::onRefresh,
         onLoadMore = viewModel::onLoadMore,
         shouldTriggerLoadMore = viewModel::shouldTriggerLoadMore,
@@ -123,6 +109,9 @@ internal fun HomeRoute(
         toFlashSalePage = viewModel::toFlashSalePage,
         toGitHubPage = viewModel::toGitHubPage,
         toAboutPage = viewModel::toAboutPage,
+        onShowCouponModal = viewModel::showCouponModal,
+        onHideCouponModal = viewModel::hideCouponModal,
+        onCouponReceive = viewModel::receiveCoupon,
         onRetry = viewModel::loadHomeData
     )
 }
@@ -153,6 +142,8 @@ internal fun HomeScreen(
     listData: List<Goods> = emptyList(),
     isRefreshing: Boolean = false,
     loadMoreState: LoadMoreState = LoadMoreState.Success,
+    couponModalVisible: Boolean = false,
+
     onRefresh: () -> Unit = {},
     onLoadMore: () -> Unit = {},
     shouldTriggerLoadMore: (lastIndex: Int, totalCount: Int) -> Boolean = { _, _ -> false },
@@ -162,6 +153,9 @@ internal fun HomeScreen(
     toFlashSalePage: () -> Unit = {},
     toGitHubPage: () -> Unit = {},
     toAboutPage: () -> Unit = {},
+    onShowCouponModal: () -> Unit = {},
+    onHideCouponModal: () -> Unit = {},
+    onCouponReceive: (Coupon) -> Unit = {},
     onRetry: () -> Unit = {}
 ) {
     CommonScaffold(
@@ -189,9 +183,22 @@ internal fun HomeScreen(
                 toGoodsDetail = toGoodsDetail,
                 toGoodsCategory = toGoodsCategory,
                 toFlashSalePage = toFlashSalePage,
-                toGitHubPage = toGitHubPage
+                toGitHubPage = toGitHubPage,
+                onShowCouponModal = onShowCouponModal
             )
         }
+
+        // 优惠券领取底部弹出层
+        CouponReceiveModal(
+            visible = couponModalVisible,
+            onDismiss = onHideCouponModal,
+            coupons = pageData.coupon ?: emptyList(),
+            onCouponReceive = { couponId ->
+                // 根据ID找到对应的优惠券并调用领取方法
+                val coupon = (pageData.coupon ?: emptyList()).find { it.id == couponId }
+                coupon?.let { onCouponReceive(it) }
+            }
+        )
     }
 }
 
@@ -221,7 +228,8 @@ private fun HomeContentView(
     toGoodsDetail: (Long) -> Unit,
     toGoodsCategory: (Long) -> Unit,
     toFlashSalePage: () -> Unit,
-    toGitHubPage: () -> Unit
+    toGitHubPage: () -> Unit,
+    onShowCouponModal: () -> Unit = {}
 ) {
 
     RefreshLayout(
@@ -240,22 +248,22 @@ private fun HomeContentView(
                 }
             }
 
+            // 优惠券
+            item(span = StaggeredGridItemSpan.FullLine) {
+                data.coupon?.let { coupons ->
+                    CouponSection(
+                        coupons = coupons,
+                        onShowCouponModal = onShowCouponModal
+                    )
+                }
+            }
+
             // 分类
             item(span = StaggeredGridItemSpan.FullLine) {
                 data.category?.let { categories ->
                     Category(
                         categories = categories,
                         onCategoryClick = toGoodsCategory
-                    )
-                }
-            }
-
-            // 优惠券
-            item(span = StaggeredGridItemSpan.FullLine) {
-                data.coupon?.let { coupons ->
-                    CouponSection(
-                        coupons = coupons,
-                        onCouponReceive = {}
                     )
                 }
             }
@@ -394,9 +402,9 @@ private fun Category(
  */
 @Composable
 private fun CategoryItem(
+    modifier: Modifier = Modifier,
     category: Category,
     onClick: () -> Unit = {},
-    modifier: Modifier = Modifier
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -526,25 +534,45 @@ private fun HomeTopAppBar(
 @Composable
 private fun CouponSection(
     coupons: List<Coupon>,
-    onCouponReceive: (Long) -> Unit
+    onShowCouponModal: () -> Unit = {}
 ) {
-    // 如果没有优惠券数据，不显示
-    if (coupons.isEmpty()) return
-
     // 轮播图页面状态管理
     val state = rememberPagerState { coupons.size }
 
-    Card(modifier = Modifier.animateContentSize()) {
-        WeSwiper(
-            state = state,
-            options = coupons,
-            autoplay = false,
-            modifier = Modifier.clip(ShapeMedium),
-        ) { index, coupon ->
+    Card {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(SpacePaddingMedium),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            // 左侧可滑动的优惠券内容
+            Box(modifier = Modifier.weight(1f)) {
+                WeSwiper(
+                    state = state,
+                    options = coupons,
+                    autoplay = false,
+                    indicator = { count, current -> }
+                ) { index, coupon ->
+                    CouponCard(coupon = coupon)
+                }
+            }
 
-            CouponCard(
-                coupon = coupon,
-                onReceive = { onCouponReceive(it.id) },
+            // 竖分割线
+            VerticalDivider(
+                modifier = Modifier
+                    .height(20.dp)
+                    .padding(horizontal = 12.dp),
+                thickness = 0.5.dp
+            )
+
+            // 右侧固定的领取按钮
+            AppText(
+                text = "领取",
+                type = TextType.LINK,
+                modifier = Modifier.clickable {
+                    onShowCouponModal()
+                }
             )
         }
     }
@@ -554,137 +582,34 @@ private fun CouponSection(
  * 优惠券卡片组件
  */
 @Composable
-private fun CouponCard(
-    coupon: Coupon,
-    onReceive: (Coupon) -> Unit,
-) {
-    var isExpanded by remember { mutableStateOf(false) }
-
-    Column {
-        // 上半部分：优惠券主要信息
-        Row(
+private fun CouponCard(coupon: Coupon) {
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Box(
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(SpacePaddingMedium),
-            verticalAlignment = Alignment.CenterVertically
+                .background(
+                    MaterialTheme.colorScheme.surfaceVariant,
+                    shape = RoundedCornerShape(4.dp)
+                )
+                .padding(SpacePaddingXSmall)
         ) {
-            // 左侧优惠券图标
-            Box(
-                modifier = Modifier
-                    .size(46.dp)
-                    .background(
-                        brush = linearGradient(
-                            colors = listOf(
-                                Primary.copy(alpha = 0.9f),
-                                Primary.copy(alpha = 0.7f)
-                            )
-                        ),
-                        shape = ShapeSmall
-                    ),
-                contentAlignment = Alignment.Center
-            ) {
-                CommonIcon(
-                    resId = R.drawable.ic_coupon_fill,
-                    size = 24.dp,
-                    tint = TextWhite,
-                )
-            }
-
-            SpaceHorizontalMedium()
-
-            // 中间信息区域
-            Column(
-                modifier = Modifier.weight(1f),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                // 优惠券标题
-                AppText(
-                    text = coupon.title,
-                    fontWeight = FontWeight.Bold,
-                    maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
-                )
-                // 有效期
-                AppText(
-                    text = "有效期至 ${coupon.endTime}",
-                    size = TextSize.BODY_MEDIUM,
-                    type = TextType.TERTIARY
-                )
-            }
-
-            SpaceHorizontalMedium()
-
-            // 右侧金额和条件区域
-            Column(
-                horizontalAlignment = Alignment.End,
-                verticalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                // 优惠券金额
-                PriceText(price = coupon.amount.toInt())
-                // 使用条件
-                AppText(
-                    text = "满${coupon.condition!!.fullAmount.toInt()}元可用",
-                    size = TextSize.BODY_MEDIUM,
-                    type = TextType.SECONDARY
-                )
-            }
-        }
-
-        // 分割线
-        WeDivider()
-
-        // 下半部分：说明和领取按钮
-        SpaceBetweenRow(
-            modifier = Modifier
-                .padding(
-                    horizontal = SpacePaddingMedium,
-                    vertical = SpaceVerticalMedium
-                )
-        ) {
-            // 左侧：可展开的说明
-            Column {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    modifier = Modifier
-                        .clickable { isExpanded = !isExpanded }
-                ) {
-                    AppText(
-                        text = "使用说明",
-                        size = TextSize.BODY_MEDIUM,
-                        type = TextType.TERTIARY
-                    )
-
-                    SpaceHorizontalXSmall()
-
-                    CommonIcon(
-                        imageVector = if (isExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
-                        size = 16.dp,
-                        tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-                    )
-                }
-
-                // 展开的详细说明
-                AnimatedVisibility(
-                    visible = isExpanded,
-                    enter = expandVertically(),
-                    exit = shrinkVertically()
-                ) {
-                    AppText(
-                        text = coupon.description,
-                        size = TextSize.BODY_MEDIUM,
-                        type = TextType.TERTIARY
-                    )
-                }
-            }
-
-            // 右侧：领取按钮
-            AppButton(
-                text = "领取",
-                onClick = {},
-                fullWidth = false,
-                size = ButtonSize.MINI
+            CommonIcon(
+                resId = CoreUiR.drawable.ic_coupon,
+                size = 18.dp,
+                tint = LocalContentColor.current.copy(alpha = 0.9f)
             )
         }
+
+        AppText(
+            text = coupon.title,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier
+                .weight(1f)
+                .padding(start = SpaceVerticalSmall)
+        )
     }
 }
 

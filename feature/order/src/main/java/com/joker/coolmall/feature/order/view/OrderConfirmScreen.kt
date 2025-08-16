@@ -45,6 +45,7 @@ import com.joker.coolmall.core.ui.component.text.TextSize
 import com.joker.coolmall.core.ui.component.text.TextType
 import com.joker.coolmall.core.ui.component.title.TitleWithLine
 import com.joker.coolmall.feature.order.R
+import com.joker.coolmall.core.ui.R as CoreUiR
 import com.joker.coolmall.feature.order.viewmodel.OrderConfirmViewModel
 
 /**
@@ -184,7 +185,7 @@ private fun OrderConfirmContentView(
 
             AppListItem(
                 title = "优惠券",
-                leadingIcon = R.drawable.ic_coupon,
+                leadingIcon = CoreUiR.drawable.ic_coupon,
                 trailingText = "无可用",
                 showArrow = true,
                 onClick = { /* 选择优惠券 */ }

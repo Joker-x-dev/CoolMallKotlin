@@ -105,6 +105,7 @@ internal fun MeRoute(
         toUserFootprint = viewModel::toUserFootprintPage,
         toGoodsDetail = viewModel::toGoodsDetailPage,
         toChat = viewModel::toChatPage,
+        toCoupon = viewModel::toCouponPage,
     )
 }
 
@@ -123,7 +124,8 @@ internal fun MeScreen(
     toOrderListByTab: (Int) -> Unit = {},
     toUserFootprint: () -> Unit = {},
     toGoodsDetail: (Long) -> Unit = {},
-    toChat: () -> Unit = {}
+    toChat: () -> Unit = {},
+    toCoupon: () -> Unit = {},
 ) {
     CommonScaffold(topBar = { }) {
         VerticalList(
@@ -160,7 +162,8 @@ internal fun MeScreen(
             // 功能菜单区域
             FunctionMenuSection(
                 toAddressList = toAddressList,
-                toChat = toChat
+                toChat = toChat,
+                toCoupon = toCoupon,
             )
 
         }
@@ -471,14 +474,16 @@ private fun OrderStatusItem(
 @Composable
 private fun FunctionMenuSection(
     toAddressList: () -> Unit,
-    toChat: () -> Unit
+    toChat: () -> Unit,
+    toCoupon: () -> Unit,
 ) {
     Card {
         AppListItem(
             title = "优惠券",
             leadingIcon = R.drawable.ic_coupon_fill,
             leadingIconTint = Color(0xFFFF9800),
-            verticalPadding = SpaceVerticalLarge
+            verticalPadding = SpaceVerticalLarge,
+            onClick = toCoupon
         )
 
         AppListItem(

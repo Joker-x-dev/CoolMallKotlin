@@ -1,5 +1,9 @@
 package com.joker.coolmall.core.data.repository
 
+import com.joker.coolmall.core.model.entity.Coupon
+import com.joker.coolmall.core.model.request.PageRequest
+import com.joker.coolmall.core.model.request.ReceiveCouponRequest
+import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.datasource.coupon.CouponNetworkDataSource
 import kotlinx.coroutines.Dispatchers
@@ -16,36 +20,28 @@ class CouponRepository @Inject constructor(
 ) {
     /**
      * 领取优惠券
+     * @param request 领取优惠券请求参数
+     * @return 领取结果
      */
-    fun receiveCoupon(params: Any): Flow<NetworkResponse<Any>> = flow {
-        emit(couponNetworkDataSource.receiveCoupon(params))
+    fun receiveCoupon(request: ReceiveCouponRequest): Flow<NetworkResponse<String>> = flow {
+        emit(couponNetworkDataSource.receiveCoupon(request))
     }.flowOn(Dispatchers.IO)
 
     /**
      * 分页查询用户优惠券
+     * @param params 分页查询参数
+     * @return 用户优惠券分页数据
      */
-    fun getUserCouponPage(params: Any): Flow<NetworkResponse<Any>> = flow {
+    fun getUserCouponPage(params: PageRequest): Flow<NetworkResponse<NetworkPageData<Coupon>>> = flow {
         emit(couponNetworkDataSource.getUserCouponPage(params))
     }.flowOn(Dispatchers.IO)
 
     /**
      * 查询用户优惠券列表
+     * @param params 查询参数
+     * @return 用户优惠券列表
      */
-    fun getUserCouponList(params: Any): Flow<NetworkResponse<Any>> = flow {
+    fun getUserCouponList(params: Any): Flow<NetworkResponse<List<Coupon>>> = flow {
         emit(couponNetworkDataSource.getUserCouponList(params))
     }.flowOn(Dispatchers.IO)
-
-    /**
-     * 用户优惠券详情
-     */
-    fun getUserCouponInfo(id: String): Flow<NetworkResponse<Any>> = flow {
-        emit(couponNetworkDataSource.getUserCouponInfo(id))
-    }.flowOn(Dispatchers.IO)
-
-    /**
-     * 分页查询优惠券信息
-     */
-    fun getCouponInfoPage(params: Any): Flow<NetworkResponse<Any>> = flow {
-        emit(couponNetworkDataSource.getCouponInfoPage(params))
-    }.flowOn(Dispatchers.IO)
-} 
+}

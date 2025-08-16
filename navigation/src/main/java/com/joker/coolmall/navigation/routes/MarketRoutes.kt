@@ -10,7 +10,7 @@ object MarketRoutes {
     private const val MARKET_ROUTE = "market"
     
     /**
-     * 优惠券管理路由
+     * 我的优惠券路由
      */
     const val COUPON = "$MARKET_ROUTE/coupon"
 }

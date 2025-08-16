@@ -10,6 +10,8 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -47,7 +49,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.snapshotFlow
@@ -58,13 +59,13 @@ import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
+import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
@@ -86,9 +87,13 @@ import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
+import com.joker.coolmall.core.model.entity.Coupon
 import com.joker.coolmall.core.model.entity.Goods
+import com.joker.coolmall.core.model.entity.GoodsDetail
 import com.joker.coolmall.core.model.entity.GoodsSpec
 import com.joker.coolmall.core.model.entity.SelectedGoods
+import com.joker.coolmall.core.model.preview.previewGoods
+import com.joker.coolmall.core.model.preview.previewMyCoupons
 import com.joker.coolmall.core.ui.component.button.AppButtonBordered
 import com.joker.coolmall.core.ui.component.button.AppButtonFixed
 import com.joker.coolmall.core.ui.component.button.ButtonShape
@@ -98,6 +103,7 @@ import com.joker.coolmall.core.ui.component.button.ButtonType
 import com.joker.coolmall.core.ui.component.card.AppCard
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
 import com.joker.coolmall.core.ui.component.list.AppListItem
+import com.joker.coolmall.core.ui.component.modal.CouponReceiveModal
 import com.joker.coolmall.core.ui.component.modal.SpecSelectModal
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkView
 import com.joker.coolmall.core.ui.component.swiper.WeSwiper
@@ -107,6 +113,7 @@ import com.joker.coolmall.core.ui.component.title.TitleWithLine
 import com.joker.coolmall.feature.goods.R
 import com.joker.coolmall.feature.goods.viewmodel.GoodsDetailViewModel
 import kotlinx.coroutines.flow.collectLatest
+import com.joker.coolmall.core.ui.R as CoreUiR
 
 /**
  * 商品详情页面路由入口
@@ -125,6 +132,7 @@ internal fun GoodsDetailRoute(
     val selectedSpec by viewModel.selectedSpec.collectAsState()
     // 收集动画状态
     val hasAnimated by viewModel.hasAnimated.collectAsState()
+    val couponModalVisible by viewModel.couponModalVisible.collectAsState()
 
     GoodsDetailScreen(
         uiState = uiState,
@@ -140,7 +148,11 @@ internal fun GoodsDetailRoute(
         onBuyNow = viewModel::buyNow,
         onSpecRetry = viewModel::loadGoodsSpecs,
         hasAnimated = hasAnimated,
-        onTriggerAnimation = viewModel::triggerAnimation
+        onTriggerAnimation = viewModel::triggerAnimation,
+        couponModalVisible = couponModalVisible,
+        onShowCouponModal = viewModel::showCouponModal,
+        onHideCouponModal = viewModel::hideCouponModal,
+        onCouponReceive = viewModel::receiveCoupon
     )
 }
 
@@ -162,7 +174,7 @@ internal fun GoodsDetailRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun GoodsDetailScreen(
-    uiState: BaseNetWorkUiState<Goods> = BaseNetWorkUiState.Loading,
+    uiState: BaseNetWorkUiState<GoodsDetail> = BaseNetWorkUiState.Loading,
     onBackClick: () -> Unit = {},
     onRetry: () -> Unit = {},
     onSpecRetry: () -> Unit = {},
@@ -175,7 +187,11 @@ internal fun GoodsDetailScreen(
     onAddToCart: (SelectedGoods) -> Unit = {},
     onBuyNow: (SelectedGoods) -> Unit = {},
     hasAnimated: Boolean = false,
-    onTriggerAnimation: () -> Unit = {}
+    onTriggerAnimation: () -> Unit = {},
+    couponModalVisible: Boolean = false,
+    onShowCouponModal: () -> Unit = {},
+    onHideCouponModal: () -> Unit = {},
+    onCouponReceive: (Coupon) -> Unit = {}
 ) {
     Scaffold(
         contentWindowInsets = ScaffoldDefaults
@@ -187,28 +203,42 @@ internal fun GoodsDetailScreen(
             uiState = uiState,
             padding = paddingValues,
             onRetry = onRetry
-        ) { goods ->
+        ) { goodsDetail ->
             GoodsDetailContentView(
-                data = goods,
+                data = goodsDetail,
+                coupons = goodsDetail.coupon,
                 onBackClick = onBackClick,
                 paddingValues = paddingValues,
                 selectedSpec = selectedSpec,
                 onShowSpecModal = onShowSpecModal,
                 hasAnimated = hasAnimated,
-                onTriggerAnimation = onTriggerAnimation
+                onTriggerAnimation = onTriggerAnimation,
+                onShowCouponModal = onShowCouponModal
             )
 
             // 规格选择底部弹出层
             SpecSelectModal(
                 visible = specModalVisible,
                 onDismiss = onHideSpecModal,
-                goods = goods,
+                goods = goodsDetail.goodsInfo,
                 uiState = specsModalUiState,
                 onSpecSelected = onSpecSelected,
                 onAddToCart = onAddToCart,
                 onBuyNow = onBuyNow,
                 onRetry = onSpecRetry,
                 selectedSpec = selectedSpec
+            )
+
+            // 优惠券领取底部弹出层
+            CouponReceiveModal(
+                visible = couponModalVisible,
+                onDismiss = onHideCouponModal,
+                coupons = goodsDetail.coupon,
+                onCouponReceive = { couponId ->
+                    // 根据ID找到对应的优惠券并调用领取方法
+                    val coupon = goodsDetail.coupon.find { it.id == couponId }
+                    coupon?.let { onCouponReceive(it) }
+                }
             )
         }
     }
@@ -225,17 +255,19 @@ internal fun GoodsDetailScreen(
  */
 @Composable
 private fun GoodsDetailContentView(
-    data: Goods,
+    data: GoodsDetail,
+    coupons: List<Coupon> = emptyList(),
     onBackClick: () -> Unit,
     paddingValues: PaddingValues,
     selectedSpec: GoodsSpec? = null,
     onShowSpecModal: () -> Unit = {},
     hasAnimated: Boolean = false,
-    onTriggerAnimation: () -> Unit = {}
+    onTriggerAnimation: () -> Unit = {},
+    onShowCouponModal: () -> Unit = {}
 ) {
     // 主内容容器
     var topBarAlpha by remember { mutableIntStateOf(0) }
-    
+
     // 启动动画
     LaunchedEffect(Unit) {
         onTriggerAnimation()
@@ -248,10 +280,12 @@ private fun GoodsDetailContentView(
     ) {
         // 内容区域
         GoodsDetailContentWithScroll(
-            data = data,
+            data = data.goodsInfo,
+            coupons = coupons,
             selectedSpec = selectedSpec,
             onTopBarAlphaChanged = { topBarAlpha = it },
-            onShowSpecModal = onShowSpecModal
+            onShowSpecModal = onShowSpecModal,
+            onShowCouponModal = onShowCouponModal
         )
 
         // 导航栏浮动在顶部
@@ -362,6 +396,7 @@ private fun CircleIconButton(
  * 带滚动功能的商品详情内容
  *
  * @param data 商品详情数据对象
+ * @param coupons 优惠券列表
  * @param selectedSpec 当前选中的商品规格，若为null则表示未选择规格
  * @param onTopBarAlphaChanged 顶部导航栏透明度变化回调，参数为新的透明度值
  * @param onShowSpecModal 显示规格选择弹窗的回调函数
@@ -369,9 +404,11 @@ private fun CircleIconButton(
 @Composable
 private fun GoodsDetailContentWithScroll(
     data: Goods,
+    coupons: List<Coupon> = emptyList(),
     selectedSpec: GoodsSpec? = null,
     onTopBarAlphaChanged: (Int) -> Unit,
-    onShowSpecModal: () -> Unit
+    onShowSpecModal: () -> Unit,
+    onShowCouponModal: () -> Unit = {}
 ) {
     val scrollState = rememberScrollState()
 
@@ -401,7 +438,7 @@ private fun GoodsDetailContentWithScroll(
             modifier = Modifier.padding(SpacePaddingMedium)
         ) {
             // 基本信息
-            GoodsInfoCard(data, selectedSpec, onShowSpecModal)
+            GoodsInfoCard(data, coupons, selectedSpec, onShowSpecModal, onShowCouponModal)
 
             SpaceVerticalMedium()
 
@@ -467,8 +504,10 @@ private fun GoodsBanner(images: List<String>) {
 @Composable
 private fun GoodsInfoCard(
     data: Goods,
+    coupons: List<Coupon> = emptyList(),
     selectedSpec: GoodsSpec? = null,
-    onShowSpecModal: () -> Unit
+    onShowSpecModal: () -> Unit,
+    onShowCouponModal: () -> Unit = {}
 ) {
     AppCard {
         // 价格和已售标签行
@@ -488,7 +527,7 @@ private fun GoodsInfoCard(
         }
 
         // 优惠券列表
-        CouponList()
+        CouponList(coupons, onShowCouponModal)
 
         SpaceVerticalMedium()
 
@@ -552,26 +591,34 @@ private fun SoldCountTag(count: Int) {
  *
  * 展示可用的优惠券信息列表
  */
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun CouponList() {
-    Spacer(modifier = Modifier.height(SpaceVerticalSmall))
-
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(SpaceVerticalSmall)
-    ) {
-        CouponTag("满188减88元")
-        CouponTag("满100减9元")
+private fun CouponList(
+    coupons: List<Coupon> = emptyList(),
+    onShowCouponModal: () -> Unit = {}
+) {
+    if (coupons.isNotEmpty()) {
+        SpaceVerticalSmall()
+        FlowRow(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(SpaceHorizontalSmall),
+            verticalArrangement = Arrangement.spacedBy(SpaceVerticalSmall)
+        ) {
+            coupons.forEach { coupon -> CouponTag(coupon, onShowCouponModal) }
+        }
     }
 }
 
 /**
  * 优惠券标签
  *
- * @param text 优惠券文本内容，如"满100减10元"
+ * @param coupon 优惠券对象，包含满减金额信息
  */
 @Composable
-private fun CouponTag(text: String) {
+private fun CouponTag(
+    coupon: Coupon,
+    onShowCouponModal: () -> Unit = {}
+) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = Modifier
@@ -580,17 +627,18 @@ private fun CouponTag(text: String) {
                 color = ColorDanger,
                 shape = RoundedCornerShape(SpaceVerticalXSmall)
             )
+            .clickable { onShowCouponModal() }
             .padding(horizontal = SpacePaddingSmall, vertical = SpaceVerticalXSmall)
     ) {
         Icon(
-            painter = painterResource(id = R.drawable.ic_coupon),
+            painter = painterResource(id = CoreUiR.drawable.ic_coupon),
             contentDescription = null,
             tint = ColorDanger,
             modifier = Modifier.size(SpaceVerticalMedium)
         )
         Spacer(modifier = Modifier.width(SpaceVerticalXSmall))
         Text(
-            text = text,
+            text = "满${coupon.condition!!.fullAmount.toInt()}减${coupon.amount.toInt()}元",
             style = MaterialTheme.typography.labelSmall,
             color = ColorDanger
         )
@@ -702,8 +750,7 @@ private fun GoodsDetailCard(contentPics: List<String>) {
         contentPics.forEachIndexed { index, pic ->
             NetWorkImage(
                 model = pic,
-                modifier = Modifier
-                    .fillMaxWidth()
+                modifier = Modifier.fillMaxWidth()
             )
         }
     }
@@ -837,31 +884,9 @@ fun GoodsDetailScreenPreview() {
     AppTheme {
         GoodsDetailScreen(
             uiState = BaseNetWorkUiState.Success(
-                data = Goods(
-                    id = 1,
-                    createTime = "2025-03-29 00:17:15",
-                    updateTime = "2025-03-29 23:07:48",
-                    typeId = 11,
-                    title = "Redmi 14C",
-                    subTitle = "【持久续航】5160mAh 大电池",
-                    mainPic = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ffcd84baf3d3a4b49b35a03aaf783281e_%E7%BA%A2%E7%B1%B3%2014c.png",
-                    pics = listOf(
-                        "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png",
-                        "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F32051f923ded432c82ef5934451a601b_b2.jpg",
-                        "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F88bf37e8c9ce42968067cbf3d717f613_b3.jpg",
-                        "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F605b0249e73a4fe185c0a075ee85c7a3_b4.jpeg",
-                        "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ffb3679b641214f9b8af929cc58d1fe87_b5.jpeg",
-                        "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Fd1cbc7c3e2e04aa28ed27b6913dbe05b_b6.jpeg",
-                        "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F3c081339d951490b8d232477d9249ec2_b7.jpeg",
-                        "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ff3b7302aa7944f7caad225fb32652999_b8.jpeg",
-                        "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F54a05d34d02141ee8c05a129a7cb3555_b9.jpeg"
-                    ),
-                    price = 499,
-                    sold = 0,
-                    content = "<p><img src=\"https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F5c161af71062402d8dc7e3193e62d8f5_d1.png\" alt=\"\" data-href=\"\" style=\"width: 100%;\"/><img src=\"https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Fea304cef45b846d2b7fc4e7fbef6d103_d2.jpg\" alt=\"\" data-href=\"\" style=\"\"/></p><p><img src=\"https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ff3d17dae77d144b9aa828537f96d04e4_d3.jpg\" alt=\"\" data-href=\"\" style=\"width: 100%;\"/><img src=\"https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F99710ccacd5443518a9b97386d028b5c_d4.jpg\" alt=\"\" data-href=\"\" style=\"\"/><img src=\"https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Fa180b572f52142d5811dcf4e18c27a95_d5.jpg\" alt=\"\" data-href=\"\" style=\"\"/><img src=\"https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ff5bab785f9d04ac38b35e10a1b63486e_d6.jpg\" alt=\"\" data-href=\"\" style=\"\"/></p><p><img src=\"https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F19f52075481c44a789dcf648e3f8a7aa_d7.jpg\" alt=\"\" data-href=\"\" style=\"\"/></p>",
-                    status = 1,
-                    sortNum = 0,
-                    specs = null
+                data = GoodsDetail(
+                    goodsInfo = previewGoods,
+                    coupon = previewMyCoupons
                 )
             )
         )
@@ -874,31 +899,9 @@ fun GoodsDetailScreenPreviewDark() {
     AppTheme(darkTheme = true) {
         GoodsDetailScreen(
             uiState = BaseNetWorkUiState.Success(
-                data = Goods(
-                    id = 1,
-                    createTime = "2025-03-29 00:17:15",
-                    updateTime = "2025-03-29 23:07:48",
-                    typeId = 11,
-                    title = "Redmi 14C",
-                    subTitle = "【持久续航】5160mAh 大电池",
-                    mainPic = "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ffcd84baf3d3a4b49b35a03aaf783281e_%E7%BA%A2%E7%B1%B3%2014c.png",
-                    pics = listOf(
-                        "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F83561ee604b14aae803747c32ff59cbb_b1.png",
-                        "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F32051f923ded432c82ef5934451a601b_b2.jpg",
-                        "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F88bf37e8c9ce42968067cbf3d717f613_b3.jpg",
-                        "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F605b0249e73a4fe185c0a075ee85c7a3_b4.jpeg",
-                        "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ffb3679b641214f9b8af929cc58d1fe87_b5.jpeg",
-                        "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Fd1cbc7c3e2e04aa28ed27b6913dbe05b_b6.jpeg",
-                        "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F3c081339d951490b8d232477d9249ec2_b7.jpeg",
-                        "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ff3b7302aa7944f7caad225fb32652999_b8.jpeg",
-                        "https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F54a05d34d02141ee8c05a129a7cb3555_b9.jpeg"
-                    ),
-                    price = 499,
-                    sold = 0,
-                    content = "<p><img src=\"https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F5c161af71062402d8dc7e3193e62d8f5_d1.png\" alt=\"\" data-href=\"\" style=\"width: 100%;\"/><img src=\"https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Fea304cef45b846d2b7fc4e7fbef6d103_d2.jpg\" alt=\"\" data-href=\"\" style=\"\"/></p><p><img src=\"https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ff3d17dae77d144b9aa828537f96d04e4_d3.jpg\" alt=\"\" data-href=\"\" style=\"width: 100%;\"/><img src=\"https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F99710ccacd5443518a9b97386d028b5c_d4.jpg\" alt=\"\" data-href=\"\" style=\"\"/><img src=\"https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Fa180b572f52142d5811dcf4e18c27a95_d5.jpg\" alt=\"\" data-href=\"\" style=\"\"/><img src=\"https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2Ff5bab785f9d04ac38b35e10a1b63486e_d6.jpg\" alt=\"\" data-href=\"\" style=\"\"/></p><p><img src=\"https://game-box-1315168471.cos.ap-guangzhou.myqcloud.com/app%2Fbase%2F19f52075481c44a789dcf648e3f8a7aa_d7.jpg\" alt=\"\" data-href=\"\" style=\"\"/></p>",
-                    status = 1,
-                    sortNum = 0,
-                    specs = null
+                data = GoodsDetail(
+                    goodsInfo = previewGoods,
+                    coupon = previewMyCoupons
                 )
             )
         )
