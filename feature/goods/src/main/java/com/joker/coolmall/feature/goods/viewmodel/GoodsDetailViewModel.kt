@@ -24,6 +24,7 @@ import com.joker.coolmall.core.util.storage.MMKVUtils
 import com.joker.coolmall.core.util.toast.ToastUtils
 import com.joker.coolmall.feature.goods.navigation.GoodsDetailRoutes
 import com.joker.coolmall.navigation.AppNavigator
+import com.joker.coolmall.navigation.routes.AuthRoutes
 import com.joker.coolmall.navigation.routes.OrderRoutes
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
@@ -215,6 +216,14 @@ class GoodsDetailViewModel @Inject constructor(
      * @param coupon 要领取的优惠券
      */
     fun receiveCoupon(coupon: Coupon) {
+        // 检查登录状态
+        if (!appState.isLoggedIn.value) {
+            hideCouponModal()
+            // 未登录，跳转到登录页面
+            super.toPage(AuthRoutes.HOME)
+            return
+        }
+        
         val request = ReceiveCouponRequest(couponId = coupon.id)
         ResultHandler.handleResultWithData(
             scope = viewModelScope,
