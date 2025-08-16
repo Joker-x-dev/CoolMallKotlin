@@ -1,6 +1,66 @@
 package com.joker.coolmall.core.model.entity
 
+import kotlinx.serialization.KSerializer
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.descriptors.PrimitiveKind
+import kotlinx.serialization.descriptors.PrimitiveSerialDescriptor
+import kotlinx.serialization.descriptors.SerialDescriptor
+import kotlinx.serialization.encoding.Decoder
+import kotlinx.serialization.encoding.Encoder
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonDecoder
+import kotlinx.serialization.json.JsonPrimitive
+
+/**
+ * 自定义序列化器，用于处理condition字段
+ * API可能返回字符串格式或对象格式的condition
+ */
+object ConditionSerializer : KSerializer<Condition?> {
+    override val descriptor: SerialDescriptor =
+        PrimitiveSerialDescriptor("Condition", PrimitiveKind.STRING)
+
+    override fun serialize(encoder: Encoder, value: Condition?) {
+        if (value == null) {
+            encoder.encodeNull()
+        } else {
+            encoder.encodeSerializableValue(Condition.serializer(), value)
+        }
+    }
+
+    override fun deserialize(decoder: Decoder): Condition? {
+        return try {
+            when (decoder) {
+                is JsonDecoder -> {
+                    val element = decoder.decodeJsonElement()
+                    when {
+                        element is JsonPrimitive && element.isString -> {
+                            // 如果是字符串格式，解析JSON字符串
+                            val jsonString = element.content
+                            if (jsonString.isBlank()) {
+                                null
+                            } else {
+                                Json.decodeFromString(Condition.serializer(), jsonString)
+                            }
+                        }
+
+                        else -> {
+                            // 如果是对象格式，直接解析
+                            Json.decodeFromJsonElement(Condition.serializer(), element)
+                        }
+                    }
+                }
+
+                else -> {
+                    // 其他情况，尝试直接解析为Condition对象
+                    decoder.decodeSerializableValue(Condition.serializer())
+                }
+            }
+        } catch (_: Exception) {
+            // 解析失败时返回null
+            null
+        }
+    }
+}
 
 /**
  * 优惠券信息
@@ -61,6 +121,7 @@ data class Coupon(
     /**
      * 条件
      */
+    @Serializable(with = ConditionSerializer::class)
     val condition: Condition? = null,
 
     /**

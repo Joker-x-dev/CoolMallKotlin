@@ -53,7 +53,7 @@ import com.joker.coolmall.core.ui.component.text.TextType
 fun AddressCard(
     modifier: Modifier = Modifier,
     address: Address? = null,
-    onClick: (Long) -> Unit = {},
+    onClick: () -> Unit = {},
     actionSlot: (@Composable () -> Unit)? = null,
     showBottomBar: Boolean = true,
     addressSelected: Boolean = false
@@ -61,7 +61,7 @@ fun AddressCard(
     Card(
         modifier = modifier
             .clip(ShapeMedium)
-            .clickable { onClick(address?.id ?: 0) },
+            .clickable { onClick() },
     ) {
         if (address != null) {
             // 有地址数据时显示正常布局

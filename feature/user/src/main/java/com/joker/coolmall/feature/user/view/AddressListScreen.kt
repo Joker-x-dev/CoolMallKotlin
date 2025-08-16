@@ -58,7 +58,9 @@ internal fun AddressListRoute(
         toAddressDetailEdit = viewModel::toAddressDetailEditPage,
         onBackClick = viewModel::navigateBack,
         onRetry = viewModel::retryRequest,
-        onDeleteClick = { viewModel.showDeleteDialog(it) }
+        onDeleteClick = { viewModel.showDeleteDialog(it) },
+        isSelectMode = viewModel.isSelectMode,
+        onAddressClick = { address -> viewModel.onAddressClick(address, backStackEntry) }
     )
 
     // 删除确认对话框
@@ -105,7 +107,9 @@ internal fun AddressListScreen(
     toAddressDetailEdit: (Long) -> Unit = {},
     onBackClick: () -> Unit = {},
     onRetry: () -> Unit = {},
-    onDeleteClick: (Long) -> Unit = {}
+    onDeleteClick: (Long) -> Unit = {},
+    isSelectMode: Boolean = false,
+    onAddressClick: (Address) -> Unit = {}
 ) {
     AppScaffold(
         title = R.string.address_list_title, onBackClick = onBackClick, bottomBar = {
@@ -127,7 +131,9 @@ internal fun AddressListScreen(
                 onLoadMore = onLoadMore,
                 shouldTriggerLoadMore = shouldTriggerLoadMore,
                 toAddressDetailEdit = toAddressDetailEdit,
-                onDeleteClick = onDeleteClick
+                onDeleteClick = onDeleteClick,
+                isSelectMode = isSelectMode,
+                onAddressClick = onAddressClick
             )
         }
     }
@@ -154,7 +160,9 @@ private fun AddressListContentView(
     onRetry: () -> Unit = {},
     shouldTriggerLoadMore: (lastIndex: Int, totalCount: Int) -> Boolean,
     toAddressDetailEdit: (Long) -> Unit,
-    onDeleteClick: (Long) -> Unit
+    onDeleteClick: (Long) -> Unit,
+    isSelectMode: Boolean = false,
+    onAddressClick: (Address) -> Unit = {}
 ) {
     RefreshLayout(
         isRefreshing = isRefreshing,
@@ -163,11 +171,17 @@ private fun AddressListContentView(
         onLoadMore = onLoadMore,
         shouldTriggerLoadMore = shouldTriggerLoadMore,
     ) {
-        // 订单列表项
+        // 地址列表项
         items(data.size) { index ->
             AddressCard(
                 address = data[index],
-                onClick = { toAddressDetailEdit(data[index].id) },
+                onClick = {
+                    if (isSelectMode) {
+                        onAddressClick(data[index])
+                    } else {
+                        toAddressDetailEdit(data[index].id)
+                    }
+                },
                 actionSlot = {
                     // 自定义操作区域 - 编辑和删除按钮
                     Row(

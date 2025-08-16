@@ -2,6 +2,7 @@ package com.joker.coolmall.core.network.datasource.page
 
 import com.joker.coolmall.core.model.entity.Home
 import com.joker.coolmall.core.model.entity.GoodsDetail
+import com.joker.coolmall.core.model.entity.ConfirmOrder
 import com.joker.coolmall.core.model.response.NetworkResponse
 
 /**
@@ -19,4 +20,9 @@ interface PageNetworkDataSource {
      * @param goodsId 商品ID
      */
     suspend fun getGoodsDetail(goodsId: Long): NetworkResponse<GoodsDetail>
+
+    /**
+     * 获取确认订单页面数据
+     */
+    suspend fun getConfirmOrder(): NetworkResponse<ConfirmOrder>
 }

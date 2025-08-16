@@ -70,10 +70,11 @@ enum class CouponCardMode {
  * 优惠券状态（自动计算）
  */
 private enum class CouponStatus {
-    AVAILABLE,  // 可用
-    SELECTED,   // 已选择
-    USED,       // 已使用
-    EXPIRED     // 已过期
+    AVAILABLE,    // 可用
+    SELECTED,     // 已选择
+    USED,         // 已使用
+    EXPIRED,      // 已过期
+    INSUFFICIENT  // 不满足使用条件
 }
 
 /**
@@ -100,6 +101,7 @@ private fun isExpired(endTime: String?): Boolean {
  * @param coupon 优惠券数据
  * @param mode 卡片模式（领取模式或选择模式）
  * @param isSelected 是否已选择（仅在选择模式下有效）
+ * @param currentPrice 当前商品价格（用于判断是否满足使用条件），null表示不检查条件
  * @param onActionClick 操作按钮点击回调
  * @param showDescription 是否显示详细描述，默认为true
  * @param expandable 是否可展开查看详情，默认为true
@@ -110,6 +112,7 @@ fun CouponCard(
     coupon: Coupon,
     mode: CouponCardMode = CouponCardMode.RECEIVE,
     isSelected: Boolean = false,
+    currentPrice: Double? = null,
     onActionClick: () -> Unit = {},
     showDescription: Boolean = true,
     expandable: Boolean = true
@@ -117,12 +120,23 @@ fun CouponCard(
     var isExpanded by remember { mutableStateOf(false) }
 
     // 计算优惠券状态
-    val status = remember(coupon, mode, isSelected) {
+    val status = remember(coupon, mode, isSelected, currentPrice) {
         when {
             // 检查是否已使用
             coupon.useStatus == 1 -> CouponStatus.USED
             // 检查是否已过期
             coupon.useStatus == 2 || isExpired(coupon.endTime) -> CouponStatus.EXPIRED
+            // 检查是否满足使用条件（仅在选择模式下且提供了当前价格时检查）
+            mode == CouponCardMode.SELECT && currentPrice != null && coupon.condition != null -> {
+                val condition = coupon.condition
+                if (condition != null && currentPrice < condition.fullAmount) {
+                    CouponStatus.INSUFFICIENT
+                } else if (isSelected) {
+                    CouponStatus.SELECTED
+                } else {
+                    CouponStatus.AVAILABLE
+                }
+            }
             // 选择模式下检查是否已选择
             mode == CouponCardMode.SELECT && isSelected -> CouponStatus.SELECTED
             // 其他情况为可用状态
@@ -130,8 +144,9 @@ fun CouponCard(
         }
     }
 
-    // 判断是否为不可用状态（已使用或已过期）
-    val isUnavailable = status == CouponStatus.USED || status == CouponStatus.EXPIRED
+    // 判断是否为不可用状态（已使用、已过期或不满足条件）
+    val isUnavailable =
+        status == CouponStatus.USED || status == CouponStatus.EXPIRED || status == CouponStatus.INSUFFICIENT
 
     Card(modifier = modifier) {
         Box {
@@ -369,6 +384,14 @@ private fun CouponActionButton(
         CouponStatus.EXPIRED -> {
             AppText(
                 text = "已过期",
+                type = TextType.TERTIARY,
+                size = TextSize.BODY_MEDIUM
+            )
+        }
+
+        CouponStatus.INSUFFICIENT -> {
+            AppText(
+                text = "不满足条件",
                 type = TextType.TERTIARY,
                 size = TextSize.BODY_MEDIUM
             )

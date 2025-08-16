@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import com.joker.coolmall.core.designsystem.component.WrapColumn
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
-import com.joker.coolmall.core.model.entity.Condition
 import com.joker.coolmall.core.model.entity.Coupon
 import com.joker.coolmall.core.model.preview.previewAvailableCoupons
 import com.joker.coolmall.core.ui.component.coupon.CouponCard
@@ -40,6 +39,7 @@ fun CouponModal(
     coupons: List<Coupon> = emptyList(),
     title: String = "领取优惠券",
     mode: CouponCardMode = CouponCardMode.RECEIVE,
+    currentPrice: Double? = null,
     onCouponAction: (Long) -> Unit = {}
 ) {
     val sheetState = rememberModalBottomSheetState(
@@ -57,6 +57,7 @@ fun CouponModal(
         CouponModalContent(
             coupons = coupons,
             mode = mode,
+            currentPrice = currentPrice,
             onCouponAction = onCouponAction
         )
     }
@@ -73,6 +74,7 @@ fun CouponModal(
 private fun CouponModalContent(
     coupons: List<Coupon>,
     mode: CouponCardMode,
+    currentPrice: Double? = null,
     onCouponAction: (Long) -> Unit
 ) {
     WrapColumn {
@@ -85,6 +87,7 @@ private fun CouponModalContent(
                 CouponCard(
                     coupon = coupon,
                     mode = mode,
+                    currentPrice = currentPrice,
                     onActionClick = { onCouponAction(coupon.id) },
                     modifier = Modifier.padding(bottom = SpaceVerticalMedium)
                 )

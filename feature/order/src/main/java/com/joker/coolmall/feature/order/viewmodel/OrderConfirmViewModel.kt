@@ -1,25 +1,28 @@
 package com.joker.coolmall.feature.order.viewmodel
 
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewModelScope
-import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
+import androidx.navigation.NavBackStackEntry
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
-import com.joker.coolmall.core.data.state.AppState
-import com.joker.coolmall.core.data.repository.AddressRepository
 import com.joker.coolmall.core.data.repository.CartRepository
 import com.joker.coolmall.core.data.repository.OrderRepository
+import com.joker.coolmall.core.data.repository.PageRepository
+import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.entity.Address
 import com.joker.coolmall.core.model.entity.Cart
 import com.joker.coolmall.core.model.entity.CartGoodsSpec
+import com.joker.coolmall.core.model.entity.ConfirmOrder
+import com.joker.coolmall.core.model.entity.Coupon
 import com.joker.coolmall.core.model.entity.Order
 import com.joker.coolmall.core.model.entity.SelectedGoods
 import com.joker.coolmall.core.model.request.CreateOrderRequest
 import com.joker.coolmall.core.model.request.CreateOrderRequest.CreateOrder
 import com.joker.coolmall.core.model.response.NetworkResponse
-import com.joker.coolmall.core.util.log.LogUtils
 import com.joker.coolmall.core.util.storage.MMKVUtils
 import com.joker.coolmall.feature.order.navigation.OrderPayRoutes
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.OrderRoutes
+import com.joker.coolmall.navigation.routes.UserRoutes
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,6 +31,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 /**
@@ -37,16 +41,46 @@ import javax.inject.Inject
 class OrderConfirmViewModel @Inject constructor(
     navigator: AppNavigator,
     appState: AppState,
-    private val addressRepository: AddressRepository,
     private val orderRepository: OrderRepository,
-    private val cartRepository: CartRepository
-) : BaseNetWorkViewModel<Address?>(navigator, appState) {
+    private val cartRepository: CartRepository,
+    private val pageRepository: PageRepository
+) : BaseNetWorkViewModel<ConfirmOrder>(navigator, appState) {
 
     /**
      * 订单备注状态
      */
     private val _remark = MutableStateFlow("")
     val remark: StateFlow<String> = _remark.asStateFlow()
+
+    /**
+     * 优惠券弹出层的显示状态
+     */
+    private val _couponModalVisible = MutableStateFlow(false)
+    val couponModalVisible: StateFlow<Boolean> = _couponModalVisible.asStateFlow()
+
+    /**
+     * 选中的优惠券
+     */
+    private val _selectedCoupon = MutableStateFlow<Coupon?>(null)
+    val selectedCoupon: StateFlow<Coupon?> = _selectedCoupon.asStateFlow()
+
+    /**
+     * 商品原价（元）
+     */
+    private val _originalPrice = MutableStateFlow(0.0)
+    val originalPrice: StateFlow<Double> = _originalPrice.asStateFlow()
+
+    /**
+     * 优惠券折扣金额（元）
+     */
+    private val _discountAmount = MutableStateFlow(0.0)
+    val discountAmount: StateFlow<Double> = _discountAmount.asStateFlow()
+
+    /**
+     * 最终价格（元）
+     */
+    private val _totalPrice = MutableStateFlow(0.0)
+    val totalPrice: StateFlow<Double> = _totalPrice.asStateFlow()
 
     /**
      * 从购物车来的商品项
@@ -108,17 +142,27 @@ class OrderConfirmViewModel @Inject constructor(
         // 清除选中商品缓存，避免重复使用
         MMKVUtils.remove("selectedGoodsList")
         MMKVUtils.remove("carts")
+
+        // 计算商品原价
+        calculateOriginalPrice()
+
+        // 监听选中优惠券变化，重新计算价格
+        viewModelScope.launch {
+            _selectedCoupon.collect { coupon ->
+                calculatePrices(coupon)
+            }
+        }
     }
 
-    override fun requestApiFlow(): Flow<NetworkResponse<Address?>> {
-        return addressRepository.getDefaultAddress()
+    override fun requestApiFlow(): Flow<NetworkResponse<ConfirmOrder>> {
+        return pageRepository.getConfirmOrder()
     }
 
     /**
      * 提交订单点击事件
      */
     fun onSubmitOrderClick() {
-        val addressId = (uiState.value as? BaseNetWorkUiState.Success)?.data?.id ?: return
+        val addressId = super.getSuccessData().defaultAddress?.id ?: return
 
         // 创建订单请求参数
         val params = CreateOrderRequest(
@@ -126,7 +170,8 @@ class OrderConfirmViewModel @Inject constructor(
                 addressId = addressId,
                 goodsList = selectedGoodsList ?: emptyList(),
                 title = "购买商品",
-                remark = _remark.value // 使用ViewModel中的备注
+                remark = _remark.value,
+                couponId = _selectedCoupon.value?.id
             )
         )
 
@@ -205,5 +250,96 @@ class OrderConfirmViewModel @Inject constructor(
      */
     fun updateRemark(newRemark: String) {
         _remark.value = newRemark
+    }
+
+    /**
+     * 显示优惠券弹出层
+     */
+    fun showCouponModal() {
+        _couponModalVisible.value = true
+    }
+
+    /**
+     * 隐藏优惠券弹出层
+     */
+    fun hideCouponModal() {
+        _couponModalVisible.value = false
+    }
+
+    /**
+     * 选择优惠券
+     * @param coupon 选中的优惠券，null表示不使用优惠券
+     */
+    fun selectCoupon(coupon: Coupon?) {
+        _selectedCoupon.value = coupon
+        hideCouponModal()
+    }
+
+    /**
+     * 计算商品原价
+     */
+    private fun calculateOriginalPrice() {
+        val price = cartList.sumOf { cart ->
+            cart.spec.sumOf { spec ->
+                spec.price.toDouble() * spec.count
+            }
+        }
+        _originalPrice.value = price
+    }
+
+    /**
+     * 计算价格（包括优惠券折扣）
+     * @param coupon 选中的优惠券
+     */
+    private fun calculatePrices(coupon: Coupon?) {
+        val originalPriceValue = _originalPrice.value
+
+        val discountValue = coupon?.let { c ->
+            // 检查是否满足使用条件
+            c.condition?.let { condition ->
+                if (originalPriceValue >= condition.fullAmount) {
+                    c.amount
+                } else {
+                    0.0
+                }
+            } ?: 0.0
+        } ?: 0.0
+
+        _discountAmount.value = discountValue
+        _totalPrice.value = (originalPriceValue - discountValue).coerceAtLeast(0.0)
+    }
+
+    /**
+     * 跳转到地址选择页面
+     */
+    fun navigateToAddressSelection() {
+        // 构建带选择模式参数的地址列表路由
+        val addressListRoute = "${UserRoutes.ADDRESS_LIST}?is_select_mode=true"
+
+        toPage(addressListRoute)
+    }
+
+    /**
+     * 监听地址选择返回的数据
+     */
+    fun observeAddressSelection(backStackEntry: NavBackStackEntry?) {
+        if (backStackEntry == null) return
+        val owner: LifecycleOwner = backStackEntry
+        backStackEntry.savedStateHandle
+            .getLiveData<String>("selected_address")
+            .observe(owner) { selectedAddressJson ->
+                if (selectedAddressJson != null) {
+                    try {
+                        val selectedAddress = Json.decodeFromString<Address>(selectedAddressJson)
+                        val currentData = super.getSuccessData()
+                        val updatedData = currentData.copy(defaultAddress = selectedAddress)
+                        super.setSuccessState(updatedData)
+                        // 清除返回数据，避免重复处理
+                        backStackEntry.savedStateHandle["selected_address"] = null
+                    } catch (_: Exception) {
+                        // JSON解析失败，忽略
+                    }
+                }
+            }
     }
 }

@@ -65,7 +65,7 @@ import com.joker.coolmall.core.ui.component.goods.GoodsGridItem
 import com.joker.coolmall.core.ui.component.goods.GoodsListItem
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
 import com.joker.coolmall.core.ui.component.list.AppListItem
-import com.joker.coolmall.core.ui.component.modal.CouponReceiveModal
+import com.joker.coolmall.core.ui.component.modal.CouponModal
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkListView
 import com.joker.coolmall.core.ui.component.refresh.RefreshLayout
 import com.joker.coolmall.core.ui.component.swiper.WeSwiper
@@ -188,12 +188,12 @@ internal fun HomeScreen(
             )
         }
 
-        // 优惠券领取底部弹出层
-        CouponReceiveModal(
+        // 优惠券弹出层
+        CouponModal(
             visible = couponModalVisible,
             onDismiss = onHideCouponModal,
             coupons = pageData.coupon ?: emptyList(),
-            onCouponReceive = { couponId ->
+            onCouponAction = { couponId ->
                 // 根据ID找到对应的优惠券并调用领取方法
                 val coupon = (pageData.coupon ?: emptyList()).find { it.id == couponId }
                 coupon?.let { onCouponReceive(it) }

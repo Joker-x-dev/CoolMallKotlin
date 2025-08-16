@@ -2,6 +2,7 @@ package com.joker.coolmall.core.network.datasource.page
 
 import com.joker.coolmall.core.model.entity.Home
 import com.joker.coolmall.core.model.entity.GoodsDetail
+import com.joker.coolmall.core.model.entity.ConfirmOrder
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.base.BaseNetworkDataSource
 import com.joker.coolmall.core.network.service.PageService
@@ -34,5 +35,14 @@ class PageNetworkDataSourceImpl @Inject constructor(
      */
     override suspend fun getGoodsDetail(goodsId: Long): NetworkResponse<GoodsDetail> {
         return pageService.getGoodsDetail(goodsId)
+    }
+
+    /**
+     * 获取确认订单页面数据
+     *
+     * @return 确认订单页面数据响应信息，包含默认收货地址和用户优惠券
+     */
+    override suspend fun getConfirmOrder(): NetworkResponse<ConfirmOrder> {
+        return pageService.getConfirmOrder()
     }
 }

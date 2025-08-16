@@ -2,6 +2,7 @@ package com.joker.coolmall.core.data.repository
 
 import com.joker.coolmall.core.model.entity.GoodsDetail
 import com.joker.coolmall.core.model.entity.Home
+import com.joker.coolmall.core.model.entity.ConfirmOrder
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.datasource.page.PageNetworkDataSource
 import kotlinx.coroutines.Dispatchers
@@ -31,5 +32,14 @@ class PageRepository @Inject constructor(
      */
     fun getGoodsDetail(goodsId: Long): Flow<NetworkResponse<GoodsDetail>> = flow {
         emit(pageNetworkDataSource.getGoodsDetail(goodsId))
+    }.flowOn(Dispatchers.IO)
+
+    /**
+     * 获取确认订单页面数据
+     *
+     * @return 确认订单页面数据响应信息，包含默认收货地址和用户优惠券
+     */
+    fun getConfirmOrder(): Flow<NetworkResponse<ConfirmOrder>> = flow {
+        emit(pageNetworkDataSource.getConfirmOrder())
     }.flowOn(Dispatchers.IO)
 }

@@ -13,7 +13,7 @@ fun NavGraphBuilder.orderGraph(navController: NavHostController) {
     orderListScreen(navController)
 
     // 订单确认页面
-    orderConfirmScreen()
+    orderConfirmScreen(navController)
 
     // 订单详情页面
     orderDetailScreen(navController)

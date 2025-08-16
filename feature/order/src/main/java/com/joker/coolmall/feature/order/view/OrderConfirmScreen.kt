@@ -6,6 +6,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.runtime.LaunchedEffect
+import androidx.navigation.NavController
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
@@ -26,8 +28,9 @@ import com.joker.coolmall.core.designsystem.component.VerticalList
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.ShapeMedium
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
-import com.joker.coolmall.core.model.entity.Address
 import com.joker.coolmall.core.model.entity.Cart
+import com.joker.coolmall.core.model.entity.ConfirmOrder
+import com.joker.coolmall.core.model.entity.Coupon
 import com.joker.coolmall.core.model.preview.previewAddress
 import com.joker.coolmall.core.model.preview.previewCartList
 import com.joker.coolmall.core.ui.component.address.AddressCard
@@ -38,6 +41,7 @@ import com.joker.coolmall.core.ui.component.button.ButtonStyle
 import com.joker.coolmall.core.ui.component.card.AppCard
 import com.joker.coolmall.core.ui.component.goods.OrderGoodsCard
 import com.joker.coolmall.core.ui.component.list.AppListItem
+import com.joker.coolmall.core.ui.component.modal.CouponModal
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkView
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
 import com.joker.coolmall.core.ui.component.text.PriceText
@@ -45,20 +49,29 @@ import com.joker.coolmall.core.ui.component.text.TextSize
 import com.joker.coolmall.core.ui.component.text.TextType
 import com.joker.coolmall.core.ui.component.title.TitleWithLine
 import com.joker.coolmall.feature.order.R
-import com.joker.coolmall.core.ui.R as CoreUiR
 import com.joker.coolmall.feature.order.viewmodel.OrderConfirmViewModel
+import com.joker.coolmall.core.ui.R as CoreUiR
 
 /**
  * 确认订单路由
  *
  * @param viewModel 确认订单ViewModel
+ * @param navController 导航控制器
  */
 @Composable
 internal fun OrderConfirmRoute(
-    viewModel: OrderConfirmViewModel = hiltViewModel()
+    viewModel: OrderConfirmViewModel = hiltViewModel(),
+    navController: NavController
 ) {
+    // 注册地址选择监听
+    val backStackEntry = navController.currentBackStackEntry
     val uiState by viewModel.uiState.collectAsState()
     val remark by viewModel.remark.collectAsState()
+    val couponModalVisible by viewModel.couponModalVisible.collectAsState()
+    val selectedCoupon by viewModel.selectedCoupon.collectAsState()
+    val originalPrice by viewModel.originalPrice.collectAsState()
+    val discountAmount by viewModel.discountAmount.collectAsState()
+    val totalPrice by viewModel.totalPrice.collectAsState()
 
     OrderConfirmScreen(
         uiState = uiState,
@@ -67,8 +80,22 @@ internal fun OrderConfirmRoute(
         cartList = viewModel.cartList,
         remark = remark,
         onRemarkChange = viewModel::updateRemark,
-        onSubmitOrderClick = viewModel::onSubmitOrderClick
+        onSubmitOrderClick = viewModel::onSubmitOrderClick,
+        couponModalVisible = couponModalVisible,
+        selectedCoupon = selectedCoupon,
+        originalPrice = originalPrice,
+        discountAmount = discountAmount,
+        totalPrice = totalPrice,
+        onShowCouponModal = viewModel::showCouponModal,
+        onHideCouponModal = viewModel::hideCouponModal,
+        onSelectCoupon = viewModel::selectCoupon,
+        onAddressClick = viewModel::navigateToAddressSelection
     )
+
+    // 监听地址选择返回的数据
+    LaunchedEffect(backStackEntry) {
+        viewModel.observeAddressSelection(backStackEntry)
+    }
 }
 
 /**
@@ -79,25 +106,33 @@ internal fun OrderConfirmRoute(
  * @param remark 订单备注
  * @param onRemarkChange 订单备注变更回调
  * @param onSubmitOrderClick 提交订单点击回调
+ * @param couponModalVisible 优惠券弹出层显示状态
+ * @param selectedCoupon 选中的优惠券
+ * @param onShowCouponModal 显示优惠券弹出层回调
+ * @param onHideCouponModal 隐藏优惠券弹出层回调
+ * @param onSelectCoupon 选择优惠券回调
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun OrderConfirmScreen(
-    uiState: BaseNetWorkUiState<Address?> = BaseNetWorkUiState.Loading,
+    uiState: BaseNetWorkUiState<ConfirmOrder> = BaseNetWorkUiState.Loading,
     onRetry: () -> Unit = {},
     onBackClick: () -> Unit = {},
     cartList: List<Cart> = emptyList(),
     remark: String = "",
     onRemarkChange: (String) -> Unit = {},
-    onSubmitOrderClick: () -> Unit = {}
+    onSubmitOrderClick: () -> Unit = {},
+    couponModalVisible: Boolean = false,
+    selectedCoupon: Coupon? = null,
+    originalPrice: Double = 0.0,
+    discountAmount: Double = 0.0,
+    totalPrice: Double = 0.0,
+    onShowCouponModal: () -> Unit = {},
+    onHideCouponModal: () -> Unit = {},
+    onSelectCoupon: (Coupon?) -> Unit = {},
+    onAddressClick: () -> Unit = {}
 ) {
-    val totalPrice = androidx.compose.runtime.remember(cartList) {
-        cartList.sumOf { cart ->
-            cart.spec.sumOf { spec ->
-                spec.price * spec.count
-            }
-        }
-    }
+    // 价格数据现在从ViewModel传入，无需在View层计算
 
     AppScaffold(
         title = R.string.order_confirm,
@@ -117,13 +152,41 @@ internal fun OrderConfirmScreen(
             onRetry = onRetry
         ) {
             OrderConfirmContentView(
-                address = it,
+                pageData = it,
+                originalPrice = originalPrice,
+                discountAmount = discountAmount,
                 totalPrice = totalPrice,
                 cartList = cartList,
                 remark = remark,
-                onRemarkChange = onRemarkChange
+                onRemarkChange = onRemarkChange,
+                selectedCoupon = selectedCoupon,
+                onShowCouponModal = onShowCouponModal,
+                onAddressClick = onAddressClick
             )
         }
+
+        // 优惠券弹出层
+        CouponModal(
+            visible = couponModalVisible,
+            onDismiss = onHideCouponModal,
+            coupons = when (uiState) {
+                is BaseNetWorkUiState.Success -> uiState.data.userCoupon ?: emptyList()
+                else -> emptyList()
+            },
+            title = "选择优惠券",
+            mode = com.joker.coolmall.core.ui.component.coupon.CouponCardMode.SELECT,
+            currentPrice = originalPrice,
+            onCouponAction = { couponId ->
+                // 根据ID找到对应的优惠券
+                val coupon = when (uiState) {
+                    is BaseNetWorkUiState.Success -> {
+                        (uiState.data.userCoupon ?: emptyList()).find { it.id == couponId }
+                    }
+                    else -> null
+                }
+                onSelectCoupon(coupon)
+            }
+        )
     }
 }
 
@@ -133,19 +196,22 @@ internal fun OrderConfirmScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun OrderConfirmContentView(
-    address: Address?,
-    totalPrice: Int,
+    pageData: ConfirmOrder,
+    originalPrice: Double,
+    discountAmount: Double,
+    totalPrice: Double,
     cartList: List<Cart>,
     remark: String,
-    onRemarkChange: (String) -> Unit
+    onRemarkChange: (String) -> Unit,
+    selectedCoupon: Coupon? = null,
+    onShowCouponModal: () -> Unit = {},
+    onAddressClick: () -> Unit = {}
 ) {
-    VerticalList(
-        modifier = Modifier.verticalScroll(rememberScrollState())
-    ) {
+    VerticalList(modifier = Modifier.verticalScroll(rememberScrollState())) {
         // 地址选择卡片
         AddressCard(
-            address = address,
-            onClick = { /* 地址点击回调 */ },
+            address = pageData.defaultAddress,
+            onClick = onAddressClick,
             addressSelected = true
         )
 
@@ -174,7 +240,7 @@ private fun OrderConfirmContentView(
                 leadingIcon = R.drawable.ic_shop,
                 trailingContent = {
                     PriceText(
-                        totalPrice, integerTextSize = TextSize.BODY_LARGE,
+                        originalPrice.toInt(), integerTextSize = TextSize.BODY_LARGE,
                         decimalTextSize = TextSize.BODY_SMALL,
                         symbolTextSize = TextSize.BODY_SMALL,
                         type = TextType.PRIMARY
@@ -186,17 +252,34 @@ private fun OrderConfirmContentView(
             AppListItem(
                 title = "优惠券",
                 leadingIcon = CoreUiR.drawable.ic_coupon,
-                trailingText = "无可用",
+                trailingText = selectedCoupon?.title ?: "选择",
                 showArrow = true,
-                onClick = { /* 选择优惠券 */ }
+                onClick = onShowCouponModal
             )
+
+            // 显示优惠券折扣（仅当有折扣时显示）
+            if (discountAmount > 0) {
+                AppListItem(
+                    title = "优惠券折扣",
+                    leadingIcon = CoreUiR.drawable.ic_coupon,
+                    trailingContent = {
+                        PriceText(
+                            -discountAmount.toInt(), integerTextSize = TextSize.BODY_LARGE,
+                            decimalTextSize = TextSize.BODY_SMALL,
+                            symbolTextSize = TextSize.BODY_SMALL,
+                            type = TextType.ERROR
+                        )
+                    },
+                    showArrow = false
+                )
+            }
 
             AppListItem(
                 title = "合计",
                 leadingIcon = R.drawable.ic_bankcard,
                 trailingContent = {
                     PriceText(
-                        totalPrice, integerTextSize = TextSize.BODY_LARGE,
+                        totalPrice.toInt(), integerTextSize = TextSize.BODY_LARGE,
                         decimalTextSize = TextSize.BODY_SMALL,
                         symbolTextSize = TextSize.BODY_SMALL,
                         type = TextType.PRIMARY
@@ -237,7 +320,7 @@ private fun OrderConfirmContentView(
  */
 @Composable
 private fun OrderBottomBar(
-    totalPrice: Int,
+    totalPrice: Double,
     onSubmitClick: () -> Unit
 ) {
     Surface(
@@ -254,7 +337,7 @@ private fun OrderBottomBar(
         ) {
 
             PriceText(
-                totalPrice,
+                totalPrice.toInt(),
                 integerTextSize = TextSize.DISPLAY_LARGE,
                 decimalTextSize = TextSize.TITLE_MEDIUM,
                 symbolTextSize = TextSize.TITLE_MEDIUM,
@@ -277,9 +360,17 @@ internal fun OrderConfirmScreenPreview() {
     AppTheme {
         OrderConfirmScreen(
             uiState = BaseNetWorkUiState.Success(
-                data = previewAddress
+                data = ConfirmOrder(
+                    defaultAddress = previewAddress,
+                    userCoupon = emptyList()
+                )
             ),
-            cartList = previewCartList
+            cartList = previewCartList,
+            couponModalVisible = false,
+            selectedCoupon = null,
+            originalPrice = 100.0,
+            discountAmount = 10.0,
+            totalPrice = 90.0
         )
     }
 }
@@ -290,9 +381,17 @@ internal fun OrderConfirmScreenPreviewDark() {
     AppTheme(darkTheme = true) {
         OrderConfirmScreen(
             uiState = BaseNetWorkUiState.Success(
-                data = previewAddress
+                data = ConfirmOrder(
+                    defaultAddress = previewAddress,
+                    userCoupon = emptyList()
+                )
             ),
-            cartList = previewCartList
+            cartList = previewCartList,
+            couponModalVisible = false,
+            selectedCoupon = null,
+            originalPrice = 100.0,
+            discountAmount = 10.0,
+            totalPrice = 90.0
         )
     }
 }

@@ -103,7 +103,7 @@ import com.joker.coolmall.core.ui.component.button.ButtonType
 import com.joker.coolmall.core.ui.component.card.AppCard
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
 import com.joker.coolmall.core.ui.component.list.AppListItem
-import com.joker.coolmall.core.ui.component.modal.CouponReceiveModal
+import com.joker.coolmall.core.ui.component.modal.CouponModal
 import com.joker.coolmall.core.ui.component.modal.SpecSelectModal
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkView
 import com.joker.coolmall.core.ui.component.swiper.WeSwiper
@@ -229,12 +229,12 @@ internal fun GoodsDetailScreen(
                 selectedSpec = selectedSpec
             )
 
-            // 优惠券领取底部弹出层
-            CouponReceiveModal(
+            // 优惠券弹出层
+            CouponModal(
                 visible = couponModalVisible,
                 onDismiss = onHideCouponModal,
                 coupons = goodsDetail.coupon,
-                onCouponReceive = { couponId ->
+                onCouponAction = { couponId ->
                     // 根据ID找到对应的优惠券并调用领取方法
                     val coupon = goodsDetail.coupon.find { it.id == couponId }
                     coupon?.let { onCouponReceive(it) }

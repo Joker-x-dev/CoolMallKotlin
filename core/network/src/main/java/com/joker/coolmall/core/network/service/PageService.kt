@@ -2,6 +2,7 @@ package com.joker.coolmall.core.network.service
 
 import com.joker.coolmall.core.model.entity.Home
 import com.joker.coolmall.core.model.entity.GoodsDetail
+import com.joker.coolmall.core.model.entity.ConfirmOrder
 import com.joker.coolmall.core.model.response.NetworkResponse
 import retrofit2.http.GET
 import retrofit2.http.Query
@@ -23,4 +24,10 @@ interface PageService {
      */
     @GET("page/goodsDetail")
     suspend fun getGoodsDetail(@Query("goodsId") goodsId: Long): NetworkResponse<GoodsDetail>
+
+    /**
+     * 获取确认订单页面数据
+     */
+    @GET("page/confirmOrder")
+    suspend fun getConfirmOrder(): NetworkResponse<ConfirmOrder>
 }

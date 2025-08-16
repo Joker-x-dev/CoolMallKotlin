@@ -1,5 +1,6 @@
 plugins {
     id("com.joker.coolmall.android.feature")
+    alias(libs.plugins.kotlin.serialization)
 }
 
 android {
@@ -13,4 +14,6 @@ android {
 dependencies {
     //支付宝支付
     implementation(libs.alipaysdk.android)
+    // kotlin序列化
+    implementation(libs.kotlinx.serialization.json)
 }
