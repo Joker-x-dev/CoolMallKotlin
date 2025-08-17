@@ -29,11 +29,11 @@ kotlin = "2.1.10"
 
 # Android 核心库版本
 # AndroidX Core KTX: https://developer.android.com/jetpack/androidx/releases/core
-coreKtx = "1.16.0"
+coreKtx = "1.17.0"
 # AndroidX Activity Compose: https://developer.android.com/jetpack/androidx/releases/activity
 activityCompose = "1.10.1"
 # AndroidX Lifecycle Runtime KTX: https://developer.android.com/jetpack/androidx/releases/lifecycle
-lifecycleRuntimeKtx = "2.9.1"
+lifecycleRuntimeKtx = "2.9.2"
 
 # 测试框架版本
 # JUnit 4 测试框架: https://junit.org/junit4/
@@ -41,12 +41,12 @@ junit = "4.13.2"
 # AndroidX JUnit 扩展: https://developer.android.com/jetpack/androidx/releases/test
 junitVersion = "1.2.1"
 # AndroidX Espresso 测试框架: https://developer.android.com/training/testing/espresso
-espressoCore = "3.6.1"
+espressoCore = "3.7.0"
 
 # Jetpack Compose 相关版本
 # Compose BOM: https://developer.android.com/jetpack/compose/bom
 # 说明: BOM 统一管理所有 Compose 库版本，确保兼容性
-composeBom = "2025.06.01"
+composeBom = "2025.08.00"
 
 # 导航相关版本
 # Navigation Compose: https://developer.android.com/jetpack/androidx/releases/navigation
@@ -90,7 +90,7 @@ coilCompose = "2.7.0"
 
 # UI 相关版本
 # AndroidX AppCompat: https://developer.android.com/jetpack/androidx/releases/appcompat
-appcompat = "1.7.0"
+appcompat = "1.7.1"
 # Material Design Components: https://github.com/material-components/material-components-android
 material = "1.12.0"
 
