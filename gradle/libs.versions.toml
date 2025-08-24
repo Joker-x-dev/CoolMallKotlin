@@ -22,10 +22,10 @@ targetSdk = "36"
 
 # 构建工具版本
 # Android Gradle Plugin: https://developer.android.com/studio/releases/gradle-plugin
-agp = "8.12.0"
+agp = "8.12.1"
 # Kotlin 编译器: https://kotlinlang.org/docs/releases.html
-# 注意: 当前版本为 2.1.10，Hilt 2.56.2 最高支持此版本
-kotlin = "2.1.10"
+# 注意: 当前 kotlin 版本为 2.2.0 注意需要和 hilt 版本对应
+kotlin = "2.2.0"
 
 # Android 核心库版本
 # AndroidX Core KTX: https://developer.android.com/jetpack/androidx/releases/core
@@ -77,12 +77,12 @@ timber = "5.0.1"
 # Hilt 依赖注入框架: https://developer.android.com/training/dependency-injection/hilt-android
 # GitHub: https://github.com/google/dagger
 # 说明: 基于 Dagger 的 Android 依赖注入库
-hilt = "2.56"
+hilt = "2.57"
 # Hilt Navigation Compose: https://developer.android.com/jetpack/androidx/releases/hilt
 hiltNavigationCompose = "1.2.0"
 # KSP (Kotlin Symbol Processing): https://github.com/google/ksp
 # 说明: Kotlin 注解处理器，用于代码生成
-ksp = "2.1.10-1.0.31"
+ksp = "2.2.0-2.0.2"
 
 # 图片加载相关版本
 # Coil Compose 图片加载库: https://coil-kt.github.io/coil/compose/
