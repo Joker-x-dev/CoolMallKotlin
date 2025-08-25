@@ -28,6 +28,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.VerticalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -123,6 +124,7 @@ internal fun HomeRoute(
  * @param listData 商品列表数据
  * @param isRefreshing 是否正在刷新
  * @param loadMoreState 加载更多状态
+ * @param couponModalVisible 优惠券弹窗是否可见
  * @param onRefresh 下拉刷新回调
  * @param onLoadMore 加载更多回调
  * @param shouldTriggerLoadMore 是否应该触发加载更多的判断函数
@@ -132,6 +134,9 @@ internal fun HomeRoute(
  * @param toFlashSalePage 跳转到限时精选页
  * @param toGitHubPage 跳转到GitHub页
  * @param toAboutPage 跳转到关于页
+ * @param onShowCouponModal 显示优惠券弹窗回调
+ * @param onHideCouponModal 隐藏优惠券弹窗回调
+ * @param onCouponReceive 领取优惠券回调
  * @param onRetry 重试请求回调
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -158,14 +163,18 @@ internal fun HomeScreen(
     onCouponReceive: (Coupon) -> Unit = {},
     onRetry: () -> Unit = {}
 ) {
+    // 创建TopAppBar的滚动行为
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
     CommonScaffold(
         topBar = {
             HomeTopAppBar(
+                scrollBehavior = scrollBehavior,
                 toGoodsSearch = toGoodsSearch,
                 toGitHubPage = toGitHubPage,
                 toAboutPage = toAboutPage
             )
-        }
+        },
+        scrollBehavior = scrollBehavior
     ) {
         BaseNetWorkListView(
             uiState = uiState,
@@ -177,6 +186,7 @@ internal fun HomeScreen(
                 listData = listData,
                 isRefreshing = isRefreshing,
                 loadMoreState = loadMoreState,
+                scrollBehavior = scrollBehavior,
                 onRefresh = onRefresh,
                 onLoadMore = onLoadMore,
                 shouldTriggerLoadMore = shouldTriggerLoadMore,
@@ -203,11 +213,12 @@ internal fun HomeScreen(
 }
 
 /**
- * 主页内容
- * @param data 页面数据
+ * 首页内容视图
+ * @param data 首页数据
  * @param listData 商品列表数据
  * @param isRefreshing 是否正在刷新
  * @param loadMoreState 加载更多状态
+ * @param scrollBehavior 顶部导航栏滚动行为，用于实现滑动折叠效果
  * @param onRefresh 下拉刷新回调
  * @param onLoadMore 加载更多回调
  * @param shouldTriggerLoadMore 是否应该触发加载更多的判断函数
@@ -215,13 +226,16 @@ internal fun HomeScreen(
  * @param toGoodsCategory 跳转到商品分类页
  * @param toFlashSalePage 跳转到限时精选页
  * @param toGitHubPage 跳转到GitHub页
+ * @param onShowCouponModal 显示优惠券弹窗回调
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HomeContentView(
     data: Home,
     listData: List<Goods>,
     isRefreshing: Boolean,
     loadMoreState: LoadMoreState,
+    scrollBehavior: TopAppBarScrollBehavior,
     onRefresh: () -> Unit,
     onLoadMore: () -> Unit,
     shouldTriggerLoadMore: (lastIndex: Int, totalCount: Int) -> Boolean,
@@ -235,6 +249,7 @@ private fun HomeContentView(
     RefreshLayout(
         isGrid = true,
         isRefreshing = isRefreshing,
+        scrollBehavior = scrollBehavior,
         loadMoreState = loadMoreState,
         onRefresh = onRefresh,
         onLoadMore = onLoadMore,
@@ -426,6 +441,10 @@ private fun CategoryItem(
 
 /**
  * 限时精选卡片 - 使用LazyRow
+ *
+ * @param goods 商品列表
+ * @param toGoodsDetail 跳转到商品详情页的回调
+ * @param toFlashSalePage 跳转到限时精选页面的回调
  */
 @Composable
 private fun FlashSale(
@@ -456,6 +475,7 @@ private fun FlashSale(
 
 /**
  * 首页顶部导航栏
+ * @param scrollBehavior 滚动行为
  * @param toGoodsSearch 跳转到商品搜索页
  * @param toGitHubPage 跳转到GitHub页
  * @param toAboutPage 跳转到关于页
@@ -463,11 +483,13 @@ private fun FlashSale(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun HomeTopAppBar(
+    scrollBehavior: TopAppBarScrollBehavior,
     toGoodsSearch: () -> Unit,
     toGitHubPage: () -> Unit,
     toAboutPage: () -> Unit
 ) {
     TopAppBar(
+        scrollBehavior = scrollBehavior,
         navigationIcon = {
             LogoIcon(
                 modifier = Modifier
@@ -523,13 +545,17 @@ private fun HomeTopAppBar(
             }
         },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.background
+            containerColor = MaterialTheme.colorScheme.background,
+            scrolledContainerColor = MaterialTheme.colorScheme.background
         )
     )
 }
 
 /**
  * 优惠券区域组件
+ *
+ * @param coupons 优惠券列表
+ * @param onShowCouponModal 显示优惠券弹窗的回调
  */
 @Composable
 private fun CouponSection(
@@ -580,6 +606,8 @@ private fun CouponSection(
 
 /**
  * 优惠券卡片组件
+ *
+ * @param coupon 优惠券数据
  */
 @Composable
 private fun CouponCard(coupon: Coupon) {

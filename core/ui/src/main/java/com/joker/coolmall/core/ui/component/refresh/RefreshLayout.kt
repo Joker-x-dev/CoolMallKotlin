@@ -24,7 +24,9 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
 import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
@@ -54,11 +56,12 @@ import com.joker.coolmall.core.ui.component.loading.LoadMore
  * @param gridState 网格状态，如果为 null 则创建新（网格模式时使用）
  * @param isRefreshing 是否正在刷新
  * @param loadMoreState 加载更多状态
+ * @param scrollBehavior 顶部导航栏滚动行为，用于实现滑动折叠效果
  * @param onRefresh 刷新回调
  * @param onLoadMore 加载更多回调
  * @param shouldTriggerLoadMore 判断是否应该触发加载更多的函数
- * @param content 列表内容构建器（列表模式时使用）
  * @param gridContent 网格内容构建器（网格模式时使用）
+ * @param content 列表内容构建器（列表模式时使用）
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -69,6 +72,7 @@ fun RefreshLayout(
     gridState: LazyStaggeredGridState? = null,
     isRefreshing: Boolean = false,
     loadMoreState: LoadMoreState = LoadMoreState.PullToLoad,
+    scrollBehavior: TopAppBarScrollBehavior? = null,
     onRefresh: () -> Unit = {},
     onLoadMore: () -> Unit = {},
     shouldTriggerLoadMore: (lastIndex: Int, totalCount: Int) -> Boolean = { _, _ -> false },
@@ -79,7 +83,13 @@ fun RefreshLayout(
     PullToRefreshBox(
         isRefreshing = isRefreshing,
         onRefresh = onRefresh,
-        modifier = modifier
+        modifier = modifier.let { mod ->
+            if (scrollBehavior != null) {
+                mod.nestedScroll(scrollBehavior.nestedScrollConnection)
+            } else {
+                mod
+            }
+        }
     ) {
         // 添加布局切换动画
         AnimatedContent(
@@ -125,6 +135,12 @@ fun RefreshLayout(
 
 /**
  * 列表内容组件
+ * 
+ * @param listState 列表状态，如果为 null 则创建新的状态
+ * @param loadMoreState 加载更多状态
+ * @param onLoadMore 加载更多回调
+ * @param shouldTriggerLoadMore 判断是否应该触发加载更多的函数
+ * @param content 列表内容构建器
  */
 @Composable
 private fun RefreshListContent(
@@ -188,6 +204,12 @@ private fun RefreshListContent(
 
 /**
  * 网格内容组件（已改为交错瀑布流 StaggeredGrid）
+ * 
+ * @param gridState 网格状态，如果为 null 则创建新的状态
+ * @param loadMoreState 加载更多状态
+ * @param onLoadMore 加载更多回调
+ * @param shouldTriggerLoadMore 判断是否应该触发加载更多的函数
+ * @param content 网格内容构建器
  */
 @Composable
 private fun RefreshGridContent(

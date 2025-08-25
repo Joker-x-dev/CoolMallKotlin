@@ -266,6 +266,7 @@ private fun OrderListContentView(
  * @param onLoadMore 加载更多回调函数
  * @param shouldTriggerLoadMore 判断是否应触发加载更多的函数，参数为当前列表最后一项索引和总数
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun OrderTabContent(
     toOrderDetail: (Long) -> Unit,

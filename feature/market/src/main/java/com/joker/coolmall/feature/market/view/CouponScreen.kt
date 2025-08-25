@@ -101,6 +101,7 @@ internal fun CouponScreen(
  * @param onLoadMore 加载更多回调
  * @param shouldTriggerLoadMore 是否应触发加载更多的判断函数
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun CouponContentView(
     data: List<Coupon>,

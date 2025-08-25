@@ -235,6 +235,7 @@ internal fun GoodsCategoryScreen(
  * @param toGoodsDetail 跳转到商品详情回调
  * @param isGridLayout 是否为网格布局
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun GoodsCategoryContentView(
     data: List<Goods>,

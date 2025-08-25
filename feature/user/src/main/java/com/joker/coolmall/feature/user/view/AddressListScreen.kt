@@ -150,6 +150,7 @@ internal fun AddressListScreen(
  * @param onRetry 重试请求回调
  * @param shouldTriggerLoadMore 是否应触发加载更多的判断函数
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AddressListContentView(
     data: List<Address>,
