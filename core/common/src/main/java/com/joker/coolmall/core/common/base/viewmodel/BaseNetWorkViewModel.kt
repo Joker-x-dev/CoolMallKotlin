@@ -11,10 +11,12 @@ import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
 /**
  * 网络请求ViewModel基类
@@ -47,6 +49,17 @@ abstract class BaseNetWorkViewModel<T>(
      * 子类可重写此属性以自定义行为
      */
     protected open val showErrorToast: Boolean = false
+
+    /**
+     * 是否启用最少加载时间（240毫秒）
+     * 子类可重写此属性以启用最少加载时间功能
+     */
+    protected open val enableMinLoadingTime: Boolean = false
+
+    /**
+     * 请求开始时间，用于计算最少加载时间
+     */
+    private var requestStartTime: Long = 0
 
     /**
      * 通用路由参数ID，子类可直接使用
@@ -85,6 +98,9 @@ abstract class BaseNetWorkViewModel<T>(
      * 使用ResultHandler自动处理状态管理和错误处理
      */
     fun executeRequest() {
+        // 记录请求开始时间
+        if (enableMinLoadingTime) requestStartTime = System.currentTimeMillis()
+
         ResultHandler.handleResultWithData(
             scope = viewModelScope,
             flow = requestApiFlow().asResult(),
@@ -107,7 +123,22 @@ abstract class BaseNetWorkViewModel<T>(
      * 处理成功结果，子类可重写此方法自定义处理逻辑
      */
     protected open fun onRequestSuccess(data: T) {
-        setSuccessState(data)
+        if (enableMinLoadingTime) {
+            val elapsedTime = System.currentTimeMillis() - requestStartTime
+            val minLoadingTime = 240L
+
+            if (elapsedTime < minLoadingTime) {
+                // 延迟设置成功状态
+                viewModelScope.launch {
+                    delay(minLoadingTime - elapsedTime)
+                    setSuccessState(data)
+                }
+            } else {
+                setSuccessState(data)
+            }
+        } else {
+            setSuccessState(data)
+        }
     }
 
     /**

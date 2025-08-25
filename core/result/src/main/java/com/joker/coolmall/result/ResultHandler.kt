@@ -28,6 +28,7 @@ object ResultHandler {
      * @param onSuccess 成功状态的回调，接收NetworkResponse对象
      * @param onSuccessWithData 成功且有数据状态的回调，接收数据对象
      * @param onError 错误状态的回调，接收错误消息和异常
+     * @param onFinally 最终执行的回调，无论成功或失败都会执行
      */
     fun <T> handleResult(
         scope: CoroutineScope,
@@ -36,7 +37,8 @@ object ResultHandler {
         onLoading: () -> Unit = {},
         onSuccess: (NetworkResponse<T>) -> Unit = {},
         onSuccessWithData: (T) -> Unit = {},
-        onError: (String, Throwable?) -> Unit = { _, _ -> }
+        onError: (String, Throwable?) -> Unit = { _, _ -> },
+        onFinally: () -> Unit = {}
     ) {
         scope.launch {
             try {
@@ -66,6 +68,8 @@ object ResultHandler {
                     showToast = showToast,
                     onError = onError
                 )
+            } finally {
+                onFinally()
             }
         }
     }
@@ -81,6 +85,7 @@ object ResultHandler {
      * @param onLoading 加载中状态的回调
      * @param onData 成功且有数据状态的回调，只有当请求成功且有数据时才会调用
      * @param onError 错误状态的回调，接收错误消息和异常
+     * @param onFinally 最终执行的回调，无论成功或失败都会执行
      */
     fun <T> handleResultWithData(
         scope: CoroutineScope,
@@ -88,7 +93,8 @@ object ResultHandler {
         showToast: Boolean = true,
         onLoading: () -> Unit = {},
         onData: (T) -> Unit,
-        onError: (String, Throwable?) -> Unit = { _, _ -> }
+        onError: (String, Throwable?) -> Unit = { _, _ -> },
+        onFinally: () -> Unit = {}
     ) {
         handleResult(
             scope = scope,
@@ -96,7 +102,8 @@ object ResultHandler {
             showToast = showToast,
             onLoading = onLoading,
             onSuccessWithData = onData,
-            onError = onError
+            onError = onError,
+            onFinally = onFinally
         )
     }
 

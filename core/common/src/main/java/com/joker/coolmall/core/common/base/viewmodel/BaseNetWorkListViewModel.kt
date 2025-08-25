@@ -68,6 +68,17 @@ abstract class BaseNetWorkListViewModel<T : Any>(
     val isRefreshing: StateFlow<Boolean> = _isRefreshing.asStateFlow()
 
     /**
+     * 是否启用最少加载时间（240毫秒）
+     * 子类可重写此属性以启用最少加载时间功能
+     */
+    protected open val enableMinLoadingTime: Boolean = false
+
+    /**
+     * 请求开始时间，用于计算最少加载时间（仅首次加载）
+     */
+    private var requestStartTime: Long = 0
+
+    /**
      * 子类必须实现此方法，提供分页API请求的Flow
      *
      * @return 返回包含分页数据的Flow
@@ -85,8 +96,16 @@ abstract class BaseNetWorkListViewModel<T : Any>(
      * 加载列表数据
      */
     protected fun loadListData() {
+
+        val isFirstLoading = _loadMoreState.value == LoadMoreState.Loading && currentPage == 1
+
+        // 记录请求开始时间（仅首次加载）并且启用最少加载时间功能
+        if (isFirstLoading && enableMinLoadingTime) {
+            requestStartTime = System.currentTimeMillis()
+        }
+
         // 设置UI状态 - 仅首次加载显示加载中状态
-        if (_loadMoreState.value == LoadMoreState.Loading && currentPage == 1) {
+        if (isFirstLoading) {
             _uiState.value = BaseNetWorkListUiState.Loading
         }
 
@@ -128,13 +147,22 @@ abstract class BaseNetWorkListViewModel<T : Any>(
                 _listData.value = newList
                 _isRefreshing.value = false
 
-                // 更新加载状态
-                if (newList.isEmpty()) {
-                    _uiState.value = BaseNetWorkListUiState.Empty
+                // 判断是否需要最少加载时间延迟
+                if (enableMinLoadingTime) {
+                    val elapsedTime = System.currentTimeMillis() - requestStartTime
+                    val minLoadingTime = 240L
+
+                    if (elapsedTime < minLoadingTime) {
+                        // 延迟设置成功状态
+                        viewModelScope.launch {
+                            delay(minLoadingTime - elapsedTime)
+                            setFirstLoadSuccessState(newList, hasNextPage)
+                        }
+                    } else {
+                        setFirstLoadSuccessState(newList, hasNextPage)
+                    }
                 } else {
-                    _uiState.value = BaseNetWorkListUiState.Success
-                    _loadMoreState.value =
-                        if (hasNextPage) LoadMoreState.PullToLoad else LoadMoreState.NoMore
+                    setFirstLoadSuccessState(newList, hasNextPage)
                 }
             }
 
@@ -223,6 +251,20 @@ abstract class BaseNetWorkListViewModel<T : Any>(
                 loadMoreState.value != LoadMoreState.Loading &&
                 loadMoreState.value != LoadMoreState.NoMore &&
                 listData.value.isNotEmpty()
+    }
+
+    /**
+     * 设置首次加载成功状态
+     */
+    private fun setFirstLoadSuccessState(newList: List<T>, hasNextPage: Boolean) {
+        // 更新加载状态
+        if (newList.isEmpty()) {
+            _uiState.value = BaseNetWorkListUiState.Empty
+        } else {
+            _uiState.value = BaseNetWorkListUiState.Success
+            _loadMoreState.value =
+                if (hasNextPage) LoadMoreState.PullToLoad else LoadMoreState.NoMore
+        }
     }
 
     /**

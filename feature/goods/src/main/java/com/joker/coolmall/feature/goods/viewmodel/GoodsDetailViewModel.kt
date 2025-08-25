@@ -89,6 +89,11 @@ class GoodsDetailViewModel @Inject constructor(
     private val _couponModalVisible = MutableStateFlow(false)
     val couponModalVisible: StateFlow<Boolean> = _couponModalVisible.asStateFlow()
 
+    /**
+     * 启用最少加载时间
+     */
+    override val enableMinLoadingTime: Boolean = true
+
     init {
         super.executeRequest()
     }
@@ -223,7 +228,7 @@ class GoodsDetailViewModel @Inject constructor(
             super.toPage(AuthRoutes.HOME)
             return
         }
-        
+
         val request = ReceiveCouponRequest(couponId = coupon.id)
         ResultHandler.handleResultWithData(
             scope = viewModelScope,

@@ -100,7 +100,6 @@ internal fun HomeRoute(
         isRefreshing = isRefreshing,
         loadMoreState = loadMoreState,
         couponModalVisible = couponModalVisible,
-
         onRefresh = viewModel::onRefresh,
         onLoadMore = viewModel::onLoadMore,
         shouldTriggerLoadMore = viewModel::shouldTriggerLoadMore,
@@ -148,7 +147,6 @@ internal fun HomeScreen(
     isRefreshing: Boolean = false,
     loadMoreState: LoadMoreState = LoadMoreState.Success,
     couponModalVisible: Boolean = false,
-
     onRefresh: () -> Unit = {},
     onLoadMore: () -> Unit = {},
     shouldTriggerLoadMore: (lastIndex: Int, totalCount: Int) -> Boolean = { _, _ -> false },
