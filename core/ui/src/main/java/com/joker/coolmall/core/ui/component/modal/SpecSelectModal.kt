@@ -38,6 +38,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -249,6 +251,16 @@ private fun SpecSelectModalContentView(
     onAddToCart: (GoodsSpec) -> Unit = {},
     onBuyNow: (GoodsSpec) -> Unit = {}
 ) {
+    // 获取屏幕尺寸信息
+    val windowInfo = LocalWindowInfo.current
+    val density = LocalDensity.current
+    val screenHeight = with(density) { windowInfo.containerSize.height.toDp() }
+
+    // 动态计算规格选择区域的最大高度
+    // 考虑头部信息(约120dp)、标题和间距(约60dp)、数量选择器(约60dp)、底部按钮(约60dp)、安全边距(约80dp)
+    val reservedHeight = 380.dp
+    val maxSpecHeight = (screenHeight - reservedHeight).coerceAtLeast(200.dp)
+
     WrapColumn {
         // 商品基本信息
         goods?.let {
@@ -276,7 +288,7 @@ private fun SpecSelectModalContentView(
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(max = 420.dp)
+                .heightIn(max = maxSpecHeight)
         ) {
             VerticalScroll {
                 AnimatedContent(
