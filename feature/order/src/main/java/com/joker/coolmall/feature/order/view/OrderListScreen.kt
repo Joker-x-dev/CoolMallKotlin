@@ -95,6 +95,10 @@ internal fun OrderListRoute(
     OrderListScreen(
         toOrderDetail = viewModel::toOrderDetailPage,
         toPay = viewModel::toPaymentPage,
+        toGoodsDetail = viewModel::toGoodsDetail,
+        toOrderLogistics = viewModel::toOrderLogistics,
+        toOrderRefund = viewModel::toOrderRefund,
+        toOrderComment = viewModel::toOrderComment,
         selectedTabIndex = selectedTabIndex,
         isAnimatingTabChange = isAnimatingTabChange,
         onTabSelected = viewModel::updateSelectedTab,
@@ -131,6 +135,10 @@ internal fun OrderListRoute(
 internal fun OrderListScreen(
     toOrderDetail: (Long) -> Unit = {},
     toPay: (Order) -> Unit = {},
+    toGoodsDetail: (Long) -> Unit = {},
+    toOrderLogistics: (Long) -> Unit = {},
+    toOrderRefund: (Long) -> Unit = {},
+    toOrderComment: (Long) -> Unit = {},
     selectedTabIndex: Int = 0,
     isAnimatingTabChange: Boolean = false,
     onTabSelected: (Int) -> Unit = {},
@@ -157,6 +165,10 @@ internal fun OrderListScreen(
         OrderListContentView(
             toOrderDetail = toOrderDetail,
             toPay = toPay,
+            toGoodsDetail = toGoodsDetail,
+            toOrderLogistics = toOrderLogistics,
+            toOrderRefund = toOrderRefund,
+            toOrderComment = toOrderComment,
             selectedTabIndex = selectedTabIndex,
             isAnimatingTabChange = isAnimatingTabChange,
             onTabSelected = onTabSelected,
@@ -186,6 +198,10 @@ private fun OrderListContentView(
     modifier: Modifier = Modifier,
     toOrderDetail: (Long) -> Unit,
     toPay: (Order) -> Unit,
+    toGoodsDetail: (Long) -> Unit,
+    toOrderLogistics: (Long) -> Unit,
+    toOrderRefund: (Long) -> Unit,
+    toOrderComment: (Long) -> Unit,
     selectedTabIndex: Int,
     isAnimatingTabChange: Boolean,
     onTabSelected: (Int) -> Unit,
@@ -239,16 +255,20 @@ private fun OrderListContentView(
                 onRetry = tabState.onRetry
             ) {
                 // 标签页的内容
-                OrderTabContent(
-                    toOrderDetail = toOrderDetail,
-                    toPay = toPay,
-                    orderList = tabState.orderList,
-                    isRefreshing = tabState.isRefreshing,
-                    loadMoreState = tabState.loadMoreState,
-                    onRefresh = tabState.onRefresh,
-                    onLoadMore = tabState.onLoadMore,
-                    shouldTriggerLoadMore = tabState.shouldTriggerLoadMore
-                )
+        OrderTabContent(
+             toOrderDetail = toOrderDetail,
+             toPay = toPay,
+             toGoodsDetail = toGoodsDetail,
+             toOrderLogistics = toOrderLogistics,
+             toOrderRefund = toOrderRefund,
+             toOrderComment = toOrderComment,
+             orderList = tabState.orderList,
+             isRefreshing = tabState.isRefreshing,
+             loadMoreState = tabState.loadMoreState,
+             onRefresh = tabState.onRefresh,
+             onLoadMore = tabState.onLoadMore,
+             shouldTriggerLoadMore = tabState.shouldTriggerLoadMore
+         )
             }
         }
     }
@@ -271,6 +291,10 @@ private fun OrderListContentView(
 private fun OrderTabContent(
     toOrderDetail: (Long) -> Unit,
     toPay: (Order) -> Unit,
+    toGoodsDetail: (Long) -> Unit,
+    toOrderLogistics: (Long) -> Unit,
+    toOrderRefund: (Long) -> Unit,
+    toOrderComment: (Long) -> Unit,
     orderList: List<Order>,
     isRefreshing: Boolean,
     loadMoreState: LoadMoreState,
@@ -287,10 +311,20 @@ private fun OrderTabContent(
     ) {
         // 订单列表项
         items(orderList.size) { index ->
+            val order = orderList[index]
             OrderCard(
-                order = orderList[index],
+                order = order,
                 toOrderDetail = toOrderDetail,
-                toPay = { toPay(orderList[index]) }
+                toPay = { toPay(order) },
+                toGoodsDetail = { 
+                    // 获取订单中第一个商品的ID进行跳转
+                    order.goodsList?.firstOrNull()?.goodsId?.let { goodsId ->
+                        toGoodsDetail(goodsId)
+                    }
+                },
+                toLogistics = { toOrderLogistics(order.id) },
+                toComment = { toOrderComment(order.id) },
+                toRefund = { toOrderRefund(order.id) }
             )
         }
     }
@@ -489,4 +523,4 @@ internal fun OrderListScreenPreviewDark() {
     AppTheme(darkTheme = true) {
         OrderListScreen()
     }
-} 
+}

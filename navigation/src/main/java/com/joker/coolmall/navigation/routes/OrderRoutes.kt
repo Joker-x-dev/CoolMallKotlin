@@ -28,4 +28,19 @@ object OrderRoutes {
      * 订单支付路由
      */
     const val PAY = "$ORDER_ROUTE/pay"
+
+    /**
+     * 退款申请路由
+     */
+    const val REFUND = "$ORDER_ROUTE/refund"
+
+    /**
+     * 订单评价路由
+     */
+    const val COMMENT = "$ORDER_ROUTE/comment"
+
+    /**
+     * 订单物流路由
+     */
+    const val LOGISTICS = "$ORDER_ROUTE/logistics"
 }

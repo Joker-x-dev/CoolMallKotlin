@@ -20,4 +20,13 @@ fun NavGraphBuilder.orderGraph(navController: NavHostController) {
 
     // 订单支付页面
     orderPayScreen()
+
+    // 订单物流页面
+    orderLogisticsScreen(navController)
+
+    // 订单退款页面
+    orderRefundScreen(navController)
+
+    // 订单评论页面
+    orderCommentScreen(navController)
 }

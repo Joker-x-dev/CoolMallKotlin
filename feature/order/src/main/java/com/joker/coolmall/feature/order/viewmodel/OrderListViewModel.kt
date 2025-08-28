@@ -15,6 +15,7 @@ import com.joker.coolmall.feature.order.model.OrderStatus
 import com.joker.coolmall.feature.order.navigation.OrderPayRoutes
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.OrderRoutes
+import com.joker.coolmall.navigation.routes.GoodsRoutes
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -376,5 +377,33 @@ class OrderListViewModel @Inject constructor(
             .replace("{${OrderPayRoutes.PRICE_ARG}}", paymentPrice.toString())
 
         toPage(paymentRoute)
+    }
+
+    /**
+     * 跳转到商品详情页面（再次购买）
+     */
+    fun toGoodsDetail(goodsId: Long) {
+        toPage(GoodsRoutes.DETAIL, goodsId)
+    }
+
+    /**
+     * 跳转到订单物流页面
+     */
+    fun toOrderLogistics(orderId: Long) {
+        toPage(OrderRoutes.LOGISTICS, orderId)
+    }
+
+    /**
+     * 跳转到退款申请页面
+     */
+    fun toOrderRefund(orderId: Long) {
+        toPage(OrderRoutes.REFUND, orderId)
+    }
+
+    /**
+     * 跳转到订单评价页面
+     */
+    fun toOrderComment(orderId: Long) {
+        toPage(OrderRoutes.COMMENT, orderId)
     }
 }

@@ -63,13 +63,13 @@ internal fun OrderDetailRoute(
         cartList = cartList,
         onBackClick = viewModel::handleBackClick,
         onRetry = viewModel::retryRequest,
-        onCancelClick = { /* 取消订单 */ },
+        onCancelClick = viewModel::cancelOrder,
         onPayClick = viewModel::navigateToPayment,
-        onRefundClick = { /* 申请退款 */ },
-        onConfirmClick = { /* 确认收货 */ },
-        onLogisticsClick = { /* 查看物流 */ },
-        onCommentClick = { /* 去评价 */ },
-        onRebuyClick = { /* 再次购买 */ }
+        onRefundClick = viewModel::toOrderRefund,
+        onConfirmClick = viewModel::confirmOrder,
+        onLogisticsClick = viewModel::toOrderLogistics,
+        onCommentClick = viewModel::toOrderComment,
+        onRebuyClick = viewModel::toGoodsDetail
     )
 
     // 只要backStackEntry不为null就注册监听
@@ -104,7 +104,7 @@ internal fun OrderDetailScreen(
     onConfirmClick: () -> Unit = {},
     onLogisticsClick: () -> Unit = {},
     onCommentClick: () -> Unit = {},
-    onRebuyClick: () -> Unit = {}
+    onRebuyClick: (Long) -> Unit = {}
 ) {
     // 根据订单状态获取对应的标题资源ID
     val titleResId = if (uiState is BaseNetWorkUiState.Success) {
@@ -151,7 +151,7 @@ internal fun OrderDetailScreen(
                             onConfirmClick = onConfirmClick,
                             onLogisticsClick = onLogisticsClick,
                             onCommentClick = onCommentClick,
-                            onRebuyClick = onRebuyClick,
+                            onRebuyClick = { onRebuyClick(uiState.data.goodsList?.firstOrNull()?.goodsId ?: 0L) },
                         )
                     }
                 }
@@ -392,4 +392,4 @@ internal fun OrderDetailScreenPreviewDark() {
             )
         )
     }
-} 
+}

@@ -4,8 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavBackStackEntry
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
-import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.data.repository.OrderRepository
+import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.entity.Cart
 import com.joker.coolmall.core.model.entity.CartGoodsSpec
 import com.joker.coolmall.core.model.entity.Order
@@ -13,6 +13,8 @@ import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.feature.order.navigation.OrderDetailRoutes
 import com.joker.coolmall.feature.order.navigation.OrderPayRoutes
 import com.joker.coolmall.navigation.AppNavigator
+import com.joker.coolmall.navigation.routes.GoodsRoutes
+import com.joker.coolmall.navigation.routes.OrderRoutes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -78,6 +80,20 @@ class OrderDetailViewModel @Inject constructor(
     }
 
     /**
+     * 取消订单
+     */
+    fun cancelOrder() {
+        // TODO: 实现取消订单逻辑
+    }
+
+    /**
+     * 确认收货
+     */
+    fun confirmOrder() {
+        // TODO: 实现确认收货逻辑
+    }
+
+    /**
      * 观察来自支付页面的刷新状态
      * 当从支付页面返回时，如果支付成功，则刷新订单详情
      */
@@ -114,6 +130,40 @@ class OrderDetailViewModel @Inject constructor(
             // 正常返回
             navigateBack()
         }
+    }
+
+    /**
+     * 跳转到商品详情页面（再次购买）
+     */
+    fun toGoodsDetail(goodsId: Long) {
+        toPage(GoodsRoutes.DETAIL, goodsId)
+    }
+
+    /**
+     * 跳转到订单物流页面
+     */
+    fun toOrderLogistics() {
+        val order = super.getSuccessData()
+        val orderId = order.id
+        toPage(OrderRoutes.LOGISTICS, orderId)
+    }
+
+    /**
+     * 跳转到退款申请页面
+     */
+    fun toOrderRefund() {
+        val order = super.getSuccessData()
+        val orderId = order.id
+        toPage(OrderRoutes.REFUND, orderId)
+    }
+
+    /**
+     * 跳转到订单评价页面
+     */
+    fun toOrderComment() {
+        val order = super.getSuccessData()
+        val orderId = order.id
+        toPage(OrderRoutes.COMMENT, orderId)
     }
 
     /**
