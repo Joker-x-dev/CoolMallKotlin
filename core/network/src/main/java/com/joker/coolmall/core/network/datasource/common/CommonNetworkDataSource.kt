@@ -1,5 +1,7 @@
 package com.joker.coolmall.core.network.datasource.common
 
+import com.joker.coolmall.core.model.request.DictDataRequest
+import com.joker.coolmall.core.model.response.DictDataResponse
 import com.joker.coolmall.core.model.response.NetworkResponse
 
 /**
@@ -30,5 +32,5 @@ interface CommonNetworkDataSource {
     /**
      * 获取字典数据
      */
-    suspend fun getDictData(params: Any): NetworkResponse<Any>
-} 
+    suspend fun getDictData(request: DictDataRequest): NetworkResponse<DictDataResponse>
+}

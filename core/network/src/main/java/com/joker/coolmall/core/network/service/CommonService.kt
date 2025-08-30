@@ -1,5 +1,7 @@
 package com.joker.coolmall.core.network.service
 
+import com.joker.coolmall.core.model.request.DictDataRequest
+import com.joker.coolmall.core.model.response.DictDataResponse
 import com.joker.coolmall.core.model.response.NetworkResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -38,5 +40,5 @@ interface CommonService {
      * 获取字典数据
      */
     @POST("dict/info/data")
-    suspend fun getDictData(@Body params: Any): NetworkResponse<Any>
-} 
+    suspend fun getDictData(@Body request: DictDataRequest): NetworkResponse<DictDataResponse>
+}

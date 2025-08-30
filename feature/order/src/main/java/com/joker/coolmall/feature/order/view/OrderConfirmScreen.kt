@@ -1,19 +1,21 @@
 package com.joker.coolmall.feature.order.view
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.imePadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.runtime.LaunchedEffect
-import androidx.navigation.NavController
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -22,7 +24,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
+import com.joker.coolmall.core.designsystem.component.FullScreenBox
 import com.joker.coolmall.core.designsystem.component.SpaceBetweenRow
 import com.joker.coolmall.core.designsystem.component.VerticalList
 import com.joker.coolmall.core.designsystem.theme.AppTheme
@@ -39,8 +43,11 @@ import com.joker.coolmall.core.ui.component.button.ButtonShape
 import com.joker.coolmall.core.ui.component.button.ButtonSize
 import com.joker.coolmall.core.ui.component.button.ButtonStyle
 import com.joker.coolmall.core.ui.component.card.AppCard
+import com.joker.coolmall.core.ui.component.coupon.CouponCardMode
+import com.joker.coolmall.core.ui.component.empty.EmptyNetwork
 import com.joker.coolmall.core.ui.component.goods.OrderGoodsCard
 import com.joker.coolmall.core.ui.component.list.AppListItem
+import com.joker.coolmall.core.ui.component.loading.PageLoading
 import com.joker.coolmall.core.ui.component.modal.CouponModal
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkView
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
@@ -132,12 +139,14 @@ internal fun OrderConfirmScreen(
     onSelectCoupon: (Coupon?) -> Unit = {},
     onAddressClick: () -> Unit = {}
 ) {
-    // 价格数据现在从ViewModel传入，无需在View层计算
-
     AppScaffold(
+        modifier = Modifier
+            .navigationBarsPadding()
+            .imePadding(),
         title = R.string.order_confirm,
         useLargeTopBar = true,
         onBackClick = onBackClick,
+        contentShouldConsumePadding = true,
         bottomBar = {
             if (uiState is BaseNetWorkUiState.Success) {
                 OrderBottomBar(
@@ -146,23 +155,31 @@ internal fun OrderConfirmScreen(
                 )
             }
         }
-    ) {
-        BaseNetWorkView(
-            uiState = uiState,
-            onRetry = onRetry
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(paddingValues)
+                .verticalScroll(rememberScrollState())
         ) {
-            OrderConfirmContentView(
-                pageData = it,
-                originalPrice = originalPrice,
-                discountAmount = discountAmount,
-                totalPrice = totalPrice,
-                cartList = cartList,
-                remark = remark,
-                onRemarkChange = onRemarkChange,
-                selectedCoupon = selectedCoupon,
-                onShowCouponModal = onShowCouponModal,
-                onAddressClick = onAddressClick
-            )
+            BaseNetWorkView(
+                uiState = uiState,
+                customLoading = { FullScreenBox { PageLoading() } },
+                customError = { EmptyNetwork(onRetryClick = onRetry) }
+            ) {
+                OrderConfirmContentView(
+                    pageData = it,
+                    originalPrice = originalPrice,
+                    discountAmount = discountAmount,
+                    totalPrice = totalPrice,
+                    cartList = cartList,
+                    remark = remark,
+                    onRemarkChange = onRemarkChange,
+                    selectedCoupon = selectedCoupon,
+                    onShowCouponModal = onShowCouponModal,
+                    onAddressClick = onAddressClick
+                )
+            }
         }
 
         // 优惠券弹出层
@@ -174,7 +191,7 @@ internal fun OrderConfirmScreen(
                 else -> emptyList()
             },
             title = "选择优惠券",
-            mode = com.joker.coolmall.core.ui.component.coupon.CouponCardMode.SELECT,
+            mode = CouponCardMode.SELECT,
             currentPrice = originalPrice,
             onCouponAction = { couponId ->
                 // 根据ID找到对应的优惠券
@@ -182,6 +199,7 @@ internal fun OrderConfirmScreen(
                     is BaseNetWorkUiState.Success -> {
                         (uiState.data.userCoupon ?: emptyList()).find { it.id == couponId }
                     }
+
                     else -> null
                 }
                 onSelectCoupon(coupon)
@@ -207,7 +225,7 @@ private fun OrderConfirmContentView(
     onShowCouponModal: () -> Unit = {},
     onAddressClick: () -> Unit = {}
 ) {
-    VerticalList(modifier = Modifier.verticalScroll(rememberScrollState())) {
+    VerticalList {
         // 地址选择卡片
         AddressCard(
             address = pageData.defaultAddress,
@@ -219,9 +237,7 @@ private fun OrderConfirmContentView(
         cartList.forEach { cart ->
             OrderGoodsCard(
                 data = cart,
-                enableQuantityStepper = false, // 确认订单页面不需要调整数量
-                onGoodsClick = { /* 商品点击事件 */ },
-                onSpecClick = { /* 规格点击事件 */ }
+                enableQuantityStepper = false
             )
         }
 
@@ -333,7 +349,6 @@ private fun OrderBottomBar(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(SpacePaddingMedium)
-                .navigationBarsPadding()
         ) {
 
             PriceText(
@@ -366,11 +381,6 @@ internal fun OrderConfirmScreenPreview() {
                 )
             ),
             cartList = previewCartList,
-            couponModalVisible = false,
-            selectedCoupon = null,
-            originalPrice = 100.0,
-            discountAmount = 10.0,
-            totalPrice = 90.0
         )
     }
 }
@@ -387,11 +397,6 @@ internal fun OrderConfirmScreenPreviewDark() {
                 )
             ),
             cartList = previewCartList,
-            couponModalVisible = false,
-            selectedCoupon = null,
-            originalPrice = 100.0,
-            discountAmount = 10.0,
-            totalPrice = 90.0
         )
     }
 }

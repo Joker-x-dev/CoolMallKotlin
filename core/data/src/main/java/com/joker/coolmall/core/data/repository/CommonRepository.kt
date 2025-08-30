@@ -1,5 +1,7 @@
 package com.joker.coolmall.core.data.repository
 
+import com.joker.coolmall.core.model.request.DictDataRequest
+import com.joker.coolmall.core.model.response.DictDataResponse
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.datasource.common.CommonNetworkDataSource
 import kotlinx.coroutines.Dispatchers
@@ -45,7 +47,7 @@ class CommonRepository @Inject constructor(
     /**
      * 获取字典数据
      */
-    fun getDictData(params: Any): Flow<NetworkResponse<Any>> = flow {
-        emit(commonNetworkDataSource.getDictData(params))
+    fun getDictData(request: DictDataRequest): Flow<NetworkResponse<DictDataResponse>> = flow {
+        emit(commonNetworkDataSource.getDictData(request))
     }.flowOn(Dispatchers.IO)
-} 
+}

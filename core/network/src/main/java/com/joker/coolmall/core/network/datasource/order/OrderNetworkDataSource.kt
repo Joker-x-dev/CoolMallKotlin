@@ -1,9 +1,12 @@
 package com.joker.coolmall.core.network.datasource.order
 
+import com.joker.coolmall.core.model.entity.Logistics
 import com.joker.coolmall.core.model.entity.Order
 import com.joker.coolmall.core.model.entity.OrderCount
+import com.joker.coolmall.core.model.request.CancelOrderRequest
 import com.joker.coolmall.core.model.request.CreateOrderRequest
 import com.joker.coolmall.core.model.request.OrderPageRequest
+import com.joker.coolmall.core.model.request.RefundOrderRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
 
@@ -25,7 +28,7 @@ interface OrderNetworkDataSource {
     /**
      * 退款
      */
-    suspend fun refundOrder(params: Any): NetworkResponse<Any>
+    suspend fun refundOrder(params: RefundOrderRequest): NetworkResponse<Boolean>
 
     /**
      * 分页查询订单
@@ -40,7 +43,7 @@ interface OrderNetworkDataSource {
     /**
      * 取消订单
      */
-    suspend fun cancelOrder(params: Any): NetworkResponse<Any>
+    suspend fun cancelOrder(params: CancelOrderRequest): NetworkResponse<Boolean>
 
     /**
      * 用户订单统计
@@ -48,9 +51,11 @@ interface OrderNetworkDataSource {
     suspend fun getUserOrderCount(): NetworkResponse<OrderCount>
 
     /**
-     * 物流信息
+     * 获取订单物流信息
+     * @param orderId 订单ID
+     * @return 物流信息
      */
-    suspend fun getOrderLogistics(id: String): NetworkResponse<Any>
+    suspend fun getOrderLogistics(orderId: Long): NetworkResponse<Logistics>
 
     /**
      * 订单信息
@@ -59,6 +64,8 @@ interface OrderNetworkDataSource {
 
     /**
      * 确认收货
+     * @param orderId 订单ID
+     * @return 确认结果
      */
-    suspend fun confirmReceive(id: Long): NetworkResponse<Any>
+    suspend fun confirmReceive(orderId: Long): NetworkResponse<Boolean>
 }

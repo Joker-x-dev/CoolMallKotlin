@@ -1,9 +1,12 @@
 package com.joker.coolmall.core.network.datasource.order
 
+import com.joker.coolmall.core.model.entity.Logistics
 import com.joker.coolmall.core.model.entity.Order
 import com.joker.coolmall.core.model.entity.OrderCount
+import com.joker.coolmall.core.model.request.CancelOrderRequest
 import com.joker.coolmall.core.model.request.CreateOrderRequest
 import com.joker.coolmall.core.model.request.OrderPageRequest
+import com.joker.coolmall.core.model.request.RefundOrderRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.base.BaseNetworkDataSource
@@ -46,7 +49,7 @@ class OrderNetworkDataSourceImpl @Inject constructor(
      * @param params 请求参数，包含订单ID和退款信息
      * @return 退款申请结果响应数据
      */
-    override suspend fun refundOrder(params: Any): NetworkResponse<Any> {
+    override suspend fun refundOrder(params: RefundOrderRequest): NetworkResponse<Boolean> {
         return orderService.refundOrder(params)
     }
 
@@ -76,7 +79,7 @@ class OrderNetworkDataSourceImpl @Inject constructor(
      * @param params 请求参数，包含订单ID和取消原因
      * @return 取消结果响应数据
      */
-    override suspend fun cancelOrder(params: Any): NetworkResponse<Any> {
+    override suspend fun cancelOrder(params: CancelOrderRequest): NetworkResponse<Boolean> {
         return orderService.cancelOrder(params)
     }
 
@@ -92,11 +95,11 @@ class OrderNetworkDataSourceImpl @Inject constructor(
     /**
      * 获取订单物流信息
      *
-     * @param id 订单ID
+     * @param orderId 订单ID
      * @return 物流信息响应数据
      */
-    override suspend fun getOrderLogistics(id: String): NetworkResponse<Any> {
-        return orderService.getOrderLogistics(id)
+    override suspend fun getOrderLogistics(orderId: Long): NetworkResponse<Logistics> {
+        return orderService.getOrderLogistics(orderId)
     }
 
     /**
@@ -112,10 +115,10 @@ class OrderNetworkDataSourceImpl @Inject constructor(
     /**
      * 确认收货
      *
-     * @param id 订单ID
+     * @param orderId 订单ID
      * @return 确认结果响应数据
      */
-    override suspend fun confirmReceive(id: Long): NetworkResponse<Any> {
-        return orderService.confirmReceive(id)
+    override suspend fun confirmReceive(orderId: Long): NetworkResponse<Boolean> {
+        return orderService.confirmReceive(orderId)
     }
 }

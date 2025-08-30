@@ -27,6 +27,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.joker.coolmall.core.common.base.state.BaseNetWorkListUiState
+import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.common.base.state.LoadMoreState
 import com.joker.coolmall.core.designsystem.component.CenterColumn
 import com.joker.coolmall.core.designsystem.component.EndRow
@@ -36,6 +37,7 @@ import com.joker.coolmall.core.designsystem.theme.ShapeMedium
 import com.joker.coolmall.core.designsystem.theme.ShapeSmall
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
+import com.joker.coolmall.core.model.entity.DictItem
 import com.joker.coolmall.core.model.entity.Order
 import com.joker.coolmall.core.ui.component.divider.WeDivider
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
@@ -48,6 +50,8 @@ import com.joker.coolmall.core.ui.component.text.PriceText
 import com.joker.coolmall.core.ui.component.text.TextSize
 import com.joker.coolmall.core.ui.component.text.TextType
 import com.joker.coolmall.feature.order.R
+import com.joker.coolmall.core.ui.component.modal.DictSelectModal
+import com.joker.coolmall.core.ui.component.dialog.WeDialog
 import com.joker.coolmall.feature.order.component.OrderButtons
 import com.joker.coolmall.feature.order.model.OrderStatus
 import com.joker.coolmall.feature.order.model.OrderTabState
@@ -67,6 +71,14 @@ internal fun OrderListRoute(
 ) {
     val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
     val isAnimatingTabChange by viewModel.isAnimatingTabChange.collectAsState()
+    
+    // 收集取消订单相关状态
+    val cancelModalVisible by viewModel.cancelModalVisible.collectAsState()
+    val cancelReasonsModalUiState by viewModel.cancelReasonsModalUiState.collectAsState()
+    val selectedCancelReason by viewModel.selectedCancelReason.collectAsState()
+    
+    // 收集确认收货弹窗状态
+    val showConfirmDialog by viewModel.showConfirmDialog.collectAsState()
 
     // 注册页面刷新监听
     val backStackEntry = navController.currentBackStackEntry
@@ -99,6 +111,17 @@ internal fun OrderListRoute(
         toOrderLogistics = viewModel::toOrderLogistics,
         toOrderRefund = viewModel::toOrderRefund,
         toOrderComment = viewModel::toOrderComment,
+        cancelOrder = viewModel::cancelOrder,
+        cancelModalVisible = cancelModalVisible,
+        cancelReasonsModalUiState = cancelReasonsModalUiState,
+        selectedCancelReason = selectedCancelReason,
+        onCancelModalDismiss = viewModel::hideCancelModal,
+        onCancelReasonSelected = viewModel::selectCancelReason,
+        onConfirmCancel = { viewModel.confirmCancelOrder() },
+        showConfirmDialog = showConfirmDialog,
+        onConfirmDialogDismiss = viewModel::hideConfirmReceiveDialog,
+        onConfirmReceive = viewModel::confirmReceiveOrder,
+        onConfirmClick = viewModel::showConfirmReceiveDialog,
         selectedTabIndex = selectedTabIndex,
         isAnimatingTabChange = isAnimatingTabChange,
         onTabSelected = viewModel::updateSelectedTab,
@@ -139,6 +162,17 @@ internal fun OrderListScreen(
     toOrderLogistics: (Long) -> Unit = {},
     toOrderRefund: (Long) -> Unit = {},
     toOrderComment: (Long) -> Unit = {},
+    cancelOrder: (Long) -> Unit = {},
+    cancelModalVisible: Boolean = false,
+    cancelReasonsModalUiState: BaseNetWorkUiState<List<DictItem>> = BaseNetWorkUiState.Loading,
+    selectedCancelReason: DictItem? = null,
+    onCancelModalDismiss: () -> Unit = {},
+    onCancelReasonSelected: (DictItem) -> Unit = {},
+    onConfirmCancel: () -> Unit = {},
+    showConfirmDialog: Boolean = false,
+    onConfirmDialogDismiss: () -> Unit = {},
+    onConfirmReceive: () -> Unit = {},
+    onConfirmClick: (Long) -> Unit = {},
     selectedTabIndex: Int = 0,
     isAnimatingTabChange: Boolean = false,
     onTabSelected: (Int) -> Unit = {},
@@ -169,12 +203,40 @@ internal fun OrderListScreen(
             toOrderLogistics = toOrderLogistics,
             toOrderRefund = toOrderRefund,
             toOrderComment = toOrderComment,
+            cancelOrder = cancelOrder,
+            onConfirmClick = onConfirmClick,
             selectedTabIndex = selectedTabIndex,
             isAnimatingTabChange = isAnimatingTabChange,
             onTabSelected = onTabSelected,
             onTabByPageChanged = onTabByPageChanged,
             onAnimationCompleted = onAnimationCompleted,
             tabStateProvider = tabStateProvider
+        )
+    }
+    
+    // 取消订单弹窗
+    DictSelectModal(
+        visible = cancelModalVisible,
+        title = "选择取消原因",
+        uiState = cancelReasonsModalUiState,
+        selectedItem = selectedCancelReason,
+        onDismiss = onCancelModalDismiss,
+        onItemSelected = onCancelReasonSelected,
+        onConfirm = { reason ->
+            onConfirmCancel()
+        }
+    )
+    
+    // 确认收货弹窗
+    if (showConfirmDialog) {
+        WeDialog(
+            title = "确认收货",
+            content = "确认收货后无法发起退款等售后申请，请谨慎操作",
+            okText = "确认",
+            cancelText = "取消",
+            onOk = onConfirmReceive,
+            onCancel = onConfirmDialogDismiss,
+            onDismiss = onConfirmDialogDismiss
         )
     }
 }
@@ -202,6 +264,8 @@ private fun OrderListContentView(
     toOrderLogistics: (Long) -> Unit,
     toOrderRefund: (Long) -> Unit,
     toOrderComment: (Long) -> Unit,
+    cancelOrder: (Long) -> Unit,
+    onConfirmClick: (Long) -> Unit,
     selectedTabIndex: Int,
     isAnimatingTabChange: Boolean,
     onTabSelected: (Int) -> Unit,
@@ -262,6 +326,8 @@ private fun OrderListContentView(
              toOrderLogistics = toOrderLogistics,
              toOrderRefund = toOrderRefund,
              toOrderComment = toOrderComment,
+             cancelOrder = cancelOrder,
+             onConfirmClick = onConfirmClick,
              orderList = tabState.orderList,
              isRefreshing = tabState.isRefreshing,
              loadMoreState = tabState.loadMoreState,
@@ -295,6 +361,8 @@ private fun OrderTabContent(
     toOrderLogistics: (Long) -> Unit,
     toOrderRefund: (Long) -> Unit,
     toOrderComment: (Long) -> Unit,
+    cancelOrder: (Long) -> Unit,
+    onConfirmClick: (Long) -> Unit,
     orderList: List<Order>,
     isRefreshing: Boolean,
     loadMoreState: LoadMoreState,
@@ -324,7 +392,9 @@ private fun OrderTabContent(
                 },
                 toLogistics = { toOrderLogistics(order.id) },
                 toComment = { toOrderComment(order.id) },
-                toRefund = { toOrderRefund(order.id) }
+                toRefund = { toOrderRefund(order.id) },
+                onCancelClick = { cancelOrder(order.id) },
+                onConfirmClick = { onConfirmClick(order.id) }
             )
         }
     }

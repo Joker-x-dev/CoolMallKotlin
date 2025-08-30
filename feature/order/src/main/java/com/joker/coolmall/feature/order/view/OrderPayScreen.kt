@@ -217,7 +217,7 @@ private fun OrderPayContentView(
             )
         }
         AppText(
-            "提示：订单价格经过处理，实际支付不会超过一元",
+            "提示：实际支付金额经过处理，都是一分钱",
             type = TextType.TERTIARY,
             size = TextSize.BODY_SMALL
         )

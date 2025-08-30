@@ -1,5 +1,7 @@
 package com.joker.coolmall.core.network.datasource.common
 
+import com.joker.coolmall.core.model.request.DictDataRequest
+import com.joker.coolmall.core.model.response.DictDataResponse
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.base.BaseNetworkDataSource
 import com.joker.coolmall.core.network.service.CommonService
@@ -55,10 +57,10 @@ class CommonNetworkDataSourceImpl @Inject constructor(
     /**
      * 获取字典数据
      *
-     * @param params 请求参数，包含字典类型等
+     * @param request 请求参数，包含字典类型等
      * @return 字典数据响应数据
      */
-    override suspend fun getDictData(params: Any): NetworkResponse<Any> {
-        return commonService.getDictData(params)
+    override suspend fun getDictData(request: DictDataRequest): NetworkResponse<DictDataResponse> {
+        return commonService.getDictData(request)
     }
-} 
+}

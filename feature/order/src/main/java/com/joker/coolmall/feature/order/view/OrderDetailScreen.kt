@@ -26,13 +26,16 @@ import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalXSmall
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.model.entity.Cart
+import com.joker.coolmall.core.model.entity.DictItem
 import com.joker.coolmall.core.model.entity.Order
 import com.joker.coolmall.core.model.preview.previewOrder
 import com.joker.coolmall.core.ui.component.address.AddressCard
 import com.joker.coolmall.core.ui.component.goods.OrderGoodsCard
 import com.joker.coolmall.core.ui.component.list.AppListItem
+import com.joker.coolmall.core.ui.component.modal.DictSelectModal
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkView
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
+import com.joker.coolmall.core.ui.component.dialog.WeDialog
 import com.joker.coolmall.core.ui.component.text.AppText
 import com.joker.coolmall.core.ui.component.text.PriceText
 import com.joker.coolmall.core.ui.component.text.TextSize
@@ -55,12 +58,20 @@ internal fun OrderDetailRoute(
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val cartList by viewModel.cartList.collectAsState()
+    val cancelModalVisible by viewModel.cancelModalVisible.collectAsState()
+    val cancelReasonsModalUiState by viewModel.cancelReasonsModalUiState.collectAsState()
+    val selectedCancelReason by viewModel.selectedCancelReason.collectAsState()
+    val showConfirmDialog by viewModel.showConfirmDialog.collectAsState()
     // 注册页面刷新监听
     val backStackEntry = navController.currentBackStackEntry
 
     OrderDetailScreen(
         uiState = uiState,
         cartList = cartList,
+        cancelModalVisible = cancelModalVisible,
+        cancelReasonsModalUiState = cancelReasonsModalUiState,
+        selectedCancelReason = selectedCancelReason,
+        showConfirmDialog = showConfirmDialog,
         onBackClick = viewModel::handleBackClick,
         onRetry = viewModel::retryRequest,
         onCancelClick = viewModel::cancelOrder,
@@ -69,7 +80,13 @@ internal fun OrderDetailRoute(
         onConfirmClick = viewModel::confirmOrder,
         onLogisticsClick = viewModel::toOrderLogistics,
         onCommentClick = viewModel::toOrderComment,
-        onRebuyClick = viewModel::toGoodsDetail
+        onRebuyClick = viewModel::toGoodsDetail,
+        onCancelModalDismiss = viewModel::hideCancelModal,
+        onCancelReasonSelected = viewModel::selectCancelReason,
+        onCancelConfirm = viewModel::confirmCancelOrder,
+        onCancelRetry = viewModel::loadCancelReasons,
+        onConfirmDialogDismiss = viewModel::hideConfirmReceiveDialog,
+        onConfirmReceive = viewModel::confirmReceiveOrder
     )
 
     // 只要backStackEntry不为null就注册监听
@@ -96,6 +113,10 @@ internal fun OrderDetailRoute(
 internal fun OrderDetailScreen(
     uiState: BaseNetWorkUiState<Order> = BaseNetWorkUiState.Loading,
     cartList: List<Cart> = emptyList(),
+    cancelModalVisible: Boolean = false,
+    cancelReasonsModalUiState: BaseNetWorkUiState<List<DictItem>> = BaseNetWorkUiState.Loading,
+    selectedCancelReason: DictItem? = null,
+    showConfirmDialog: Boolean = false,
     onBackClick: () -> Unit = {},
     onRetry: () -> Unit = {},
     onCancelClick: () -> Unit = {},
@@ -104,7 +125,13 @@ internal fun OrderDetailScreen(
     onConfirmClick: () -> Unit = {},
     onLogisticsClick: () -> Unit = {},
     onCommentClick: () -> Unit = {},
-    onRebuyClick: (Long) -> Unit = {}
+    onRebuyClick: (Long) -> Unit = {},
+    onCancelModalDismiss: () -> Unit = {},
+    onCancelReasonSelected: (DictItem) -> Unit = {},
+    onCancelConfirm: () -> Unit = {},
+    onCancelRetry: () -> Unit = {},
+    onConfirmDialogDismiss: () -> Unit = {},
+    onConfirmReceive: () -> Unit = {}
 ) {
     // 根据订单状态获取对应的标题资源ID
     val titleResId = if (uiState is BaseNetWorkUiState.Success) {
@@ -167,6 +194,31 @@ internal fun OrderDetailScreen(
                 cartList = cartList
             )
         }
+    }
+
+    // 取消订单原因选择弹窗
+    DictSelectModal(
+        visible = cancelModalVisible,
+        onDismiss = onCancelModalDismiss,
+        title = "请选择取消订单原因（必选）",
+        uiState = cancelReasonsModalUiState,
+        selectedItem = selectedCancelReason,
+        onItemSelected = onCancelReasonSelected,
+        onConfirm = { onCancelConfirm() },
+        onRetry = onCancelRetry
+    )
+    
+    // 确认收货弹窗
+    if (showConfirmDialog) {
+        WeDialog(
+            title = "确认收货",
+            content = "确认收货后无法发起退款等售后申请，请谨慎操作",
+            okText = "确认",
+            cancelText = "取消",
+            onOk = onConfirmReceive,
+            onCancel = onConfirmDialogDismiss,
+            onDismiss = onConfirmDialogDismiss
+        )
     }
 }
 

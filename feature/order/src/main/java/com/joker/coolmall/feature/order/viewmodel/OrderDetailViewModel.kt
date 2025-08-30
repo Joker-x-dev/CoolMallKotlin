@@ -3,21 +3,30 @@ package com.joker.coolmall.feature.order.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavBackStackEntry
+import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
+import com.joker.coolmall.core.data.repository.CommonRepository
 import com.joker.coolmall.core.data.repository.OrderRepository
 import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.entity.Cart
 import com.joker.coolmall.core.model.entity.CartGoodsSpec
+import com.joker.coolmall.core.model.entity.DictItem
 import com.joker.coolmall.core.model.entity.Order
+import com.joker.coolmall.core.model.request.CancelOrderRequest
+import com.joker.coolmall.core.model.request.DictDataRequest
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.feature.order.navigation.OrderDetailRoutes
 import com.joker.coolmall.feature.order.navigation.OrderPayRoutes
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.GoodsRoutes
 import com.joker.coolmall.navigation.routes.OrderRoutes
+import com.joker.coolmall.result.ResultHandler
+import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -30,7 +39,8 @@ class OrderDetailViewModel @Inject constructor(
     navigator: AppNavigator,
     appState: AppState,
     savedStateHandle: SavedStateHandle,
-    private val orderRepository: OrderRepository
+    private val orderRepository: OrderRepository,
+    private val commonRepository: CommonRepository
 ) : BaseNetWorkViewModel<Order>(
     navigator = navigator,
     appState = appState,
@@ -40,6 +50,32 @@ class OrderDetailViewModel @Inject constructor(
 
     private val _cartList = MutableStateFlow<List<Cart>>(emptyList())
     val cartList = _cartList.asStateFlow()
+
+    /**
+     * 取消原因选择弹窗的显示状态
+     */
+    private val _cancelModalVisible = MutableStateFlow(false)
+    val cancelModalVisible: StateFlow<Boolean> = _cancelModalVisible.asStateFlow()
+
+    /**
+     * 取消原因弹出层 ui 状态
+     */
+    private val _cancelReasonsModalUiState =
+        MutableStateFlow<BaseNetWorkUiState<List<DictItem>>>(BaseNetWorkUiState.Loading)
+    val cancelReasonsModalUiState: StateFlow<BaseNetWorkUiState<List<DictItem>>> =
+        _cancelReasonsModalUiState.asStateFlow()
+
+    /**
+     * 选中的取消原因
+     */
+    private val _selectedCancelReason = MutableStateFlow<DictItem?>(null)
+    val selectedCancelReason: StateFlow<DictItem?> = _selectedCancelReason.asStateFlow()
+
+    /**
+     * 确认收货弹窗的显示状态
+     */
+    private val _showConfirmDialog = MutableStateFlow(false)
+    val showConfirmDialog: StateFlow<Boolean> = _showConfirmDialog.asStateFlow()
 
     // 标记是否需要在返回时刷新列表
     private var shouldRefreshListOnBack = false
@@ -64,6 +100,126 @@ class OrderDetailViewModel @Inject constructor(
     }
 
     /**
+     * 确认收货
+     */
+    fun confirmOrder() {
+        showConfirmReceiveDialog()
+    }
+
+    /**
+     * 显示确认收货弹窗
+     */
+    fun showConfirmReceiveDialog() {
+        _showConfirmDialog.value = true
+    }
+
+    /**
+     * 隐藏确认收货弹窗
+     */
+    fun hideConfirmReceiveDialog() {
+        _showConfirmDialog.value = false
+    }
+
+    /**
+     * 确认收货订单
+     */
+    fun confirmReceiveOrder() {
+        ResultHandler.handleResultWithData(
+            scope = viewModelScope,
+            flow = orderRepository.confirmReceive(requiredId).asResult(),
+            onData = { _ ->
+                // 刷新订单详情
+                retryRequest()
+                // 标记需要在返回时刷新列表
+                shouldRefreshListOnBack = true
+                // 隐藏弹窗
+                hideConfirmReceiveDialog()
+            }
+        )
+    }
+
+    /**
+     * 取消订单
+     */
+    fun cancelOrder() {
+        showCancelModal()
+        viewModelScope.launch {
+            // 延迟加载商品规格，避免阻塞UI线程
+            delay(300)
+            loadCancelReasons()
+        }
+    }
+
+    /**
+     * 加载取消原因字典数据
+     */
+    fun loadCancelReasons() {
+        // 如果 ui 状态为成功，则不重复加载
+        if (_cancelReasonsModalUiState.value is BaseNetWorkUiState.Success) {
+            return
+        }
+        ResultHandler.handleResultWithData(
+            scope = viewModelScope,
+            flow = commonRepository.getDictData(
+                DictDataRequest(
+                    types = listOf("orderCancelReason")
+                )
+            ).asResult(),
+            showToast = false,
+            onLoading = { _cancelReasonsModalUiState.value = BaseNetWorkUiState.Loading },
+            onData = { data ->
+                _cancelReasonsModalUiState.value =
+                    BaseNetWorkUiState.Success(data.orderCancelReason!!)
+            },
+            onError = { _, _ ->
+                _cancelReasonsModalUiState.value = BaseNetWorkUiState.Error()
+            }
+        )
+    }
+
+    /**
+     * 显示取消原因选择弹窗
+     */
+    fun showCancelModal() {
+        _cancelModalVisible.value = true
+    }
+
+    /**
+     * 隐藏取消原因选择弹窗
+     */
+    fun hideCancelModal() {
+        _cancelModalVisible.value = false
+    }
+
+    /**
+     * 选择取消原因
+     */
+    fun selectCancelReason(reason: DictItem) {
+        _selectedCancelReason.value = reason
+    }
+
+    /**
+     * 确认取消订单
+     */
+    fun confirmCancelOrder() {
+        ResultHandler.handleResultWithData(
+            scope = viewModelScope,
+            flow = orderRepository.cancelOrder(
+                CancelOrderRequest(
+                    orderId = requiredId,
+                    remark = _selectedCancelReason.value?.name ?: ""
+                )
+            ).asResult(),
+            onData = { _ ->
+                // 刷新订单详情
+                retryRequest()
+                // 标记需要在返回时刷新列表
+                shouldRefreshListOnBack = true
+            }
+        )
+    }
+
+    /**
      * 跳转到支付页面
      */
     fun navigateToPayment() {
@@ -77,20 +233,6 @@ class OrderDetailViewModel @Inject constructor(
             .replace("{${OrderPayRoutes.PRICE_ARG}}", paymentPrice.toString())
 
         toPage(paymentRoute)
-    }
-
-    /**
-     * 取消订单
-     */
-    fun cancelOrder() {
-        // TODO: 实现取消订单逻辑
-    }
-
-    /**
-     * 确认收货
-     */
-    fun confirmOrder() {
-        // TODO: 实现确认收货逻辑
     }
 
     /**
