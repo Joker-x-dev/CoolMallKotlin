@@ -51,13 +51,6 @@ class OrderLogisticsViewModel @Inject constructor(
     }
 
     /**
-     * 处理请求成功的逻辑
-     */
-    override fun onRequestSuccess(data: Order) {
-        super.setSuccessState(data)
-    }
-
-    /**
      * 重写请求API的方法
      */
     override fun requestApiFlow(): Flow<NetworkResponse<Order>> {
