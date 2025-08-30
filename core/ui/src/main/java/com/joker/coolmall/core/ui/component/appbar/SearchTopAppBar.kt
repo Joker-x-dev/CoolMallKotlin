@@ -14,6 +14,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -48,7 +49,8 @@ fun SearchTopAppBar(
     onBackClick: () -> Unit,
     onSearch: (String) -> Unit,
     initialSearchText: String = "",
-    actions: @Composable () -> Unit = {}
+    actions: @Composable () -> Unit = {},
+    scrollBehavior: TopAppBarScrollBehavior? = null
 ) {
     var searchText by rememberSaveable { mutableStateOf(initialSearchText) }
     val focusManager = LocalFocusManager.current
@@ -63,7 +65,6 @@ fun SearchTopAppBar(
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .height(42.dp)
                     .clip(ShapeCircle)
                     .background(MaterialTheme.colorScheme.surfaceVariant)
             ) {
@@ -131,10 +132,12 @@ fun SearchTopAppBar(
         },
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.surface
-        )
+        ),
+        scrollBehavior = scrollBehavior
     )
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable
 fun SearchTopAppBarPreview() {

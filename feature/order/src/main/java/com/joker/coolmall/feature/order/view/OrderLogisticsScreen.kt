@@ -47,7 +47,6 @@ internal fun OrderLogisticsScreen(
     onRetry: () -> Unit = {}
 ) {
     AppScaffold(
-        titleText = "订单物流",
         onBackClick = onBackClick
     ) {
         BaseNetWorkView(

@@ -6,21 +6,27 @@ import androidx.compose.animation.SharedTransitionLayout
 import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -43,6 +49,7 @@ import com.joker.coolmall.core.ui.component.network.BaseNetWorkListView
 import com.joker.coolmall.core.ui.component.refresh.RefreshLayout
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
 import com.joker.coolmall.core.ui.component.text.AppText
+import com.joker.coolmall.core.ui.component.text.TextSize
 import com.joker.coolmall.feature.goods.R
 import com.joker.coolmall.feature.goods.component.FilterDialog
 import com.joker.coolmall.feature.goods.model.SortState
@@ -164,6 +171,9 @@ internal fun GoodsCategoryScreen(
     onToggleLayout: () -> Unit = {},
     sharedTransitionScope: SharedTransitionScope
 ) {
+    // 创建TopAppBar的滚动行为
+    val scrollBehavior = TopAppBarDefaults.enterAlwaysScrollBehavior()
+
     AppScaffold(
         topBar = {
             Column(
@@ -174,24 +184,16 @@ internal fun GoodsCategoryScreen(
                     onBackClick = onBackClick,
                     onSearch = onSearch,
                     initialSearchText = initialSearchText,
+                    scrollBehavior = scrollBehavior,
                     actions = {
-                        Box(
-                            modifier = Modifier
-                                .padding(end = SpaceHorizontalSmall)
-                                .clip(ShapeCircle)
-                                .clickable {
-                                    onToggleLayout()
-                                }
-                                .padding(SpacePaddingXSmall)
-                        ) {
-                            CommonIcon(
-                                resId = if (isGridLayout) CoreUiR.drawable.ic_menu_list else CoreUiR.drawable.ic_menu,
-                                size = 24.dp,
-                                tint = MaterialTheme.colorScheme.onSurface
-                            )
-                        }
+                        LayoutToggleButton(
+                            isGridLayout = isGridLayout,
+                            onToggleLayout = onToggleLayout,
+                            modifier = Modifier.padding(end = SpaceHorizontalSmall)
+                        )
                     }
                 )
+                SpaceVerticalSmall()
 
                 FilterBar(
                     filtersVisible = filtersVisible,
@@ -199,11 +201,15 @@ internal fun GoodsCategoryScreen(
                     currentSortType = currentSortType,
                     currentSortState = currentSortState,
                     onSortClick = onSortClick,
-                    sharedTransitionScope = sharedTransitionScope
+                    sharedTransitionScope = sharedTransitionScope,
+                    scrollBehavior = scrollBehavior,
+                    isGridLayout = isGridLayout,
+                    onToggleLayout = onToggleLayout
                 )
                 SpaceVerticalSmall()
             }
-        }
+        },
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     ) {
         BaseNetWorkListView(
             uiState = uiState,
@@ -273,7 +279,7 @@ private fun GoodsCategoryContentView(
 /**
  * 筛选栏
  */
-@OptIn(ExperimentalSharedTransitionApi::class)
+@OptIn(ExperimentalSharedTransitionApi::class, ExperimentalMaterial3Api::class)
 @Composable
 private fun FilterBar(
     filtersVisible: Boolean,
@@ -281,11 +287,15 @@ private fun FilterBar(
     currentSortType: SortType,
     currentSortState: SortState,
     onSortClick: (SortType) -> Unit,
-    sharedTransitionScope: SharedTransitionScope
+    sharedTransitionScope: SharedTransitionScope,
+    scrollBehavior: TopAppBarScrollBehavior,
+    isGridLayout: Boolean,
+    onToggleLayout: () -> Unit
 ) {
     Row(
         modifier = Modifier
-            .padding(horizontal = SpaceHorizontalMedium)
+            .padding(horizontal = SpaceHorizontalMedium),
+        verticalAlignment = Alignment.CenterVertically
     ) {
 
         with(sharedTransitionScope) {
@@ -309,10 +319,13 @@ private fun FilterBar(
                     ) {
                         CommonIcon(
                             resId = R.drawable.ic_filter,
-                            size = 18.dp,
+                            size = 14.dp,
                             tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
                         )
-                        AppText("筛选")
+                        AppText(
+                            "筛选",
+                            size = TextSize.BODY_MEDIUM
+                        )
                     }
                 }
             }
@@ -324,6 +337,7 @@ private fun FilterBar(
         ) {
             AppText(
                 text = "综合",
+                size = TextSize.BODY_MEDIUM,
                 color = if (currentSortType == SortType.COMPREHENSIVE)
                     MaterialTheme.colorScheme.primary
                 else
@@ -346,6 +360,19 @@ private fun FilterBar(
             currentSortState = currentSortState,
             onSortClick = onSortClick
         )
+
+        Spacer(modifier = Modifier.weight(1f))
+
+        AnimatedVisibility(
+            visible = scrollBehavior.state.collapsedFraction >= 1f,
+            enter = scaleIn(),
+            exit = scaleOut()
+        ) {
+            LayoutToggleButton(
+                isGridLayout = isGridLayout,
+                onToggleLayout = onToggleLayout
+            )
+        }
     }
 }
 
@@ -360,7 +387,7 @@ private fun FilterButton(
 ) {
     Box(
         modifier = Modifier
-            .padding(start = SpaceHorizontalLarge)
+            .padding(start = SpaceHorizontalSmall)
             .clip(ShapeCircle)
             .background(
                 if (isSelected)
@@ -396,10 +423,11 @@ private fun SortButtonWithArrows(
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.height(28.dp)
+            modifier = Modifier.height(32.dp)
         ) {
             AppText(
                 text = text,
+                size = TextSize.BODY_MEDIUM,
                 color = if (isSelected)
                     MaterialTheme.colorScheme.primary
                 else
@@ -428,7 +456,7 @@ private fun SortArrows(
     ) {
         CommonIcon(
             resId = R.drawable.ic_up_triangle,
-            size = 8.dp,
+            size = 6.dp,
             tint = if (currentSortType == sortType && currentSortState == SortState.ASC)
                 MaterialTheme.colorScheme.primary
             else
@@ -436,7 +464,7 @@ private fun SortArrows(
         )
         CommonIcon(
             resId = R.drawable.ic_down_triangle,
-            size = 8.dp,
+            size = 6.dp,
             tint = if (currentSortType == sortType && currentSortState == SortState.DESC)
                 MaterialTheme.colorScheme.primary
             else
@@ -445,6 +473,32 @@ private fun SortArrows(
     }
 }
 
+/**
+ * 布局切换按钮
+ *
+ * @param isGridLayout 是否为网格布局
+ * @param onToggleLayout 切换布局模式回调
+ * @param modifier Modifier
+ */
+@Composable
+private fun LayoutToggleButton(
+    isGridLayout: Boolean,
+    onToggleLayout: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier
+            .clip(ShapeCircle)
+            .clickable { onToggleLayout() }
+            .padding(SpacePaddingXSmall)
+    ) {
+        CommonIcon(
+            resId = if (isGridLayout) CoreUiR.drawable.ic_menu_list else CoreUiR.drawable.ic_menu,
+            size = 24.dp,
+            tint = MaterialTheme.colorScheme.onSurface
+        )
+    }
+}
 
 /**
  * 商品分类界面浅色主题预览
