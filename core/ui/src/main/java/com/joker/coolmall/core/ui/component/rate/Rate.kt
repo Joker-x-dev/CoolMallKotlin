@@ -1,3 +1,4 @@
+package com.joker.coolmall.core.ui.component.rate
 
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -8,12 +9,11 @@ import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.joker.coolmall.core.ui.R
 import kotlinx.coroutines.delay
@@ -125,7 +126,7 @@ private fun StarItem(
         targetValue = if (isActive) {
             Color(0xffFF6700)
         } else {
-            MaterialTheme.colorScheme.outline
+            Color(0xffC0C0C0) // 灰色
         },
         animationSpec = tween(
             durationMillis = if (animationEnabled) 300 else 0,
@@ -135,7 +136,7 @@ private fun StarItem(
     )
 
     // 星星填充动画 - 当评分变化时的弹性效果
-    var scaleAnimation by remember { mutableStateOf(1f) }
+    var scaleAnimation by remember { mutableFloatStateOf(1f) }
     val animatedScale by animateFloatAsState(
         targetValue = scaleAnimation,
         animationSpec = spring(
@@ -157,11 +158,7 @@ private fun StarItem(
 
     Icon(
         painter = painterResource(
-            id = if (isActive) {
-                R.drawable.ic_star_fill
-            } else {
-                R.drawable.ic_star
-            }
+            id = R.drawable.ic_star_fill
         ),
         contentDescription = "评分星星",
         tint = tintColor,
@@ -183,4 +180,10 @@ private fun Offset.calculateRateValue(starWidth: Int, count: Int): Int {
     return newRating
         .roundToInt()
         .coerceIn(0, count)
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun PreviewWeRate() {
+    WeRate(value = 3)
 }

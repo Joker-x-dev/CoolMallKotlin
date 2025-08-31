@@ -9,6 +9,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.lerp
@@ -23,11 +25,12 @@ import com.joker.coolmall.core.designsystem.theme.ArrowLeftIcon
  *
  * @param title 顶部应用栏标题的资源ID，如果为null则不显示标题
  * @param titleText 顶部应用栏标题的字符串，如果为null则不显示标题
- * @param colors 顶部应用栏的颜色配置
  * @param actions 顶部应用栏右侧的操作按钮区域
  * @param onBackClick 点击返回按钮时的回调函数
  * @param showBackIcon 是否显示返回按钮，默认为true
  * @param scrollBehavior 滚动行为，用于控制标题动画
+ * @param expandedBackgroundColor 展开状态下的背景色，默认为 MaterialTheme.colorScheme.background
+ * @param collapsedBackgroundColor 收起状态下的背景色，默认为 MaterialTheme.colorScheme.background
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,12 +40,21 @@ fun LargeTopAppBar(
     actions: @Composable (RowScope.() -> Unit) = {},
     onBackClick: () -> Unit = {},
     showBackIcon: Boolean = true,
-    scrollBehavior: TopAppBarScrollBehavior? = null
+    scrollBehavior: TopAppBarScrollBehavior? = null,
+    expandedBackgroundColor: Color = MaterialTheme.colorScheme.background,
+    collapsedBackgroundColor: Color = MaterialTheme.colorScheme.background
 ) {
     val scrollFraction = scrollBehavior?.state?.collapsedFraction ?: 0f
     val titleFontSize = lerp(
         start = 30.sp,
         stop = 16.sp,
+        fraction = scrollFraction
+    )
+    
+    // 根据滚动状态动态计算背景色
+    val backgroundColor = lerp(
+        start = expandedBackgroundColor,
+        stop = collapsedBackgroundColor,
         fraction = scrollFraction
     )
 
@@ -68,7 +80,7 @@ fun LargeTopAppBar(
         actions = actions,
         scrollBehavior = scrollBehavior,
         colors = TopAppBarDefaults.largeTopAppBarColors(
-            containerColor = MaterialTheme.colorScheme.background
+            containerColor = backgroundColor
         )
     )
-} 
+}

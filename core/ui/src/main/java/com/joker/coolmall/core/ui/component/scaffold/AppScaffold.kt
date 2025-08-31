@@ -42,6 +42,8 @@ import com.joker.coolmall.core.ui.component.appbar.LargeTopAppBar
  * @param floatingActionButton 浮动操作按钮的内容，默认为null
  * @param topBar 自定义顶部应用栏，如果提供则优先使用此应用栏
  * @param useLargeTopBar 是否使用大标题样式的顶部应用栏，如果为true则会自动启用滚动行为
+ * @param largeTopBarExpandedBackgroundColor 大标题应用栏展开状态下的背景色，仅在useLargeTopBar为true时生效
+ * @param largeTopBarCollapsedBackgroundColor 大标题应用栏收起状态下的背景色，仅在useLargeTopBar为true时生效
  * @param contentShouldConsumePadding 是否由内容区域(content)来消费padding。默认为false，即Scaffold的根Box会消费padding。
  *                                    如果设为true，根Box将不应用padding，而是由content自行处理。
  * @param content 页面主体内容，接收PaddingValues参数以适应顶部应用栏的空间
@@ -62,6 +64,8 @@ fun AppScaffold(
     floatingActionButton: @Composable () -> Unit = {},
     topBar: @Composable (() -> Unit)? = null,
     useLargeTopBar: Boolean = false,
+    largeTopBarExpandedBackgroundColor: Color = MaterialTheme.colorScheme.background,
+    largeTopBarCollapsedBackgroundColor: Color = MaterialTheme.colorScheme.background,
     contentShouldConsumePadding: Boolean = false, // New parameter
     content: @Composable (PaddingValues) -> Unit
 ) {
@@ -84,7 +88,9 @@ fun AppScaffold(
                     actions = topBarActions,
                     onBackClick = onBackClick,
                     showBackIcon = showBackIcon,
-                    scrollBehavior = scrollBehavior
+                    scrollBehavior = scrollBehavior,
+                    expandedBackgroundColor = largeTopBarExpandedBackgroundColor,
+                    collapsedBackgroundColor = largeTopBarCollapsedBackgroundColor
                 )
             } else {
                 CenterTopAppBar(
