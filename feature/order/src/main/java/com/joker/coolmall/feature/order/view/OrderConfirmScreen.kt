@@ -277,7 +277,7 @@ private fun OrderConfirmContentView(
             if (discountAmount > 0) {
                 AppListItem(
                     title = "优惠券折扣",
-                    leadingIcon = CoreUiR.drawable.ic_coupon,
+                    leadingIcon = CoreUiR.drawable.ic_refund,
                     trailingContent = {
                         PriceText(
                             -discountAmount.toInt(), integerTextSize = TextSize.BODY_LARGE,
@@ -292,7 +292,7 @@ private fun OrderConfirmContentView(
 
             AppListItem(
                 title = "合计",
-                leadingIcon = R.drawable.ic_bankcard,
+                leadingIcon = R.drawable.ic_money,
                 trailingContent = {
                     PriceText(
                         totalPrice.toInt(), integerTextSize = TextSize.BODY_LARGE,

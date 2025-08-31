@@ -289,7 +289,7 @@ private fun OrderDetailContentView(
 
             AppListItem(
                 title = "实付金额",
-                leadingIcon = R.drawable.ic_bankcard,
+                leadingIcon = R.drawable.ic_money,
                 trailingContent = {
                     PriceText(
                         data.price - data.discountPrice, integerTextSize = TextSize.BODY_LARGE,

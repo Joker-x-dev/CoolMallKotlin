@@ -1,12 +1,10 @@
 package com.joker.coolmall.core.ui.component.empty
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -19,9 +17,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.joker.coolmall.core.designsystem.theme.AppTheme
+import com.joker.coolmall.core.designsystem.theme.CommonIcon
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXLarge
+import com.joker.coolmall.core.designsystem.theme.TextQuaternaryDark
 import com.joker.coolmall.core.designsystem.theme.appTextColors
 import com.joker.coolmall.core.ui.R
 
@@ -44,10 +44,10 @@ fun Empty(
             .fillMaxSize()
             .padding(SpacePaddingLarge)
     ) {
-        Image(
-            modifier = Modifier.size(200.dp),
+        CommonIcon(
             painter = painterResource(id = icon),
-            contentDescription = null
+            size = 160.dp,
+            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4F)
         )
 
         SpaceVerticalXLarge()
@@ -88,6 +88,14 @@ fun Empty(
 @Composable
 fun EmptyPreview() {
     AppTheme {
+        Empty()
+    }
+}
+
+@Preview(showBackground = true)
+@Composable
+fun EmptyPreviewDark() {
+    AppTheme(darkTheme = true) {
         Empty()
     }
 }

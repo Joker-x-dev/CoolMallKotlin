@@ -63,6 +63,7 @@ import com.joker.coolmall.core.ui.component.text.AppText
 import com.joker.coolmall.core.ui.component.text.TextSize
 import com.joker.coolmall.core.ui.component.text.TextType
 import com.joker.coolmall.feature.main.R
+import com.joker.coolmall.core.ui.R as CoreUiR
 import com.joker.coolmall.feature.main.component.CommonScaffold
 import com.joker.coolmall.feature.main.viewmodel.MeViewModel
 
@@ -333,7 +334,7 @@ private fun OrderSection(
             )
 
             OrderStatusItem(
-                icon = R.drawable.ic_refund,
+                icon = CoreUiR.drawable.ic_refund,
                 label = "退款/售后",
                 badgeCount = (orderCount?.refunding ?: 0) + (orderCount?.refunded ?: 0),
                 modifier = Modifier.weight(1f),
