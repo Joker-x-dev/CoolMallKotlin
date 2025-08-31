@@ -28,7 +28,6 @@ import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.ShapeMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXXLarge
-import com.joker.coolmall.core.model.entity.MediaItem
 import com.joker.coolmall.core.ui.component.bottombar.AppBottomButton
 import com.joker.coolmall.core.ui.component.rate.WeRate
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
@@ -63,7 +62,6 @@ internal fun OrderCommentScreen(
 ) {
     var ratingValue by remember { mutableIntStateOf(0) }
     var commentText by remember { mutableStateOf("") }
-    var selectedImages by remember { mutableStateOf<List<MediaItem>>(emptyList()) }
 
     AppScaffold(
         titleText = "商品评价",
@@ -82,10 +80,8 @@ internal fun OrderCommentScreen(
         OrderCommentContentView(
             ratingValue = ratingValue,
             commentText = commentText,
-            selectedImages = selectedImages,
             onRatingChange = { ratingValue = it },
             onCommentChange = { commentText = it },
-            onImagesChange = { selectedImages = it }
         )
     }
 }
@@ -97,10 +93,8 @@ internal fun OrderCommentScreen(
 private fun OrderCommentContentView(
     ratingValue: Int,
     commentText: String,
-    selectedImages: List<MediaItem>,
     onRatingChange: (Int) -> Unit,
     onCommentChange: (String) -> Unit,
-    onImagesChange: (List<MediaItem>) -> Unit
 ) {
     VerticalList(
         horizontalAlignment = Alignment.CenterHorizontally,
