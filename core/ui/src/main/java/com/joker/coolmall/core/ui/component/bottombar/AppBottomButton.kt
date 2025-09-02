@@ -16,12 +16,16 @@ import com.joker.coolmall.core.ui.component.button.AppButton
  * @param text 按钮文本
  * @param onClick 点击回调
  * @param modifier 修饰符
+ * @param enabled 是否启用，默认为true
+ * @param loading 是否加载中，默认为false
  */
 @Composable
 fun AppBottomButton(
     text: String,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    enabled: Boolean = true,
+    loading: Boolean = false
 ) {
     Surface(
         modifier = Modifier
@@ -32,6 +36,8 @@ fun AppBottomButton(
         AppButton(
             text = text,
             onClick = onClick,
+            enabled = enabled,
+            loading = loading,
             modifier = modifier
                 .navigationBarsPadding()
                 .padding(SpacePaddingMedium)

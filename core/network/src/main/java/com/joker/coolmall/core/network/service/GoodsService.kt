@@ -2,8 +2,11 @@ package com.joker.coolmall.core.network.service
 
 import com.joker.coolmall.core.model.entity.Category
 import com.joker.coolmall.core.model.entity.Goods
+import com.joker.coolmall.core.model.entity.Comment
 import com.joker.coolmall.core.model.entity.GoodsSearchKeyword
 import com.joker.coolmall.core.model.entity.GoodsSpec
+import com.joker.coolmall.core.model.request.GoodsCommentPageRequest
+import com.joker.coolmall.core.model.request.GoodsCommentSubmitRequest
 import com.joker.coolmall.core.model.request.GoodsSearchRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
@@ -51,11 +54,11 @@ interface GoodsService {
      * 提交商品评论
      */
     @POST("goods/comment/submit")
-    suspend fun submitGoodsComment(@Body params: Any): NetworkResponse<Any>
+    suspend fun submitGoodsComment(@Body params: GoodsCommentSubmitRequest): NetworkResponse<Boolean>
 
     /**
      * 分页查询商品评论
      */
     @POST("goods/comment/page")
-    suspend fun getGoodsCommentPage(@Body params: Any): NetworkResponse<Any>
-} 
+    suspend fun getGoodsCommentPage(@Body params: GoodsCommentPageRequest): NetworkResponse<NetworkPageData<Comment>>
+}

@@ -1,11 +1,14 @@
 package com.joker.coolmall.core.network.di
 
+import android.content.Context
 import com.joker.coolmall.core.network.service.AddressService
 import com.joker.coolmall.core.network.service.AuthService
 import com.joker.coolmall.core.network.service.BannerService
 import com.joker.coolmall.core.network.service.CommonService
 import com.joker.coolmall.core.network.service.CouponService
 import com.joker.coolmall.core.network.service.CustomerServiceService
+import com.joker.coolmall.core.network.service.FileUploadService
+import com.joker.coolmall.core.network.service.impl.FileUploadServiceImpl
 import com.joker.coolmall.core.network.service.GoodsService
 import com.joker.coolmall.core.network.service.OrderService
 import com.joker.coolmall.core.network.service.PageService
@@ -13,7 +16,9 @@ import com.joker.coolmall.core.network.service.UserInfoService
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import javax.inject.Singleton
 
@@ -143,5 +148,24 @@ object ServiceModule {
     @Singleton
     fun provideCommonService(retrofit: Retrofit): CommonService {
         return retrofit.create(CommonService::class.java)
+    }
+
+    /**
+     * 提供文件上传服务接口
+     *
+     * @param okHttpClient OkHttpClient实例
+     * @param context 应用上下文
+     * @return 文件上传服务接口实现
+     */
+    @Provides
+    @Singleton
+    fun provideFileUploadService(
+        @FileUploadQualifier okHttpClient: OkHttpClient,
+        @ApplicationContext context: Context
+    ): FileUploadService {
+        return FileUploadServiceImpl(
+            okHttpClient = okHttpClient,
+            context = context
+        )
     }
 }

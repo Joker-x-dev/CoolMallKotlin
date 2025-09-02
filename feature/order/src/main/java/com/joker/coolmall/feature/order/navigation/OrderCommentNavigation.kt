@@ -18,11 +18,12 @@ import com.joker.coolmall.navigation.routes.OrderRoutes
  */
 object OrderCommentRoutes {
     const val ORDER_ID_ARG = "order_id"
+    const val GOODS_ID_ARG = "goods_id"
 
     /**
      * 带参数的路由模式
      */
-    const val COMMENT_PATTERN = "${OrderRoutes.COMMENT}/{$ORDER_ID_ARG}"
+    const val COMMENT_PATTERN = "${OrderRoutes.COMMENT}/{$ORDER_ID_ARG}/{$GOODS_ID_ARG}"
 }
 
 /**
@@ -31,9 +32,14 @@ object OrderCommentRoutes {
 fun NavGraphBuilder.orderCommentScreen(navController: NavHostController) {
     composable(
         route = OrderCommentRoutes.COMMENT_PATTERN,
-        arguments = listOf(navArgument(OrderCommentRoutes.ORDER_ID_ARG) {
-            type = NavType.LongType
-        })
+        arguments = listOf(
+            navArgument(OrderCommentRoutes.ORDER_ID_ARG) {
+                type = NavType.LongType
+            },
+            navArgument(OrderCommentRoutes.GOODS_ID_ARG) {
+                type = NavType.LongType
+            }
+        )
     ) {
         OrderCommentRoute()
     }

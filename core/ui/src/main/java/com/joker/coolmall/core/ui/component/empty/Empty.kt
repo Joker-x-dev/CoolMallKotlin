@@ -46,8 +46,8 @@ fun Empty(
     ) {
         CommonIcon(
             painter = painterResource(id = icon),
-            size = 160.dp,
-            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4F)
+            size = 120.dp,
+            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.2F)
         )
 
         SpaceVerticalXLarge()

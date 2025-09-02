@@ -33,6 +33,7 @@ import com.joker.coolmall.core.ui.component.address.AddressCard
 import com.joker.coolmall.core.ui.component.goods.OrderGoodsCard
 import com.joker.coolmall.core.ui.component.list.AppListItem
 import com.joker.coolmall.core.ui.component.modal.DictSelectModal
+import com.joker.coolmall.core.ui.component.modal.OrderGoodsModal
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkView
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
 import com.joker.coolmall.core.ui.component.dialog.WeDialog
@@ -62,6 +63,8 @@ internal fun OrderDetailRoute(
     val cancelReasonsModalUiState by viewModel.cancelReasonsModalUiState.collectAsState()
     val selectedCancelReason by viewModel.selectedCancelReason.collectAsState()
     val showConfirmDialog by viewModel.showConfirmDialog.collectAsState()
+    val rebuyModalVisible by viewModel.rebuyModalVisible.collectAsState()
+    val commentModalVisible by viewModel.commentModalVisible.collectAsState()
     // 注册页面刷新监听
     val backStackEntry = navController.currentBackStackEntry
 
@@ -72,6 +75,8 @@ internal fun OrderDetailRoute(
         cancelReasonsModalUiState = cancelReasonsModalUiState,
         selectedCancelReason = selectedCancelReason,
         showConfirmDialog = showConfirmDialog,
+        rebuyModalVisible = rebuyModalVisible,
+        commentModalVisible = commentModalVisible,
         onBackClick = viewModel::handleBackClick,
         onRetry = viewModel::retryRequest,
         onCancelClick = viewModel::cancelOrder,
@@ -80,7 +85,11 @@ internal fun OrderDetailRoute(
         onConfirmClick = viewModel::confirmOrder,
         onLogisticsClick = viewModel::toOrderLogistics,
         onCommentClick = viewModel::toOrderComment,
-        onRebuyClick = viewModel::toGoodsDetail,
+        onRebuyClick = viewModel::handleRebuy,
+        onRebuyModalDismiss = viewModel::hideRebuyModal,
+        onRebuyGoodsClick = viewModel::toGoodsDetail,
+        onCommentModalDismiss = viewModel::hideCommentModal,
+        onCommentGoodsClick = viewModel::toOrderCommentForGoods,
         onCancelModalDismiss = viewModel::hideCancelModal,
         onCancelReasonSelected = viewModel::selectCancelReason,
         onCancelConfirm = viewModel::confirmCancelOrder,
@@ -117,6 +126,8 @@ internal fun OrderDetailScreen(
     cancelReasonsModalUiState: BaseNetWorkUiState<List<DictItem>> = BaseNetWorkUiState.Loading,
     selectedCancelReason: DictItem? = null,
     showConfirmDialog: Boolean = false,
+    rebuyModalVisible: Boolean = false,
+    commentModalVisible: Boolean = false,
     onBackClick: () -> Unit = {},
     onRetry: () -> Unit = {},
     onCancelClick: () -> Unit = {},
@@ -125,7 +136,11 @@ internal fun OrderDetailScreen(
     onConfirmClick: () -> Unit = {},
     onLogisticsClick: () -> Unit = {},
     onCommentClick: () -> Unit = {},
-    onRebuyClick: (Long) -> Unit = {},
+    onRebuyClick: () -> Unit = {},
+    onRebuyModalDismiss: () -> Unit = {},
+    onRebuyGoodsClick: (Long) -> Unit = {},
+    onCommentModalDismiss: () -> Unit = {},
+    onCommentGoodsClick: (Long) -> Unit = {},
     onCancelModalDismiss: () -> Unit = {},
     onCancelReasonSelected: (DictItem) -> Unit = {},
     onCancelConfirm: () -> Unit = {},
@@ -178,7 +193,7 @@ internal fun OrderDetailScreen(
                             onConfirmClick = onConfirmClick,
                             onLogisticsClick = onLogisticsClick,
                             onCommentClick = onCommentClick,
-                            onRebuyClick = { onRebuyClick(uiState.data.goodsList?.firstOrNull()?.goodsId ?: 0L) },
+                            onRebuyClick = onRebuyClick,
                         )
                     }
                 }
@@ -220,6 +235,26 @@ internal fun OrderDetailScreen(
             onDismiss = onConfirmDialogDismiss
         )
     }
+
+    // 再次购买弹窗
+    OrderGoodsModal(
+        visible = rebuyModalVisible,
+        title = "选择要购买的商品",
+        buttonText = "再次购买",
+        cartList = cartList,
+        onDismiss = onRebuyModalDismiss,
+        onItemButtonClick = onRebuyGoodsClick
+    )
+
+    // 商品评论弹窗
+    OrderGoodsModal(
+        visible = commentModalVisible,
+        title = "选择要评价的商品",
+        buttonText = "去评价",
+        cartList = cartList,
+        onDismiss = onCommentModalDismiss,
+        onItemButtonClick = onCommentGoodsClick
+    )
 }
 
 /**

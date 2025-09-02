@@ -53,6 +53,8 @@ import com.joker.coolmall.feature.order.R
 import com.joker.coolmall.core.ui.component.modal.DictSelectModal
 import com.joker.coolmall.core.ui.component.dialog.WeDialog
 import com.joker.coolmall.feature.order.component.OrderButtons
+import com.joker.coolmall.core.ui.component.modal.BottomModal
+import com.joker.coolmall.core.ui.component.modal.OrderGoodsModal
 import com.joker.coolmall.feature.order.model.OrderStatus
 import com.joker.coolmall.feature.order.model.OrderTabState
 import com.joker.coolmall.feature.order.viewmodel.OrderListViewModel
@@ -79,6 +81,14 @@ internal fun OrderListRoute(
     
     // 收集确认收货弹窗状态
     val showConfirmDialog by viewModel.showConfirmDialog.collectAsState()
+    
+    // 收集再次购买和商品评论弹窗状态
+    val rebuyModalVisible by viewModel.rebuyModalVisible.collectAsState()
+    val commentModalVisible by viewModel.commentModalVisible.collectAsState()
+    val rebuyCartList by viewModel.rebuyCartList.collectAsState()
+    val rebuyCurrentOrder: Order? by viewModel.rebuyCurrentOrder.collectAsState()
+    val commentCartList by viewModel.commentCartList.collectAsState()
+    val commentCurrentOrder: Order? by viewModel.commentCurrentOrder.collectAsState()
 
     // 注册页面刷新监听
     val backStackEntry = navController.currentBackStackEntry
@@ -107,10 +117,10 @@ internal fun OrderListRoute(
     OrderListScreen(
         toOrderDetail = viewModel::toOrderDetailPage,
         toPay = viewModel::toPaymentPage,
-        toGoodsDetail = viewModel::toGoodsDetail,
+        toGoodsDetail = viewModel::handleRebuy,
         toOrderLogistics = viewModel::toOrderLogistics,
         toOrderRefund = viewModel::toOrderRefund,
-        toOrderComment = viewModel::toOrderComment,
+        toOrderComment = viewModel::handleOrderComment,
         cancelOrder = viewModel::cancelOrder,
         cancelModalVisible = cancelModalVisible,
         cancelReasonsModalUiState = cancelReasonsModalUiState,
@@ -122,6 +132,18 @@ internal fun OrderListRoute(
         onConfirmDialogDismiss = viewModel::hideConfirmReceiveDialog,
         onConfirmReceive = viewModel::confirmReceiveOrder,
         onConfirmClick = viewModel::showConfirmReceiveDialog,
+        rebuyModalVisible = rebuyModalVisible,
+        commentModalVisible = commentModalVisible,
+        rebuyCartList = rebuyCartList,
+        rebuyCurrentOrder = rebuyCurrentOrder,
+        commentCartList = commentCartList,
+        commentCurrentOrder = commentCurrentOrder,
+        onRebuyModalDismiss = viewModel::hideRebuyModal,
+        onCommentModalDismiss = viewModel::hideCommentModal,
+        onRebuyGoodsSelected = viewModel::toGoodsDetailForRebuy,
+        onCommentGoodsSelected = { orderId, goodsId -> 
+            viewModel.toOrderCommentForGoods(goodsId)
+        },
         selectedTabIndex = selectedTabIndex,
         isAnimatingTabChange = isAnimatingTabChange,
         onTabSelected = viewModel::updateSelectedTab,
@@ -158,10 +180,10 @@ internal fun OrderListRoute(
 internal fun OrderListScreen(
     toOrderDetail: (Long) -> Unit = {},
     toPay: (Order) -> Unit = {},
-    toGoodsDetail: (Long) -> Unit = {},
+    toGoodsDetail: (Order) -> Unit = {},
     toOrderLogistics: (Long) -> Unit = {},
     toOrderRefund: (Long) -> Unit = {},
-    toOrderComment: (Long) -> Unit = {},
+    toOrderComment: (Order) -> Unit = {},
     cancelOrder: (Long) -> Unit = {},
     cancelModalVisible: Boolean = false,
     cancelReasonsModalUiState: BaseNetWorkUiState<List<DictItem>> = BaseNetWorkUiState.Loading,
@@ -173,6 +195,16 @@ internal fun OrderListScreen(
     onConfirmDialogDismiss: () -> Unit = {},
     onConfirmReceive: () -> Unit = {},
     onConfirmClick: (Long) -> Unit = {},
+    rebuyModalVisible: Boolean = false,
+    commentModalVisible: Boolean = false,
+    rebuyCartList: List<com.joker.coolmall.core.model.entity.Cart> = emptyList(),
+    rebuyCurrentOrder: Order? = null,
+    commentCartList: List<com.joker.coolmall.core.model.entity.Cart> = emptyList(),
+    commentCurrentOrder: Order? = null,
+    onRebuyModalDismiss: () -> Unit = {},
+    onCommentModalDismiss: () -> Unit = {},
+    onRebuyGoodsSelected: (Long) -> Unit = {},
+    onCommentGoodsSelected: (Long, Long) -> Unit = { _, _ -> },
     selectedTabIndex: Int = 0,
     isAnimatingTabChange: Boolean = false,
     onTabSelected: (Int) -> Unit = {},
@@ -239,6 +271,30 @@ internal fun OrderListScreen(
             onDismiss = onConfirmDialogDismiss
         )
     }
+    
+    // 再次购买弹窗
+    OrderGoodsModal(
+        visible = rebuyModalVisible,
+        title = "选择要购买的商品",
+        buttonText = "再次购买",
+        cartList = rebuyCartList,
+        onDismiss = onRebuyModalDismiss,
+        onItemButtonClick = onRebuyGoodsSelected
+    )
+
+    // 商品评论弹窗
+    OrderGoodsModal(
+        visible = commentModalVisible,
+        title = "选择要评价的商品",
+        buttonText = "去评价",
+        cartList = commentCartList,
+        onDismiss = onCommentModalDismiss,
+        onItemButtonClick = { goodsId -> 
+            commentCurrentOrder?.let { order ->
+                onCommentGoodsSelected(order.id, goodsId)
+            }
+        }
+    )
 }
 
 /**
@@ -260,10 +316,10 @@ private fun OrderListContentView(
     modifier: Modifier = Modifier,
     toOrderDetail: (Long) -> Unit,
     toPay: (Order) -> Unit,
-    toGoodsDetail: (Long) -> Unit,
+    toGoodsDetail: (Order) -> Unit,
     toOrderLogistics: (Long) -> Unit,
     toOrderRefund: (Long) -> Unit,
-    toOrderComment: (Long) -> Unit,
+    toOrderComment: (Order) -> Unit,
     cancelOrder: (Long) -> Unit,
     onConfirmClick: (Long) -> Unit,
     selectedTabIndex: Int,
@@ -357,10 +413,10 @@ private fun OrderListContentView(
 private fun OrderTabContent(
     toOrderDetail: (Long) -> Unit,
     toPay: (Order) -> Unit,
-    toGoodsDetail: (Long) -> Unit,
+    toGoodsDetail: (Order) -> Unit,
     toOrderLogistics: (Long) -> Unit,
     toOrderRefund: (Long) -> Unit,
-    toOrderComment: (Long) -> Unit,
+    toOrderComment: (Order) -> Unit,
     cancelOrder: (Long) -> Unit,
     onConfirmClick: (Long) -> Unit,
     orderList: List<Order>,
@@ -385,13 +441,11 @@ private fun OrderTabContent(
                 toOrderDetail = toOrderDetail,
                 toPay = { toPay(order) },
                 toGoodsDetail = { 
-                    // 获取订单中第一个商品的ID进行跳转
-                    order.goodsList?.firstOrNull()?.goodsId?.let { goodsId ->
-                        toGoodsDetail(goodsId)
-                    }
+                    // 使用 ViewModel 的 handleRebuy 方法处理再次购买逻辑
+                    toGoodsDetail(order)
                 },
                 toLogistics = { toOrderLogistics(order.id) },
-                toComment = { toOrderComment(order.id) },
+                toComment = { toOrderComment(order) },
                 toRefund = { toOrderRefund(order.id) },
                 onCancelClick = { cancelOrder(order.id) },
                 onConfirmClick = { onConfirmClick(order.id) }

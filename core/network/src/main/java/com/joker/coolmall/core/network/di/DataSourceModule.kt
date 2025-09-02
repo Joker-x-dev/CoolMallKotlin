@@ -12,6 +12,8 @@ import com.joker.coolmall.core.network.datasource.coupon.CouponNetworkDataSource
 import com.joker.coolmall.core.network.datasource.coupon.CouponNetworkDataSourceImpl
 import com.joker.coolmall.core.network.datasource.cs.CustomerServiceNetworkDataSource
 import com.joker.coolmall.core.network.datasource.cs.CustomerServiceNetworkDataSourceImpl
+import com.joker.coolmall.core.network.datasource.fileupload.FileUploadNetworkDataSource
+import com.joker.coolmall.core.network.datasource.fileupload.FileUploadNetworkDataSourceImpl
 import com.joker.coolmall.core.network.datasource.goods.GoodsNetworkDataSource
 import com.joker.coolmall.core.network.datasource.goods.GoodsNetworkDataSourceImpl
 import com.joker.coolmall.core.network.datasource.order.OrderNetworkDataSource
@@ -30,9 +32,12 @@ import com.joker.coolmall.core.network.service.GoodsService
 import com.joker.coolmall.core.network.service.OrderService
 import com.joker.coolmall.core.network.service.PageService
 import com.joker.coolmall.core.network.service.UserInfoService
+import com.joker.coolmall.core.network.service.FileUploadService
+import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -162,5 +167,24 @@ object DataSourceModule {
     @Singleton
     fun provideCommonNetworkDataSource(commonService: CommonService): CommonNetworkDataSource {
         return CommonNetworkDataSourceImpl(commonService)
+    }
+
+    /**
+     * 提供文件上传网络数据源
+     *
+     * @param commonNetworkDataSource 通用网络数据源
+     * @param fileUploadService 文件上传服务
+     * @return 文件上传网络数据源接口
+     */
+    @Provides
+    @Singleton
+    fun provideFileUploadNetworkDataSource(
+        commonNetworkDataSource: CommonNetworkDataSource,
+        fileUploadService: FileUploadService
+    ): FileUploadNetworkDataSource {
+        return FileUploadNetworkDataSourceImpl(
+            commonNetworkDataSource = commonNetworkDataSource,
+            fileUploadService = fileUploadService
+        )
     }
 }

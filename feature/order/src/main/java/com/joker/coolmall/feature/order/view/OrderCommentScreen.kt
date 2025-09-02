@@ -1,5 +1,6 @@
 package com.joker.coolmall.feature.order.view
 
+import android.net.Uri
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.rememberScrollState
@@ -11,11 +12,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,6 +27,7 @@ import com.joker.coolmall.core.designsystem.theme.ShapeMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXXLarge
 import com.joker.coolmall.core.ui.component.bottombar.AppBottomButton
+import com.joker.coolmall.core.ui.component.imagepicker.ImageGridPicker
 import com.joker.coolmall.core.ui.component.rate.WeRate
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
 import com.joker.coolmall.core.ui.component.text.AppText
@@ -43,26 +42,57 @@ import com.joker.coolmall.feature.order.viewmodel.OrderCommentViewModel
 internal fun OrderCommentRoute(
     viewModel: OrderCommentViewModel = hiltViewModel()
 ) {
+    val rating by viewModel.rating.collectAsState()
+    val commentContent by viewModel.commentContent.collectAsState()
+    val selectedImages by viewModel.selectedImages.collectAsState()
+    val uploadedImageUrls by viewModel.uploadedImageUrls.collectAsState()
+    val isSubmitting by viewModel.isSubmitting.collectAsState()
+
     OrderCommentScreen(
+        rating = rating,
+        commentContent = commentContent,
+        selectedImages = selectedImages,
+        uploadedImageUrls = uploadedImageUrls,
+        isSubmitting = isSubmitting,
+        isFormValid = viewModel.isFormValid(),
         onBackClick = viewModel::navigateBack,
+        onRatingChange = viewModel::updateRating,
+        onCommentChange = viewModel::updateCommentContent,
+        onImagesChange = viewModel::updateSelectedImages,
+        onSubmitComment = viewModel::onSubmitButtonClick
     )
 }
 
 /**
  * 订单评价界面
  *
+ * @param rating 评分
+ * @param commentContent 评论内容
+ * @param selectedImages 选中的图片
+ * @param uploadedImageUrls 已上传的图片URL列表
+ * @param isSubmitting 是否正在提交
+ * @param isFormValid 表单是否有效
  * @param onBackClick 返回按钮回调
- * @param onRetry 重试请求回调
+ * @param onRatingChange 评分变化回调
+ * @param onCommentChange 评论内容变化回调
+ * @param onImagesChange 图片变化回调
+ * @param onSubmitComment 提交评论回调
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun OrderCommentScreen(
+    rating: Int = 5,
+    commentContent: String = "",
+    selectedImages: List<Uri> = emptyList(),
+    uploadedImageUrls: List<String> = emptyList(),
+    isSubmitting: Boolean = false,
+    isFormValid: Boolean = true,
     onBackClick: () -> Unit = {},
-    onRetry: () -> Unit = {}
+    onRatingChange: (Int) -> Unit = {},
+    onCommentChange: (String) -> Unit = {},
+    onImagesChange: (List<Uri>) -> Unit = {},
+    onSubmitComment: () -> Unit = {},
 ) {
-    var ratingValue by remember { mutableIntStateOf(0) }
-    var commentText by remember { mutableStateOf("") }
-
     AppScaffold(
         titleText = "商品评价",
         useLargeTopBar = true,
@@ -73,29 +103,46 @@ internal fun OrderCommentScreen(
         bottomBar = {
             AppBottomButton(
                 text = "提交评价",
-                onClick = {}
+                onClick = onSubmitComment,
+                enabled = isFormValid && !isSubmitting,
+                loading = isSubmitting
             )
         }
     ) {
         OrderCommentContentView(
-            ratingValue = ratingValue,
-            commentText = commentText,
-            onRatingChange = { ratingValue = it },
-            onCommentChange = { commentText = it },
+            rating = rating,
+            commentContent = commentContent,
+            selectedImages = selectedImages,
+            uploadedImageUrls = uploadedImageUrls,
+            onRatingChange = onRatingChange,
+            onCommentChange = onCommentChange,
+            onImagesChange = onImagesChange,
         )
     }
 }
 
 /**
  * 订单评价内容视图
+ *
+ * @param rating 评分
+ * @param commentContent 评论内容
+ * @param selectedImages 选中的图片
+ * @param uploadedImageUrls 已上传的图片URL列表
+ * @param onRatingChange 评分变化回调
+ * @param onCommentChange 评论内容变化回调
+ * @param onImagesChange 图片变化回调
  */
 @Composable
 private fun OrderCommentContentView(
-    ratingValue: Int,
-    commentText: String,
+    rating: Int,
+    commentContent: String,
+    selectedImages: List<Uri>,
+    uploadedImageUrls: List<String>,
     onRatingChange: (Int) -> Unit,
     onCommentChange: (String) -> Unit,
+    onImagesChange: (List<Uri>) -> Unit,
 ) {
+
     VerticalList(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.verticalScroll(rememberScrollState())
@@ -103,12 +150,12 @@ private fun OrderCommentContentView(
         SpaceVerticalXXLarge()
         // 评分
         WeRate(
-            value = ratingValue,
+            value = rating,
             count = 5,
             onChange = onRatingChange,
         )
         AppText(
-            text = when (ratingValue) {
+            text = when (rating) {
                 0 -> "请点击星星进行评分"
                 1 -> "很差"
                 2 -> "较差"
@@ -123,7 +170,7 @@ private fun OrderCommentContentView(
 
         // 评价内容输入框
         TextField(
-            value = commentText,
+            value = commentContent,
             onValueChange = onCommentChange,
             modifier = Modifier
                 .fillMaxWidth()
@@ -147,13 +194,11 @@ private fun OrderCommentContentView(
             maxLines = 8
         )
 
-        SpaceVerticalXSmall()
-
-        // 图片选择区域
-        AppText(
-            text = "添加图片",
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier.fillMaxWidth()
+        // 图片选择器
+        ImageGridPicker(
+            selectedImages = selectedImages,
+            onImagesChanged = onImagesChange,
+            maxImages = 9
         )
 
         SpaceVerticalXSmall()
@@ -168,7 +213,11 @@ private fun OrderCommentContentView(
 @Composable
 internal fun OrderCommentScreenPreview() {
     AppTheme {
-        OrderCommentScreen()
+        OrderCommentScreen(
+            rating = 5,
+            commentContent = "这是一个很好的商品",
+            selectedImages = emptyList()
+        )
     }
 }
 

@@ -2,8 +2,11 @@ package com.joker.coolmall.core.data.repository
 
 import com.joker.coolmall.core.model.entity.Category
 import com.joker.coolmall.core.model.entity.Goods
+import com.joker.coolmall.core.model.entity.Comment
 import com.joker.coolmall.core.model.entity.GoodsSearchKeyword
 import com.joker.coolmall.core.model.entity.GoodsSpec
+import com.joker.coolmall.core.model.request.GoodsCommentPageRequest
+import com.joker.coolmall.core.model.request.GoodsCommentSubmitRequest
 import com.joker.coolmall.core.model.request.GoodsSearchRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
@@ -59,14 +62,14 @@ class GoodsRepository @Inject constructor(
     /**
      * 提交商品评论
      */
-    fun submitGoodsComment(params: Any): Flow<NetworkResponse<Any>> = flow {
+    fun submitGoodsComment(params: GoodsCommentSubmitRequest): Flow<NetworkResponse<Boolean>> = flow {
         emit(goodsNetworkDataSource.submitGoodsComment(params))
     }.flowOn(Dispatchers.IO)
 
     /**
      * 分页查询商品评论
      */
-    fun getGoodsCommentPage(params: Any): Flow<NetworkResponse<Any>> = flow {
+    fun getGoodsCommentPage(params: GoodsCommentPageRequest): Flow<NetworkResponse<NetworkPageData<Comment>>> = flow {
         emit(goodsNetworkDataSource.getGoodsCommentPage(params))
     }.flowOn(Dispatchers.IO)
-} 
+}

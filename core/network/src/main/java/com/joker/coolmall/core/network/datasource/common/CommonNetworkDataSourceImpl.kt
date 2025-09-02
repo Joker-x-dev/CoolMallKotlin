@@ -1,5 +1,6 @@
 package com.joker.coolmall.core.network.datasource.common
 
+import com.joker.coolmall.core.model.entity.OssUpload
 import com.joker.coolmall.core.model.request.DictDataRequest
 import com.joker.coolmall.core.model.response.DictDataResponse
 import com.joker.coolmall.core.model.response.NetworkResponse
@@ -20,20 +21,10 @@ class CommonNetworkDataSourceImpl @Inject constructor(
     /**
      * 上传文件
      *
-     * @param params 请求参数，包含文件数据等
-     * @return 文件上传结果响应数据
+     * @return OSS上传配置信息
      */
-    override suspend fun uploadFile(params: Any): NetworkResponse<Any> {
-        return commonService.uploadFile(params)
-    }
-
-    /**
-     * 获取文件上传模式
-     *
-     * @return 文件上传模式响应数据
-     */
-    override suspend fun getUploadMode(): NetworkResponse<Any> {
-        return commonService.getUploadMode()
+    override suspend fun uploadFile(): NetworkResponse<OssUpload> {
+        return commonService.uploadFile()
     }
 
     /**

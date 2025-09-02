@@ -10,6 +10,8 @@ import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
 import com.joker.coolmall.core.data.repository.CommonRepository
 import com.joker.coolmall.core.data.repository.OrderRepository
 import com.joker.coolmall.core.data.state.AppState
+import com.joker.coolmall.core.model.entity.Cart
+import com.joker.coolmall.core.model.entity.CartGoodsSpec
 import com.joker.coolmall.core.model.entity.DictItem
 import com.joker.coolmall.core.model.entity.Order
 import com.joker.coolmall.core.model.request.CancelOrderRequest
@@ -17,6 +19,7 @@ import com.joker.coolmall.core.model.request.DictDataRequest
 import com.joker.coolmall.core.model.request.OrderPageRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.feature.order.model.OrderStatus
+import com.joker.coolmall.feature.order.navigation.OrderCommentRoutes
 import com.joker.coolmall.feature.order.navigation.OrderPayRoutes
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.GoodsRoutes
@@ -142,6 +145,42 @@ class OrderListViewModel @Inject constructor(
      */
     private var _currentConfirmOrderId: Long = 0L
 
+    /**
+     * 再次购买弹窗的显示状态
+     */
+    private val _rebuyModalVisible = MutableStateFlow(false)
+    val rebuyModalVisible: StateFlow<Boolean> = _rebuyModalVisible.asStateFlow()
+
+    /**
+     * 商品评论弹窗的显示状态
+     */
+    private val _commentModalVisible = MutableStateFlow(false)
+    val commentModalVisible: StateFlow<Boolean> = _commentModalVisible.asStateFlow()
+
+    /**
+     * 再次购买弹窗的购物车列表
+     */
+    private val _rebuyCartList = MutableStateFlow<List<Cart>>(emptyList())
+    val rebuyCartList = _rebuyCartList.asStateFlow()
+
+    /**
+     * 再次购买弹窗的当前订单
+     */
+    private val _rebuyCurrentOrder = MutableStateFlow<Order?>(null)
+    val rebuyCurrentOrder: StateFlow<Order?> = _rebuyCurrentOrder.asStateFlow()
+
+    /**
+     * 商品评论弹窗的购物车列表
+     */
+    private val _commentCartList = MutableStateFlow<List<Cart>>(emptyList())
+    val commentCartList = _commentCartList.asStateFlow()
+
+    /**
+     * 商品评论弹窗的当前订单
+     */
+    private val _commentCurrentOrder = MutableStateFlow<Order?>(null)
+    val commentCurrentOrder: StateFlow<Order?> = _commentCurrentOrder.asStateFlow()
+
     init {
         // 从URL参数中获取初始标签索引
         savedStateHandle.get<String>("tab")?.toIntOrNull()?.let { tabIndex ->
@@ -195,7 +234,7 @@ class OrderListViewModel @Inject constructor(
                 resetTabLoadState(tabIndex)
             }
         }
-        
+
         // 如果当前显示的标签页在刷新列表中，则立即刷新
         val currentTab = _selectedTabIndex.value
         if (currentTab in tabIndices) {
@@ -439,6 +478,8 @@ class OrderListViewModel @Inject constructor(
      * 跳转到商品详情页面（再次购买）
      */
     fun toGoodsDetail(goodsId: Long) {
+        // 隐藏弹窗
+        hideRebuyModal()
         toPage(GoodsRoutes.DETAIL, goodsId)
     }
 
@@ -457,8 +498,9 @@ class OrderListViewModel @Inject constructor(
     }
 
     /**
-     * 跳转到订单评价页面
+     * 跳转到订单评价页面（已废弃，使用 handleOrderComment 替代）
      */
+    @Deprecated("使用 handleOrderComment(order: Order) 替代")
     fun toOrderComment(orderId: Long) {
         toPage(OrderRoutes.COMMENT, orderId)
     }
@@ -570,10 +612,159 @@ class OrderListViewModel @Inject constructor(
             onData = { _ ->
                 // 隐藏弹窗
                 hideConfirmReceiveDialog()
-                
+
                 // 确认收货会影响：全部(0)、待收货(3)、待评价(5)
                 refreshSpecificTabs(listOf(0, 3, 5))
             }
         )
+    }
+
+    /**
+     * 显示再次购买弹窗
+     */
+    fun showRebuyModal() {
+        _rebuyModalVisible.value = true
+    }
+
+    /**
+     * 隐藏再次购买弹窗
+     */
+    fun hideRebuyModal() {
+        _rebuyModalVisible.value = false
+        // 不立即清空数据，避免弹窗关闭时数据消失
+    }
+
+    /**
+     * 显示商品评论弹窗
+     */
+    fun showCommentModal() {
+        _commentModalVisible.value = true
+    }
+
+    /**
+     * 隐藏商品评论弹窗
+     */
+    fun hideCommentModal() {
+        _commentModalVisible.value = false
+        // 不立即清空数据，避免弹窗关闭时数据消失
+    }
+
+    /**
+     * 处理再次购买逻辑
+     */
+    fun handleRebuy(order: Order) {
+        // 清除上一次的数据
+        _rebuyCurrentOrder.value = null
+        _rebuyCartList.value = emptyList()
+
+        val cartList = convertOrderGoodsToCart(order)
+        if (cartList.size > 1) {
+            // 多个商品时显示弹窗让用户选择
+            _rebuyCurrentOrder.value = order
+            _rebuyCartList.value = cartList
+            showRebuyModal()
+        } else {
+            // 单个商品时直接跳转
+            val goodsId = cartList.firstOrNull()?.goodsId ?: 0L
+            toGoodsDetail(goodsId)
+        }
+    }
+
+    /**
+     * 处理商品评论逻辑
+     */
+    fun handleOrderComment(order: Order) {
+        // 清除上一次的数据
+        _commentCurrentOrder.value = null
+        _commentCartList.value = emptyList()
+
+        val cartList = convertOrderGoodsToCart(order)
+        if (cartList.size > 1) {
+            // 多个商品时显示弹窗让用户选择
+            _commentCurrentOrder.value = order
+            _commentCartList.value = cartList
+            showCommentModal()
+        } else {
+            // 单个商品时直接跳转
+            val orderId = order.id
+            val goodsId = cartList.firstOrNull()?.goodsId ?: 0L
+
+            // 构建带参数的评价路由：/order/comment/{orderId}/{goodsId}
+            val commentRoute = OrderCommentRoutes.COMMENT_PATTERN
+                .replace("{${OrderCommentRoutes.ORDER_ID_ARG}}", orderId.toString())
+                .replace("{${OrderCommentRoutes.GOODS_ID_ARG}}", goodsId.toString())
+
+            toPage(commentRoute)
+        }
+    }
+
+    /**
+     * 跳转到指定商品的订单评价页面
+     */
+    fun toOrderCommentForGoods(goodsId: Long) {
+        val order = _commentCurrentOrder.value ?: return
+        val orderId = order.id
+
+        // 构建带参数的评价路由：/order/comment/{orderId}/{goodsId}
+        val commentRoute = OrderCommentRoutes.COMMENT_PATTERN
+            .replace("{${OrderCommentRoutes.ORDER_ID_ARG}}", orderId.toString())
+            .replace("{${OrderCommentRoutes.GOODS_ID_ARG}}", goodsId.toString())
+
+        toPage(commentRoute)
+        hideCommentModal()
+    }
+
+    /**
+     * 跳转到指定商品详情页面（再次购买）
+     */
+    fun toGoodsDetailForRebuy(goodsId: Long) {
+        // 先跳转，再隐藏弹窗
+        toPage(GoodsRoutes.DETAIL, goodsId)
+        hideRebuyModal()
+    }
+
+    /**
+     * 将Order中的goodsList转换为Cart类型的列表
+     * 参考OrderConfirmViewModel中的处理方法
+     */
+    private fun convertOrderGoodsToCart(order: Order): List<Cart> {
+        return order.goodsList?.let { goodsList ->
+            // 按商品ID分组
+            val groupedGoods = goodsList.groupBy { it.goodsId }
+
+            // 为每个商品ID创建一个Cart对象
+            groupedGoods.map { (goodsId, items) ->
+                val firstItem = items.first()
+
+                Cart().apply {
+                    this.goodsId = goodsId
+                    this.goodsName = firstItem.goodsInfo?.title ?: ""
+                    this.goodsMainPic = firstItem.goodsInfo?.mainPic ?: ""
+
+                    // 收集该商品的所有规格
+                    val allSpecs = mutableListOf<CartGoodsSpec>()
+
+                    // 遍历该商品的所有选中项
+                    items.forEach { orderGoods ->
+                        // 如果有规格信息，转换为CartGoodsSpec并添加
+                        orderGoods.spec?.let { spec ->
+                            val cartSpec = CartGoodsSpec(
+                                id = spec.id,
+                                goodsId = spec.goodsId,
+                                name = spec.name,
+                                price = spec.price,
+                                stock = spec.stock,
+                                count = orderGoods.count,
+                                images = spec.images
+                            )
+                            allSpecs.add(cartSpec)
+                        }
+                    }
+
+                    // 设置规格列表
+                    this.spec = allSpecs
+                }
+            }
+        } ?: emptyList()
     }
 }

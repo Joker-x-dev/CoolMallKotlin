@@ -5,6 +5,7 @@ import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.joker.coolmall.core.network.BuildConfig
 import com.joker.coolmall.core.network.interceptor.AuthInterceptor
+import com.joker.coolmall.core.network.di.FileUploadQualifier
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -86,5 +87,28 @@ object NetworkModule {
                 HttpLoggingInterceptor.Level.NONE
             }
         }
+    }
+
+    // 提供文件上传专用的OkHttpClient
+    @Provides
+    @Singleton
+    @FileUploadQualifier
+    fun provideFileUploadOkHttpClient(
+        @ApplicationContext context: Context
+    ): OkHttpClient {
+        return OkHttpClient.Builder()
+            .connectTimeout(30, TimeUnit.SECONDS)
+            .writeTimeout(30, TimeUnit.SECONDS)
+            .readTimeout(30, TimeUnit.SECONDS)
+            .retryOnConnectionFailure(true)
+            .apply {
+                if (BuildConfig.DEBUG) {
+                    addInterceptor(ChuckerInterceptor.Builder(context).build())
+                    addInterceptor(HttpLoggingInterceptor().apply {
+                        level = HttpLoggingInterceptor.Level.BODY
+                    })
+                }
+            }
+            .build()
     }
 }

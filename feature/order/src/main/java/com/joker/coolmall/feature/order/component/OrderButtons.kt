@@ -70,7 +70,8 @@ fun OrderButtons(
     if (listOf(2, 3, 4, 5, 6).contains(order.status)) {
         OrderButton(
             text = "查看物流",
-            onClick = onLogisticsClick
+            onClick = onLogisticsClick,
+            isPrimary = order.status == 2
         )
         SpaceHorizontalSmall()
     }
@@ -84,7 +85,7 @@ fun OrderButtons(
         SpaceHorizontalSmall()
     }
 
-    if (order.status != 0) {
+    if (order.status != 0 && order.status != 2) {
         OrderButton(
             text = "再次购买",
             onClick = onRebuyClick,

@@ -2,8 +2,11 @@ package com.joker.coolmall.core.network.datasource.goods
 
 import com.joker.coolmall.core.model.entity.Category
 import com.joker.coolmall.core.model.entity.Goods
+import com.joker.coolmall.core.model.entity.Comment
 import com.joker.coolmall.core.model.entity.GoodsSearchKeyword
 import com.joker.coolmall.core.model.entity.GoodsSpec
+import com.joker.coolmall.core.model.request.GoodsCommentPageRequest
+import com.joker.coolmall.core.model.request.GoodsCommentSubmitRequest
 import com.joker.coolmall.core.model.request.GoodsSearchRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
@@ -75,7 +78,7 @@ class GoodsNetworkDataSourceImpl @Inject constructor(
      * @param params 请求参数，包含评论内容和商品ID
      * @return 评论提交结果响应数据
      */
-    override suspend fun submitGoodsComment(params: Any): NetworkResponse<Any> {
+    override suspend fun submitGoodsComment(params: GoodsCommentSubmitRequest): NetworkResponse<Boolean> {
         return goodsService.submitGoodsComment(params)
     }
 
@@ -85,7 +88,7 @@ class GoodsNetworkDataSourceImpl @Inject constructor(
      * @param params 请求参数，包含分页和商品ID
      * @return 商品评论分页列表响应数据
      */
-    override suspend fun getGoodsCommentPage(params: Any): NetworkResponse<Any> {
+    override suspend fun getGoodsCommentPage(params: GoodsCommentPageRequest): NetworkResponse<NetworkPageData<Comment>> {
         return goodsService.getGoodsCommentPage(params)
     }
-} 
+}

@@ -1,5 +1,6 @@
 package com.joker.coolmall.core.network.datasource.common
 
+import com.joker.coolmall.core.model.entity.OssUpload
 import com.joker.coolmall.core.model.request.DictDataRequest
 import com.joker.coolmall.core.model.response.DictDataResponse
 import com.joker.coolmall.core.model.response.NetworkResponse
@@ -12,12 +13,7 @@ interface CommonNetworkDataSource {
     /**
      * 文件上传
      */
-    suspend fun uploadFile(params: Any): NetworkResponse<Any>
-
-    /**
-     * 文件上传模式
-     */
-    suspend fun getUploadMode(): NetworkResponse<Any>
+    suspend fun uploadFile(): NetworkResponse<OssUpload>
 
     /**
      * 参数配置
