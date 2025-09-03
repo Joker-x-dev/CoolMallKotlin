@@ -39,10 +39,10 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.ScaffoldDefaults
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -55,7 +55,6 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.drawWithContent
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
@@ -67,19 +66,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
+import com.joker.coolmall.core.designsystem.component.SpaceBetweenRow
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.ColorDanger
+import com.joker.coolmall.core.designsystem.theme.CommonIcon
 import com.joker.coolmall.core.designsystem.theme.Primary
 import com.joker.coolmall.core.designsystem.theme.ShapeCircle
 import com.joker.coolmall.core.designsystem.theme.ShapeSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceDivider
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
-import com.joker.coolmall.core.designsystem.theme.SpacePaddingLarge
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingSmall
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingXSmall
@@ -109,6 +108,7 @@ import com.joker.coolmall.core.ui.component.modal.CouponModal
 import com.joker.coolmall.core.ui.component.modal.SpecSelectModal
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkView
 import com.joker.coolmall.core.ui.component.swiper.WeSwiper
+import com.joker.coolmall.core.ui.component.text.AppText
 import com.joker.coolmall.core.ui.component.text.PriceText
 import com.joker.coolmall.core.ui.component.text.TextSize
 import com.joker.coolmall.core.ui.component.title.TitleWithLine
@@ -758,16 +758,16 @@ private fun GoodsDeliveryCard() {
         )
 
         AppListItem(
-            title = "送至",
+            title = "发货",
             showArrow = false,
-            trailingText = "广州市 天河区"
+            trailingText = "云南省 昆明市"
         )
 
         AppListItem(
             title = "服务",
             showArrow = false,
             showDivider = false,
-            trailingText = "7天无理由退货·运费险·48小时发货"
+            trailingText = "7天无理由退货 · 运费险 · 48小时发货"
         )
     }
 }
@@ -819,105 +819,89 @@ private fun GoodsActionBar(
         animationSpec = tween(durationMillis = 800),
         label = "bottom_bar_offset"
     )
-    val outlineColor = MaterialTheme.colorScheme.outline
-    Row(
-        modifier = modifier
+    Surface(
+        modifier = Modifier
             .fillMaxWidth()
-            .offset { IntOffset(bottomBarOffset.x.toInt(), bottomBarOffset.y.toInt()) }
-            // 绘制上边框
-            .drawWithContent {
-                drawContent() // 先绘制内容
-                drawLine(
-                    color = outlineColor,
-                    start = Offset(0f, 0f),
-                    end = Offset(size.width, 0f),
-                    strokeWidth = SpaceDivider.toPx()
-                )
-            }
-            .background(MaterialTheme.colorScheme.surface)
-            .padding(horizontal = SpacePaddingLarge, vertical = SpaceVerticalSmall)
-            .navigationBarsPadding(),
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween
+            .then(modifier)
+            .offset { IntOffset(bottomBarOffset.x.toInt(), bottomBarOffset.y.toInt()) },
+        shadowElevation = 4.dp
     ) {
-        Row {
-            // 客服按钮
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .padding(end = SpaceHorizontalSmall)
+        SpaceBetweenRow(
+            modifier = modifier
+                .fillMaxWidth()
+                .padding(vertical = SpaceVerticalSmall)
+                .navigationBarsPadding(),
+        ) {
+            Row(
+                modifier = Modifier.padding(start = SpaceHorizontalSmall)
             ) {
-                IconButton(
-                    onClick = { },
+                // 客服按钮
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
                     modifier = Modifier
-                        .size(24.dp)
-                        .clip(ShapeCircle)
-                        .background(MaterialTheme.colorScheme.surface)
-                        .padding(0.dp)
+                        .width(40.dp)
+                        .clip(ShapeSmall)
+                        .clickable { }
+                        .padding(vertical = SpaceVerticalXSmall)
                 ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_customer_service),
-                        contentDescription = "客服"
+                    CommonIcon(
+                        resId = R.drawable.ic_customer_service,
+                        size = 20.dp
+                    )
+
+                    AppText(
+                        text = "客服",
+                        size = TextSize.BODY_SMALL
                     )
                 }
 
-                Text(
-                    text = "客服",
-                    fontSize = 10.sp
-                )
-            }
-
-            SpaceHorizontalLarge()
-
-            // 购物车按钮
-            Column(
-                horizontalAlignment = Alignment.CenterHorizontally,
-                modifier = Modifier
-                    .padding(end = SpaceHorizontalSmall)
-            ) {
-                IconButton(
-                    onClick = { },
+                // 购物车按钮
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier
-                        .size(24.dp)
-                        .clip(ShapeCircle)
-                        .background(MaterialTheme.colorScheme.surface)
-                        .padding(0.dp)
+                        .width(40.dp)
+                        .clip(ShapeSmall)
+                        .clickable { }
+                        .padding(vertical = SpaceVerticalXSmall)
                 ) {
-                    Icon(
-                        painter = painterResource(id = R.drawable.ic_cart),
-                        contentDescription = "购物车",
+                    CommonIcon(
+                        resId = R.drawable.ic_cart,
+                        size = 20.dp
+                    )
+                    AppText(
+                        text = "购物车",
+                        size = TextSize.BODY_SMALL
                     )
                 }
+            }
 
-                Text(
-                    text = "购物车",
-                    fontSize = 10.sp
+            Row(
+                modifier = Modifier.padding(end = SpaceHorizontalLarge)
+            ) {
+                // 加入购物车按钮（边框样式）
+                AppButtonBordered(
+                    text = "加入购物车",
+                    onClick = onAddToCartClick,
+                    type = ButtonType.LINK,
+                    shape = ButtonShape.SQUARE,
+                    size = ButtonSize.MINI,
+                )
+
+                SpaceHorizontalLarge()
+
+                // 立即购买按钮（渐变背景）
+                AppButtonFixed(
+                    text = "立即购买",
+                    onClick = onBuyNowClick,
+                    size = ButtonSize.MINI,
+                    style = ButtonStyle.GRADIENT,
+                    shape = ButtonShape.SQUARE
                 )
             }
-        }
-
-        Row {
-            // 加入购物车按钮（边框样式）
-            AppButtonBordered(
-                text = "加入购物车",
-                onClick = onAddToCartClick,
-                type = ButtonType.LINK,
-                shape = ButtonShape.SQUARE,
-                size = ButtonSize.MINI,
-            )
-
-            SpaceHorizontalLarge()
-
-            // 立即购买按钮（渐变背景）
-            AppButtonFixed(
-                text = "立即购买",
-                onClick = onBuyNowClick,
-                size = ButtonSize.MINI,
-                style = ButtonStyle.GRADIENT,
-                shape = ButtonShape.SQUARE
-            )
         }
     }
+
 }
 
 @Preview(showBackground = true)
