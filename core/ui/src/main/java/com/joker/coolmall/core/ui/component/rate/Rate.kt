@@ -24,6 +24,7 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.joker.coolmall.core.ui.R
 import kotlinx.coroutines.delay
@@ -33,6 +34,7 @@ import kotlin.math.roundToInt
  * 评分组件 - 支持整星评分，带动画效果
  * @param value 当前评分值
  * @param count 星星总数，默认5个
+ * @param size 星星大小，默认26.dp
  * @param onChange 评分变化回调
  * @param animationEnabled 是否启用动画效果，默认true
  */
@@ -40,6 +42,7 @@ import kotlin.math.roundToInt
 fun WeRate(
     value: Int,
     count: Int = 5,
+    size: Dp = 26.dp,
     onChange: ((Int) -> Unit)? = null,
     animationEnabled: Boolean = true
 ) {
@@ -75,7 +78,7 @@ fun WeRate(
                 animationDelay = if (animationEnabled) index * 50L else 0L,
                 animationTrigger = animationTrigger,
                 modifier = Modifier
-                    .size(26.dp)
+                    .size(size)
                     .onSizeChanged {
                         starWidth = it.width
                     }

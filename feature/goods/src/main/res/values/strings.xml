@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="goods_detail">商品详情</string>
+    <string name="goods_comment_title">商品评论</string>
 </resources>

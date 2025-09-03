@@ -1,6 +1,5 @@
 package com.joker.coolmall.feature.auth.viewmodel
 
-import android.content.Context
 import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
 import com.joker.coolmall.core.data.repository.AuthRepository
@@ -15,7 +14,6 @@ import com.joker.coolmall.navigation.routes.AuthRoutes
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
@@ -30,7 +28,6 @@ class AccountLoginViewModel @Inject constructor(
     navigator: AppNavigator,
     appState: AppState,
     private val authRepository: AuthRepository,
-    @ApplicationContext private val context: Context
 ) : BaseViewModel(
     navigator = navigator,
     appState = appState
@@ -114,7 +111,7 @@ class AccountLoginViewModel @Inject constructor(
         viewModelScope.launch {
             // 保存账号和密码
             saveCredentials(_account.value, _password.value)
-            
+
             ToastUtils.showSuccess(R.string.login_success)
             appState.updateAuth(authData)
             appState.refreshUserInfo()
@@ -129,7 +126,7 @@ class AccountLoginViewModel @Inject constructor(
     private fun loadSavedCredentials() {
         val savedPhone = MMKVUtils.getString(KEY_SAVED_PHONE, "")
         val savedPassword = MMKVUtils.getString(KEY_SAVED_PASSWORD, "")
-        
+
         if (savedPhone.isNotEmpty()) {
             _account.value = savedPhone
         }

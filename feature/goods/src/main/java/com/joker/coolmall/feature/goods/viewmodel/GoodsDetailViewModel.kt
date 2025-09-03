@@ -25,6 +25,7 @@ import com.joker.coolmall.core.util.toast.ToastUtils
 import com.joker.coolmall.feature.goods.navigation.GoodsDetailRoutes
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.AuthRoutes
+import com.joker.coolmall.navigation.routes.GoodsRoutes
 import com.joker.coolmall.navigation.routes.OrderRoutes
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
@@ -302,6 +303,14 @@ class GoodsDetailViewModel @Inject constructor(
             hideSpecModal()
             super.toPage(OrderRoutes.CONFIRM)
         }
+    }
+
+    /**
+     * 跳转到商品评论页面
+     * 从商品详情页面跳转到该商品的评论列表页面，传递当前商品ID作为参数
+     */
+    fun toGoodsCommentPage() {
+        super.toPage(GoodsRoutes.COMMENT, requiredId)
     }
 
     /**

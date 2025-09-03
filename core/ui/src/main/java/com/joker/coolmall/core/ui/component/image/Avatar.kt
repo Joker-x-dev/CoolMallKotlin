@@ -15,8 +15,10 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
+import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.ui.R
 
 /**
@@ -70,6 +72,7 @@ fun Avatar(
             size = size,
             cornerShape = cornerShape,
             contentScale = contentScale,
+            showBackground = true,
             modifier = finalModifier
         )
     }
@@ -90,14 +93,14 @@ private fun DefaultAvatar(
 ) {
     Box(
         modifier = modifier
-            .background(MaterialTheme.colorScheme.surface),
+            .background(MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.08f)),
         contentAlignment = Alignment.Center
     ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_my_fill),
             contentDescription = "默认头像",
             modifier = Modifier.size(size * 0.5f), // 图标大小为头像的一半
-            tint = MaterialTheme.colorScheme.onSurfaceVariant
+            tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
         )
     }
 }
@@ -150,4 +153,12 @@ fun MediumAvatar(
         onClick = onClick,
         modifier = modifier
     )
+}
+
+@Preview(showBackground = true)
+@Composable
+private fun DefaultAvatarPreview() {
+    AppTheme {
+        DefaultAvatar(size = 36.dp)
+    }
 }

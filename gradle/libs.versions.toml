@@ -22,10 +22,10 @@ targetSdk = "36"
 
 # 构建工具版本
 # Android Gradle Plugin: https://developer.android.com/studio/releases/gradle-plugin
-agp = "8.12.1"
+agp = "8.13.0"
 # Kotlin 编译器: https://kotlinlang.org/docs/releases.html
-# 注意: 当前 kotlin 版本为 2.2.0 注意需要和 hilt 版本对应
-kotlin = "2.2.0"
+# 注意: 当前 kotlin 版本为 2.2.10 注意需要和 hilt 版本对应
+kotlin = "2.2.10"
 
 # Android 核心库版本
 # AndroidX Core KTX: https://developer.android.com/jetpack/androidx/releases/core
@@ -39,14 +39,14 @@ lifecycleRuntimeKtx = "2.9.2"
 # JUnit 4 测试框架: https://junit.org/junit4/
 junit = "4.13.2"
 # AndroidX JUnit 扩展: https://developer.android.com/jetpack/androidx/releases/test
-junitVersion = "1.2.1"
+junitVersion = "1.3.0"
 # AndroidX Espresso 测试框架: https://developer.android.com/training/testing/espresso
 espressoCore = "3.7.0"
 
 # Jetpack Compose 相关版本
 # Compose BOM: https://developer.android.com/jetpack/compose/bom
 # 说明: BOM 统一管理所有 Compose 库版本，确保兼容性
-composeBom = "2025.08.00"
+composeBom = "2025.08.01"
 
 # 导航相关版本
 # Navigation Compose: https://developer.android.com/jetpack/androidx/releases/navigation
@@ -77,12 +77,12 @@ timber = "5.0.1"
 # Hilt 依赖注入框架: https://developer.android.com/training/dependency-injection/hilt-android
 # GitHub: https://github.com/google/dagger
 # 说明: 基于 Dagger 的 Android 依赖注入库
-hilt = "2.57"
+hilt = "2.57.1"
 # Hilt Navigation Compose: https://developer.android.com/jetpack/androidx/releases/hilt
 hiltNavigationCompose = "1.2.0"
 # KSP (Kotlin Symbol Processing): https://github.com/google/ksp
 # 说明: Kotlin 注解处理器，用于代码生成
-ksp = "2.2.0-2.0.2"
+ksp = "2.2.10-2.0.2"
 
 # 图片加载相关版本
 # Coil Compose 图片加载库: https://coil-kt.github.io/coil/compose/
@@ -105,7 +105,7 @@ toaster = "13.2"
 
 # 数据存储相关版本
 # 腾讯 MMKV 高性能存储: https://github.com/Tencent/MMKV
-mmkv = "2.2.2"
+mmkv = "2.2.3"
 
 # 动画相关版本
 # Lottie Compose 动画库: https://airbnb.io/lottie/#/android-compose
@@ -124,11 +124,11 @@ room = "2.7.2"
 
 # 支付相关版本
 # 支付宝支付 SDK: https://opendocs.alipay.com/open/54/104509
-alipaysdkAndroid = "15.8.35"
+alipaysdkAndroid = "15.8.38"
 
 # 权限相关版本
 # XXPermissions 权限框架: https://github.com/getActivity/XXPermissions
-xxpermissions = "23.0"
+xxpermissions = "26.5"
 
 [libraries]
 

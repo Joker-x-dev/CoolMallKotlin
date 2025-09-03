@@ -87,6 +87,7 @@ import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
+import com.joker.coolmall.core.model.entity.Comment
 import com.joker.coolmall.core.model.entity.Coupon
 import com.joker.coolmall.core.model.entity.Goods
 import com.joker.coolmall.core.model.entity.GoodsDetail
@@ -101,6 +102,7 @@ import com.joker.coolmall.core.ui.component.button.ButtonSize
 import com.joker.coolmall.core.ui.component.button.ButtonStyle
 import com.joker.coolmall.core.ui.component.button.ButtonType
 import com.joker.coolmall.core.ui.component.card.AppCard
+import com.joker.coolmall.core.ui.component.divider.WeDivider
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
 import com.joker.coolmall.core.ui.component.list.AppListItem
 import com.joker.coolmall.core.ui.component.modal.CouponModal
@@ -111,6 +113,7 @@ import com.joker.coolmall.core.ui.component.text.PriceText
 import com.joker.coolmall.core.ui.component.text.TextSize
 import com.joker.coolmall.core.ui.component.title.TitleWithLine
 import com.joker.coolmall.feature.goods.R
+import com.joker.coolmall.feature.goods.component.CommentItem
 import com.joker.coolmall.feature.goods.viewmodel.GoodsDetailViewModel
 import kotlinx.coroutines.flow.collectLatest
 import com.joker.coolmall.core.ui.R as CoreUiR
@@ -152,7 +155,8 @@ internal fun GoodsDetailRoute(
         couponModalVisible = couponModalVisible,
         onShowCouponModal = viewModel::showCouponModal,
         onHideCouponModal = viewModel::hideCouponModal,
-        onCouponReceive = viewModel::receiveCoupon
+        onCouponReceive = viewModel::receiveCoupon,
+        onCommentClick = viewModel::toGoodsCommentPage
     )
 }
 
@@ -170,6 +174,7 @@ internal fun GoodsDetailRoute(
  * @param onHideSpecModal 隐藏规格选择弹窗的回调
  * @param onAddToCart 加入购物车回调，参数为包含商品和规格信息的购物车对象
  * @param onBuyNow 立即购买回调，参数为包含商品和规格信息的购物车对象
+ * @param onCommentClick 跳转到评论页面的回调，点击评论相关区域时触发
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -191,7 +196,8 @@ internal fun GoodsDetailScreen(
     couponModalVisible: Boolean = false,
     onShowCouponModal: () -> Unit = {},
     onHideCouponModal: () -> Unit = {},
-    onCouponReceive: (Coupon) -> Unit = {}
+    onCouponReceive: (Coupon) -> Unit = {},
+    onCommentClick: () -> Unit = {}
 ) {
     Scaffold(
         contentWindowInsets = ScaffoldDefaults
@@ -207,13 +213,15 @@ internal fun GoodsDetailScreen(
             GoodsDetailContentView(
                 data = goodsDetail,
                 coupons = goodsDetail.coupon,
+                comments = goodsDetail.comment,
                 onBackClick = onBackClick,
                 paddingValues = paddingValues,
                 selectedSpec = selectedSpec,
                 onShowSpecModal = onShowSpecModal,
                 hasAnimated = hasAnimated,
                 onTriggerAnimation = onTriggerAnimation,
-                onShowCouponModal = onShowCouponModal
+                onShowCouponModal = onShowCouponModal,
+                onCommentClick = onCommentClick
             )
 
             // 规格选择底部弹出层
@@ -252,18 +260,21 @@ internal fun GoodsDetailScreen(
  * @param paddingValues 页面内边距值，用于适配系统UI（如状态栏、导航栏）
  * @param selectedSpec 当前选中的商品规格，若为null则表示未选择规格
  * @param onShowSpecModal 显示规格选择弹窗的回调函数
+ * @param onCommentClick 跳转到评论页面的回调函数
  */
 @Composable
 private fun GoodsDetailContentView(
     data: GoodsDetail,
     coupons: List<Coupon> = emptyList(),
+    comments: List<Comment> = emptyList(),
     onBackClick: () -> Unit,
     paddingValues: PaddingValues,
     selectedSpec: GoodsSpec? = null,
     onShowSpecModal: () -> Unit = {},
     hasAnimated: Boolean = false,
     onTriggerAnimation: () -> Unit = {},
-    onShowCouponModal: () -> Unit = {}
+    onShowCouponModal: () -> Unit = {},
+    onCommentClick: () -> Unit = {}
 ) {
     // 主内容容器
     var topBarAlpha by remember { mutableIntStateOf(0) }
@@ -282,10 +293,12 @@ private fun GoodsDetailContentView(
         GoodsDetailContentWithScroll(
             data = data.goodsInfo,
             coupons = coupons,
+            comments = comments,
             selectedSpec = selectedSpec,
             onTopBarAlphaChanged = { topBarAlpha = it },
             onShowSpecModal = onShowSpecModal,
-            onShowCouponModal = onShowCouponModal
+            onShowCouponModal = onShowCouponModal,
+            onCommentClick = onCommentClick
         )
 
         // 导航栏浮动在顶部
@@ -400,15 +413,18 @@ private fun CircleIconButton(
  * @param selectedSpec 当前选中的商品规格，若为null则表示未选择规格
  * @param onTopBarAlphaChanged 顶部导航栏透明度变化回调，参数为新的透明度值
  * @param onShowSpecModal 显示规格选择弹窗的回调函数
+ * @param onCommentClick 跳转到评论页面的回调函数
  */
 @Composable
 private fun GoodsDetailContentWithScroll(
     data: Goods,
     coupons: List<Coupon> = emptyList(),
+    comments: List<Comment> = emptyList(),
     selectedSpec: GoodsSpec? = null,
     onTopBarAlphaChanged: (Int) -> Unit,
     onShowSpecModal: () -> Unit,
-    onShowCouponModal: () -> Unit = {}
+    onShowCouponModal: () -> Unit = {},
+    onCommentClick: () -> Unit = {}
 ) {
     val scrollState = rememberScrollState()
 
@@ -430,9 +446,7 @@ private fun GoodsDetailContentWithScroll(
             .verticalScroll(scrollState)
     ) {
         // 轮播图直接放在顶部，没有状态栏的padding
-        data.pics.let {
-            GoodsBanner(data.pics!!)
-        }
+        GoodsBanner(data.pics!!)
 
         Column(
             modifier = Modifier.padding(SpacePaddingMedium)
@@ -446,6 +460,34 @@ private fun GoodsDetailContentWithScroll(
             GoodsDeliveryCard()
 
             SpaceVerticalMedium()
+
+            // 评论列表
+            if (comments.isNotEmpty()) {
+                Card {
+                    Column {
+                        AppListItem(
+                            title = "",
+                            trailingText = "查看全部",
+                            leadingContent = {
+                                TitleWithLine(text = "商品评价")
+                            },
+                            onClick = onCommentClick
+                        )
+
+                        comments.forEachIndexed { index, comment ->
+                            CommentItem(
+                                comment = comment,
+                                onClick = onCommentClick
+                            )
+                            // 添加分割线，最后一个评论项不添加
+                            if (index < comments.size - 1) {
+                                WeDivider()
+                            }
+                        }
+                    }
+                }
+                SpaceVerticalMedium()
+            }
 
             // 图文详情
             if (data.contentPics != null) {

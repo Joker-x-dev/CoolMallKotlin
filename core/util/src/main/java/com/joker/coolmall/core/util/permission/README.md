@@ -2,6 +2,13 @@
 
 基于 XXPermissions 框架封装的权限工具类，提供常用权限的快捷申请方法。
 
+## 最新更新
+
+- ✨ **代码重构优化**：提取公共方法，消除重复代码
+- 🔧 **适配最新版本**：完全适配最新版本的 XXPermissions 框架
+- 📝 **API 更新**：使用 `PermissionLists` 替代已弃用的 `Permission` 类
+- 🎯 **统一处理逻辑**：统一权限申请结果处理和错误提示
+
 ## 特性
 
 - 🚀 简化权限申请流程
@@ -9,6 +16,7 @@
 - 🎯 自动处理权限拒绝情况
 - 💬 集成 Toast 提示
 - 🔧 支持自定义权限组合
+- 🛠️ 代码结构优化，减少重复逻辑
 
 ## 使用方法
 
@@ -112,9 +120,9 @@ PermissionUtils.requestCameraAndGalleryPermission(this) { granted ->
 
 ```kotlin
 val permissions = arrayOf(
-    Permission.CAMERA,
-    Permission.RECORD_AUDIO,
-    Permission.WRITE_EXTERNAL_STORAGE
+    PermissionLists.getCameraPermission(),
+    PermissionLists.getRecordAudioPermission(),
+    PermissionLists.getWriteExternalStoragePermission()
 )
 
 PermissionUtils.requestCustomPermissions(this, permissions) { granted, deniedPermissions ->
@@ -133,7 +141,7 @@ PermissionUtils.requestCustomPermissions(this, permissions) { granted, deniedPer
 ### 检查单个权限
 
 ```kotlin
-if (PermissionUtils.hasPermission(this, Permission.CAMERA)) {
+if (PermissionUtils.hasPermission(this, PermissionLists.getCameraPermission())) {
     // 已有相机权限
     openCamera()
 } else {
@@ -147,7 +155,10 @@ if (PermissionUtils.hasPermission(this, Permission.CAMERA)) {
 ### 检查多个权限
 
 ```kotlin
-val permissions = arrayOf(Permission.CAMERA, Permission.RECORD_AUDIO)
+val permissions = arrayOf(
+    PermissionLists.getCameraPermission(),
+    PermissionLists.getRecordAudioPermission()
+)
 if (PermissionUtils.hasPermissions(this, permissions)) {
     // 已有所有权限
     startVideoRecording()
@@ -168,7 +179,7 @@ if (PermissionUtils.hasPermissions(this, permissions)) {
 PermissionUtils.openPermissionSettings(this)
 
 // 跳转到指定权限的设置页面
-val permissions = arrayOf(Permission.CAMERA)
+val permissions = arrayOf(PermissionLists.getCameraPermission())
 PermissionUtils.openPermissionSettings(this, permissions)
 ```
 
@@ -214,7 +225,7 @@ PermissionUtils.openPermissionSettings(this, permissions)
 ```kotlin
 // 推荐的使用模式
 fun takePhoto() {
-    if (PermissionUtils.hasPermission(this, Permission.CAMERA)) {
+    if (PermissionUtils.hasPermission(this, PermissionLists.getCameraPermission())) {
         // 直接使用相机
         openCamera()
     } else {

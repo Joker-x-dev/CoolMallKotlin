@@ -38,6 +38,12 @@ val previewGoodsList = listOf(
                 sortNum = 2,
                 images = listOf("https://example.com/iphone15pro_black.jpg")
             )
+        ),
+        contentPics = listOf(
+            "https://example.com/iphone15pro_content_1.jpg",
+            "https://example.com/iphone15pro_content_2.jpg",
+            "https://example.com/iphone15pro_content_3.jpg",
+            "https://example.com/iphone15pro_content_4.jpg",
         )
     ),
     Goods(
@@ -65,6 +71,12 @@ val previewGoodsList = listOf(
                 sortNum = 1,
                 images = listOf("https://example.com/xiaomi14ultra_black.jpg")
             )
+        ),
+        contentPics = listOf(
+            "https://example.com/iphone15pro_content_1.jpg",
+            "https://example.com/iphone15pro_content_2.jpg",
+            "https://example.com/iphone15pro_content_3.jpg",
+            "https://example.com/iphone15pro_content_4.jpg",
         )
     )
 )
