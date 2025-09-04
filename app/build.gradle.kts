@@ -97,6 +97,8 @@ dependencies {
     implementation(project(":feature:common"))
     // 营销模块
     implementation(project(":feature:market"))
+    // 启动流程模块
+    implementation(project(":feature:launch"))
 
     // region 依赖注入
     // https://developer.android.google.cn/training/dependency-injection/hilt-android?hl=zh-cn

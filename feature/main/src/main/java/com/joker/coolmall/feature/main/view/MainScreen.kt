@@ -121,7 +121,10 @@ internal fun MainScreen(
                 .padding(paddingValues)
         ) { page: Int ->
             when (page) {
-                0 -> HomeRoute()
+                0 -> HomeRoute(
+                    sharedTransitionScope = sharedTransitionScope,
+                    animatedContentScope = animatedContentScope
+                )
                 1 -> CategoryRoute()
                 2 -> CartRoute()
                 3 -> MeRoute(

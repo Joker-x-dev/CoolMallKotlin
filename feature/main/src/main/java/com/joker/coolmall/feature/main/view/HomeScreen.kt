@@ -1,5 +1,8 @@
 package com.joker.coolmall.feature.main.view
 
+import androidx.compose.animation.AnimatedContentScope
+import androidx.compose.animation.ExperimentalSharedTransitionApi
+import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -82,8 +85,11 @@ import com.joker.coolmall.core.ui.R as CoreUiR
 /**
  * 首页路由入口
  */
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 internal fun HomeRoute(
+    sharedTransitionScope: SharedTransitionScope? = null,
+    animatedContentScope: AnimatedContentScope? = null,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState.collectAsState()
@@ -100,6 +106,8 @@ internal fun HomeRoute(
         isRefreshing = isRefreshing,
         loadMoreState = loadMoreState,
         couponModalVisible = couponModalVisible,
+        sharedTransitionScope = sharedTransitionScope,
+        animatedContentScope = animatedContentScope,
         onRefresh = viewModel::onRefresh,
         onLoadMore = viewModel::onLoadMore,
         shouldTriggerLoadMore = viewModel::shouldTriggerLoadMore,
@@ -124,6 +132,8 @@ internal fun HomeRoute(
  * @param isRefreshing 是否正在刷新
  * @param loadMoreState 加载更多状态
  * @param couponModalVisible 优惠券弹窗是否可见
+ * @param sharedTransitionScope 共享转换作用域
+ * @param animatedContentScope 动画内容作用域
  * @param onRefresh 下拉刷新回调
  * @param onLoadMore 加载更多回调
  * @param shouldTriggerLoadMore 是否应该触发加载更多的判断函数
@@ -138,7 +148,7 @@ internal fun HomeRoute(
  * @param onCouponReceive 领取优惠券回调
  * @param onRetry 重试请求回调
  */
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
 internal fun HomeScreen(
     uiState: BaseNetWorkListUiState = BaseNetWorkListUiState.Loading,
@@ -147,6 +157,8 @@ internal fun HomeScreen(
     isRefreshing: Boolean = false,
     loadMoreState: LoadMoreState = LoadMoreState.Success,
     couponModalVisible: Boolean = false,
+    sharedTransitionScope: SharedTransitionScope? = null,
+    animatedContentScope: AnimatedContentScope? = null,
     onRefresh: () -> Unit = {},
     onLoadMore: () -> Unit = {},
     shouldTriggerLoadMore: (lastIndex: Int, totalCount: Int) -> Boolean = { _, _ -> false },
@@ -167,6 +179,8 @@ internal fun HomeScreen(
         topBar = {
             HomeTopAppBar(
                 scrollBehavior = scrollBehavior,
+                sharedTransitionScope = sharedTransitionScope,
+                animatedContentScope = animatedContentScope,
                 toGoodsSearch = toGoodsSearch,
                 toGitHubPage = toGitHubPage,
                 toAboutPage = toAboutPage
@@ -474,14 +488,18 @@ private fun FlashSale(
 /**
  * 首页顶部导航栏
  * @param scrollBehavior 滚动行为
+ * @param sharedTransitionScope 共享转换作用域
+ * @param animatedContentScope 动画内容作用域
  * @param toGoodsSearch 跳转到商品搜索页
  * @param toGitHubPage 跳转到GitHub页
  * @param toAboutPage 跳转到关于页
  */
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
 private fun HomeTopAppBar(
     scrollBehavior: TopAppBarScrollBehavior,
+    sharedTransitionScope: SharedTransitionScope? = null,
+    animatedContentScope: AnimatedContentScope? = null,
     toGoodsSearch: () -> Unit,
     toGitHubPage: () -> Unit,
     toAboutPage: () -> Unit
@@ -492,7 +510,19 @@ private fun HomeTopAppBar(
             LogoIcon(
                 modifier = Modifier
                     .padding(horizontal = 8.dp)
-                    .clickable { toAboutPage() },
+                    .clickable { toAboutPage() }
+                    .let { modifier ->
+                        if (sharedTransitionScope != null && animatedContentScope != null) {
+                            with(sharedTransitionScope) {
+                                modifier.sharedElement(
+                                    sharedContentState = rememberSharedContentState(key = "app_logo"),
+                                    animatedVisibilityScope = animatedContentScope
+                                )
+                            }
+                        } else {
+                            modifier
+                        }
+                    },
                 size = 34.dp
             )
         },
@@ -639,10 +669,14 @@ private fun CouponCard(coupon: Coupon) {
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Preview(showBackground = true)
 @Composable
 fun HomeScreenPreview() {
     AppTheme {
-        HomeScreen()
+        HomeScreen(
+            sharedTransitionScope = null,
+            animatedContentScope = null
+        )
     }
 }

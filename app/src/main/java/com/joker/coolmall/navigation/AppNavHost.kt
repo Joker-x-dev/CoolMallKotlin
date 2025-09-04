@@ -13,11 +13,12 @@ import com.joker.coolmall.feature.auth.navigation.authGraph
 import com.joker.coolmall.feature.common.navigation.commonGraph
 import com.joker.coolmall.feature.cs.navigation.csGraph
 import com.joker.coolmall.feature.goods.navigation.goodsGraph
+import com.joker.coolmall.feature.launch.navigation.launchGraph
 import com.joker.coolmall.feature.main.navigation.mainGraph
 import com.joker.coolmall.feature.market.navigation.marketGraph
 import com.joker.coolmall.feature.order.navigation.orderGraph
 import com.joker.coolmall.feature.user.navigation.userGraph
-import com.joker.coolmall.navigation.routes.MainRoutes
+import com.joker.coolmall.navigation.routes.LaunchRoutes
 import kotlinx.coroutines.flow.collectLatest
 
 /**
@@ -42,7 +43,7 @@ fun AppNavHost(
     SharedTransitionLayout {
         NavHost(
             navController = navController,
-            startDestination = MainRoutes.MAIN,
+            startDestination = LaunchRoutes.SPLASH,
             modifier = modifier,
             // 页面进入动画
             enterTransition = {
@@ -85,6 +86,7 @@ fun AppNavHost(
             csGraph(navController)
             commonGraph(navController)
             marketGraph(navController)
+            launchGraph(navController,this@SharedTransitionLayout)
         }
     }
 }
