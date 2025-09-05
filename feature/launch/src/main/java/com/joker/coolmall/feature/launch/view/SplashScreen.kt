@@ -8,6 +8,7 @@ package com.joker.coolmall.feature.launch.view
 import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -15,6 +16,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.offset
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -27,8 +29,9 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.blur
-import androidx.compose.ui.draw.scale
+import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.joker.coolmall.core.designsystem.theme.AppTheme
@@ -108,22 +111,37 @@ private fun SplashContentView(
         toHome()
     }
 
-    // Logo缩放动画
-    val logoScale by animateFloatAsState(
-        targetValue = if (startAnimation) 1f else 0.8f,
+    // Logo Y偏移
+    val logoOffsetY by animateDpAsState(
+        targetValue = if (startAnimation) 0.dp else 160.dp,
         animationSpec = tween(durationMillis = 1000),
-        label = "logoScale"
+        label = "logoOffsetY"
+    )
+
+    // Logo 旋转
+    val logoRotation by animateFloatAsState(
+        targetValue = if (startAnimation) 0f else -15f,
+        animationSpec = tween(durationMillis = 1000),
+        label = "logoRotation"
+    )
+
+    // Logo 透明度
+    val logoAlpha by animateFloatAsState(
+        targetValue = if (startAnimation) 1f else 0f,
+        animationSpec = tween(durationMillis = 800),
+        label = "logoAlpha"
     )
 
     // 内容透明度动画
-    val contentAlpha by animateFloatAsState(
+    val textAlpha by animateFloatAsState(
         targetValue = if (startAnimation) 1f else 0f,
-        animationSpec = tween(durationMillis = 800, delayMillis = 200),
-        label = "contentAlpha"
+        animationSpec = tween(durationMillis = 800, delayMillis = 400),
+        label = "textAlpha"
     )
 
     Box(
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .background(MaterialTheme.colorScheme.surface),
         contentAlignment = Alignment.Center,
     ) {
@@ -132,8 +150,10 @@ private fun SplashContentView(
 
         // 前景内容
         ForegroundContentSection(
-            logoScale = logoScale,
-            contentAlpha = contentAlpha,
+            logoOffsetY = logoOffsetY,
+            logoRotation = logoRotation,
+            logoAlpha = logoAlpha,
+            textAlpha = textAlpha,
             sharedTransitionScope = sharedTransitionScope,
             animatedContentScope = animatedContentScope
         )
@@ -149,27 +169,31 @@ private fun BackgroundLogoSection() {
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .fillMaxSize()
-            .blur(radius = 80.dp)
-            .alpha(0.6f)
+            .blur(radius = 100.dp)
+            .alpha(0.8f)
     ) {
         // 背景大Logo
-        LogoIcon(size = 200.dp)
+        LogoIcon(size = 240.dp)
     }
 }
 
 /**
  * 前景内容区域
  *
- * @param logoScale Logo缩放比例
- * @param contentAlpha 内容透明度
+ * @param logoOffsetY Logo Y 轴偏移
+ * @param logoRotation Logo 旋转角度
+ * @param logoAlpha Logo 透明度
+ * @param textAlpha 文本透明度
  * @param sharedTransitionScope 共享转换作用域
  * @param animatedContentScope 动画内容作用域
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun ForegroundContentSection(
-    logoScale: Float = 1f,
-    contentAlpha: Float = 1f,
+    logoOffsetY: Dp = 0.dp,
+    logoRotation: Float = 0f,
+    logoAlpha: Float = 1f,
+    textAlpha: Float = 1f,
     sharedTransitionScope: SharedTransitionScope? = null,
     animatedContentScope: AnimatedContentScope? = null
 ) {
@@ -177,7 +201,6 @@ private fun ForegroundContentSection(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
-            .alpha(contentAlpha)
     ) {
         // 上方空白区域，将Logo推向中心
         Spacer(modifier = Modifier.weight(1f))
@@ -185,7 +208,9 @@ private fun ForegroundContentSection(
         // 前景Logo
         LogoIcon(
             modifier = Modifier
-                .scale(logoScale)
+                .offset(y = logoOffsetY)
+                .rotate(logoRotation)
+                .alpha(logoAlpha)
                 .let { modifier ->
                     if (sharedTransitionScope != null && animatedContentScope != null) {
                         with(sharedTransitionScope) {
@@ -203,20 +228,25 @@ private fun ForegroundContentSection(
 
         Spacer(modifier = Modifier.weight(1f))
 
-        AppText(
-            text = "青商城",
-            size = TextSize.TITLE_LARGE,
-            color = MaterialTheme.colorScheme.onSurface
-        )
+        Column(
+            modifier = Modifier.alpha(textAlpha),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            AppText(
+                text = "青商城",
+                size = TextSize.TITLE_LARGE,
+                color = MaterialTheme.colorScheme.onSurface
+            )
 
-        SpaceVerticalMedium()
+            SpaceVerticalMedium()
 
-        // 底部应用信息
-        AppText(
-            text = "© 2025 Joker.X & CoolMallKotlin Contributors",
-            size = TextSize.BODY_MEDIUM,
-            type = TextType.TERTIARY,
-        )
+            // 底部应用信息
+            AppText(
+                text = "© 2025 Joker.X & CoolMallKotlin Contributors",
+                size = TextSize.BODY_MEDIUM,
+                type = TextType.TERTIARY,
+            )
+        }
 
         // 底部边距
         SpaceVerticalXXLarge()
