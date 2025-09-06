@@ -33,7 +33,7 @@ coreKtx = "1.17.0"
 # AndroidX Activity Compose: https://developer.android.com/jetpack/androidx/releases/activity
 activityCompose = "1.10.1"
 # AndroidX Lifecycle Runtime KTX: https://developer.android.com/jetpack/androidx/releases/lifecycle
-lifecycleRuntimeKtx = "2.9.2"
+lifecycleRuntimeKtx = "2.9.3"
 
 # 测试框架版本
 # JUnit 4 测试框架: https://junit.org/junit4/
@@ -92,7 +92,7 @@ coilCompose = "2.7.0"
 # AndroidX AppCompat: https://developer.android.com/jetpack/androidx/releases/appcompat
 appcompat = "1.7.1"
 # Material Design Components: https://github.com/material-components/material-components-android
-material = "1.12.0"
+material = "1.13.0"
 
 # 启动页相关版本
 # AndroidX Core Splashscreen: https://developer.android.com/jetpack/androidx/releases/core
