@@ -14,5 +14,5 @@ fun NavGraphBuilder.launchGraph(
     sharedTransitionScope: SharedTransitionScope
 ) {
     splashScreen(sharedTransitionScope)
-    guideScreen(sharedTransitionScope)
+    guideScreen()
 }
