@@ -135,7 +135,6 @@ Android 开发感兴趣，无论是学习还是共同创造，都欢迎加入。
 
 - **用户体系模块 (user)**
     - 个人中心 (profile) `仅页面`
-    - 设置模块 (settings) `待开发`
     - 收货地址列表 (address-list) `已完成`
     - 收货地址详情 (address-detail) `已完成`
     - 用户足迹 (footprint) `已完成`
@@ -174,6 +173,7 @@ Android 开发感兴趣，无论是学习还是共同创造，都欢迎加入。
 - **通用模块 (common)**
     - 关于我们 (about) `仅页面`
     - WebView 页面 (web) `已完成`
+    - 应用设置 (settings) `仅页面`
 
 
 - **启动流程模块 (launch)**

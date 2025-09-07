@@ -11,6 +11,7 @@ import com.joker.coolmall.core.model.entity.Footprint
 import com.joker.coolmall.core.model.entity.OrderCount
 import com.joker.coolmall.core.model.entity.User
 import com.joker.coolmall.navigation.AppNavigator
+import com.joker.coolmall.navigation.routes.CommonRoutes
 import com.joker.coolmall.navigation.routes.CsRoutes
 import com.joker.coolmall.navigation.routes.GoodsRoutes
 import com.joker.coolmall.navigation.routes.MarketRoutes
@@ -166,5 +167,12 @@ class MeViewModel @Inject constructor(
      */
     fun toChatPage() {
         super.toPage(CsRoutes.CHAT)
+    }
+
+    /**
+     * 跳转到设置页面
+     */
+    fun toSettingsPage() {
+        super.toPage(CommonRoutes.SETTINGS)
     }
 }

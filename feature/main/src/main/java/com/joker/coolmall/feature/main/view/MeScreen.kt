@@ -109,6 +109,7 @@ internal fun MeRoute(
         toGoodsDetail = viewModel::toGoodsDetailPage,
         toChat = viewModel::toChatPage,
         toCoupon = viewModel::toCouponPage,
+        toSettings = viewModel::toSettingsPage,
     )
 }
 
@@ -129,6 +130,7 @@ internal fun MeScreen(
     toGoodsDetail: (Long) -> Unit = {},
     toChat: () -> Unit = {},
     toCoupon: () -> Unit = {},
+    toSettings: () -> Unit = {},
 ) {
     CommonScaffold(topBar = { }) {
         VerticalList(
@@ -168,6 +170,7 @@ internal fun MeScreen(
                 toAddressList = toAddressList,
                 toChat = toChat,
                 toCoupon = toCoupon,
+                toSettings = toSettings,
             )
 
         }
@@ -480,6 +483,7 @@ private fun FunctionMenuSection(
     toAddressList: () -> Unit,
     toChat: () -> Unit,
     toCoupon: () -> Unit,
+    toSettings: () -> Unit,
 ) {
     Card {
         AppListItem(
@@ -515,7 +519,8 @@ private fun FunctionMenuSection(
             leadingIcon = R.drawable.ic_set_fill,
             leadingIconTint = Color(0xFF26A69A),
             verticalPadding = SpaceVerticalLarge,
-            showDivider = false
+            showDivider = false,
+            onClick = toSettings
         )
     }
 }

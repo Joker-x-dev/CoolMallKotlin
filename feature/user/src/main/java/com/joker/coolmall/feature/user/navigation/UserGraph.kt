@@ -16,7 +16,6 @@ fun NavGraphBuilder.userGraph(
     sharedTransitionScope: SharedTransitionScope
 ) {
     profileScreen(sharedTransitionScope)
-    settingsScreen()
     addressListScreen(navController)
     addressDetailScreen()
     footprintScreen()

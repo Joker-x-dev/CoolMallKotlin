@@ -11,4 +11,5 @@ import androidx.navigation.NavHostController
 fun NavGraphBuilder.commonGraph(navController: NavHostController) {
     aboutScreen()
     webScreen()
-} 
+    settingsScreen()
+}

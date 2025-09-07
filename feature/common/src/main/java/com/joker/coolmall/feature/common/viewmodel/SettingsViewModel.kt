@@ -1,4 +1,4 @@
-package com.joker.coolmall.feature.user.viewmodel
+package com.joker.coolmall.feature.common.viewmodel
 
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
 import com.joker.coolmall.core.data.state.AppState

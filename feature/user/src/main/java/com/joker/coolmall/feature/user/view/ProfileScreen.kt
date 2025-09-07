@@ -57,7 +57,6 @@ internal fun ProfileRoute(
         onLogoutClick = viewModel::logout,
         sharedTransitionScope = sharedTransitionScope,
         animatedContentScope = animatedContentScope,
-        isLoggedIn = isLoggedIn,
         userInfo = userInfo,
         routeAvatarUrl = viewModel.routeAvatarUrl
     )
@@ -67,8 +66,9 @@ internal fun ProfileRoute(
  * 个人中心界面
  *
  * @param onBackClick 返回上一页回调
- * @param isLoggedIn 登录状态
- * @param userInfo 用户信息
+ * @param onLogoutClick 退出登录回调
+ * @param sharedTransitionScope 共享转换作用域
+ * @param animatedContentScope 动画内容作用域
  */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
@@ -77,7 +77,6 @@ internal fun ProfileScreen(
     onLogoutClick: () -> Unit = {},
     sharedTransitionScope: SharedTransitionScope? = null,
     animatedContentScope: AnimatedContentScope? = null,
-    isLoggedIn: Boolean = false,
     userInfo: User? = null,
     routeAvatarUrl: String? = null
 ) {
@@ -86,140 +85,168 @@ internal fun ProfileScreen(
         useLargeTopBar = true,
         onBackClick = onBackClick
     ) {
-        VerticalList(
-            modifier = Modifier.verticalScroll(rememberScrollState())
-        ) {
-            Card {
-                AppListItem(
-                    title = "头像",
-                    showArrow = false,
-                    verticalPadding = SpaceVerticalXSmall,
-                    horizontalPadding = SpaceHorizontalLarge,
-                    trailingContent = {
-                        SmallAvatar(
-                            avatarUrl = routeAvatarUrl ?: userInfo?.avatarUrl,
-                            modifier = Modifier.let { modifier ->
-                                if (sharedTransitionScope != null && animatedContentScope != null) {
-                                    with(sharedTransitionScope) {
-                                        modifier.sharedElement(
-                                            sharedContentState = rememberSharedContentState(key = "user_avatar"),
-                                            animatedVisibilityScope = animatedContentScope
-                                        )
-                                    }
-                                } else {
-                                    modifier
+        ProfileContentView(
+            onLogoutClick = onLogoutClick,
+            sharedTransitionScope = sharedTransitionScope,
+            animatedContentScope = animatedContentScope,
+            userInfo = userInfo,
+            routeAvatarUrl = routeAvatarUrl
+        )
+    }
+}
+
+@OptIn(ExperimentalSharedTransitionApi::class)
+@Composable
+private fun ProfileContentView(
+    onLogoutClick: () -> Unit,
+    sharedTransitionScope: SharedTransitionScope? = null,
+    animatedContentScope: AnimatedContentScope? = null,
+    userInfo: User? = null,
+    routeAvatarUrl: String? = null
+) {
+    VerticalList(
+        modifier = Modifier.verticalScroll(rememberScrollState())
+    ) {
+        Card {
+            AppListItem(
+                title = "头像",
+                showArrow = false,
+                verticalPadding = SpaceVerticalSmall,
+                horizontalPadding = SpaceHorizontalLarge,
+                trailingContent = {
+                    SmallAvatar(
+                        avatarUrl = routeAvatarUrl ?: userInfo?.avatarUrl,
+                        modifier = Modifier.let { modifier ->
+                            if (sharedTransitionScope != null && animatedContentScope != null) {
+                                with(sharedTransitionScope) {
+                                    modifier.sharedElement(
+                                        sharedContentState = rememberSharedContentState(key = "user_avatar"),
+                                        animatedVisibilityScope = animatedContentScope
+                                    )
                                 }
+                            } else {
+                                modifier
                             }
-                        )
-                    }
-                )
-
-                AppListItem(
-                    title = "昵称",
-                    showArrow = false,
-                    showDivider = false,
-                    horizontalPadding = SpaceHorizontalLarge,
-                    trailingContent = {
-                        AppText(
-                            userInfo?.nickName ?: "未设置",
-                            type = TextType.TERTIARY
-                        )
-                    }
-                )
-            }
-
-            TitleWithLine(
-                text = "账号信息", modifier = Modifier
-                    .padding(top = SpaceVerticalSmall)
-            )
-
-            Card {
-                AppListItem(
-                    title = "手机号",
-                    showArrow = false,
-                    horizontalPadding = SpaceHorizontalLarge,
-                    trailingContent = {
-                        AppText(
-                            userInfo?.phone ?: "未绑定",
-                            type = TextType.TERTIARY
-                        )
-                    }
-                )
-
-                AppListItem(
-                    title = "账号",
-                    showArrow = false,
-                    showDivider = false,
-                    horizontalPadding = SpaceHorizontalLarge,
-                    trailingContent = {
-                        AppText(
-                            userInfo?.id?.toString() ?: "未设置",
-                            type = TextType.TERTIARY
-                        )
-                    }
-                )
-            }
-
-            TitleWithLine(
-                text = "社交账号", modifier = Modifier
-                    .padding(top = SpaceVerticalSmall)
-            )
-
-            Card {
-                AppListItem(
-                    title = "微信",
-                    showArrow = false,
-                    horizontalPadding = SpaceHorizontalLarge,
-                    trailingContent = {
-                        AppText(
-                            "去绑定",
-                            type = TextType.TERTIARY
-                        )
-                    }
-                )
-
-                AppListItem(
-                    title = " QQ",
-                    showArrow = false,
-                    showDivider = false,
-                    horizontalPadding = SpaceHorizontalLarge,
-                    trailingContent = {
-                        AppText(
-                            " 已绑定",
-                            type = TextType.TERTIARY
-                        )
-                    }
-                )
-            }
-
-            TitleWithLine(
-                text = "安全", modifier = Modifier
-                    .padding(top = SpaceVerticalSmall)
-            )
-
-            Card {
-                AppListItem(title = "修改密码", horizontalPadding = SpaceHorizontalLarge)
-
-                AppListItem(
-                    title = " 注销账户",
-                    showDivider = false,
-                    horizontalPadding = SpaceHorizontalLarge,
-                )
-            }
-
-            Card(
-                modifier = Modifier.clickable { onLogoutClick() }
-            ) {
-                CenterBox(
-                    padding = SpaceVerticalLarge,
-                    fillMaxSize = false
-                ) {
-                    AppText(
-                        "退出登录",
-                        type = TextType.ERROR,
-                        textAlign = TextAlign.Center
+                        }
                     )
                 }
+            )
+
+            AppListItem(
+                title = "昵称",
+                showArrow = false,
+                showDivider = false,
+                horizontalPadding = SpaceHorizontalLarge,
+                verticalPadding = SpaceVerticalLarge,
+                trailingContent = {
+                    AppText(
+                        userInfo?.nickName ?: "未设置",
+                        type = TextType.TERTIARY
+                    )
+                }
+            )
+        }
+
+        TitleWithLine(
+            text = "账号信息", modifier = Modifier
+                .padding(top = SpaceVerticalSmall)
+        )
+
+        Card {
+            AppListItem(
+                title = "手机号",
+                showArrow = false,
+                horizontalPadding = SpaceHorizontalLarge,
+                verticalPadding = SpaceVerticalLarge,
+                trailingContent = {
+                    AppText(
+                        userInfo?.phone ?: "未绑定",
+                        type = TextType.TERTIARY
+                    )
+                }
+            )
+
+            AppListItem(
+                title = "账号",
+                showArrow = false,
+                showDivider = false,
+                horizontalPadding = SpaceHorizontalLarge,
+                verticalPadding = SpaceVerticalLarge,
+                trailingContent = {
+                    AppText(
+                        userInfo?.id?.toString() ?: "未设置",
+                        type = TextType.TERTIARY
+                    )
+                }
+            )
+        }
+
+        TitleWithLine(
+            text = "社交账号", modifier = Modifier
+                .padding(top = SpaceVerticalSmall)
+        )
+
+        Card {
+            AppListItem(
+                title = "微信",
+                showArrow = false,
+                horizontalPadding = SpaceHorizontalLarge,
+                verticalPadding = SpaceVerticalLarge,
+                trailingContent = {
+                    AppText(
+                        "去绑定",
+                        type = TextType.TERTIARY
+                    )
+                }
+            )
+
+            AppListItem(
+                title = " QQ",
+                showArrow = false,
+                showDivider = false,
+                horizontalPadding = SpaceHorizontalLarge,
+                verticalPadding = SpaceVerticalLarge,
+                trailingContent = {
+                    AppText(
+                        " 已绑定",
+                        type = TextType.TERTIARY
+                    )
+                }
+            )
+        }
+
+        TitleWithLine(
+            text = "安全", modifier = Modifier
+                .padding(top = SpaceVerticalSmall)
+        )
+
+        Card {
+            AppListItem(
+                title = "修改密码",
+                horizontalPadding = SpaceHorizontalLarge,
+                verticalPadding = SpaceVerticalLarge
+            )
+
+            AppListItem(
+                title = " 注销账户",
+                showDivider = false,
+                horizontalPadding = SpaceHorizontalLarge,
+                verticalPadding = SpaceVerticalLarge
+            )
+        }
+
+        Card(
+            modifier = Modifier.clickable { onLogoutClick() }
+        ) {
+            CenterBox(
+                padding = SpaceVerticalLarge,
+                fillMaxSize = false
+            ) {
+                AppText(
+                    "退出登录",
+                    type = TextType.ERROR,
+                    textAlign = TextAlign.Center
+                )
             }
         }
     }
@@ -228,21 +255,23 @@ internal fun ProfileScreen(
 /**
  * 个人中心界面浅色主题预览
  */
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 @Preview(showBackground = true)
 fun ProfileScreenPreview() {
     AppTheme {
-//        ProfileScreen()
+        ProfileScreen()
     }
 }
 
 /**
  * 个人中心界面深色主题预览
  */
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 @Preview(showBackground = true)
 fun ProfileScreenPreviewDark() {
     AppTheme(darkTheme = true) {
-//        ProfileScreen()
+        ProfileScreen()
     }
 }

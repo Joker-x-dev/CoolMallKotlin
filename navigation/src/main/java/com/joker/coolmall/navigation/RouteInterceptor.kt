@@ -19,7 +19,6 @@ class RouteInterceptor {
     private val loginRequiredRoutes = setOf(
         // 用户模块 - 需要登录的页面
         UserRoutes.PROFILE,
-        UserRoutes.SETTINGS,
         UserRoutes.ADDRESS_LIST,
         UserRoutes.ADDRESS_DETAIL,
 
@@ -28,6 +27,9 @@ class RouteInterceptor {
         OrderRoutes.CONFIRM,
         OrderRoutes.DETAIL,
         OrderRoutes.PAY,
+        OrderRoutes.REFUND,
+        OrderRoutes.COMMENT,
+        OrderRoutes.LOGISTICS,
 
         // 客服模块 - 需要登录的页面
         CsRoutes.CHAT,

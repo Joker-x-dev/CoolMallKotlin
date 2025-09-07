@@ -15,11 +15,6 @@ object UserRoutes {
     const val PROFILE = "$USER_ROUTE/profile"
 
     /**
-     * 设置模块路由
-     */
-    const val SETTINGS = "$USER_ROUTE/settings"
-
-    /**
      * 收货地址列表路由
      */
     const val ADDRESS_LIST = "$USER_ROUTE/address-list"

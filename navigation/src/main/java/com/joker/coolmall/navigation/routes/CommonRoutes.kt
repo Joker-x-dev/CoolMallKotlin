@@ -8,14 +8,19 @@ object CommonRoutes {
      * 公共信息模块根路由
      */
     private const val COMMON_ROUTE = "common"
-    
+
     /**
      * 关于我们路由
      */
     const val ABOUT = "$COMMON_ROUTE/about"
-    
+
     /**
      * WebView 页面路由
      */
     const val WEB = "$COMMON_ROUTE/web"
+
+    /**
+     * 设置页面路由
+     */
+    const val SETTINGS = "$COMMON_ROUTE/settings"
 }
