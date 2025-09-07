@@ -61,7 +61,7 @@ internal fun SplashRoute(
     SplashScreen(
         sharedTransitionScope = sharedTransitionScope,
         animatedContentScope = animatedContentScope,
-        toHome = viewModel::toMainPage
+        toHome = viewModel::checkGuideStatusAndNavigate
     )
 }
 
