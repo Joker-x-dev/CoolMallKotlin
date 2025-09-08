@@ -18,12 +18,9 @@ import com.joker.coolmall.core.designsystem.component.VerticalList
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
-import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.ui.component.list.AppListItem
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
-import com.joker.coolmall.core.ui.component.text.AppText
-import com.joker.coolmall.core.ui.component.text.TextType
 import com.joker.coolmall.core.ui.component.title.TitleWithLine
 import com.joker.coolmall.feature.common.R
 import com.joker.coolmall.feature.common.viewmodel.SettingsViewModel
@@ -70,6 +67,16 @@ private fun SettingsContentView() {
     VerticalList(
         modifier = Modifier.verticalScroll(rememberScrollState())
     ) {
+
+        Card {
+            AppListItem(
+                title = "账号与安全",
+                showDivider = false,
+                horizontalPadding = SpaceHorizontalLarge,
+                verticalPadding = SpaceVerticalLarge,
+            )
+        }
+
         TitleWithLine(
             text = "外观与语言",
             modifier = Modifier.padding(top = SpaceVerticalSmall)
@@ -79,15 +86,10 @@ private fun SettingsContentView() {
             // 夜间模式
             AppListItem(
                 title = "夜间模式",
-                showArrow = false,
+                showArrow = true,
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge,
-                trailingContent = {
-                    AppText(
-                        "跟随系统",
-                        type = TextType.TERTIARY
-                    )
-                }
+                trailingText = "跟随系统"
             )
 
             // 动态主题色
