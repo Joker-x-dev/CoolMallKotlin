@@ -97,6 +97,8 @@ dependencies {
     implementation(project(":feature:common"))
     // 营销模块
     implementation(project(":feature:market"))
+    // 反馈模块
+    implementation(project(":feature:feedback"))
     // 启动流程模块
     implementation(project(":feature:launch"))
 

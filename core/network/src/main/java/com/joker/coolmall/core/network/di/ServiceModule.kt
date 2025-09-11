@@ -7,6 +7,7 @@ import com.joker.coolmall.core.network.service.BannerService
 import com.joker.coolmall.core.network.service.CommonService
 import com.joker.coolmall.core.network.service.CouponService
 import com.joker.coolmall.core.network.service.CustomerServiceService
+import com.joker.coolmall.core.network.service.FeedbackService
 import com.joker.coolmall.core.network.service.FileUploadService
 import com.joker.coolmall.core.network.service.impl.FileUploadServiceImpl
 import com.joker.coolmall.core.network.service.GoodsService
@@ -167,5 +168,17 @@ object ServiceModule {
             okHttpClient = okHttpClient,
             context = context
         )
+    }
+
+    /**
+     * 提供意见反馈相关服务接口
+     *
+     * @param retrofit Retrofit实例
+     * @return 意见反馈服务接口实现
+     */
+    @Provides
+    @Singleton
+    fun provideFeedbackService(retrofit: Retrofit): FeedbackService {
+        return retrofit.create(FeedbackService::class.java)
     }
 }

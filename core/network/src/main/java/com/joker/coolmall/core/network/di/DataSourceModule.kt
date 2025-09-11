@@ -12,6 +12,8 @@ import com.joker.coolmall.core.network.datasource.coupon.CouponNetworkDataSource
 import com.joker.coolmall.core.network.datasource.coupon.CouponNetworkDataSourceImpl
 import com.joker.coolmall.core.network.datasource.cs.CustomerServiceNetworkDataSource
 import com.joker.coolmall.core.network.datasource.cs.CustomerServiceNetworkDataSourceImpl
+import com.joker.coolmall.core.network.datasource.feedback.FeedbackNetworkDataSource
+import com.joker.coolmall.core.network.datasource.feedback.FeedbackNetworkDataSourceImpl
 import com.joker.coolmall.core.network.datasource.fileupload.FileUploadNetworkDataSource
 import com.joker.coolmall.core.network.datasource.fileupload.FileUploadNetworkDataSourceImpl
 import com.joker.coolmall.core.network.datasource.goods.GoodsNetworkDataSource
@@ -28,6 +30,7 @@ import com.joker.coolmall.core.network.service.BannerService
 import com.joker.coolmall.core.network.service.CommonService
 import com.joker.coolmall.core.network.service.CouponService
 import com.joker.coolmall.core.network.service.CustomerServiceService
+import com.joker.coolmall.core.network.service.FeedbackService
 import com.joker.coolmall.core.network.service.GoodsService
 import com.joker.coolmall.core.network.service.OrderService
 import com.joker.coolmall.core.network.service.PageService
@@ -172,9 +175,9 @@ object DataSourceModule {
     /**
      * 提供文件上传网络数据源
      *
-     * @param commonNetworkDataSource 通用网络数据源
-     * @param fileUploadService 文件上传服务
-     * @return 文件上传网络数据源接口
+     * @param commonNetworkDataSource 通用网络数据源，用于获取上传配置
+     * @param fileUploadService 文件上传服务接口
+     * @return 文件上传网络数据源实现
      */
     @Provides
     @Singleton
@@ -183,8 +186,20 @@ object DataSourceModule {
         fileUploadService: FileUploadService
     ): FileUploadNetworkDataSource {
         return FileUploadNetworkDataSourceImpl(
-            commonNetworkDataSource = commonNetworkDataSource,
-            fileUploadService = fileUploadService
+            commonNetworkDataSource,
+            fileUploadService
         )
+    }
+
+    /**
+     * 提供意见反馈网络数据源
+     *
+     * @param feedbackService 意见反馈服务接口
+     * @return 意见反馈网络数据源实现
+     */
+    @Provides
+    @Singleton
+    fun provideFeedbackNetworkDataSource(feedbackService: FeedbackService): FeedbackNetworkDataSource {
+        return FeedbackNetworkDataSourceImpl(feedbackService)
     }
 }

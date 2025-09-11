@@ -63,9 +63,9 @@ import com.joker.coolmall.core.ui.component.text.AppText
 import com.joker.coolmall.core.ui.component.text.TextSize
 import com.joker.coolmall.core.ui.component.text.TextType
 import com.joker.coolmall.feature.main.R
-import com.joker.coolmall.core.ui.R as CoreUiR
 import com.joker.coolmall.feature.main.component.CommonScaffold
 import com.joker.coolmall.feature.main.viewmodel.MeViewModel
+import com.joker.coolmall.core.ui.R as CoreUiR
 
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -109,6 +109,8 @@ internal fun MeRoute(
         toGoodsDetail = viewModel::toGoodsDetailPage,
         toChat = viewModel::toChatPage,
         toCoupon = viewModel::toCouponPage,
+        toFeedback = viewModel::toFeedbackPage,
+        toAbout = viewModel::toAboutPage,
         toSettings = viewModel::toSettingsPage,
     )
 }
@@ -130,6 +132,8 @@ internal fun MeScreen(
     toGoodsDetail: (Long) -> Unit = {},
     toChat: () -> Unit = {},
     toCoupon: () -> Unit = {},
+    toFeedback: () -> Unit = {},
+    toAbout: () -> Unit = {},
     toSettings: () -> Unit = {},
 ) {
     CommonScaffold(topBar = { }) {
@@ -139,6 +143,9 @@ internal fun MeScreen(
                 .padding(it)
                 .verticalScroll(rememberScrollState())
         ) {
+
+            SpaceVerticalMedium()
+
             // 用户信息区域
             UserInfoSection(
                 sharedTransitionScope = sharedTransitionScope,
@@ -170,6 +177,8 @@ internal fun MeScreen(
                 toAddressList = toAddressList,
                 toChat = toChat,
                 toCoupon = toCoupon,
+                toFeedback = toFeedback,
+                toAbout = toAbout,
                 toSettings = toSettings,
             )
 
@@ -359,37 +368,20 @@ private fun MyFootprintSection(
     Card {
         AppListItem(
             title = "我的足迹",
-            trailingText = if (footprints.isNotEmpty()) "查看全部" else "暂无足迹",
+            trailingText = "查看全部",
             leadingIcon = R.drawable.ic_footprint_fill,
             leadingIconTint = Color(0xFFFF9800),
             onClick = toUserFootprint
         )
-
-        if (footprints.isNotEmpty()) {
-            // 水平滚动的产品列表
-            LazyRow(
-                horizontalArrangement = Arrangement.spacedBy(12.dp),
-                modifier = Modifier.padding(SpacePaddingMedium)
-            ) {
-                items(footprints) { footprint ->
-                    FootprintItem(
-                        footprint = footprint,
-                        onClick = { toGoodsDetail(footprint.goodsId) }
-                    )
-                }
-            }
-        } else {
-            // 空状态提示
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(SpaceVerticalLarge),
-                contentAlignment = Alignment.Center
-            ) {
-                AppText(
-                    text = "暂无浏览记录",
-                    type = TextType.TERTIARY,
-                    size = TextSize.BODY_MEDIUM
+        // 水平滚动的产品列表
+        LazyRow(
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            modifier = Modifier.padding(SpacePaddingMedium)
+        ) {
+            items(footprints) { footprint ->
+                FootprintItem(
+                    footprint = footprint,
+                    onClick = { toGoodsDetail(footprint.goodsId) }
                 )
             }
         }
@@ -483,19 +475,21 @@ private fun FunctionMenuSection(
     toAddressList: () -> Unit,
     toChat: () -> Unit,
     toCoupon: () -> Unit,
+    toFeedback: () -> Unit,
+    toAbout: () -> Unit,
     toSettings: () -> Unit,
 ) {
     Card {
         AppListItem(
             title = "优惠券",
             leadingIcon = R.drawable.ic_coupon_fill,
-            leadingIconTint = Color(0xFFFF9800),
+            leadingIconTint = Color(0xFF6A9BE6),
             verticalPadding = SpaceVerticalLarge,
             onClick = toCoupon
         )
 
         AppListItem(
-            title = "收货人",
+            title = "收货地址",
             leadingIcon = R.drawable.ic_location_fill,
             leadingIconTint = Color(0xFF66BB6A),
             verticalPadding = SpaceVerticalLarge,
@@ -503,12 +497,28 @@ private fun FunctionMenuSection(
         )
 
         AppListItem(
-            title = "客服",
+            title = "在线客服",
             leadingIcon = R.drawable.ic_service_fill,
             leadingIconTint = Color(0xFFF87C7B),
             verticalPadding = SpaceVerticalLarge,
-            showDivider = false,
             onClick = toChat
+        )
+
+        AppListItem(
+            title = "意见反馈",
+            leadingIcon = R.drawable.ic_creative_fill,
+            leadingIconTint = Color(0xFFF3AF76),
+            verticalPadding = SpaceVerticalLarge,
+            onClick = toFeedback
+        )
+
+        AppListItem(
+            title = "关于我们",
+            leadingIcon = R.drawable.ic_tip_fill,
+            leadingIconTint = Color(0xFF9179F1),
+            verticalPadding = SpaceVerticalLarge,
+            showDivider = false,
+            onClick = toAbout
         )
     }
 
@@ -525,18 +535,20 @@ private fun FunctionMenuSection(
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Preview(showBackground = true)
 @Composable
 fun MeScreenPreview() {
     AppTheme {
-//        MeScreen()
+        MeScreen()
     }
 }
 
+@OptIn(ExperimentalSharedTransitionApi::class)
 @Preview(showBackground = true)
 @Composable
 fun MeScreenPreviewDark() {
     AppTheme(darkTheme = true) {
-//        MeScreen()
+        MeScreen()
     }
 }

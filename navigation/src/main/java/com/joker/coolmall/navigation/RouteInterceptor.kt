@@ -2,6 +2,7 @@ package com.joker.coolmall.navigation
 
 import com.joker.coolmall.navigation.routes.AuthRoutes
 import com.joker.coolmall.navigation.routes.CsRoutes
+import com.joker.coolmall.navigation.routes.FeedbackRoutes
 import com.joker.coolmall.navigation.routes.MarketRoutes
 import com.joker.coolmall.navigation.routes.OrderRoutes
 import com.joker.coolmall.navigation.routes.UserRoutes
@@ -35,7 +36,11 @@ class RouteInterceptor {
         CsRoutes.CHAT,
 
         // 营销模块 - 需要登录的页面
-        MarketRoutes.COUPON
+        MarketRoutes.COUPON,
+
+        // 反馈模块 - 需要登录的页面
+        FeedbackRoutes.LIST,
+        FeedbackRoutes.SUBMIT
     )
 
     /**

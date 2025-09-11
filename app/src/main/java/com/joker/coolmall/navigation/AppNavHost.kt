@@ -12,6 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import com.joker.coolmall.feature.auth.navigation.authGraph
 import com.joker.coolmall.feature.common.navigation.commonGraph
 import com.joker.coolmall.feature.cs.navigation.csGraph
+import com.joker.coolmall.feature.feedback.navigation.feedbackGraph
 import com.joker.coolmall.feature.goods.navigation.goodsGraph
 import com.joker.coolmall.feature.launch.navigation.launchGraph
 import com.joker.coolmall.feature.main.navigation.mainGraph
@@ -86,6 +87,7 @@ fun AppNavHost(
             csGraph(navController)
             commonGraph(navController)
             marketGraph(navController)
+            feedbackGraph(navController)
             launchGraph(navController,this@SharedTransitionLayout)
         }
     }

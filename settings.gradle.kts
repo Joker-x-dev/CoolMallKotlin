@@ -71,3 +71,5 @@ include(":feature:order")
 include(":feature:user")
 // 客服模块
 include(":feature:cs")
+// 反馈模块
+include(":feature:feedback")

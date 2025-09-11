@@ -10,6 +10,12 @@ import androidx.compose.ui.unit.dp
  */
 
 // 标准圆角数值定义
+
+/**
+ * 超小圆角数值：4dp (8px)
+ */
+val RadiusXSmall = 4.dp
+
 /**
  * 小圆角数值：8dp (16px)
  */
@@ -29,6 +35,12 @@ val RadiusLarge = 16.dp
  * 超大圆角数值：24dp (48px)
  */
 val RadiusExtraLarge = 24.dp
+
+/**
+ * 超小圆角：4dp (8px)
+ * 适用场景：极小的UI元素，如图标按钮
+ */
+val ShapeXSmall = RoundedCornerShape(RadiusXSmall) // 超小圆角 8px
 
 /**
  * 小圆角：8dp (16px)
