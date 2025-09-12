@@ -22,7 +22,7 @@ interface FeedbackService {
      * 提交意见反馈
      */
     @POST("app/feedback/submit")
-    suspend fun submitFeedback(@Body params: FeedbackSubmitRequest): NetworkResponse<Any>
+    suspend fun submitFeedback(@Body params: FeedbackSubmitRequest): NetworkResponse<Boolean>
 
     /**
      * 分页查询意见反馈列表

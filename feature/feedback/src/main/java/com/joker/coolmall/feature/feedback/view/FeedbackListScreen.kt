@@ -4,8 +4,10 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.joker.coolmall.core.common.base.state.BaseNetWorkListUiState
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.designsystem.theme.AppTheme
+import com.joker.coolmall.core.ui.component.bottombar.AppBottomButton
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkView
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
 import com.joker.coolmall.core.ui.component.text.AppText
@@ -24,7 +26,8 @@ internal fun FeedbackListRoute(
 ) {
     FeedbackListScreen(
         onBackClick = viewModel::navigateBack,
-        onRetry = {}
+        onRetry = {},
+        toFeedbackSubmit = viewModel::toFeedbackSubmitPage
     )
 }
 
@@ -40,10 +43,19 @@ internal fun FeedbackListRoute(
 internal fun FeedbackListScreen(
     uiState: BaseNetWorkUiState<Any> = BaseNetWorkUiState.Loading,
     onBackClick: () -> Unit = {},
-    onRetry: () -> Unit = {}
+    onRetry: () -> Unit = {},
+    toFeedbackSubmit: () -> Unit = {}
 ) {
     AppScaffold(
-        onBackClick = onBackClick
+        onBackClick = onBackClick,
+        bottomBar = {
+            if (uiState != BaseNetWorkListUiState.Loading && uiState != BaseNetWorkListUiState.Error) {
+                AppBottomButton(
+                    text = "我要反馈",
+                    onClick = toFeedbackSubmit
+                )
+            }
+        }
     ) {
         BaseNetWorkView(
             uiState = uiState,

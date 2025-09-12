@@ -21,5 +21,10 @@ data class DictDataResponse(
     /**
      * 订单退款原因字典
      */
-    val orderRefundReason: List<DictItem>? = null
+    val orderRefundReason: List<DictItem>? = null,
+
+    /**
+     * 反馈类型字典
+     */
+    val feedbackType: List<DictItem>? = null
 )

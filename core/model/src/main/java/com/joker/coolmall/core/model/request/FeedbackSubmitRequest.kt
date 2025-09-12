@@ -16,7 +16,7 @@ data class FeedbackSubmitRequest(
     /**
      * 联系方式
      */
-    val contact: String,
+    val contact: String? = "",
 
     /**
      * 类型

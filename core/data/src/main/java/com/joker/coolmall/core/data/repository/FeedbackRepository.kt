@@ -26,7 +26,7 @@ class FeedbackRepository @Inject constructor(
     /**
      * 提交意见反馈
      */
-    fun submitFeedback(params: FeedbackSubmitRequest): Flow<NetworkResponse<Any>> = flow {
+    fun submitFeedback(params: FeedbackSubmitRequest): Flow<NetworkResponse<Boolean>> = flow {
         emit(feedbackNetworkDataSource.submitFeedback(params))
     }.flowOn(Dispatchers.IO)
 

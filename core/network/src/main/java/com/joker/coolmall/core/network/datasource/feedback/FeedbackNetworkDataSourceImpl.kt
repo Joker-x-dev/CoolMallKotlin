@@ -31,7 +31,7 @@ class FeedbackNetworkDataSourceImpl @Inject constructor(
      * @param params 提交反馈的请求参数
      * @return 提交结果响应数据
      */
-    override suspend fun submitFeedback(params: FeedbackSubmitRequest): NetworkResponse<Any> {
+    override suspend fun submitFeedback(params: FeedbackSubmitRequest): NetworkResponse<Boolean> {
         return feedbackService.submitFeedback(params)
     }
 

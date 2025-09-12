@@ -19,7 +19,7 @@ interface FeedbackNetworkDataSource {
     /**
      * 提交意见反馈
      */
-    suspend fun submitFeedback(params: FeedbackSubmitRequest): NetworkResponse<Any>
+    suspend fun submitFeedback(params: FeedbackSubmitRequest): NetworkResponse<Boolean>
 
     /**
      * 分页查询意见反馈列表
