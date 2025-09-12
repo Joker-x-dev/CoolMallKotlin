@@ -5,10 +5,11 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.OutlinedTextField
@@ -27,11 +28,11 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
+import com.joker.coolmall.core.designsystem.component.VerticalList
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.ArrowRightIcon
 import com.joker.coolmall.core.designsystem.theme.ShapeMedium
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
-import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.model.entity.Address
 import com.joker.coolmall.core.ui.component.bottombar.AppBottomButton
@@ -131,6 +132,7 @@ internal fun AddressDetailScreen(
 
     AppScaffold(
         title = titleResId,
+        useLargeTopBar = true,
         bottomBar = {
             if (uiState is BaseNetWorkUiState.Success) {
                 AppBottomButton(
@@ -186,10 +188,8 @@ private fun AddressDetailContentView(
     // 创建无涟漪效果的交互源
     val interactionSource = remember { MutableInteractionSource() }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(SpacePaddingMedium)
+    VerticalList(
+        modifier = Modifier.verticalScroll(rememberScrollState())
     ) {
         // 基本信息卡片
         Card(
@@ -277,8 +277,6 @@ private fun AddressDetailContentView(
                 )
             }
         }
-
-        SpaceVerticalLarge()
 
         // 设置默认地址开关
         DefaultAddressSwitch(
