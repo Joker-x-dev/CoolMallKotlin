@@ -6,6 +6,11 @@
 
 _🛍️ 基于 Kotlin 和 Jetpack Compose 的现代化电商应用_
 
+<!-- 语言切换按钮 -->
+<div align="center">
+  <a href="README_EN.md">🌍 English</a>
+</div>
+
 [![GitHub](https://img.shields.io/badge/GitHub-CoolMallKotlin-blue?style=flat-square&logo=github)](https://github.com/Joker-x-dev/CoolMallKotlin)
 [![Gitee](https://img.shields.io/badge/Gitee-CoolMallKotlin-red?style=flat-square&logo=gitee)](https://gitee.com/Joker-x-dev/CoolMallKotlin)
 [![Demo](https://img.shields.io/badge/Demo-蒲公英下载-green?style=flat-square&logo=android)](https://www.pgyer.com/CoolMallKotlinProdRelease)
@@ -19,15 +24,53 @@ _🛍️ 基于 Kotlin 和 Jetpack Compose 的现代化电商应用_
 推荐的应用架构和最佳实践，参考了 [Now in Android](https://github.com/android/nowinandroid)
 的架构设计，旨在展示如何运用现代 Android 开发技术构建一个完整的电商应用。项目具备完整的电商业务流程，包括用户认证、商品展示、购物车、订单支付等核心功能，适合开发者学习参考现代 Android 开发技术。
 
-作为热爱技术的个人开发者，我将工作之外的时间都投入到这个项目中。每一个功能的实现、每一次代码的优化，都是我在闲暇时间精心打磨的成果。尽管进度可能不如专职团队那么快，而且某些功能的实现还不够完善，但我会持续改进，不断完善。如果你对
+作为热爱技术的个人开发者，我将工作之外半年多的时间都投入到这个项目中。每一个功能的实现、每一次代码的优化，都是我在闲暇时间精心打磨的成果。尽管进度可能不如专职团队那么快，而且某些功能的实现还不够完善，但我会持续改进，不断完善。如果你对
 Android 开发感兴趣，无论是学习还是共同创造，都欢迎加入。
 
-## 📱 项目预览
+> 如果项目对您有帮助，请给个 Star 支持 ⭐ 这对我来说很重要，能给我带来长期更新维护的动力！
 
-<img src="docs/images/preview1.png"  alt="青商城应用预览1"/>
-<img src="docs/images/preview2.png"  alt="青商城应用预览2"/>
-<img src="docs/images/preview3.png"  alt="青商城应用预览3"/>
-<img src="docs/images/preview4.png"  alt="青商城应用预览4"/>
+## 📱 项目预览
+> 💡 **说明**：由于功能模块较多，截图不下，这里仅展示部分界面，可下载体验完整功能。
+
+<img src="docs/images/gif/1.gif" width="180" alt="青商城动画演示1"/>
+<img src="docs/images/gif/2.gif" width="180" alt="青商城动画演示2"/>
+<img src="docs/images/gif/3.gif" width="180" alt="青商城动画演示3"/>
+<img src="docs/images/gif/4.gif" width="180" alt="青商城动画演示4"/>
+<img src="docs/images/gif/5.gif" width="180" alt="青商城动画演示5"/>
+<img src="docs/images/gif/6.gif" width="180" alt="青商城动画演示6"/>
+<img src="docs/images/gif/7.gif" width="180" alt="青商城动画演示7"/>
+<img src="docs/images/gif/8.gif" width="180" alt="青商城动画演示8"/>
+<img src="docs/images/gif/9.gif" width="180" alt="青商城动画演示9"/>
+<img src="docs/images/gif/10.gif" width="180" alt="青商城动画演示10"/>
+
+### ☀️ 应用截图
+
+<div style="display: flex; flex-wrap: wrap; gap: 2px; justify-content: space-between;">
+  <div style="display: flex; width: 100%; gap: 4px; margin-bottom: 2px;">
+    <img src="docs/images/preview/Light 1.png" alt="青商城应用浅色模式1" style="width: 50%; height: auto;"/>
+    <img src="docs/images/preview/Dark 1.png" alt="青商城应用深色模式1" style="width: 50%; height: auto;"/>
+  </div>
+  
+  <div style="display: flex; width: 100%; gap: 4px; margin-bottom: 2px;">
+    <img src="docs/images/preview/Light 2.png" alt="青商城应用浅色模式2" style="width: 50%; height: auto;"/>
+    <img src="docs/images/preview/Dark 2.png" alt="青商城应用深色模式2" style="width: 50%; height: auto;"/>
+  </div>
+  
+  <div style="display: flex; width: 100%; gap: 4px; margin-bottom: 2px;">
+    <img src="docs/images/preview/Light 3.png" alt="青商城应用浅色模式3" style="width: 50%; height: auto;"/>
+    <img src="docs/images/preview/Dark 3.png" alt="青商城应用深色模式3" style="width: 50%; height: auto;"/>
+  </div>
+  
+  <div style="display: flex; width: 100%; gap: 4px; margin-bottom: 2px;">
+    <img src="docs/images/preview/Light 4.png" alt="青商城应用浅色模式4" style="width: 50%; height: auto;"/>
+    <img src="docs/images/preview/Dark 4.png" alt="青商城应用深色模式4" style="width: 50%; height: auto;"/>
+  </div>
+  
+  <div style="display: flex; width: 100%; gap: 4px;">
+    <img src="docs/images/preview/Light 5.png" alt="青商城应用浅色模式5" style="width: 50%; height: auto;"/>
+    <img src="docs/images/preview/Dark 5.png" alt="青商城应用深色模式5" style="width: 50%; height: auto;"/>
+  </div>
+</div>
 
 ### 📍 项目地址
 
@@ -36,14 +79,16 @@ Android 开发感兴趣，无论是学习还是共同创造，都欢迎加入。
 
 ### Demo 下载
 
-- **Release 版本 (推荐)**：[点击下载体验](https://www.pgyer.com/CoolMallKotlinProdRelease)
-  - 这是为日常使用和体验优化的稳定版本，具有最佳性能。
+- **Release 版本（推荐 4MB）**：[点击下载体验](https://www.pgyer.com/CoolMallKotlinProdRelease)
+  - 为日常使用和体验优化的稳定版本，具有最佳性能和体积。
 
-- **Debug 版本 (开发者)**：[点击下载体验](https://www.pgyer.com/CoolMallKotlinDebug)
+
+- **Debug 版本（开发者 19MB）**：[点击下载体验](https://www.pgyer.com/CoolMallKotlinDebug)
   - **注意**：Debug 版本的包名带有 `.debug` 后缀，与 Release 版本不同，可以共存安装。
-  - **内置工具**：集成了 LeakCanary (内存泄漏检测) 和 Chucker (网络请求监控) 等调试工具。
-  - **性能与体积**：由于开启了调试功能且未进行代码压缩，此版本性能会低于 Release 版本，且 APK 体积更大。
-  - **快捷访问**：长按桌面图标可快速访问 `Leaks` (内存泄漏) 和 `Open Chucker` (网络监控)。为确保能接收到 Chucker 的实时网络请求通知，建议开启应用的通知权限。
+  - **内置工具**：集成了 LeakCanary（内存泄漏检测）和 Chucker（网络请求监控）等调试工具。
+  - **性能与体积**：由于开启了调试功能且未进行代码压缩，此版本性能低于 Release 版本，且 APK 体积更大。
+  - **快捷访问**：长按桌面图标可快速访问 `Leaks`（内存泄漏）和 `Open Chucker`（网络监控）。为确保能接收到 Chucker 的实时网络请求通知，建议开启应用的通知权限。
+
 
 - **支持系统**：Android 8.0 及以上
 - **更新说明**：预览版本会不定时更新，可能不会完全同步最新的代码变更
@@ -74,7 +119,7 @@ Android 开发感兴趣，无论是学习还是共同创造，都欢迎加入。
 | 网络请求   | Retrofit + OkHttp        | 3.0.0 + 5.1.0 | HTTP 客户端     |
 | 图片加载   | Coil Compose             | 2.7.0    | 图片加载与缓存      |
 | 动画效果   | Lottie Compose           | 6.6.7    | After Effects 动画 |
-| 权限管理   | XXPermissions            | 23.0     | 动态权限申请       |
+| 权限管理   | XXPermissions            | 26.5     | 动态权限申请       |
 
 ### 数据存储
 
@@ -100,14 +145,14 @@ Android 开发感兴趣，无论是学习还是共同创造，都欢迎加入。
 
 ## ✨ 项目特点
 
-- 采用模块化架构设计，各功能模块高度解耦
-- 使用 Jetpack Compose 构建现代化 UI
-- 遵循 Material Design 3 设计规范
-- 支持浅色/深色主题切换
-- 支持中英文语言切换
-- 采用响应式编程范式
-- 完整的测试覆盖 `计划中`
-- 大屏适配（平板/折叠屏）`计划中`
+- **现代化架构**: 采用模块化设计 + Clean Architecture，各功能模块高度解耦
+- **声明式 UI**: 使用 Jetpack Compose 构建现代化用户界面
+- **设计规范**: 严格遵循 Material Design 3 设计规范和最佳实践
+- **主题适配**: 完整支持浅色/深色主题动态切换
+- **国际化**: 支持中英文语言切换，便于全球化推广 `待完善`
+- **响应式编程**: 基于 Coroutines + Flow 的响应式编程范式
+- **完整的测试覆盖** `计划中`
+- **大屏适配（平板/折叠屏）** `计划中`
 
 ## 📱 功能模块目录
 
@@ -166,8 +211,8 @@ Android 开发感兴趣，无论是学习还是共同创造，都欢迎加入。
 
 
 - **反馈模块 (feedback)**
-    - 反馈列表 (list) `待开发`
-    - 提交反馈 (submit) `待开发`
+    - 反馈列表 (list) `已完成`
+    - 提交反馈 (submit) `已完成`
 
 
 - **通用模块 (common)**
@@ -199,6 +244,8 @@ Android 开发感兴趣，无论是学习还是共同创造，都欢迎加入。
 ├── feature/              # 功能模块
 │   ├── auth/             # 认证模块
 │   ├── common/           # 公共模块
+│   ├── cs/               # 客服模块
+│   ├── feedback/         # 反馈模块
 │   ├── goods/            # 商品模块
 │   ├── launch/           # 启动模块
 │   ├── main/             # 主模块
@@ -235,16 +282,37 @@ Android 开发技术的实践平台。
 - **循序渐进**: 采用迭代式开发方式，每次专注于一个小功能点的完善
 - **开放学习**: 及时分享开发过程中的经验和心得，帮助其他开发者学习
 - **持续改进**: 根据实际使用反馈不断优化架构和代码设计
+- **质量优先**: 注重代码质量和用户体验，而非功能数量的堆砌
+- **社区驱动**: 欢迎开发者参与贡献，共同打造优质的学习项目
 
 ## 🎯 当前开发重点
 
-项目的核心功能模块（用户认证、商品展示、购物车、订单支付等）已全面完成，整体电商业务流程完整可用。目前仅有少数不影响主流程的辅助功能（如反馈系统、用户资料设置等）待开发。当前开发重点已转向：
+项目的核心电商业务流程已全面完成并稳定运行，包括用户认证、商品展示、购物车、订单支付等主要功能模块。当前开发重点已从功能实现转向质量提升和生态完善：
 
-1. **功能完善**: 补充反馈系统、用户资料设置等辅助功能模块
-2. **细节优化**: 优化用户体验，完善交互细节和视觉效果
-3. **性能提升**: 提升应用性能，优化内存使用和响应速度
-4. **代码质量**: 重构部分代码，提高代码可维护性和可读性
+### 🔧 近期重点
+1. **辅助功能完善**: 完成用户资料编辑、应用设置等辅助功能模块
+2. **用户体验优化**: 细化交互动效，完善视觉反馈，提升整体使用体验
+3. **性能深度优化**: 内存使用优化、启动速度提升、页面渲染性能调优
+
+### 🚀 中长期规划
+4. **代码质量提升**: 重构历史代码，提高可维护性，完善单元测试覆盖
+5. **多端生态扩展**: 推进鸿蒙版本和 iOS 版本的开发计划
+6. **社区建设**: 完善开发文档，建立贡献者指南，促进开源社区发展
 
 ## 🤝 参与贡献
 
-欢迎感兴趣的开发者参与项目开发，无论是提交 Issue、Pull Request 还是优化文档，都可以帮助项目变得更好！
+这是一个开放的学习项目，欢迎所有对 Android 开发感兴趣的开发者参与贡献！
+
+### 🎯 贡献方式
+- **代码贡献**: 提交 Pull Request，完善功能实现或修复问题
+- **问题反馈**: 通过 Issue 报告 Bug 或提出功能建议
+- **文档优化**: 完善项目文档、添加使用说明或开发指南
+- **设计支持**: 提供 UI/UX 设计建议或素材资源
+- **测试协助**: 参与功能测试，提供使用反馈和改进建议
+
+### 📋 贡献指南
+- 提交代码前请确保遵循项目的编码规范
+- 新功能开发建议先创建 Issue 讨论可行性
+- 欢迎分享学习心得和技术总结
+
+让我们一起打造一个优质的 Android 学习项目！ 🚀
