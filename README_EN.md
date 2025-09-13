@@ -29,45 +29,55 @@ As a technology-loving individual developer, I have invested more than half a ye
 ## 📱 Project Preview
 > 💡 **Note**: Due to the large number of functional modules, screenshots cannot cover all features. Here we only show some interfaces. You can download to experience the complete functionality.
 
-<img src="docs/images/gif/1.gif" width="180" alt="CoolMall Animation Demo 1"/>
-<img src="docs/images/gif/2.gif" width="180" alt="CoolMall Animation Demo 2"/>
-<img src="docs/images/gif/3.gif" width="180" alt="CoolMall Animation Demo 3"/>
-<img src="docs/images/gif/4.gif" width="180" alt="CoolMall Animation Demo 4"/>
-<img src="docs/images/gif/5.gif" width="180" alt="CoolMall Animation Demo 5"/>
-<img src="docs/images/gif/6.gif" width="180" alt="CoolMall Animation Demo 6"/>
-<img src="docs/images/gif/7.gif" width="180" alt="CoolMall Animation Demo 7"/>
-<img src="docs/images/gif/8.gif" width="180" alt="CoolMall Animation Demo 8"/>
-<img src="docs/images/gif/9.gif" width="180" alt="CoolMall Animation Demo 9"/>
-<img src="docs/images/gif/10.gif" width="180" alt="CoolMall Animation Demo 10"/>
+<!-- GIF动画展示区域 - 使用table布局确保跨平台兼容性和自动排列 -->
+<table width="100%" cellpadding="5" cellspacing="0">
+  <tr>
+    <td width="20%" align="center">
+      <img src="docs/images/gif/1.gif" width="180" alt="CoolMall Animation Demo 1"/>
+    </td>
+    <td width="20%" align="center">
+      <img src="docs/images/gif/2.gif" width="180" alt="CoolMall Animation Demo 2"/>
+    </td>
+    <td width="20%" align="center">
+      <img src="docs/images/gif/3.gif" width="180" alt="CoolMall Animation Demo 3"/>
+    </td>
+    <td width="20%" align="center">
+      <img src="docs/images/gif/4.gif" width="180" alt="CoolMall Animation Demo 4"/>
+    </td>
+    <td width="20%" align="center">
+      <img src="docs/images/gif/5.gif" width="180" alt="CoolMall Animation Demo 5"/>
+    </td>
+  </tr>
+  <tr>
+    <td width="20%" align="center">
+      <img src="docs/images/gif/6.gif" width="180" alt="CoolMall Animation Demo 6"/>
+    </td>
+    <td width="20%" align="center">
+      <img src="docs/images/gif/7.gif" width="180" alt="CoolMall Animation Demo 7"/>
+    </td>
+    <td width="20%" align="center">
+      <img src="docs/images/gif/8.gif" width="180" alt="CoolMall Animation Demo 8"/>
+    </td>
+    <td width="20%" align="center">
+      <img src="docs/images/gif/9.gif" width="180" alt="CoolMall Animation Demo 9"/>
+    </td>
+    <td width="20%" align="center">
+      <img src="docs/images/gif/10.gif" width="180" alt="CoolMall Animation Demo 10"/>
+    </td>
+  </tr>
+</table>
 
-### ☀️ App Screenshots
+### ☀️ Light Mode
+<img src="docs/images/preview/Light 1.png"  alt="CoolMall App Light Mode Preview 1"/>
+<img src="docs/images/preview/Light 2.png"  alt="CoolMall App Light Mode Preview 2"/>
+<img src="docs/images/preview/Light 3.png"  alt="CoolMall App Light Mode Preview 3"/>
+<img src="docs/images/preview/Light 4.png"  alt="CoolMall App Light Mode Preview 4"/>
 
-<div style="display: flex; flex-wrap: wrap; gap: 2px; justify-content: space-between;">
-  <div style="display: flex; width: 100%; gap: 4px; margin-bottom: 2px;">
-    <img src="docs/images/preview/Light 1.png" alt="青商城应用浅色模式1" style="width: 50%; height: auto;"/>
-    <img src="docs/images/preview/Dark 1.png" alt="青商城应用深色模式1" style="width: 50%; height: auto;"/>
-  </div>
-
-  <div style="display: flex; width: 100%; gap: 4px; margin-bottom: 2px;">
-    <img src="docs/images/preview/Light 2.png" alt="青商城应用浅色模式2" style="width: 50%; height: auto;"/>
-    <img src="docs/images/preview/Dark 2.png" alt="青商城应用深色模式2" style="width: 50%; height: auto;"/>
-  </div>
-
-  <div style="display: flex; width: 100%; gap: 4px; margin-bottom: 2px;">
-    <img src="docs/images/preview/Light 3.png" alt="青商城应用浅色模式3" style="width: 50%; height: auto;"/>
-    <img src="docs/images/preview/Dark 3.png" alt="青商城应用深色模式3" style="width: 50%; height: auto;"/>
-  </div>
-
-  <div style="display: flex; width: 100%; gap: 4px; margin-bottom: 2px;">
-    <img src="docs/images/preview/Light 4.png" alt="青商城应用浅色模式4" style="width: 50%; height: auto;"/>
-    <img src="docs/images/preview/Dark 4.png" alt="青商城应用深色模式4" style="width: 50%; height: auto;"/>
-  </div>
-
-  <div style="display: flex; width: 100%; gap: 4px;">
-    <img src="docs/images/preview/Light 5.png" alt="青商城应用浅色模式5" style="width: 50%; height: auto;"/>
-    <img src="docs/images/preview/Dark 5.png" alt="青商城应用深色模式5" style="width: 50%; height: auto;"/>
-  </div>
-</div>
+### 🌙 Dark Mode
+<img src="docs/images/preview/Dark 1.png"  alt="CoolMall App Dark Mode Preview 1"/>
+<img src="docs/images/preview/Dark 2.png"  alt="CoolMall App Dark Mode Preview 2"/>
+<img src="docs/images/preview/Dark 3.png"  alt="CoolMall App Dark Mode Preview 3"/>
+<img src="docs/images/preview/Dark 4.png"  alt="CoolMall App Dark Mode Preview 4"/>
 
 ### 📍 Project Links
 

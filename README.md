@@ -32,45 +32,34 @@ Android 开发感兴趣，无论是学习还是共同创造，都欢迎加入。
 ## 📱 项目预览
 > 💡 **说明**：由于功能模块较多，截图不下，这里仅展示部分界面，可下载体验完整功能。
 
-<img src="docs/images/gif/1.gif" width="180" alt="青商城动画演示1"/>
-<img src="docs/images/gif/2.gif" width="180" alt="青商城动画演示2"/>
-<img src="docs/images/gif/3.gif" width="180" alt="青商城动画演示3"/>
-<img src="docs/images/gif/4.gif" width="180" alt="青商城动画演示4"/>
-<img src="docs/images/gif/5.gif" width="180" alt="青商城动画演示5"/>
-<img src="docs/images/gif/6.gif" width="180" alt="青商城动画演示6"/>
-<img src="docs/images/gif/7.gif" width="180" alt="青商城动画演示7"/>
-<img src="docs/images/gif/8.gif" width="180" alt="青商城动画演示8"/>
-<img src="docs/images/gif/9.gif" width="180" alt="青商城动画演示9"/>
-<img src="docs/images/gif/10.gif" width="180" alt="青商城动画演示10"/>
+<table>
+  <tr>
+    <td><img src="docs/images/gif/1.gif" width="180" alt="青商城动画演示1"/></td>
+    <td><img src="docs/images/gif/2.gif" width="180" alt="青商城动画演示2"/></td>
+    <td><img src="docs/images/gif/3.gif" width="180" alt="青商城动画演示3"/></td>
+    <td><img src="docs/images/gif/4.gif" width="180" alt="青商城动画演示4"/></td>
+    <td><img src="docs/images/gif/5.gif" width="180" alt="青商城动画演示5"/></td>
+  </tr>
+  <tr>
+    <td><img src="docs/images/gif/6.gif" width="180" alt="青商城动画演示6"/></td>
+    <td><img src="docs/images/gif/7.gif" width="180" alt="青商城动画演示7"/></td>
+    <td><img src="docs/images/gif/8.gif" width="180" alt="青商城动画演示8"/></td>
+    <td><img src="docs/images/gif/9.gif" width="180" alt="青商城动画演示9"/></td>
+    <td><img src="docs/images/gif/10.gif" width="180" alt="青商城动画演示10"/></td>
+  </tr>
+</table>
 
-### ☀️ 应用截图
+### ☀️ 浅色模式
+<img src="docs/images/preview/Light 1.png"  alt="青商城应用浅色模式预览1"/>
+<img src="docs/images/preview/Light 2.png"  alt="青商城应用浅色模式预览2"/>
+<img src="docs/images/preview/Light 3.png"  alt="青商城应用浅色模式预览3"/>
+<img src="docs/images/preview/Light 4.png"  alt="青商城应用浅色模式预览4"/>
 
-<div style="display: flex; flex-wrap: wrap; gap: 2px; justify-content: space-between;">
-  <div style="display: flex; width: 100%; gap: 4px; margin-bottom: 2px;">
-    <img src="docs/images/preview/Light 1.png" alt="青商城应用浅色模式1" style="width: 50%; height: auto;"/>
-    <img src="docs/images/preview/Dark 1.png" alt="青商城应用深色模式1" style="width: 50%; height: auto;"/>
-  </div>
-  
-  <div style="display: flex; width: 100%; gap: 4px; margin-bottom: 2px;">
-    <img src="docs/images/preview/Light 2.png" alt="青商城应用浅色模式2" style="width: 50%; height: auto;"/>
-    <img src="docs/images/preview/Dark 2.png" alt="青商城应用深色模式2" style="width: 50%; height: auto;"/>
-  </div>
-  
-  <div style="display: flex; width: 100%; gap: 4px; margin-bottom: 2px;">
-    <img src="docs/images/preview/Light 3.png" alt="青商城应用浅色模式3" style="width: 50%; height: auto;"/>
-    <img src="docs/images/preview/Dark 3.png" alt="青商城应用深色模式3" style="width: 50%; height: auto;"/>
-  </div>
-  
-  <div style="display: flex; width: 100%; gap: 4px; margin-bottom: 2px;">
-    <img src="docs/images/preview/Light 4.png" alt="青商城应用浅色模式4" style="width: 50%; height: auto;"/>
-    <img src="docs/images/preview/Dark 4.png" alt="青商城应用深色模式4" style="width: 50%; height: auto;"/>
-  </div>
-  
-  <div style="display: flex; width: 100%; gap: 4px;">
-    <img src="docs/images/preview/Light 5.png" alt="青商城应用浅色模式5" style="width: 50%; height: auto;"/>
-    <img src="docs/images/preview/Dark 5.png" alt="青商城应用深色模式5" style="width: 50%; height: auto;"/>
-  </div>
-</div>
+### 🌙 深色模式
+<img src="docs/images/preview/Dark 1.png"  alt="青商城应用深色模式预览1"/>
+<img src="docs/images/preview/Dark 2.png"  alt="青商城应用深色模式预览2"/>
+<img src="docs/images/preview/Dark 3.png"  alt="青商城应用深色模式预览3"/>
+<img src="docs/images/preview/Dark 4.png"  alt="青商城应用深色模式预览4"/>
 
 ### 📍 项目地址
 
