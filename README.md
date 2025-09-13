@@ -22,7 +22,9 @@ _🛍️ 基于 Kotlin 和 Jetpack Compose 的现代化电商应用_
 
 这是一个基于 Kotlin 和 Jetpack Compose 打造的开源电商学习项目，核心功能已基本完成。项目采用了 Google
 推荐的应用架构和最佳实践，参考了 [Now in Android](https://github.com/android/nowinandroid)
-的架构设计，旨在展示如何运用现代 Android 开发技术构建一个完整的电商应用。项目具备完整的电商业务流程，包括用户认证、商品展示、购物车、订单支付等核心功能，适合开发者学习参考现代 Android 开发技术。
+的架构设计，旨在展示如何运用现代 Android
+开发技术构建一个完整的电商应用。项目具备完整的电商业务流程，包括用户认证、商品展示、购物车、订单支付等核心功能，适合开发者学习参考现代
+Android 开发技术。
 
 作为热爱技术的个人开发者，我将工作之外半年多的时间都投入到这个项目中。每一个功能的实现、每一次代码的优化，都是我在闲暇时间精心打磨的成果。尽管进度可能不如专职团队那么快，而且某些功能的实现还不够完善，但我会持续改进，不断完善。如果你对
 Android 开发感兴趣，无论是学习还是共同创造，都欢迎加入。
@@ -30,53 +32,61 @@ Android 开发感兴趣，无论是学习还是共同创造，都欢迎加入。
 > 如果项目对您有帮助，请给个 Star 支持 ⭐ 这对我来说很重要，能给我带来长期更新维护的动力！
 
 ## 📱 项目预览
+
 > 💡 **说明**：由于功能模块较多，截图不下，这里仅展示部分界面，可下载体验完整功能。
 
 <table>
   <tr>
-    <td><img src="docs/images/gif/1.gif" width="180" alt="青商城动画演示1"/></td>
-    <td><img src="docs/images/gif/2.gif" width="180" alt="青商城动画演示2"/></td>
-    <td><img src="docs/images/gif/3.gif" width="180" alt="青商城动画演示3"/></td>
-    <td><img src="docs/images/gif/4.gif" width="180" alt="青商城动画演示4"/></td>
-    <td><img src="docs/images/gif/5.gif" width="180" alt="青商城动画演示5"/></td>
+    <td><img src="docs/images/gif/1.gif" alt="青商城动画演示1"/></td>
+    <td><img src="docs/images/gif/2.gif" alt="青商城动画演示2"/></td>
+    <td><img src="docs/images/gif/3.gif" alt="青商城动画演示3"/></td>
+    <td><img src="docs/images/gif/4.gif" alt="青商城动画演示4"/></td>
+    <td><img src="docs/images/gif/5.gif" alt="青商城动画演示5"/></td>
   </tr>
   <tr>
-    <td><img src="docs/images/gif/6.gif" width="180" alt="青商城动画演示6"/></td>
-    <td><img src="docs/images/gif/7.gif" width="180" alt="青商城动画演示7"/></td>
-    <td><img src="docs/images/gif/8.gif" width="180" alt="青商城动画演示8"/></td>
-    <td><img src="docs/images/gif/9.gif" width="180" alt="青商城动画演示9"/></td>
-    <td><img src="docs/images/gif/10.gif" width="180" alt="青商城动画演示10"/></td>
+    <td><img src="docs/images/gif/6.gif" alt="青商城动画演示6"/></td>
+    <td><img src="docs/images/gif/7.gif" alt="青商城动画演示7"/></td>
+    <td><img src="docs/images/gif/8.gif" alt="青商城动画演示8"/></td>
+    <td><img src="docs/images/gif/9.gif" alt="青商城动画演示9"/></td>
+    <td><img src="docs/images/gif/10.gif" alt="青商城动画演示10"/></td>
   </tr>
 </table>
 
 ### ☀️ 浅色模式
-<img src="docs/images/preview/Light 1.png"  alt="青商城应用浅色模式预览1"/>
-<img src="docs/images/preview/Light 2.png"  alt="青商城应用浅色模式预览2"/>
-<img src="docs/images/preview/Light 3.png"  alt="青商城应用浅色模式预览3"/>
-<img src="docs/images/preview/Light 4.png"  alt="青商城应用浅色模式预览4"/>
+
+<img src="docs/images/preview/Light 1.png" alt="青商城应用浅色模式预览1"/>
+<img src="docs/images/preview/Light 2.png" alt="青商城应用浅色模式预览2"/>
+<img src="docs/images/preview/Light 3.png" alt="青商城应用浅色模式预览3"/>
+<img src="docs/images/preview/Light 4.png" alt="青商城应用浅色模式预览4"/>
+<img src="docs/images/preview/Light 5.png" alt="青商城应用浅色模式预览5"/>
 
 ### 🌙 深色模式
-<img src="docs/images/preview/Dark 1.png"  alt="青商城应用深色模式预览1"/>
-<img src="docs/images/preview/Dark 2.png"  alt="青商城应用深色模式预览2"/>
-<img src="docs/images/preview/Dark 3.png"  alt="青商城应用深色模式预览3"/>
-<img src="docs/images/preview/Dark 4.png"  alt="青商城应用深色模式预览4"/>
+
+<img src="docs/images/preview/Dark 1.png" alt="青商城应用深色模式预览1"/>
+<img src="docs/images/preview/Dark 2.png" alt="青商城应用深色模式预览2"/>
+<img src="docs/images/preview/Dark 3.png" alt="青商城应用深色模式预览3"/>
+<img src="docs/images/preview/Dark 4.png" alt="青商城应用深色模式预览4"/>
+<img src="docs/images/preview/Dark 5.png" alt="青商城应用深色模式预览5"/>
 
 ### 📍 项目地址
 
-- **GitHub 地址**：[https://github.com/Joker-x-dev/CoolMallKotlin](https://github.com/Joker-x-dev/CoolMallKotlin)
-- **Gitee 地址**：[https://gitee.com/Joker-x-dev/CoolMallKotlin](https://gitee.com/Joker-x-dev/CoolMallKotlin)
+- **GitHub 地址
+  **：[https://github.com/Joker-x-dev/CoolMallKotlin](https://github.com/Joker-x-dev/CoolMallKotlin)
+- **Gitee 地址
+  **：[https://gitee.com/Joker-x-dev/CoolMallKotlin](https://gitee.com/Joker-x-dev/CoolMallKotlin)
 
 ### Demo 下载
 
 - **Release 版本（推荐 4MB）**：[点击下载体验](https://www.pgyer.com/CoolMallKotlinProdRelease)
-  - 为日常使用和体验优化的稳定版本，具有最佳性能和体积。
+    - 为日常使用和体验优化的稳定版本，具有最佳性能和体积。
 
 
 - **Debug 版本（开发者 19MB）**：[点击下载体验](https://www.pgyer.com/CoolMallKotlinDebug)
-  - **注意**：Debug 版本的包名带有 `.debug` 后缀，与 Release 版本不同，可以共存安装。
-  - **内置工具**：集成了 LeakCanary（内存泄漏检测）和 Chucker（网络请求监控）等调试工具。
-  - **性能与体积**：由于开启了调试功能且未进行代码压缩，此版本性能低于 Release 版本，且 APK 体积更大。
-  - **快捷访问**：长按桌面图标可快速访问 `Leaks`（内存泄漏）和 `Open Chucker`（网络监控）。为确保能接收到 Chucker 的实时网络请求通知，建议开启应用的通知权限。
+    - **注意**：Debug 版本的包名带有 `.debug` 后缀，与 Release 版本不同，可以共存安装。
+    - **内置工具**：集成了 LeakCanary（内存泄漏检测）和 Chucker（网络请求监控）等调试工具。
+    - **性能与体积**：由于开启了调试功能且未进行代码压缩，此版本性能低于 Release 版本，且 APK 体积更大。
+    - **快捷访问**：长按桌面图标可快速访问 `Leaks`（内存泄漏）和 `Open Chucker`（网络监控）。为确保能接收到
+      Chucker 的实时网络请求通知，建议开启应用的通知权限。
 
 
 - **支持系统**：Android 8.0 及以上
@@ -91,41 +101,41 @@ Android 开发感兴趣，无论是学习还是共同创造，都欢迎加入。
 
 ### 核心技术
 
-| 类别     | 技术选型                    | 版本号      | 说明                     |
-|--------|-------------------------|----------|------------------------|
-| 编程语言   | Kotlin                   | 2.2.10   | 100% Kotlin 开发         |
-| UI 框架  | Jetpack Compose          | 2025.08.01 | 声明式 UI 框架             |
-| 架构模式   | MVVM + Clean Architecture | -        | MVVM + Clean 架构        |
-| 依赖注入   | Hilt                     | 2.57.1   | 基于 Dagger 的依赖注入框架     |
-| 异步处理   | Coroutines + Flow        | 1.9.0    | 协程 + Flow 响应式编程       |
+| 类别    | 技术选型                      | 版本号        | 说明                |
+|-------|---------------------------|------------|-------------------|
+| 编程语言  | Kotlin                    | 2.2.10     | 100% Kotlin 开发    |
+| UI 框架 | Jetpack Compose           | 2025.08.01 | 声明式 UI 框架         |
+| 架构模式  | MVVM + Clean Architecture | -          | MVVM + Clean 架构   |
+| 依赖注入  | Hilt                      | 2.57.1     | 基于 Dagger 的依赖注入框架 |
+| 异步处理  | Coroutines + Flow         | 1.9.0      | 协程 + Flow 响应式编程   |
 
 ### 功能模块
 
-| 类别     | 技术选型                    | 版本号      | 说明           |
-|--------|-------------------------|----------|--------------|
-| 导航     | Navigation Compose       | 2.9.3    | Compose 导航组件 |
-| 数据序列化  | Kotlinx Serialization   | 1.9.0    | JSON 序列化处理   |
-| 网络请求   | Retrofit + OkHttp        | 3.0.0 + 5.1.0 | HTTP 客户端     |
-| 图片加载   | Coil Compose             | 2.7.0    | 图片加载与缓存      |
-| 动画效果   | Lottie Compose           | 6.6.7    | After Effects 动画 |
-| 权限管理   | XXPermissions            | 26.5     | 动态权限申请       |
+| 类别    | 技术选型                  | 版本号           | 说明               |
+|-------|-----------------------|---------------|------------------|
+| 导航    | Navigation Compose    | 2.9.3         | Compose 导航组件     |
+| 数据序列化 | Kotlinx Serialization | 1.9.0         | JSON 序列化处理       |
+| 网络请求  | Retrofit + OkHttp     | 3.0.0 + 5.1.0 | HTTP 客户端         |
+| 图片加载  | Coil Compose          | 2.7.0         | 图片加载与缓存          |
+| 动画效果  | Lottie Compose        | 6.6.7         | After Effects 动画 |
+| 权限管理  | XXPermissions         | 26.5          | 动态权限申请           |
 
 ### 数据存储
 
-| 类别     | 技术选型    | 版本号    | 说明         |
-|--------|---------|--------|------------|
-| 数据库    | Room    | 2.7.2  | SQLite 数据库 |
-| 本地存储   | MMKV    | 2.2.3  | 高性能键值存储    |
+| 类别   | 技术选型 | 版本号   | 说明         |
+|------|------|-------|------------|
+| 数据库  | Room | 2.7.2 | SQLite 数据库 |
+| 本地存储 | MMKV | 2.2.3 | 高性能键值存储    |
 
 ### 开发工具
 
-| 类别     | 技术选型       | 版本号    | 说明        |
-|--------|------------|--------|-----------|
-| 日志框架   | Timber     | 5.0.1  | 日志管理      |
-| 网络调试   | Chucker    | 4.2.0  | 网络请求监控    |
-| 内存检测   | LeakCanary | 2.14   | 内存泄漏检测    |
-| 权限管理   | XXPermissions | 26.5 | 动态权限申请 |
-| 测试框架   | JUnit      | 4.13.2 | 单元测试 + UI测试 |
+| 类别   | 技术选型          | 版本号    | 说明          |
+|------|---------------|--------|-------------|
+| 日志框架 | Timber        | 5.0.1  | 日志管理        |
+| 网络调试 | Chucker       | 4.2.0  | 网络请求监控      |
+| 内存检测 | LeakCanary    | 2.14   | 内存泄漏检测      |
+| 权限管理 | XXPermissions | 26.5   | 动态权限申请      |
+| 测试框架 | JUnit         | 4.13.2 | 单元测试 + UI测试 |
 
 ## 📚 资源与参考
 
@@ -158,7 +168,7 @@ Android 开发感兴趣，无论是学习还是共同创造，都欢迎加入。
     - 购物车 (cart) `已完成`
     - 我的 (me) `已完成`
 
-  
+
 - **认证模块 (auth)**
     - 登录主页 (login) `已完成`
     - 账号密码登录 (account-login) `已完成`
@@ -279,11 +289,13 @@ Android 开发技术的实践平台。
 项目的核心电商业务流程已全面完成并稳定运行，包括用户认证、商品展示、购物车、订单支付等主要功能模块。当前开发重点已从功能实现转向质量提升和生态完善：
 
 ### 🔧 近期重点
+
 1. **辅助功能完善**: 完成用户资料编辑、应用设置等辅助功能模块
 2. **用户体验优化**: 细化交互动效，完善视觉反馈，提升整体使用体验
 3. **性能深度优化**: 内存使用优化、启动速度提升、页面渲染性能调优
 
 ### 🚀 中长期规划
+
 4. **代码质量提升**: 重构历史代码，提高可维护性，完善单元测试覆盖
 5. **多端生态扩展**: 推进鸿蒙版本和 iOS 版本的开发计划
 6. **社区建设**: 完善开发文档，建立贡献者指南，促进开源社区发展
@@ -293,6 +305,7 @@ Android 开发技术的实践平台。
 这是一个开放的学习项目，欢迎所有对 Android 开发感兴趣的开发者参与贡献！
 
 ### 🎯 贡献方式
+
 - **代码贡献**: 提交 Pull Request，完善功能实现或修复问题
 - **问题反馈**: 通过 Issue 报告 Bug 或提出功能建议
 - **文档优化**: 完善项目文档、添加使用说明或开发指南
@@ -300,6 +313,7 @@ Android 开发技术的实践平台。
 - **测试协助**: 参与功能测试，提供使用反馈和改进建议
 
 ### 📋 贡献指南
+
 - 提交代码前请确保遵循项目的编码规范
 - 新功能开发建议先创建 Issue 讨论可行性
 - 欢迎分享学习心得和技术总结
