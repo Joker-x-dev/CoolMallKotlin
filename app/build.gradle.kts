@@ -81,6 +81,7 @@ dependencies {
     implementation(project(":core:designsystem"))
     implementation(project(":core:util"))
     implementation(project(":core:data"))
+    implementation(project(":core:common"))
     // 首页模块
     implementation(project(":feature:main"))
     // 商品模块
@@ -119,4 +120,7 @@ dependencies {
     // LeakCanary - 内存泄漏检测工具（仅在debug构建中使用）
     // https://github.com/square/leakcanary
     debugImplementation(libs.leakcanary.android)
+
+    // QQ SDK 依赖
+    implementation(files("../core/common/libs/open_sdk_lite.jar"))
 }

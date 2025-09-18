@@ -25,3 +25,10 @@
 
 # 权限混淆规则
 -keep class com.hjq.permissions.** { *; }
+
+# QQ互联 SDK 混淆规则
+-keep class com.tencent.** { *; }
+-keep class com.tencent.open.** { *; }
+-keep class com.tencent.tauth.** { *; }
+-keep class com.tencent.connect.** { *; }
+-dontwarn com.tencent.**

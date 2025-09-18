@@ -1,7 +1,10 @@
 package com.joker.coolmall.feature.auth.viewmodel
 
+import android.app.Activity
 import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
+import com.joker.coolmall.core.common.manager.QQLoginManager
+import com.joker.coolmall.core.common.manager.QQLoginResult
 import com.joker.coolmall.core.data.repository.AuthRepository
 import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.entity.Auth
@@ -42,12 +45,55 @@ class LoginViewModel @Inject constructor(
     }
 
     /**
-     * QQ 授权成功
+     * 启动 QQ 登录
+     * @param activity 当前 Activity 实例
      */
-    fun qqAuthSuccess() {
+    fun startQQLogin(activity: Activity) {
+        try {
+            // 启动 QQ 登录
+            QQLoginManager.getInstance().startQQLogin(activity)
+
+            // 监听登录结果
+            viewModelScope.launch {
+                QQLoginManager.getInstance().loginResult.collect { result ->
+                    when (result) {
+                        is QQLoginResult.Success -> {
+                            // QQ 登录成功，调用后端登录接口
+                            qqLoginSuccess(result.accessToken, result.openId)
+                            // 清除登录结果
+                            QQLoginManager.getInstance().clearLoginResult()
+                        }
+
+                        is QQLoginResult.Error -> {
+                            // QQ 登录失败
+                            ToastUtils.showError("登录失败: ${result.message}")
+                            QQLoginManager.getInstance().clearLoginResult()
+                        }
+
+                        is QQLoginResult.Cancel -> {
+                            // 用户取消登录
+                            ToastUtils.showWarning("登录取消")
+                            QQLoginManager.getInstance().clearLoginResult()
+                        }
+
+                        else -> {}
+                    }
+                }
+            }
+        } catch (e: Exception) {
+            ToastUtils.showError("启动QQ登录失败: ${e.message}")
+        }
+    }
+
+    /**
+     * QQ 登录成功
+     * @param accessToken QQ 登录成功返回的 accessToken
+     * @param openId QQ 登录成功返回的 openId
+     */
+    private fun qqLoginSuccess(accessToken: String, openId: String) {
         val params = QQLoginRequest(
-            accessToken = "",
-            openId = ""
+            accessToken = accessToken,
+            openId = openId
         )
         ResultHandler.handleResultWithData(
             scope = viewModelScope,
@@ -55,6 +101,7 @@ class LoginViewModel @Inject constructor(
             onData = { authData -> loginSuccess(authData) }
         )
     }
+
 
     /**
      * 登录成功统一处理

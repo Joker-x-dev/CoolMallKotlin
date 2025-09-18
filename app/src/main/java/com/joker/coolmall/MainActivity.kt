@@ -1,13 +1,17 @@
 package com.joker.coolmall
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.joker.coolmall.core.common.manager.QQLoginManager
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.navigation.AppNavHost
 import com.joker.coolmall.navigation.AppNavigator
+import com.tencent.connect.common.Constants
+import com.tencent.tauth.Tencent
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -41,5 +45,23 @@ class MainActivity : ComponentActivity() {
         splashScreen.setKeepOnScreenCondition {
             false
         }
+    }
+
+    /**
+     * 处理 Activity 结果回调，目前主要用于三方登录
+     */
+    @Deprecated("")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        // 处理 QQ 登录回调
+        if (requestCode == Constants.REQUEST_LOGIN || requestCode == Constants.REQUEST_APPBAR) {
+            Tencent.onActivityResultData(
+                requestCode,
+                resultCode,
+                data,
+                QQLoginManager.getInstance().qqLoginListener
+            )
+        }
+
+        super.onActivityResult(requestCode, resultCode, data)
     }
 }

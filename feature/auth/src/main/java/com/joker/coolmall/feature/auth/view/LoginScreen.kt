@@ -1,6 +1,7 @@
 package com.joker.coolmall.feature.auth.view
 
 import androidx.annotation.DrawableRes
+import android.app.Activity
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.Spring
@@ -27,6 +28,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -57,10 +59,19 @@ import com.joker.coolmall.feature.auth.viewmodel.LoginViewModel
 internal fun LoginRoute(
     viewModel: LoginViewModel = hiltViewModel()
 ) {
+    val context = LocalContext.current
+    
     LoginScreen(
         toAccountLogin = viewModel::toAccountLoginPage,
         toSmsLogin = viewModel::toSMSLoginPage,
-        onBackClick = viewModel::navigateBack
+        onBackClick = viewModel::navigateBack,
+        onQQLogin = {
+            // 获取当前 Activity 实例
+            val activity = context as? Activity
+            if (activity != null) {
+                viewModel.startQQLogin(activity)
+            }
+        }
     )
 }
 
@@ -69,6 +80,7 @@ internal fun LoginRoute(
  *
  * @param toAccountLogin 导航到账号密码登录页面回调
  * @param toSmsLogin 导航到短信登录页面回调
+ * @param onBackClick 返回按钮回调
  * @param onQQLogin QQ 登录回调
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -76,7 +88,8 @@ internal fun LoginRoute(
 internal fun LoginScreen(
     toAccountLogin: () -> Unit = {},
     toSmsLogin: () -> Unit = {},
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
+    onQQLogin: () -> Unit = {}
 ) {
     // 使用rememberSaveable来保持状态，即使在配置更改时也不会重置
     // isAnimationPlayed标志用于跟踪动画是否已经播放过
@@ -172,7 +185,7 @@ internal fun LoginScreen(
                     SpaceVerticalXLarge()
 
                     // 第三方登录按钮
-                    SpaceEvenlyRow() {
+                    SpaceEvenlyRow {
                         // 微信登录
                         ThirdPartyLoginButton(
                             icon = com.joker.coolmall.core.ui.R.drawable.ic_wechat,
@@ -183,7 +196,7 @@ internal fun LoginScreen(
                         ThirdPartyLoginButton(
                             icon = com.joker.coolmall.core.ui.R.drawable.ic_qq,
                             name = stringResource(id = R.string.qq),
-                            onClick = {}
+                            onClick = onQQLogin
                         )
 
                         // 支付宝登录

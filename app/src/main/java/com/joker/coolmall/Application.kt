@@ -2,6 +2,8 @@ package com.joker.coolmall
 
 import android.app.Application
 import android.content.res.Configuration
+import com.joker.coolmall.core.common.config.AppConfig
+import com.joker.coolmall.core.common.manager.QQLoginManager
 import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.designsystem.BuildConfig
 import com.joker.coolmall.core.util.log.LogUtils
@@ -25,6 +27,7 @@ class Application : Application() {
         initToast()
         initLog()
         initMMKV()
+        initQQ()
 
         // 由于 appState 依赖 MMKV
         // 所以等待 MMKV 初始化完成以后再初始化 AppState
@@ -58,6 +61,13 @@ class Application : Application() {
     }
 
     /**
+     * 初始化 QQ SDK
+     */
+    private fun initQQ() {
+        QQLoginManager.getInstance().init(this, AppConfig.QQ_APP_ID)
+    }
+
+    /**
      * 应用配置变化时调用（如切换深色模式）
      */
     override fun onConfigurationChanged(newConfig: Configuration) {
@@ -74,4 +84,4 @@ class Application : Application() {
             ToastUtils.setBlackStyle()
         }
     }
-} 
+}

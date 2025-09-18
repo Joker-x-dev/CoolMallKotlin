@@ -5,6 +5,12 @@ plugins {
 }
 
 android {
+
+    defaultConfig {
+        // QQ 登录相关配置
+        manifestPlaceholders["TENCENT_APPID"] = "102756675"
+    }
+
     buildFeatures {
         buildConfig = true
     }
@@ -30,4 +36,7 @@ dependencies {
     ksp(libs.hilt.android.compiler)
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
+
+    // QQ SDK 依赖
+    implementation(files("libs/open_sdk_lite.jar"))
 }
