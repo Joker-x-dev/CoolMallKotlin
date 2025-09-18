@@ -2,6 +2,7 @@ package com.joker.coolmall.core.network.datasource.auth
 
 import com.joker.coolmall.core.model.entity.Auth
 import com.joker.coolmall.core.model.entity.Captcha
+import com.joker.coolmall.core.model.request.QQLoginRequest
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.base.BaseNetworkDataSource
 import com.joker.coolmall.core.network.service.AuthService
@@ -25,6 +26,16 @@ class AuthNetworkDataSourceImpl @Inject constructor(
      */
     override suspend fun loginByWxApp(params: Map<String, String>): NetworkResponse<Auth> {
         return authService.loginByWxApp(params)
+    }
+
+    /**
+     * QQ APP授权登录
+     *
+     * @param params 请求参数，包含QQ授权信息
+     * @return 登录结果响应数据
+     */
+    override suspend fun loginByQqApp(params: QQLoginRequest): NetworkResponse<Auth> {
+        return authService.loginByQqApp(params)
     }
 
     /**

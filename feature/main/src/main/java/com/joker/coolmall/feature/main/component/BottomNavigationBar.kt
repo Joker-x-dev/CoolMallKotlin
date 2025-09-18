@@ -31,6 +31,10 @@ import com.joker.coolmall.feature.main.model.TopLevelDestination
 
 /**
  * 底部导航栏
+ * @param destinations 底部导航栏目的地列表
+ * @param onNavigateToDestination 点击导航项的回调
+ * @param currentDestination 当前选中的导航项
+ * @param modifier 修饰符
  */
 @Composable
 fun BottomNavigationBar(

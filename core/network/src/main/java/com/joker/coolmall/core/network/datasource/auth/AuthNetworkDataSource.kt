@@ -2,6 +2,7 @@ package com.joker.coolmall.core.network.datasource.auth
 
 import com.joker.coolmall.core.model.entity.Auth
 import com.joker.coolmall.core.model.entity.Captcha
+import com.joker.coolmall.core.model.request.QQLoginRequest
 import com.joker.coolmall.core.model.response.NetworkResponse
 
 /**
@@ -13,6 +14,11 @@ interface AuthNetworkDataSource {
      * 微信APP授权登录
      */
     suspend fun loginByWxApp(params: Map<String, String>): NetworkResponse<Auth>
+
+    /**
+     * QQ APP授权登录
+     */
+    suspend fun loginByQqApp(params: QQLoginRequest): NetworkResponse<Auth>
 
     /**
      * 用户注册

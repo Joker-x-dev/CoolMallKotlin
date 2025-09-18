@@ -2,6 +2,7 @@ package com.joker.coolmall.core.network.service
 
 import com.joker.coolmall.core.model.entity.Auth
 import com.joker.coolmall.core.model.entity.Captcha
+import com.joker.coolmall.core.model.request.QQLoginRequest
 import com.joker.coolmall.core.model.response.NetworkResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -17,6 +18,12 @@ interface AuthService {
      */
     @POST("user/login/wxApp")
     suspend fun loginByWxApp(@Body params: Map<String, String>): NetworkResponse<Auth>
+
+    /**
+     * QQ APP授权登录
+     */
+    @POST("user/login/qq")
+    suspend fun loginByQqApp(@Body params: QQLoginRequest): NetworkResponse<Auth>
 
     /**
      * 用户注册

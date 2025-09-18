@@ -69,6 +69,7 @@ internal fun LoginRoute(
  *
  * @param toAccountLogin 导航到账号密码登录页面回调
  * @param toSmsLogin 导航到短信登录页面回调
+ * @param onQQLogin QQ 登录回调
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -182,7 +183,8 @@ internal fun LoginScreen(
                         ThirdPartyLoginButton(
                             icon = com.joker.coolmall.core.ui.R.drawable.ic_qq,
                             name = stringResource(id = R.string.qq),
-                            onClick = { /* QQ登录逻辑 */ })
+                            onClick = {}
+                        )
 
                         // 支付宝登录
                         ThirdPartyLoginButton(

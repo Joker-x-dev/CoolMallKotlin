@@ -2,6 +2,7 @@ package com.joker.coolmall.core.data.repository
 
 import com.joker.coolmall.core.model.entity.Auth
 import com.joker.coolmall.core.model.entity.Captcha
+import com.joker.coolmall.core.model.request.QQLoginRequest
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.datasource.auth.AuthNetworkDataSource
 import kotlinx.coroutines.Dispatchers
@@ -21,6 +22,13 @@ class AuthRepository @Inject constructor(
      */
     fun loginByWxApp(params: Map<String, String>): Flow<NetworkResponse<Auth>> = flow {
         emit(authNetworkDataSource.loginByWxApp(params))
+    }.flowOn(Dispatchers.IO)
+
+    /**
+     * QQ APP授权登录
+     */
+    fun loginByQqApp(params: QQLoginRequest): Flow<NetworkResponse<Auth>> = flow {
+        emit(authNetworkDataSource.loginByQqApp(params))
     }.flowOn(Dispatchers.IO)
 
     /**
