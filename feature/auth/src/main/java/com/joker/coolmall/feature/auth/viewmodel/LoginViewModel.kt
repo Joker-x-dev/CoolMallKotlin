@@ -115,4 +115,25 @@ class LoginViewModel @Inject constructor(
             super.navigateBack()
         }
     }
+
+    /**
+     * 微信登录点击
+     */
+    fun onWechatLoginClick() {
+        onWechatAndAlipayLoginTipClick()
+    }
+
+    /**
+     * 支付宝登录点击
+     */
+    fun onAlipayLoginClick() {
+        onWechatAndAlipayLoginTipClick()
+    }
+
+    /**
+     * 微信和支付宝登录提示
+     */
+    fun onWechatAndAlipayLoginTipClick() {
+        ToastUtils.showWarning("三方登录暂时仅支持QQ登录")
+    }
 }

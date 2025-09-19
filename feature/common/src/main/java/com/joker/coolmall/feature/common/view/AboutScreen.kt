@@ -48,6 +48,7 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.luminance
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
@@ -55,7 +56,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.joker.coolmall.core.designsystem.component.CenterColumn
 import com.joker.coolmall.core.designsystem.component.FullScreenBox
 import com.joker.coolmall.core.designsystem.theme.AppTheme
@@ -74,6 +75,7 @@ import com.joker.coolmall.core.ui.component.text.AppText
 import com.joker.coolmall.core.ui.component.text.TextSize
 import com.joker.coolmall.core.ui.component.text.TextType
 import com.joker.coolmall.core.ui.component.title.TitleWithLine
+import com.joker.coolmall.core.util.`package`.PackageUtils
 import com.joker.coolmall.feature.common.R
 import com.joker.coolmall.feature.common.viewmodel.AboutViewModel
 import kotlinx.coroutines.delay
@@ -403,6 +405,7 @@ private fun AnimatedAuroraBackground() {
  */
 @Composable
 private fun AboutTopSection() {
+    val context = LocalContext.current
     CenterColumn {
         // 顶部占位间距，用于调整Logo的垂直位置
         Spacer(modifier = Modifier.height(130.dp))
@@ -426,7 +429,7 @@ private fun AboutTopSection() {
         SpaceVerticalXLarge()
 
         AppText(
-            text = "青商城",
+            text = PackageUtils.getCurrentAppName(context),
             size = TextSize.DISPLAY_LARGE,
             fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onSurface
@@ -487,6 +490,8 @@ private fun AboutBottomScrollableContent(
     onPrivacyPolicyClick: () -> Unit,
     onOpenSourceLicenseClick: () -> Unit
 ) {
+    val context = LocalContext.current
+
     Column(
         modifier = Modifier
             .verticalScroll(state = scrollState)
@@ -500,7 +505,7 @@ private fun AboutBottomScrollableContent(
             // 应用名称
             AppListItem(
                 title = "应用名称",
-                trailingText = "青商城",
+                trailingText = PackageUtils.getCurrentAppName(context),
                 showArrow = false,
                 showDivider = true,
                 horizontalPadding = SpaceHorizontalLarge,
@@ -509,7 +514,7 @@ private fun AboutBottomScrollableContent(
             // 版本号
             AppListItem(
                 title = "版本号",
-                trailingText = "1.0.0",
+                trailingText = PackageUtils.getCurrentVersionName(context),
                 showArrow = false,
                 showDivider = true,
                 horizontalPadding = SpaceHorizontalLarge,
@@ -518,7 +523,7 @@ private fun AboutBottomScrollableContent(
             // 版本代码
             AppListItem(
                 title = "版本代码",
-                trailingText = "2025070701",
+                trailingText = PackageUtils.getCurrentVersionCode(context).toString(),
                 showArrow = false,
                 showDivider = false,
                 horizontalPadding = SpaceHorizontalLarge,

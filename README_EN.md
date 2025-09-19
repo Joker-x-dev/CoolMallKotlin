@@ -121,7 +121,7 @@ to join.
 | Category                | Technology                | Version    | Description                            |
 |-------------------------|---------------------------|------------|----------------------------------------|
 | Programming Language    | Kotlin                    | 2.2.10     | 100% Kotlin Development                |
-| UI Framework            | Jetpack Compose           | 2025.08.01 | Declarative UI Framework               |
+| UI Framework            | Jetpack Compose           | 2025.09.00 | Declarative UI Framework               |
 | Architecture Pattern    | MVVM + Clean Architecture | -          | MVVM + Clean Architecture              |
 | Dependency Injection    | Hilt                      | 2.57.1     | Dagger-based DI Framework              |
 | Asynchronous Processing | Coroutines + Flow         | 1.9.0      | Coroutines + Flow Reactive Programming |
@@ -130,7 +130,7 @@ to join.
 
 | Category              | Technology            | Version       | Description                   |
 |-----------------------|-----------------------|---------------|-------------------------------|
-| Navigation            | Navigation Compose    | 2.9.3         | Compose Navigation Component  |
+| Navigation            | Navigation Compose    | 2.9.4         | Compose Navigation Component  |
 | Data Serialization    | Kotlinx Serialization | 1.9.0         | JSON Serialization Processing |
 | Network Requests      | Retrofit + OkHttp     | 3.0.0 + 5.1.0 | HTTP Client                   |
 | Image Loading         | Coil Compose          | 2.7.0         | Image Loading and Caching     |
@@ -141,7 +141,7 @@ to join.
 
 | Category      | Technology | Version | Description                        |
 |---------------|------------|---------|------------------------------------|
-| Database      | Room       | 2.7.2   | SQLite Database                    |
+| Database      | Room       | 2.8.0   | SQLite Database                    |
 | Local Storage | MMKV       | 2.2.3   | High-performance Key-Value Storage |
 
 ### Development Tools

@@ -6,7 +6,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.joker.coolmall.core.common.base.state.BaseNetWorkListUiState
 import com.joker.coolmall.core.common.base.state.LoadMoreState
 import com.joker.coolmall.core.designsystem.theme.AppTheme

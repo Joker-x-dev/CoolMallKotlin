@@ -1,7 +1,7 @@
 package com.joker.coolmall.feature.auth.view
 
-import androidx.annotation.DrawableRes
 import android.app.Activity
+import androidx.annotation.DrawableRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.MutableTransitionState
 import androidx.compose.animation.core.Spring
@@ -33,7 +33,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.joker.coolmall.core.designsystem.component.CenterColumn
 import com.joker.coolmall.core.designsystem.component.SpaceBetweenColumn
 import com.joker.coolmall.core.designsystem.component.SpaceEvenlyRow
@@ -60,11 +60,13 @@ internal fun LoginRoute(
     viewModel: LoginViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
-    
+
     LoginScreen(
         toAccountLogin = viewModel::toAccountLoginPage,
         toSmsLogin = viewModel::toSMSLoginPage,
         onBackClick = viewModel::navigateBack,
+        onWechatLoginClick = viewModel::onWechatLoginClick,
+        onAlipayLoginClick = viewModel::onAlipayLoginClick,
         onQQLogin = {
             // 获取当前 Activity 实例
             val activity = context as? Activity
@@ -82,6 +84,8 @@ internal fun LoginRoute(
  * @param toSmsLogin 导航到短信登录页面回调
  * @param onBackClick 返回按钮回调
  * @param onQQLogin QQ 登录回调
+ * @param onWechatLoginClick 微信登录点击回调
+ * @param onAlipayLoginClick 支付宝登录点击回调
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -89,6 +93,8 @@ internal fun LoginScreen(
     toAccountLogin: () -> Unit = {},
     toSmsLogin: () -> Unit = {},
     onBackClick: () -> Unit = {},
+    onWechatLoginClick: () -> Unit = {},
+    onAlipayLoginClick: () -> Unit = {},
     onQQLogin: () -> Unit = {}
 ) {
     // 使用rememberSaveable来保持状态，即使在配置更改时也不会重置
@@ -190,7 +196,8 @@ internal fun LoginScreen(
                         ThirdPartyLoginButton(
                             icon = com.joker.coolmall.core.ui.R.drawable.ic_wechat,
                             name = stringResource(id = R.string.wechat),
-                            onClick = { /* 微信登录逻辑 */ })
+                            onClick = onWechatLoginClick
+                        )
 
                         // QQ登录
                         ThirdPartyLoginButton(
@@ -203,7 +210,8 @@ internal fun LoginScreen(
                         ThirdPartyLoginButton(
                             icon = com.joker.coolmall.core.ui.R.drawable.ic_alipay,
                             name = stringResource(id = R.string.alipay),
-                            onClick = { /* 支付宝登录逻辑 */ })
+                            onClick = onAlipayLoginClick
+                        )
                     }
 
                     // 用户协议

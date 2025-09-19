@@ -50,14 +50,13 @@ import androidx.compose.ui.layout.LastBaseline
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.common.base.state.LoadMoreState
 import com.joker.coolmall.core.designsystem.component.AppColumn
 import com.joker.coolmall.core.designsystem.component.AppRow
 import com.joker.coolmall.core.designsystem.component.FullScreenBox
 import com.joker.coolmall.core.designsystem.theme.AppTheme
-import com.joker.coolmall.core.designsystem.theme.ShapeCircle
 import com.joker.coolmall.core.designsystem.theme.ShapeExtraLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalXSmall
@@ -68,8 +67,8 @@ import com.joker.coolmall.core.designsystem.theme.SpacePaddingXSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.model.entity.CsMsg
 import com.joker.coolmall.core.ui.component.appbar.CenterTopAppBar
-import com.joker.coolmall.core.ui.component.image.NetWorkImage
 import com.joker.coolmall.core.ui.component.image.Avatar
+import com.joker.coolmall.core.ui.component.image.NetWorkImage
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkView
 import com.joker.coolmall.core.ui.component.tag.Tag
 import com.joker.coolmall.core.ui.component.tag.TagStyle
@@ -638,6 +637,7 @@ fun ChatItemBubble(message: CsMsg, isUserMe: Boolean) {
                     contentScale = ContentScale.Crop
                 )
             }
+
             else -> {
                 // 显示文本消息
                 AppText(
