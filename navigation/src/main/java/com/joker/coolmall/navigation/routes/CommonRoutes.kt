@@ -23,4 +23,19 @@ object CommonRoutes {
      * 设置页面路由
      */
     const val SETTINGS = "$COMMON_ROUTE/settings"
+
+    /**
+     * 用户协议路由
+     */
+    const val USER_AGREEMENT = "$COMMON_ROUTE/user_agreement"
+
+    /**
+     * 隐私政策路由
+     */
+    const val PRIVACY_POLICY = "$COMMON_ROUTE/privacy_policy"
+
+    /**
+     * 贡献者列表路由
+     */
+    const val CONTRIBUTORS = "$COMMON_ROUTE/contributors"
 }

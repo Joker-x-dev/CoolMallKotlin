@@ -31,7 +31,7 @@ class AboutViewModel @Inject constructor(
      * 查看项目贡献者列表
      */
     fun onContributorsClick() {
-        // TODO: 导航到贡献者页面
+        toPage(CommonRoutes.CONTRIBUTORS)
     }
 
     // ==================== 项目地址相关点击事件 ====================
@@ -132,7 +132,7 @@ class AboutViewModel @Inject constructor(
      * 显示用户使用协议
      */
     fun onUserAgreementClick() {
-        // TODO: 导航到用户协议页面
+        toPage(CommonRoutes.USER_AGREEMENT)
     }
 
     /**
@@ -140,7 +140,7 @@ class AboutViewModel @Inject constructor(
      * 显示隐私政策内容
      */
     fun onPrivacyPolicyClick() {
-        // TODO: 导航到隐私政策页面
+        toPage(CommonRoutes.PRIVACY_POLICY)
     }
 
     /**

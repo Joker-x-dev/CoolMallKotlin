@@ -12,4 +12,7 @@ fun NavGraphBuilder.commonGraph(navController: NavHostController) {
     aboutScreen()
     webScreen()
     settingsScreen()
+    userAgreementScreen()
+    privacyPolicyScreen()
+    contributorsScreen()
 }

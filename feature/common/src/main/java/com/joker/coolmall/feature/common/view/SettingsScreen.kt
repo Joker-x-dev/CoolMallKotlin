@@ -35,7 +35,13 @@ internal fun SettingsRoute(
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
     SettingsScreen(
-        onBackClick = viewModel::navigateBack
+        onBackClick = viewModel::navigateBack,
+        onUserAgreementClick = viewModel::onUserAgreementClick,
+        onPrivacyPolicyClick = viewModel::onPrivacyPolicyClick,
+        onAccountSecurityClick = viewModel::onAccountSecurityClick,
+        onFeedbackClick = viewModel::onFeedbackClick,
+        onAboutAppClick = viewModel::onAboutAppClick,
+        onAppGuideClick = viewModel::onAppGuideClick
     )
 }
 
@@ -43,26 +49,51 @@ internal fun SettingsRoute(
  * 设置页面界面
  *
  * @param onBackClick 返回上一页回调
+ * @param onUserAgreementClick 用户协议点击回调
+ * @param onPrivacyPolicyClick 隐私政策点击回调
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun SettingsScreen(
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
+    onUserAgreementClick: () -> Unit = {},
+    onPrivacyPolicyClick: () -> Unit = {},
+    onAccountSecurityClick: () -> Unit = {},
+    onFeedbackClick: () -> Unit = {},
+    onAboutAppClick: () -> Unit = {},
+    onAppGuideClick: () -> Unit = {}
 ) {
     AppScaffold(
         title = R.string.settings_title,
         useLargeTopBar = true,
         onBackClick = onBackClick
     ) {
-        SettingsContentView()
+        SettingsContentView(
+            onUserAgreementClick = onUserAgreementClick,
+            onPrivacyPolicyClick = onPrivacyPolicyClick,
+            onAccountSecurityClick = onAccountSecurityClick,
+            onFeedbackClick = onFeedbackClick,
+            onAboutAppClick = onAboutAppClick,
+            onAppGuideClick = onAppGuideClick
+        )
     }
 }
 
 /**
  * 设置页面内容视图
+ *
+ * @param onUserAgreementClick 用户协议点击回调
+ * @param onPrivacyPolicyClick 隐私政策点击回调
  */
 @Composable
-private fun SettingsContentView() {
+private fun SettingsContentView(
+    onUserAgreementClick: () -> Unit = {},
+    onPrivacyPolicyClick: () -> Unit = {},
+    onAccountSecurityClick: () -> Unit = {},
+    onFeedbackClick: () -> Unit = {},
+    onAboutAppClick: () -> Unit = {},
+    onAppGuideClick: () -> Unit = {}
+) {
 
     VerticalList(
         modifier = Modifier.verticalScroll(rememberScrollState())
@@ -74,6 +105,7 @@ private fun SettingsContentView() {
                 showDivider = false,
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge,
+                onClick = onAccountSecurityClick
             )
         }
 
@@ -127,7 +159,8 @@ private fun SettingsContentView() {
             AppListItem(
                 title = "隐私政策",
                 horizontalPadding = SpaceHorizontalLarge,
-                verticalPadding = SpaceVerticalLarge
+                verticalPadding = SpaceVerticalLarge,
+                onClick = onPrivacyPolicyClick
             )
 
             // 用户协议
@@ -135,7 +168,8 @@ private fun SettingsContentView() {
                 title = "用户协议",
                 showDivider = false,
                 horizontalPadding = SpaceHorizontalLarge,
-                verticalPadding = SpaceVerticalLarge
+                verticalPadding = SpaceVerticalLarge,
+                onClick = onUserAgreementClick
             )
         }
 
@@ -166,7 +200,8 @@ private fun SettingsContentView() {
                 title = "应用引导",
                 showDivider = false,
                 horizontalPadding = SpaceHorizontalLarge,
-                verticalPadding = SpaceVerticalLarge
+                verticalPadding = SpaceVerticalLarge,
+                onClick = onAppGuideClick
             )
         }
 
@@ -188,7 +223,8 @@ private fun SettingsContentView() {
             AppListItem(
                 title = "意见反馈",
                 horizontalPadding = SpaceHorizontalLarge,
-                verticalPadding = SpaceVerticalLarge
+                verticalPadding = SpaceVerticalLarge,
+                onClick = onFeedbackClick
             )
 
             // 关于我们
@@ -196,7 +232,8 @@ private fun SettingsContentView() {
                 title = "关于应用",
                 showDivider = false,
                 horizontalPadding = SpaceHorizontalLarge,
-                verticalPadding = SpaceVerticalLarge
+                verticalPadding = SpaceVerticalLarge,
+                onClick = onAboutAppClick
             )
         }
     }

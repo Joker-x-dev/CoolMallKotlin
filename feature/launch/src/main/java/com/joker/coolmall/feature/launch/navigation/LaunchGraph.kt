@@ -6,7 +6,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 
 /**
- * 商品模块导航图
+ * 启动模块导航图
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
 fun NavGraphBuilder.launchGraph(

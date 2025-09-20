@@ -15,11 +15,13 @@ fun NavGraphBuilder.mainGraph(
 ) {
     // 只调用页面级导航函数，不包含其他逻辑
     mainScreen(sharedTransitionScope)
+    
+    // 购物车页面导航
+    cartScreen()
 
     // 如果主页面内部的子页面需要在Navigation中注册，也可以在这里调用
     // homeScreen()
     // categoryScreen()
-    // cartScreen()
     // meScreen()
 }
 

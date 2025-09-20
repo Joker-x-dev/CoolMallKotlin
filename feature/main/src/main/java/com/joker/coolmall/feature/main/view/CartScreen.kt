@@ -69,12 +69,14 @@ internal fun CartRoute(
     val isAllSelected by viewModel.isAllSelected.collectAsState()
     val selectedCount by viewModel.selectedCount.collectAsState()
     val selectedTotalAmount by viewModel.selectedTotalAmount.collectAsState()
+    val showBackIcon by viewModel.showBackIcon.collectAsState()
     val selectedItems by viewModel.selectedItems.collectAsState()
 
     CartScreen(
         carts = carts,
         isEmpty = isEmpty,
         isEditing = isEditing,
+
         isAllSelected = isAllSelected,
         selectedCount = selectedCount,
         selectedTotalAmount = selectedTotalAmount,
@@ -85,6 +87,8 @@ internal fun CartRoute(
         onUpdateCartItemCount = viewModel::updateCartItemCount,
         onDeleteSelected = viewModel::deleteSelectedItems,
         onSettleClick = viewModel::onCheckoutClick,
+        showBackIcon = showBackIcon,
+        onBackClick = viewModel::navigateBack,
         toGoodsDetailPage = viewModel::toGoodsDetailPage
     )
 }
@@ -124,6 +128,8 @@ internal fun CartScreen(
     onDeleteSelected: () -> Unit,
     onSettleClick: () -> Unit,
     toGoodsDetailPage: (Long) -> Unit,
+    onBackClick: () -> Unit,
+    showBackIcon: Boolean,
 ) {
     // 跟踪正在删除的商品
     var deletingItems by remember { mutableStateOf(emptyMap<Long, Set<Long>>()) }
@@ -145,7 +151,8 @@ internal fun CartScreen(
         topBar = {
             CenterTopAppBar(
                 title = R.string.cart,
-                showBackIcon = false,
+                showBackIcon = showBackIcon,
+                onBackClick = onBackClick,
                 actions = {
                     if (!isEmpty) {
                         TextButton(onClick = onToggleEditMode) {
@@ -228,8 +235,6 @@ internal fun CartScreen(
                         }
                     }
                 }
-
-
             }
         }
     }
@@ -337,7 +342,9 @@ fun CartScreenPreview() {
             onUpdateCartItemCount = { _, _, _ -> },
             onDeleteSelected = { },
             onSettleClick = { },
-            toGoodsDetailPage = {}
+            toGoodsDetailPage = {},
+            showBackIcon = false,
+            onBackClick = { },
         )
     }
 }
@@ -360,7 +367,9 @@ fun EmptyCartScreenPreview() {
             onUpdateCartItemCount = { _, _, _ -> },
             onDeleteSelected = { },
             onSettleClick = { },
-            toGoodsDetailPage = {}
+            toGoodsDetailPage = {},
+            showBackIcon = false,
+            onBackClick = { },
         )
     }
 }
@@ -383,7 +392,9 @@ fun CartScreenEditingPreview() {
             onUpdateCartItemCount = { _, _, _ -> },
             onDeleteSelected = { },
             onSettleClick = { },
-            toGoodsDetailPage = {}
+            toGoodsDetailPage = {},
+            showBackIcon = false,
+            onBackClick = { },
         )
     }
 }
@@ -406,7 +417,9 @@ fun CartScreenDarkPreview() {
             onUpdateCartItemCount = { _, _, _ -> },
             onDeleteSelected = { },
             onSettleClick = { },
-            toGoodsDetailPage = {}
+            toGoodsDetailPage = {},
+            showBackIcon = false,
+            onBackClick = { },
         )
     }
 }

@@ -1,5 +1,6 @@
 package com.joker.coolmall.feature.main.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
 import com.joker.coolmall.core.data.repository.CartRepository
@@ -10,6 +11,7 @@ import com.joker.coolmall.core.model.entity.GoodsSpec
 import com.joker.coolmall.core.model.entity.SelectedGoods
 import com.joker.coolmall.core.util.storage.MMKVUtils
 import com.joker.coolmall.core.util.toast.ToastUtils
+import com.joker.coolmall.feature.main.navigation.CartRoutes
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.GoodsRoutes
 import com.joker.coolmall.navigation.routes.OrderRoutes
@@ -17,6 +19,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
@@ -31,8 +34,15 @@ import javax.inject.Inject
 class CartViewModel @Inject constructor(
     navigator: AppNavigator,
     appState: AppState,
-    private val cartRepository: CartRepository
+    private val cartRepository: CartRepository,
+    private val savedStateHandle: SavedStateHandle
 ) : BaseViewModel(navigator, appState) {
+
+    /**
+     * 是否显示返回按钮
+     */
+    private val _showBackIcon = MutableStateFlow(false)
+    val showBackIcon: StateFlow<Boolean> = _showBackIcon.asStateFlow()
 
     /**
      * 编辑模式状态
@@ -126,6 +136,11 @@ class CartViewModel @Inject constructor(
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = 0
     )
+
+    init {
+        // 从导航参数中获取是否显示返回按钮
+        _showBackIcon.value = savedStateHandle.get<Boolean>(CartRoutes.SHOW_BACK_ICON_ARG) ?: false
+    }
 
     /**
      * 切换编辑模式

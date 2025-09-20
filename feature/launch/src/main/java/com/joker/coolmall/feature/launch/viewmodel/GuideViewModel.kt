@@ -5,10 +5,12 @@
  */
 package com.joker.coolmall.feature.launch.viewmodel
 
+import androidx.lifecycle.SavedStateHandle
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
 import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.util.storage.MMKVUtils
 import com.joker.coolmall.feature.launch.model.GuidePageProvider
+import com.joker.coolmall.feature.launch.navigation.GuideRoutes
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.LaunchRoutes
 import com.joker.coolmall.navigation.routes.MainRoutes
@@ -25,6 +27,7 @@ import javax.inject.Inject
 class GuideViewModel @Inject constructor(
     navigator: AppNavigator,
     appState: AppState,
+    private val savedStateHandle: SavedStateHandle,
 ) : BaseViewModel(navigator, appState) {
 
     companion object {
@@ -33,6 +36,10 @@ class GuideViewModel @Inject constructor(
          */
         private const val KEY_GUIDE_SHOWN = "guide_shown"
     }
+
+    // 是否从设置页面进入
+    private val isFromSettings: Boolean =
+        savedStateHandle.get<Boolean>(GuideRoutes.FROM_SETTINGS_ARG) ?: false
 
     // 引导页数据
     val guidePages = GuidePageProvider.getGuidePages()
@@ -88,10 +95,14 @@ class GuideViewModel @Inject constructor(
      * 开始体验应用
      */
     private fun startExperience() {
-        // 标记引导页已显示
-        markGuideAsShown()
-        // 跳转到主页面并关闭引导页
-        toPageAndCloseCurrent(MainRoutes.MAIN, LaunchRoutes.GUIDE)
+        if (isFromSettings) {
+            // 从设置页面进入，直接返回上一页
+            navigateBack()
+        } else {
+            // 正常流程，标记引导页已显示并跳转到主页面
+            markGuideAsShown()
+            toPageAndCloseCurrent(MainRoutes.MAIN, LaunchRoutes.GUIDE)
+        }
     }
 
     /**

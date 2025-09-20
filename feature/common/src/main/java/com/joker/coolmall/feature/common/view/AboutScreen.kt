@@ -438,7 +438,7 @@ private fun AboutTopSection() {
         SpaceVerticalSmall()
 
         AppText(
-            text = "Version 1.0.0",
+            text = "Version ${PackageUtils.getCurrentVersionName(context)}",
             size = TextSize.BODY_MEDIUM,
             type = TextType.TERTIARY
         )

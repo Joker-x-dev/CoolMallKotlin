@@ -25,7 +25,9 @@ import com.joker.coolmall.core.util.toast.ToastUtils
 import com.joker.coolmall.feature.goods.navigation.GoodsDetailRoutes
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.AuthRoutes
+import com.joker.coolmall.navigation.routes.CsRoutes
 import com.joker.coolmall.navigation.routes.GoodsRoutes
+import com.joker.coolmall.navigation.routes.MainRoutes
 import com.joker.coolmall.navigation.routes.OrderRoutes
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
@@ -311,6 +313,20 @@ class GoodsDetailViewModel @Inject constructor(
      */
     fun toGoodsCommentPage() {
         super.toPage(GoodsRoutes.COMMENT, requiredId)
+    }
+
+    /**
+     * 跳转到购物车页面
+     */
+    fun toCartPage() {
+        super.toPage("${MainRoutes.CART}?show_back_icon=true")
+    }
+
+    /**
+     * 跳转到客服页面
+     */
+    fun toCsPage() {
+        super.toPage(CsRoutes.CHAT)
     }
 
     /**

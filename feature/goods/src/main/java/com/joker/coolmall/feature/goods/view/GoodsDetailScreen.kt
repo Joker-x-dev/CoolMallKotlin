@@ -139,7 +139,7 @@ internal fun GoodsDetailRoute(
 
     GoodsDetailScreen(
         uiState = uiState,
-        onBackClick = { viewModel.navigateBack() },
+        onBackClick = viewModel::navigateBack,
         onRetry = viewModel::retryRequest,
         specModalVisible = specModalVisible,
         specsModalUiState = specsModalUiState,
@@ -156,7 +156,9 @@ internal fun GoodsDetailRoute(
         onShowCouponModal = viewModel::showCouponModal,
         onHideCouponModal = viewModel::hideCouponModal,
         onCouponReceive = viewModel::receiveCoupon,
-        onCommentClick = viewModel::toGoodsCommentPage
+        onCommentClick = viewModel::toGoodsCommentPage,
+        onCsClick = viewModel::toCsPage,
+        onCartClick = viewModel::toCartPage
     )
 }
 
@@ -197,7 +199,9 @@ internal fun GoodsDetailScreen(
     onShowCouponModal: () -> Unit = {},
     onHideCouponModal: () -> Unit = {},
     onCouponReceive: (Coupon) -> Unit = {},
-    onCommentClick: () -> Unit = {}
+    onCommentClick: () -> Unit = {},
+    onCsClick: () -> Unit = {},
+    onCartClick: () -> Unit = {}
 ) {
     Scaffold(
         contentWindowInsets = ScaffoldDefaults
@@ -221,7 +225,9 @@ internal fun GoodsDetailScreen(
                 hasAnimated = hasAnimated,
                 onTriggerAnimation = onTriggerAnimation,
                 onShowCouponModal = onShowCouponModal,
-                onCommentClick = onCommentClick
+                onCommentClick = onCommentClick,
+                onCsClick = onCsClick,
+                onCartClick = onCartClick
             )
 
             // 规格选择底部弹出层
@@ -274,7 +280,9 @@ private fun GoodsDetailContentView(
     hasAnimated: Boolean = false,
     onTriggerAnimation: () -> Unit = {},
     onShowCouponModal: () -> Unit = {},
-    onCommentClick: () -> Unit = {}
+    onCommentClick: () -> Unit = {},
+    onCsClick: () -> Unit = {},
+    onCartClick: () -> Unit = {}
 ) {
     // 主内容容器
     var topBarAlpha by remember { mutableIntStateOf(0) }
@@ -315,7 +323,9 @@ private fun GoodsDetailContentView(
             modifier = Modifier.align(Alignment.BottomCenter),
             onAddToCartClick = onShowSpecModal,
             onBuyNowClick = onShowSpecModal,
-            hasAnimated = hasAnimated
+            hasAnimated = hasAnimated,
+            onCsClick = onCsClick,
+            onCartClick = onCartClick
         )
     }
 }
@@ -811,7 +821,9 @@ private fun GoodsActionBar(
     modifier: Modifier = Modifier,
     onAddToCartClick: () -> Unit = {},
     onBuyNowClick: () -> Unit = {},
-    hasAnimated: Boolean = false
+    hasAnimated: Boolean = false,
+    onCsClick: () -> Unit = {},
+    onCartClick: () -> Unit = {}
 ) {
     // 底部操作栏从底部升起的动画
     val bottomBarOffset by animateOffsetAsState(
@@ -842,7 +854,7 @@ private fun GoodsActionBar(
                     modifier = Modifier
                         .width(40.dp)
                         .clip(ShapeSmall)
-                        .clickable { }
+                        .clickable { onCsClick() }
                         .padding(vertical = SpaceVerticalXSmall)
                 ) {
                     CommonIcon(
@@ -862,7 +874,7 @@ private fun GoodsActionBar(
                     modifier = Modifier
                         .width(40.dp)
                         .clip(ShapeSmall)
-                        .clickable { }
+                        .clickable { onCartClick() }
                         .padding(vertical = SpaceVerticalXSmall)
                 ) {
                     CommonIcon(
