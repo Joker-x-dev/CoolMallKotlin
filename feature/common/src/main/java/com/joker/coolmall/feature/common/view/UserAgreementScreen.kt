@@ -4,6 +4,7 @@ import android.view.ViewGroup
 import android.webkit.WebView
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -51,7 +52,8 @@ internal fun UserAgreementScreen(
 ) {
     AppScaffold(
         titleText = "用户协议",
-        onBackClick = onBackClick
+        onBackClick = onBackClick,
+        backgroundColor = MaterialTheme.colorScheme.surface,
     ) {
         BaseNetWorkView(
             uiState = uiState,
