@@ -18,7 +18,7 @@ interface CommonNetworkDataSource {
     /**
      * 参数配置
      */
-    suspend fun getParam(): NetworkResponse<Any>
+    suspend fun getParam(key: String): NetworkResponse<String>
 
     /**
      * 实体信息与路径

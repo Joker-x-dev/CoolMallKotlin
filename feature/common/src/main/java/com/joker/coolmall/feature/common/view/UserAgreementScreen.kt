@@ -1,15 +1,20 @@
 package com.joker.coolmall.feature.common.view
 
+import android.view.ViewGroup
+import android.webkit.WebView
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkView
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
-import com.joker.coolmall.core.ui.component.text.AppText
-import com.joker.coolmall.core.ui.component.text.TextSize
 import com.joker.coolmall.feature.common.viewmodel.UserAgreementViewModel
 
 /**
@@ -21,9 +26,12 @@ import com.joker.coolmall.feature.common.viewmodel.UserAgreementViewModel
 internal fun UserAgreementRoute(
     viewModel: UserAgreementViewModel = hiltViewModel()
 ) {
+    val uiState by viewModel.uiState.collectAsState()
+
     UserAgreementScreen(
+        uiState = uiState,
         onBackClick = viewModel::navigateBack,
-        onRetry = {}
+        onRetry = viewModel::retryRequest,
     )
 }
 
@@ -37,30 +45,64 @@ internal fun UserAgreementRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun UserAgreementScreen(
-    uiState: BaseNetWorkUiState<Any> = BaseNetWorkUiState.Loading,
+    uiState: BaseNetWorkUiState<String> = BaseNetWorkUiState.Loading,
     onBackClick: () -> Unit = {},
     onRetry: () -> Unit = {}
 ) {
     AppScaffold(
+        titleText = "用户协议",
         onBackClick = onBackClick
     ) {
         BaseNetWorkView(
             uiState = uiState,
             onRetry = onRetry
-        ) {
-            UserAgreementContentView()
+        ) { html ->
+            UserAgreementContentView(html = html)
         }
     }
 }
 
 /**
  * 用户协议内容视图
+ *
+ * @param html HTML内容
  */
 @Composable
-private fun UserAgreementContentView() {
-    AppText(
-        text = "用户协议",
-        size = TextSize.TITLE_MEDIUM
+private fun UserAgreementContentView(html: String) {
+    AndroidView(
+        factory = { context ->
+            WebView(context).apply {
+                settings.apply {
+                    layoutParams = ViewGroup.LayoutParams(
+                        ViewGroup.LayoutParams.MATCH_PARENT,
+                        ViewGroup.LayoutParams.MATCH_PARENT
+                    )
+
+                    // 基础设置
+                    // 不需要 JavaScript
+                    javaScriptEnabled = false
+                    loadsImagesAutomatically = true
+                    useWideViewPort = true
+                    loadWithOverviewMode = true
+                    setSupportZoom(true)
+                    builtInZoomControls = true
+                    displayZoomControls = false
+                    // 不需要存储
+                    domStorageEnabled = false
+                    safeBrowsingEnabled = true
+                }
+
+                // 加载 HTML 内容
+                loadDataWithBaseURL(
+                    null,
+                    html,
+                    "text/html",
+                    "UTF-8",
+                    null
+                )
+            }
+        },
+        modifier = Modifier.fillMaxSize()
     )
 }
 
@@ -73,7 +115,7 @@ internal fun UserAgreementScreenPreview() {
     AppTheme {
         UserAgreementScreen(
             uiState = BaseNetWorkUiState.Success(
-                data = Any()
+                "1"
             )
         )
     }
@@ -88,7 +130,7 @@ internal fun UserAgreementScreenPreviewDark() {
     AppTheme(darkTheme = true) {
         UserAgreementScreen(
             uiState = BaseNetWorkUiState.Success(
-                data = Any()
+                "1"
             )
         )
     }

@@ -7,6 +7,7 @@ import com.joker.coolmall.core.model.response.NetworkResponse
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.POST
+import retrofit2.http.Query
 
 /**
  * 通用基础接口
@@ -23,7 +24,7 @@ interface CommonService {
      * 参数配置
      */
     @GET("base/comm/param")
-    suspend fun getParam(): NetworkResponse<Any>
+    suspend fun getParam(@Query("key") key: String): NetworkResponse<String>
 
     /**
      * 实体信息与路径

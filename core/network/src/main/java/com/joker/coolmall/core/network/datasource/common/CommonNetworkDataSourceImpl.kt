@@ -32,8 +32,8 @@ class CommonNetworkDataSourceImpl @Inject constructor(
      *
      * @return 参数配置响应数据
      */
-    override suspend fun getParam(): NetworkResponse<Any> {
-        return commonService.getParam()
+    override suspend fun getParam(key: String): NetworkResponse<String> {
+        return commonService.getParam(key)
     }
 
     /**

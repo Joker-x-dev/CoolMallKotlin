@@ -1,6 +1,5 @@
 package com.joker.coolmall.core.data.repository
 
-import com.joker.coolmall.core.model.entity.OssUpload
 import com.joker.coolmall.core.model.request.DictDataRequest
 import com.joker.coolmall.core.model.response.DictDataResponse
 import com.joker.coolmall.core.model.response.NetworkResponse
@@ -18,25 +17,10 @@ class CommonRepository @Inject constructor(
     private val commonNetworkDataSource: CommonNetworkDataSource
 ) {
     /**
-     * 文件上传
-     * @return OSS上传响应信息
-     */
-    fun uploadFile(): Flow<NetworkResponse<OssUpload>> = flow {
-        emit(commonNetworkDataSource.uploadFile())
-    }.flowOn(Dispatchers.IO)
-
-    /**
      * 参数配置
      */
-    fun getParam(): Flow<NetworkResponse<Any>> = flow {
-        emit(commonNetworkDataSource.getParam())
-    }.flowOn(Dispatchers.IO)
-
-    /**
-     * 实体信息与路径
-     */
-    fun getEntityPathInfo(): Flow<NetworkResponse<Any>> = flow {
-        emit(commonNetworkDataSource.getEntityPathInfo())
+    fun getParam(key: String): Flow<NetworkResponse<String>> = flow {
+        emit(commonNetworkDataSource.getParam(key))
     }.flowOn(Dispatchers.IO)
 
     /**
