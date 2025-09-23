@@ -1,10 +1,18 @@
 package com.joker.coolmall.feature.common.viewmodel
 
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
 import com.joker.coolmall.core.data.state.AppState
+import com.joker.coolmall.feature.common.data.DependencyDataSource
+import com.joker.coolmall.feature.common.model.Dependency
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.CommonRoutes
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import java.net.URLEncoder
 import javax.inject.Inject
 
@@ -16,6 +24,19 @@ class AboutViewModel @Inject constructor(
     navigator: AppNavigator,
     appState: AppState,
 ) : BaseViewModel(navigator, appState) {
+
+    // ==================== 依赖弹出层状态 ====================
+
+    /**
+     * 依赖弹出层显示状态
+     */
+    private val _showDependencyModal = MutableStateFlow(false)
+    val showDependencyModal: StateFlow<Boolean> = _showDependencyModal.asStateFlow()
+
+    /**
+     * 依赖列表数据
+     */
+    val dependencies: List<Dependency> = DependencyDataSource.getAllDependencies()
 
 
     /**
@@ -124,7 +145,27 @@ class AboutViewModel @Inject constructor(
      * 显示项目中使用的第三方库和资源致谢
      */
     fun onCitationClick() {
-        // TODO: 导航到引用致谢页面
+        _showDependencyModal.value = true
+    }
+
+    /**
+     * 关闭依赖弹出层
+     */
+    fun onDismissDependencyModal() {
+        _showDependencyModal.value = false
+    }
+
+    /**
+     * 点击依赖项
+     * 打开依赖的官方网站
+     * @param dependency 依赖对象
+     */
+    fun onDependencyClick(dependency: Dependency) {
+        if (dependency.websiteUrl.isNotEmpty()) {
+            toWebPage(dependency.websiteUrl, dependency.name)
+        }
+        // 点击后关闭弹出层
+        _showDependencyModal.value = false
     }
 
     /**

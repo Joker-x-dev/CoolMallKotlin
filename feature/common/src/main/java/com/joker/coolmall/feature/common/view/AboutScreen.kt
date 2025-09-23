@@ -33,6 +33,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -77,6 +78,7 @@ import com.joker.coolmall.core.ui.component.text.TextType
 import com.joker.coolmall.core.ui.component.title.TitleWithLine
 import com.joker.coolmall.core.util.`package`.PackageUtils
 import com.joker.coolmall.feature.common.R
+import com.joker.coolmall.feature.common.component.DependencyModal
 import com.joker.coolmall.feature.common.viewmodel.AboutViewModel
 import kotlinx.coroutines.delay
 import kotlin.math.PI
@@ -88,10 +90,15 @@ import kotlin.math.sin
  *
  * @param viewModel 关于我们 ViewModel
  */
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AboutRoute(
     viewModel: AboutViewModel = hiltViewModel()
 ) {
+
+    // 依赖弹出层
+    val showDependencyModal by viewModel.showDependencyModal.collectAsState()
+
     AboutScreen(
         onBackClick = viewModel::navigateBack,
         onDeveloperClick = viewModel::onDeveloperClick,
@@ -111,6 +118,13 @@ internal fun AboutRoute(
         onUserAgreementClick = viewModel::onUserAgreementClick,
         onPrivacyPolicyClick = viewModel::onPrivacyPolicyClick,
         onOpenSourceLicenseClick = viewModel::onOpenSourceLicenseClick
+    )
+
+    DependencyModal(
+        visible = showDependencyModal,
+        dependencies = viewModel.dependencies,
+        onDismiss = viewModel::onDismissDependencyModal,
+        onDependencyClick = viewModel::onDependencyClick
     )
 }
 
@@ -865,4 +879,4 @@ internal fun AboutScreenPreviewDark() {
     AppTheme(darkTheme = true) {
         AboutScreen()
     }
-} 
+}
