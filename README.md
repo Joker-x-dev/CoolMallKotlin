@@ -218,6 +218,9 @@ Android 开发感兴趣，无论是学习还是共同创造，都欢迎加入。
     - 关于我们 (about) `仅页面`
     - WebView 页面 (web) `已完成`
     - 应用设置 (settings) `仅页面`
+    - 用户协议 (user-agreement) `已完成`
+    - 隐私政策 (privacy-policy) `已完成`
+    - 贡献者列表 (contributors) `已完成`
 
 
 - **启动流程模块 (launch)**

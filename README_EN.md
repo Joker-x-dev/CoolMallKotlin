@@ -241,6 +241,9 @@ to join.
     - About Us (about) `UI only`
     - WebView Page (web) `Completed`
     - App Settings (settings) `UI only`
+    - User Agreement (user-agreement) `Completed`
+    - Privacy Policy (privacy-policy) `Completed`
+    - Contributors List (contributors) `Completed`
 
 
 - **Launch Process Module (launch)**
