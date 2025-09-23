@@ -13,6 +13,7 @@ import com.joker.coolmall.core.network.service.impl.FileUploadServiceImpl
 import com.joker.coolmall.core.network.service.GoodsService
 import com.joker.coolmall.core.network.service.OrderService
 import com.joker.coolmall.core.network.service.PageService
+import com.joker.coolmall.core.network.service.UserContributorService
 import com.joker.coolmall.core.network.service.UserInfoService
 import dagger.Module
 import dagger.Provides
@@ -180,5 +181,17 @@ object ServiceModule {
     @Singleton
     fun provideFeedbackService(retrofit: Retrofit): FeedbackService {
         return retrofit.create(FeedbackService::class.java)
+    }
+
+    /**
+     * 提供用户贡献者相关服务接口
+     *
+     * @param retrofit Retrofit实例
+     * @return 用户贡献者服务接口实现
+     */
+    @Provides
+    @Singleton
+    fun provideUserContributorService(retrofit: Retrofit): UserContributorService {
+        return retrofit.create(UserContributorService::class.java)
     }
 }

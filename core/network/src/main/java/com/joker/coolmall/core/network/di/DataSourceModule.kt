@@ -22,6 +22,8 @@ import com.joker.coolmall.core.network.datasource.order.OrderNetworkDataSource
 import com.joker.coolmall.core.network.datasource.order.OrderNetworkDataSourceImpl
 import com.joker.coolmall.core.network.datasource.page.PageNetworkDataSource
 import com.joker.coolmall.core.network.datasource.page.PageNetworkDataSourceImpl
+import com.joker.coolmall.core.network.datasource.usercontributor.UserContributorNetworkDataSource
+import com.joker.coolmall.core.network.datasource.usercontributor.UserContributorNetworkDataSourceImpl
 import com.joker.coolmall.core.network.datasource.userinfo.UserInfoNetworkDataSource
 import com.joker.coolmall.core.network.datasource.userinfo.UserInfoNetworkDataSourceImpl
 import com.joker.coolmall.core.network.service.AddressService
@@ -34,6 +36,7 @@ import com.joker.coolmall.core.network.service.FeedbackService
 import com.joker.coolmall.core.network.service.GoodsService
 import com.joker.coolmall.core.network.service.OrderService
 import com.joker.coolmall.core.network.service.PageService
+import com.joker.coolmall.core.network.service.UserContributorService
 import com.joker.coolmall.core.network.service.UserInfoService
 import com.joker.coolmall.core.network.service.FileUploadService
 import android.content.Context
@@ -170,6 +173,18 @@ object DataSourceModule {
     @Singleton
     fun provideCommonNetworkDataSource(commonService: CommonService): CommonNetworkDataSource {
         return CommonNetworkDataSourceImpl(commonService)
+    }
+
+    /**
+     * 提供用户贡献者相关网络数据源
+     *
+     * @param userContributorService 用户贡献者服务接口
+     * @return 用户贡献者网络数据源实现
+     */
+    @Provides
+    @Singleton
+    fun provideUserContributorNetworkDataSource(userContributorService: UserContributorService): UserContributorNetworkDataSource {
+        return UserContributorNetworkDataSourceImpl(userContributorService)
     }
 
     /**
