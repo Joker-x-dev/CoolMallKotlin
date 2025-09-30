@@ -54,7 +54,7 @@ fun AppScaffold(
     modifier: Modifier = Modifier,
     title: Int? = null,
     titleText: String? = null,
-    topBarColors: TopAppBarColors = TopAppBarDefaults.centerAlignedTopAppBarColors(),
+    topBarColors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
     topBarActions: @Composable (RowScope.() -> Unit) = {},
     showBackIcon: Boolean = true,
     onBackClick: () -> Unit = {},

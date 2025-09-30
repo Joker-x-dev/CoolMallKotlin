@@ -39,9 +39,12 @@ import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.model.entity.DictItem
 import com.joker.coolmall.core.model.entity.Order
+import com.joker.coolmall.core.ui.component.dialog.WeDialog
 import com.joker.coolmall.core.ui.component.divider.WeDivider
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
 import com.joker.coolmall.core.ui.component.list.AppListItem
+import com.joker.coolmall.core.ui.component.modal.DictSelectModal
+import com.joker.coolmall.core.ui.component.modal.OrderGoodsModal
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkListView
 import com.joker.coolmall.core.ui.component.refresh.RefreshLayout
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
@@ -50,11 +53,7 @@ import com.joker.coolmall.core.ui.component.text.PriceText
 import com.joker.coolmall.core.ui.component.text.TextSize
 import com.joker.coolmall.core.ui.component.text.TextType
 import com.joker.coolmall.feature.order.R
-import com.joker.coolmall.core.ui.component.modal.DictSelectModal
-import com.joker.coolmall.core.ui.component.dialog.WeDialog
 import com.joker.coolmall.feature.order.component.OrderButtons
-import com.joker.coolmall.core.ui.component.modal.BottomModal
-import com.joker.coolmall.core.ui.component.modal.OrderGoodsModal
 import com.joker.coolmall.feature.order.model.OrderStatus
 import com.joker.coolmall.feature.order.model.OrderTabState
 import com.joker.coolmall.feature.order.viewmodel.OrderListViewModel
@@ -73,15 +72,15 @@ internal fun OrderListRoute(
 ) {
     val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
     val isAnimatingTabChange by viewModel.isAnimatingTabChange.collectAsState()
-    
+
     // 收集取消订单相关状态
     val cancelModalVisible by viewModel.cancelModalVisible.collectAsState()
     val cancelReasonsModalUiState by viewModel.cancelReasonsModalUiState.collectAsState()
     val selectedCancelReason by viewModel.selectedCancelReason.collectAsState()
-    
+
     // 收集确认收货弹窗状态
     val showConfirmDialog by viewModel.showConfirmDialog.collectAsState()
-    
+
     // 收集再次购买和商品评论弹窗状态
     val rebuyModalVisible by viewModel.rebuyModalVisible.collectAsState()
     val commentModalVisible by viewModel.commentModalVisible.collectAsState()
@@ -141,7 +140,7 @@ internal fun OrderListRoute(
         onRebuyModalDismiss = viewModel::hideRebuyModal,
         onCommentModalDismiss = viewModel::hideCommentModal,
         onRebuyGoodsSelected = viewModel::toGoodsDetailForRebuy,
-        onCommentGoodsSelected = { orderId, goodsId -> 
+        onCommentGoodsSelected = { orderId, goodsId ->
             viewModel.toOrderCommentForGoods(goodsId)
         },
         selectedTabIndex = selectedTabIndex,
@@ -245,7 +244,7 @@ internal fun OrderListScreen(
             tabStateProvider = tabStateProvider
         )
     }
-    
+
     // 取消订单弹窗
     DictSelectModal(
         visible = cancelModalVisible,
@@ -258,7 +257,7 @@ internal fun OrderListScreen(
             onConfirmCancel()
         }
     )
-    
+
     // 确认收货弹窗
     if (showConfirmDialog) {
         WeDialog(
@@ -271,7 +270,7 @@ internal fun OrderListScreen(
             onDismiss = onConfirmDialogDismiss
         )
     }
-    
+
     // 再次购买弹窗
     OrderGoodsModal(
         visible = rebuyModalVisible,
@@ -289,7 +288,7 @@ internal fun OrderListScreen(
         buttonText = "去评价",
         cartList = commentCartList,
         onDismiss = onCommentModalDismiss,
-        onItemButtonClick = { goodsId -> 
+        onItemButtonClick = { goodsId ->
             commentCurrentOrder?.let { order ->
                 onCommentGoodsSelected(order.id, goodsId)
             }
@@ -375,22 +374,22 @@ private fun OrderListContentView(
                 onRetry = tabState.onRetry
             ) {
                 // 标签页的内容
-        OrderTabContent(
-             toOrderDetail = toOrderDetail,
-             toPay = toPay,
-             toGoodsDetail = toGoodsDetail,
-             toOrderLogistics = toOrderLogistics,
-             toOrderRefund = toOrderRefund,
-             toOrderComment = toOrderComment,
-             cancelOrder = cancelOrder,
-             onConfirmClick = onConfirmClick,
-             orderList = tabState.orderList,
-             isRefreshing = tabState.isRefreshing,
-             loadMoreState = tabState.loadMoreState,
-             onRefresh = tabState.onRefresh,
-             onLoadMore = tabState.onLoadMore,
-             shouldTriggerLoadMore = tabState.shouldTriggerLoadMore
-         )
+                OrderTabContent(
+                    toOrderDetail = toOrderDetail,
+                    toPay = toPay,
+                    toGoodsDetail = toGoodsDetail,
+                    toOrderLogistics = toOrderLogistics,
+                    toOrderRefund = toOrderRefund,
+                    toOrderComment = toOrderComment,
+                    cancelOrder = cancelOrder,
+                    onConfirmClick = onConfirmClick,
+                    orderList = tabState.orderList,
+                    isRefreshing = tabState.isRefreshing,
+                    loadMoreState = tabState.loadMoreState,
+                    onRefresh = tabState.onRefresh,
+                    onLoadMore = tabState.onLoadMore,
+                    shouldTriggerLoadMore = tabState.shouldTriggerLoadMore
+                )
             }
         }
     }
@@ -440,7 +439,7 @@ private fun OrderTabContent(
                 order = order,
                 toOrderDetail = toOrderDetail,
                 toPay = { toPay(order) },
-                toGoodsDetail = { 
+                toGoodsDetail = {
                     // 使用 ViewModel 的 handleRebuy 方法处理再次购买逻辑
                     toGoodsDetail(order)
                 },

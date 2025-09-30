@@ -6,8 +6,8 @@ import com.joker.coolmall.feature.main.R
 import com.joker.coolmall.navigation.routes.MainRoutes
 
 enum class TopLevelDestination(
-    @StringRes val titleTextId: Int,
-    @RawRes val animationResId: Int,
+    @param:StringRes val titleTextId: Int,
+    @param:RawRes val animationResId: Int,
     val route: String
 ) {
     HOME(

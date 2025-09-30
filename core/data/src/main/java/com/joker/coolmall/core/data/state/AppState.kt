@@ -31,7 +31,7 @@ class AppState @Inject constructor(
     private val authStoreRepository: AuthStoreRepository,
     private val userInfoStoreRepository: UserInfoStoreRepository,
     private val userInfoRepository: UserInfoRepository,
-    @ApplicationScope private val applicationScope: CoroutineScope
+    @param:ApplicationScope private val applicationScope: CoroutineScope
 ) {
     // 用户登录状态
     private val _isLoggedIn = MutableStateFlow(false)

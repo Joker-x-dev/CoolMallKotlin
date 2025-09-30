@@ -7,11 +7,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -20,7 +16,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -32,11 +27,13 @@ import com.joker.coolmall.core.designsystem.theme.BgYellowLight
 import com.joker.coolmall.core.designsystem.theme.ColorDanger
 import com.joker.coolmall.core.designsystem.theme.ColorSuccess
 import com.joker.coolmall.core.designsystem.theme.ColorWarning
+import com.joker.coolmall.core.designsystem.theme.CommonIcon
 import com.joker.coolmall.core.designsystem.theme.Primary
 import com.joker.coolmall.core.designsystem.theme.ShapeSmall
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingSmall
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingXSmall
 import com.joker.coolmall.core.designsystem.theme.TextWhite
+import com.joker.coolmall.core.ui.R
 
 /**
  * 标签类型
@@ -205,7 +202,7 @@ fun TagClosable(
     style: TagStyle = TagStyle.FILLED,
     size: TagSize = TagSize.MEDIUM,
     shape: Shape = ShapeSmall,
-    closeIcon: ImageVector = Icons.Default.Close,
+    closeIcon: Int = R.drawable.ic_close,
     modifier: Modifier = Modifier,
     textStyle: TextStyle = MaterialTheme.typography.labelSmall
 ) {
@@ -265,12 +262,12 @@ fun TagClosable(
 
         Spacer(modifier = Modifier.width(4.dp))
 
-        Icon(
-            imageVector = closeIcon,
+        CommonIcon(
+            resId = closeIcon,
             contentDescription = "关闭",
             tint = textColor,
+            size = iconSize,
             modifier = Modifier
-                .size(iconSize)
                 .clickable { onClose() }
         )
     }

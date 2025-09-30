@@ -30,6 +30,6 @@ data class CartEntity(
     /**
      * 规格列表 - 需要类型转换器
      */
-    @TypeConverters(CartSpecConverter::class)
+     @param:TypeConverters(CartSpecConverter::class)
     val spec: List<CartGoodsSpec> = emptyList()
 )

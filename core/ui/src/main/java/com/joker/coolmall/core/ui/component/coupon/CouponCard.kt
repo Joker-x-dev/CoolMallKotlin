@@ -12,9 +12,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.KeyboardArrowDown
-import androidx.compose.material.icons.filled.KeyboardArrowUp
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -295,7 +292,7 @@ private fun CouponCardContent(
                             SpaceHorizontalXSmall()
 
                             CommonIcon(
-                                imageVector = if (isExpanded) Icons.Default.KeyboardArrowUp else Icons.Default.KeyboardArrowDown,
+                                resId = if (isExpanded) R.drawable.ic_up else R.drawable.ic_down,
                                 size = 16.dp,
                                 tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                             )

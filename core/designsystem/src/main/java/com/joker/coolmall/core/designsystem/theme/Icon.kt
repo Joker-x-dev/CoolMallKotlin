@@ -134,7 +134,7 @@ fun ArrowLeftIcon(
     tint: Color = LocalContentColor.current
 ) {
     CommonIcon(
-        resId = R.drawable.ic_arrow_left,
+        resId = R.drawable.ic_left,
         modifier = modifier,
         size = size,
         tint = tint
@@ -155,7 +155,7 @@ fun ArrowRightIcon(
     tint: Color = RightArrowGray
 ) {
     CommonIcon(
-        resId = R.drawable.ic_arrow_right,
+        resId = R.drawable.ic_right,
         modifier = modifier,
         size = size,
         tint = tint

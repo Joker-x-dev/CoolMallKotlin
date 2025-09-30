@@ -94,7 +94,7 @@ fun PasswordInputField(
         ) {
             Image(
                 painter = painterResource(
-                    id = if (passwordVisible) R.drawable.ic_visible else R.drawable.ic_invisible
+                    id = if (passwordVisible) R.drawable.ic_eye else R.drawable.ic_eye_hide
                 ),
                 contentDescription = if (passwordVisible)
                     stringResource(id = R.string.hide_password) else stringResource(id = R.string.show_password),

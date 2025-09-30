@@ -848,12 +848,12 @@ private fun AboutAnimatedToolBar(
                 ArrowLeftIcon()
             }
         },
-        colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+        colors = TopAppBarDefaults.topAppBarColors(
             containerColor = MaterialTheme.colorScheme.background.copy(
                 alpha = toolbarAlpha
             ),
+            navigationIconContentColor = MaterialTheme.colorScheme.onBackground,
             titleContentColor = MaterialTheme.colorScheme.onBackground,
-            navigationIconContentColor = MaterialTheme.colorScheme.onBackground
         ),
         scrollBehavior = scrollBehavior
     )

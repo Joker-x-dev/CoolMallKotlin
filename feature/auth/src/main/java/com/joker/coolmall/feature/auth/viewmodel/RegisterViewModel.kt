@@ -31,7 +31,7 @@ class RegisterViewModel @Inject constructor(
     navigator: AppNavigator,
     appState: AppState,
     private val authRepository: AuthRepository,
-    @ApplicationContext private val context: Context
+    @param:ApplicationContext private val context: Context
 ) : BaseViewModel(
     navigator = navigator,
     appState = appState

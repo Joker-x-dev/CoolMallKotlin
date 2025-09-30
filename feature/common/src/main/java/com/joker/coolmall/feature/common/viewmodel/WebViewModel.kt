@@ -24,7 +24,7 @@ class WebViewModel @Inject constructor(
     navigator: AppNavigator,
     appState: AppState,
     savedStateHandle: SavedStateHandle,
-    @ApplicationContext private val context: Context,
+    @param:ApplicationContext private val context: Context,
 ) : BaseViewModel(navigator, appState) {
 
     /**
@@ -133,4 +133,4 @@ class WebViewModel @Inject constructor(
     fun dismissDropdownMenu() {
         _showDropdownMenu.value = false
     }
-} 
+}

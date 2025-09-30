@@ -61,5 +61,6 @@
     <!-- Toast messages -->
     <string name="invalid_phone_number">Please enter a valid phone number</string>
     <string name="invalid_verification_code">Please enter a 4-digit verification code</string>
+    <string name="invalid_password">Please enter the correct password</string>
     <string name="login_success">Login successful</string>
-</resources> 
+</resources>

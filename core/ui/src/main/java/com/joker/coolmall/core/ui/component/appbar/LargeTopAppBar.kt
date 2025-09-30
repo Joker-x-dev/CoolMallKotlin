@@ -79,8 +79,8 @@ fun LargeTopAppBar(
         },
         actions = actions,
         scrollBehavior = scrollBehavior,
-        colors = TopAppBarDefaults.largeTopAppBarColors(
-            containerColor = backgroundColor
+        colors = TopAppBarDefaults.topAppBarColors(
+            containerColor = backgroundColor,
         )
     )
 }

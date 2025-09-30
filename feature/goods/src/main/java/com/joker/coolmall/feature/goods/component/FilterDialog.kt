@@ -30,8 +30,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.BasicTextField
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Card
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -65,6 +63,7 @@ import com.joker.coolmall.core.designsystem.theme.SpacePaddingXSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.model.entity.CategoryTree
 import com.joker.coolmall.core.model.preview.previewCategoryTreeList
+import com.joker.coolmall.core.ui.R
 import com.joker.coolmall.core.ui.component.button.AppButton
 import com.joker.coolmall.core.ui.component.button.AppButtonBordered
 import com.joker.coolmall.core.ui.component.button.ButtonSize
@@ -199,7 +198,8 @@ private fun FilterContentView(
         ) {
             AppText(
                 text = "筛选",
-                size = TextSize.TITLE_LARGE
+                size = TextSize.TITLE_LARGE,
+                color = MaterialTheme.colorScheme.onSurface
             )
 
             Box(
@@ -209,7 +209,7 @@ private fun FilterContentView(
                     .padding(SpacePaddingXSmall)
             ) {
                 CommonIcon(
-                    imageVector = Icons.Default.Close,
+                    resId = R.drawable.ic_close,
                     size = 24.dp,
                     tint = MaterialTheme.colorScheme.onSurface
                 )

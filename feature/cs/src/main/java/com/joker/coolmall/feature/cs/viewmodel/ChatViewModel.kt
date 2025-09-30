@@ -38,7 +38,7 @@ private const val TAG = "ChatViewModel"
 class ChatViewModel @Inject constructor(
     private val customerServiceRepository: CustomerServiceRepository,
     appState: AppState,
-    @ApplicationContext private val context: Context,
+    @param:ApplicationContext private val context: Context,
     navigator: AppNavigator,
 ) : BaseViewModel(navigator, appState) {
 

@@ -34,8 +34,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -71,6 +69,7 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.designsystem.component.SpaceBetweenRow
 import com.joker.coolmall.core.designsystem.theme.AppTheme
+import com.joker.coolmall.core.designsystem.theme.ArrowRightIcon
 import com.joker.coolmall.core.designsystem.theme.ColorDanger
 import com.joker.coolmall.core.designsystem.theme.CommonIcon
 import com.joker.coolmall.core.designsystem.theme.Primary
@@ -79,6 +78,7 @@ import com.joker.coolmall.core.designsystem.theme.ShapeSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceDivider
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
+import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalXSmall
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingSmall
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingXSmall
@@ -365,7 +365,7 @@ private fun GoodsDetailTopBar(
             .padding(horizontal = SpacePaddingMedium, vertical = SpacePaddingSmall)
     ) {
         CircleIconButton(
-            icon = com.joker.coolmall.core.designsystem.R.drawable.ic_arrow_left,
+            icon = com.joker.coolmall.core.designsystem.R.drawable.ic_left,
             onClick = onBackClick,
             iconSize = 28.dp,
             scale = buttonScale
@@ -374,7 +374,7 @@ private fun GoodsDetailTopBar(
         Spacer(modifier = Modifier.weight(1f))
 
         CircleIconButton(
-            icon = R.drawable.ic_share_fill,
+            icon = R.drawable.ic_share_triangle,
             onClick = onShareClick,
             scale = buttonScale
         )
@@ -726,13 +726,13 @@ private fun SpecSelection(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                painter = painterResource(id = R.drawable.ic_spec),
+                painter = painterResource(id = R.drawable.ic_cube),
                 contentDescription = "规格",
                 tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
-                modifier = Modifier.size(SpaceVerticalLarge)
+                modifier = Modifier.size(20.dp)
             )
 
-            SpaceHorizontalSmall()
+            SpaceHorizontalXSmall()
 
             // 根据是否选中规格显示不同的文本
             Text(
@@ -742,11 +742,10 @@ private fun SpecSelection(
             )
         }
 
-        Icon(
-            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
-            contentDescription = null,
-            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f),
-            modifier = Modifier.size(SpaceVerticalLarge)
+        ArrowRightIcon(
+            modifier = Modifier.size(SpaceVerticalLarge),
+            size = 16.dp,
+            tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.4f)
         )
     }
 }

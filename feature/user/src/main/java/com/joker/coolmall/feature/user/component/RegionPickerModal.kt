@@ -9,10 +9,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
@@ -28,6 +25,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import com.joker.coolmall.core.designsystem.theme.CommonIcon
 import com.joker.coolmall.core.designsystem.theme.ShapeCircle
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
@@ -41,6 +39,7 @@ import com.joker.coolmall.core.ui.component.tag.TagStyle
 import com.joker.coolmall.core.ui.component.tag.TagType
 import com.joker.coolmall.feature.user.R
 import com.joker.coolmall.feature.user.model.Region
+import com.joker.coolmall.core.ui.R as CoreUiR
 
 /**
  * 地区选择对话框
@@ -263,11 +262,10 @@ private fun RegionItem(
                         .background(MaterialTheme.colorScheme.primary),
                     contentAlignment = Alignment.Center
                 ) {
-                    Icon(
-                        imageVector = Icons.Default.Check,
-                        contentDescription = "已选择",
+                    CommonIcon(
+                        resId = CoreUiR.drawable.ic_success_circle,
                         tint = Color.White,
-                        modifier = Modifier.size(14.dp)
+                        size = 14.dp,
                     )
                 }
             }

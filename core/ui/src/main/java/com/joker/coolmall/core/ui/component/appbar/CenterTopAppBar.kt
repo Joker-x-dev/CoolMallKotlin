@@ -34,7 +34,7 @@ import com.joker.coolmall.core.designsystem.theme.ArrowLeftIcon
 fun CenterTopAppBar(
     title: Int? = null,
     titleText: String? = null,
-    colors: TopAppBarColors = TopAppBarDefaults.centerAlignedTopAppBarColors(),
+    colors: TopAppBarColors = TopAppBarDefaults.topAppBarColors(),
     actions: @Composable (RowScope.() -> Unit) = {},
     onBackClick: () -> Unit = {},
     showBackIcon: Boolean = true

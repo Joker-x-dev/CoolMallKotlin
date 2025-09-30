@@ -26,7 +26,7 @@ import javax.inject.Singleton
 
 @Singleton
 class FileUploadServiceImpl @Inject constructor(
-    @FileUploadQualifier private val okHttpClient: OkHttpClient,
+    @param:FileUploadQualifier private val okHttpClient: OkHttpClient,
     private val context: Context
 ) : FileUploadService {
 

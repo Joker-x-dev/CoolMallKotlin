@@ -8,12 +8,9 @@ import android.webkit.WebViewClient
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MoreVert
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.Text
@@ -32,7 +29,9 @@ import androidx.core.net.toUri
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.joker.coolmall.core.designsystem.component.FullScreenBox
 import com.joker.coolmall.core.designsystem.theme.AppTheme
+import com.joker.coolmall.core.designsystem.theme.CommonIcon
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
+import com.joker.coolmall.feature.common.R
 import com.joker.coolmall.feature.common.model.WebViewData
 import com.joker.coolmall.feature.common.viewmodel.WebViewModel
 
@@ -145,8 +144,8 @@ private fun WebScreenTopBarActions(
 ) {
     // 溢出菜单按钮
     IconButton(onClick = onShowDropdownMenu) {
-        Icon(
-            imageVector = Icons.Default.MoreVert,
+        CommonIcon(
+            resId = R.drawable.ic_more_vertical,
             contentDescription = "更多选项"
         )
     }
