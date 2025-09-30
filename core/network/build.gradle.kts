@@ -1,19 +1,16 @@
 plugins {
-    id("com.joker.coolmall.android.library")
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt)
+    alias(libs.plugins.coolmall.android.library)
+    alias(libs.plugins.coolmall.hilt)
 }
 
 android {
-    buildFeatures {
-        buildConfig = true
-    }
-}
+    namespace = "com.joker.coolmall.core.network"
 
+}
 dependencies {
     // 引入 model 模块
-    implementation(project(":core:model"))
-    implementation(project(":core:datastore"))
+    implementation(projects.core.model)
+    implementation(projects.core.datastore)
 
     // 网络相关
     implementation(libs.kotlinx.serialization.json)
@@ -22,10 +19,6 @@ dependencies {
     implementation(libs.retrofit2.kotlinx.serialization.converter)
     implementation(libs.logging.interceptor)
     implementation(libs.timber)
-
-    // Hilt
-    ksp(libs.hilt.android.compiler)
-    implementation(libs.hilt.android)
 
     // 通过OkHttp的拦截器机制
     // 实现在应用通知栏显示网络请求功能

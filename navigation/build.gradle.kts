@@ -1,21 +1,13 @@
 plugins {
-    id("com.joker.coolmall.android.library")
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt)
+    alias(libs.plugins.coolmall.android.library)
+    alias(libs.plugins.coolmall.hilt)
 }
 
 dependencies {
     // 导航
     implementation(libs.navigation.compose)
-
-    // Hilt
-    ksp(libs.hilt.android.compiler)
-    implementation(libs.hilt.android)
-    implementation(libs.hilt.navigation.compose)
 }
 
 android {
-    buildFeatures {
-        buildConfig = true
-    }
+    namespace = "com.joker.coolmall.navigation"
 }

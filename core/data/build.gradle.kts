@@ -1,34 +1,25 @@
 plugins {
-    id("com.joker.coolmall.android.library")
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt)
+    alias(libs.plugins.coolmall.android.library)
+    alias(libs.plugins.coolmall.hilt)
 }
 
 android {
-    buildFeatures {
-        buildConfig = true
-    }
+    namespace = "com.joker.coolmall.core.data"
 }
 
 dependencies {
     // 引入 model 模块
-    implementation(project(":core:model"))
+    implementation(projects.core.model)
     // 引入网络模块
-    implementation(project(":core:network"))
+    implementation(projects.core.network)
     // 引入工具模块
-    implementation(project(":core:util"))
+    api(projects.core.util)
     // 引入数据存储模块
-    implementation(project(":core:datastore"))
+    implementation(projects.core.datastore)
     // 引入数据库模块
-    implementation(project(":core:database"))
+    implementation(projects.core.database)
     // 引入 result 模块
-    implementation(project(":core:result"))
-
+    implementation(projects.core.result)
     // kotlin序列化
     implementation(libs.kotlinx.serialization.json)
-
-    // Hilt
-    ksp(libs.hilt.android.compiler)
-    implementation(libs.hilt.android)
-    implementation(libs.hilt.navigation.compose)
 }

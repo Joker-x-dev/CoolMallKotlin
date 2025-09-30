@@ -1,13 +1,9 @@
 plugins {
-    id("com.joker.coolmall.android.feature")
+    alias(libs.plugins.coolmall.android.feature)
 }
 
 android {
     namespace = "com.joker.coolmall.feature.feedback"
-
-    buildFeatures {
-        buildConfig = true
-    }
 }
 
 dependencies {}

@@ -1,12 +1,10 @@
 plugins {
-    id("com.joker.coolmall.android.library")
+    alias(libs.plugins.coolmall.android.library)
     alias(libs.plugins.kotlin.serialization)
 }
 
 android {
-    buildFeatures {
-        buildConfig = true
-    }
+    namespace = "com.joker.coolmall.core.model"
 }
 
 kotlin {

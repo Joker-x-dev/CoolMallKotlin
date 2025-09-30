@@ -1,3 +1,6 @@
+// 启用类型安全的项目访问器功能
+enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
+
 // Gradle插件管理配置
 pluginManagement {
     // 包含build-logic目录作为构建逻辑模块
@@ -73,3 +76,12 @@ include(":feature:user")
 include(":feature:cs")
 // 反馈模块
 include(":feature:feedback")
+
+// JDK 版本检查：确保使用 JDK 17 或更高版本进行构建
+check(JavaVersion.current().isCompatibleWith(JavaVersion.VERSION_17)) {
+    """
+    CoolMall 项目需要 JDK 17+ 但当前使用的是 JDK ${JavaVersion.current()}。
+    Java Home: [${System.getProperty("java.home")}]
+    请参考: https://developer.android.com/build/jdks#jdk-config-in-studio
+    """.trimIndent()
+}

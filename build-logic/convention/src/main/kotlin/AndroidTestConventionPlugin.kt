@@ -1,6 +1,6 @@
-package com.joker.coolmall
-
 import com.android.build.gradle.TestExtension
+import com.joker.coolmall.configureKotlinAndroid
+import com.joker.coolmall.libs
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -16,7 +16,7 @@ import org.gradle.kotlin.dsl.configure
  * 
  * 主要通过扩展Android Gradle Plugin的TestExtension来实现配置
  */
-class AndroidTest : Plugin<Project> {
+class AndroidTestConventionPlugin : Plugin<Project> {
     /**
      * 插件应用入口
      * 
@@ -32,25 +32,15 @@ class AndroidTest : Plugin<Project> {
 
             // 配置Android测试扩展
             extensions.configure<TestExtension> {
-                // 设置编译SDK版本
-                compileSdk = libs.findVersion("compileSdk").get().toString().toInt()
-
+                // 使用统一的 Kotlin Android 配置
+                configureKotlinAndroid(this)
+                
                 // 默认配置
                 defaultConfig {
-                    // 设置最小支持的SDK版本
-                    minSdk = libs.findVersion("minSdk").get().toString().toInt()
                     // 设置目标SDK版本
                     targetSdk = libs.findVersion("targetSdk").get().toString().toInt()
                     // 设置Android测试运行器
                     testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-                }
-
-                // Java编译选项配置
-                compileOptions {
-                    // 源代码兼容性级别设置为Java 11
-                    sourceCompatibility = JavaVersion.VERSION_11
-                    // 目标字节码兼容性级别设置为Java 11
-                    targetCompatibility = JavaVersion.VERSION_11
                 }
             }
         }

@@ -1,6 +1,6 @@
-package com.joker.coolmall
-
 import com.android.build.gradle.LibraryExtension
+import com.joker.coolmall.configureKotlinAndroid
+import com.joker.coolmall.libs
 import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
@@ -25,7 +25,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
  * - navigation模块：com.joker.coolmall.navigation
  * - 其他模块：根据模块路径生成
  */
-class AndroidLibrary : Plugin<Project> {
+class AndroidLibraryConventionPlugin : Plugin<Project> {
     /**
      * 插件应用入口
      *
@@ -73,7 +73,9 @@ class AndroidLibrary : Plugin<Project> {
 
                 println("配置模块: ${project.path} 的命名空间为: $namespace")
 
-                configureAndroid(this)
+                // 使用统一的 Kotlin Android 配置
+                configureKotlinAndroid(this)
+                
                 defaultConfig.targetSdk = libs.findVersion("targetSdk").get().toString().toInt()
 
                 flavorDimensions += listOf("env")
@@ -93,42 +95,12 @@ class AndroidLibrary : Plugin<Project> {
                 }
             }
 
-            // 配置 Kotlin 编译选项
-            tasks.withType<KotlinCompile>().configureEach {
-                compilerOptions {
-                    jvmTarget.set(JvmTarget.JVM_11)
-                }
-            }
-
             configureDependencies()
         }
     }
 }
 
-/**
- * 配置Android库的通用设置
- *
- * @param commonExtension Android库扩展实例
- */
-internal fun Project.configureAndroid(
-    commonExtension: LibraryExtension,
-) {
-    commonExtension.apply {
-        compileSdk = libs.findVersion("compileSdk").get().toString().toInt()
 
-        defaultConfig {
-            minSdk = libs.findVersion("minSdk").get().toString().toInt()
-
-            testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-            consumerProguardFiles("consumer-rules.pro")
-        }
-
-        compileOptions {
-            sourceCompatibility = JavaVersion.VERSION_11
-            targetCompatibility = JavaVersion.VERSION_11
-        }
-    }
-}
 
 /**
  * 配置库模块的通用依赖

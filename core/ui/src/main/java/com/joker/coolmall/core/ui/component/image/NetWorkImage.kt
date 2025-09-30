@@ -21,6 +21,7 @@ import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
 import com.joker.coolmall.core.common.R
+import com.joker.coolmall.core.util.R as CoreUtilR
 import com.joker.coolmall.core.ui.component.loading.WeLoading
 
 /**
@@ -111,7 +112,7 @@ fun NetWorkImage(
                     if (onErrorClick != null) {
                         IconButton(onClick = onErrorClick) {
                             Icon(
-                                painter = painterResource(id = R.drawable.ic_error),
+                                painter = painterResource(id = CoreUtilR.drawable.ic_error),
                                 contentDescription = "Error",
                                 tint = errorColor,
                                 modifier = Modifier.size(24.dp)
@@ -120,7 +121,7 @@ fun NetWorkImage(
                     } else {
                         // 否则显示普通图标
                         Icon(
-                            painter = painterResource(id = R.drawable.ic_error),
+                            painter = painterResource(id = CoreUtilR.drawable.ic_error),
                             contentDescription = "Error",
                             tint = errorColor,
                             modifier = Modifier.size(24.dp)

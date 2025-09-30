@@ -1,16 +1,8 @@
 plugins {
-    id("com.joker.coolmall.android.library")
-    id("com.joker.coolmall.android.compose")
+    alias(libs.plugins.coolmall.android.library.compose)
 }
 
 android {
     namespace = "com.joker.coolmall.core.designsystem"
-
-    buildFeatures {
-        buildConfig = true
-    }
 }
-
-dependencies {
-
-}
+dependencies {}

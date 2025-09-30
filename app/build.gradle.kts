@@ -1,8 +1,6 @@
 plugins {
-    id("com.joker.coolmall.android.application")
-    id("com.joker.coolmall.android.compose")
-    alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt)
+    alias(libs.plugins.coolmall.android.application.compose)
+    alias(libs.plugins.coolmall.hilt)
 }
 
 android {
@@ -70,45 +68,38 @@ android {
             )
         }
     }
-
-    kotlin {
-        jvmToolchain(11)
-    }
 }
 
 dependencies {
-    implementation(project(":navigation"))
-    implementation(project(":core:designsystem"))
-    implementation(project(":core:util"))
-    implementation(project(":core:data"))
-    implementation(project(":core:common"))
+    implementation(projects.navigation)
+    implementation(projects.core.designsystem)
+    implementation(projects.core.util)
+    implementation(projects.core.data)
+    implementation(projects.core.common)
     // 首页模块
-    implementation(project(":feature:main"))
+    implementation(projects.feature.main)
     // 商品模块
-    implementation(project(":feature:goods"))
+    implementation(projects.feature.goods)
     // 登录(认证)模块
-    implementation(project(":feature:auth"))
+    implementation(projects.feature.auth)
     // 用户模块
-    implementation(project(":feature:user"))
+    implementation(projects.feature.user)
     // 订单模块
-    implementation(project(":feature:order"))
+    implementation(projects.feature.order)
     // 客服模块
-    implementation(project(":feature:cs"))
+    implementation(projects.feature.cs)
     // 通用模块
-    implementation(project(":feature:common"))
+    implementation(projects.feature.common)
     // 营销模块
-    implementation(project(":feature:market"))
+    implementation(projects.feature.market)
     // 反馈模块
-    implementation(project(":feature:feedback"))
+    implementation(projects.feature.feedback)
     // 启动流程模块
-    implementation(project(":feature:launch"))
+    implementation(projects.feature.launch)
 
     // region 依赖注入
     // https://developer.android.google.cn/training/dependency-injection/hilt-android?hl=zh-cn
-    ksp(libs.hilt.android.compiler)
-    implementation(libs.hilt.android)
-    implementation(libs.hilt.navigation.compose)
-    kspAndroidTest(libs.hilt.android.compiler)
+    kspAndroidTest(libs.hilt.compiler)
     androidTestImplementation(libs.hilt.android.testing)
     //endregion
 
@@ -120,6 +111,11 @@ dependencies {
     // LeakCanary - 内存泄漏检测工具（仅在debug构建中使用）
     // https://github.com/square/leakcanary
     debugImplementation(libs.leakcanary.android)
+
+    // 测试依赖
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.junit)
+    androidTestImplementation(libs.androidx.espresso.core)
 
     // QQ SDK 依赖
     implementation(files("../core/common/libs/open_sdk_lite.jar"))
