@@ -14,10 +14,10 @@ dependencies {
 
     // 网络相关
     implementation(libs.kotlinx.serialization.json)
-    implementation(libs.okhttp)
+    implementation(libs.okhttp3)
     implementation(libs.retrofit)
     implementation(libs.retrofit2.kotlinx.serialization.converter)
-    implementation(libs.logging.interceptor)
+    implementation(libs.okhttp.logging)
     implementation(libs.timber)
 
     // 通过OkHttp的拦截器机制

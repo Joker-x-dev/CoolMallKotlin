@@ -31,7 +31,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalWindowInfo
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
@@ -88,9 +87,10 @@ fun BottomModal(
 
     // 计算安全区域
     val density = LocalDensity.current
+    val configuration = LocalConfiguration.current
 
     // 获取屏幕高度（dp）
-    val screenHeightDp = LocalWindowInfo.current.containerSize.height.dp
+    val screenHeightDp = configuration.screenHeightDp.dp
 
     // 获取顶部安全区域高度（状态栏和刘海屏）
     val statusBarHeightPx = WindowInsets.statusBars.getTop(density)

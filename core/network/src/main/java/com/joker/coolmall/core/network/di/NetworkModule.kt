@@ -5,7 +5,6 @@ import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import com.joker.coolmall.core.network.BuildConfig
 import com.joker.coolmall.core.network.interceptor.AuthInterceptor
-import com.joker.coolmall.core.network.di.FileUploadQualifier
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -64,6 +64,10 @@ import com.joker.coolmall.core.model.entity.Category
 import com.joker.coolmall.core.model.entity.Coupon
 import com.joker.coolmall.core.model.entity.Goods
 import com.joker.coolmall.core.model.entity.Home
+import com.joker.coolmall.core.model.preview.previewAvailableCoupons
+import com.joker.coolmall.core.model.preview.previewBannerList
+import com.joker.coolmall.core.model.preview.previewCategoryList
+import com.joker.coolmall.core.model.preview.previewGoodsList
 import com.joker.coolmall.core.ui.component.card.AppCard
 import com.joker.coolmall.core.ui.component.goods.GoodsGridItem
 import com.joker.coolmall.core.ui.component.goods.GoodsListItem
@@ -676,7 +680,16 @@ fun HomeScreenPreview() {
     AppTheme {
         HomeScreen(
             sharedTransitionScope = null,
-            animatedContentScope = null
+            animatedContentScope = null,
+            uiState = BaseNetWorkListUiState.Success,
+            pageData = Home(
+                banner = previewBannerList,
+                coupon = previewAvailableCoupons,
+                category = previewCategoryList,
+                recommend = previewGoodsList,
+                flashSale = previewGoodsList,
+                goods = previewGoodsList
+            ),
         )
     }
 }

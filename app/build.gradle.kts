@@ -76,6 +76,10 @@ dependencies {
     implementation(projects.core.util)
     implementation(projects.core.data)
     implementation(projects.core.common)
+    
+    // 网络相关依赖
+    implementation(libs.okhttp3)
+    implementation(libs.retrofit)
     // 首页模块
     implementation(projects.feature.main)
     // 商品模块
