@@ -1,8 +1,3 @@
-/**
- * 启动页界面
- *
- * @author Joker.X
- */
 package com.joker.coolmall.feature.launch.view
 
 import androidx.compose.animation.AnimatedContentScope
@@ -29,6 +24,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.blur
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
@@ -36,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.LogoIcon
+import com.joker.coolmall.feature.launch.R
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXXLarge
 import com.joker.coolmall.core.ui.component.text.AppText
@@ -50,6 +47,7 @@ import kotlinx.coroutines.delay
  * @param sharedTransitionScope 共享转换作用域
  * @param animatedContentScope 动画内容作用域
  * @param viewModel 启动页 ViewModel
+ * @author Joker.X
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -71,6 +69,7 @@ internal fun SplashRoute(
  * @param sharedTransitionScope 共享转换作用域
  * @param animatedContentScope 动画内容作用域
  * @param toHome 导航到主页的回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
@@ -92,6 +91,7 @@ internal fun SplashScreen(
  * @param sharedTransitionScope 共享转换作用域
  * @param animatedContentScope 动画内容作用域
  * @param toHome 导航到主页的回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -162,6 +162,8 @@ private fun SplashContentView(
 
 /**
  * 背景Logo区域
+ *
+ * @author Joker.X
  */
 @Composable
 private fun BackgroundLogoSection() {
@@ -186,6 +188,7 @@ private fun BackgroundLogoSection() {
  * @param textAlpha 文本透明度
  * @param sharedTransitionScope 共享转换作用域
  * @param animatedContentScope 动画内容作用域
+ * @author Joker.X
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -233,7 +236,7 @@ private fun ForegroundContentSection(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             AppText(
-                text = "青商城",
+                text = stringResource(R.string.app_name_splash),
                 size = TextSize.TITLE_LARGE,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -242,7 +245,7 @@ private fun ForegroundContentSection(
 
             // 底部应用信息
             AppText(
-                text = "© 2025 Joker.X & CoolMallKotlin Contributors",
+                text = stringResource(R.string.app_copyright),
                 size = TextSize.BODY_MEDIUM,
                 type = TextType.TERTIARY,
             )
@@ -255,6 +258,8 @@ private fun ForegroundContentSection(
 
 /**
  * 启动页界面浅色主题预览
+ *
+ * @author Joker.X
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Preview(showBackground = true)
@@ -270,6 +275,8 @@ internal fun SplashScreenPreview() {
 
 /**
  * 启动页界面深色主题预览
+ *
+ * @author Joker.X
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Preview(showBackground = true)

@@ -58,25 +58,33 @@ import kotlinx.coroutines.delay
  * 购物车页面路由
  *
  * @param viewModel 购物车ViewModel
+ * @author Joker.X
  */
 @Composable
 internal fun CartRoute(
     viewModel: CartViewModel = hiltViewModel(),
 ) {
+    // 购物车商品列表
     val carts by viewModel.cartItems.collectAsState()
+    // 购物车是否为空
     val isEmpty by viewModel.isEmpty.collectAsState()
+    // 是否处于编辑模式
     val isEditing by viewModel.isEditing.collectAsState()
+    // 是否全选状态
     val isAllSelected by viewModel.isAllSelected.collectAsState()
+    // 已选商品数量
     val selectedCount by viewModel.selectedCount.collectAsState()
+    // 已选商品总金额
     val selectedTotalAmount by viewModel.selectedTotalAmount.collectAsState()
+    // 是否显示返回按钮
     val showBackIcon by viewModel.showBackIcon.collectAsState()
+    // 已选商品和规格ID的映射
     val selectedItems by viewModel.selectedItems.collectAsState()
 
     CartScreen(
         carts = carts,
         isEmpty = isEmpty,
         isEditing = isEditing,
-
         isAllSelected = isAllSelected,
         selectedCount = selectedCount,
         selectedTotalAmount = selectedTotalAmount,
@@ -110,33 +118,36 @@ internal fun CartRoute(
  * @param onDeleteSelected 删除已选商品回调
  * @param onSettleClick 结算按钮点击回调
  * @param toGoodsDetailPage 跳转到商品详情
+ * @param onBackClick 返回按钮回调
+ * @param showBackIcon 是否显示返回按钮
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun CartScreen(
-    carts: List<Cart>,
-    isEmpty: Boolean,
-    isEditing: Boolean,
-    isAllSelected: Boolean,
-    selectedCount: Int,
-    selectedTotalAmount: Int,
-    selectedItems: Map<Long, Set<Long>>,
-    onToggleEditMode: () -> Unit,
-    onToggleSelectAll: () -> Unit,
-    onToggleItemSelection: (Long, Long) -> Unit,
-    onUpdateCartItemCount: (Long, Long, Int) -> Unit,
-    onDeleteSelected: () -> Unit,
-    onSettleClick: () -> Unit,
-    toGoodsDetailPage: (Long) -> Unit,
-    onBackClick: () -> Unit,
-    showBackIcon: Boolean,
+    carts: List<Cart>? = null,
+    isEmpty: Boolean = false,
+    isEditing: Boolean = false,
+    isAllSelected: Boolean = false,
+    selectedCount: Int = 0,
+    selectedTotalAmount: Int = 0,
+    selectedItems: Map<Long, Set<Long>>? = null,
+    onToggleEditMode: () -> Unit = {},
+    onToggleSelectAll: () -> Unit = {},
+    onToggleItemSelection: (Long, Long) -> Unit = { _, _ -> },
+    onUpdateCartItemCount: (Long, Long, Int) -> Unit = { _, _, _ -> },
+    onDeleteSelected: () -> Unit = {},
+    onSettleClick: () -> Unit = {},
+    toGoodsDetailPage: (Long) -> Unit = {},
+    onBackClick: () -> Unit = {},
+    showBackIcon: Boolean = false,
 ) {
     // 跟踪正在删除的商品
     var deletingItems by remember { mutableStateOf(emptyMap<Long, Set<Long>>()) }
 
     // 处理删除动画
     val handleDeleteWithAnimation = {
-        deletingItems = selectedItems.toMap()
+        deletingItems = selectedItems?.toMap() ?: emptyMap()
     }
 
     // 监听deletingItems变化，延迟后执行实际删除
@@ -180,61 +191,89 @@ internal fun CartScreen(
             }
         }
     ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
-        ) {
-            if (isEmpty) {
-                EmptyCart()
-            } else {
-                // 购物车商品列表
-                LazyColumn(
-                    contentPadding = PaddingValues(SpacePaddingMedium),
-                    verticalArrangement = Arrangement.spacedBy(SpaceVerticalMedium),
-                    modifier = Modifier
-                        .fillMaxSize()
-                ) {
-                    items(
-                        items = carts,
-                        key = { "cart-${it.goodsId}" },
-                    ) { cart ->
-                        // 检查整个商品是否正在删除
-                        val cartSelectedSpecs = selectedItems[cart.goodsId] ?: emptySet()
-                        val cartDeletingSpecs = deletingItems[cart.goodsId] ?: emptySet()
-                        val isCartDeleting = cartSelectedSpecs.isNotEmpty() &&
-                                cartSelectedSpecs == cart.spec.map { it.id }.toSet() &&
-                                cartDeletingSpecs == cartSelectedSpecs
+        // Screen层处理空状态
+        if (isEmpty) {
+            EmptyCart()
+        } else {
+            // 有数据时才渲染ContentView
+            CartContentView(
+                carts = carts ?: emptyList(),
+                selectedItems = selectedItems ?: emptyMap(),
+                deletingItems = deletingItems,
+                toGoodsDetailPage = toGoodsDetailPage,
+                onUpdateCartItemCount = onUpdateCartItemCount,
+                onToggleItemSelection = onToggleItemSelection,
+                modifier = Modifier.padding(paddingValues)
+            )
+        }
+    }
+}
 
-                        AnimatedVisibility(
-                            visible = !isCartDeleting,
-                            exit = slideOutHorizontally(
-                                targetOffsetX = { -it },
-                                animationSpec = tween(300)
-                            ) + fadeOut(animationSpec = tween(300))
-                        ) {
-                            OrderGoodsCard(
-                                data = cart,
-                                deletingSpecIds = cartDeletingSpecs,
-                                onGoodsClick = {
-                                    toGoodsDetailPage(cart.goodsId)
-                                },
-                                onQuantityChanged = { specId, newCount ->
-                                    onUpdateCartItemCount(cart.goodsId, specId, newCount)
-                                },
-                                itemSelectSlot = { spec ->
-                                    // 每次渲染时都会重新计算选中状态
-                                    val selected =
-                                        selectedItems[cart.goodsId]?.contains(spec.id) == true
-                                    CheckButton(
-                                        selected = selected,
-                                        onClick = { onToggleItemSelection(cart.goodsId, spec.id) }
-                                    )
-                                }
-                            )
-                        }
+/**
+ * 购物车内容视图（仅展示成功状态）
+ *
+ * @param carts 购物车商品列表
+ * @param selectedItems 已选商品和规格ID的映射
+ * @param deletingItems 正在删除的商品和规格ID的映射
+ * @param toGoodsDetailPage 跳转到商品详情
+ * @param onUpdateCartItemCount 更新商品数量回调
+ * @param onToggleItemSelection 切换商品选中状态回调
+ * @param modifier 修饰符
+ * @author Joker.X
+ */
+@Composable
+private fun CartContentView(
+    carts: List<Cart>,
+    selectedItems: Map<Long, Set<Long>>,
+    deletingItems: Map<Long, Set<Long>>,
+    toGoodsDetailPage: (Long) -> Unit,
+    onUpdateCartItemCount: (Long, Long, Int) -> Unit,
+    onToggleItemSelection: (Long, Long) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    // 购物车商品列表
+    LazyColumn(
+        contentPadding = PaddingValues(SpacePaddingMedium),
+        verticalArrangement = Arrangement.spacedBy(SpaceVerticalMedium),
+        modifier = modifier.fillMaxSize()
+    ) {
+        items(
+            items = carts,
+            key = { "cart-${it.goodsId}" },
+        ) { cart ->
+            // 检查整个商品是否正在删除
+            val cartSelectedSpecs = selectedItems[cart.goodsId] ?: emptySet()
+            val cartDeletingSpecs = deletingItems[cart.goodsId] ?: emptySet()
+            val isCartDeleting = cartSelectedSpecs.isNotEmpty() &&
+                    cartSelectedSpecs == cart.spec.map { it.id }.toSet() &&
+                    cartDeletingSpecs == cartSelectedSpecs
+
+            AnimatedVisibility(
+                visible = !isCartDeleting,
+                exit = slideOutHorizontally(
+                    targetOffsetX = { -it },
+                    animationSpec = tween(300)
+                ) + fadeOut(animationSpec = tween(300))
+            ) {
+                OrderGoodsCard(
+                    data = cart,
+                    deletingSpecIds = cartDeletingSpecs,
+                    onGoodsClick = {
+                        toGoodsDetailPage(cart.goodsId)
+                    },
+                    onQuantityChanged = { specId, newCount ->
+                        onUpdateCartItemCount(cart.goodsId, specId, newCount)
+                    },
+                    itemSelectSlot = { spec ->
+                        // 每次渲染时都会重新计算选中状态
+                        val selected =
+                            selectedItems[cart.goodsId]?.contains(spec.id) == true
+                        CheckButton(
+                            selected = selected,
+                            onClick = { onToggleItemSelection(cart.goodsId, spec.id) }
+                        )
                     }
-                }
+                )
             }
         }
     }
@@ -251,6 +290,7 @@ internal fun CartScreen(
  * @param onDeleteClick 删除按钮点击回调
  * @param onSettleClick 结算按钮点击回调
  * @param modifier 修饰符
+ * @author Joker.X
  */
 @Composable
 private fun CartBottomBar(
@@ -324,6 +364,11 @@ private fun CartBottomBar(
 }
 
 
+/**
+ * 购物车界面浅色主题预览
+ *
+ * @author Joker.X
+ */
 @Preview(showBackground = true)
 @Composable
 fun CartScreenPreview() {
@@ -331,95 +376,59 @@ fun CartScreenPreview() {
         CartScreen(
             carts = previewCartList,
             isEmpty = false,
-            isEditing = false,
-            isAllSelected = false,
             selectedCount = 2,
             selectedTotalAmount = 12997,
-            selectedItems = mapOf(),
-            onToggleEditMode = { },
-            onToggleSelectAll = { },
-            onToggleItemSelection = { _, _ -> },
-            onUpdateCartItemCount = { _, _, _ -> },
-            onDeleteSelected = { },
-            onSettleClick = { },
-            toGoodsDetailPage = {},
-            showBackIcon = false,
-            onBackClick = { },
         )
     }
 }
 
+/**
+ * 空购物车界面预览
+ *
+ * @author Joker.X
+ */
 @Preview(showBackground = true)
 @Composable
 fun EmptyCartScreenPreview() {
     AppTheme {
         CartScreen(
-            carts = emptyList(),
             isEmpty = true,
-            isEditing = false,
-            isAllSelected = false,
-            selectedCount = 0,
-            selectedTotalAmount = 0,
-            selectedItems = mapOf(),
-            onToggleEditMode = { },
-            onToggleSelectAll = { },
-            onToggleItemSelection = { _, _ -> },
-            onUpdateCartItemCount = { _, _, _ -> },
-            onDeleteSelected = { },
-            onSettleClick = { },
-            toGoodsDetailPage = {},
-            showBackIcon = false,
-            onBackClick = { },
         )
     }
 }
 
+/**
+ * 购物车编辑模式预览
+ *
+ * @author Joker.X
+ */
 @Preview(showBackground = true)
 @Composable
 fun CartScreenEditingPreview() {
     AppTheme {
         CartScreen(
             carts = previewCartList,
-            isEmpty = false,
             isEditing = true,
             isAllSelected = true,
             selectedCount = 2,
             selectedTotalAmount = 12997,
-            selectedItems = mapOf(1L to setOf(1L)),
-            onToggleEditMode = { },
-            onToggleSelectAll = { },
-            onToggleItemSelection = { _, _ -> },
-            onUpdateCartItemCount = { _, _, _ -> },
-            onDeleteSelected = { },
-            onSettleClick = { },
-            toGoodsDetailPage = {},
-            showBackIcon = false,
-            onBackClick = { },
         )
     }
 }
 
+/**
+ * 购物车界面深色主题预览
+ *
+ * @author Joker.X
+ */
 @Preview(showBackground = true)
 @Composable
 fun CartScreenDarkPreview() {
     AppTheme(darkTheme = true) {
         CartScreen(
             carts = previewCartList,
-            isEmpty = false,
-            isEditing = false,
-            isAllSelected = false,
             selectedCount = 2,
             selectedTotalAmount = 12997,
-            selectedItems = mapOf(),
-            onToggleEditMode = { },
-            onToggleSelectAll = { },
-            onToggleItemSelection = { _, _ -> },
-            onUpdateCartItemCount = { _, _, _ -> },
-            onDeleteSelected = { },
-            onSettleClick = { },
-            toGoodsDetailPage = {},
-            showBackIcon = false,
-            onBackClick = { },
         )
     }
 }

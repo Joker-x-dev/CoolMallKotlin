@@ -42,6 +42,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -88,6 +89,11 @@ import com.joker.coolmall.core.ui.R as CoreUiR
 
 /**
  * 首页路由入口
+ *
+ * @param sharedTransitionScope 共享转换作用域
+ * @param animatedContentScope 动画内容作用域
+ * @param viewModel 首页 ViewModel
+ * @author Joker.X
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -96,11 +102,17 @@ internal fun HomeRoute(
     animatedContentScope: AnimatedContentScope? = null,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
+    // 网络请求UI状态
     val uiState by viewModel.uiState.collectAsState()
+    // 首页数据
     val pageData by viewModel.pageData.collectAsState()
+    // 商品列表数据
     val listData by viewModel.listData.collectAsState()
+    // 是否正在刷新
     val isRefreshing by viewModel.isRefreshing.collectAsState()
+    // 加载更多状态
     val loadMoreState by viewModel.loadMoreState.collectAsState()
+    // 优惠券弹窗是否可见
     val couponModalVisible by viewModel.couponModalVisible.collectAsState()
 
     HomeScreen(
@@ -130,6 +142,7 @@ internal fun HomeRoute(
 
 /**
  * 首页UI
+ *
  * @param uiState 网络请求UI状态
  * @param pageData 页面数据
  * @param listData 商品列表数据
@@ -151,6 +164,7 @@ internal fun HomeRoute(
  * @param onHideCouponModal 隐藏优惠券弹窗回调
  * @param onCouponReceive 领取优惠券回调
  * @param onRetry 重试请求回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
@@ -230,6 +244,7 @@ internal fun HomeScreen(
 
 /**
  * 首页内容视图
+ *
  * @param data 首页数据
  * @param listData 商品列表数据
  * @param isRefreshing 是否正在刷新
@@ -243,6 +258,7 @@ internal fun HomeScreen(
  * @param toFlashSalePage 跳转到限时精选页
  * @param toGitHubPage 跳转到GitHub页
  * @param onShowCouponModal 显示优惠券弹窗回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -314,7 +330,7 @@ private fun HomeContentView(
             item(span = StaggeredGridItemSpan.FullLine) {
                 data.goods?.let {
                     TitleWithLine(
-                        text = "推荐商品",
+                        text = stringResource(R.string.recommend_goods),
                         modifier = Modifier.padding(vertical = SpaceVerticalSmall)
                     )
                 }
@@ -336,7 +352,7 @@ private fun HomeContentView(
             item(span = StaggeredGridItemSpan.FullLine) {
                 data.goods?.let {
                     TitleWithLine(
-                        text = "全部商品",
+                        text = stringResource(R.string.all_goods),
                         modifier = Modifier.padding(vertical = SpaceVerticalSmall)
                     )
                 }
@@ -356,6 +372,9 @@ private fun HomeContentView(
 
 /**
  * 顶部轮播图
+ *
+ * @param banners 轮播图列表
+ * @author Joker.X
  */
 @Composable
 private fun Banner(banners: List<Banner>) {
@@ -392,6 +411,10 @@ private fun Banner(banners: List<Banner>) {
 
 /**
  * 分类
+ *
+ * @param categories 分类列表
+ * @param onCategoryClick 分类点击回调
+ * @author Joker.X
  */
 @Composable
 private fun Category(
@@ -430,6 +453,11 @@ private fun Category(
 
 /**
  * 分类项
+ *
+ * @param modifier 修饰符
+ * @param category 分类数据
+ * @param onClick 点击回调
+ * @author Joker.X
  */
 @Composable
 private fun CategoryItem(
@@ -461,6 +489,7 @@ private fun CategoryItem(
  * @param goods 商品列表
  * @param toGoodsDetail 跳转到商品详情页的回调
  * @param toFlashSalePage 跳转到限时精选页面的回调
+ * @author Joker.X
  */
 @Composable
 private fun FlashSale(
@@ -470,8 +499,8 @@ private fun FlashSale(
 ) {
     Card {
         AppListItem(
-            title = "限时精选",
-            trailingText = "查看全部",
+            title = stringResource(R.string.flash_sale),
+            trailingText = stringResource(R.string.view_all),
             leadingIcon = R.drawable.ic_time,
             onClick = toFlashSalePage
         )
@@ -491,12 +520,14 @@ private fun FlashSale(
 
 /**
  * 首页顶部导航栏
+ *
  * @param scrollBehavior 滚动行为
  * @param sharedTransitionScope 共享转换作用域
  * @param animatedContentScope 动画内容作用域
  * @param toGoodsSearch 跳转到商品搜索页
  * @param toGitHubPage 跳转到GitHub页
  * @param toAboutPage 跳转到关于页
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
@@ -549,13 +580,13 @@ private fun HomeTopAppBar(
                 ) {
                     Icon(
                         painter = painterResource(id = com.joker.coolmall.core.ui.R.drawable.ic_search),
-                        contentDescription = "搜索",
+                        contentDescription = stringResource(R.string.search),
                         tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                         modifier = Modifier.size(18.dp)
                     )
 
                     Text(
-                        text = "搜索商品",
+                        text = stringResource(R.string.search_goods),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                         modifier = Modifier.padding(start = 8.dp)
@@ -588,6 +619,7 @@ private fun HomeTopAppBar(
  *
  * @param coupons 优惠券列表
  * @param onShowCouponModal 显示优惠券弹窗的回调
+ * @author Joker.X
  */
 @Composable
 private fun CouponSection(
@@ -626,7 +658,7 @@ private fun CouponSection(
 
             // 右侧固定的领取按钮
             AppText(
-                text = "领取",
+                text = stringResource(R.string.receive),
                 type = TextType.LINK,
                 modifier = Modifier.clickable {
                     onShowCouponModal()
@@ -640,6 +672,7 @@ private fun CouponSection(
  * 优惠券卡片组件
  *
  * @param coupon 优惠券数据
+ * @author Joker.X
  */
 @Composable
 private fun CouponCard(coupon: Coupon) {
@@ -673,6 +706,11 @@ private fun CouponCard(coupon: Coupon) {
     }
 }
 
+/**
+ * 首页界面浅色主题预览
+ *
+ * @author Joker.X
+ */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Preview(showBackground = true)
 @Composable

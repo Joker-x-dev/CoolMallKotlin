@@ -1,5 +1,6 @@
 package com.joker.coolmall.feature.order.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavBackStackEntry
@@ -22,10 +23,12 @@ import com.joker.coolmall.core.util.storage.MMKVUtils
 import com.joker.coolmall.feature.order.navigation.OrderPayRoutes
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.OrderRoutes
+import com.joker.coolmall.feature.order.R
 import com.joker.coolmall.navigation.routes.UserRoutes
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -36,9 +39,18 @@ import javax.inject.Inject
 
 /**
  * 订单确认页面ViewModel
+ *
+ * @param context 应用上下文
+ * @param navigator 导航器
+ * @param appState 应用状态
+ * @param orderRepository 订单仓库
+ * @param cartRepository 购物车仓库
+ * @param pageRepository 页面仓库
+ * @author Joker.X
  */
 @HiltViewModel
 class OrderConfirmViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     navigator: AppNavigator,
     appState: AppState,
     private val orderRepository: OrderRepository,
@@ -154,12 +166,20 @@ class OrderConfirmViewModel @Inject constructor(
         }
     }
 
+    /**
+     * 请求API流
+     *
+     * @return 确认订单网络响应流
+     * @author Joker.X
+     */
     override fun requestApiFlow(): Flow<NetworkResponse<ConfirmOrder>> {
         return pageRepository.getConfirmOrder()
     }
 
     /**
      * 提交订单点击事件
+     *
+     * @author Joker.X
      */
     fun onSubmitOrderClick() {
         val addressId = super.getSuccessData().defaultAddress?.id ?: return
@@ -169,7 +189,7 @@ class OrderConfirmViewModel @Inject constructor(
             data = CreateOrder(
                 addressId = addressId,
                 goodsList = selectedGoodsList ?: emptyList(),
-                title = "购买商品",
+                title = context.getString(R.string.purchase_goods),
                 remark = _remark.value,
                 couponId = _selectedCoupon.value?.id
             )
@@ -196,6 +216,9 @@ class OrderConfirmViewModel @Inject constructor(
 
     /**
      * 跳转到支付页面并关闭当前页面
+     *
+     * @param order 订单对象
+     * @author Joker.X
      */
     fun navigateToPayment(order: Order) {
         val orderId = order.id
@@ -215,6 +238,8 @@ class OrderConfirmViewModel @Inject constructor(
 
     /**
      * 删除购物车中已下单的商品
+     *
+     * @author Joker.X
      */
     private fun deleteCartItems() {
         viewModelScope.launch {
@@ -247,6 +272,9 @@ class OrderConfirmViewModel @Inject constructor(
 
     /**
      * 更新订单备注
+     *
+     * @param newRemark 新的备注内容
+     * @author Joker.X
      */
     fun updateRemark(newRemark: String) {
         _remark.value = newRemark
@@ -254,6 +282,8 @@ class OrderConfirmViewModel @Inject constructor(
 
     /**
      * 显示优惠券弹出层
+     *
+     * @author Joker.X
      */
     fun showCouponModal() {
         _couponModalVisible.value = true
@@ -261,6 +291,8 @@ class OrderConfirmViewModel @Inject constructor(
 
     /**
      * 隐藏优惠券弹出层
+     *
+     * @author Joker.X
      */
     fun hideCouponModal() {
         _couponModalVisible.value = false
@@ -268,7 +300,9 @@ class OrderConfirmViewModel @Inject constructor(
 
     /**
      * 选择优惠券
+     *
      * @param coupon 选中的优惠券，null表示不使用优惠券
+     * @author Joker.X
      */
     fun selectCoupon(coupon: Coupon?) {
         _selectedCoupon.value = coupon
@@ -277,6 +311,8 @@ class OrderConfirmViewModel @Inject constructor(
 
     /**
      * 计算商品原价
+     *
+     * @author Joker.X
      */
     private fun calculateOriginalPrice() {
         val price = cartList.sumOf { cart ->
@@ -289,7 +325,9 @@ class OrderConfirmViewModel @Inject constructor(
 
     /**
      * 计算价格（包括优惠券折扣）
+     *
      * @param coupon 选中的优惠券
+     * @author Joker.X
      */
     private fun calculatePrices(coupon: Coupon?) {
         val originalPriceValue = _originalPrice.value
@@ -311,6 +349,8 @@ class OrderConfirmViewModel @Inject constructor(
 
     /**
      * 跳转到地址选择页面
+     *
+     * @author Joker.X
      */
     fun navigateToAddressSelection() {
         // 构建带选择模式参数的地址列表路由
@@ -321,6 +361,9 @@ class OrderConfirmViewModel @Inject constructor(
 
     /**
      * 监听地址选择返回的数据
+     *
+     * @param backStackEntry 导航返回栈条目
+     * @author Joker.X
      */
     fun observeAddressSelection(backStackEntry: NavBackStackEntry?) {
         if (backStackEntry == null) return

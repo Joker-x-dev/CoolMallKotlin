@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Page titles -->
+    <string name="customer_service_chat">Customer Service Chat</string>
+    
+    <!-- Chat screen -->
+    <string name="back_to_bottom">Back to bottom</string>
+    
+    <!-- Input field -->
+    <string name="input_message_hint">Send a message...</string>
+    <string name="send">Send</string>
+    <string name="emoji">Emoji</string>
+    <string name="more_functions">More functions</string>
+    
+    <!-- Load more -->
+    <string name="load_more_history">Load more history</string>
+    <string name="loading_history">Loading history...</string>
+    <string name="load_success">Load success</string>
+    <string name="load_failed_retry">Load failed, tap to retry</string>
+    <string name="load_failed">Load failed</string>
+    <string name="no_more_messages">No more messages</string>
+    
+    <!-- Function selector -->
+    <string name="gallery">Gallery</string>
+    <string name="camera">Camera</string>
+    
+    <!-- WebSocket connection -->
+    <string name="connection_error">Connection error</string>
+    <string name="create_session_failed">Failed to create session</string>
+    <string name="send_message_failed">Failed to send message</string>
+    <string name="normal_close">Normal close</string>
+</resources>
+

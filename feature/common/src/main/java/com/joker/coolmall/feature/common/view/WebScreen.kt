@@ -22,6 +22,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -39,15 +40,21 @@ import com.joker.coolmall.feature.common.viewmodel.WebViewModel
  * 网页路由
  *
  * @param viewModel 网页 ViewModel
+ * @author Joker.X
  */
 @Composable
 internal fun WebRoute(
     viewModel: WebViewModel = hiltViewModel()
 ) {
+    // 收集WebView数据
     val webViewData by viewModel.webViewData.collectAsState()
+    // 收集页面标题
     val pageTitle by viewModel.pageTitle.collectAsState()
+    // 收集当前加载进度
     val currentProgress by viewModel.currentProgress.collectAsState()
+    // 收集页面刷新状态
     val shouldRefresh by viewModel.shouldRefresh.collectAsState()
+    // 收集下拉菜单显示状态
     val showDropdownMenu by viewModel.showDropdownMenu.collectAsState()
 
     WebScreen(
@@ -83,12 +90,13 @@ internal fun WebRoute(
  * @param onOpenInBrowser 用浏览器打开回调
  * @param onShowDropdownMenu 显示下拉菜单回调
  * @param onDismissDropdownMenu 隐藏下拉菜单回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun WebScreen(
     webViewData: WebViewData = WebViewData(),
-    pageTitle: String = "网页",
+    pageTitle: String = "",
     currentProgress: Int = 0,
     shouldRefresh: Boolean = false,
     showDropdownMenu: Boolean = false,
@@ -133,6 +141,7 @@ internal fun WebScreen(
  * @param onDismissDropdownMenu 隐藏下拉菜单回调
  * @param onRefreshClick 刷新按钮回调
  * @param onOpenInBrowser 用浏览器打开回调
+ * @author Joker.X
  */
 @Composable
 private fun WebScreenTopBarActions(
@@ -146,7 +155,7 @@ private fun WebScreenTopBarActions(
     IconButton(onClick = onShowDropdownMenu) {
         CommonIcon(
             resId = R.drawable.ic_more_vertical,
-            contentDescription = "更多选项"
+            contentDescription = stringResource(id = R.string.web_more_options)
         )
     }
 
@@ -157,13 +166,13 @@ private fun WebScreenTopBarActions(
     ) {
         // 刷新选项
         DropdownMenuItem(
-            text = { Text("刷新") },
+            text = { Text(stringResource(id = R.string.web_menu_refresh)) },
             onClick = onRefreshClick
         )
 
         // 用浏览器打开选项
         DropdownMenuItem(
-            text = { Text("用浏览器打开") },
+            text = { Text(stringResource(id = R.string.web_menu_open_browser)) },
             onClick = onOpenInBrowser
         )
     }
@@ -178,6 +187,7 @@ private fun WebScreenTopBarActions(
  * @param onTitleChange 标题变化回调
  * @param onProgressChange 进度变化回调
  * @param onResetRefreshState 重置刷新状态回调
+ * @author Joker.X
  */
 @Composable
 private fun WebViewContent(
@@ -277,6 +287,8 @@ private fun WebViewContent(
 
 /**
  * 网页界面浅色主题预览
+ * 
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -295,6 +307,8 @@ internal fun WebScreenPreview() {
 
 /**
  * 网页界面深色主题预览
+ * 
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable

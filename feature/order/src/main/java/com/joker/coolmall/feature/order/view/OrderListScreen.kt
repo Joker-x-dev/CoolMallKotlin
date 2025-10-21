@@ -22,6 +22,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -64,29 +65,43 @@ import kotlinx.coroutines.launch
  *
  * 负责收集ViewModel数据并传递给Screen层
  * @param viewModel 订单列表ViewModel，提供数据和事件处理，默认通过hiltViewModel()注入
+ * @param navController 导航控制器
+ * @author Joker.X
  */
 @Composable
 internal fun OrderListRoute(
     viewModel: OrderListViewModel = hiltViewModel(),
     navController: NavController
 ) {
+    // 当前选中的标签索引
     val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
+    // 是否正在进行标签切换动画
     val isAnimatingTabChange by viewModel.isAnimatingTabChange.collectAsState()
 
     // 收集取消订单相关状态
+    // 取消订单弹窗显示状态
     val cancelModalVisible by viewModel.cancelModalVisible.collectAsState()
+    // 取消原因弹出层UI状态
     val cancelReasonsModalUiState by viewModel.cancelReasonsModalUiState.collectAsState()
+    // 选中的取消原因
     val selectedCancelReason by viewModel.selectedCancelReason.collectAsState()
 
     // 收集确认收货弹窗状态
+    // 确认收货弹窗显示状态
     val showConfirmDialog by viewModel.showConfirmDialog.collectAsState()
 
     // 收集再次购买和商品评论弹窗状态
+    // 再次购买弹窗显示状态
     val rebuyModalVisible by viewModel.rebuyModalVisible.collectAsState()
+    // 商品评论弹窗显示状态
     val commentModalVisible by viewModel.commentModalVisible.collectAsState()
+    // 再次购买的购物车列表
     val rebuyCartList by viewModel.rebuyCartList.collectAsState()
+    // 再次购买的当前订单
     val rebuyCurrentOrder: Order? by viewModel.rebuyCurrentOrder.collectAsState()
+    // 商品评论的购物车列表
     val commentCartList by viewModel.commentCartList.collectAsState()
+    // 商品评论的当前订单
     val commentCurrentOrder: Order? by viewModel.commentCurrentOrder.collectAsState()
 
     // 注册页面刷新监听
@@ -166,6 +181,31 @@ internal fun OrderListRoute(
  *
  * @param toOrderDetail 跳转到订单详情页面
  * @param toPay 跳转到支付页面
+ * @param toGoodsDetail 跳转到商品详情页面（再次购买）
+ * @param toOrderLogistics 跳转到订单物流页面
+ * @param toOrderRefund 跳转到退款申请页面
+ * @param toOrderComment 跳转到订单评价页面
+ * @param cancelOrder 取消订单
+ * @param cancelModalVisible 取消订单弹窗显示状态
+ * @param cancelReasonsModalUiState 取消原因弹出层UI状态
+ * @param selectedCancelReason 选中的取消原因
+ * @param onCancelModalDismiss 取消订单弹窗关闭回调
+ * @param onCancelReasonSelected 取消原因选中回调
+ * @param onConfirmCancel 确认取消订单回调
+ * @param showConfirmDialog 确认收货弹窗显示状态
+ * @param onConfirmDialogDismiss 确认收货弹窗关闭回调
+ * @param onConfirmReceive 确认收货回调
+ * @param onConfirmClick 确认收货按钮点击回调
+ * @param rebuyModalVisible 再次购买弹窗显示状态
+ * @param commentModalVisible 商品评论弹窗显示状态
+ * @param rebuyCartList 再次购买的购物车列表
+ * @param rebuyCurrentOrder 再次购买的当前订单
+ * @param commentCartList 商品评论的购物车列表
+ * @param commentCurrentOrder 商品评论的当前订单
+ * @param onRebuyModalDismiss 再次购买弹窗关闭回调
+ * @param onCommentModalDismiss 商品评论弹窗关闭回调
+ * @param onRebuyGoodsSelected 再次购买商品选中回调
+ * @param onCommentGoodsSelected 商品评论商品选中回调
  * @param selectedTabIndex 当前选中的标签索引，默认为0
  * @param isAnimatingTabChange 是否正在执行标签切换动画，默认为false
  * @param onTabSelected 标签被选择时的回调，参数为选中的标签索引
@@ -173,6 +213,7 @@ internal fun OrderListRoute(
  * @param onAnimationCompleted 标签切换动画完成时的回调
  * @param onBackClick 返回按钮点击事件回调
  * @param tabStateProvider 标签页状态提供者函数，根据索引返回对应标签页的状态
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -248,7 +289,7 @@ internal fun OrderListScreen(
     // 取消订单弹窗
     DictSelectModal(
         visible = cancelModalVisible,
-        title = "选择取消原因",
+        title = stringResource(R.string.select_cancel_reason),
         uiState = cancelReasonsModalUiState,
         selectedItem = selectedCancelReason,
         onDismiss = onCancelModalDismiss,
@@ -261,10 +302,10 @@ internal fun OrderListScreen(
     // 确认收货弹窗
     if (showConfirmDialog) {
         WeDialog(
-            title = "确认收货",
-            content = "确认收货后无法发起退款等售后申请，请谨慎操作",
-            okText = "确认",
-            cancelText = "取消",
+            title = stringResource(R.string.confirm_receipt),
+            content = stringResource(R.string.confirm_receipt_message),
+            okText = stringResource(R.string.confirm),
+            cancelText = stringResource(R.string.cancel),
             onOk = onConfirmReceive,
             onCancel = onConfirmDialogDismiss,
             onDismiss = onConfirmDialogDismiss
@@ -274,8 +315,8 @@ internal fun OrderListScreen(
     // 再次购买弹窗
     OrderGoodsModal(
         visible = rebuyModalVisible,
-        title = "选择要购买的商品",
-        buttonText = "再次购买",
+        title = stringResource(R.string.select_goods_to_buy),
+        buttonText = stringResource(R.string.rebuy),
         cartList = rebuyCartList,
         onDismiss = onRebuyModalDismiss,
         onItemButtonClick = onRebuyGoodsSelected
@@ -284,8 +325,8 @@ internal fun OrderListScreen(
     // 商品评论弹窗
     OrderGoodsModal(
         visible = commentModalVisible,
-        title = "选择要评价的商品",
-        buttonText = "去评价",
+        title = stringResource(R.string.select_goods_to_comment),
+        buttonText = stringResource(R.string.go_to_comment),
         cartList = commentCartList,
         onDismiss = onCommentModalDismiss,
         onItemButtonClick = { goodsId ->
@@ -302,12 +343,19 @@ internal fun OrderListScreen(
  * @param modifier Compose修饰符，用于设置组件样式和布局，默认为Modifier
  * @param toOrderDetail 跳转到订单详情
  * @param toPay 跳转到支付页面
+ * @param toGoodsDetail 跳转到商品详情页面（再次购买）
+ * @param toOrderLogistics 跳转到订单物流页面
+ * @param toOrderRefund 跳转到退款申请页面
+ * @param toOrderComment 跳转到订单评价页面
+ * @param cancelOrder 取消订单
+ * @param onConfirmClick 确认收货按钮点击回调
  * @param selectedTabIndex 当前选中的标签页索引
  * @param isAnimatingTabChange 是否正在执行标签切换动画
  * @param onTabSelected 标签被点击选择时的回调，参数为选中的标签索引
  * @param onTabByPageChanged 通过页面滑动切换标签时的回调，参数为新的标签索引
  * @param onAnimationCompleted 标签切换动画完成时的回调
  * @param tabStateProvider 标签页状态提供者函数，根据索引返回对应标签页的状态
+ * @author Joker.X
  */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -400,12 +448,19 @@ private fun OrderListContentView(
  *
  * @param toOrderDetail 跳转到订单详情
  * @param toPay 跳转到支付页面
+ * @param toGoodsDetail 跳转到商品详情页面（再次购买）
+ * @param toOrderLogistics 跳转到订单物流页面
+ * @param toOrderRefund 跳转到退款申请页面
+ * @param toOrderComment 跳转到订单评价页面
+ * @param cancelOrder 取消订单
+ * @param onConfirmClick 确认收货按钮点击回调
  * @param orderList 订单列表数据
  * @param isRefreshing 是否正在刷新中
  * @param loadMoreState 加载更多的状态
  * @param onRefresh 刷新回调函数
  * @param onLoadMore 加载更多回调函数
  * @param shouldTriggerLoadMore 判断是否应触发加载更多的函数，参数为当前列表最后一项索引和总数
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -466,6 +521,7 @@ private fun OrderTabContent(
  * @param toRefund 跳转到退款/售后页面
  * @param onCancelClick 取消订单按钮点击回调
  * @param onConfirmClick 确认收货按钮点击回调
+ * @author Joker.X
  */
 @Composable
 private fun OrderCard(
@@ -494,17 +550,19 @@ private fun OrderCard(
             onClick = {
                 toOrderDetail(order.id)
             },
-            trailingText = when (order.status) {
-                0 -> "待付款"
-                1 -> "待发货"
-                2 -> "待收货"
-                3 -> "待评价"
-                4 -> "交易完成"
-                5 -> "退款中"
-                6 -> "已退款"
-                7 -> "已关闭"
-                else -> ""
-            }
+            trailingText = stringResource(
+                when (order.status) {
+                    0 -> R.string.order_status_unpaid
+                    1 -> R.string.order_status_unshipped
+                    2 -> R.string.order_status_unreceived
+                    3 -> R.string.order_status_unevaluated
+                    4 -> R.string.order_status_completed
+                    5 -> R.string.order_status_refunding
+                    6 -> R.string.order_status_refunded
+                    7 -> R.string.order_status_closed
+                    else -> R.string.order_status_unknown
+                }
+            )
         )
 
         // 订单商品列表
@@ -538,7 +596,7 @@ private fun OrderCard(
                 PriceText(order.price, integerTextSize = TextSize.BODY_LARGE)
                 SpaceVerticalXSmall()
                 AppText(
-                    text = "共 ${order.goodsList?.size ?: 0} 件",
+                    text = stringResource(R.string.total_items, order.goodsList?.size ?: 0),
                     size = TextSize.BODY_SMALL,
                     type = TextType.TERTIARY
                 )
@@ -567,6 +625,7 @@ private fun OrderCard(
  *
  * @param selectedIndex 当前选中的标签索引
  * @param onTabSelected 标签被选择时的回调，参数为选中的标签索引
+ * @author Joker.X
  */
 @Composable
 private fun OrderTabs(selectedIndex: Int, onTabSelected: (Int) -> Unit) {
@@ -581,7 +640,7 @@ private fun OrderTabs(selectedIndex: Int, onTabSelected: (Int) -> Unit) {
                 onClick = { onTabSelected(index) },
                 text = {
                     AppText(
-                        text = status.label,
+                        text = stringResource(status.labelRes),
                         type = if (selectedIndex == index) TextType.PRIMARY else TextType.SECONDARY
                     )
                 }
@@ -599,6 +658,7 @@ private fun OrderTabs(selectedIndex: Int, onTabSelected: (Int) -> Unit) {
  * @param isAnimatingTabChange 是否正在执行标签切换动画
  * @param onTabByPageChanged 通过页面滑动切换标签时的回调，参数为新的标签索引
  * @param onAnimationCompleted 标签切换动画完成时的回调
+ * @author Joker.X
  */
 @Composable
 private fun HandlePageStateChanges(
@@ -632,6 +692,11 @@ private fun HandlePageStateChanges(
     }
 }
 
+/**
+ * 订单列表界面浅色主题预览
+ *
+ * @author Joker.X
+ */
 @Preview(showBackground = true)
 @Composable
 internal fun OrderListScreenPreview() {
@@ -640,6 +705,11 @@ internal fun OrderListScreenPreview() {
     }
 }
 
+/**
+ * 订单列表界面深色主题预览
+ *
+ * @author Joker.X
+ */
 @Preview(showBackground = true)
 @Composable
 internal fun OrderListScreenPreviewDark() {

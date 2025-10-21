@@ -5,6 +5,14 @@ import androidx.annotation.StringRes
 import com.joker.coolmall.feature.main.R
 import com.joker.coolmall.navigation.routes.MainRoutes
 
+/**
+ * 顶级导航目的地
+ *
+ * @param titleTextId 标题文本资源ID
+ * @param animationResId 动画资源ID
+ * @param route 路由地址
+ * @author Joker.X
+ */
 enum class TopLevelDestination(
     @param:StringRes val titleTextId: Int,
     @param:RawRes val animationResId: Int,

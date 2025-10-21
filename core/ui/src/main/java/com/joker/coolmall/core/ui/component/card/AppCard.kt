@@ -17,10 +17,12 @@ import com.joker.coolmall.core.ui.component.title.TitleWithLine
 
 /**
  * 通用卡片组件
+ *
  * @param modifier 修饰符
  * @param title 普通标题文本，如果为null则不显示
  * @param lineTitle 带装饰线的标题文本，如果为null则不显示
  * @param content 卡片内容
+ * @author Joker.X
  */
 @Composable
 fun AppCard(
@@ -60,6 +62,11 @@ fun AppCard(
     }
 }
 
+/**
+ * 通用卡片组件预览
+ *
+ * @author Joker.X
+ */
 @Preview(showBackground = true)
 @Composable
 fun AppCardPreview() {

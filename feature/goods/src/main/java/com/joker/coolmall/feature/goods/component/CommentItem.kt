@@ -1,12 +1,8 @@
-/**
- * 评论Item组件 - 紧凑型布局
- *
- * @author Joker.X
- */
 package com.joker.coolmall.feature.goods.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -34,6 +30,7 @@ import com.joker.coolmall.core.ui.component.rate.WeRate
 import com.joker.coolmall.core.ui.component.text.AppText
 import com.joker.coolmall.core.ui.component.text.TextSize
 import com.joker.coolmall.core.ui.component.text.TextType
+import com.joker.coolmall.feature.goods.R
 
 /**
  * 评论Item组件 - 紧凑型布局
@@ -43,6 +40,7 @@ import com.joker.coolmall.core.ui.component.text.TextType
  * @param comment 评价数据
  * @param modifier 修饰符
  * @param onClick 点击事件回调
+ * @author Joker.X
  */
 @Composable
 fun CommentItem(
@@ -70,7 +68,7 @@ fun CommentItem(
         Column(modifier = Modifier.weight(1f)) {
             // 用户昵称
             AppText(
-                text = comment.nickName ?: "匿名用户",
+                text = comment.nickName ?: stringResource(R.string.anonymous_user),
                 size = TextSize.BODY_MEDIUM,
                 type = TextType.PRIMARY
             )
@@ -114,6 +112,7 @@ fun CommentItem(
  *
  * @param images 图片URL列表
  * @param modifier 修饰符
+ * @author Joker.X
  */
 @Composable
 private fun CommentImagePreview(
@@ -156,6 +155,8 @@ private fun CommentImagePreview(
 
 /**
  * CommentItem 组件预览 - 多图片
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -184,6 +185,8 @@ fun CommentItemPreview() {
 
 /**
  * CommentItem 组件预览 - 单图片
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -210,6 +213,8 @@ fun CommentItemSingleImagePreview() {
 
 /**
  * CommentItem 组件预览 - 无图片
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -234,6 +239,8 @@ fun CommentItemNoImagesPreview() {
 
 /**
  * CommentItem 组件预览 - 深色主题
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable

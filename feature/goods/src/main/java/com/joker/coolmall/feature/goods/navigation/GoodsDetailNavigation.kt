@@ -9,6 +9,8 @@ import com.joker.coolmall.navigation.routes.GoodsRoutes
 
 /**
  * 商品详情页面路由常量
+ *
+ * @author Joker.X
  */
 object GoodsDetailRoutes {
     const val GOODS_ID_ARG = "goods_id"
@@ -21,6 +23,8 @@ object GoodsDetailRoutes {
 
 /**
  * 注册商品详情页面路由
+ *
+ * @author Joker.X
  */
 fun NavGraphBuilder.goodsDetailScreen() {
     composable(

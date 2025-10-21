@@ -22,6 +22,7 @@ import com.joker.coolmall.core.model.request.ReceiveCouponRequest
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.util.storage.MMKVUtils
 import com.joker.coolmall.core.util.toast.ToastUtils
+import com.joker.coolmall.feature.goods.R
 import com.joker.coolmall.feature.goods.navigation.GoodsDetailRoutes
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.AuthRoutes
@@ -42,6 +43,17 @@ import javax.inject.Inject
 
 /**
  * 商品详情页面ViewModel
+ *
+ * @param navigator 导航器
+ * @param appState 应用状态
+ * @param savedStateHandle 保存的状态句柄
+ * @param context 应用上下文
+ * @param goodsRepository 商品仓库
+ * @param cartRepository 购物车仓库
+ * @param footprintRepository 足迹仓库
+ * @param pageRepository 页面仓库
+ * @param couponRepository 优惠券仓库
+ * @author Joker.X
  */
 @HiltViewModel
 class GoodsDetailViewModel @Inject constructor(
@@ -103,6 +115,9 @@ class GoodsDetailViewModel @Inject constructor(
 
     /**
      * 通过重写来给父类提供API请求的Flow
+     *
+     * @return 商品详情的网络响应Flow
+     * @author Joker.X
      */
     override fun requestApiFlow(): Flow<NetworkResponse<GoodsDetail>> {
         return pageRepository.getGoodsDetail(requiredId)
@@ -110,6 +125,9 @@ class GoodsDetailViewModel @Inject constructor(
 
     /**
      * 处理成功结果，重写此方法添加足迹记录
+     *
+     * @param data 商品详情数据
+     * @author Joker.X
      */
     override fun onRequestSuccess(data: GoodsDetail) {
         super.onRequestSuccess(data)
@@ -119,6 +137,9 @@ class GoodsDetailViewModel @Inject constructor(
 
     /**
      * 添加商品到足迹
+     *
+     * @param goods 商品信息
+     * @author Joker.X
      */
     private fun addToFootprint(goods: Goods) {
         viewModelScope.launch {
@@ -142,6 +163,8 @@ class GoodsDetailViewModel @Inject constructor(
 
     /**
      * 加载商品规格
+     *
+     * @author Joker.X
      */
     fun loadGoodsSpecs() {
         // 如果 ui 状态为成功，则不重复加载
@@ -166,6 +189,9 @@ class GoodsDetailViewModel @Inject constructor(
 
     /**
      * 选择规格
+     *
+     * @param spec 商品规格
+     * @author Joker.X
      */
     fun selectSpec(spec: GoodsSpec) {
         // 如果当前已选择的规格与传入的规格相同，则表示取消选择
@@ -178,6 +204,8 @@ class GoodsDetailViewModel @Inject constructor(
 
     /**
      * 显示规格选择弹窗
+     *
+     * @author Joker.X
      */
     fun showSpecModal() {
         _specModalVisible.value = true
@@ -191,6 +219,8 @@ class GoodsDetailViewModel @Inject constructor(
 
     /**
      * 隐藏规格选择弹窗
+     *
+     * @author Joker.X
      */
     fun hideSpecModal() {
         _specModalVisible.value = false
@@ -198,6 +228,8 @@ class GoodsDetailViewModel @Inject constructor(
 
     /**
      * 触发动画
+     *
+     * @author Joker.X
      */
     fun triggerAnimation() {
         if (!_hasAnimated.value) {
@@ -207,6 +239,8 @@ class GoodsDetailViewModel @Inject constructor(
 
     /**
      * 显示优惠券弹出层
+     *
+     * @author Joker.X
      */
     fun showCouponModal() {
         _couponModalVisible.value = true
@@ -214,6 +248,8 @@ class GoodsDetailViewModel @Inject constructor(
 
     /**
      * 隐藏优惠券领取弹出层
+     *
+     * @author Joker.X
      */
     fun hideCouponModal() {
         _couponModalVisible.value = false
@@ -221,7 +257,9 @@ class GoodsDetailViewModel @Inject constructor(
 
     /**
      * 领取优惠券
+     *
      * @param coupon 要领取的优惠券
+     * @author Joker.X
      */
     fun receiveCoupon(coupon: Coupon) {
         // 检查登录状态
@@ -243,12 +281,15 @@ class GoodsDetailViewModel @Inject constructor(
 
     /**
      * 加入购物车
+     *
+     * @param selectedGoods 选中的商品
+     * @author Joker.X
      */
     fun addToCart(selectedGoods: SelectedGoods) {
         viewModelScope.launch {
             // 检查参数合法性
             if (selectedGoods.goodsId <= 0 || selectedGoods.spec == null || selectedGoods.count <= 0) {
-                ToastUtils.showError("添加购物车失败")
+                ToastUtils.showError(R.string.add_to_cart_failed)
                 return@launch
             }
 
@@ -291,12 +332,15 @@ class GoodsDetailViewModel @Inject constructor(
             }
 
             hideSpecModal()
-            ToastUtils.showSuccess("添加购物车成功")
+            ToastUtils.showSuccess(R.string.add_to_cart_success)
         }
     }
 
     /**
      * 立即购买
+     *
+     * @param selectedGoods 选中的商品
+     * @author Joker.X
      */
     fun buyNow(selectedGoods: SelectedGoods) {
         viewModelScope.launch {
@@ -310,6 +354,8 @@ class GoodsDetailViewModel @Inject constructor(
     /**
      * 跳转到商品评论页面
      * 从商品详情页面跳转到该商品的评论列表页面，传递当前商品ID作为参数
+     *
+     * @author Joker.X
      */
     fun toGoodsCommentPage() {
         super.toPage(GoodsRoutes.COMMENT, requiredId)
@@ -317,6 +363,8 @@ class GoodsDetailViewModel @Inject constructor(
 
     /**
      * 跳转到购物车页面
+     *
+     * @author Joker.X
      */
     fun toCartPage() {
         super.toPage("${MainRoutes.CART}?show_back_icon=true")
@@ -324,6 +372,8 @@ class GoodsDetailViewModel @Inject constructor(
 
     /**
      * 跳转到客服页面
+     *
+     * @author Joker.X
      */
     fun toCsPage() {
         super.toPage(CsRoutes.CHAT)
@@ -331,6 +381,10 @@ class GoodsDetailViewModel @Inject constructor(
 
     /**
      * 将商品规格转换为购物车商品规格
+     *
+     * @param count 数量
+     * @return 购物车商品规格
+     * @author Joker.X
      */
     private fun GoodsSpec.toCartGoodsSpec(count: Int): CartGoodsSpec {
         return CartGoodsSpec(

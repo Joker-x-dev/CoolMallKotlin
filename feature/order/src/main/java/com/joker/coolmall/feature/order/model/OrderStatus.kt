@@ -1,14 +1,20 @@
 package com.joker.coolmall.feature.order.model
 
+import androidx.annotation.StringRes
+import com.joker.coolmall.feature.order.R
+
 /**
- * 订单状态
+ * 订单状态枚举
+ *
+ * @param labelRes 状态显示文本资源ID
+ * @author Joker.X
  */
-enum class OrderStatus(val label: String) {
-    ALL("全部"),
-    UNPAID("待付款"),
-    UNSHIPPED("待发货"),
-    UNRECEIVED("待收货"),
-    AFTER_SALE("售后/退款"),
-    UNEVALUATED("待评价"),
-    COMPLETED("已完成"),
+enum class OrderStatus(@StringRes val labelRes: Int) {
+    ALL(R.string.order_status_all),
+    UNPAID(R.string.order_status_unpaid),
+    UNSHIPPED(R.string.order_status_unshipped),
+    UNRECEIVED(R.string.order_status_unreceived),
+    AFTER_SALE(R.string.order_status_after_sale),
+    UNEVALUATED(R.string.order_status_unevaluated),
+    COMPLETED(R.string.order_status_completed_tab),
 } 

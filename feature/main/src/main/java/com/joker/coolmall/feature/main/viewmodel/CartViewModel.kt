@@ -11,6 +11,7 @@ import com.joker.coolmall.core.model.entity.GoodsSpec
 import com.joker.coolmall.core.model.entity.SelectedGoods
 import com.joker.coolmall.core.util.storage.MMKVUtils
 import com.joker.coolmall.core.util.toast.ToastUtils
+import com.joker.coolmall.feature.main.R
 import com.joker.coolmall.feature.main.navigation.CartRoutes
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.GoodsRoutes
@@ -29,6 +30,12 @@ import javax.inject.Inject
 
 /**
  * 购物车页面ViewModel
+ *
+ * @param navigator 导航器
+ * @param appState 应用状态
+ * @param cartRepository 购物车仓库
+ * @param savedStateHandle 保存状态句柄
+ * @author Joker.X
  */
 @HiltViewModel
 class CartViewModel @Inject constructor(
@@ -144,6 +151,8 @@ class CartViewModel @Inject constructor(
 
     /**
      * 切换编辑模式
+     *
+     * @author Joker.X
      */
     fun toggleEditMode() {
         // 清空选择状态
@@ -153,6 +162,8 @@ class CartViewModel @Inject constructor(
 
     /**
      * 切换全选状态
+     *
+     * @author Joker.X
      */
     fun toggleSelectAll() {
         val currentAllSelected = isAllSelected.value
@@ -180,6 +191,7 @@ class CartViewModel @Inject constructor(
      *
      * @param goodsId 商品ID
      * @param specId 规格ID
+     * @author Joker.X
      */
     fun toggleItemSelection(goodsId: Long, specId: Long) {
         _selectedItems.update { currentSelected ->
@@ -214,6 +226,7 @@ class CartViewModel @Inject constructor(
      * @param goodsId 商品ID
      * @param specId 规格ID
      * @param count 更新后的数量
+     * @author Joker.X
      */
     fun updateCartItemCount(goodsId: Long, specId: Long, count: Int) {
         viewModelScope.launch {
@@ -223,6 +236,8 @@ class CartViewModel @Inject constructor(
 
     /**
      * 删除选中的商品
+     *
+     * @author Joker.X
      */
     fun deleteSelectedItems() {
         viewModelScope.launch {
@@ -254,19 +269,21 @@ class CartViewModel @Inject constructor(
 
     /**
      * 去结算按钮点击事件
+     *
+     * @author Joker.X
      */
     fun onCheckoutClick() {
         viewModelScope.launch {
             val selected = selectedItems.value
             if (selected.isEmpty()) {
-                ToastUtils.showError("请选择要结算的商品")
+                ToastUtils.showError(R.string.please_select_settlement_goods)
                 return@launch
             }
 
             // 1. 获取选中的购物车项
             val selectedCarts = getSelectedCarts()
             if (selectedCarts.isEmpty()) {
-                ToastUtils.showError("获取选中商品失败")
+                ToastUtils.showError(R.string.get_selected_goods_failed)
                 return@launch
             }
 
@@ -288,6 +305,7 @@ class CartViewModel @Inject constructor(
      * 获取选中的购物车项
      *
      * @return 选中的购物车列表
+     * @author Joker.X
      */
     private fun getSelectedCarts(): List<Cart> {
         val result = mutableListOf<Cart>()
@@ -318,6 +336,7 @@ class CartViewModel @Inject constructor(
      *
      * @param carts 购物车列表
      * @return 转换后的SelectedGoods列表
+     * @author Joker.X
      */
     private fun convertCartsToSelectedGoods(carts: List<Cart>): List<SelectedGoods> {
         val result = mutableListOf<SelectedGoods>()
@@ -351,6 +370,9 @@ class CartViewModel @Inject constructor(
 
     /**
      * 跳转到商品详情
+     *
+     * @param goodsId 商品ID
+     * @author Joker.X
      */
     fun toGoodsDetailPage(goodsId: Long) {
         super.toPage(GoodsRoutes.DETAIL, goodsId)

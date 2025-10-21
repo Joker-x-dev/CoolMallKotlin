@@ -19,6 +19,7 @@ import com.joker.coolmall.feature.auth.R
  * @param centerAlignment 是否居中对齐，默认为false（居左）
  * @param onUserAgreementClick 用户协议点击回调
  * @param onPrivacyPolicyClick 隐私政策点击回调
+ * @author Joker.X
  */
 @Composable
 fun UserAgreement(
@@ -57,6 +58,11 @@ fun UserAgreement(
 
 /**
  * 用户协议内容组件，抽取公共部分
+ * 
+ * @param prefixText 前缀文本
+ * @param onUserAgreementClick 用户协议点击回调
+ * @param onPrivacyPolicyClick 隐私政策点击回调
+ * @author Joker.X
  */
 @Composable
 private fun AgreementContent(

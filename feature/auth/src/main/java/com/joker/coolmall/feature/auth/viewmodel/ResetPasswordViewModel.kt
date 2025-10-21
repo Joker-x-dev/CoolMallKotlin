@@ -13,6 +13,8 @@ import javax.inject.Inject
 
 /**
  * 找回密码ViewModel
+ * 
+ * @author Joker.X
  */
 @HiltViewModel
 class ResetPasswordViewModel @Inject constructor(
@@ -49,6 +51,9 @@ class ResetPasswordViewModel @Inject constructor(
 
     /**
      * 更新手机号输入
+     * 
+     * @param value 手机号值
+     * @author Joker.X
      */
     fun updatePhone(value: String) {
         _phone.value = value
@@ -56,6 +61,9 @@ class ResetPasswordViewModel @Inject constructor(
 
     /**
      * 更新新密码输入
+     * 
+     * @param value 新密码值
+     * @author Joker.X
      */
     fun updateNewPassword(value: String) {
         _newPassword.value = value
@@ -63,6 +71,9 @@ class ResetPasswordViewModel @Inject constructor(
 
     /**
      * 更新确认密码输入
+     * 
+     * @param value 确认密码值
+     * @author Joker.X
      */
     fun updateConfirmPassword(value: String) {
         _confirmPassword.value = value
@@ -70,6 +81,9 @@ class ResetPasswordViewModel @Inject constructor(
 
     /**
      * 更新验证码输入
+     * 
+     * @param value 验证码值
+     * @author Joker.X
      */
     fun updateVerificationCode(value: String) {
         _verificationCode.value = value
@@ -77,6 +91,8 @@ class ResetPasswordViewModel @Inject constructor(
 
     /**
      * 发送验证码
+     * 
+     * @author Joker.X
      */
     fun sendVerificationCode() {
         // 此处仅为空实现，实际项目中需要调用发送验证码API
@@ -87,6 +103,8 @@ class ResetPasswordViewModel @Inject constructor(
 
     /**
      * 执行重置密码操作
+     * 
+     * @author Joker.X
      */
     fun resetPassword() {
         // 此处仅为空实现，实际项目中需要调用重置密码API
@@ -97,6 +115,8 @@ class ResetPasswordViewModel @Inject constructor(
 
     /**
      * 导航到账号密码登录页面
+     * 
+     * @author Joker.X
      */
     fun toAccountLoginPage() {
         super.toPage(AuthRoutes.ACCOUNT_LOGIN)
@@ -104,6 +124,8 @@ class ResetPasswordViewModel @Inject constructor(
 
     /**
      * 导航到短信登录页面
+     * 
+     * @author Joker.X
      */
     fun toSmsLoginPage() {
         super.toPage(AuthRoutes.SMS_LOGIN)

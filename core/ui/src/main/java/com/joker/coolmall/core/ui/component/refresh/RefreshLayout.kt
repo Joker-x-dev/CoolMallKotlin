@@ -62,6 +62,7 @@ import com.joker.coolmall.core.ui.component.loading.LoadMore
  * @param shouldTriggerLoadMore 判断是否应该触发加载更多的函数
  * @param gridContent 网格内容构建器（网格模式时使用）
  * @param content 列表内容构建器（列表模式时使用）
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

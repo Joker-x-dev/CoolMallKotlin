@@ -36,6 +36,7 @@ import com.joker.coolmall.core.ui.R
  * @param onQuantityChanged 数量变更回调，参数为新的数量值
  * @param buttonSize 按钮尺寸，默认为24.dp
  * @param quantityWidth 数量显示区域的最小宽度，默认为24.dp
+ * @author Joker.X
  */
 @Composable
 fun QuantityStepper(
@@ -105,6 +106,11 @@ fun QuantityStepper(
     }
 }
 
+/**
+ * 数量控制器组件预览
+ *
+ * @author Joker.X
+ */
 @Preview(showBackground = true)
 @Composable
 private fun QuantityStepperPreview() {

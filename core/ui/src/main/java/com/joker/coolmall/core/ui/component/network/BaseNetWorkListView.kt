@@ -28,6 +28,7 @@ import com.joker.coolmall.core.ui.component.loading.PageLoading
  * @param customError 自定义错误组件
  * @param customEmpty 自定义空数据组件
  * @param content 成功状态下显示的内容
+ * @author Joker.X
  */
 @Composable
 fun BaseNetWorkListView(

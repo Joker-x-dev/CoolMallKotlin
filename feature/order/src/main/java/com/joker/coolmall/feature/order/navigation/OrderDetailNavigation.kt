@@ -10,6 +10,8 @@ import com.joker.coolmall.navigation.routes.OrderRoutes
 
 /**
  * 订单详情页面路由常量
+ *
+ * @author Joker.X
  */
 object OrderDetailRoutes {
     const val ORDER_ID_ARG = "order_id"
@@ -22,6 +24,9 @@ object OrderDetailRoutes {
 
 /**
  * 订单详情导航
+ *
+ * @param navController 导航控制器
+ * @author Joker.X
  */
 fun NavGraphBuilder.orderDetailScreen(navController: NavHostController) {
     composable(

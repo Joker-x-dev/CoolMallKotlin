@@ -16,6 +16,7 @@ import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
  * @param modifier 可选修饰符
  * @param thickness 线条粗细，默认为1dp
  * @param withSpacing 是否在分隔线上方添加间距，默认为true
+ * @author Joker.X
  */
 @Composable
 fun FocusableDivider(

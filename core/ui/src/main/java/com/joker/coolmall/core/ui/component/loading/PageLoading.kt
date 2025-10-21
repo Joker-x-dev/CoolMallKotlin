@@ -7,11 +7,15 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
+import com.joker.coolmall.core.ui.R
 
 /**
  * 页面加载中
+ *
  * @param modifier 可选修饰符
+ * @author Joker.X
  */
 @Composable
 fun PageLoading(
@@ -24,6 +28,6 @@ fun PageLoading(
     ) {
         LottieLoading()
         SpaceVerticalSmall()
-        Text(text = "加载中...")
+        Text(text = stringResource(R.string.loading))
     }
 }

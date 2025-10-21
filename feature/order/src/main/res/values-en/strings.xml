@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Page Titles -->
+    <string name="order_list">Order List</string>
+    <string name="order_detail">Order Detail</string>
+    <string name="order_confirm">Confirm Order</string>
+    <string name="order_pay">Checkout</string>
+    <string name="order_logistics">Logistics Detail</string>
+    <string name="order_refund">Refund Request</string>
+    <string name="order_comment">Product Review</string>
+
+    <!-- Order Status Titles -->
+    <string name="order_status_all">All</string>
+    <string name="order_status_unpaid">Unpaid</string>
+    <string name="order_status_unshipped">Unshipped</string>
+    <string name="order_status_unreceived">Unreceived</string>
+    <string name="order_status_after_sale">After Sale/Refund</string>
+    <string name="order_status_unevaluated">To Review</string>
+    <string name="order_status_completed_tab">Completed</string>
+    <string name="order_status_pending_payment">Pending Payment</string>
+    <string name="order_status_pending_shipment">Pending Shipment</string>
+    <string name="order_status_pending_receipt">Pending Receipt</string>
+    <string name="order_status_pending_comment">Pending Review</string>
+    <string name="order_status_completed">Completed</string>
+    <string name="order_status_refunding">Refunding</string>
+    <string name="order_status_refunded">Refunded</string>
+    <string name="order_status_closed">Closed</string>
+    
+    <!-- Order List Page -->
+    <string name="total_items">Total %d items</string>
+    <string name="select_cancel_reason">Select Cancel Reason</string>
+    <string name="confirm_receipt">Confirm Receipt</string>
+    <string name="confirm_receipt_message">Once confirmed, you cannot request refund or after-sales service. Please proceed with caution</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="select_goods_to_buy">Select Products to Buy</string>
+    <string name="rebuy">Buy Again</string>
+    <string name="select_goods_to_comment">Select Products to Review</string>
+    <string name="go_to_comment">Go to Review</string>
+    
+    <!-- Order Detail Page -->
+    <string name="price_detail">Price Detail</string>
+    <string name="goods_total_price">Products Total</string>
+    <string name="discount_amount">Discount Amount</string>
+    <string name="actual_payment">Actual Payment</string>
+    <string name="refund_amount">Refund Amount</string>
+    <string name="refund_status">Refund Status</string>
+    <string name="refund_status_applying">Applying</string>
+    <string name="refund_status_refunded">Refunded</string>
+    <string name="refund_status_rejected">Rejected</string>
+    <string name="refund_status_unknown">Unknown Status</string>
+    <string name="apply_reason">Application Reason</string>
+    <string name="refuse_reason">Refusal Reason</string>
+    <string name="apply_time">Application Time</string>
+    <string name="none">None</string>
+    <string name="order_info">Order Information</string>
+    <string name="order_number">Order Number</string>
+    <string name="copy">Copy</string>
+    <string name="payment_method">Payment Method</string>
+    <string name="wechat">WeChat</string>
+    <string name="wechat_pay">WeChat</string>
+    <string name="payment_time">Payment Time</string>
+    <string name="unpaid">Not Paid</string>
+    <string name="not_paid">Not Paid</string>
+    <string name="order_time">Order Time</string>
+    <string name="order_remark">Order Remark</string>
+    
+    <!-- Order Confirm Page -->
+    <string name="purchase_goods">Purchase Goods</string>
+    <string name="select_coupon">Select Coupon</string>
+    <string name="coupon">Coupon</string>
+    <string name="coupon_select">Select</string>
+    <string name="coupon_discount">Coupon Discount</string>
+    <string name="total">Total</string>
+    <string name="order_remark_title">Order Remark</string>
+    <string name="order_remark_label">Order Remark</string>
+    <string name="order_remark_placeholder">Optional, visible to merchant after payment</string>
+    <string name="submit_order">Submit Order</string>
+    
+    <!-- Order Pay Page -->
+    <string name="go_to_pay">Pay Now</string>
+    <string name="order_pay_button">Pay Now</string>
+    <string name="order_pay_button_with_price">Pay ¥%d</string>
+    <string name="alipay">Alipay</string>
+    <string name="pay_method_alipay">Alipay</string>
+    <string name="wechat_pay_title">WeChat Pay</string>
+    <string name="pay_method_wechat">WeChat Pay</string>
+    <string name="pay_method_qq">QQ Pay</string>
+    <string name="order_pay_tip">Note: Actual payment amount is processed to 1 cent</string>
+    
+    <!-- Order Refund Page -->
+    <string name="submit">Submit</string>
+    <string name="refund_info">Refund Information</string>
+    <string name="please_select">Please Select</string>
+    
+    <!-- Logistics Detail Page -->
+    <string name="logistics_info">Logistics Information</string>
+    <string name="express_company">Express Company</string>
+    <string name="unknown_express">Unknown Express</string>
+    <string name="logistics_number">Tracking Number</string>
+    <string name="courier">Courier</string>
+    <string name="contact_phone">Contact Phone</string>
+    <string name="call">Call</string>
+    <string name="transport_time">Transport Time</string>
+    <string name="logistics_track">Logistics Track</string>
+    
+    <!-- Order Comment Page -->
+    <string name="submit_comment">Submit Review</string>
+    <string name="please_rate">Please tap stars to rate</string>
+    <string name="rating_very_poor">Very Poor</string>
+    <string name="rating_poor">Poor</string>
+    <string name="rating_average">Average</string>
+    <string name="rating_good">Good</string>
+    <string name="rating_excellent">Excellent</string>
+    <string name="comment_placeholder">Please enter your comment...</string>
+    
+    <!-- Order Buttons -->
+    <string name="cancel_order">Cancel Order</string>
+    <string name="pay_now">Pay Now</string>
+    <string name="order_refund_button">After Sales/Refund</string>
+    <string name="confirm_receive">Confirm Receipt</string>
+    <string name="view_logistics">View Logistics</string>
+    <string name="comment_now">Review Now</string>
+    <string name="rebuy_now">Buy Again</string>
+    
+    <!-- Toast Messages -->
+    <string name="please_fill_comment">Please fill in review content and rating first</string>
+    <string name="comment_submit_success">Review submitted successfully</string>
+    <string name="submitting">Submitting...</string>
+    <string name="payment_success">Payment successful</string>
+    <string name="payment_failed">Payment failed</string>
+    <string name="payment_cancel">Payment cancelled</string>
+</resources>
+

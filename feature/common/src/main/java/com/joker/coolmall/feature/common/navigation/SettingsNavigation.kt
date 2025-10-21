@@ -7,6 +7,8 @@ import com.joker.coolmall.navigation.routes.CommonRoutes
 
 /**
  * 设置页面导航
+ * 
+ * @author Joker.X
  */
 fun NavGraphBuilder.settingsScreen() {
     composable(route = CommonRoutes.SETTINGS) {

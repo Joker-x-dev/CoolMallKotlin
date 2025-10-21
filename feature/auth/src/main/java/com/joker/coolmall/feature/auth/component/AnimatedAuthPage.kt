@@ -34,6 +34,7 @@ import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
  * @param withFadeIn 是否使用淡入效果，默认为false
  * @param onBackClick 返回按钮点击回调，默认为null（不显示返回按钮）
  * @param content 页面内容
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

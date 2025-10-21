@@ -32,6 +32,13 @@ import javax.inject.Inject
 
 /**
  * 首页ViewModel
+ *
+ * @param navigator 导航器
+ * @param appState 应用状态
+ * @param pageRepository 页面仓库
+ * @param goodsRepository 商品仓库
+ * @param couponRepository 优惠券仓库
+ * @author Joker.X
  */
 @HiltViewModel
 class HomeViewModel @Inject constructor(
@@ -60,6 +67,9 @@ class HomeViewModel @Inject constructor(
 
     /**
      * 重写请求列表数据方法
+     *
+     * @return 商品分页数据流
+     * @author Joker.X
      */
     override fun requestListData(): Flow<NetworkResponse<NetworkPageData<Goods>>> {
         return goodsRepository.getGoodsPage(
@@ -72,6 +82,8 @@ class HomeViewModel @Inject constructor(
 
     /**
      * 加载首页数据
+     *
+     * @author Joker.X
      */
     fun loadHomeData() {
         ResultHandler.handleResult(
@@ -102,6 +114,8 @@ class HomeViewModel @Inject constructor(
 
     /**
      * 重写触发下拉刷新方法
+     *
+     * @author Joker.X
      */
     override fun onRefresh() {
         // 如果正在加载中，则不重复请求
@@ -116,6 +130,8 @@ class HomeViewModel @Inject constructor(
 
     /**
      * 跳转到商品搜索页面
+     *
+     * @author Joker.X
      */
     fun toGoodsSearch() {
         super.toPage(GoodsRoutes.SEARCH)
@@ -123,6 +139,9 @@ class HomeViewModel @Inject constructor(
 
     /**
      * 导航到商品详情页
+     *
+     * @param goodsId 商品ID
+     * @author Joker.X
      */
     fun toGoodsDetail(goodsId: Long) {
         super.toPage(GoodsRoutes.DETAIL, goodsId)
@@ -130,7 +149,9 @@ class HomeViewModel @Inject constructor(
 
     /**
      * 跳转到商品分类页面
+     *
      * @param categoryId 点击的分类ID
+     * @author Joker.X
      */
     fun toGoodsCategoryPage(categoryId: Long) {
         val data = pageData.value
@@ -143,6 +164,8 @@ class HomeViewModel @Inject constructor(
 
     /**
      * 跳转到限时精选页面
+     *
+     * @author Joker.X
      */
     fun toFlashSalePage() {
         super.toPage("${GoodsRoutes.CATEGORY}?featured=true")
@@ -150,6 +173,8 @@ class HomeViewModel @Inject constructor(
 
     /**
      * 跳转到推荐商品页面
+     *
+     * @author Joker.X
      */
     fun toRecommendPage() {
         super.toPage("${GoodsRoutes.CATEGORY}?recommend=true")
@@ -157,6 +182,8 @@ class HomeViewModel @Inject constructor(
 
     /**
      * 跳转到 GitHub 页面
+     *
+     * @author Joker.X
      */
     fun toGitHubPage() {
         val url = "https://github.com/Joker-x-dev/CoolMallKotlin"
@@ -173,6 +200,8 @@ class HomeViewModel @Inject constructor(
 
     /**
      * 跳转到关于页面
+     *
+     * @author Joker.X
      */
     fun toAboutPage() {
         super.toPage(CommonRoutes.ABOUT)
@@ -180,6 +209,8 @@ class HomeViewModel @Inject constructor(
 
     /**
      * 显示优惠券弹出层
+     *
+     * @author Joker.X
      */
     fun showCouponModal() {
         _couponModalVisible.value = true
@@ -187,6 +218,8 @@ class HomeViewModel @Inject constructor(
 
     /**
      * 隐藏优惠券领取弹出层
+     *
+     * @author Joker.X
      */
     fun hideCouponModal() {
         _couponModalVisible.value = false
@@ -194,7 +227,9 @@ class HomeViewModel @Inject constructor(
 
     /**
      * 领取优惠券
+     *
      * @param coupon 要领取的优惠券
+     * @author Joker.X
      */
     fun receiveCoupon(coupon: Coupon) {
         // 检查登录状态
@@ -216,9 +251,11 @@ class HomeViewModel @Inject constructor(
 
     /**
      * 查找指定分类的所有子分类ID
+     *
      * @param parentId 父分类ID
      * @param allCategories 所有分类列表
      * @return 子分类ID列表
+     * @author Joker.X
      */
     private fun findChildCategoryIds(parentId: Long, allCategories: List<Category>): List<Long> {
         return allCategories.filter { it.parentId == parentId.toInt() }.map { it.id }

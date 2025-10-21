@@ -26,8 +26,7 @@ import com.joker.coolmall.core.designsystem.theme.ArrowLeftIcon
  * @param actions 顶部应用栏右侧的操作按钮区域，默认为空
  * @param onBackClick 点击返回按钮时的回调函数
  * @param showBackIcon 是否显示返回按钮，默认为true
- *
- * @sample CenterTopAppBarPreview
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -62,6 +61,11 @@ fun CenterTopAppBar(
     )
 }
 
+/**
+ * 居中顶部应用栏预览
+ *
+ * @author Joker.X
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable

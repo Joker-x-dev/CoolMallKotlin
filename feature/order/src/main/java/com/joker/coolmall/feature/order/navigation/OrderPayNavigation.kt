@@ -9,6 +9,8 @@ import com.joker.coolmall.navigation.routes.OrderRoutes
 
 /**
  * 订单支付页面路由常量
+ *
+ * @author Joker.X
  */
 object OrderPayRoutes {
     const val ORDER_ID_ARG = "order_id"
@@ -31,6 +33,8 @@ object OrderPayRoutes {
 
 /**
  * 订单支付页面导航
+ *
+ * @author Joker.X
  */
 fun NavGraphBuilder.orderPayScreen() {
     composable(

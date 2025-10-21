@@ -31,6 +31,7 @@ import com.joker.coolmall.core.designsystem.theme.ArrowLeftIcon
  * @param scrollBehavior 滚动行为，用于控制标题动画
  * @param expandedBackgroundColor 展开状态下的背景色，默认为 MaterialTheme.colorScheme.background
  * @param collapsedBackgroundColor 收起状态下的背景色，默认为 MaterialTheme.colorScheme.background
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

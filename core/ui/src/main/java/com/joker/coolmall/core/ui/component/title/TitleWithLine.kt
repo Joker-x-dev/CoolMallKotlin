@@ -23,8 +23,10 @@ import com.joker.coolmall.core.ui.component.text.AppText
  * 带有垂直装饰线的标题组件
  *
  * @param text 标题文本
+ * @param textColor 文本颜色
  * @param modifier 修饰符
  * @param lineColor 装饰线颜色
+ * @author Joker.X
  */
 @Composable
 fun TitleWithLine(
@@ -56,6 +58,11 @@ fun TitleWithLine(
     }
 }
 
+/**
+ * 带装饰线标题组件预览
+ *
+ * @author Joker.X
+ */
 @Preview(showBackground = true)
 @Composable
 fun TitleWithLinePreview() {

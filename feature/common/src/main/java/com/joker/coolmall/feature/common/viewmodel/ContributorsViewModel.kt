@@ -16,6 +16,8 @@ import javax.inject.Inject
 
 /**
  * 贡献者列表 ViewModel
+ * 
+ * @author Joker.X
  */
 @HiltViewModel
 class ContributorsViewModel @Inject constructor(
@@ -32,6 +34,7 @@ class ContributorsViewModel @Inject constructor(
      * 通过重写来给父类提供API请求的Flow
      *
      * @return 用户贡献者分页数据的Flow
+     * @author Joker.X
      */
     override fun requestListData(): Flow<NetworkResponse<NetworkPageData<UserContributor>>> {
         return userContributorRepository.getUserContributorPage(
@@ -47,6 +50,7 @@ class ContributorsViewModel @Inject constructor(
      * 如果贡献者有网站链接，则打开WebView页面显示
      *
      * @param contributor 被点击的贡献者
+     * @author Joker.X
      */
     fun onContributorClick(contributor: UserContributor) {
         contributor.websiteUrl?.let { url ->

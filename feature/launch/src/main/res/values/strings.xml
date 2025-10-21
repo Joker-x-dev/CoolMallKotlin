@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- 引导页 -->
+    <string name="guide_skip">跳过</string>
+    <string name="guide_start_experience">开始体验</string>
+    <string name="guide_continue">继续</string>
+    
+    <!-- 引导页内容 -->
+    <string name="guide_page_1_title">青商城 - 开源电商学习项目</string>
+    <string name="guide_page_1_desc">100% Kotlin 开发的现代化电商应用\n完全开源免费，助力开发者快速成长\n提供完整的代码参考和学习资源</string>
+    
+    <string name="guide_page_2_title">声明式 UI 新体验</string>
+    <string name="guide_page_2_desc">基于 Jetpack Compose 构建流畅界面\n采用 MVVM + Clean Architecture 架构\nHilt、Coroutines、Flow 等主流技术全整合</string>
+    
+    <string name="guide_page_3_title">完整电商业务流程</string>
+    <string name="guide_page_3_desc">用户认证、商品展示、搜索分类\n购物车管理、订单支付全流程实现\n贴近真实商业场景的学习案例</string>
+    
+    <string name="guide_page_4_title">模块化架构设计</string>
+    <string name="guide_page_4_desc">参考 Google Now in Android 最佳实践\n高内聚低耦合，便于维护与扩展\n适合学习与二次开发的优质项目</string>
+    
+    <!-- 启动页 -->
+    <string name="app_name_splash">青商城</string>
+    <string name="app_copyright">© 2025 Joker.X &amp; CoolMallKotlin Contributors</string>
+</resources>
+

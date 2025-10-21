@@ -27,6 +27,7 @@ import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.joker.coolmall.core.designsystem.component.AppRow
 import com.joker.coolmall.core.designsystem.theme.ShapeCircle
@@ -53,6 +54,7 @@ import com.joker.coolmall.feature.cs.R
  * @param focusRequester 输入框焦点请求器
  * @param onFocusRequested 输入框聚焦前的回调，用于处理前置逻辑
  * @param modifier 修饰符
+ * @author Joker.X
  */
 @Composable
 fun ChatInputBar(
@@ -114,7 +116,7 @@ fun ChatInputBar(
                             Box {
                                 if (inputText.isEmpty()) {
                                     AppText(
-                                        text = "发送消息...",
+                                        text = stringResource(R.string.input_message_hint),
                                         color = MaterialTheme.colorScheme.onSurfaceVariant.copy(
                                             alpha = 0.6f
                                         ),
@@ -144,7 +146,7 @@ fun ChatInputBar(
                 ) {
                     Icon(
                         painter = painterResource(id = R.drawable.ic_emoji_good),
-                        contentDescription = "表情",
+                        contentDescription = stringResource(R.string.emoji),
                         modifier = Modifier.size(24.dp),
                         tint = if (showEmojiSelector)
                             MaterialTheme.colorScheme.primary
@@ -167,7 +169,7 @@ fun ChatInputBar(
                     if (hasContent) {
                         // 发送按钮
                         AppButton(
-                            text = "发送",
+                            text = stringResource(R.string.send),
                             size = ButtonSize.MINI,
                             onClick = onSendMessage,
                             fullWidth = false,
@@ -187,7 +189,7 @@ fun ChatInputBar(
                         ) {
                             Icon(
                                 painter = painterResource(id = R.drawable.ic_add_circle),
-                                contentDescription = "更多功能",
+                                contentDescription = stringResource(R.string.more_functions),
                                 modifier = Modifier.size(24.dp),
                                 tint = if (showFunctionSelector)
                                     MaterialTheme.colorScheme.primary

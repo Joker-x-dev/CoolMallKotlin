@@ -33,6 +33,7 @@ import com.joker.coolmall.feature.auth.R
  * @param nextAction 输入法下一步动作，默认为Next
  * @param isPhoneValid 手机号是否有效，用于控制发送按钮是否可点击
  * @param modifier 可选修饰符
+ * @author Joker.X
  */
 @Composable
 fun VerificationCodeField(

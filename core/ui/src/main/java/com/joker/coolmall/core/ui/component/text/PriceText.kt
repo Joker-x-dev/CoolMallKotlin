@@ -19,6 +19,7 @@ import com.joker.coolmall.core.designsystem.theme.AppTheme
  * @param integerTextSize 整数部分文本大小，默认为DISPLAY_MEDIUM
  * @param decimalTextSize 小数部分文本大小，默认为BODY_MEDIUM
  * @param symbolTextSize 人民币符号文本大小，默认为BODY_MEDIUM
+ * @author Joker.X
  */
 @Composable
 fun PriceText(
@@ -62,6 +63,11 @@ fun PriceText(
     }
 }
 
+/**
+ * 价格文本组件预览
+ *
+ * @author Joker.X
+ */
 @Preview(showBackground = true)
 @Composable
 fun PriceTextPreview() {

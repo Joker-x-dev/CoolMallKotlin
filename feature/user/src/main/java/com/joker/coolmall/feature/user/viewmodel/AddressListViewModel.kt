@@ -27,6 +27,8 @@ import javax.inject.Inject
 
 /**
  * 收货地址列表 ViewModel
+ *
+ * @author Joker.X
  */
 @HiltViewModel
 class AddressListViewModel @Inject constructor(
@@ -59,6 +61,9 @@ class AddressListViewModel @Inject constructor(
 
     /**
      * 通过重写来给父类提供API请求的Flow
+     *
+     * @return 网络响应的Flow
+     * @author Joker.X
      */
     override fun requestListData(): Flow<NetworkResponse<NetworkPageData<Address>>> {
         return addressRepository.getAddressPage(
@@ -71,6 +76,8 @@ class AddressListViewModel @Inject constructor(
 
     /**
      * 跳转到收货地址详情 - 新增模式
+     *
+     * @author Joker.X
      */
     fun toAddressDetailPage() {
         val args = mapOf(
@@ -83,6 +90,7 @@ class AddressListViewModel @Inject constructor(
      * 跳转到收货地址详情 - 编辑模式
      *
      * @param addressId 待编辑的地址ID
+     * @author Joker.X
      */
     fun toAddressDetailEditPage(addressId: Long) {
         val args = mapOf(
@@ -94,7 +102,9 @@ class AddressListViewModel @Inject constructor(
 
     /**
      * 显示删除确认弹窗，并记录待删除的地址ID
+     *
      * @param id 待删除的地址ID
+     * @author Joker.X
      */
     fun showDeleteDialog(id: Long) {
         _deleteId.value = id
@@ -103,6 +113,8 @@ class AddressListViewModel @Inject constructor(
 
     /**
      * 隐藏删除确认弹窗，并清空待删除ID
+     *
+     * @author Joker.X
      */
     fun hideDeleteDialog() {
         _showDeleteDialog.value = false
@@ -111,6 +123,8 @@ class AddressListViewModel @Inject constructor(
 
     /**
      * 执行删除操作，删除当前待删除ID的地址，成功后刷新列表并关闭弹窗
+     *
+     * @author Joker.X
      */
     fun deleteAddress() {
         val id = _deleteId.value ?: return
@@ -127,6 +141,10 @@ class AddressListViewModel @Inject constructor(
     /**
      * 选择地址（仅在选择模式下使用）
      * 将选中的地址数据返回给上一个页面
+     *
+     * @param address 选中的地址
+     * @param backStackEntry 导航返回栈条目
+     * @author Joker.X
      */
     private fun selectAddress(address: Address, backStackEntry: NavBackStackEntry?) {
         if (isSelectMode && backStackEntry != null) {
@@ -139,6 +157,10 @@ class AddressListViewModel @Inject constructor(
     /**
      * 处理地址卡片点击事件
      * 根据当前模式决定是编辑地址还是选择地址
+     *
+     * @param address 点击的地址
+     * @param backStackEntry 导航返回栈条目
+     * @author Joker.X
      */
     fun onAddressClick(address: Address, backStackEntry: NavBackStackEntry? = null) {
         if (isSelectMode) {

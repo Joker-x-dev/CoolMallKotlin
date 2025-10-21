@@ -9,6 +9,9 @@ import com.joker.coolmall.navigation.routes.MainRoutes
 
 /**
  * 注册主页面路由
+ *
+ * @param sharedTransitionScope 共享转场作用域
+ * @author Joker.X
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
 fun NavGraphBuilder.mainScreen(sharedTransitionScope: SharedTransitionScope) {

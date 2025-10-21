@@ -31,6 +31,8 @@ import com.joker.coolmall.feature.user.viewmodel.AddressListViewModel
  * 收货地址列表路由
  *
  * @param viewModel 收货地址列表ViewModel
+ * @param navController 导航控制器
+ * @author Joker.X
  */
 @Composable
 internal fun AddressListRoute(
@@ -87,11 +89,19 @@ internal fun AddressListRoute(
  *
  * @param uiState 收货地址列表UI状态
  * @param listData 收货地址列表数据
+ * @param isRefreshing 是否正在刷新
+ * @param loadMoreState 加载更多状态
+ * @param onRefresh 刷新回调
+ * @param onLoadMore 加载更多回调
+ * @param shouldTriggerLoadMore 是否应触发加载更多的判断函数
  * @param toAddressDetail 导航到收货地址详情（新增模式）
  * @param toAddressDetailEdit 导航到收货地址详情（编辑模式）
  * @param onBackClick 返回上一页回调
  * @param onRetry 重试请求回调
  * @param onDeleteClick 删除地址回调
+ * @param isSelectMode 是否为选择模式
+ * @param onAddressClick 地址点击回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -149,6 +159,11 @@ internal fun AddressListScreen(
  * @param onLoadMore 加载更多回调
  * @param onRetry 重试请求回调
  * @param shouldTriggerLoadMore 是否应触发加载更多的判断函数
+ * @param toAddressDetailEdit 导航到收货地址详情（编辑模式）
+ * @param onDeleteClick 删除地址回调
+ * @param isSelectMode 是否为选择模式
+ * @param onAddressClick 地址点击回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -206,6 +221,11 @@ private fun AddressListContentView(
     }
 }
 
+/**
+ * 收货地址列表界面浅色主题预览
+ *
+ * @author Joker.X
+ */
 @Composable
 @Preview
 internal fun AddressListScreenPreview() {
@@ -217,6 +237,11 @@ internal fun AddressListScreenPreview() {
     }
 }
 
+/**
+ * 收货地址列表界面深色主题预览
+ *
+ * @author Joker.X
+ */
 @Composable
 @Preview
 internal fun AddressListScreenPreviewDark() {

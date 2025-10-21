@@ -40,6 +40,7 @@ import com.joker.coolmall.core.ui.component.text.TextType
  * @param contributor 贡献者数据
  * @param modifier 修饰符
  * @param onClick 点击事件回调，参数为贡献者数据
+ * @author Joker.X
  */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -118,6 +119,8 @@ fun UserContributorCard(
 
 /**
  * 组件预览
+ * 
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable

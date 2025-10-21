@@ -15,17 +15,20 @@ import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkView
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
+import com.joker.coolmall.feature.common.R
 import com.joker.coolmall.feature.common.viewmodel.PrivacyPolicyViewModel
 
 /**
  * 隐私政策路由
  *
  * @param viewModel 隐私政策 ViewModel
+ * @author Joker.X
  */
 @Composable
 internal fun PrivacyPolicyRoute(
     viewModel: PrivacyPolicyViewModel = hiltViewModel()
 ) {
+    // 从ViewModel收集UI状态
     val uiState by viewModel.uiState.collectAsState()
 
     PrivacyPolicyScreen(
@@ -41,6 +44,7 @@ internal fun PrivacyPolicyRoute(
  * @param uiState UI状态
  * @param onBackClick 返回按钮回调
  * @param onRetry 重试请求回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -50,7 +54,7 @@ internal fun PrivacyPolicyScreen(
     onRetry: () -> Unit = {}
 ) {
     AppScaffold(
-        titleText = "隐私政策",
+        title = R.string.privacy_policy_title,
         onBackClick = onBackClick
     ) {
         BaseNetWorkView(
@@ -66,6 +70,7 @@ internal fun PrivacyPolicyScreen(
  * 隐私政策内容视图
  *
  * @param html HTML 富文本内容
+ * @author Joker.X
  */
 @Composable
 private fun PrivacyPolicyContentView(html: String) {
@@ -108,6 +113,8 @@ private fun PrivacyPolicyContentView(html: String) {
 
 /**
  * 隐私政策界面浅色主题预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -123,6 +130,8 @@ internal fun PrivacyPolicyScreenPreview() {
 
 /**
  * 隐私政策界面深色主题预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable

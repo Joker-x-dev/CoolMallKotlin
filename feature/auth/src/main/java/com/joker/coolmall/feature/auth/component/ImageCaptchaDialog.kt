@@ -47,6 +47,7 @@ import com.joker.coolmall.feature.auth.R
  * @param onRefreshCaptcha 刷新验证码回调，用户点击图片时触发
  * @param title 对话框标题，默认使用 R.string.security_verification
  * @param buttonText 按钮文本，默认使用 R.string.complete_verification
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -122,9 +123,10 @@ fun ImageCaptchaDialog(
 /**
  * 验证码图片组件
  *
+ * @param modifier 修饰符
  * @param captcha 验证码数据
  * @param onRefresh 刷新验证码回调，点击图片时触发
- * @param modifier 修饰符
+ * @author Joker.X
  */
 @Composable
 fun CaptchaImage(

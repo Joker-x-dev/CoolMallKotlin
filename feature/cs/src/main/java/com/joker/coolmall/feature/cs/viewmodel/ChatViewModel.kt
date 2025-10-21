@@ -33,6 +33,12 @@ private const val TAG = "ChatViewModel"
 
 /**
  * 客服聊天 ViewModel
+ * 
+ * @param customerServiceRepository 客服仓库
+ * @param appState 应用状态
+ * @param context 应用上下文
+ * @param navigator 导航器
+ * @author Joker.X
  */
 @HiltViewModel
 class ChatViewModel @Inject constructor(
@@ -98,6 +104,8 @@ class ChatViewModel @Inject constructor(
 
     /**
      * 设置WebSocket回调
+     * 
+     * @author Joker.X
      */
     private fun setupWebSocketCallbacks() {
         webSocketManager.setOnMessageReceived { message ->
@@ -111,6 +119,8 @@ class ChatViewModel @Inject constructor(
 
     /**
      * 创建客服会话
+     * 
+     * @author Joker.X
      */
     private fun createSession() {
         LogUtils.d(TAG, "开始创建会话")
@@ -144,6 +154,8 @@ class ChatViewModel @Inject constructor(
 
     /**
      * 加载历史消息
+     * 
+     * @author Joker.X
      */
     fun loadHistoryMessages() {
         if (_isLoadingHistory.value) return
@@ -217,6 +229,8 @@ class ChatViewModel @Inject constructor(
 
     /**
      * 加载更多历史消息
+     * 
+     * @author Joker.X
      */
     fun loadMoreMessages() {
         // 检查是否可以加载更多
@@ -233,6 +247,8 @@ class ChatViewModel @Inject constructor(
 
     /**
      * 刷新消息列表
+     * 
+     * @author Joker.X
      */
     fun refreshMessages() {
         if (_isLoadingHistory.value) return
@@ -244,6 +260,8 @@ class ChatViewModel @Inject constructor(
 
     /**
      * 建立WebSocket连接
+     * 
+     * @author Joker.X
      */
     fun connectWebSocket() {
         val token = appState?.auth?.value?.token ?: ""
@@ -252,6 +270,9 @@ class ChatViewModel @Inject constructor(
 
     /**
      * 添加新消息到列表
+     * 
+     * @param message 消息数据
+     * @author Joker.X
      */
     private fun addNewMessage(message: CsMsg) {
         val currentMessages = _messages.value.toMutableList()
@@ -278,6 +299,9 @@ class ChatViewModel @Inject constructor(
 
     /**
      * 更新输入框文本
+     * 
+     * @param text 输入文本
+     * @author Joker.X
      */
     fun updateInputText(text: String) {
         _inputText.value = text
@@ -285,6 +309,9 @@ class ChatViewModel @Inject constructor(
 
     /**
      * 清除消息动画状态
+     * 
+     * @param messageId 消息ID
+     * @author Joker.X
      */
     fun clearMessageAnimation(messageId: Long) {
         _newMessageIds.value = _newMessageIds.value - messageId
@@ -292,6 +319,10 @@ class ChatViewModel @Inject constructor(
 
     /**
      * 发送消息
+     * 
+     * @param content 消息内容
+     * @param type 消息类型
+     * @author Joker.X
      */
     fun sendMessage(content: String = _inputText.value, type: String = "text") {
         if (content.isBlank()) return
@@ -324,6 +355,8 @@ class ChatViewModel @Inject constructor(
 
     /**
      * 标记消息为已读
+     * 
+     * @author Joker.X
      */
     fun markMessagesAsRead() {
         viewModelScope.launch {
@@ -346,6 +379,8 @@ class ChatViewModel @Inject constructor(
 
     /**
      * 重试请求
+     * 
+     * @author Joker.X
      */
     fun retryRequest() {
         if (_uiState.value is BaseNetWorkUiState.Error) {
@@ -357,6 +392,8 @@ class ChatViewModel @Inject constructor(
 
     /**
      * 断开WebSocket连接
+     * 
+     * @author Joker.X
      */
     fun disconnectWebSocket() {
         webSocketManager.disconnect()

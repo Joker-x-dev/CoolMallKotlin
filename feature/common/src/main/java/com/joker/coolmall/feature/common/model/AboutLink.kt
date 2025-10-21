@@ -2,6 +2,8 @@ package com.joker.coolmall.feature.common.model
 
 /**
  * 链接项
+ * 
+ * @author Joker.X
  */
 data class LinkItem(
     val title: String,
@@ -11,6 +13,8 @@ data class LinkItem(
 
 /**
  * 链接分类
+ * 
+ * @author Joker.X
  */
 data class LinkCategory(
     val title: String,

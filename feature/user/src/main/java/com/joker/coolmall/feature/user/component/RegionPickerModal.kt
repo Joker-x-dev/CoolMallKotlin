@@ -49,6 +49,7 @@ import com.joker.coolmall.core.ui.R as CoreUiR
  * @param regions 省级地区列表
  * @param onRegionSelected 地区选择回调，参数为完整地址字符串，如"广西壮族自治区 崇左市 大新县"
  * @param initialRegion 初始选中的地区，格式为"省 市 区"
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -241,6 +242,11 @@ fun RegionPickerModal(
 
 /**
  * 地区列表项
+ *
+ * @param region 地区信息
+ * @param isSelected 是否选中
+ * @param onClick 点击回调
+ * @author Joker.X
  */
 @Composable
 private fun RegionItem(

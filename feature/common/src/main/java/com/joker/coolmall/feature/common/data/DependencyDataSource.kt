@@ -5,12 +5,16 @@ import com.joker.coolmall.feature.common.model.Dependency
 /**
  * 依赖库数据源
  * 提供项目中使用的第三方依赖库信息
+ * 
+ * @author Joker.X
  */
 object DependencyDataSource {
     
     /**
      * 获取所有依赖库列表
+     * 
      * @return 依赖库列表
+     * @author Joker.X
      */
     fun getAllDependencies(): List<Dependency> {
         return listOf(
@@ -195,8 +199,10 @@ object DependencyDataSource {
     
     /**
      * 根据分类获取依赖库列表
+     * 
      * @param category 分类名称
      * @return 指定分类的依赖库列表
+     * @author Joker.X
      */
     fun getDependenciesByCategory(category: String): List<Dependency> {
         return getAllDependencies().filter { it.category == category }
@@ -204,7 +210,9 @@ object DependencyDataSource {
     
     /**
      * 获取所有分类
+     * 
      * @return 分类列表
+     * @author Joker.X
      */
     fun getAllCategories(): List<String> {
         return getAllDependencies().map { it.category }.distinct().sorted()

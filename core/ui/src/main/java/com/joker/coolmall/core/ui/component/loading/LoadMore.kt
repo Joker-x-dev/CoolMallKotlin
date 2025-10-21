@@ -20,10 +20,12 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.joker.coolmall.core.common.base.state.LoadMoreState
 import com.joker.coolmall.core.designsystem.theme.AppTheme
+import com.joker.coolmall.core.ui.R
 import com.joker.coolmall.core.ui.component.divider.WeDivider
 import com.joker.coolmall.core.ui.component.text.AppText
 import com.joker.coolmall.core.ui.component.text.TextType
@@ -42,6 +44,7 @@ import com.joker.coolmall.core.ui.component.text.TextType
  * @param state 当前加载状态，默认为可上拉加载状态
  * @param listState LazyList的状态，用于自动滚动到底部，可为空
  * @param onRetry 加载失败时的重试回调，为空时不可点击重试
+ * @author Joker.X
  */
 @Composable
 fun LoadMore(
@@ -62,7 +65,7 @@ fun LoadMore(
             LoadMoreState.PullToLoad -> {
                 WeDivider(modifier = Modifier.weight(1f))
                 AppText(
-                    text = "上拉加载更多",
+                    text = stringResource(R.string.load_more_pull),
                     modifier = Modifier.padding(horizontal = 8.dp),
                     type = TextType.SECONDARY
                 )
@@ -73,7 +76,7 @@ fun LoadMore(
             LoadMoreState.Loading -> {
                 WeLoading() // 显示加载动画
                 Spacer(modifier = Modifier.width(8.dp))
-                AppText(text = "正在加载...")
+                AppText(text = stringResource(R.string.load_more_loading))
                 // 如果提供了列表状态，自动滚动到底部
                 if (listState != null) {
                     LaunchedEffect(Unit) {
@@ -86,7 +89,7 @@ fun LoadMore(
             LoadMoreState.Success -> {
                 WeDivider(modifier = Modifier.weight(1f))
                 AppText(
-                    text = "加载成功",
+                    text = stringResource(R.string.load_more_success),
                     modifier = Modifier.padding(horizontal = 8.dp)
                 )
                 WeDivider(modifier = Modifier.weight(1f))
@@ -97,7 +100,7 @@ fun LoadMore(
                 WeDivider(modifier = Modifier.weight(1f))
                 if (onRetry != null) {
                     AppText(
-                        text = "加载失败，点击重试",
+                        text = stringResource(R.string.load_more_error_retry),
                         modifier = Modifier
                             .padding(horizontal = 8.dp)
                             .clip(MaterialTheme.shapes.small)
@@ -107,7 +110,7 @@ fun LoadMore(
                     )
                 } else {
                     AppText(
-                        text = "加载失败",
+                        text = stringResource(R.string.load_more_error),
                         modifier = Modifier.padding(horizontal = 8.dp),
                         type = TextType.ERROR
                     )
@@ -144,6 +147,8 @@ fun LoadMore(
 
 /**
  * OrderLoadMore 组件预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -181,6 +186,8 @@ private fun OrderLoadMorePreview() {
 
 /**
  * OrderLoadMore 组件深色主题预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable

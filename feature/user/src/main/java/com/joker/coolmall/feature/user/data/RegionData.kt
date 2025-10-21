@@ -4,11 +4,16 @@ import com.joker.coolmall.feature.user.model.Region
 
 /**
  * 地区数据
+ *
+ * @author Joker.X
  */
 object RegionData {
 
     /**
      * 获取所有省级地区数据
+     *
+     * @return 省级地区列表
+     * @author Joker.X
      */
     fun getProvinces(): List<Region> {
         return listOf(

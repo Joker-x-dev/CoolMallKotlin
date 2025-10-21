@@ -20,6 +20,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,23 +41,32 @@ import com.joker.coolmall.core.ui.component.network.BaseNetWorkView
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
 import com.joker.coolmall.core.ui.component.text.AppText
 import com.joker.coolmall.core.ui.component.text.TextType
+import com.joker.coolmall.feature.feedback.R
 import com.joker.coolmall.feature.feedback.viewmodel.FeedbackSubmitViewModel
 
 /**
  * 提交反馈路由
  *
  * @param viewModel 提交反馈 ViewModel
+ * @author Joker.X
  */
 @Composable
 internal fun FeedbackSubmitRoute(
     viewModel: FeedbackSubmitViewModel = hiltViewModel()
 ) {
+    // UI状态
     val uiState by viewModel.uiState.collectAsState()
+    // 选中的反馈类型
     val selectedFeedbackType by viewModel.selectedFeedbackType.collectAsState()
+    // 联系方式
     val contact by viewModel.contact.collectAsState()
+    // 反馈内容
     val content by viewModel.content.collectAsState()
+    // 选中的图片
     val selectedImages by viewModel.selectedImages.collectAsState()
+    // 已上传的图片URL列表
     val uploadedImageUrls by viewModel.uploadedImageUrls.collectAsState()
+    // 是否正在提交
     val isSubmitting by viewModel.isSubmitting.collectAsState()
 
     FeedbackSubmitScreen(
@@ -96,6 +106,7 @@ internal fun FeedbackSubmitRoute(
  * @param onContentChange 反馈内容变化回调
  * @param onImagesChange 图片变化回调
  * @param onSubmitFeedback 提交反馈回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -117,13 +128,13 @@ internal fun FeedbackSubmitScreen(
     onSubmitFeedback: () -> Unit = {},
 ) {
     AppScaffold(
-        titleText = "我要反馈",
+        title = R.string.feedback_submit,
         useLargeTopBar = true,
         onBackClick = onBackClick,
         bottomBar = {
             if (uiState is BaseNetWorkUiState.Success) {
                 AppBottomButton(
-                    text = "提交",
+                    text = stringResource(R.string.submit),
                     onClick = onSubmitFeedback,
                     enabled = isFormValid && !isSubmitting,
                     loading = isSubmitting
@@ -164,6 +175,7 @@ internal fun FeedbackSubmitScreen(
  * @param onContactChange 联系方式变化回调
  * @param onContentChange 反馈内容变化回调
  * @param onImagesChange 图片变化回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -182,7 +194,7 @@ private fun FeedbackSubmitContentView(
     VerticalList(
         modifier = Modifier.verticalScroll(rememberScrollState())
     ) {
-        AppCard(lineTitle = "反馈类型") {
+        AppCard(lineTitle = stringResource(R.string.feedback_type)) {
             FlowRow(
                 horizontalArrangement = Arrangement.spacedBy(SpaceHorizontalSmall),
                 verticalArrangement = Arrangement.spacedBy(SpaceVerticalSmall),
@@ -198,7 +210,7 @@ private fun FeedbackSubmitContentView(
             }
         }
 
-        AppCard(lineTitle = "反馈内容") {
+        AppCard(lineTitle = stringResource(R.string.feedback_content)) {
             OutlinedTextField(
                 value = content,
                 onValueChange = onContentChange,
@@ -207,7 +219,7 @@ private fun FeedbackSubmitContentView(
                     .padding(top = 8.dp),
                 placeholder = {
                     AppText(
-                        "请尽量详细描述遇到的问题，操作步骤，并附上相关页面截图，以便更好定位问题",
+                        stringResource(R.string.feedback_content_hint),
                         type = TextType.TERTIARY
                     )
                 },
@@ -221,7 +233,7 @@ private fun FeedbackSubmitContentView(
             )
         }
 
-        AppCard(lineTitle = "联系方式（选填）") {
+        AppCard(lineTitle = stringResource(R.string.contact_info_optional)) {
             OutlinedTextField(
                 value = contact,
                 onValueChange = onContactChange,
@@ -230,7 +242,7 @@ private fun FeedbackSubmitContentView(
                     .padding(top = 8.dp),
                 placeholder = {
                     AppText(
-                        "QQ/微信号，手机号，邮箱",
+                        stringResource(R.string.contact_info_hint),
                         type = TextType.TERTIARY
                     )
                 },
@@ -242,7 +254,7 @@ private fun FeedbackSubmitContentView(
             )
         }
 
-        AppCard(lineTitle = "问题截图（选填）") {
+        AppCard(lineTitle = stringResource(R.string.problem_screenshot_optional)) {
             ImageGridPicker(
                 selectedImages = selectedImages,
                 onImagesChanged = onImagesChange,
@@ -259,6 +271,7 @@ private fun FeedbackSubmitContentView(
  * @param dictItem 字典项数据
  * @param isSelected 是否选中
  * @param onClick 点击回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -299,6 +312,8 @@ private fun FeedbackTypeChip(
 
 /**
  * 提交反馈界面浅色主题预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -314,6 +329,8 @@ internal fun FeedbackSubmitScreenPreview() {
 
 /**
  * 提交反馈界面深色主题预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable

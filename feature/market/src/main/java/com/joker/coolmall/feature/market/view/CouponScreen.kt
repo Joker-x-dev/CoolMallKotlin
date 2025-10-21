@@ -22,14 +22,19 @@ import com.joker.coolmall.feature.market.viewmodel.CouponViewModel
  * 我的优惠券路由
  *
  * @param viewModel 我的优惠券 ViewModel
+ * @author Joker.X
  */
 @Composable
 internal fun CouponRoute(
     viewModel: CouponViewModel = hiltViewModel()
 ) {
+    // UI状态
     val uiState by viewModel.uiState.collectAsState()
+    // 优惠券列表数据
     val listData by viewModel.listData.collectAsState()
+    // 是否正在刷新
     val isRefreshing by viewModel.isRefreshing.collectAsState()
+    // 加载更多状态
     val loadMoreState by viewModel.loadMoreState.collectAsState()
 
     CouponScreen(
@@ -57,6 +62,7 @@ internal fun CouponRoute(
  * @param shouldTriggerLoadMore 是否应触发加载更多的判断函数
  * @param onBackClick 返回按钮回调
  * @param onRetry 重试请求回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -100,6 +106,7 @@ internal fun CouponScreen(
  * @param onRefresh 刷新回调
  * @param onLoadMore 加载更多回调
  * @param shouldTriggerLoadMore 是否应触发加载更多的判断函数
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -130,6 +137,8 @@ private fun CouponContentView(
 
 /**
  * 我的优惠券界面浅色主题预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -144,6 +153,8 @@ internal fun CouponScreenPreview() {
 
 /**
  * 我的优惠券界面深色主题预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable

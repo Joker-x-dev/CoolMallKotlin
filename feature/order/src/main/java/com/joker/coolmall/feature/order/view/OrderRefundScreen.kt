@@ -1,8 +1,3 @@
-/**
- * 退款申请界面
- *
- * @author Joker.X
- */
 package com.joker.coolmall.feature.order.view
 
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -17,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -39,22 +35,24 @@ import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
 import com.joker.coolmall.core.ui.component.text.PriceText
 import com.joker.coolmall.core.ui.component.text.TextSize
 import com.joker.coolmall.core.ui.component.title.TitleWithLine
+import com.joker.coolmall.feature.order.R
 import com.joker.coolmall.feature.order.viewmodel.OrderRefundViewModel
 
 /**
  * 退款申请路由
  *
  * @param viewModel 退款申请 ViewModel
+ * @author Joker.X
  */
 @Composable
 internal fun OrderRefundRoute(
     viewModel: OrderRefundViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsState()
-    val cartList by viewModel.cartList.collectAsState()
-    val refundModalVisible by viewModel.refundModalVisible.collectAsState()
-    val refundReasonsModalUiState by viewModel.refundReasonsModalUiState.collectAsState()
-    val selectedRefundReason by viewModel.selectedRefundReason.collectAsState()
+    val uiState by viewModel.uiState.collectAsState() // 订单数据状态
+    val cartList by viewModel.cartList.collectAsState() // 购物车列表
+    val refundModalVisible by viewModel.refundModalVisible.collectAsState() // 退款原因弹窗显示状态
+    val refundReasonsModalUiState by viewModel.refundReasonsModalUiState.collectAsState() // 退款原因弹窗UI状态
+    val selectedRefundReason by viewModel.selectedRefundReason.collectAsState() // 选中的退款原因
 
     OrderRefundScreen(
         uiState = uiState,
@@ -89,6 +87,7 @@ internal fun OrderRefundRoute(
  * @param onReasonConfirm 退款原因确认回调
  * @param onReasonRetry 重试加载退款原因回调
  * @param onSubmitClick 提交退款申请回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -108,7 +107,7 @@ internal fun OrderRefundScreen(
     onSubmitClick: () -> Unit = {}
 ) {
     AppScaffold(
-        titleText = "退款申请",
+        titleText = stringResource(R.string.order_refund),
         onBackClick = onBackClick,
         useLargeTopBar = true,
         bottomBar = {
@@ -124,7 +123,7 @@ internal fun OrderRefundScreen(
                             .navigationBarsPadding()
                     ) {
                         AppButton(
-                            text = "提交",
+                            text = stringResource(R.string.submit),
                             modifier = Modifier.fillMaxWidth(),
                             enabled = selectedRefundReason != null,
                             onClick = onSubmitClick
@@ -151,7 +150,7 @@ internal fun OrderRefundScreen(
     DictSelectModal(
         visible = refundModalVisible,
         onDismiss = onRefundModalDismiss,
-        title = "请选择退款原因（必选）",
+        title = stringResource(R.string.select_cancel_reason),
         uiState = refundReasonsModalUiState,
         selectedItem = selectedRefundReason,
         onConfirm = onReasonConfirm,
@@ -166,6 +165,7 @@ internal fun OrderRefundScreen(
  * @param cartList 转换后的购物车列表
  * @param selectedRefundReason 选中的退款原因
  * @param onReasonClick 选择退款原因回调
+ * @author Joker.X
  */
 @Composable
 private fun OrderRefundContentView(
@@ -184,20 +184,20 @@ private fun OrderRefundContentView(
                 title = "",
                 showArrow = false,
                 leadingContent = {
-                    TitleWithLine(text = "退款信息")
+                    TitleWithLine(text = stringResource(R.string.refund_info))
                 }
             )
 
             AppListItem(
-                title = "申请原因",
-                trailingText = selectedRefundReason?.name ?: "请选择",
+                title = stringResource(R.string.refund_reason),
+                trailingText = selectedRefundReason?.name ?: stringResource(R.string.please_select),
                 showArrow = true,
 
                 onClick = onReasonClick
             )
 
             AppListItem(
-                title = "退款金额",
+                title = stringResource(R.string.refund_amount),
                 showDivider = false,
                 showArrow = false,
                 trailingContent = {
@@ -223,6 +223,8 @@ private fun OrderRefundContentView(
 
 /**
  * 退款申请界面浅色主题预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -239,6 +241,8 @@ internal fun OrderRefundScreenPreview() {
 
 /**
  * 退款申请界面深色主题预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable

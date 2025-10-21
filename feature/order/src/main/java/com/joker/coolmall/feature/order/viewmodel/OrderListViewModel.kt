@@ -36,6 +36,13 @@ import javax.inject.Inject
 
 /**
  * 订单列表视图模型
+ *
+ * @param navigator 导航器
+ * @param appState 应用状态
+ * @param orderRepository 订单仓库
+ * @param commonRepository 通用仓库
+ * @param savedStateHandle 保存状态句柄
+ * @author Joker.X
  */
 @HiltViewModel
 class OrderListViewModel @Inject constructor(
@@ -196,6 +203,8 @@ class OrderListViewModel @Inject constructor(
     /**
      * 观察来自其他页面的刷新状态
      * 当从其他页面返回时，如果刷新标志为true，则刷新订单列表
+     *
+     * @author Joker.X
      */
     fun observeRefreshState(backStackEntry: NavBackStackEntry?) {
         backStackEntry?.savedStateHandle?.let { savedStateHandle ->
@@ -351,6 +360,8 @@ class OrderListViewModel @Inject constructor(
 
     /**
      * 重试加载
+     *
+     * @author Joker.X
      */
     fun retryRequest(tabIndex: Int = _selectedTabIndex.value) {
         pageIndices[tabIndex] = 1
@@ -360,6 +371,8 @@ class OrderListViewModel @Inject constructor(
 
     /**
      * 触发下拉刷新
+     *
+     * @author Joker.X
      */
     fun onRefresh(tabIndex: Int = _selectedTabIndex.value) {
         // 如果正在加载中，则不重复请求
@@ -374,6 +387,8 @@ class OrderListViewModel @Inject constructor(
 
     /**
      * 加载更多数据
+     *
+     * @author Joker.X
      */
     fun onLoadMore(tabIndex: Int = _selectedTabIndex.value) {
         // 只有在可加载更多和加载失败状态下才能触发加载
@@ -391,6 +406,8 @@ class OrderListViewModel @Inject constructor(
 
     /**
      * 判断是否应该触发加载更多
+     *
+     * @author Joker.X
      */
     fun shouldTriggerLoadMore(
         lastIndex: Int,
@@ -405,6 +422,8 @@ class OrderListViewModel @Inject constructor(
 
     /**
      * 更新选中的标签
+     *
+     * @author Joker.X
      */
     fun updateSelectedTab(index: Int) {
         if (_selectedTabIndex.value != index) {
@@ -418,6 +437,8 @@ class OrderListViewModel @Inject constructor(
 
     /**
      * 通知标签切换动画已完成
+     *
+     * @author Joker.X
      */
     fun notifyAnimationCompleted() {
         _isAnimatingTabChange.value = false
@@ -425,6 +446,8 @@ class OrderListViewModel @Inject constructor(
 
     /**
      * 根据页面滑动更新选中的标签
+     *
+     * @author Joker.X
      */
     fun updateTabByPage(index: Int) {
         if (!_isAnimatingTabChange.value) {
@@ -452,6 +475,8 @@ class OrderListViewModel @Inject constructor(
 
     /**
      * 跳转到订单详情页面
+     *
+     * @author Joker.X
      */
     fun toOrderDetailPage(orderId: Long) {
         super.toPage(OrderRoutes.DETAIL, orderId)
@@ -461,6 +486,8 @@ class OrderListViewModel @Inject constructor(
      * 跳转到支付页面
      *
      * @param order 订单对象
+     *
+     * @author Joker.X
      */
     fun toPaymentPage(order: Order) {
         val orderId = order.id
@@ -476,6 +503,8 @@ class OrderListViewModel @Inject constructor(
 
     /**
      * 跳转到商品详情页面（再次购买）
+     *
+     * @author Joker.X
      */
     fun toGoodsDetail(goodsId: Long) {
         // 隐藏弹窗
@@ -485,6 +514,8 @@ class OrderListViewModel @Inject constructor(
 
     /**
      * 跳转到订单物流页面
+     *
+     * @author Joker.X
      */
     fun toOrderLogistics(orderId: Long) {
         toPage(OrderRoutes.LOGISTICS, orderId)
@@ -492,6 +523,8 @@ class OrderListViewModel @Inject constructor(
 
     /**
      * 跳转到退款申请页面
+     *
+     * @author Joker.X
      */
     fun toOrderRefund(orderId: Long) {
         toPage(OrderRoutes.REFUND, orderId)
@@ -507,6 +540,8 @@ class OrderListViewModel @Inject constructor(
 
     /**
      * 取消订单
+     *
+     * @author Joker.X
      */
     fun cancelOrder(orderId: Long) {
         _currentCancelOrderId = orderId
@@ -520,6 +555,8 @@ class OrderListViewModel @Inject constructor(
 
     /**
      * 加载取消原因字典数据
+     *
+     * @author Joker.X
      */
     fun loadCancelReasons() {
         // 如果 ui 状态为成功，则不重复加载
@@ -547,6 +584,8 @@ class OrderListViewModel @Inject constructor(
 
     /**
      * 显示取消原因选择弹窗
+     *
+     * @author Joker.X
      */
     fun showCancelModal() {
         _cancelModalVisible.value = true
@@ -554,6 +593,8 @@ class OrderListViewModel @Inject constructor(
 
     /**
      * 隐藏取消原因选择弹窗
+     *
+     * @author Joker.X
      */
     fun hideCancelModal() {
         _cancelModalVisible.value = false
@@ -562,6 +603,8 @@ class OrderListViewModel @Inject constructor(
 
     /**
      * 选择取消原因
+     *
+     * @author Joker.X
      */
     fun selectCancelReason(reason: DictItem) {
         _selectedCancelReason.value = reason
@@ -569,6 +612,8 @@ class OrderListViewModel @Inject constructor(
 
     /**
      * 确认取消订单
+     *
+     * @author Joker.X
      */
     fun confirmCancelOrder() {
         ResultHandler.handleResultWithData(
@@ -588,6 +633,8 @@ class OrderListViewModel @Inject constructor(
 
     /**
      * 显示确认收货弹窗
+     *
+     * @author Joker.X
      */
     fun showConfirmReceiveDialog(orderId: Long) {
         _currentConfirmOrderId = orderId
@@ -596,6 +643,8 @@ class OrderListViewModel @Inject constructor(
 
     /**
      * 隐藏确认收货弹窗
+     *
+     * @author Joker.X
      */
     fun hideConfirmReceiveDialog() {
         _showConfirmDialog.value = false
@@ -604,6 +653,8 @@ class OrderListViewModel @Inject constructor(
 
     /**
      * 确认收货
+     *
+     * @author Joker.X
      */
     fun confirmReceiveOrder() {
         ResultHandler.handleResultWithData(
@@ -621,6 +672,8 @@ class OrderListViewModel @Inject constructor(
 
     /**
      * 显示再次购买弹窗
+     *
+     * @author Joker.X
      */
     fun showRebuyModal() {
         _rebuyModalVisible.value = true
@@ -628,6 +681,8 @@ class OrderListViewModel @Inject constructor(
 
     /**
      * 隐藏再次购买弹窗
+     *
+     * @author Joker.X
      */
     fun hideRebuyModal() {
         _rebuyModalVisible.value = false
@@ -636,6 +691,8 @@ class OrderListViewModel @Inject constructor(
 
     /**
      * 显示商品评论弹窗
+     *
+     * @author Joker.X
      */
     fun showCommentModal() {
         _commentModalVisible.value = true
@@ -643,6 +700,8 @@ class OrderListViewModel @Inject constructor(
 
     /**
      * 隐藏商品评论弹窗
+     *
+     * @author Joker.X
      */
     fun hideCommentModal() {
         _commentModalVisible.value = false
@@ -651,6 +710,8 @@ class OrderListViewModel @Inject constructor(
 
     /**
      * 处理再次购买逻辑
+     *
+     * @author Joker.X
      */
     fun handleRebuy(order: Order) {
         // 清除上一次的数据
@@ -672,6 +733,8 @@ class OrderListViewModel @Inject constructor(
 
     /**
      * 处理商品评论逻辑
+     *
+     * @author Joker.X
      */
     fun handleOrderComment(order: Order) {
         // 清除上一次的数据
@@ -700,6 +763,8 @@ class OrderListViewModel @Inject constructor(
 
     /**
      * 跳转到指定商品的订单评价页面
+     *
+     * @author Joker.X
      */
     fun toOrderCommentForGoods(goodsId: Long) {
         val order = _commentCurrentOrder.value ?: return
@@ -716,6 +781,8 @@ class OrderListViewModel @Inject constructor(
 
     /**
      * 跳转到指定商品详情页面（再次购买）
+     *
+     * @author Joker.X
      */
     fun toGoodsDetailForRebuy(goodsId: Long) {
         // 先跳转，再隐藏弹窗

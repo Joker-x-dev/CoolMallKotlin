@@ -1,8 +1,3 @@
-/**
- * 引导页导航
- *
- * @author Joker.X
- */
 package com.joker.coolmall.feature.launch.navigation
 
 import androidx.navigation.NavGraphBuilder
@@ -14,6 +9,8 @@ import com.joker.coolmall.navigation.routes.LaunchRoutes
 
 /**
  * 引导页路由常量
+ *
+ * @author Joker.X
  */
 object GuideRoutes {
     const val FROM_SETTINGS_ARG = "from_settings"
@@ -26,6 +23,8 @@ object GuideRoutes {
 
 /**
  * 引导页面导航
+ *
+ * @author Joker.X
  */
 fun NavGraphBuilder.guideScreen() {
     composable(

@@ -70,12 +70,15 @@ import kotlinx.coroutines.launch
  * 分类页面路由
  *
  * @param viewModel 分类页面的ViewModel
+ * @author Joker.X
  */
 @Composable
 internal fun CategoryRoute(
     viewModel: CategoryViewModel = hiltViewModel()
 ) {
+    // 分类UI状态
     val uiState by viewModel.categoryUiState.collectAsState()
+    // 当前选中的分类索引
     val selectedIndex by viewModel.selectedCategoryIndex.collectAsState()
 
     CategoryScreen(
@@ -95,6 +98,7 @@ internal fun CategoryRoute(
  * @param onCategorySelected 分类选中回调
  * @param toGoodsCategory 跳转到商品分类页面
  * @param onRetry 重试加载数据回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -132,6 +136,7 @@ internal fun CategoryScreen(
  * @param selectedIndex 当前选中的分类索引
  * @param onCategorySelected 分类选中回调
  * @param toGoodsCategory 跳转到商品分类页面
+ * @author Joker.X
  */
 @Composable
 private fun CategoryContentView(
@@ -236,6 +241,7 @@ private fun CategoryContentView(
  * @param selectedIndex 当前选中的分类索引
  * @param onCategorySelected 分类选中回调
  * @param modifier 修饰符
+ * @author Joker.X
  */
 @Composable
 private fun LeftCategoryList(
@@ -278,6 +284,7 @@ private fun LeftCategoryList(
  * @param isNext 是否为选中项的后一项
  * @param isFirst 是否为第一项
  * @param onClick 点击事件回调
+ * @author Joker.X
  */
 @Composable
 private fun LeftCategoryItem(
@@ -411,6 +418,7 @@ private fun LeftCategoryItem(
  * 底部占位项
  *
  * @param isLastSelected 最后一项是否被选中
+ * @author Joker.X
  */
 @Composable
 private fun BottomPlaceholderItem(
@@ -455,6 +463,7 @@ private fun BottomPlaceholderItem(
  * @param categoryTrees 分类树列表
  * @param listState 列表滚动状态
  * @param toGoodsCategory 跳转到商品分类页面
+ * @author Joker.X
  */
 @Composable
 private fun RightCategoryContent(
@@ -504,6 +513,7 @@ private fun RightCategoryContent(
  * @param modifier 修饰符
  * @param categoryTree 分类树数据
  * @param toGoodsCategory 跳转到商品分类页面
+ * @author Joker.X
  */
 @Composable
 private fun CategorySection(
@@ -546,6 +556,7 @@ private fun CategorySection(
  * @param name 分类名称
  * @param imageUrl 图片URL
  * @param onClick 点击事件回调
+ * @author Joker.X
  */
 @Composable
 private fun SubCategoryItem(
@@ -589,6 +600,11 @@ private val RightTopRoundedShape = RoundedCornerShape(
     bottomStart = 0.dp
 )
 
+/**
+ * 分类界面浅色主题预览
+ *
+ * @author Joker.X
+ */
 @Preview(showBackground = true)
 @Composable
 fun CategoryScreenPreview() {

@@ -55,6 +55,7 @@ import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -89,6 +90,7 @@ import kotlin.math.sin
  * 关于我们路由
  *
  * @param viewModel 关于我们 ViewModel
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -96,7 +98,7 @@ internal fun AboutRoute(
     viewModel: AboutViewModel = hiltViewModel()
 ) {
 
-    // 依赖弹出层
+    // 收集依赖弹出层显示状态
     val showDependencyModal by viewModel.showDependencyModal.collectAsState()
 
     AboutScreen(
@@ -149,6 +151,7 @@ internal fun AboutRoute(
  * @param onUserAgreementClick 点击用户协议回调
  * @param onPrivacyPolicyClick 点击隐私政策回调
  * @param onOpenSourceLicenseClick 点击开源许可回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -416,6 +419,8 @@ private fun AnimatedAuroraBackground() {
 
 /**
  * 顶部内容区域
+ * 
+ * @author Joker.X
  */
 @Composable
 private fun AboutTopSection() {
@@ -481,6 +486,7 @@ private fun AboutTopSection() {
  * @param onUserAgreementClick 点击用户协议回调
  * @param onPrivacyPolicyClick 点击隐私政策回调
  * @param onOpenSourceLicenseClick 点击开源许可回调
+ * @author Joker.X
  */
 @Composable
 private fun AboutBottomScrollableContent(
@@ -518,7 +524,7 @@ private fun AboutBottomScrollableContent(
         Card {
             // 应用名称
             AppListItem(
-                title = "应用名称",
+                title = stringResource(id = R.string.about_app_name),
                 trailingText = PackageUtils.getCurrentAppName(context),
                 showArrow = false,
                 showDivider = true,
@@ -527,7 +533,7 @@ private fun AboutBottomScrollableContent(
             )
             // 版本号
             AppListItem(
-                title = "版本号",
+                title = stringResource(id = R.string.about_version),
                 trailingText = PackageUtils.getCurrentVersionName(context),
                 showArrow = false,
                 showDivider = true,
@@ -536,7 +542,7 @@ private fun AboutBottomScrollableContent(
             )
             // 版本代码
             AppListItem(
-                title = "版本代码",
+                title = stringResource(id = R.string.about_version_code),
                 trailingText = PackageUtils.getCurrentVersionCode(context).toString(),
                 showArrow = false,
                 showDivider = false,
@@ -548,7 +554,7 @@ private fun AboutBottomScrollableContent(
         SpaceVerticalXLarge()
 
         // 开发者部分
-        TitleWithLine("开发者")
+        TitleWithLine(stringResource(id = R.string.about_developer))
         SpaceVerticalMedium()
 
         Card {
@@ -558,7 +564,7 @@ private fun AboutBottomScrollableContent(
                 leadingContent = {
                     Image(
                         painter = painterResource(id = R.drawable.avatar),
-                        contentDescription = "Joker.x",
+                        contentDescription = stringResource(id = R.string.about_developer_name),
                         modifier = Modifier
                             .size(36.dp)
                             .clip(CircleShape)
@@ -567,11 +573,11 @@ private fun AboutBottomScrollableContent(
                         modifier = Modifier.padding(start = SpaceHorizontalMedium)
                     ) {
                         AppText(
-                            text = "Joker.X",
+                            text = stringResource(id = R.string.about_developer_name),
                             size = TextSize.TITLE_LARGE,
                         )
                         AppText(
-                            text = "joker.x.dev@gmail.com",
+                            text = stringResource(id = R.string.about_developer_email),
                             type = TextType.TERTIARY,
                             size = TextSize.BODY_MEDIUM,
                         )
@@ -586,7 +592,7 @@ private fun AboutBottomScrollableContent(
             )
             // 贡献者
             AppListItem(
-                title = "贡献者",
+                title = stringResource(id = R.string.contributors_title),
                 showArrow = true,
                 showDivider = false,
                 horizontalPadding = SpaceHorizontalLarge,
@@ -600,13 +606,13 @@ private fun AboutBottomScrollableContent(
         SpaceVerticalXLarge()
 
         // 项目地址部分
-        TitleWithLine("项目地址")
+        TitleWithLine(stringResource(id = R.string.about_section_project))
         SpaceVerticalMedium()
         Card {
             // GitHub
             AppListItem(
-                title = "GitHub",
-                description = "https://github.com/Joker-x-dev/CoolMallKotlin",
+                title = stringResource(id = R.string.about_github),
+                description = stringResource(id = R.string.about_github_url),
                 showArrow = true,
                 showDivider = true,
                 onClick = {
@@ -617,8 +623,8 @@ private fun AboutBottomScrollableContent(
             )
             // Gitee
             AppListItem(
-                title = "Gitee",
-                description = "https://gitee.com/Joker-x-dev/CoolMallKotlin",
+                title = stringResource(id = R.string.about_gitee),
+                description = stringResource(id = R.string.about_gitee_url),
                 showArrow = true,
                 showDivider = false,
                 onClick = {
@@ -631,13 +637,13 @@ private fun AboutBottomScrollableContent(
         SpaceVerticalXLarge()
 
         // 相关资源部分
-        TitleWithLine("相关资源")
+        TitleWithLine(stringResource(id = R.string.about_section_resources))
         SpaceVerticalMedium()
         Card {
             // API 文档
             AppListItem(
-                title = "API 文档",
-                description = "查看项目后端接口的详细定义",
+                title = stringResource(id = R.string.about_api_doc),
+                description = stringResource(id = R.string.about_api_doc_desc),
                 showArrow = true,
                 showDivider = true,
                 onClick = {
@@ -648,8 +654,8 @@ private fun AboutBottomScrollableContent(
             )
             // Demo 下载
             AppListItem(
-                title = "Demo 下载",
-                description = "不定时更新，可能不会同步最新代码变更",
+                title = stringResource(id = R.string.about_demo_download),
+                description = stringResource(id = R.string.about_demo_download_desc),
                 showArrow = true,
                 showDivider = true,
                 onClick = {
@@ -660,8 +666,8 @@ private fun AboutBottomScrollableContent(
             )
             // 图标来源
             AppListItem(
-                title = "图标来源",
-                description = "项目使用的图标库来自图鸟 Icon",
+                title = stringResource(id = R.string.about_icon_source),
+                description = stringResource(id = R.string.about_icon_source_desc),
                 showArrow = true,
                 showDivider = false,
                 onClick = {
@@ -674,13 +680,13 @@ private fun AboutBottomScrollableContent(
         SpaceVerticalXLarge()
 
         // 讨论部分
-        TitleWithLine("讨论")
+        TitleWithLine(stringResource(id = R.string.about_section_discussion))
         SpaceVerticalMedium()
         Card {
             // GitHub 讨论区
             AppListItem(
-                title = "GitHub 讨论区",
-                description = "在 GitHub 上参与项目讨论",
+                title = stringResource(id = R.string.about_github_discussion),
+                description = stringResource(id = R.string.about_github_discussion_desc),
                 showArrow = true,
                 showDivider = true,
                 onClick = {
@@ -691,7 +697,7 @@ private fun AboutBottomScrollableContent(
             )
             // QQ 交流群
             AppListItem(
-                title = "QQ 交流群",
+                title = stringResource(id = R.string.about_qq_group),
                 showArrow = true,
                 showDivider = true,
                 onClick = {
@@ -702,7 +708,7 @@ private fun AboutBottomScrollableContent(
             )
             // 微信交流群
             AppListItem(
-                title = "微信交流群",
+                title = stringResource(id = R.string.about_wechat_group),
                 showArrow = true,
                 showDivider = false,
                 onClick = {
@@ -715,13 +721,13 @@ private fun AboutBottomScrollableContent(
         SpaceVerticalXLarge()
 
         // 支持与帮助部分
-        TitleWithLine("支持与帮助")
+        TitleWithLine(stringResource(id = R.string.about_section_support))
         SpaceVerticalMedium()
         Card {
             // 翻译
             AppListItem(
-                title = "翻译",
-                description = "帮助我将应用翻译为您的语言",
+                title = stringResource(id = R.string.about_translation),
+                description = stringResource(id = R.string.about_translation_desc),
                 showArrow = true,
                 showDivider = true,
                 onClick = {
@@ -732,8 +738,8 @@ private fun AboutBottomScrollableContent(
             )
             // 支持
             AppListItem(
-                title = "支持",
-                description = "您可以在此赞助以支持我",
+                title = stringResource(id = R.string.about_support),
+                description = stringResource(id = R.string.about_support_desc),
                 showArrow = true,
                 showDivider = true,
                 onClick = {
@@ -744,8 +750,8 @@ private fun AboutBottomScrollableContent(
             )
             // 帮助
             AppListItem(
-                title = "帮助",
-                description = "有任何问题或建议，欢迎提交 Issue",
+                title = stringResource(id = R.string.about_help),
+                description = stringResource(id = R.string.about_help_desc),
                 showArrow = true,
                 showDivider = false,
                 onClick = {
@@ -758,13 +764,13 @@ private fun AboutBottomScrollableContent(
         SpaceVerticalXLarge()
 
         // 其他部分
-        TitleWithLine("其他")
+        TitleWithLine(stringResource(id = R.string.about_section_other))
         SpaceVerticalMedium()
         Card {
             // 引用
             AppListItem(
-                title = "引用",
-                description = "项目中使用的第三方库和资源致谢",
+                title = stringResource(id = R.string.about_citation),
+                description = stringResource(id = R.string.about_citation_desc),
                 showArrow = true,
                 showDivider = true,
                 onClick = {
@@ -775,7 +781,7 @@ private fun AboutBottomScrollableContent(
             )
             // 用户协议
             AppListItem(
-                title = "用户协议",
+                title = stringResource(id = R.string.about_user_agreement),
                 showArrow = true,
                 showDivider = true,
                 onClick = {
@@ -786,7 +792,7 @@ private fun AboutBottomScrollableContent(
             )
             // 隐私政策
             AppListItem(
-                title = "隐私政策",
+                title = stringResource(id = R.string.about_privacy_policy),
                 showArrow = true,
                 showDivider = true,
                 onClick = {
@@ -797,7 +803,7 @@ private fun AboutBottomScrollableContent(
             )
             // 开源许可
             AppListItem(
-                title = "开源许可",
+                title = stringResource(id = R.string.about_open_source_license),
                 showArrow = true,
                 showDivider = false,
                 onClick = {
@@ -810,7 +816,7 @@ private fun AboutBottomScrollableContent(
         SpaceVerticalXLarge()
 
         AppText(
-            text = "© 2025 Joker.X & CoolMallKotlin Contributors",
+            text = stringResource(id = R.string.about_copyright),
             size = TextSize.BODY_MEDIUM,
             type = TextType.TERTIARY,
             textAlign = TextAlign.Center,
@@ -826,6 +832,7 @@ private fun AboutBottomScrollableContent(
  *
  * @param onBackClick 返回按钮回调
  * @param toolbarAlpha 工具栏透明度
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -838,7 +845,7 @@ private fun AboutAnimatedToolBar(
     CenterAlignedTopAppBar(
         title = {
             Text(
-                text = "关于我们",
+                text = stringResource(id = R.string.about_title),
                 modifier = Modifier.alpha(toolbarAlpha),
                 color = MaterialTheme.colorScheme.onBackground
             )
@@ -861,6 +868,8 @@ private fun AboutAnimatedToolBar(
 
 /**
  * 关于我们界面浅色主题预览
+ * 
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -872,6 +881,8 @@ internal fun AboutScreenPreview() {
 
 /**
  * 关于我们界面深色主题预览
+ * 
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable

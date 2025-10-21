@@ -25,6 +25,8 @@ import javax.inject.Inject
 
 /**
  * 用户注册ViewModel
+ * 
+ * @author Joker.X
  */
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
@@ -109,6 +111,9 @@ class RegisterViewModel @Inject constructor(
 
     /**
      * 更新手机号输入
+     * 
+     * @param value 手机号值
+     * @author Joker.X
      */
     fun updatePhone(value: String) {
         _phone.value = value
@@ -116,6 +121,9 @@ class RegisterViewModel @Inject constructor(
 
     /**
      * 更新密码输入
+     * 
+     * @param value 密码值
+     * @author Joker.X
      */
     fun updatePassword(value: String) {
         _password.value = value
@@ -123,6 +131,9 @@ class RegisterViewModel @Inject constructor(
 
     /**
      * 更新确认密码输入
+     * 
+     * @param value 确认密码值
+     * @author Joker.X
      */
     fun updateConfirmPassword(value: String) {
         _confirmPassword.value = value
@@ -130,6 +141,9 @@ class RegisterViewModel @Inject constructor(
 
     /**
      * 更新验证码输入
+     * 
+     * @param value 验证码值
+     * @author Joker.X
      */
     fun updateVerificationCode(value: String) {
         _verificationCode.value = value
@@ -137,6 +151,9 @@ class RegisterViewModel @Inject constructor(
 
     /**
      * 更新图形验证码输入
+     * 
+     * @param value 图形验证码值
+     * @author Joker.X
      */
     fun updateImageCode(value: String) {
         _imageCode.value = value
@@ -145,6 +162,8 @@ class RegisterViewModel @Inject constructor(
     /**
      * 显示图片验证码 Popup
      * 在显示之前会先刷新验证码
+     * 
+     * @author Joker.X
      */
     fun onSendCodeButtonClick() {
         // 检查手机号是否有效
@@ -163,6 +182,8 @@ class RegisterViewModel @Inject constructor(
 
     /**
      * 隐藏图片验证码 Popup
+     * 
+     * @author Joker.X
      */
     fun onHideImageCodePopup() {
         _showImageCodePopup.value = false
@@ -173,6 +194,9 @@ class RegisterViewModel @Inject constructor(
     /**
      * 验证码确认
      * 当用户在图形验证码对话框中点击确认按钮时调用
+     * 
+     * @param imageCode 图形验证码
+     * @author Joker.X
      */
     fun onImageCodeConfirm(imageCode: String) {
         updateImageCode(imageCode)
@@ -181,6 +205,8 @@ class RegisterViewModel @Inject constructor(
 
     /**
      * 发送短信验证码
+     * 
+     * @author Joker.X
      */
     fun sendVerificationCode() {
         val currentImageCode = imageCode.value
@@ -208,6 +234,8 @@ class RegisterViewModel @Inject constructor(
     /**
      * 获取图片验证码
      * 当需要刷新验证码时调用（如用户点击验证码图片）
+     * 
+     * @author Joker.X
      */
     fun getCaptcha() {
         viewModelScope.launch {
@@ -219,6 +247,8 @@ class RegisterViewModel @Inject constructor(
 
     /**
      * 实际获取验证码的网络请求
+     * 
+     * @author Joker.X
      */
     private fun fetchCaptcha() {
         ResultHandler.handleResultWithData(
@@ -232,6 +262,8 @@ class RegisterViewModel @Inject constructor(
 
     /**
      * 执行注册操作
+     * 
+     * @author Joker.X
      */
     fun register() {
         // 验证手机号
@@ -274,10 +306,13 @@ class RegisterViewModel @Inject constructor(
 
     /**
      * 注册成功
+     * 
+     * @param authData 认证数据
+     * @author Joker.X
      */
     private fun registerSuccess(authData: Auth) {
         viewModelScope.launch {
-            ToastUtils.showSuccess("注册成功")
+            ToastUtils.showSuccess(R.string.register_success)
             appState.updateAuth(authData)
             appState.refreshUserInfo()
             super.navigateBack()

@@ -54,6 +54,7 @@ import com.joker.coolmall.feature.auth.viewmodel.LoginViewModel
  * 登录主页路由
  *
  * @param viewModel 认证ViewModel
+ * @author Joker.X
  */
 @Composable
 internal fun LoginRoute(
@@ -83,9 +84,10 @@ internal fun LoginRoute(
  * @param toAccountLogin 导航到账号密码登录页面回调
  * @param toSmsLogin 导航到短信登录页面回调
  * @param onBackClick 返回按钮回调
- * @param onQQLogin QQ 登录回调
  * @param onWechatLoginClick 微信登录点击回调
  * @param onAlipayLoginClick 支付宝登录点击回调
+ * @param onQQLogin QQ 登录回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -96,6 +98,38 @@ internal fun LoginScreen(
     onWechatLoginClick: () -> Unit = {},
     onAlipayLoginClick: () -> Unit = {},
     onQQLogin: () -> Unit = {}
+) {
+    AppScaffold(
+        onBackClick = onBackClick,
+        backgroundColor = MaterialTheme.colorScheme.surface
+    ) {
+        LoginContentView(
+            toAccountLogin = toAccountLogin,
+            toSmsLogin = toSmsLogin,
+            onWechatLoginClick = onWechatLoginClick,
+            onAlipayLoginClick = onAlipayLoginClick,
+            onQQLogin = onQQLogin
+        )
+    }
+}
+
+/**
+ * 登录主页内容视图
+ *
+ * @param toAccountLogin 导航到账号密码登录页面回调
+ * @param toSmsLogin 导航到短信登录页面回调
+ * @param onWechatLoginClick 微信登录点击回调
+ * @param onAlipayLoginClick 支付宝登录点击回调
+ * @param onQQLogin QQ 登录回调
+ * @author Joker.X
+ */
+@Composable
+private fun LoginContentView(
+    toAccountLogin: () -> Unit,
+    toSmsLogin: () -> Unit,
+    onWechatLoginClick: () -> Unit,
+    onAlipayLoginClick: () -> Unit,
+    onQQLogin: () -> Unit
 ) {
     // 使用rememberSaveable来保持状态，即使在配置更改时也不会重置
     // isAnimationPlayed标志用于跟踪动画是否已经播放过
@@ -120,106 +154,101 @@ internal fun LoginScreen(
         }
     }
 
-    AppScaffold(
-        onBackClick = onBackClick,
-        backgroundColor = MaterialTheme.colorScheme.surface
+    SpaceBetweenColumn(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        SpaceBetweenColumn(
-            modifier = Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally
+        // 顶部Logo - 从上到下淡入淡出
+        AnimatedVisibility(
+            visibleState = animationState,
+            enter = slideInVertically(
+                initialOffsetY = { -it }, // 从上方开始
+                animationSpec = spring(
+                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                    stiffness = Spring.StiffnessLow
+                )
+            )
         ) {
-            // 顶部Logo - 从上到下淡入淡出
-            AnimatedVisibility(
-                visibleState = animationState,
-                enter = slideInVertically(
-                    initialOffsetY = { -it }, // 从上方开始
-                    animationSpec = spring(
-                        dampingRatio = Spring.DampingRatioMediumBouncy,
-                        stiffness = Spring.StiffnessLow
-                    )
-                )
+            // 包裹Logo在一个有额外padding的容器中，确保弹跳空间
+            Box(
+                modifier = Modifier
+                    .padding(top = 80.dp, bottom = 30.dp),
+                contentAlignment = Alignment.Center
             ) {
-                // 包裹Logo在一个有额外padding的容器中，确保弹跳空间
-                Box(
-                    modifier = Modifier
-                        .padding(top = 80.dp, bottom = 30.dp),
-                    contentAlignment = Alignment.Center
-                ) {
-                    LogoIcon(size = 120.dp)
-                }
+                LogoIcon(size = 120.dp)
             }
+        }
 
-            // 底部容器，包含登录按钮和第三方登录 - 从下向上升起
-            AnimatedVisibility(
-                visibleState = animationState,
-                enter = slideInVertically(
-                    initialOffsetY = { it }, // 从下方开始
-                    animationSpec = tween(
-                        durationMillis = 500,
-                        delayMillis = 100 // 稍微延迟，让logo先出现
-                    )
+        // 底部容器，包含登录按钮和第三方登录 - 从下向上升起
+        AnimatedVisibility(
+            visibleState = animationState,
+            enter = slideInVertically(
+                initialOffsetY = { it }, // 从下方开始
+                animationSpec = tween(
+                    durationMillis = 500,
+                    delayMillis = 100 // 稍微延迟，让logo先出现
                 )
+            )
+        ) {
+            CenterColumn(
+                modifier = Modifier
+                    .padding(24.dp)
+                    .fillMaxWidth()
             ) {
-                CenterColumn(
-                    modifier = Modifier
-                        .padding(24.dp)
-                        .fillMaxWidth()
-                ) {
-                    // 验证码登录按钮（主按钮）
-                    AppButton(
-                        text = stringResource(id = R.string.sms_login),
-                        onClick = toSmsLogin
+                // 验证码登录按钮（主按钮）
+                AppButton(
+                    text = stringResource(id = R.string.sms_login),
+                    onClick = toSmsLogin
+                )
+
+                SpaceVerticalXLarge()
+
+                // 账号密码登录按钮（次要按钮）
+                AppButton(
+                    text = stringResource(id = R.string.account_login),
+                    onClick = toAccountLogin,
+                    style = ButtonStyle.OUTLINED
+                )
+
+                Spacer(modifier = Modifier.height(48.dp))
+
+                AppText(
+                    text = stringResource(id = R.string.other_login_methods),
+                    size = TextSize.BODY_MEDIUM,
+                    type = TextType.TERTIARY
+                )
+
+                SpaceVerticalXLarge()
+
+                // 第三方登录按钮
+                SpaceEvenlyRow {
+                    // 微信登录
+                    ThirdPartyLoginButton(
+                        icon = com.joker.coolmall.core.ui.R.drawable.ic_wechat,
+                        name = stringResource(id = R.string.wechat),
+                        onClick = onWechatLoginClick
                     )
 
-                    SpaceVerticalXLarge()
-
-                    // 账号密码登录按钮（次要按钮）
-                    AppButton(
-                        text = stringResource(id = R.string.account_login),
-                        onClick = toAccountLogin,
-                        style = ButtonStyle.OUTLINED
+                    // QQ登录
+                    ThirdPartyLoginButton(
+                        icon = com.joker.coolmall.core.ui.R.drawable.ic_qq,
+                        name = stringResource(id = R.string.qq),
+                        onClick = onQQLogin
                     )
 
-                    Spacer(modifier = Modifier.height(48.dp))
-
-                    AppText(
-                        text = stringResource(id = R.string.other_login_methods),
-                        size = TextSize.BODY_MEDIUM,
-                        type = TextType.TERTIARY
-                    )
-
-                    SpaceVerticalXLarge()
-
-                    // 第三方登录按钮
-                    SpaceEvenlyRow {
-                        // 微信登录
-                        ThirdPartyLoginButton(
-                            icon = com.joker.coolmall.core.ui.R.drawable.ic_wechat,
-                            name = stringResource(id = R.string.wechat),
-                            onClick = onWechatLoginClick
-                        )
-
-                        // QQ登录
-                        ThirdPartyLoginButton(
-                            icon = com.joker.coolmall.core.ui.R.drawable.ic_qq,
-                            name = stringResource(id = R.string.qq),
-                            onClick = onQQLogin
-                        )
-
-                        // 支付宝登录
-                        ThirdPartyLoginButton(
-                            icon = com.joker.coolmall.core.ui.R.drawable.ic_alipay,
-                            name = stringResource(id = R.string.alipay),
-                            onClick = onAlipayLoginClick
-                        )
-                    }
-
-                    // 用户协议
-                    UserAgreement(
-                        modifier = Modifier.padding(top = 32.dp),
-                        centerAlignment = true
+                    // 支付宝登录
+                    ThirdPartyLoginButton(
+                        icon = com.joker.coolmall.core.ui.R.drawable.ic_alipay,
+                        name = stringResource(id = R.string.alipay),
+                        onClick = onAlipayLoginClick
                     )
                 }
+
+                // 用户协议
+                UserAgreement(
+                    modifier = Modifier.padding(top = 32.dp),
+                    centerAlignment = true
+                )
             }
         }
     }
@@ -231,6 +260,7 @@ internal fun LoginScreen(
  * @param icon 图标资源ID
  * @param name 名称
  * @param onClick 点击回调
+ * @author Joker.X
  */
 @Composable
 fun ThirdPartyLoginButton(
@@ -257,6 +287,11 @@ fun ThirdPartyLoginButton(
     }
 }
 
+/**
+ * 登录主页界面浅色主题预览
+ * 
+ * @author Joker.X
+ */
 @Preview(showBackground = true)
 @Composable
 fun LoginScreenPreview() {

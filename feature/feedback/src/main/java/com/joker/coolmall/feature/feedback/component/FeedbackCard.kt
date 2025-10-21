@@ -1,8 +1,3 @@
-/**
- * 反馈卡片组件
- *
- * @author Joker.X
- */
 package com.joker.coolmall.feature.feedback.component
 
 import androidx.compose.foundation.background
@@ -21,8 +16,10 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.joker.coolmall.feature.feedback.R
 import com.joker.coolmall.core.designsystem.component.SpaceBetweenRow
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.ShapeMedium
@@ -47,6 +44,7 @@ import com.joker.coolmall.core.ui.component.text.TextType
  * @param feedback 反馈数据
  * @param typeName 反馈类型名称
  * @param onClick 卡片点击回调
+ * @author Joker.X
  */
 @Composable
 fun FeedbackCard(
@@ -77,7 +75,9 @@ fun FeedbackCard(
 
                     // 状态标签
                     Tag(
-                        text = if (feedback.status == 1) "已处理" else "未处理",
+                        text = stringResource(
+                            if (feedback.status == 1) R.string.status_processed else R.string.status_unprocessed
+                        ),
                         type = if (feedback.status == 1) TagType.SUCCESS else TagType.WARNING,
                         size = TagSize.SMALL,
 //                        shape = ShapeMedium
@@ -126,7 +126,7 @@ fun FeedbackCard(
                 ) {
                     Column {
                         AppText(
-                            text = "客服回复",
+                            text = stringResource(R.string.customer_service_reply),
                             type = TextType.SECONDARY,
                             size = TextSize.BODY_SMALL
                         )
@@ -150,6 +150,7 @@ fun FeedbackCard(
  * @param images 图片URL列表
  * @param modifier 修饰符
  * @param maxImages 最大显示图片数量，默认9张
+ * @author Joker.X
  */
 @Composable
 private fun FeedbackImageGrid(
@@ -193,6 +194,7 @@ private fun FeedbackImageGrid(
  *
  * @param imageUrl 图片URL
  * @param modifier 修饰符
+ * @author Joker.X
  */
 @Composable
 private fun FeedbackImageItem(
@@ -208,6 +210,11 @@ private fun FeedbackImageItem(
     )
 }
 
+/**
+ * 反馈卡片预览
+ * 
+ * @author Joker.X
+ */
 @Preview(showBackground = true)
 @Composable
 fun FeedbackCardPreview() {

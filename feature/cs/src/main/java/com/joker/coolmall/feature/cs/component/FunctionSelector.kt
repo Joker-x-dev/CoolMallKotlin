@@ -20,6 +20,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.joker.coolmall.core.designsystem.component.AppRow
 import com.joker.coolmall.core.designsystem.theme.ShapeCircle
@@ -37,6 +38,7 @@ import com.joker.coolmall.feature.cs.R
  *
  * @param onFunctionSelected 功能选择回调
  * @param modifier 修饰符
+ * @author Joker.X
  */
 @Composable
 fun FunctionSelector(
@@ -73,8 +75,8 @@ fun FunctionSelector(
                 // 相册功能
                 FunctionItem(
                     icon = R.drawable.ic_image_fill,
-                    label = "相册",
-                    onClick = { onFunctionSelected("相册") }
+                    label = stringResource(R.string.gallery),
+                    onClick = { onFunctionSelected("gallery") }
                 )
 
                 SpaceHorizontalMedium()
@@ -82,8 +84,8 @@ fun FunctionSelector(
                 // 拍摄功能
                 FunctionItem(
                     icon = R.drawable.ic_camera_fill,
-                    label = "拍摄",
-                    onClick = { onFunctionSelected("拍摄") }
+                    label = stringResource(R.string.camera),
+                    onClick = { onFunctionSelected("camera") }
                 )
 
                 Spacer(modifier = Modifier.weight(1f))
@@ -99,6 +101,7 @@ fun FunctionSelector(
  * @param label 功能标签
  * @param onClick 点击回调
  * @param modifier 修饰符
+ * @author Joker.X
  */
 @Composable
 fun FunctionItem(

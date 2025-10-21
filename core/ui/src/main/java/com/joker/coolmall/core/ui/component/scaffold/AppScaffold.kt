@@ -47,6 +47,7 @@ import com.joker.coolmall.core.ui.component.appbar.LargeTopAppBar
  * @param contentShouldConsumePadding 是否由内容区域(content)来消费padding。默认为false，即Scaffold的根Box会消费padding。
  *                                    如果设为true，根Box将不应用padding，而是由content自行处理。
  * @param content 页面主体内容，接收PaddingValues参数以适应顶部应用栏的空间
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -1,8 +1,3 @@
-/**
- * 订单评价 ViewModel
- *
- * @author Joker.X
- */
 package com.joker.coolmall.feature.order.viewmodel
 
 import android.net.Uri
@@ -16,6 +11,7 @@ import com.joker.coolmall.core.model.entity.Comment
 import com.joker.coolmall.core.model.request.GoodsCommentSubmitRequest
 import com.joker.coolmall.core.util.log.LogUtils
 import com.joker.coolmall.core.util.toast.ToastUtils
+import com.joker.coolmall.feature.order.R
 import com.joker.coolmall.feature.order.navigation.OrderCommentRoutes
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.result.ResultHandler
@@ -29,6 +25,13 @@ import javax.inject.Inject
 
 /**
  * 订单评价 ViewModel
+ *
+ * @param navigator 导航器
+ * @param appState 应用状态
+ * @param savedStateHandle 保存状态句柄
+ * @param fileUploadRepository 文件上传仓库
+ * @param goodsRepository 商品仓库
+ * @author Joker.X
  */
 @HiltViewModel
 class OrderCommentViewModel @Inject constructor(
@@ -147,18 +150,20 @@ class OrderCommentViewModel @Inject constructor(
 
     /**
      * 按钮点击处理方法
+     *
+     * @author Joker.X
      */
     fun onSubmitButtonClick() {
         // 表单验证
         if (!isFormValid()) {
-            ToastUtils.showError("请先填写评价内容和评分")
+            ToastUtils.showError(R.string.please_fill_comment)
             LogUtils.w("表单验证失败：评分=${_rating.value}, 内容长度=${_commentContent.value.length}")
             return
         }
 
         // 防止重复提交
         if (_isSubmitting.value) {
-            ToastUtils.showWarning("正在提交中...")
+            ToastUtils.showWarning(R.string.submitting)
             LogUtils.w("正在提交中，请勿重复提交")
             return
         }
@@ -172,6 +177,8 @@ class OrderCommentViewModel @Inject constructor(
 
     /**
      * 提交评价到服务器
+     *
+     * @author Joker.X
      */
     private fun submitCommentToServer() {
         // 创建提交请求
@@ -188,7 +195,7 @@ class OrderCommentViewModel @Inject constructor(
             scope = viewModelScope,
             flow = goodsRepository.submitGoodsComment(request).asResult(),
             onData = { success ->
-                ToastUtils.showSuccess("评价提交成功")
+                ToastUtils.showSuccess(R.string.comment_submit_success)
                 LogUtils.d("评价提交成功")
                 navigateBack(mapOf("refresh" to true))
             },

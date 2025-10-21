@@ -2,6 +2,8 @@ package com.joker.coolmall.feature.goods.model
 
 /**
  * 排序状态
+ *
+ * @author Joker.X
  */
 enum class SortState {
     /**

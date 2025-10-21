@@ -7,6 +7,8 @@ import com.joker.coolmall.navigation.routes.CommonRoutes
 
 /**
  * 贡献者列表页面导航
+ * 
+ * @author Joker.X
  */
 fun NavGraphBuilder.contributorsScreen() {
     composable(route = CommonRoutes.CONTRIBUTORS) {

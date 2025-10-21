@@ -120,21 +120,25 @@ import com.joker.coolmall.core.ui.R as CoreUiR
 
 /**
  * 商品详情页面路由入口
+ *
+ * @param viewModel 商品详情 ViewModel
+ * @author Joker.X
  */
 @Composable
 internal fun GoodsDetailRoute(
     viewModel: GoodsDetailViewModel = hiltViewModel()
 ) {
-    // 从ViewModel收集UI状态
+    // UI状态
     val uiState by viewModel.uiState.collectAsState()
-    // 收集规格选择弹窗状态
+    // 规格选择弹窗状态
     val specModalVisible by viewModel.specModalVisible.collectAsState()
-    // 收集规格列表状态
+    // 规格列表状态
     val specsModalUiState by viewModel.specsModalUiState.collectAsState()
-    // 收集选中的规格
+    // 选中的规格
     val selectedSpec by viewModel.selectedSpec.collectAsState()
-    // 收集动画状态
+    // 动画状态
     val hasAnimated by viewModel.hasAnimated.collectAsState()
+    // 优惠券弹窗状态
     val couponModalVisible by viewModel.couponModalVisible.collectAsState()
 
     GoodsDetailScreen(
@@ -164,6 +168,7 @@ internal fun GoodsDetailRoute(
 
 /**
  * 商品详情页面UI
+ *
  * @param uiState 商品详情UI状态，包含商品数据的网络请求状态
  * @param onBackClick 返回按钮点击回调，点击后返回上一页
  * @param onRetry 商品详情加载失败时的重试回调
@@ -176,7 +181,16 @@ internal fun GoodsDetailRoute(
  * @param onHideSpecModal 隐藏规格选择弹窗的回调
  * @param onAddToCart 加入购物车回调，参数为包含商品和规格信息的购物车对象
  * @param onBuyNow 立即购买回调，参数为包含商品和规格信息的购物车对象
+ * @param hasAnimated 是否已播放动画
+ * @param onTriggerAnimation 触发动画回调
+ * @param couponModalVisible 优惠券弹窗是否可见
+ * @param onShowCouponModal 显示优惠券弹窗回调
+ * @param onHideCouponModal 隐藏优惠券弹窗回调
+ * @param onCouponReceive 领取优惠券回调
  * @param onCommentClick 跳转到评论页面的回调，点击评论相关区域时触发
+ * @param onCsClick 跳转到客服页面的回调
+ * @param onCartClick 跳转到购物车页面的回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -262,11 +276,19 @@ internal fun GoodsDetailScreen(
  * 商品详情主内容
  *
  * @param data 商品详情数据对象
+ * @param coupons 优惠券列表
+ * @param comments 评论列表
  * @param onBackClick 返回按钮点击回调
  * @param paddingValues 页面内边距值，用于适配系统UI（如状态栏、导航栏）
  * @param selectedSpec 当前选中的商品规格，若为null则表示未选择规格
  * @param onShowSpecModal 显示规格选择弹窗的回调函数
+ * @param hasAnimated 是否已播放动画
+ * @param onTriggerAnimation 触发动画回调
+ * @param onShowCouponModal 显示优惠券弹窗回调
  * @param onCommentClick 跳转到评论页面的回调函数
+ * @param onCsClick 跳转到客服页面的回调
+ * @param onCartClick 跳转到购物车页面的回调
+ * @author Joker.X
  */
 @Composable
 private fun GoodsDetailContentView(
@@ -337,6 +359,8 @@ private fun GoodsDetailContentView(
  * @param onBackClick 返回按钮点击回调
  * @param onShareClick 分享按钮点击回调
  * @param topBarAlpha 顶部导航栏的透明度值(0-255)，用于实现滚动时的渐变效果
+ * @param hasAnimated 是否已播放动画
+ * @author Joker.X
  */
 @Composable
 private fun GoodsDetailTopBar(
@@ -388,6 +412,8 @@ private fun GoodsDetailTopBar(
  * @param icon 图标资源ID
  * @param onClick 按钮点击回调
  * @param iconSize 图标大小
+ * @param scale 缩放比例
+ * @author Joker.X
  */
 @Composable
 private fun CircleIconButton(
@@ -420,10 +446,13 @@ private fun CircleIconButton(
  *
  * @param data 商品详情数据对象
  * @param coupons 优惠券列表
+ * @param comments 评论列表
  * @param selectedSpec 当前选中的商品规格，若为null则表示未选择规格
  * @param onTopBarAlphaChanged 顶部导航栏透明度变化回调，参数为新的透明度值
  * @param onShowSpecModal 显示规格选择弹窗的回调函数
+ * @param onShowCouponModal 显示优惠券弹窗回调
  * @param onCommentClick 跳转到评论页面的回调函数
+ * @author Joker.X
  */
 @Composable
 private fun GoodsDetailContentWithScroll(
@@ -477,9 +506,9 @@ private fun GoodsDetailContentWithScroll(
                     Column {
                         AppListItem(
                             title = "",
-                            trailingText = "查看全部",
+                            trailingText = stringResource(R.string.view_all),
                             leadingContent = {
-                                TitleWithLine(text = "商品评价")
+                                TitleWithLine(text = stringResource(R.string.goods_reviews))
                             },
                             onClick = onCommentClick
                         )
@@ -514,6 +543,7 @@ private fun GoodsDetailContentWithScroll(
  * 商品轮播图
  *
  * @param images 图片URL列表，用于轮播展示
+ * @author Joker.X
  */
 @Composable
 private fun GoodsBanner(images: List<String>) {
@@ -550,8 +580,11 @@ private fun GoodsBanner(images: List<String>) {
  * 商品信息卡片
  *
  * @param data 商品详情数据对象
+ * @param coupons 优惠券列表
  * @param selectedSpec 当前选中的商品规格，若为null则表示未选择规格
  * @param onShowSpecModal 显示规格选择弹窗的回调函数
+ * @param onShowCouponModal 显示优惠券弹窗回调
+ * @author Joker.X
  */
 @Composable
 private fun GoodsInfoCard(
@@ -618,6 +651,7 @@ private fun GoodsInfoCard(
  * 已售数量标签
  *
  * @param count 已售出的商品数量
+ * @author Joker.X
  */
 @Composable
 private fun SoldCountTag(count: Int) {
@@ -631,7 +665,7 @@ private fun SoldCountTag(count: Int) {
             .padding(horizontal = SpacePaddingSmall, vertical = SpacePaddingXSmall)
     ) {
         Text(
-            text = "已售 $count",
+            text = stringResource(R.string.sold_count, count),
             style = MaterialTheme.typography.labelSmall,
             color = Color.White
         )
@@ -642,6 +676,10 @@ private fun SoldCountTag(count: Int) {
  * 优惠券列表
  *
  * 展示可用的优惠券信息列表
+ *
+ * @param coupons 优惠券列表
+ * @param onShowCouponModal 显示优惠券弹窗回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -665,6 +703,8 @@ private fun CouponList(
  * 优惠券标签
  *
  * @param coupon 优惠券对象，包含满减金额信息
+ * @param onShowCouponModal 显示优惠券弹窗回调
+ * @author Joker.X
  */
 @Composable
 private fun CouponTag(
@@ -690,7 +730,11 @@ private fun CouponTag(
         )
         Spacer(modifier = Modifier.width(SpaceVerticalXSmall))
         Text(
-            text = "满${coupon.condition!!.fullAmount.toInt()}减${coupon.amount.toInt()}元",
+            text = stringResource(
+                R.string.coupon_text,
+                coupon.condition!!.fullAmount.toInt(),
+                coupon.amount.toInt()
+            ),
             style = MaterialTheme.typography.labelSmall,
             color = ColorDanger
         )
@@ -702,6 +746,7 @@ private fun CouponTag(
  *
  * @param selectedSpec 当前选中的商品规格，若为null则表示未选择规格
  * @param onClick 点击规格选择区域的回调，用于打开规格选择弹窗
+ * @author Joker.X
  */
 @Composable
 private fun SpecSelection(
@@ -727,7 +772,7 @@ private fun SpecSelection(
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_cube),
-                contentDescription = "规格",
+                contentDescription = stringResource(R.string.spec),
                 tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
                 modifier = Modifier.size(20.dp)
             )
@@ -736,7 +781,11 @@ private fun SpecSelection(
 
             // 根据是否选中规格显示不同的文本
             Text(
-                text = if (selectedSpec != null) "已选：${selectedSpec.name}" else "选择规格",
+                text = if (selectedSpec != null) {
+                    stringResource(R.string.selected_spec, selectedSpec.name)
+                } else {
+                    stringResource(R.string.select_spec)
+                },
                 style = MaterialTheme.typography.bodyMedium,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.8f)
             )
@@ -754,6 +803,8 @@ private fun SpecSelection(
  * 配送信息卡片
  *
  * 显示商品的配送相关信息，包括送货地址和服务承诺
+ *
+ * @author Joker.X
  */
 @Composable
 private fun GoodsDeliveryCard() {
@@ -762,21 +813,21 @@ private fun GoodsDeliveryCard() {
             title = "",
             showArrow = false,
             leadingContent = {
-                TitleWithLine(text = "发货与服务")
+                TitleWithLine(text = stringResource(R.string.shipping_and_service))
             }
         )
 
         AppListItem(
-            title = "发货",
+            title = stringResource(R.string.shipping),
             showArrow = false,
-            trailingText = "云南省 昆明市"
+            trailingText = stringResource(R.string.shipping_location)
         )
 
         AppListItem(
-            title = "服务",
+            title = stringResource(R.string.service),
             showArrow = false,
             showDivider = false,
-            trailingText = "7天无理由退货 · 运费险 · 48小时发货"
+            trailingText = stringResource(R.string.service_details)
         )
     }
 }
@@ -785,6 +836,7 @@ private fun GoodsDeliveryCard() {
  * 商品详情卡片
  *
  * @param contentPics 商品详情图片列表
+ * @author Joker.X
  */
 @Composable
 private fun GoodsDetailCard(contentPics: List<String>) {
@@ -814,6 +866,9 @@ private fun GoodsDetailCard(contentPics: List<String>) {
  * @param onAddToCartClick 加入购物车按钮点击回调
  * @param onBuyNowClick 立即购买按钮点击回调
  * @param hasAnimated 是否已经播放过动画
+ * @param onCsClick 跳转到客服页面的回调
+ * @param onCartClick 跳转到购物车页面的回调
+ * @author Joker.X
  */
 @Composable
 private fun GoodsActionBar(
@@ -862,7 +917,7 @@ private fun GoodsActionBar(
                     )
 
                     AppText(
-                        text = "客服",
+                        text = stringResource(R.string.customer_service),
                         size = TextSize.BODY_SMALL
                     )
                 }
@@ -881,7 +936,7 @@ private fun GoodsActionBar(
                         size = 20.dp
                     )
                     AppText(
-                        text = "购物车",
+                        text = stringResource(R.string.shopping_cart),
                         size = TextSize.BODY_SMALL
                     )
                 }
@@ -892,7 +947,7 @@ private fun GoodsActionBar(
             ) {
                 // 加入购物车按钮（边框样式）
                 AppButtonBordered(
-                    text = "加入购物车",
+                    text = stringResource(R.string.add_to_cart),
                     onClick = onAddToCartClick,
                     type = ButtonType.LINK,
                     shape = ButtonShape.SQUARE,
@@ -903,7 +958,7 @@ private fun GoodsActionBar(
 
                 // 立即购买按钮（渐变背景）
                 AppButtonFixed(
-                    text = "立即购买",
+                    text = stringResource(R.string.buy_now),
                     onClick = onBuyNowClick,
                     size = ButtonSize.MINI,
                     style = ButtonStyle.GRADIENT,
@@ -915,6 +970,11 @@ private fun GoodsActionBar(
 
 }
 
+/**
+ * 商品详情界面浅色主题预览
+ *
+ * @author Joker.X
+ */
 @Preview(showBackground = true)
 @Composable
 fun GoodsDetailScreenPreview() {
@@ -930,6 +990,11 @@ fun GoodsDetailScreenPreview() {
     }
 }
 
+/**
+ * 商品详情界面深色主题预览
+ *
+ * @author Joker.X
+ */
 @Preview(showBackground = true)
 @Composable
 fun GoodsDetailScreenPreviewDark() {

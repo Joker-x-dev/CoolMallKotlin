@@ -25,6 +25,8 @@ import javax.inject.Inject
 
 /**
  * 短信登录ViewModel
+ * 
+ * @author Joker.X
  */
 @HiltViewModel
 class SmsLoginViewModel @Inject constructor(
@@ -98,6 +100,8 @@ class SmsLoginViewModel @Inject constructor(
     /**
      * 显示图片验证码 Popup
      * 在显示之前会先刷新验证码
+     * 
+     * @author Joker.X
      */
     fun onSendCodeButtonClick() {
         // 检查手机号是否有效
@@ -116,6 +120,8 @@ class SmsLoginViewModel @Inject constructor(
 
     /**
      * 隐藏图片验证码 Popup
+     * 
+     * @author Joker.X
      */
     fun onHideImageCodePopup() {
         _showImageCodePopup.value = false
@@ -125,6 +131,9 @@ class SmsLoginViewModel @Inject constructor(
 
     /**
      * 更新手机号输入
+     * 
+     * @param value 手机号值
+     * @author Joker.X
      */
     fun updatePhone(value: String) {
         _phone.value = value
@@ -132,6 +141,9 @@ class SmsLoginViewModel @Inject constructor(
 
     /**
      * 更新验证码输入
+     * 
+     * @param value 验证码值
+     * @author Joker.X
      */
     fun updateVerificationCode(value: String) {
         _verificationCode.value = value
@@ -139,6 +151,9 @@ class SmsLoginViewModel @Inject constructor(
 
     /**
      * 更新图形验证码输入
+     * 
+     * @param value 图形验证码值
+     * @author Joker.X
      */
     fun updateImageCode(value: String) {
         _imageCode.value = value
@@ -147,6 +162,9 @@ class SmsLoginViewModel @Inject constructor(
     /**
      * 验证码确认
      * 当用户在图形验证码对话框中点击确认按钮时调用
+     * 
+     * @param imageCode 图形验证码
+     * @author Joker.X
      */
     fun onImageCodeConfirm(imageCode: String) {
         updateImageCode(imageCode)
@@ -155,6 +173,8 @@ class SmsLoginViewModel @Inject constructor(
 
     /**
      * 发送短信验证码
+     * 
+     * @author Joker.X
      */
     fun sendVerificationCode() {
         val currentImageCode = imageCode.value
@@ -181,6 +201,8 @@ class SmsLoginViewModel @Inject constructor(
 
     /**
      * 执行短信登录操作
+     * 
+     * @author Joker.X
      */
     fun login() {
         // 再次验证手机号和验证码是否有效
@@ -208,6 +230,9 @@ class SmsLoginViewModel @Inject constructor(
 
     /**
      * 登录成功
+     * 
+     * @param authData 认证数据
+     * @author Joker.X
      */
     fun loginSuccess(authData: Auth) {
         viewModelScope.launch {
@@ -224,6 +249,8 @@ class SmsLoginViewModel @Inject constructor(
 
     /**
      * 加载已保存的手机号
+     * 
+     * @author Joker.X
      */
     private fun loadSavedPhone() {
         val savedPhone = MMKVUtils.getString(KEY_SAVED_PHONE, "")
@@ -234,6 +261,9 @@ class SmsLoginViewModel @Inject constructor(
 
     /**
      * 保存手机号
+     * 
+     * @param phone 手机号
+     * @author Joker.X
      */
     private fun savePhone(phone: String) {
         MMKVUtils.putString(KEY_SAVED_PHONE, phone)
@@ -242,6 +272,8 @@ class SmsLoginViewModel @Inject constructor(
     /**
      * 获取图片验证码
      * 当需要刷新验证码时调用（如用户点击验证码图片）
+     * 
+     * @author Joker.X
      */
     fun getCaptcha() {
         viewModelScope.launch {
@@ -253,6 +285,8 @@ class SmsLoginViewModel @Inject constructor(
 
     /**
      * 实际获取验证码的网络请求
+     * 
+     * @author Joker.X
      */
     private fun fetchCaptcha() {
         ResultHandler.handleResultWithData(

@@ -1,8 +1,3 @@
-/**
- * 订单物流界面
- *
- * @author Joker.X
- */
 package com.joker.coolmall.feature.order.view
 
 import androidx.compose.foundation.layout.padding
@@ -14,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -36,6 +32,7 @@ import com.joker.coolmall.core.ui.component.text.AppText
 import com.joker.coolmall.core.ui.component.text.TextSize
 import com.joker.coolmall.core.ui.component.text.TextType
 import com.joker.coolmall.core.ui.component.title.TitleWithLine
+import com.joker.coolmall.feature.order.R
 import com.joker.coolmall.feature.order.component.LogisticsSteps
 import com.joker.coolmall.feature.order.viewmodel.OrderLogisticsViewModel
 
@@ -43,13 +40,14 @@ import com.joker.coolmall.feature.order.viewmodel.OrderLogisticsViewModel
  * 订单物流路由
  *
  * @param viewModel 订单物流 ViewModel
+ * @author Joker.X
  */
 @Composable
 internal fun OrderLogisticsRoute(
     viewModel: OrderLogisticsViewModel = hiltViewModel()
 ) {
-    val uiState by viewModel.uiState.collectAsState()
-    val logisticsUiState by viewModel.orderLogisticsUiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsState() // 订单数据状态
+    val logisticsUiState by viewModel.orderLogisticsUiState.collectAsState() // 物流数据状态
 
     OrderLogisticsScreen(
         uiState = uiState,
@@ -66,6 +64,7 @@ internal fun OrderLogisticsRoute(
  * @param logisticsUiState 物流数据状态
  * @param onBackClick 返回按钮回调
  * @param onRetry 重试请求回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -76,7 +75,7 @@ internal fun OrderLogisticsScreen(
     onRetry: () -> Unit = {}
 ) {
     AppScaffold(
-        titleText = "物流详情",
+        titleText = stringResource(R.string.order_logistics),
         useLargeTopBar = true,
         onBackClick = onBackClick
     ) {
@@ -97,6 +96,7 @@ internal fun OrderLogisticsScreen(
  *
  * @param order 订单数据
  * @param logistics 物流数据
+ * @author Joker.X
  */
 @Composable
 private fun OrderLogisticsContentView(
@@ -114,7 +114,7 @@ private fun OrderLogisticsContentView(
                 title = "",
                 showArrow = false,
                 leadingContent = {
-                    TitleWithLine(text = "物流信息")
+                    TitleWithLine(text = stringResource(R.string.logistics_info))
                 },
                 trailingContent = {
                     NetWorkImage(
@@ -126,14 +126,14 @@ private fun OrderLogisticsContentView(
 
             // 快递公司信息
             AppListItem(
-                title = "快递公司",
+                title = stringResource(R.string.express_company),
                 showArrow = false,
-                trailingText = logistics.expName ?: "未知快递"
+                trailingText = logistics.expName ?: stringResource(R.string.unknown_express)
             )
 
             // 物流编号
             AppListItem(
-                title = "物流编号",
+                title = stringResource(R.string.logistics_number),
                 trailingContent = {
                     AppText(
                         text = logistics.number ?: "",
@@ -143,7 +143,7 @@ private fun OrderLogisticsContentView(
                     SpaceHorizontalSmall()
 
                     AppText(
-                        text = "复制",
+                        text = stringResource(R.string.copy),
                         type = TextType.LINK,
                         size = TextSize.BODY_MEDIUM,
                         onClick = { /* 复制物流编号 */ }
@@ -155,14 +155,14 @@ private fun OrderLogisticsContentView(
 
             // 快递员信息
             AppListItem(
-                title = "快递员",
+                title = stringResource(R.string.courier),
                 showArrow = false,
                 trailingText = logistics.courier
             )
 
             // 快递员电话
             AppListItem(
-                title = "联系电话",
+                title = stringResource(R.string.contact_phone),
                 trailingContent = {
                     AppText(
                         text = logistics.courierPhone.toString(),
@@ -172,7 +172,7 @@ private fun OrderLogisticsContentView(
                     SpaceHorizontalSmall()
 
                     AppText(
-                        text = "拨打",
+                        text = stringResource(R.string.call),
                         type = TextType.LINK,
                         size = TextSize.BODY_MEDIUM,
                         onClick = { /* 拨打电话 */ }
@@ -184,7 +184,7 @@ private fun OrderLogisticsContentView(
 
             // 耗时信息
             AppListItem(
-                title = "运输耗时",
+                title = stringResource(R.string.transport_time),
                 showArrow = false,
                 trailingText = logistics.takeTime,
                 showDivider = false
@@ -196,7 +196,7 @@ private fun OrderLogisticsContentView(
             AppListItem(
                 title = "",
                 showArrow = false,
-                leadingContent = { TitleWithLine(text = "物流轨迹") }
+                leadingContent = { TitleWithLine(text = stringResource(R.string.logistics_track)) }
             )
 
             // 物流步骤条
@@ -209,7 +209,9 @@ private fun OrderLogisticsContentView(
 }
 
 /**
- * 订单物流界面预览
+ * 订单物流界面浅色主题预览
+ *
+ * @author Joker.X
  */
 @Preview
 @Composable
@@ -223,7 +225,9 @@ private fun OrderLogisticsScreenPreview() {
 }
 
 /**
- * 订单物流界面预览（深色主题）
+ * 订单物流界面深色主题预览
+ *
+ * @author Joker.X
  */
 @Preview
 @Composable

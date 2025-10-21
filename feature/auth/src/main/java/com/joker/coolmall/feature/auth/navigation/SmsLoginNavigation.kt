@@ -7,6 +7,8 @@ import com.joker.coolmall.navigation.routes.AuthRoutes
 
 /**
  * 短信登录页面导航
+ * 
+ * @author Joker.X
  */
 fun NavGraphBuilder.smsLoginScreen() {
     composable(route = AuthRoutes.SMS_LOGIN) {

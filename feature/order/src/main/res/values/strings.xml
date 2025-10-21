@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- 页面标题 -->
     <string name="order_list">订单列表</string>
     <string name="order_detail">订单详情</string>
     <string name="order_confirm">确认订单</string>
     <string name="order_pay">收银台</string>
+    <string name="order_logistics">物流详情</string>
+    <string name="order_refund">退款申请</string>
+    <string name="order_comment">商品评价</string>
 
     <!-- 订单状态标题 -->
+    <string name="order_status_all">全部</string>
+    <string name="order_status_unpaid">待付款</string>
+    <string name="order_status_unshipped">待发货</string>
+    <string name="order_status_unreceived">待收货</string>
+    <string name="order_status_after_sale">售后/退款</string>
+    <string name="order_status_unevaluated">待评价</string>
+    <string name="order_status_completed_tab">已完成</string>
     <string name="order_status_pending_payment">待付款</string>
     <string name="order_status_pending_shipment">待发货</string>
     <string name="order_status_pending_receipt">待收货</string>
@@ -14,4 +25,109 @@
     <string name="order_status_refunding">退款中</string>
     <string name="order_status_refunded">已退款</string>
     <string name="order_status_closed">已关闭</string>
+    
+    <!-- 订单列表页面 -->
+    <string name="total_items">共 %d 件</string>
+    <string name="select_cancel_reason">选择取消原因</string>
+    <string name="confirm_receipt">确认收货</string>
+    <string name="confirm_receipt_message">确认收货后无法发起退款等售后申请，请谨慎操作</string>
+    <string name="confirm">确认</string>
+    <string name="cancel">取消</string>
+    <string name="select_goods_to_buy">选择要购买的商品</string>
+    <string name="rebuy">再次购买</string>
+    <string name="select_goods_to_comment">选择要评价的商品</string>
+    <string name="go_to_comment">去评价</string>
+    
+    <!-- 订单详情页面 -->
+    <string name="price_detail">价格明细</string>
+    <string name="goods_total_price">商品总价</string>
+    <string name="discount_amount">优惠金额</string>
+    <string name="actual_payment">实付金额</string>
+    <string name="refund_amount">退款金额</string>
+    <string name="refund_status">退款状态</string>
+    <string name="refund_status_applying">申请中</string>
+    <string name="refund_status_refunded">已退款</string>
+    <string name="refund_status_rejected">拒绝退款</string>
+    <string name="refund_status_unknown">未知状态</string>
+    <string name="refund_reason">申请原因</string>
+    <string name="refund_reject_reason">拒绝原因</string>
+    <string name="refund_apply_time">申请时间</string>
+    <string name="none">无</string>
+    <string name="order_info">订单信息</string>
+    <string name="order_number">订单编号</string>
+    <string name="copy">复制</string>
+    <string name="payment_method">支付方式</string>
+    <string name="wechat">微信</string>
+    <string name="wechat_pay">微信</string>
+    <string name="payment_time">支付时间</string>
+    <string name="unpaid">未支付</string>
+    <string name="not_paid">未支付</string>
+    <string name="order_time">下单时间</string>
+    <string name="order_remark">订单备注</string>
+    
+    <!-- 订单确认页面 -->
+    <string name="purchase_goods">购买商品</string>
+    <string name="select_coupon">选择优惠券</string>
+    <string name="coupon">优惠券</string>
+    <string name="coupon_select">选择</string>
+    <string name="coupon_discount">优惠券折扣</string>
+    <string name="total">合计</string>
+    <string name="order_remark_title">订单备注</string>
+    <string name="order_remark_label">订单备注</string>
+    <string name="order_remark_placeholder">选填，付款后商家可见</string>
+    <string name="submit_order">提交订单</string>
+    
+    <!-- 订单支付页面 -->
+    <string name="go_to_pay">去支付</string>
+    <string name="order_pay_button">去支付</string>
+    <string name="order_pay_button_with_price">去支付 ¥%d</string>
+    <string name="alipay">支付宝支付</string>
+    <string name="pay_method_alipay">支付宝支付</string>
+    <string name="wechat_pay_title">微信支付</string>
+    <string name="pay_method_wechat">微信支付</string>
+    <string name="pay_method_qq">QQ支付</string>
+    <string name="order_pay_tip">提示：实际支付金额经过处理，都是一分钱</string>
+    
+    <!-- 订单退款页面 -->
+    <string name="submit">提交</string>
+    <string name="refund_info">退款信息</string>
+    <string name="please_select">请选择</string>
+    
+    <!-- 物流详情页面 -->
+    <string name="logistics_info">物流信息</string>
+    <string name="express_company">快递公司</string>
+    <string name="unknown_express">未知快递</string>
+    <string name="logistics_number">物流编号</string>
+    <string name="courier">快递员</string>
+    <string name="contact_phone">联系电话</string>
+    <string name="call">拨打</string>
+    <string name="transport_time">运输耗时</string>
+    <string name="logistics_track">物流轨迹</string>
+    
+    <!-- 订单评价页面 -->
+    <string name="submit_comment">提交评价</string>
+    <string name="please_rate">请点击星星进行评分</string>
+    <string name="rating_very_poor">很差</string>
+    <string name="rating_poor">较差</string>
+    <string name="rating_average">一般</string>
+    <string name="rating_good">满意</string>
+    <string name="rating_excellent">非常满意</string>
+    <string name="comment_placeholder">请输入您的评价内容...</string>
+    
+    <!-- 订单按钮 -->
+    <string name="cancel_order">取消订单</string>
+    <string name="pay_now">去支付</string>
+    <string name="order_refund_button">售后/退款</string>
+    <string name="confirm_receive">确认收货</string>
+    <string name="view_logistics">查看物流</string>
+    <string name="comment_now">去评价</string>
+    <string name="rebuy_now">再次购买</string>
+    
+    <!-- Toast提示 -->
+    <string name="please_fill_comment">请先填写评价内容和评分</string>
+    <string name="comment_submit_success">评价提交成功</string>
+    <string name="submitting">正在提交中...</string>
+    <string name="payment_success">支付成功</string>
+    <string name="payment_failed">支付失败</string>
+    <string name="payment_cancel">支付已取消</string>
 </resources>

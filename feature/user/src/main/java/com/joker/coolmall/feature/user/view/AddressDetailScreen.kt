@@ -48,6 +48,7 @@ import com.joker.coolmall.feature.user.viewmodel.AddressDetailViewModel
  * 收货地址详情路由
  *
  * @param viewModel 收货地址详情ViewModel
+ * @author Joker.X
  */
 @Composable
 internal fun AddressDetailRoute(
@@ -105,6 +106,7 @@ internal fun AddressDetailRoute(
  * @param onSaveClick 保存按钮点击回调
  * @param onBackClick 返回上一页回调
  * @param onRetry 重试请求回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -167,6 +169,20 @@ internal fun AddressDetailScreen(
 
 /**
  * 收货地址详情内容视图
+ *
+ * @param contactName 联系人
+ * @param phone 手机号
+ * @param province 省
+ * @param city 市
+ * @param district 区
+ * @param detailAddress 详细地址
+ * @param isDefaultAddress 是否为默认地址
+ * @param onContactNameChange 联系人变更回调
+ * @param onPhoneChange 手机号变更回调
+ * @param onRegionChange 地区变更回调
+ * @param onDetailAddressChange 详细地址变更回调
+ * @param onDefaultAddressChange 默认地址变更回调
+ * @author Joker.X
  */
 @Composable
 private fun AddressDetailContentView(
@@ -305,6 +321,10 @@ private fun AddressDetailContentView(
 
 /**
  * 默认地址开关
+ *
+ * @param isDefault 是否为默认地址
+ * @param onValueChange 开关变更回调
+ * @author Joker.X
  */
 @Composable
 private fun DefaultAddressSwitch(
@@ -326,6 +346,11 @@ private fun DefaultAddressSwitch(
     }
 }
 
+/**
+ * 收货地址详情界面浅色主题预览
+ *
+ * @author Joker.X
+ */
 @Composable
 @Preview
 internal fun AddressDetailScreenPreview() {
@@ -334,6 +359,11 @@ internal fun AddressDetailScreenPreview() {
     }
 }
 
+/**
+ * 收货地址详情界面深色主题预览
+ *
+ * @author Joker.X
+ */
 @Composable
 @Preview
 internal fun AddressDetailScreenPreviewDark() {

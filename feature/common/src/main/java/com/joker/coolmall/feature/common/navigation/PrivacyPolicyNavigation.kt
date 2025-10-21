@@ -7,6 +7,8 @@ import com.joker.coolmall.navigation.routes.CommonRoutes
 
 /**
  * 隐私政策页面导航
+ * 
+ * @author Joker.X
  */
 fun NavGraphBuilder.privacyPolicyScreen() {
     composable(route = CommonRoutes.PRIVACY_POLICY) {

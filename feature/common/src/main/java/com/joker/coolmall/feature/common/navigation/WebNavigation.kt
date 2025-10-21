@@ -9,6 +9,8 @@ import com.joker.coolmall.navigation.routes.CommonRoutes
 
 /**
  * WebView 页面路由常量
+ * 
+ * @author Joker.X
  */
 object WebRoutes {
     const val URL_ARG = "url"
@@ -16,12 +18,16 @@ object WebRoutes {
 
     /**
      * 带参数的路由模式
+     * 
+     * @author Joker.X
      */
     const val WEB_PATTERN = "${CommonRoutes.WEB}?${URL_ARG}={${URL_ARG}}&${TITLE_ARG}={${TITLE_ARG}}"
 }
 
 /**
  * 网页页面导航
+ * 
+ * @author Joker.X
  */
 fun NavGraphBuilder.webScreen() {
     composable(
@@ -33,7 +39,7 @@ fun NavGraphBuilder.webScreen() {
             },
             navArgument(WebRoutes.TITLE_ARG) {
                 type = NavType.StringType
-                defaultValue = "网页"
+                defaultValue = ""
             }
         )
     ) {

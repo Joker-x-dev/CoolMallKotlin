@@ -40,6 +40,7 @@ import com.joker.coolmall.feature.auth.R
  * @param placeholder 提示文本，默认为"请输入密码"
  * @param nextAction 输入法下一步动作，默认为Done
  * @param modifier 可选修饰符
+ * @author Joker.X
  */
 @Composable
 fun PasswordInputField(

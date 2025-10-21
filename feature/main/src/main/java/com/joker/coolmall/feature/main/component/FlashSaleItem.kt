@@ -21,6 +21,11 @@ import com.joker.coolmall.core.ui.component.text.TextSize
 
 /**
  * 限时精选卡片项
+ *
+ * @param goods 商品数据
+ * @param modifier 修饰符
+ * @param onClick 点击回调
+ * @author Joker.X
  */
 @Composable
 fun FlashSaleItem(

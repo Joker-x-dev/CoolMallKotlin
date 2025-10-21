@@ -19,6 +19,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -64,6 +65,7 @@ import com.joker.coolmall.core.ui.R as CoreUiR
  *
  * @param viewModel 确认订单ViewModel
  * @param navController 导航控制器
+ * @author Joker.X
  */
 @Composable
 internal fun OrderConfirmRoute(
@@ -72,13 +74,13 @@ internal fun OrderConfirmRoute(
 ) {
     // 注册地址选择监听
     val backStackEntry = navController.currentBackStackEntry
-    val uiState by viewModel.uiState.collectAsState()
-    val remark by viewModel.remark.collectAsState()
-    val couponModalVisible by viewModel.couponModalVisible.collectAsState()
-    val selectedCoupon by viewModel.selectedCoupon.collectAsState()
-    val originalPrice by viewModel.originalPrice.collectAsState()
-    val discountAmount by viewModel.discountAmount.collectAsState()
-    val totalPrice by viewModel.totalPrice.collectAsState()
+    val uiState by viewModel.uiState.collectAsState() // UI状态
+    val remark by viewModel.remark.collectAsState() // 订单备注
+    val couponModalVisible by viewModel.couponModalVisible.collectAsState() // 优惠券弹窗显示状态
+    val selectedCoupon by viewModel.selectedCoupon.collectAsState() // 选中的优惠券
+    val originalPrice by viewModel.originalPrice.collectAsState() // 原始价格
+    val discountAmount by viewModel.discountAmount.collectAsState() // 折扣金额
+    val totalPrice by viewModel.totalPrice.collectAsState() // 总价格
 
     OrderConfirmScreen(
         uiState = uiState,
@@ -108,16 +110,23 @@ internal fun OrderConfirmRoute(
 /**
  * 确认订单页面
  *
+ * @param uiState UI状态
  * @param onRetry 重试请求回调
+ * @param onBackClick 返回按钮回调
  * @param cartList 购物车列表
  * @param remark 订单备注
  * @param onRemarkChange 订单备注变更回调
  * @param onSubmitOrderClick 提交订单点击回调
  * @param couponModalVisible 优惠券弹出层显示状态
  * @param selectedCoupon 选中的优惠券
+ * @param originalPrice 原始价格
+ * @param discountAmount 折扣金额
+ * @param totalPrice 总价格
  * @param onShowCouponModal 显示优惠券弹出层回调
  * @param onHideCouponModal 隐藏优惠券弹出层回调
  * @param onSelectCoupon 选择优惠券回调
+ * @param onAddressClick 地址点击回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -190,7 +199,7 @@ internal fun OrderConfirmScreen(
                 is BaseNetWorkUiState.Success -> uiState.data.userCoupon ?: emptyList()
                 else -> emptyList()
             },
-            title = "选择优惠券",
+            title = stringResource(R.string.select_coupon),
             mode = CouponCardMode.SELECT,
             currentPrice = originalPrice,
             onCouponAction = { couponId ->
@@ -210,6 +219,18 @@ internal fun OrderConfirmScreen(
 
 /**
  * 确认订单内容视图
+ *
+ * @param pageData 页面数据
+ * @param originalPrice 原始价格
+ * @param discountAmount 折扣金额
+ * @param totalPrice 总价格
+ * @param cartList 购物车列表
+ * @param remark 订单备注
+ * @param onRemarkChange 订单备注变更回调
+ * @param selectedCoupon 选中的优惠券
+ * @param onShowCouponModal 显示优惠券弹出层回调
+ * @param onAddressClick 地址点击回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -247,12 +268,12 @@ private fun OrderConfirmContentView(
                 title = "",
                 showArrow = false,
                 leadingContent = {
-                    TitleWithLine(text = "价格明细")
+                    TitleWithLine(text = stringResource(R.string.price_detail))
                 }
             )
 
             AppListItem(
-                title = "商品总价",
+                title = stringResource(R.string.goods_total_price),
                 leadingIcon = R.drawable.ic_shop,
                 trailingContent = {
                     PriceText(
@@ -266,9 +287,9 @@ private fun OrderConfirmContentView(
             )
 
             AppListItem(
-                title = "优惠券",
+                title = stringResource(R.string.coupon),
                 leadingIcon = CoreUiR.drawable.ic_coupon,
-                trailingText = selectedCoupon?.title ?: "选择",
+                trailingText = selectedCoupon?.title ?: stringResource(R.string.coupon_select),
                 showArrow = true,
                 onClick = onShowCouponModal
             )
@@ -276,7 +297,7 @@ private fun OrderConfirmContentView(
             // 显示优惠券折扣（仅当有折扣时显示）
             if (discountAmount > 0) {
                 AppListItem(
-                    title = "优惠券折扣",
+                    title = stringResource(R.string.coupon_discount),
                     leadingIcon = CoreUiR.drawable.ic_refund,
                     trailingContent = {
                         PriceText(
@@ -291,7 +312,7 @@ private fun OrderConfirmContentView(
             }
 
             AppListItem(
-                title = "合计",
+                title = stringResource(R.string.total),
                 leadingIcon = R.drawable.ic_money,
                 trailingContent = {
                     PriceText(
@@ -307,15 +328,15 @@ private fun OrderConfirmContentView(
         }
 
         // 订单备注卡片
-        AppCard(lineTitle = "订单备注") {
+        AppCard(lineTitle = stringResource(R.string.order_remark_title)) {
             OutlinedTextField(
                 value = remark,
                 onValueChange = onRemarkChange,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 8.dp),
-                label = { Text("订单备注") },
-                placeholder = { Text("选填，付款后商家可见") },
+                label = { Text(stringResource(R.string.order_remark_label)) },
+                placeholder = { Text(stringResource(R.string.order_remark_placeholder)) },
                 shape = ShapeMedium,
                 keyboardOptions = KeyboardOptions(
                     keyboardType = KeyboardType.Text,
@@ -333,6 +354,7 @@ private fun OrderConfirmContentView(
  *
  * @param totalPrice 订单总金额（单位：分）
  * @param onSubmitClick 提交订单点击回调
+ * @author Joker.X
  */
 @Composable
 private fun OrderBottomBar(
@@ -359,7 +381,7 @@ private fun OrderBottomBar(
             )
 
             AppButtonFixed(
-                text = "提交订单",
+                text = stringResource(R.string.submit_order),
                 onClick = onSubmitClick,
                 size = ButtonSize.MINI,
                 style = ButtonStyle.GRADIENT,
@@ -369,6 +391,11 @@ private fun OrderBottomBar(
     }
 }
 
+/**
+ * 确认订单界面浅色主题预览
+ *
+ * @author Joker.X
+ */
 @Preview(showBackground = true)
 @Composable
 internal fun OrderConfirmScreenPreview() {
@@ -385,6 +412,11 @@ internal fun OrderConfirmScreenPreview() {
     }
 }
 
+/**
+ * 确认订单界面深色主题预览
+ *
+ * @author Joker.X
+ */
 @Preview(showBackground = true)
 @Composable
 internal fun OrderConfirmScreenPreviewDark() {

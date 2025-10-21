@@ -9,6 +9,8 @@ import com.joker.coolmall.navigation.routes.UserRoutes
 
 /**
  * 收货地址详情页面路由常量
+ *
+ * @author Joker.X
  */
 object AddressDetailRoutes {
     const val ADDRESS_ID_ARG = "address_id"
@@ -23,6 +25,8 @@ object AddressDetailRoutes {
 
 /**
  * 收货地址详情页面导航
+ *
+ * @author Joker.X
  */
 fun NavGraphBuilder.addressDetailScreen() {
     composable(

@@ -8,6 +8,10 @@ import com.joker.coolmall.core.ui.R
 
 /**
  * 加载失败状态视图
+ *
+ * @param modifier 修饰符
+ * @param onRetryClick 重试点击回调
+ * @author Joker.X
  */
 @Composable
 fun EmptyError(
@@ -24,6 +28,11 @@ fun EmptyError(
     )
 }
 
+/**
+ * 加载失败状态预览
+ *
+ * @author Joker.X
+ */
 @Preview(showBackground = true)
 @Composable
 fun EmptyErrorPreview() {

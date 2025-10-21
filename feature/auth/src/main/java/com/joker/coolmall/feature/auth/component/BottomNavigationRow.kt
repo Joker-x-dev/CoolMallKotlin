@@ -16,12 +16,13 @@ import com.joker.coolmall.core.designsystem.theme.Primary
 /**
  * 底部导航栏组件，用于显示登录、注册等页面的底部导航选项
  *
+ * @param modifier 可选修饰符
  * @param messageText 提示文本
  * @param actionText 操作按钮文本
  * @param onCancelClick 左侧操作按钮的回调
  * @param onActionClick 右侧操作按钮的回调
- * @param modifier 可选修饰符
  * @param divider 是否显示分隔符，默认为false
+ * @author Joker.X
  */
 @Composable
 fun BottomNavigationRow(

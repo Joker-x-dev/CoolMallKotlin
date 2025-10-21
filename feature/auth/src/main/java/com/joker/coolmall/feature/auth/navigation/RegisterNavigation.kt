@@ -7,6 +7,8 @@ import com.joker.coolmall.navigation.routes.AuthRoutes
 
 /**
  * 注册页面导航
+ * 
+ * @author Joker.X
  */
 fun NavGraphBuilder.registerScreen() {
     composable(route = AuthRoutes.REGISTER) {

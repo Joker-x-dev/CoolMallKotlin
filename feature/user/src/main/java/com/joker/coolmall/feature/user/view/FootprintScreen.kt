@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -37,6 +38,7 @@ import com.joker.coolmall.feature.user.viewmodel.FootprintViewModel
  * 用户足迹路由
  *
  * @param viewModel 用户足迹ViewModel
+ * @author Joker.X
  */
 @Composable
 internal fun FootprintRoute(
@@ -66,6 +68,7 @@ internal fun FootprintRoute(
  * @param onBackClick 返回上一页回调
  * @param onFootprintClick 点击足迹项回调
  * @param onClearAll 清空所有足迹回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -84,7 +87,7 @@ internal fun FootprintScreen(
             if (footprints.isNotEmpty()) {
                 TextButton(onClick = onClearAll) {
                     Text(
-                        text = "清空 ($footprintCount)",
+                        text = stringResource(R.string.clear_with_count, footprintCount),
                         color = MaterialTheme.colorScheme.primary
                     )
                 }
@@ -114,6 +117,11 @@ internal fun FootprintScreen(
 
 /**
  * 足迹内容视图
+ *
+ * @param footprints 足迹列表
+ * @param onFootprintClick 点击足迹项回调
+ * @param modifier 修饰符
+ * @author Joker.X
  */
 @Composable
 private fun FootprintContentView(
@@ -139,6 +147,9 @@ private fun FootprintContentView(
 
 /**
  * 将Footprint转换为Goods对象，用于GoodsGridItem组件
+ *
+ * @return Goods对象
+ * @author Joker.X
  */
 private fun Footprint.toGoods(): Goods {
     return Goods(
@@ -153,6 +164,8 @@ private fun Footprint.toGoods(): Goods {
 
 /**
  * 我的足迹界面浅色主题预览
+ *
+ * @author Joker.X
  */
 @Composable
 @Preview(showBackground = true)
@@ -164,6 +177,8 @@ fun FootprintScreenPreview() {
 
 /**
  * 我的足迹界面深色主题预览
+ *
+ * @author Joker.X
  */
 @Composable
 @Preview(showBackground = true)

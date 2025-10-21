@@ -18,6 +18,8 @@ import javax.inject.Inject
 
 /**
  * 用户足迹ViewModel
+ *
+ * @author Joker.X
  */
 @HiltViewModel
 class FootprintViewModel @Inject constructor(
@@ -70,6 +72,9 @@ class FootprintViewModel @Inject constructor(
 
     /**
      * 跳转到商品详情页面
+     *
+     * @param goodsId 商品ID
+     * @author Joker.X
      */
     fun toGoodsDetail(goodsId: Long) {
         super.toPage(GoodsRoutes.DETAIL, goodsId)
@@ -77,6 +82,9 @@ class FootprintViewModel @Inject constructor(
 
     /**
      * 删除指定足迹记录
+     *
+     * @param goodsId 商品ID
+     * @author Joker.X
      */
     fun removeFootprint(goodsId: Long) {
         viewModelScope.launch {
@@ -86,6 +94,8 @@ class FootprintViewModel @Inject constructor(
 
     /**
      * 清空所有足迹记录
+     *
+     * @author Joker.X
      */
     fun clearAllFootprints() {
         viewModelScope.launch {

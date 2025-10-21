@@ -25,6 +25,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -42,6 +43,13 @@ import com.joker.coolmall.core.ui.component.text.TextType
 
 /**
  * 搜索顶部栏
+ *
+ * @param onBackClick 返回按钮点击回调
+ * @param onSearch 搜索回调
+ * @param initialSearchText 初始搜索文本
+ * @param actions 右侧操作按钮
+ * @param scrollBehavior 滚动行为
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -96,7 +104,7 @@ fun SearchTopAppBar(
                         decorationBox = { innerTextField ->
                             if (searchText.isEmpty()) {
                                 AppText(
-                                    text = "输入内容进行搜索",
+                                    text = stringResource(R.string.search_hint),
                                     type = TextType.TERTIARY
                                 )
                             }
@@ -115,7 +123,7 @@ fun SearchTopAppBar(
                         contentAlignment = Alignment.Center
                     ) {
                         AppText(
-                            text = "搜索",
+                            text = stringResource(R.string.search),
                             color = Color.White
                         )
                     }
@@ -137,6 +145,11 @@ fun SearchTopAppBar(
     )
 }
 
+/**
+ * 搜索顶部栏预览
+ *
+ * @author Joker.X
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(showBackground = true)
 @Composable

@@ -7,6 +7,8 @@ import com.joker.coolmall.navigation.routes.GoodsRoutes
 
 /**
  * 商品搜索页面导航
+ *
+ * @author Joker.X
  */
 fun NavGraphBuilder.goodsSearchScreen() {
     composable(route = GoodsRoutes.SEARCH) {

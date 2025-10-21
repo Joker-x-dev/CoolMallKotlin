@@ -1,8 +1,4 @@
-/**
- * 引导页界面
- *
- * @author Joker.X
- */
+
 package com.joker.coolmall.feature.launch.view
 
 import androidx.compose.animation.AnimatedContentScope
@@ -38,6 +34,7 @@ import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -59,6 +56,7 @@ import com.joker.coolmall.core.ui.component.button.AppButton
 import com.joker.coolmall.core.ui.component.text.AppText
 import com.joker.coolmall.core.ui.component.text.TextSize
 import com.joker.coolmall.core.ui.component.text.TextType
+import com.joker.coolmall.feature.launch.R
 import com.joker.coolmall.feature.launch.model.GuidePageData
 import com.joker.coolmall.feature.launch.viewmodel.GuideViewModel
 import kotlinx.coroutines.launch
@@ -67,6 +65,7 @@ import kotlinx.coroutines.launch
  * 引导页路由
  *
  * @param viewModel 引导页 ViewModel
+ * @author Joker.X
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -106,6 +105,7 @@ internal fun GuideRoute(
  * @param onPageChanged 页面变化回调
  * @param onNextClick 下一页按钮点击回调
  * @param onSkipClick 跳过按钮点击回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -134,78 +134,108 @@ internal fun GuideScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         containerColor = MaterialTheme.colorScheme.surface
-
     ) { paddingValues ->
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(paddingValues)
+        GuideContentView(
+            guidePages = guidePages,
+            currentPageIndex = currentPageIndex,
+            isLastPage = isLastPage,
+            pagerState = pagerState,
+            onNextClick = onNextClick,
+            onSkipClick = onSkipClick,
+            modifier = Modifier.padding(paddingValues)
+        )
+    }
+}
+
+/**
+ * 引导页内容视图
+ *
+ * @param guidePages 引导页数据列表
+ * @param currentPageIndex 当前页面索引
+ * @param isLastPage 是否为最后一页
+ * @param pagerState 分页器状态
+ * @param onNextClick 下一页按钮点击回调
+ * @param onSkipClick 跳过按钮点击回调
+ * @param modifier 修饰符
+ * @author Joker.X
+ */
+@Composable
+private fun GuideContentView(
+    guidePages: List<GuidePageData>,
+    currentPageIndex: Int,
+    isLastPage: Boolean,
+    pagerState: androidx.compose.foundation.pager.PagerState,
+    onNextClick: (androidx.compose.foundation.pager.PagerState) -> Unit,
+    onSkipClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Box(
+        modifier = modifier.fillMaxSize()
+    ) {
+        // 顶部跳过按钮
+        SpaceBetweenRow(
+            modifier = Modifier.fillMaxWidth()
         ) {
-            // 顶部跳过按钮
-            SpaceBetweenRow(
-                modifier = Modifier.fillMaxWidth()
+            Spacer(modifier = Modifier.width(1.dp))
+            TextButton(
+                onClick = onSkipClick,
+                modifier = Modifier.padding(SpacePaddingLarge)
             ) {
-                Spacer(modifier = Modifier.width(1.dp))
-                TextButton(
-                    onClick = onSkipClick,
-                    modifier = Modifier.padding(SpacePaddingLarge)
-                ) {
-                    AppText(
-                        text = "跳过",
-                        type = TextType.TERTIARY,
-                        size = TextSize.BODY_MEDIUM
+                AppText(
+                    text = stringResource(R.string.guide_skip),
+                    type = TextType.TERTIARY,
+                    size = TextSize.BODY_MEDIUM
+                )
+            }
+        }
+
+        // 主要内容区域
+        FullScreenColumn(
+            modifier = Modifier,
+            verticalArrangement = Arrangement.SpaceBetween,
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            SpaceVerticalXXLarge()
+            SpaceVerticalLarge()
+
+            // 水平分页器
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier.weight(1f)
+            ) { page ->
+                if (page < guidePages.size) {
+                    GuidePageContent(
+                        pageData = guidePages[page],
+                        modifier = Modifier.fillMaxSize()
                     )
                 }
             }
 
-            // 主要内容区域
-            FullScreenColumn(
-                modifier = Modifier,
-                verticalArrangement = Arrangement.SpaceBetween,
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                SpaceVerticalXXLarge()
-                SpaceVerticalLarge()
+            SpaceVerticalXXLarge()
 
-                // 水平分页器
-                HorizontalPager(
-                    state = pagerState,
-                    modifier = Modifier.weight(1f)
-                ) { page ->
-                    if (page < guidePages.size) {
-                        GuidePageContent(
-                            pageData = guidePages[page],
-                            modifier = Modifier.fillMaxSize()
-                        )
-                    }
-                }
+            // 页面指示器
+            PageIndicator(
+                pageCount = guidePages.size,
+                currentPage = currentPageIndex,
+                modifier = Modifier.padding(vertical = SpaceVerticalLarge)
+            )
 
-                SpaceVerticalXXLarge()
+            // 下一页按钮 - 带宽度变化动画
+            val buttonText = if (isLastPage) stringResource(R.string.guide_start_experience) else stringResource(R.string.guide_continue)
+            val animatedButtonWidth by animateDpAsState(
+                targetValue = if (isLastPage) 160.dp else 120.dp,
+                animationSpec = tween(300),
+                label = "button_width"
+            )
 
-                // 页面指示器
-                PageIndicator(
-                    pageCount = guidePages.size,
-                    currentPage = currentPageIndex,
-                    modifier = Modifier.padding(vertical = SpaceVerticalLarge)
-                )
+            AppButton(
+                text = buttonText,
+                onClick = { onNextClick(pagerState) },
+                fullWidth = false,
+                modifier = Modifier.width(animatedButtonWidth)
+            )
 
-                // 下一页按钮 - 带宽度变化动画
-                val buttonText = if (isLastPage) "开始体验" else "继续"
-                val animatedButtonWidth by animateDpAsState(
-                    targetValue = if (isLastPage) 160.dp else 120.dp,
-                    animationSpec = tween(300),
-                    label = "button_width"
-                )
-
-                AppButton(
-                    text = buttonText,
-                    onClick = { onNextClick(pagerState) },
-                    fullWidth = false,
-                    modifier = Modifier.width(animatedButtonWidth)
-                )
-
-                SpaceVerticalXXLarge()
-            }
+            SpaceVerticalXXLarge()
         }
     }
 }
@@ -215,6 +245,7 @@ internal fun GuideScreen(
  *
  * @param pageData 页面数据
  * @param modifier 修饰符
+ * @author Joker.X
  */
 @Composable
 private fun GuidePageContent(
@@ -260,6 +291,7 @@ private fun GuidePageContent(
  * @param pageCount 总页数
  * @param currentPage 当前页面索引
  * @param modifier 修饰符
+ * @author Joker.X
  */
 @Composable
 private fun PageIndicator(
@@ -306,6 +338,8 @@ private fun PageIndicator(
 
 /**
  * 引导页界面浅色主题预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -317,6 +351,8 @@ internal fun GuideScreenPreview() {
 
 /**
  * 引导页界面深色主题预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable

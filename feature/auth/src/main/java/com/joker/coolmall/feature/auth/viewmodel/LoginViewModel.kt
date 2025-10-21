@@ -10,6 +10,7 @@ import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.entity.Auth
 import com.joker.coolmall.core.model.request.QQLoginRequest
 import com.joker.coolmall.core.util.toast.ToastUtils
+import com.joker.coolmall.feature.auth.R
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.AuthRoutes
 import com.joker.coolmall.result.ResultHandler
@@ -20,6 +21,8 @@ import javax.inject.Inject
 
 /**
  * 登录主页 ViewModel
+ * 
+ * @author Joker.X
  */
 @HiltViewModel
 class LoginViewModel @Inject constructor(
@@ -32,6 +35,8 @@ class LoginViewModel @Inject constructor(
 ) {
     /**
      * 导航到短信登录页面
+     * 
+     * @author Joker.X
      */
     fun toSMSLoginPage() {
         super.toPage(AuthRoutes.SMS_LOGIN)
@@ -39,6 +44,8 @@ class LoginViewModel @Inject constructor(
 
     /**
      * 导航到账号密码登录页面
+     * 
+     * @author Joker.X
      */
     fun toAccountLoginPage() {
         super.toPage(AuthRoutes.ACCOUNT_LOGIN)
@@ -46,7 +53,9 @@ class LoginViewModel @Inject constructor(
 
     /**
      * 启动 QQ 登录
+     * 
      * @param activity 当前 Activity 实例
+     * @author Joker.X
      */
     fun startQQLogin(activity: Activity) {
         try {
@@ -66,13 +75,13 @@ class LoginViewModel @Inject constructor(
 
                         is QQLoginResult.Error -> {
                             // QQ 登录失败
-                            ToastUtils.showError("登录失败: ${result.message}")
+                            ToastUtils.showError(R.string.login_failed)
                             QQLoginManager.getInstance().clearLoginResult()
                         }
 
                         is QQLoginResult.Cancel -> {
                             // 用户取消登录
-                            ToastUtils.showWarning("登录取消")
+                            ToastUtils.showWarning(R.string.login_cancelled)
                             QQLoginManager.getInstance().clearLoginResult()
                         }
 
@@ -81,14 +90,16 @@ class LoginViewModel @Inject constructor(
                 }
             }
         } catch (e: Exception) {
-            ToastUtils.showError("启动QQ登录失败: ${e.message}")
+            ToastUtils.showError(R.string.start_qq_login_failed)
         }
     }
 
     /**
      * QQ 登录成功
+     * 
      * @param accessToken QQ 登录成功返回的 accessToken
      * @param openId QQ 登录成功返回的 openId
+     * @author Joker.X
      */
     private fun qqLoginSuccess(accessToken: String, openId: String) {
         val params = QQLoginRequest(
@@ -105,11 +116,13 @@ class LoginViewModel @Inject constructor(
 
     /**
      * 登录成功统一处理
+     * 
      * @param authData 登录成功返回的认证数据
+     * @author Joker.X
      */
     fun loginSuccess(authData: Auth) {
         viewModelScope.launch {
-            ToastUtils.showSuccess("登录成功")
+            ToastUtils.showSuccess(R.string.login_success)
             appState.updateAuth(authData)
             appState.refreshUserInfo()
             super.navigateBack()
@@ -118,6 +131,8 @@ class LoginViewModel @Inject constructor(
 
     /**
      * 微信登录点击
+     * 
+     * @author Joker.X
      */
     fun onWechatLoginClick() {
         onWechatAndAlipayLoginTipClick()
@@ -125,6 +140,8 @@ class LoginViewModel @Inject constructor(
 
     /**
      * 支付宝登录点击
+     * 
+     * @author Joker.X
      */
     fun onAlipayLoginClick() {
         onWechatAndAlipayLoginTipClick()
@@ -132,8 +149,10 @@ class LoginViewModel @Inject constructor(
 
     /**
      * 微信和支付宝登录提示
+     * 
+     * @author Joker.X
      */
     fun onWechatAndAlipayLoginTipClick() {
-        ToastUtils.showWarning("三方登录暂时仅支持QQ登录")
+        ToastUtils.showWarning(R.string.third_party_login_only_qq)
     }
 }

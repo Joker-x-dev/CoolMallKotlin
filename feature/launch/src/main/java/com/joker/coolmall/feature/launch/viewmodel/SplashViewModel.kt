@@ -1,8 +1,3 @@
-/**
- * 启动页 ViewModel
- *
- * @author Joker.X
- */
 package com.joker.coolmall.feature.launch.viewmodel
 
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
@@ -16,6 +11,10 @@ import javax.inject.Inject
 
 /**
  * 启动页 ViewModel
+ *
+ * @param navigator 应用导航器
+ * @param appState 应用状态
+ * @author Joker.X
  */
 @HiltViewModel
 class SplashViewModel @Inject constructor(
@@ -32,6 +31,8 @@ class SplashViewModel @Inject constructor(
 
     /**
      * 检查是否已显示过引导页，并根据结果跳转到相应页面
+     *
+     * @author Joker.X
      */
     fun checkGuideStatusAndNavigate() {
         if (isGuideShown()) {
@@ -47,6 +48,7 @@ class SplashViewModel @Inject constructor(
      * 检查是否已显示过引导页
      *
      * @return true表示已显示过，false表示未显示过
+     * @author Joker.X
      */
     private fun isGuideShown(): Boolean {
         return MMKVUtils.getBoolean(KEY_GUIDE_SHOWN, false)
@@ -54,6 +56,8 @@ class SplashViewModel @Inject constructor(
 
     /**
      * 跳转到引导页并关闭当前启动页
+     *
+     * @author Joker.X
      */
     private fun toGuidePage() {
         toPageAndCloseCurrent(LaunchRoutes.GUIDE, LaunchRoutes.SPLASH)
@@ -61,6 +65,8 @@ class SplashViewModel @Inject constructor(
 
     /**
      * 跳转到主页并关闭当前启动页
+     *
+     * @author Joker.X
      */
     fun toMainPage() {
         toPageAndCloseCurrent(MainRoutes.MAIN, LaunchRoutes.SPLASH)

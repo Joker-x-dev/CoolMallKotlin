@@ -7,6 +7,9 @@ import androidx.navigation.NavHostController
  * 订单模块导航图
  *
  * 整合订单模块下所有页面的导航
+ *
+ * @param navController 导航控制器
+ * @author Joker.X
  */
 fun NavGraphBuilder.orderGraph(navController: NavHostController) {
     // 订单列表页面

@@ -30,6 +30,7 @@ import com.joker.coolmall.core.util.log.LogUtils
  * @param onInputTextChange 输入文本改变回调
  * @param onSendMessage 发送消息回调
  * @param modifier 修饰符
+ * @author Joker.X
  */
 @Composable
 fun ChatInputArea(

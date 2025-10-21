@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- 底部导航 -->
     <string name="home">主页</string>
     <string name="category">分类</string>
     <string name="cart">购物车</string>
     <string name="me">我的</string>
+    
+    <!-- 购物车 -->
     <string name="edit">编辑</string>
     <string name="complete">完成</string>
     <string name="delete">删除</string>
@@ -13,4 +16,41 @@
     <string name="price">¥%.2f</string>
     <string name="settle_account">结算</string>
     <string name="settle_account_count">结算(%d)</string>
+    <string name="cart_empty">购物车空空如也~</string>
+    <string name="go_shopping">去逛逛</string>
+    
+    <!-- 首页 -->
+    <string name="search">搜索</string>
+    <string name="search_goods">搜索商品</string>
+    <string name="recommend_goods">推荐商品</string>
+    <string name="all_goods">全部商品</string>
+    <string name="flash_sale">限时精选</string>
+    <string name="view_all">查看全部</string>
+    <string name="receive">领取</string>
+    
+    <!-- 个人中心 -->
+    <string name="not_logged_in">未登录</string>
+    <string name="click_to_login">点击登录账号</string>
+    <string name="member">会员</string>
+    <string name="activate_now">立即开通</string>
+    <string name="my_orders">我的订单</string>
+    <string name="pending_payment">待付款</string>
+    <string name="pending_shipment">待发货</string>
+    <string name="pending_receipt">待收货</string>
+    <string name="pending_review">待评价</string>
+    <string name="my_footprint">我的足迹</string>
+    <string name="coupons">优惠券</string>
+    <string name="shipping_address">收货地址</string>
+    <string name="online_customer_service">在线客服</string>
+    <string name="feedback">意见反馈</string>
+    <string name="about_us">关于我们</string>
+    <string name="settings">设置</string>
+    
+    <!-- 分类页面 -->
+    <string name="category_all">全部分类</string>
+    <string name="category_empty">暂无分类</string>
+    
+    <!-- Toast提示 -->
+    <string name="please_select_settlement_goods">请选择要结算的商品</string>
+    <string name="get_selected_goods_failed">获取选中商品失败</string>
 </resources>

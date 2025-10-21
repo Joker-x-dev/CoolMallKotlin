@@ -27,6 +27,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -61,23 +62,36 @@ import com.joker.coolmall.core.ui.R as CoreUiR
  * 商品分类路由
  *
  * @param viewModel 商品分类 ViewModel
+ * @author Joker.X
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 internal fun GoodsCategoryRoute(
     viewModel: GoodsCategoryViewModel = hiltViewModel()
 ) {
+    // 网络请求UI状态
     val uiState by viewModel.uiState.collectAsState()
+    // 分类数据UI状态
     val categoryUiState by viewModel.categoryUiState.collectAsState()
+    // 商品列表数据
     val listData by viewModel.listData.collectAsState()
+    // 是否正在刷新
     val isRefreshing by viewModel.isRefreshing.collectAsState()
+    // 加载更多状态
     val loadMoreState by viewModel.loadMoreState.collectAsState()
+    // 筛选弹窗是否可见
     val filtersVisible by viewModel.filtersVisible.collectAsState()
+    // 选中的分类ID列表
     val selectedCategoryIds by viewModel.selectedCategoryIds.collectAsState()
+    // 最低价格
     val minPrice by viewModel.minPrice.collectAsState()
+    // 最高价格
     val maxPrice by viewModel.maxPrice.collectAsState()
+    // 当前排序类型
     val currentSortType by viewModel.currentSortType.collectAsState()
+    // 当前排序状态
     val currentSortState by viewModel.currentSortState.collectAsState()
+    // 是否为网格布局
     val isGridLayout by viewModel.isGridLayout.collectAsState()
 
     SharedTransitionLayout {
@@ -137,6 +151,7 @@ internal fun GoodsCategoryRoute(
  * @param onBackClick 返回按钮回调
  * @param onRetry 重试请求回调
  * @param onSearch 搜索回调
+ * @param initialSearchText 初始搜索文本
  * @param filtersVisible 筛选弹窗是否可见
  * @param onFiltersClick 筛选按钮点击回调
  * @param currentSortType 当前排序类型
@@ -146,6 +161,7 @@ internal fun GoodsCategoryRoute(
  * @param isGridLayout 是否为网格布局
  * @param onToggleLayout 切换布局模式回调
  * @param sharedTransitionScope 共享转场作用域
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
@@ -240,6 +256,7 @@ internal fun GoodsCategoryScreen(
  * @param shouldTriggerLoadMore 是否应该触发加载更多的判断函数
  * @param toGoodsDetail 跳转到商品详情回调
  * @param isGridLayout 是否为网格布局
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -278,6 +295,17 @@ private fun GoodsCategoryContentView(
 
 /**
  * 筛选栏
+ *
+ * @param filtersVisible 筛选弹窗是否可见
+ * @param onFiltersClick 筛选按钮点击回调
+ * @param currentSortType 当前排序类型
+ * @param currentSortState 当前排序状态
+ * @param onSortClick 排序按钮点击回调
+ * @param sharedTransitionScope 共享转场作用域
+ * @param scrollBehavior 滚动行为
+ * @param isGridLayout 是否为网格布局
+ * @param onToggleLayout 切换布局模式回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalSharedTransitionApi::class, ExperimentalMaterial3Api::class)
 @Composable
@@ -323,7 +351,7 @@ private fun FilterBar(
                             tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f)
                         )
                         AppText(
-                            "筛选",
+                            stringResource(R.string.filter),
                             size = TextSize.BODY_MEDIUM
                         )
                     }
@@ -336,7 +364,7 @@ private fun FilterBar(
             onClick = { onSortClick(SortType.COMPREHENSIVE) }
         ) {
             AppText(
-                text = "综合",
+                text = stringResource(R.string.comprehensive),
                 size = TextSize.BODY_MEDIUM,
                 color = if (currentSortType == SortType.COMPREHENSIVE)
                     MaterialTheme.colorScheme.primary
@@ -346,7 +374,7 @@ private fun FilterBar(
         }
 
         SortButtonWithArrows(
-            text = "销量",
+            text = stringResource(R.string.sales),
             sortType = SortType.SALES,
             currentSortType = currentSortType,
             currentSortState = currentSortState,
@@ -354,7 +382,7 @@ private fun FilterBar(
         )
 
         SortButtonWithArrows(
-            text = "价格",
+            text = stringResource(R.string.price),
             sortType = SortType.PRICE,
             currentSortType = currentSortType,
             currentSortState = currentSortState,
@@ -378,6 +406,11 @@ private fun FilterBar(
 
 /**
  * 通用筛选按钮组件
+ *
+ * @param isSelected 是否选中
+ * @param onClick 点击回调
+ * @param content 内容
+ * @author Joker.X
  */
 @Composable
 private fun FilterButton(
@@ -406,6 +439,13 @@ private fun FilterButton(
 
 /**
  * 带箭头的排序按钮组件
+ *
+ * @param text 按钮文本
+ * @param sortType 排序类型
+ * @param currentSortType 当前排序类型
+ * @param currentSortState 当前排序状态
+ * @param onSortClick 排序按钮点击回调
+ * @author Joker.X
  */
 @Composable
 private fun SortButtonWithArrows(
@@ -444,6 +484,11 @@ private fun SortButtonWithArrows(
 
 /**
  * 排序箭头组件
+ *
+ * @param sortType 排序类型
+ * @param currentSortType 当前排序类型
+ * @param currentSortState 当前排序状态
+ * @author Joker.X
  */
 @Composable
 private fun SortArrows(
@@ -479,6 +524,7 @@ private fun SortArrows(
  * @param isGridLayout 是否为网格布局
  * @param onToggleLayout 切换布局模式回调
  * @param modifier Modifier
+ * @author Joker.X
  */
 @Composable
 private fun LayoutToggleButton(
@@ -502,6 +548,8 @@ private fun LayoutToggleButton(
 
 /**
  * 商品分类界面浅色主题预览
+ *
+ * @author Joker.X
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Preview(showBackground = true)
@@ -519,6 +567,8 @@ internal fun GoodsCategoryScreenPreview() {
 
 /**
  * 商品分类界面深色主题预览
+ *
+ * @author Joker.X
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Preview(showBackground = true)

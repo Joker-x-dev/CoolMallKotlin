@@ -63,4 +63,10 @@
     <string name="invalid_verification_code">请输入4位验证码</string>
     <string name="invalid_password">请输入正确的密码</string>
     <string name="login_success">登录成功</string>
+    <string name="register_success">注册成功</string>
+    <string name="login_failed">登录失败: %s</string>
+    <string name="login_cancelled">登录取消</string>
+    <string name="start_qq_login_failed">启动QQ登录失败: %s</string>
+    <string name="third_party_login_only_qq">三方登录暂时仅支持QQ登录</string>
+    <string name="notification_permission_required">需要通知权限才能接收验证码</string>
 </resources>

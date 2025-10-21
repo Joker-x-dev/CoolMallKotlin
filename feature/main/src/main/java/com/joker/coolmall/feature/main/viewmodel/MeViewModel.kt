@@ -31,6 +31,12 @@ import javax.inject.Inject
 
 /**
  * 我的页面视图模型
+ *
+ * @param navigator 导航器
+ * @param appState 应用状态
+ * @param footprintRepository 足迹仓库
+ * @param orderRepository 订单仓库
+ * @author Joker.X
  */
 @HiltViewModel
 class MeViewModel @Inject constructor(
@@ -87,6 +93,8 @@ class MeViewModel @Inject constructor(
 
     /**
      * 用户订单统计
+     *
+     * @author Joker.X
      */
     fun getUserOrderStatistics() {
         // 只有已经登录了才去请求订单统计数据
@@ -100,6 +108,8 @@ class MeViewModel @Inject constructor(
 
     /**
      * 跳转到订单列表
+     *
+     * @author Joker.X
      */
     fun toOrderListPage() {
         super.toPage(OrderRoutes.LIST)
@@ -109,6 +119,7 @@ class MeViewModel @Inject constructor(
      * 跳转到指定状态的订单列表
      *
      * @param tabIndex 订单标签索引：0-全部，1-待付款，2-待发货，3-待收货，4-售后，5-待评价，6-已完成
+     * @author Joker.X
      */
     fun toOrderListPage(tabIndex: Int) {
         val route = "${OrderRoutes.LIST}?tab=$tabIndex"
@@ -117,6 +128,8 @@ class MeViewModel @Inject constructor(
 
     /**
      * 用户资料点击
+     *
+     * @author Joker.X
      */
     fun onHeadClick() {
         toProfilePage()
@@ -124,6 +137,9 @@ class MeViewModel @Inject constructor(
 
     /**
      * 跳转到商品详情
+     *
+     * @param goodsId 商品ID
+     * @author Joker.X
      */
     fun toGoodsDetailPage(goodsId: Long) {
         super.toPage(GoodsRoutes.DETAIL, goodsId)
@@ -131,6 +147,8 @@ class MeViewModel @Inject constructor(
 
     /**
      * 跳转到用户足迹
+     *
+     * @author Joker.X
      */
     fun toUserFootprintPage() {
         super.toPage(UserRoutes.FOOTPRINT)
@@ -138,6 +156,8 @@ class MeViewModel @Inject constructor(
 
     /**
      * 跳转到收货地址列表
+     *
+     * @author Joker.X
      */
     fun toAddressListPage() {
         super.toPage(UserRoutes.ADDRESS_LIST)
@@ -145,6 +165,8 @@ class MeViewModel @Inject constructor(
 
     /**
      * 跳转到我的优惠券
+     *
+     * @author Joker.X
      */
     fun toCouponPage() {
         super.toPage(MarketRoutes.COUPON)
@@ -152,6 +174,8 @@ class MeViewModel @Inject constructor(
 
     /**
      * 跳转到用户资料页面
+     *
+     * @author Joker.X
      */
     fun toProfilePage() {
         val avatarUrl = userInfo.value?.avatarUrl
@@ -165,6 +189,8 @@ class MeViewModel @Inject constructor(
 
     /**
      * 跳转到客服聊天页面
+     *
+     * @author Joker.X
      */
     fun toChatPage() {
         super.toPage(CsRoutes.CHAT)
@@ -172,6 +198,8 @@ class MeViewModel @Inject constructor(
 
     /**
      * 跳转到意见反馈页面
+     *
+     * @author Joker.X
      */
     fun toFeedbackPage() {
         super.toPage(FeedbackRoutes.LIST)
@@ -179,6 +207,8 @@ class MeViewModel @Inject constructor(
 
     /**
      * 跳转到关于我们页面
+     *
+     * @author Joker.X
      */
     fun toAboutPage() {
         super.toPage(CommonRoutes.ABOUT)
@@ -186,6 +216,8 @@ class MeViewModel @Inject constructor(
 
     /**
      * 跳转到设置页面
+     *
+     * @author Joker.X
      */
     fun toSettingsPage() {
         super.toPage(CommonRoutes.SETTINGS)

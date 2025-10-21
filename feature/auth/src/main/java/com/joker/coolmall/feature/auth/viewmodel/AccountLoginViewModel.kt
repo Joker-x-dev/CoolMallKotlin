@@ -22,6 +22,8 @@ import javax.inject.Inject
 
 /**
  * 账号密码登录ViewModel
+ * 
+ * @author Joker.X
  */
 @HiltViewModel
 class AccountLoginViewModel @Inject constructor(
@@ -64,6 +66,9 @@ class AccountLoginViewModel @Inject constructor(
 
     /**
      * 更新账号输入
+     * 
+     * @param value 账号值
+     * @author Joker.X
      */
     fun updateAccount(value: String) {
         _account.value = value
@@ -71,6 +76,9 @@ class AccountLoginViewModel @Inject constructor(
 
     /**
      * 更新密码输入
+     * 
+     * @param value 密码值
+     * @author Joker.X
      */
     fun updatePassword(value: String) {
         _password.value = value
@@ -78,6 +86,8 @@ class AccountLoginViewModel @Inject constructor(
 
     /**
      * 执行登录操作
+     * 
+     * @author Joker.X
      */
     fun login() {
         // 验证手机号
@@ -106,6 +116,9 @@ class AccountLoginViewModel @Inject constructor(
 
     /**
      * 登录成功
+     * 
+     * @param authData 认证数据
+     * @author Joker.X
      */
     private fun loginSuccess(authData: Auth) {
         viewModelScope.launch {
@@ -122,6 +135,8 @@ class AccountLoginViewModel @Inject constructor(
 
     /**
      * 加载已保存的凭据
+     * 
+     * @author Joker.X
      */
     private fun loadSavedCredentials() {
         val savedPhone = MMKVUtils.getString(KEY_SAVED_PHONE, "")
@@ -137,6 +152,10 @@ class AccountLoginViewModel @Inject constructor(
 
     /**
      * 保存凭据
+     * 
+     * @param phone 手机号
+     * @param password 密码
+     * @author Joker.X
      */
     private fun saveCredentials(phone: String, password: String) {
         MMKVUtils.putString(KEY_SAVED_PHONE, phone)
@@ -145,6 +164,8 @@ class AccountLoginViewModel @Inject constructor(
 
     /**
      * 导航到注册页面
+     * 
+     * @author Joker.X
      */
     fun toRegisterPage() {
         super.toPage(AuthRoutes.REGISTER)
@@ -152,6 +173,8 @@ class AccountLoginViewModel @Inject constructor(
 
     /**
      * 导航到重置密码页面
+     * 
+     * @author Joker.X
      */
     fun toResetPasswordPage() {
         super.toPage(AuthRoutes.RESET_PASSWORD)

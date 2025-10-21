@@ -9,6 +9,8 @@ import com.joker.coolmall.navigation.routes.MainRoutes
 
 /**
  * 购物车路由常量
+ *
+ * @author Joker.X
  */
 object CartRoutes {
     const val SHOW_BACK_ICON_ARG = "show_back_icon"
@@ -21,6 +23,8 @@ object CartRoutes {
 
 /**
  * 购物车页面导航
+ *
+ * @author Joker.X
  */
 fun NavGraphBuilder.cartScreen() {
     composable(

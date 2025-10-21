@@ -20,6 +20,12 @@ import javax.inject.Inject
 
 /**
  * 商品搜索 ViewModel
+ *
+ * @param navigator 导航器
+ * @param appState 应用状态
+ * @param goodsRepository 商品仓库
+ * @param searchHistoryRepository 搜索历史仓库
+ * @author Joker.X
  */
 @HiltViewModel
 class GoodsSearchViewModel @Inject constructor(
@@ -40,6 +46,9 @@ class GoodsSearchViewModel @Inject constructor(
 
     /**
      * 重写父类方法，返回商品搜索关键词列表的 Flow
+     *
+     * @return 商品搜索关键词列表的网络响应Flow
+     * @author Joker.X
      */
     override fun requestApiFlow(): Flow<NetworkResponse<List<GoodsSearchKeyword>>> {
         return goodsRepository.getSearchKeywordList()
@@ -47,6 +56,8 @@ class GoodsSearchViewModel @Inject constructor(
 
     /**
      * 加载搜索历史
+     *
+     * @author Joker.X
      */
     private fun loadSearchHistory() {
         viewModelScope.launch {
@@ -58,7 +69,9 @@ class GoodsSearchViewModel @Inject constructor(
 
     /**
      * 执行搜索
+     *
      * @param keyword 搜索关键词
+     * @author Joker.X
      */
     fun onSearch(keyword: String) {
         if (keyword.isNotBlank()) {
@@ -73,7 +86,9 @@ class GoodsSearchViewModel @Inject constructor(
 
     /**
      * 点击搜索关键词
+     *
      * @param keyword 搜索关键词
+     * @author Joker.X
      */
     fun onKeywordClick(keyword: String) {
         onSearch(keyword)
@@ -81,7 +96,9 @@ class GoodsSearchViewModel @Inject constructor(
 
     /**
      * 点击搜索历史
+     *
      * @param searchHistory 搜索历史
+     * @author Joker.X
      */
     fun onSearchHistoryClick(searchHistory: SearchHistory) {
         onSearch(searchHistory.keyword)
@@ -89,6 +106,8 @@ class GoodsSearchViewModel @Inject constructor(
 
     /**
      * 清空搜索历史
+     *
+     * @author Joker.X
      */
     fun clearSearchHistory() {
         viewModelScope.launch {

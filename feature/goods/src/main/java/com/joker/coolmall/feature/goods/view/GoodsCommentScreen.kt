@@ -27,9 +27,13 @@ import com.joker.coolmall.feature.goods.viewmodel.GoodsCommentViewModel
 internal fun GoodsCommentRoute(
     viewModel: GoodsCommentViewModel = hiltViewModel()
 ) {
+    // 商品评论列表UI状态
     val uiState by viewModel.uiState.collectAsState()
+    // 商品评论列表数据
     val listData by viewModel.listData.collectAsState()
+    // 是否正在刷新
     val isRefreshing by viewModel.isRefreshing.collectAsState()
+    // 加载更多状态
     val loadMoreState by viewModel.loadMoreState.collectAsState()
 
     GoodsCommentScreen(
@@ -131,6 +135,8 @@ private fun GoodsCommentContentView(
 
 /**
  * 商品评论界面浅色主题预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -144,6 +150,8 @@ internal fun GoodsCommentScreenPreview() {
 
 /**
  * 商品评论界面深色主题预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable

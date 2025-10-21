@@ -31,6 +31,11 @@ import kotlin.math.absoluteValue
 
 /**
  * 主界面路由入口
+ *
+ * @param sharedTransitionScope 共享转场作用域
+ * @param animatedContentScope 动画内容作用域
+ * @param viewModel 主界面ViewModel
+ * @author Joker.X
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -39,8 +44,9 @@ internal fun MainRoute(
     animatedContentScope: AnimatedContentScope,
     viewModel: MainViewModel = hiltViewModel()
 ) {
-    // 从ViewModel获取当前导航状态
+    // 当前导航目的地
     val currentDestination by viewModel.currentDestination.collectAsState()
+    // 当前页面索引
     val currentPageIndex by viewModel.currentPageIndex.collectAsState()
 
     MainScreen(
@@ -56,6 +62,14 @@ internal fun MainRoute(
 /**
  * 主界面
  * 包含底部导航栏和四个主要页面（首页、分类、购物车、我的）
+ *
+ * @param sharedTransitionScope 共享转场作用域
+ * @param animatedContentScope 动画内容作用域
+ * @param currentDestination 当前导航目的地
+ * @param currentPageIndex 当前页面索引
+ * @param onPageChanged 页面改变回调
+ * @param onNavigationItemSelected 导航项选中回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -111,6 +125,15 @@ internal fun MainScreen(
     }
 }
 
+/**
+ * 主界面内容视图
+ *
+ * @param pageState 分页器状态
+ * @param paddingValues 内边距
+ * @param sharedTransitionScope 共享转场作用域
+ * @param animatedContentScope 动画内容作用域
+ * @author Joker.X
+ */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun MainScreenContentView(
@@ -140,6 +163,11 @@ private fun MainScreenContentView(
     }
 }
 
+/**
+ * 主界面浅色主题预览
+ *
+ * @author Joker.X
+ */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Preview(showBackground = true)
 @Composable

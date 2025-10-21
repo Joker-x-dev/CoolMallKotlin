@@ -16,17 +16,20 @@ import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkView
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
+import com.joker.coolmall.feature.common.R
 import com.joker.coolmall.feature.common.viewmodel.UserAgreementViewModel
 
 /**
  * 用户协议路由
  *
  * @param viewModel 用户协议 ViewModel
+ * @author Joker.X
  */
 @Composable
 internal fun UserAgreementRoute(
     viewModel: UserAgreementViewModel = hiltViewModel()
 ) {
+    // 从ViewModel收集UI状态
     val uiState by viewModel.uiState.collectAsState()
 
     UserAgreementScreen(
@@ -42,6 +45,7 @@ internal fun UserAgreementRoute(
  * @param uiState UI状态
  * @param onBackClick 返回按钮回调
  * @param onRetry 重试请求回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,7 +55,7 @@ internal fun UserAgreementScreen(
     onRetry: () -> Unit = {}
 ) {
     AppScaffold(
-        titleText = "用户协议",
+        title = R.string.user_agreement_title,
         onBackClick = onBackClick,
         backgroundColor = MaterialTheme.colorScheme.surface,
     ) {
@@ -68,6 +72,7 @@ internal fun UserAgreementScreen(
  * 用户协议内容视图
  *
  * @param html HTML内容
+ * @author Joker.X
  */
 @Composable
 private fun UserAgreementContentView(html: String) {
@@ -110,6 +115,8 @@ private fun UserAgreementContentView(html: String) {
 
 /**
  * 用户协议界面浅色主题预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -125,6 +132,8 @@ internal fun UserAgreementScreenPreview() {
 
 /**
  * 用户协议界面深色主题预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable

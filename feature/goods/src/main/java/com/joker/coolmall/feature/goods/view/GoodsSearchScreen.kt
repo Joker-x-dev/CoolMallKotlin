@@ -16,6 +16,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -44,13 +45,15 @@ import com.joker.coolmall.feature.goods.viewmodel.GoodsSearchViewModel
  * 商品搜索路由
  *
  * @param viewModel 商品搜索 ViewModel
+ * @author Joker.X
  */
 @Composable
 internal fun GoodsSearchRoute(
     viewModel: GoodsSearchViewModel = hiltViewModel()
 ) {
-    // 从ViewModel收集UI状态
+    // UI状态
     val uiState by viewModel.uiState.collectAsState()
+    // 搜索历史列表
     val searchHistoryList by viewModel.searchHistoryList.collectAsState()
 
     GoodsSearchScreen(
@@ -76,6 +79,7 @@ internal fun GoodsSearchRoute(
  * @param onKeywordClick 关键词点击回调
  * @param onSearchHistoryClick 搜索历史点击回调
  * @param onClearSearchHistory 清空搜索历史回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -120,6 +124,7 @@ internal fun GoodsSearchScreen(
  * @param onKeywordClick 关键词点击回调
  * @param onSearchHistoryClick 搜索历史点击回调
  * @param onClearSearchHistory 清空搜索历史回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -156,6 +161,11 @@ private fun GoodsSearchContentView(
 
 /**
  * 搜索历史部分
+ *
+ * @param searchHistoryList 搜索历史列表
+ * @param onSearchHistoryClick 搜索历史点击回调
+ * @param onClearSearchHistory 清空搜索历史回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -168,7 +178,7 @@ private fun SearchHistorySection(
         AppListItem(
             "",
             leadingContent = {
-                AppText("搜索历史", size = TextSize.TITLE_LARGE)
+                AppText(stringResource(R.string.search_history), size = TextSize.TITLE_LARGE)
             },
             showArrow = false,
             showDivider = false,
@@ -203,6 +213,10 @@ private fun SearchHistorySection(
 
 /**
  * 推荐搜索部分
+ *
+ * @param keywordList 推荐关键词列表
+ * @param onKeywordClick 关键词点击回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -211,7 +225,7 @@ private fun RecommendSearchSection(
     onKeywordClick: (String) -> Unit
 ) {
     Column {
-        AppText("推荐搜索", size = TextSize.TITLE_LARGE)
+        AppText(stringResource(R.string.recommended_search), size = TextSize.TITLE_LARGE)
 
         SpaceVerticalSmall()
 
@@ -232,6 +246,10 @@ private fun RecommendSearchSection(
 
 /**
  * 搜索历史标签
+ *
+ * @param text 标签文本
+ * @param onClick 点击回调
+ * @author Joker.X
  */
 @Composable
 private fun SearchHistoryTag(
@@ -256,6 +274,8 @@ private fun SearchHistoryTag(
 
 /**
  * 商品搜索界面浅色主题预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -276,6 +296,8 @@ internal fun GoodsSearchScreenPreview() {
 
 /**
  * 商品搜索界面深色主题预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable

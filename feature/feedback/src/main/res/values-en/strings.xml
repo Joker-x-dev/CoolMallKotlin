@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Page titles -->
+    <string name="feedback_list">Feedback List</string>
+    <string name="feedback_submit">Submit Feedback</string>
+    
+    <!-- Button text -->
+    <string name="submit">Submit</string>
+    
+    <!-- Form fields -->
+    <string name="feedback_type">Feedback Type</string>
+    <string name="feedback_content">Feedback Content</string>
+    <string name="contact_info_optional">Contact (Optional)</string>
+    <string name="problem_screenshot_optional">Screenshots (Optional)</string>
+    
+    <!-- Hint text -->
+    <string name="feedback_content_hint">Please describe the problem in detail, including steps to reproduce and relevant screenshots to help us locate the issue</string>
+    <string name="contact_info_hint">QQ/WeChat ID, phone number, or email</string>
+    
+    <!-- Status text -->
+    <string name="status_processed">Processed</string>
+    <string name="status_unprocessed">Unprocessed</string>
+    <string name="customer_service_reply">Customer Service Reply</string>
+    <string name="unknown_type">Unknown Type</string>
+    
+    <!-- Toast messages -->
+    <string name="please_select_type_and_fill_content">Please select feedback type and fill in content</string>
+    <string name="submitting">Submitting...</string>
+    <string name="feedback_submit_success">Feedback submitted successfully, thank you for your feedback</string>
+</resources>
+

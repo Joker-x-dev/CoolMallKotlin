@@ -14,6 +14,11 @@ import javax.inject.Inject
 
 /**
  * 我的优惠券 ViewModel
+ *
+ * @param navigator 导航器
+ * @param appState 应用状态
+ * @param couponRepository 优惠券仓库
+ * @author Joker.X
  */
 @HiltViewModel
 class CouponViewModel @Inject constructor(
@@ -28,6 +33,9 @@ class CouponViewModel @Inject constructor(
 
     /**
      * 通过重写来给父类提供API请求的Flow
+     *
+     * @return 优惠券分页数据流
+     * @author Joker.X
      */
     override fun requestListData(): Flow<NetworkResponse<NetworkPageData<Coupon>>> {
         return couponRepository.getUserCouponPage(

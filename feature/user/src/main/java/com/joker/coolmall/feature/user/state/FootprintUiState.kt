@@ -2,6 +2,8 @@ package com.joker.coolmall.feature.user.state
 
 /**
  * 足迹 ui 状态
+ *
+ * @author Joker.X
  */
 sealed class FootprintUiState {
     /**

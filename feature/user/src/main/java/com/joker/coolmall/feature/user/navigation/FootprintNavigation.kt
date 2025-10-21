@@ -7,6 +7,8 @@ import com.joker.coolmall.navigation.routes.UserRoutes
 
 /**
  * 用户足迹页面导航
+ *
+ * @author Joker.X
  */
 fun NavGraphBuilder.footprintScreen() {
     composable(route = UserRoutes.FOOTPRINT) {

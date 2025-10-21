@@ -47,6 +47,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.layout.LastBaseline
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -88,17 +89,24 @@ import kotlinx.coroutines.launch
  * 客服聊天路由
  *
  * @param viewModel 客服聊天 ViewModel
+ * @author Joker.X
  */
 @Composable
 internal fun ChatRoute(
     viewModel: ChatViewModel = hiltViewModel()
 ) {
     // 从ViewModel收集UI状态
+    // 页面UI状态
     val uiState by viewModel.uiState.collectAsState()
+    // 消息列表
     val messages by viewModel.messages.collectAsState()
+    // 是否正在加载历史消息
     val isLoadingHistory by viewModel.isLoadingHistory.collectAsState()
+    // 加载更多状态
     val loadMoreState by viewModel.loadMoreState.collectAsState()
+    // 输入框文本
     val inputText by viewModel.inputText.collectAsState()
+    // 新消息ID集合
     val newMessageIds by viewModel.newMessageIds.collectAsState()
 
     ChatScreen(
@@ -127,6 +135,7 @@ internal fun ChatRoute(
  * @param isLoadingHistory 是否正在加载历史消息
  * @param loadMoreState 加载更多状态
  * @param inputText 输入框文本
+ * @param newMessageIds 新消息ID集合
  * @param onBackClick 返回按钮回调
  * @param onRefresh 刷新消息回调
  * @param onLoadMore 加载更多消息回调
@@ -134,6 +143,8 @@ internal fun ChatRoute(
  * @param onInputTextChange 输入框文本变化回调
  * @param onMarkAsRead 标记消息已读回调
  * @param newMessageEvent 新消息事件流
+ * @param onClearMessageAnimation 清除消息动画状态回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -196,6 +207,7 @@ internal fun ChatScreen(
 /**
  * 聊天主视图
  *
+ * @param modifier 修饰符
  * @param messages 消息列表
  * @param isLoadingHistory 是否正在加载历史消息
  * @param loadMoreState 加载更多状态
@@ -206,7 +218,7 @@ internal fun ChatScreen(
  * @param onInputTextChange 输入框文本变化回调
  * @param onClearMessageAnimation 清除消息动画状态回调
  * @param newMessageEvent 新消息事件流，用于触发自动滚动
- * @param modifier 修饰符
+ * @author Joker.X
  */
 @Composable
 private fun ChatContentView(
@@ -284,7 +296,10 @@ private fun ChatContentView(
  * @param isLoading 是否正在加载
  * @param loadMoreState 加载更多状态
  * @param scrollState 滚动状态
+ * @param newMessageIds 新消息ID集合
  * @param onLoadMore 加载更多回调
+ * @param onClearMessageAnimation 清除消息动画状态回调
+ * @author Joker.X
  */
 @Composable
 fun MessageList(
@@ -388,6 +403,7 @@ fun MessageList(
  * @param isLastMessageByAuthor 是否为该作者的最后一条消息
  * @param isNewMessage 是否为新消息，用于控制进入动画
  * @param onAnimationFinished 动画完成回调，用于清除新消息状态
+ * @author Joker.X
  */
 @Composable
 fun Message(
@@ -486,6 +502,7 @@ fun Message(
  * @param isFirstMessageByAuthor 是否为该作者的第一条消息
  * @param isLastMessageByAuthor 是否为该作者的最后一条消息
  * @param modifier 修饰符
+ * @author Joker.X
  */
 @Composable
 fun AuthorAndTextMessage(
@@ -520,6 +537,7 @@ fun AuthorAndTextMessage(
  *
  * @param msg 消息数据
  * @param isUserMe 是否为当前用户发送的消息
+ * @author Joker.X
  */
 @Composable
 private fun AuthorNameTimestamp(msg: CsMsg, isUserMe: Boolean) {
@@ -573,6 +591,7 @@ private val OtherChatBubbleShape = RoundedCornerShape(
  * 日期头部组件
  *
  * @param dayString 日期字符串
+ * @author Joker.X
  */
 @Composable
 fun DayHeader(dayString: String) {
@@ -605,6 +624,7 @@ fun DayHeader(dayString: String) {
  *
  * @param message 消息数据
  * @param isUserMe 是否为当前用户发送的消息
+ * @author Joker.X
  */
 @Composable
 fun ChatItemBubble(message: CsMsg, isUserMe: Boolean) {
@@ -659,6 +679,7 @@ fun ChatItemBubble(message: CsMsg, isUserMe: Boolean) {
  * @param enabled 是否启用按钮
  * @param onClicked 点击回调
  * @param modifier 修饰符
+ * @author Joker.X
  */
 @Composable
 fun JumpToBottom(
@@ -684,7 +705,7 @@ fun JumpToBottom(
         modifier = modifier
     ) {
         Tag(
-            "回到底部",
+            stringResource(R.string.back_to_bottom),
             shape = ShapeExtraLarge,
             type = TagType.PRIMARY,
             style = TagStyle.LIGHT,
@@ -698,6 +719,8 @@ fun JumpToBottom(
 
 /**
  * 客服聊天界面浅色主题预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -709,6 +732,8 @@ internal fun ChatScreenPreview() {
 
 /**
  * 客服聊天界面深色主题预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable

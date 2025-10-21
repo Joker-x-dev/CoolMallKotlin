@@ -16,9 +16,11 @@ import androidx.compose.material3.SheetState
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import com.joker.coolmall.feature.common.R
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingLarge
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
@@ -42,6 +44,7 @@ import com.joker.coolmall.feature.common.model.Dependency
  * @param onDismiss 关闭弹出层回调
  * @param onDependencyClick 点击依赖项回调，传入依赖对象
  * @param sheetState 底部弹出层状态
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,7 +57,7 @@ fun DependencyModal(
 ) {
     BottomModal(
         visible = visible,
-        title = "引用致谢",
+        title = stringResource(id = R.string.dependency_modal_title),
         onDismiss = onDismiss,
         sheetState = sheetState,
         showDragIndicator = true,
@@ -85,6 +88,7 @@ fun DependencyModal(
  *
  * @param dependency 依赖对象
  * @param onClick 点击回调
+ * @author Joker.X
  */
 @Composable
 private fun DependencyCard(

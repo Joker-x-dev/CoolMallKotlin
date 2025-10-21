@@ -3,6 +3,8 @@ package com.joker.coolmall.feature.common.model
 /**
  * 依赖库数据模型
  * 用于表示项目中使用的第三方依赖库信息
+ * 
+ * @author Joker.X
  */
 data class Dependency(
     /**

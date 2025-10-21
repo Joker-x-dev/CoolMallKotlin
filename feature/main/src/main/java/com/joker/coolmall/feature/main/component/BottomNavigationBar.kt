@@ -31,10 +31,12 @@ import com.joker.coolmall.feature.main.model.TopLevelDestination
 
 /**
  * 底部导航栏
+ *
  * @param destinations 底部导航栏目的地列表
  * @param onNavigateToDestination 点击导航项的回调
  * @param currentDestination 当前选中的导航项
  * @param modifier 修饰符
+ * @author Joker.X
  */
 @Composable
 fun BottomNavigationBar(
@@ -92,6 +94,10 @@ fun BottomNavigationBar(
 
 /**
  * 底部导航栏Lottie动画
+ *
+ * @param animRes 动画资源ID
+ * @param isSelected 是否选中
+ * @author Joker.X
  */
 @Composable
 private fun TabLottieAnimation(
@@ -115,6 +121,11 @@ private fun TabLottieAnimation(
     )
 }
 
+/**
+ * 底部导航栏预览
+ *
+ * @author Joker.X
+ */
 @Preview(showBackground = true)
 @Composable
 fun MyNavigationBarPreview() {

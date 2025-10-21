@@ -48,6 +48,7 @@ import com.joker.coolmall.core.ui.component.text.TextType
  * @param actionSlot 右上角操作区域插槽，可根据场景定制
  * @param showBottomBar 是否显示底部栏，包含联系人和标签
  * @param addressSelected 在订单确认页标记为已选中的地址
+ * @author Joker.X
  */
 @Composable
 fun AddressCard(

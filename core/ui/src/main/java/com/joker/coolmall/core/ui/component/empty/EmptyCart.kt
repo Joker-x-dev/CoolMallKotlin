@@ -8,6 +8,10 @@ import com.joker.coolmall.core.ui.R
 
 /**
  * 购物车为空状态视图
+ *
+ * @param modifier 修饰符
+ * @param onRetryClick 重试点击回调
+ * @author Joker.X
  */
 @Composable
 fun EmptyCart(
@@ -24,6 +28,11 @@ fun EmptyCart(
     )
 }
 
+/**
+ * 购物车为空状态预览
+ *
+ * @author Joker.X
+ */
 @Preview(showBackground = true)
 @Composable
 fun EmptyCartPreview() {

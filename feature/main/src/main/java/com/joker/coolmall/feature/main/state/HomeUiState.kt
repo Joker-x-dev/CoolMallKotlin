@@ -9,6 +9,8 @@ import com.joker.coolmall.core.model.entity.Home
  * - 加载中状态 [Loading]
  * - 加载成功状态 [Success]
  * - 加载失败状态 [Error]
+ *
+ * @author Joker.X
  */
 sealed interface HomeUiState {
     /**

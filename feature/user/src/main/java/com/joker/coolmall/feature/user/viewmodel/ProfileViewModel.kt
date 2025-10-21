@@ -16,6 +16,8 @@ import javax.inject.Inject
 
 /**
  * 个人中心ViewModel
+ *
+ * @author Joker.X
  */
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
@@ -59,6 +61,8 @@ class ProfileViewModel @Inject constructor(
 
     /**
      * 用户退出登录
+     *
+     * @author Joker.X
      */
     fun logout() {
         viewModelScope.launch {

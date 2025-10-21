@@ -1,8 +1,3 @@
-/**
- * 启动页导航
- *
- * @author Joker.X
- */
 package com.joker.coolmall.feature.launch.navigation
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -14,6 +9,9 @@ import com.joker.coolmall.navigation.routes.LaunchRoutes
 
 /**
  * 启动页面导航
+ *
+ * @param sharedTransitionScope 共享转换作用域
+ * @author Joker.X
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
 fun NavGraphBuilder.splashScreen(sharedTransitionScope: SharedTransitionScope) {

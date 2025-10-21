@@ -41,6 +41,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -63,7 +64,7 @@ import com.joker.coolmall.core.designsystem.theme.SpacePaddingXSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.model.entity.CategoryTree
 import com.joker.coolmall.core.model.preview.previewCategoryTreeList
-import com.joker.coolmall.core.ui.R
+import com.joker.coolmall.core.ui.R as CoreUiR
 import com.joker.coolmall.core.ui.component.button.AppButton
 import com.joker.coolmall.core.ui.component.button.AppButtonBordered
 import com.joker.coolmall.core.ui.component.button.ButtonSize
@@ -75,6 +76,7 @@ import com.joker.coolmall.core.ui.component.loading.PageLoading
 import com.joker.coolmall.core.ui.component.text.AppText
 import com.joker.coolmall.core.ui.component.text.TextSize
 import com.joker.coolmall.core.ui.component.text.TextType
+import com.joker.coolmall.feature.goods.R
 
 /**
  * 筛选对话框
@@ -88,6 +90,7 @@ import com.joker.coolmall.core.ui.component.text.TextType
  * @param maxPrice 最高价格
  * @param onApplyFilters 应用筛选条件回调
  * @param onResetFilters 重置筛选条件回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -170,6 +173,18 @@ fun FilterDialog(
     }
 }
 
+/**
+ * 筛选对话框内容视图
+ *
+ * @param data 分类树数据列表
+ * @param onDismiss 关闭对话框回调
+ * @param selectedCategoryIds 已选中的分类ID列表
+ * @param minPrice 最低价格
+ * @param maxPrice 最高价格
+ * @param onApplyFilters 应用筛选条件回调
+ * @param onResetFilters 重置筛选条件回调
+ * @author Joker.X
+ */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
 private fun FilterContentView(
@@ -197,7 +212,7 @@ private fun FilterContentView(
                 .zIndex(1f)
         ) {
             AppText(
-                text = "筛选",
+                text = stringResource(R.string.filter),
                 size = TextSize.TITLE_LARGE,
                 color = MaterialTheme.colorScheme.onSurface
             )
@@ -209,7 +224,7 @@ private fun FilterContentView(
                     .padding(SpacePaddingXSmall)
             ) {
                 CommonIcon(
-                    resId = R.drawable.ic_close,
+                    resId = CoreUiR.drawable.ic_close,
                     size = 24.dp,
                     tint = MaterialTheme.colorScheme.onSurface
                 )
@@ -227,7 +242,7 @@ private fun FilterContentView(
                     modifier = Modifier.padding(SpacePaddingMedium)
                 ) {
                     AppText(
-                        text = "价格区间",
+                        text = stringResource(R.string.price_range),
                         modifier = Modifier.padding(bottom = SpacePaddingMedium)
                     )
 
@@ -240,7 +255,7 @@ private fun FilterContentView(
                         PriceInputField(
                             value = currentMinPrice,
                             onValueChange = { currentMinPrice = it },
-                            placeholder = "最低价",
+                            placeholderResId = R.string.min_price,
                             modifier = Modifier.weight(1f)
                         )
 
@@ -256,7 +271,7 @@ private fun FilterContentView(
                         PriceInputField(
                             value = currentMaxPrice,
                             onValueChange = { currentMaxPrice = it },
-                            placeholder = "最高价",
+                            placeholderResId = R.string.max_price,
                             modifier = Modifier.weight(1f)
                         )
                     }
@@ -312,7 +327,7 @@ private fun FilterContentView(
                 modifier = Modifier.padding(SpacePaddingSmall)
             ) {
                 AppButtonBordered(
-                    text = "重置",
+                    text = stringResource(R.string.reset),
                     onClick = {
                         currentMinPrice = ""
                         currentMaxPrice = ""
@@ -327,7 +342,7 @@ private fun FilterContentView(
                 SpaceHorizontalMedium()
 
                 AppButton(
-                    text = "确定",
+                    text = stringResource(R.string.confirm),
                     onClick = {
                         onApplyFilters(
                             selectedCategories.toList(),
@@ -350,14 +365,15 @@ private fun FilterContentView(
  *
  * @param value 当前输入值
  * @param onValueChange 值改变回调
- * @param placeholder 占位文本
+ * @param placeholderResId 占位文本资源ID
  * @param modifier 额外的修饰符
+ * @author Joker.X
  */
 @Composable
 private fun PriceInputField(
     value: String,
     onValueChange: (String) -> Unit,
-    placeholder: String,
+    placeholderResId: Int,
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -385,7 +401,7 @@ private fun PriceInputField(
             decorationBox = { innerTextField ->
                 if (value.isEmpty()) {
                     AppText(
-                        text = placeholder,
+                        text = stringResource(placeholderResId),
                         size = TextSize.BODY_MEDIUM,
                         type = TextType.TERTIARY
                     )
@@ -402,6 +418,7 @@ private fun PriceInputField(
  * @param category 分类数据
  * @param isSelected 是否选中
  * @param onSelectionChanged 选中状态改变回调
+ * @author Joker.X
  */
 @Composable
 private fun CategoryChip(
@@ -458,6 +475,11 @@ private fun CategoryChip(
     }
 }
 
+/**
+ * 筛选对话框预览
+ *
+ * @author Joker.X
+ */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Preview(showBackground = true)
 @Composable
@@ -470,6 +492,11 @@ fun FilterDialogPreview() {
     }
 }
 
+/**
+ * 筛选对话框深色主题预览
+ *
+ * @author Joker.X
+ */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Preview(showBackground = true)
 @Composable

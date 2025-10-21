@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- 优惠券页面 -->
     <string name="coupon_title">我的优惠券</string>
 </resources>

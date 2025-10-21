@@ -1,0 +1,67 @@
+<resources>
+    <!-- Empty States -->
+    <string name="empty_cart">Cart is Empty</string>
+    <string name="empty_cart_subtitle">Add some products</string>
+    <string name="empty_cart_btn">Go Shopping</string>
+    <string name="empty_data">No Data</string>
+    <string name="empty_data_subtitle">No content available</string>
+    <string name="empty_error">Load Failed</string>
+    <string name="empty_error_subtitle">Something went wrong</string>
+    <string name="empty_network">Network Error</string>
+    <string name="empty_network_subtitle">Please check your connection</string>
+    <string name="click_retry">Retry</string>
+    
+    <!-- Loading States -->
+    <string name="loading">Loading...</string>
+    <string name="load_more_pull">Pull to Load More</string>
+    <string name="load_more_loading">Loading...</string>
+    <string name="load_more_success">Load Success</string>
+    <string name="load_more_error">Load Failed</string>
+    <string name="load_more_error_retry">Load Failed, Click to Retry</string>
+    <string name="load_more_no_more">No More Data</string>
+    
+    <!-- Common Actions -->
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete</string>
+    <string name="edit">Edit</string>
+    <string name="save">Save</string>
+    <string name="submit">Submit</string>
+    <string name="search">Search</string>
+    <string name="search_hint">Enter content to search</string>
+    <string name="retry">Retry</string>
+    
+    <!-- Coupon -->
+    <string name="coupon_expired">Expired</string>
+    <string name="coupon_used">Used</string>
+    <string name="coupon_available">Available</string>
+    <string name="coupon_conditions">Min %1$s</string>
+    <string name="coupon_no_conditions">No Conditions</string>
+    <string name="coupon_valid_date">Valid: %1$s - %2$s</string>
+    <string name="coupon_receive">Receive</string>
+    <string name="coupon_received">Received</string>
+    <string name="coupon_use">Use Now</string>
+    
+    <!-- Address -->
+    <string name="address_default">Default</string>
+    <string name="address_edit">Edit</string>
+    <string name="address_delete">Delete</string>
+    
+    <!-- Goods -->
+    <string name="goods_sold">%d Sold</string>
+    <string name="goods_select">Select</string>
+    <string name="goods_spec">Specs</string>
+    <string name="goods_quantity">Quantity</string>
+    
+    <!-- Modal -->
+    <string name="modal_close">Close</string>
+    <string name="modal_select_spec">Select Specification</string>
+    <string name="modal_add_to_cart">Add to Cart</string>
+    <string name="modal_buy_now">Buy Now</string>
+    
+    <!-- Other -->
+    <string name="total">Total</string>
+    <string name="price">Price</string>
+    <string name="quantity">Quantity</string>
+</resources>
+

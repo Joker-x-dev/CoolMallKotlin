@@ -19,6 +19,8 @@ import javax.inject.Inject
 
 /**
  * 收货地址详情ViewModel
+ *
+ * @author Joker.X
  */
 @HiltViewModel
 class AddressDetailViewModel @Inject constructor(
@@ -97,6 +99,9 @@ class AddressDetailViewModel @Inject constructor(
     /**
      * 通过重写来给父类提供API请求的Flow
      * 根据地址ID获取地址详情
+     *
+     * @return 网络响应的Flow
+     * @author Joker.X
      */
     override fun requestApiFlow(): Flow<NetworkResponse<Address>> {
         // 此处使用父类提供的 requiredId
@@ -105,6 +110,9 @@ class AddressDetailViewModel @Inject constructor(
 
     /**
      * 更新表单数据
+     *
+     * @param address 地址信息
+     * @author Joker.X
      */
     private fun updateFormData(address: Address) {
         _contactName.value = address.contact
@@ -118,6 +126,9 @@ class AddressDetailViewModel @Inject constructor(
 
     /**
      * 更新联系人
+     *
+     * @param value 联系人姓名
+     * @author Joker.X
      */
     fun updateContactName(value: String) {
         _contactName.value = value
@@ -125,6 +136,9 @@ class AddressDetailViewModel @Inject constructor(
 
     /**
      * 更新手机号
+     *
+     * @param value 手机号
+     * @author Joker.X
      */
     fun updatePhone(value: String) {
         _phone.value = value
@@ -132,6 +146,11 @@ class AddressDetailViewModel @Inject constructor(
 
     /**
      * 更新省市区
+     *
+     * @param province 省
+     * @param city 市
+     * @param district 区
+     * @author Joker.X
      */
     fun updateRegion(province: String, city: String, district: String) {
         _province.value = province
@@ -141,6 +160,9 @@ class AddressDetailViewModel @Inject constructor(
 
     /**
      * 更新详细地址
+     *
+     * @param value 详细地址
+     * @author Joker.X
      */
     fun updateDetailAddress(value: String) {
         _detailAddress.value = value
@@ -148,6 +170,9 @@ class AddressDetailViewModel @Inject constructor(
 
     /**
      * 更新是否默认地址
+     *
+     * @param value 是否默认地址
+     * @author Joker.X
      */
     fun updateIsDefaultAddress(value: Boolean) {
         _isDefaultAddress.value = value
@@ -156,6 +181,8 @@ class AddressDetailViewModel @Inject constructor(
     /**
      * 保存地址信息
      * 根据是否为编辑模式调用不同的保存逻辑
+     *
+     * @author Joker.X
      */
     fun saveAddress() {
         val address = Address(
@@ -178,6 +205,9 @@ class AddressDetailViewModel @Inject constructor(
 
     /**
      * 修改地址
+     *
+     * @param address 地址信息
+     * @author Joker.X
      */
     private fun updateAddress(address: Address) {
         ResultHandler.handleResultWithData(
@@ -191,6 +221,9 @@ class AddressDetailViewModel @Inject constructor(
 
     /**
      * 新增地址
+     *
+     * @param address 地址信息
+     * @author Joker.X
      */
     private fun addAddress(address: Address) {
         ResultHandler.handleResultWithData(
@@ -204,6 +237,9 @@ class AddressDetailViewModel @Inject constructor(
 
     /**
      * 重写请求成功处理方法，用于更新表单数据
+     *
+     * @param data 地址数据
+     * @author Joker.X
      */
     override fun onRequestSuccess(data: Address) {
         updateFormData(data)

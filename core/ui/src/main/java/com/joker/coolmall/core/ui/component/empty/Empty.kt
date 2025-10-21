@@ -27,6 +27,14 @@ import com.joker.coolmall.core.ui.R
 
 /**
  * 页面状态视图
+ *
+ * @param modifier 修饰符
+ * @param message 消息文本资源ID
+ * @param subtitle 副标题文本资源ID
+ * @param retryButtonText 重试按钮文本资源ID
+ * @param icon 图标资源ID
+ * @param onRetryClick 重试点击回调
+ * @author Joker.X
  */
 @Composable
 fun Empty(
@@ -84,6 +92,11 @@ fun Empty(
     }
 }
 
+/**
+ * 页面状态视图浅色主题预览
+ *
+ * @author Joker.X
+ */
 @Preview(showBackground = true)
 @Composable
 fun EmptyPreview() {
@@ -92,6 +105,11 @@ fun EmptyPreview() {
     }
 }
 
+/**
+ * 页面状态视图深色主题预览
+ *
+ * @author Joker.X
+ */
 @Preview(showBackground = true)
 @Composable
 fun EmptyPreviewDark() {

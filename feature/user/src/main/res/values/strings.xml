@@ -33,4 +33,26 @@
 
     <!-- 足迹 -->
     <string name="footprint_title">我的足迹</string>
+    <string name="footprint_empty">还没有浏览记录哦</string>
+    <string name="go_browse">去逛逛</string>
+    <string name="clear_with_count">清空 (%d)</string>
+    
+    <!-- 个人信息 -->
+    <string name="avatar">头像</string>
+    <string name="nickname">昵称</string>
+    <string name="not_set">未设置</string>
+    <string name="account_info">账号信息</string>
+    <string name="phone">手机号</string>
+    <string name="not_bound">未绑定</string>
+    <string name="account">账号</string>
+    <string name="social_account">社交账号</string>
+    <string name="wechat">微信</string>
+    <string name="qq">QQ</string>
+    <string name="go_bind">去绑定</string>
+    <string name="bound">已绑定</string>
+    <string name="security">安全</string>
+    <string name="change_password">修改密码</string>
+    <string name="delete_account">注销账户</string>
+    <string name="my_footprint">我的足迹</string>
+    <string name="logout">退出登录</string>
 </resources> 

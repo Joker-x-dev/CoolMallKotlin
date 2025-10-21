@@ -29,6 +29,7 @@ import com.joker.coolmall.core.ui.component.text.TextSize
  *
  * @param onEmojiSelected 表情选择回调
  * @param modifier 修饰符
+ * @author Joker.X
  */
 @Composable
 fun EmojiSelector(

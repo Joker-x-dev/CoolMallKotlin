@@ -1,8 +1,3 @@
-/**
- * 订单物流 ViewModel
- *
- * @author Joker.X
- */
 package com.joker.coolmall.feature.order.viewmodel
 
 import androidx.lifecycle.SavedStateHandle
@@ -25,6 +20,12 @@ import javax.inject.Inject
 
 /**
  * 订单物流 ViewModel
+ *
+ * @param navigator 导航器
+ * @param appState 应用状态
+ * @param savedStateHandle 保存状态句柄
+ * @param orderRepository 订单仓库
+ * @author Joker.X
  */
 @HiltViewModel
 class OrderLogisticsViewModel @Inject constructor(
@@ -52,6 +53,9 @@ class OrderLogisticsViewModel @Inject constructor(
 
     /**
      * 重写请求API的方法
+     *
+     * @return 订单网络响应流
+     * @author Joker.X
      */
     override fun requestApiFlow(): Flow<NetworkResponse<Order>> {
         return orderRepository.getOrderInfo(requiredId)
@@ -59,6 +63,8 @@ class OrderLogisticsViewModel @Inject constructor(
 
     /**
      * 获取订单物流信息
+     *
+     * @author Joker.X
      */
     fun getOrderLogistics() {
         ResultHandler.handleResultWithData(

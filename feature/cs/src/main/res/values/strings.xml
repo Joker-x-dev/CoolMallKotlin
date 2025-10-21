@@ -1,4 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- 页面标题 -->
     <string name="customer_service_chat">客服聊天</string>
+    
+    <!-- 聊天界面 -->
+    <string name="back_to_bottom">回到底部</string>
+    
+    <!-- 输入框 -->
+    <string name="input_message_hint">发送消息...</string>
+    <string name="send">发送</string>
+    <string name="emoji">表情</string>
+    <string name="more_functions">更多功能</string>
+    
+    <!-- 加载更多 -->
+    <string name="load_more_history">加载更多历史消息</string>
+    <string name="loading_history">正在加载历史消息...</string>
+    <string name="load_success">加载成功</string>
+    <string name="load_failed_retry">加载失败，点击重试</string>
+    <string name="load_failed">加载失败</string>
+    <string name="no_more_messages">没有更多消息了</string>
+    
+    <!-- 功能选择器 -->
+    <string name="gallery">相册</string>
+    <string name="camera">拍摄</string>
+    
+    <!-- WebSocket连接相关 -->
+    <string name="connection_error">连接错误</string>
+    <string name="create_session_failed">创建会话失败</string>
+    <string name="send_message_failed">消息发送失败</string>
+    <string name="normal_close">正常关闭</string>
 </resources> 

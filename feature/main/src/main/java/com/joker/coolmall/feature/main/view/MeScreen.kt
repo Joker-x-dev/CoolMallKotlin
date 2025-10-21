@@ -31,6 +31,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -67,6 +68,14 @@ import com.joker.coolmall.feature.main.component.CommonScaffold
 import com.joker.coolmall.feature.main.viewmodel.MeViewModel
 import com.joker.coolmall.core.ui.R as CoreUiR
 
+/**
+ * 个人中心路由
+ *
+ * @param sharedTransitionScope 共享转换作用域
+ * @param animatedContentScope 动画内容作用域
+ * @param viewModel 个人中心 ViewModel
+ * @author Joker.X
+ */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 internal fun MeRoute(
@@ -115,6 +124,28 @@ internal fun MeRoute(
     )
 }
 
+/**
+ * 个人中心界面
+ *
+ * @param sharedTransitionScope 共享转换作用域
+ * @param animatedContentScope 动画内容作用域
+ * @param isLoggedIn 是否已登录
+ * @param userInfo 用户信息
+ * @param orderCount 订单统计数据
+ * @param recentFootprints 最近足迹列表
+ * @param onHeadClick 头像点击回调
+ * @param toAddressList 跳转到地址列表
+ * @param toOrderList 跳转到订单列表
+ * @param toOrderListByTab 跳转到订单列表指定标签
+ * @param toUserFootprint 跳转到用户足迹
+ * @param toGoodsDetail 跳转到商品详情
+ * @param toChat 跳转到在线客服
+ * @param toCoupon 跳转到优惠券
+ * @param toFeedback 跳转到意见反馈
+ * @param toAbout 跳转到关于我们
+ * @param toSettings 跳转到设置
+ * @author Joker.X
+ */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
 internal fun MeScreen(
@@ -136,58 +167,132 @@ internal fun MeScreen(
     toAbout: () -> Unit = {},
     toSettings: () -> Unit = {},
 ) {
-    CommonScaffold(topBar = { }) {
-        VerticalList(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(it)
-                .verticalScroll(rememberScrollState())
-        ) {
+    CommonScaffold(topBar = { }) { paddingValues ->
+        MeContentView(
+            isLoggedIn = isLoggedIn,
+            userInfo = userInfo ?: User(),
+            orderCount = orderCount ?: OrderCount(),
+            recentFootprints = recentFootprints,
+            onHeadClick = onHeadClick,
+            toAddressList = toAddressList,
+            toOrderList = toOrderList,
+            toOrderListByTab = toOrderListByTab,
+            toUserFootprint = toUserFootprint,
+            toGoodsDetail = toGoodsDetail,
+            toChat = toChat,
+            toCoupon = toCoupon,
+            toFeedback = toFeedback,
+            toAbout = toAbout,
+            toSettings = toSettings,
+            sharedTransitionScope = sharedTransitionScope,
+            animatedContentScope = animatedContentScope,
+            modifier = Modifier.padding(paddingValues)
+        )
+    }
+}
 
-            SpaceVerticalMedium()
+/**
+ * 个人中心内容视图
+ *
+ * @param sharedTransitionScope 共享转换作用域
+ * @param animatedContentScope 动画内容作用域
+ * @param isLoggedIn 是否已登录
+ * @param userInfo 用户信息
+ * @param orderCount 订单统计数据
+ * @param recentFootprints 最近足迹列表
+ * @param onHeadClick 头像点击回调
+ * @param toAddressList 跳转到地址列表
+ * @param toOrderList 跳转到订单列表
+ * @param toOrderListByTab 跳转到订单列表指定标签
+ * @param toUserFootprint 跳转到用户足迹
+ * @param toGoodsDetail 跳转到商品详情
+ * @param toChat 跳转到在线客服
+ * @param toCoupon 跳转到优惠券
+ * @param toFeedback 跳转到意见反馈
+ * @param toAbout 跳转到关于我们
+ * @param toSettings 跳转到设置
+ * @param modifier 修饰符
+ * @author Joker.X
+ */
+@OptIn(ExperimentalSharedTransitionApi::class)
+@Composable
+private fun MeContentView(
+    isLoggedIn: Boolean,
+    userInfo: User,
+    orderCount: OrderCount,
+    recentFootprints: List<Footprint>,
+    onHeadClick: () -> Unit,
+    toAddressList: () -> Unit,
+    toOrderList: () -> Unit,
+    toOrderListByTab: (Int) -> Unit,
+    toUserFootprint: () -> Unit,
+    toGoodsDetail: (Long) -> Unit,
+    toChat: () -> Unit,
+    toCoupon: () -> Unit,
+    toFeedback: () -> Unit,
+    toAbout: () -> Unit,
+    toSettings: () -> Unit,
+    sharedTransitionScope: SharedTransitionScope? = null,
+    animatedContentScope: AnimatedContentScope? = null,
+    modifier: Modifier = Modifier
+) {
+    VerticalList(
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+    ) {
 
-            // 用户信息区域
-            UserInfoSection(
-                sharedTransitionScope = sharedTransitionScope,
-                animatedContentScope = animatedContentScope,
-                isLoggedIn = isLoggedIn, userInfo = userInfo, onHeadClick = onHeadClick
+        SpaceVerticalMedium()
+
+        // 用户信息区域
+        UserInfoSection(
+            sharedTransitionScope = sharedTransitionScope,
+            animatedContentScope = animatedContentScope,
+            isLoggedIn = isLoggedIn,
+            userInfo = userInfo,
+            onHeadClick = onHeadClick
+        )
+
+        // 会员权益卡片
+        MembershipCard()
+
+        // 订单区域
+        OrderSection(
+            orderCount = orderCount,
+            toOrderList = toOrderList,
+            toOrderListByTab = toOrderListByTab
+        )
+
+        // 我的足迹
+        if (recentFootprints.isNotEmpty()) {
+            MyFootprintSection(
+                footprints = recentFootprints,
+                toUserFootprint = toUserFootprint,
+                toGoodsDetail = toGoodsDetail
             )
-
-            // 会员权益卡片
-            MembershipCard()
-
-            // 订单区域
-            OrderSection(
-                orderCount = orderCount,
-                toOrderList = toOrderList,
-                toOrderListByTab = toOrderListByTab
-            )
-
-            // 我的足迹
-            if (recentFootprints.isNotEmpty()) {
-                MyFootprintSection(
-                    footprints = recentFootprints,
-                    toUserFootprint = toUserFootprint,
-                    toGoodsDetail = toGoodsDetail
-                )
-            }
-
-            // 功能菜单区域
-            FunctionMenuSection(
-                toAddressList = toAddressList,
-                toChat = toChat,
-                toCoupon = toCoupon,
-                toFeedback = toFeedback,
-                toAbout = toAbout,
-                toSettings = toSettings,
-            )
-
         }
+
+        // 功能菜单区域
+        FunctionMenuSection(
+            toAddressList = toAddressList,
+            toChat = toChat,
+            toCoupon = toCoupon,
+            toFeedback = toFeedback,
+            toAbout = toAbout,
+            toSettings = toSettings,
+        )
     }
 }
 
 /**
  * 用户信息区域
+ *
+ * @param sharedTransitionScope 共享转换作用域
+ * @param animatedContentScope 动画内容作用域
+ * @param isLoggedIn 是否已登录
+ * @param userInfo 用户信息
+ * @param onHeadClick 头像点击回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -229,7 +334,7 @@ private fun UserInfoSection(
         ) {
             // 用户名 - 根据登录状态显示
             AppText(
-                text = (if (isLoggedIn && userInfo != null) userInfo.nickName else "未登录").toString(),
+                text = (if (isLoggedIn && userInfo != null) userInfo.nickName else stringResource(R.string.not_logged_in)).toString(),
                 size = TextSize.DISPLAY_MEDIUM
             )
 
@@ -238,7 +343,7 @@ private fun UserInfoSection(
             // 手机号 - 根据登录状态显示
             AppText(
                 text = if (isLoggedIn && userInfo != null && !userInfo.phone.isNullOrEmpty()) "手机号: ${userInfo.phone}"
-                else "点击登录账号",
+                else stringResource(R.string.click_to_login),
                 size = TextSize.BODY_MEDIUM,
                 type = TextType.TERTIARY
             )
@@ -252,6 +357,8 @@ private fun UserInfoSection(
 
 /**
  * 会员权益卡片
+ *
+ * @author Joker.X
  */
 @Composable
 private fun MembershipCard() {
@@ -270,7 +377,7 @@ private fun MembershipCard() {
             Row {
                 Icon(
                     painter = painterResource(id = R.drawable.ic_vip_fill),
-                    contentDescription = "会员",
+                    contentDescription = stringResource(R.string.member),
                     tint = Color(0xFFE0A472),
                     modifier = Modifier.size(20.dp)
                 )
@@ -282,7 +389,7 @@ private fun MembershipCard() {
                 )
             }
             AppText(
-                text = "立即开通",
+                text = stringResource(R.string.activate_now),
                 size = TextSize.BODY_MEDIUM,
                 color = Color(0xFFE0A472),
                 modifier = Modifier
@@ -295,6 +402,11 @@ private fun MembershipCard() {
 
 /**
  * 订单区域
+ *
+ * @param orderCount 订单统计数据
+ * @param toOrderList 跳转到订单列表
+ * @param toOrderListByTab 跳转到订单列表指定标签
+ * @author Joker.X
  */
 @Composable
 private fun OrderSection(
@@ -305,8 +417,8 @@ private fun OrderSection(
     Card {
         // 标题行
         AppListItem(
-            title = "我的订单",
-            trailingText = "查看全部",
+            title = stringResource(R.string.my_orders),
+            trailingText = stringResource(R.string.view_all),
             leadingIcon = R.drawable.ic_order_fill,
             leadingIconTint = Primary,
             onClick = toOrderList
@@ -315,7 +427,7 @@ private fun OrderSection(
         SpaceEvenlyRow {
             OrderStatusItem(
                 icon = R.drawable.ic_pay,
-                label = "待付款",
+                label = stringResource(R.string.pending_payment),
                 badgeCount = orderCount?.pendingPayment ?: 0,
                 modifier = Modifier.weight(1f),
                 onClick = { toOrderListByTab(1) } // 待付款对应的标签索引为1
@@ -323,7 +435,7 @@ private fun OrderSection(
 
             OrderStatusItem(
                 icon = R.drawable.ic_receipt,
-                label = "待发货",
+                label = stringResource(R.string.pending_shipment),
                 badgeCount = orderCount?.pendingShipment ?: 0,
                 modifier = Modifier.weight(1f),
                 onClick = { toOrderListByTab(2) } // 待发货对应的标签索引为2
@@ -331,7 +443,7 @@ private fun OrderSection(
 
             OrderStatusItem(
                 icon = R.drawable.ic_logistics,
-                label = "待收货",
+                label = stringResource(R.string.pending_receipt),
                 badgeCount = orderCount?.pendingReceive ?: 0,
                 modifier = Modifier.weight(1f),
                 onClick = { toOrderListByTab(3) } // 待收货对应的标签索引为3
@@ -339,7 +451,7 @@ private fun OrderSection(
 
             OrderStatusItem(
                 icon = R.drawable.ic_message,
-                label = "待评价",
+                label = stringResource(R.string.pending_review),
                 badgeCount = orderCount?.pendingReview ?: 0,
                 modifier = Modifier.weight(1f),
                 onClick = { toOrderListByTab(5) } // 待评价对应的标签索引为5
@@ -358,6 +470,11 @@ private fun OrderSection(
 
 /**
  * 我的足迹区域
+ *
+ * @param footprints 足迹列表
+ * @param toUserFootprint 跳转到足迹页面
+ * @param toGoodsDetail 跳转到商品详情
+ * @author Joker.X
  */
 @Composable
 private fun MyFootprintSection(
@@ -367,8 +484,8 @@ private fun MyFootprintSection(
 ) {
     Card {
         AppListItem(
-            title = "我的足迹",
-            trailingText = "查看全部",
+            title = stringResource(R.string.my_footprint),
+            trailingText = stringResource(R.string.view_all),
             leadingIcon = R.drawable.ic_footprint_fill,
             leadingIconTint = Color(0xFFFF9800),
             onClick = toUserFootprint
@@ -390,6 +507,10 @@ private fun MyFootprintSection(
 
 /**
  * 足迹项
+ *
+ * @param footprint 足迹数据
+ * @param onClick 点击回调
+ * @author Joker.X
  */
 @Composable
 private fun FootprintItem(
@@ -419,6 +540,13 @@ private fun FootprintItem(
 
 /**
  * 订单状态项
+ *
+ * @param modifier 修饰符
+ * @param icon 图标资源
+ * @param label 标签文字
+ * @param badgeCount 徽章数量
+ * @param onClick 点击回调
+ * @author Joker.X
  */
 @Composable
 private fun OrderStatusItem(
@@ -469,6 +597,14 @@ private fun OrderStatusItem(
 
 /**
  * 功能菜单区域
+ *
+ * @param toAddressList 跳转到地址列表
+ * @param toChat 跳转到在线客服
+ * @param toCoupon 跳转到优惠券
+ * @param toFeedback 跳转到意见反馈
+ * @param toAbout 跳转到关于我们
+ * @param toSettings 跳转到设置
+ * @author Joker.X
  */
 @Composable
 private fun FunctionMenuSection(
@@ -481,7 +617,7 @@ private fun FunctionMenuSection(
 ) {
     Card {
         AppListItem(
-            title = "优惠券",
+            title = stringResource(R.string.coupons),
             leadingIcon = R.drawable.ic_coupon_fill,
             leadingIconTint = Color(0xFF6A9BE6),
             verticalPadding = SpaceVerticalLarge,
@@ -489,7 +625,7 @@ private fun FunctionMenuSection(
         )
 
         AppListItem(
-            title = "收货地址",
+            title = stringResource(R.string.shipping_address),
             leadingIcon = R.drawable.ic_location_fill,
             leadingIconTint = Color(0xFF66BB6A),
             verticalPadding = SpaceVerticalLarge,
@@ -497,7 +633,7 @@ private fun FunctionMenuSection(
         )
 
         AppListItem(
-            title = "在线客服",
+            title = stringResource(R.string.online_customer_service),
             leadingIcon = R.drawable.ic_service_fill,
             leadingIconTint = Color(0xFFF87C7B),
             verticalPadding = SpaceVerticalLarge,
@@ -505,7 +641,7 @@ private fun FunctionMenuSection(
         )
 
         AppListItem(
-            title = "意见反馈",
+            title = stringResource(R.string.feedback),
             leadingIcon = R.drawable.ic_creative_fill,
             leadingIconTint = Color(0xFFF3AF76),
             verticalPadding = SpaceVerticalLarge,
@@ -513,7 +649,7 @@ private fun FunctionMenuSection(
         )
 
         AppListItem(
-            title = "关于我们",
+            title = stringResource(R.string.about_us),
             leadingIcon = R.drawable.ic_tip_fill,
             leadingIconTint = Color(0xFF9179F1),
             verticalPadding = SpaceVerticalLarge,
@@ -525,7 +661,7 @@ private fun FunctionMenuSection(
     // 设置选项单独放在一个卡片中
     Card {
         AppListItem(
-            title = "设置",
+            title = stringResource(R.string.settings),
             leadingIcon = R.drawable.ic_set_fill,
             leadingIconTint = Color(0xFF26A69A),
             verticalPadding = SpaceVerticalLarge,
@@ -535,6 +671,11 @@ private fun FunctionMenuSection(
     }
 }
 
+/**
+ * 个人中心界面浅色主题预览
+ *
+ * @author Joker.X
+ */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Preview(showBackground = true)
 @Composable
@@ -544,6 +685,11 @@ fun MeScreenPreview() {
     }
 }
 
+/**
+ * 个人中心界面深色主题预览
+ *
+ * @author Joker.X
+ */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Preview(showBackground = true)
 @Composable

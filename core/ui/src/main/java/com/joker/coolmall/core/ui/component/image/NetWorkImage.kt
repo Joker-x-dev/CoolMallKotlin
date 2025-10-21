@@ -45,6 +45,7 @@ import com.joker.coolmall.core.ui.component.loading.WeLoading
  * @param showBackground 是否显示背景颜色，默认为false（背景透明）
  * @param backgroundColor 背景颜色，默认为MaterialTheme.colorScheme.surfaceVariant
  * @param cornerShape 圆角形状，默认为null（无圆角）
+ * @author Joker.X
  */
 @Composable
 fun NetWorkImage(

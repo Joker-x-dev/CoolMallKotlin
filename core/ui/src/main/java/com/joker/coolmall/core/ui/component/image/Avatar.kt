@@ -35,6 +35,7 @@ import com.joker.coolmall.core.ui.R
  * @param contentScale 图片内容缩放模式，默认为Crop
  * @param onClick 点击头像的回调
  * @param modifier 修饰符
+ * @author Joker.X
  */
 @Composable
 fun Avatar(
@@ -85,6 +86,7 @@ fun Avatar(
  *
  * @param size 头像大小
  * @param modifier 修饰符
+ * @author Joker.X
  */
 @Composable
 private fun DefaultAvatar(
@@ -114,6 +116,7 @@ private fun DefaultAvatar(
  * @param size 头像大小，默认为36dp
  * @param onClick 点击头像的回调
  * @param modifier 修饰符
+ * @author Joker.X
  */
 @Composable
 fun SmallAvatar(
@@ -139,6 +142,7 @@ fun SmallAvatar(
  * @param size 头像大小，默认为48dp
  * @param onClick 点击头像的回调
  * @param modifier 修饰符
+ * @author Joker.X
  */
 @Composable
 fun MediumAvatar(

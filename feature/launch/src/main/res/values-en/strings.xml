@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Guide Page -->
+    <string name="guide_skip">Skip</string>
+    <string name="guide_start_experience">Get Started</string>
+    <string name="guide_continue">Continue</string>
+    
+    <!-- Guide Page Content -->
+    <string name="guide_page_1_title">CoolMall - Open Source E-Commerce Learning Project</string>
+    <string name="guide_page_1_desc">Modern e-commerce app developed in 100% Kotlin\nCompletely open source and free, helping developers grow fast\nProviding complete code references and learning resources</string>
+    
+    <string name="guide_page_2_title">Declarative UI Experience</string>
+    <string name="guide_page_2_desc">Build smooth interfaces with Jetpack Compose\nMVVM + Clean Architecture\nFull integration of Hilt, Coroutines, Flow and more</string>
+    
+    <string name="guide_page_3_title">Complete E-Commerce Process</string>
+    <string name="guide_page_3_desc">User authentication, product display, search &amp; categories\nShopping cart management, full order &amp; payment flow\nLearning cases close to real business scenarios</string>
+    
+    <string name="guide_page_4_title">Modular Architecture Design</string>
+    <string name="guide_page_4_desc">Reference to Google Now in Android best practices\nHigh cohesion, low coupling, easy to maintain and extend\nQuality project for learning and secondary development</string>
+    
+    <!-- Splash Page -->
+    <string name="app_name_splash">CoolMall</string>
+    <string name="app_copyright">© 2025 Joker.X &amp; CoolMallKotlin Contributors</string>
+</resources>
+

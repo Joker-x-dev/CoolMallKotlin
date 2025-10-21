@@ -7,6 +7,8 @@ import com.joker.coolmall.navigation.routes.CommonRoutes
 
 /**
  * 用户协议页面导航
+ * 
+ * @author Joker.X
  */
 fun NavGraphBuilder.userAgreementScreen() {
     composable(route = CommonRoutes.USER_AGREEMENT) {

@@ -14,6 +14,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -51,19 +52,29 @@ import com.joker.coolmall.core.ui.R as CoreUiR
  * 订单详情路由
  *
  * @param viewModel 订单详情ViewModel
+ * @param navController 导航控制器
+ * @author Joker.X
  */
 @Composable
 internal fun OrderDetailRoute(
     viewModel: OrderDetailViewModel = hiltViewModel(),
     navController: NavController
 ) {
+    // UI状态
     val uiState by viewModel.uiState.collectAsState()
+    // 转换后的购物车列表
     val cartList by viewModel.cartList.collectAsState()
+    // 取消订单弹窗显示状态
     val cancelModalVisible by viewModel.cancelModalVisible.collectAsState()
+    // 取消原因弹出层UI状态
     val cancelReasonsModalUiState by viewModel.cancelReasonsModalUiState.collectAsState()
+    // 选中的取消原因
     val selectedCancelReason by viewModel.selectedCancelReason.collectAsState()
+    // 确认收货弹窗显示状态
     val showConfirmDialog by viewModel.showConfirmDialog.collectAsState()
+    // 再次购买弹窗显示状态
     val rebuyModalVisible by viewModel.rebuyModalVisible.collectAsState()
+    // 商品评论弹窗显示状态
     val commentModalVisible by viewModel.commentModalVisible.collectAsState()
     // 注册页面刷新监听
     val backStackEntry = navController.currentBackStackEntry
@@ -114,8 +125,32 @@ internal fun OrderDetailRoute(
  *
  * @param uiState UI状态
  * @param cartList 转换后的购物车列表
+ * @param cancelModalVisible 取消订单弹窗显示状态
+ * @param cancelReasonsModalUiState 取消原因弹出层UI状态
+ * @param selectedCancelReason 选中的取消原因
+ * @param showConfirmDialog 确认收货弹窗显示状态
+ * @param rebuyModalVisible 再次购买弹窗显示状态
+ * @param commentModalVisible 商品评论弹窗显示状态
  * @param onBackClick 返回回调
  * @param onRetry 重试请求回调
+ * @param onCancelClick 取消订单回调
+ * @param onPayClick 支付回调
+ * @param onRefundClick 退款回调
+ * @param onConfirmClick 确认收货回调
+ * @param onLogisticsClick 查看物流回调
+ * @param onCommentClick 评价回调
+ * @param onRebuyClick 再次购买回调
+ * @param onRebuyModalDismiss 再次购买弹窗关闭回调
+ * @param onRebuyGoodsClick 再次购买商品点击回调
+ * @param onCommentModalDismiss 商品评论弹窗关闭回调
+ * @param onCommentGoodsClick 商品评论商品点击回调
+ * @param onCancelModalDismiss 取消订单弹窗关闭回调
+ * @param onCancelReasonSelected 取消原因选中回调
+ * @param onCancelConfirm 确认取消订单回调
+ * @param onCancelRetry 取消原因重试回调
+ * @param onConfirmDialogDismiss 确认收货弹窗关闭回调
+ * @param onConfirmReceive 确认收货确认回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -215,7 +250,7 @@ internal fun OrderDetailScreen(
     DictSelectModal(
         visible = cancelModalVisible,
         onDismiss = onCancelModalDismiss,
-        title = "请选择取消订单原因（必选）",
+        title = stringResource(R.string.select_cancel_reason),
         uiState = cancelReasonsModalUiState,
         selectedItem = selectedCancelReason,
         onItemSelected = onCancelReasonSelected,
@@ -226,10 +261,10 @@ internal fun OrderDetailScreen(
     // 确认收货弹窗
     if (showConfirmDialog) {
         WeDialog(
-            title = "确认收货",
-            content = "确认收货后无法发起退款等售后申请，请谨慎操作",
-            okText = "确认",
-            cancelText = "取消",
+            title = stringResource(R.string.confirm_receipt),
+            content = stringResource(R.string.confirm_receipt_message),
+            okText = stringResource(R.string.confirm),
+            cancelText = stringResource(R.string.cancel),
             onOk = onConfirmReceive,
             onCancel = onConfirmDialogDismiss,
             onDismiss = onConfirmDialogDismiss
@@ -239,8 +274,8 @@ internal fun OrderDetailScreen(
     // 再次购买弹窗
     OrderGoodsModal(
         visible = rebuyModalVisible,
-        title = "选择要购买的商品",
-        buttonText = "再次购买",
+        title = stringResource(R.string.select_goods_to_buy),
+        buttonText = stringResource(R.string.rebuy),
         cartList = cartList,
         onDismiss = onRebuyModalDismiss,
         onItemButtonClick = onRebuyGoodsClick
@@ -249,8 +284,8 @@ internal fun OrderDetailScreen(
     // 商品评论弹窗
     OrderGoodsModal(
         visible = commentModalVisible,
-        title = "选择要评价的商品",
-        buttonText = "去评价",
+        title = stringResource(R.string.select_goods_to_comment),
+        buttonText = stringResource(R.string.go_to_comment),
         cartList = cartList,
         onDismiss = onCommentModalDismiss,
         onItemButtonClick = onCommentGoodsClick
@@ -259,6 +294,10 @@ internal fun OrderDetailScreen(
 
 /**
  * 订单详情内容视图
+ *
+ * @param data 订单数据
+ * @param cartList 购物车列表
+ * @author Joker.X
  */
 @Composable
 private fun OrderDetailContentView(
@@ -289,12 +328,12 @@ private fun OrderDetailContentView(
                 title = "",
                 showArrow = false,
                 leadingContent = {
-                    TitleWithLine(text = "价格明细")
+                    TitleWithLine(text = stringResource(R.string.price_detail))
                 }
             )
 
             AppListItem(
-                title = "商品总价",
+                title = stringResource(R.string.goods_total_price),
                 leadingIcon = R.drawable.ic_shop,
                 trailingContent = {
                     PriceText(
@@ -308,7 +347,7 @@ private fun OrderDetailContentView(
             )
 
             AppListItem(
-                title = "优惠金额",
+                title = stringResource(R.string.discount_amount),
                 leadingIcon = CoreUiR.drawable.ic_coupon,
                 description = data.discountSource?.info?.title ?: "",
                 showArrow = false,
@@ -323,7 +362,7 @@ private fun OrderDetailContentView(
             )
 
             AppListItem(
-                title = "实付金额",
+                title = stringResource(R.string.actual_payment),
                 leadingIcon = R.drawable.ic_money,
                 trailingContent = {
                     PriceText(
@@ -345,12 +384,12 @@ private fun OrderDetailContentView(
                     title = "",
                     showArrow = false,
                     leadingContent = {
-                        TitleWithLine(text = "售后/退款")
+                        TitleWithLine(text = stringResource(R.string.refund_info))
                     }
                 )
 
                 AppListItem(
-                    title = "退款金额",
+                    title = stringResource(R.string.refund_amount),
                     trailingContent = {
                         PriceText(
                             refund.amount?.toInt() ?: 0,
@@ -364,34 +403,34 @@ private fun OrderDetailContentView(
                 )
 
                 AppListItem(
-                    title = "退款状态",
+                    title = stringResource(R.string.refund_status),
                     showArrow = false,
                     trailingText = when (refund.status) {
-                        0 -> "申请中"
-                        1 -> "已退款"
-                        2 -> "拒绝退款"
-                        else -> "未知状态"
+                        0 -> stringResource(R.string.refund_status_applying)
+                        1 -> stringResource(R.string.refund_status_refunded)
+                        2 -> stringResource(R.string.refund_status_rejected)
+                        else -> stringResource(R.string.refund_status_unknown)
                     }
                 )
 
                 AppListItem(
-                    title = "申请原因",
+                    title = stringResource(R.string.refund_reason),
                     showArrow = false,
-                    trailingText = refund.reason ?: "无"
+                    trailingText = refund.reason ?: stringResource(R.string.none)
                 )
 
                 if (refund.status == 2) {
                     AppListItem(
-                        title = "拒绝原因",
+                        title = stringResource(R.string.refund_reject_reason),
                         showArrow = false,
-                        trailingText = refund.refuseReason ?: "无",
+                        trailingText = refund.refuseReason ?: stringResource(R.string.none),
                         showDivider = false
                     )
                 } else {
                     AppListItem(
-                        title = "申请时间",
+                        title = stringResource(R.string.refund_apply_time),
                         showArrow = false,
-                        trailingText = refund.applyTime ?: "无",
+                        trailingText = refund.applyTime ?: stringResource(R.string.none),
                         showDivider = false
                     )
                 }
@@ -404,12 +443,12 @@ private fun OrderDetailContentView(
                 title = "",
                 showArrow = false,
                 leadingContent = {
-                    TitleWithLine(text = "订单信息")
+                    TitleWithLine(text = stringResource(R.string.order_info))
                 }
             )
 
             AppListItem(
-                title = "订单编号",
+                title = stringResource(R.string.order_number),
                 trailingContent = {
                     AppText(
                         text = data.orderNum,
@@ -419,7 +458,7 @@ private fun OrderDetailContentView(
                     SpaceHorizontalSmall()
 
                     AppText(
-                        text = "复制",
+                        text = stringResource(R.string.copy),
                         type = TextType.LINK,
                         size = TextSize.BODY_MEDIUM,
                         onClick = { /* 复制订单号 */ }
@@ -430,33 +469,38 @@ private fun OrderDetailContentView(
             )
 
             AppListItem(
-                title = "支付方式",
+                title = stringResource(R.string.payment_method),
                 showArrow = false,
-                trailingText = "微信"
+                trailingText = stringResource(R.string.wechat)
             )
 
             AppListItem(
-                title = "支付时间",
+                title = stringResource(R.string.payment_time),
                 showArrow = false,
-                trailingText = data.payTime ?: "未支付"
+                trailingText = data.payTime ?: stringResource(R.string.unpaid)
             )
 
             AppListItem(
-                title = "下单时间",
+                title = stringResource(R.string.order_time),
                 showArrow = false,
                 trailingText = data.createTime
             )
 
             AppListItem(
-                title = "订单备注",
+                title = stringResource(R.string.order_remark),
                 showArrow = false,
-                trailingText = data.remark ?: "无"
+                trailingText = data.remark ?: stringResource(R.string.none)
             )
         }
 
     }
 }
 
+/**
+ * 订单详情界面浅色主题预览
+ *
+ * @author Joker.X
+ */
 @Preview(showBackground = true)
 @Composable
 internal fun OrderDetailScreenPreview() {
@@ -469,6 +513,11 @@ internal fun OrderDetailScreenPreview() {
     }
 }
 
+/**
+ * 订单详情界面深色主题预览
+ *
+ * @author Joker.X
+ */
 @Preview(showBackground = true)
 @Composable
 internal fun OrderDetailScreenPreviewDark() {

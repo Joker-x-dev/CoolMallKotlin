@@ -8,6 +8,9 @@ import com.joker.coolmall.navigation.routes.OrderRoutes
 
 /**
  * 确认订单页面导航
+ *
+ * @param navController 导航控制器
+ * @author Joker.X
  */
 fun NavGraphBuilder.orderConfirmScreen(navController: NavHostController) {
     composable(route = OrderRoutes.CONFIRM) {

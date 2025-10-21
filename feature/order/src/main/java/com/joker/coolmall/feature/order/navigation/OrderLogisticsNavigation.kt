@@ -1,8 +1,3 @@
-/**
- * 订单物流页面导航
- *
- * @author Joker.X
- */
 package com.joker.coolmall.feature.order.navigation
 
 import androidx.navigation.NavGraphBuilder
@@ -15,6 +10,8 @@ import com.joker.coolmall.navigation.routes.OrderRoutes
 
 /**
  * 订单物流页面路由常量
+ *
+ * @author Joker.X
  */
 object OrderLogisticsRoutes {
     const val ORDER_ID_ARG = "order_id"
@@ -27,6 +24,9 @@ object OrderLogisticsRoutes {
 
 /**
  * 订单物流导航
+ *
+ * @param navController 导航控制器
+ * @author Joker.X
  */
 fun NavGraphBuilder.orderLogisticsScreen(navController: NavHostController) {
     composable(

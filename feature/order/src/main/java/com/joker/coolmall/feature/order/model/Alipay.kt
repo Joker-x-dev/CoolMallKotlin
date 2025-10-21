@@ -4,6 +4,9 @@ import android.text.TextUtils
 
 /**
  * 支付宝支付结果解析
+ *
+ * @param rawResult 原始支付结果Map
+ * @author Joker.X
  */
 class Alipay(rawResult: Map<String, String>) {
 

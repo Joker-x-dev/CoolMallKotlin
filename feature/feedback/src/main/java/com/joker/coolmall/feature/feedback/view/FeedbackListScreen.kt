@@ -29,9 +29,13 @@ import com.joker.coolmall.feature.feedback.viewmodel.FeedbackListViewModel
 internal fun FeedbackListRoute(
     viewModel: FeedbackListViewModel = hiltViewModel()
 ) {
+    // 反馈列表UI状态
     val uiState by viewModel.uiState.collectAsState()
+    // 反馈列表数据
     val listData by viewModel.listData.collectAsState()
+    // 是否正在刷新
     val isRefreshing by viewModel.isRefreshing.collectAsState()
+    // 加载更多状态
     val loadMoreState by viewModel.loadMoreState.collectAsState()
 
     FeedbackListScreen(
@@ -81,12 +85,12 @@ internal fun FeedbackListScreen(
     getFeedbackTypeName: (Int?) -> String = { it.toString() }
 ) {
     AppScaffold(
-        titleText = "反馈列表",
+        title = R.string.feedback_list,
         onBackClick = onBackClick,
         bottomBar = {
             if (uiState != BaseNetWorkListUiState.Loading && uiState != BaseNetWorkListUiState.Error) {
                 AppBottomButton(
-                    text = "我要反馈",
+                    text = stringResource(R.string.feedback_submit),
                     onClick = onSubmitClick
                 )
             }
@@ -151,6 +155,8 @@ private fun FeedbackListContentView(
 
 /**
  * 反馈列表界面浅色主题预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -176,6 +182,8 @@ internal fun FeedbackListScreenPreview() {
 
 /**
  * 反馈列表界面深色主题预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable

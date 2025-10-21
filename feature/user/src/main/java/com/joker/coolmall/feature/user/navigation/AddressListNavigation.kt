@@ -10,6 +10,8 @@ import com.joker.coolmall.navigation.routes.UserRoutes
 
 /**
  * 收货地址列表页面路由常量
+ *
+ * @author Joker.X
  */
 object AddressListRoutes {
     const val IS_SELECT_MODE_ARG = "is_select_mode"
@@ -23,6 +25,9 @@ object AddressListRoutes {
 
 /**
  * 收货地址列表页面导航
+ *
+ * @param navController 导航控制器
+ * @author Joker.X
  */
 fun NavGraphBuilder.addressListScreen(navController: NavHostController) {
     composable(

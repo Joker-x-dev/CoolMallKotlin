@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Profile -->
+    <string name="profile_title">Profile</string>
+    <string name="my_footprint">My Footprint</string>
+    <string name="address_management">Address Management</string>
+    <string name="logout">Logout</string>
+
+    <!-- Settings -->
+    <string name="settings_title">Settings</string>
+
+    <!-- Address List -->
+    <string name="address_list_title">Shipping Address</string>
+    <string name="address_detail_title">Address Details</string>
+    <string name="add_address">Add Address</string>
+    <string name="edit_address">Edit Address</string>
+    <string name="delete_address">Delete Address</string>
+    <string name="ok">OK</string>
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete_address_confirm">Are you sure to delete this address?</string>
+    <string name="set_default_address">Set as Default</string>
+    <string name="default_address">Default Address</string>
+    <string name="default_address_tip">This address will be used for orders first</string>
+    <string name="save_address">Save</string>
+    <string name="address_add_new">New Address</string>
+    <string name="address_edit">Edit Address</string>
+    <string name="contact_person">Contact Person</string>
+    <string name="please_input_contact">Please enter contact person</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="please_input_phone">Please enter phone number</string>
+    <string name="region">Region</string>
+    <string name="please_select_region">Please select region</string>
+    <string name="detail_address">Detail Address</string>
+    <string name="street_number_etc">Street, building number, etc.</string>
+
+    <!-- Footprint -->
+    <string name="footprint_title">My Footprint</string>
+    <string name="footprint_empty">No browsing history yet</string>
+    <string name="go_browse">Go Browse</string>
+    <string name="clear_with_count">Clear (%d)</string>
+    
+    <!-- Personal Info -->
+    <string name="avatar">Avatar</string>
+    <string name="nickname">Nickname</string>
+    <string name="not_set">Not Set</string>
+    <string name="account_info">Account Info</string>
+    <string name="phone">Phone</string>
+    <string name="not_bound">Not Bound</string>
+    <string name="account">Account</string>
+    <string name="social_account">Social Account</string>
+    <string name="wechat">WeChat</string>
+    <string name="qq">QQ</string>
+    <string name="go_bind">Go Bind</string>
+    <string name="bound">Bound</string>
+    <string name="security">Security</string>
+    <string name="change_password">Change Password</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="my_footprint">My Footprint</string>
+    <string name="logout">Logout</string>
+</resources>
+

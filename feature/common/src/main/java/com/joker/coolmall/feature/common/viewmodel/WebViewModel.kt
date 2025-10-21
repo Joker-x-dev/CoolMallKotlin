@@ -18,6 +18,8 @@ import javax.inject.Inject
 
 /**
  * 网页 ViewModel
+ * 
+ * @author Joker.X
  */
 @HiltViewModel
 class WebViewModel @Inject constructor(
@@ -72,6 +74,7 @@ class WebViewModel @Inject constructor(
      * 更新页面标题
      *
      * @param title 新的页面标题
+     * @author Joker.X
      */
     fun updatePageTitle(title: String) {
         _pageTitle.value = title
@@ -81,6 +84,7 @@ class WebViewModel @Inject constructor(
      * 更新加载进度
      *
      * @param progress 加载进度(0-100)
+     * @author Joker.X
      */
     fun updateProgress(progress: Int) {
         _currentProgress.value = progress
@@ -88,6 +92,8 @@ class WebViewModel @Inject constructor(
 
     /**
      * 刷新页面
+     * 
+     * @author Joker.X
      */
     fun refreshPage() {
         _shouldRefresh.value = true
@@ -96,6 +102,8 @@ class WebViewModel @Inject constructor(
 
     /**
      * 重置刷新状态
+     * 
+     * @author Joker.X
      */
     fun resetRefreshState() {
         _shouldRefresh.value = false
@@ -103,6 +111,8 @@ class WebViewModel @Inject constructor(
 
     /**
      * 用浏览器打开当前页面
+     * 
+     * @author Joker.X
      */
     fun openInBrowser() {
         val currentUrl = _webViewData.value.url
@@ -122,6 +132,8 @@ class WebViewModel @Inject constructor(
 
     /**
      * 显示下拉菜单
+     * 
+     * @author Joker.X
      */
     fun showDropdownMenu() {
         _showDropdownMenu.value = true
@@ -129,6 +141,8 @@ class WebViewModel @Inject constructor(
 
     /**
      * 隐藏下拉菜单
+     * 
+     * @author Joker.X
      */
     fun dismissDropdownMenu() {
         _showDropdownMenu.value = false

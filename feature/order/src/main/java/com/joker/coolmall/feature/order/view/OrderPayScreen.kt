@@ -17,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -44,12 +45,15 @@ import kotlinx.coroutines.withContext
  * 订单支付路由
  *
  * @param viewModel 订单支付 ViewModel
+ * @author Joker.X
  */
 @Composable
 internal fun OrderPayRoute(
     viewModel: OrderPayViewModel = hiltViewModel()
 ) {
+    // 支付价格
     val price by viewModel.price.collectAsState()
+    // 支付宝支付信息
     val alipayPayInfo by viewModel.alipayPayInfo.collectAsState()
     val context = LocalContext.current
 
@@ -86,6 +90,7 @@ internal fun OrderPayRoute(
  * @param price 支付价格
  * @param onBackClick 返回按钮回调
  * @param onPayClick 支付按钮回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -101,9 +106,9 @@ internal fun OrderPayScreen(
         onBackClick = onBackClick,
         bottomBar = {
             val priceText = if (price > 0) {
-                "去支付 ¥$price"
+                stringResource(R.string.order_pay_button_with_price, price)
             } else {
-                "去支付"
+                stringResource(R.string.order_pay_button)
             }
             AppBottomButton(
                 text = priceText,
@@ -119,6 +124,9 @@ internal fun OrderPayScreen(
 
 /**
  * 订单支付内容视图
+ *
+ * @param price 支付价格
+ * @author Joker.X
  */
 @Composable
 private fun OrderPayContentView(
@@ -167,7 +175,7 @@ private fun OrderPayContentView(
                         modifier = Modifier.size(24.dp)
                     )
                 },
-                title = "支付宝支付",
+                title = stringResource(R.string.pay_method_alipay),
                 showArrow = false,
                 trailingContent = {
                     CheckButton(
@@ -186,7 +194,7 @@ private fun OrderPayContentView(
                         modifier = Modifier.size(24.dp)
                     )
                 },
-                title = "微信支付",
+                title = stringResource(R.string.pay_method_wechat),
                 showArrow = false,
                 trailingContent = {
                     CheckButton(
@@ -205,7 +213,7 @@ private fun OrderPayContentView(
                         modifier = Modifier.size(24.dp)
                     )
                 },
-                title = "QQ支付",
+                title = stringResource(R.string.pay_method_qq),
                 showArrow = false,
                 trailingContent = {
                     CheckButton(
@@ -217,7 +225,7 @@ private fun OrderPayContentView(
             )
         }
         AppText(
-            "提示：实际支付金额经过处理，都是一分钱",
+            stringResource(R.string.order_pay_tip),
             type = TextType.TERTIARY,
             size = TextSize.BODY_SMALL
         )
@@ -226,6 +234,8 @@ private fun OrderPayContentView(
 
 /**
  * 订单支付界面浅色主题预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -239,6 +249,8 @@ internal fun OrderPayScreenPreview() {
 
 /**
  * 订单支付界面深色主题预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable

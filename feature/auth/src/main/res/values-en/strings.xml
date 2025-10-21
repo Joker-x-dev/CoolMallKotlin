@@ -63,4 +63,10 @@
     <string name="invalid_verification_code">Please enter a 4-digit verification code</string>
     <string name="invalid_password">Please enter the correct password</string>
     <string name="login_success">Login successful</string>
+    <string name="register_success">Registration successful</string>
+    <string name="login_failed">Login failed: %s</string>
+    <string name="login_cancelled">Login cancelled</string>
+    <string name="start_qq_login_failed">Failed to start QQ login: %s</string>
+    <string name="third_party_login_only_qq">Third-party login currently only supports QQ</string>
+    <string name="notification_permission_required">Notification permission required to receive verification code</string>
 </resources>

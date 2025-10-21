@@ -17,6 +17,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
@@ -31,22 +32,24 @@ import com.joker.coolmall.core.ui.component.imagepicker.ImageGridPicker
 import com.joker.coolmall.core.ui.component.rate.WeRate
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
 import com.joker.coolmall.core.ui.component.text.AppText
+import com.joker.coolmall.feature.order.R
 import com.joker.coolmall.feature.order.viewmodel.OrderCommentViewModel
 
 /**
  * 订单评价路由
  *
  * @param viewModel 订单评价 ViewModel
+ * @author Joker.X
  */
 @Composable
 internal fun OrderCommentRoute(
     viewModel: OrderCommentViewModel = hiltViewModel()
 ) {
-    val rating by viewModel.rating.collectAsState()
-    val commentContent by viewModel.commentContent.collectAsState()
-    val selectedImages by viewModel.selectedImages.collectAsState()
-    val uploadedImageUrls by viewModel.uploadedImageUrls.collectAsState()
-    val isSubmitting by viewModel.isSubmitting.collectAsState()
+    val rating by viewModel.rating.collectAsState() // 评分
+    val commentContent by viewModel.commentContent.collectAsState() // 评论内容
+    val selectedImages by viewModel.selectedImages.collectAsState() // 选中的图片
+    val uploadedImageUrls by viewModel.uploadedImageUrls.collectAsState() // 已上传的图片URL
+    val isSubmitting by viewModel.isSubmitting.collectAsState() // 是否正在提交
 
     OrderCommentScreen(
         rating = rating,
@@ -77,6 +80,7 @@ internal fun OrderCommentRoute(
  * @param onCommentChange 评论内容变化回调
  * @param onImagesChange 图片变化回调
  * @param onSubmitComment 提交评论回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -94,7 +98,7 @@ internal fun OrderCommentScreen(
     onSubmitComment: () -> Unit = {},
 ) {
     AppScaffold(
-        titleText = "商品评价",
+        titleText = stringResource(R.string.order_comment),
         useLargeTopBar = true,
         onBackClick = onBackClick,
         backgroundColor = MaterialTheme.colorScheme.surface,
@@ -102,7 +106,7 @@ internal fun OrderCommentScreen(
         largeTopBarCollapsedBackgroundColor = MaterialTheme.colorScheme.surface,
         bottomBar = {
             AppBottomButton(
-                text = "提交评价",
+                text = stringResource(R.string.submit_comment),
                 onClick = onSubmitComment,
                 enabled = isFormValid && !isSubmitting,
                 loading = isSubmitting
@@ -131,6 +135,7 @@ internal fun OrderCommentScreen(
  * @param onRatingChange 评分变化回调
  * @param onCommentChange 评论内容变化回调
  * @param onImagesChange 图片变化回调
+ * @author Joker.X
  */
 @Composable
 private fun OrderCommentContentView(
@@ -156,13 +161,13 @@ private fun OrderCommentContentView(
         )
         AppText(
             text = when (rating) {
-                0 -> "请点击星星进行评分"
-                1 -> "很差"
-                2 -> "较差"
-                3 -> "一般"
-                4 -> "满意"
-                5 -> "非常满意"
-                else -> "请点击星星进行评分"
+                0 -> stringResource(R.string.please_rate)
+                1 -> stringResource(R.string.rating_very_poor)
+                2 -> stringResource(R.string.rating_poor)
+                3 -> stringResource(R.string.rating_average)
+                4 -> stringResource(R.string.rating_good)
+                5 -> stringResource(R.string.rating_excellent)
+                else -> stringResource(R.string.please_rate)
             },
         )
 
@@ -178,7 +183,7 @@ private fun OrderCommentContentView(
                     color = MaterialTheme.colorScheme.surfaceVariant,
                     shape = ShapeMedium
                 ),
-            placeholder = { Text("请输入您的评价内容...") },
+            placeholder = { Text(stringResource(R.string.comment_placeholder)) },
             colors = TextFieldDefaults.colors(
                 focusedContainerColor = Color.Transparent,
                 unfocusedContainerColor = Color.Transparent,
@@ -208,6 +213,8 @@ private fun OrderCommentContentView(
 
 /**
  * 订单评价界面浅色主题预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -223,6 +230,8 @@ internal fun OrderCommentScreenPreview() {
 
 /**
  * 订单评价界面深色主题预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable

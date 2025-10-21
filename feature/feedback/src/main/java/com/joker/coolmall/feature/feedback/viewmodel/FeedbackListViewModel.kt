@@ -1,6 +1,9 @@
 package com.joker.coolmall.feature.feedback.viewmodel
 
+import android.content.Context
 import androidx.lifecycle.viewModelScope
+import com.joker.coolmall.feature.feedback.R
+import dagger.hilt.android.qualifiers.ApplicationContext
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkListViewModel
 import com.joker.coolmall.core.data.repository.CommonRepository
 import com.joker.coolmall.core.data.repository.FeedbackRepository
@@ -25,10 +28,16 @@ import javax.inject.Inject
 /**
  * 反馈列表 ViewModel
  *
+ * @param context 应用上下文
+ * @param navigator 导航器
+ * @param appState 应用状态
+ * @param feedbackRepository 反馈仓库
+ * @param commonRepository 通用数据仓库
  * @author Joker.X
  */
 @HiltViewModel
 class FeedbackListViewModel @Inject constructor(
+    @param:ApplicationContext private val context: Context,
     navigator: AppNavigator,
     appState: AppState,
     private val feedbackRepository: FeedbackRepository,
@@ -47,6 +56,7 @@ class FeedbackListViewModel @Inject constructor(
      * 通过重写来给父类提供API请求的Flow
      *
      * @return 反馈分页数据的Flow
+     * @author Joker.X
      */
     override fun requestListData(): Flow<NetworkResponse<NetworkPageData<Feedback>>> {
         return feedbackRepository.getFeedbackPage(
@@ -59,6 +69,8 @@ class FeedbackListViewModel @Inject constructor(
 
     /**
      * 加载反馈类型字典数据
+     * 
+     * @author Joker.X
      */
     fun loadFeedbackTypes() {
         ResultHandler.handleResultWithData(
@@ -79,14 +91,18 @@ class FeedbackListViewModel @Inject constructor(
      *
      * @param typeValue 反馈类型值
      * @return 反馈类型中文名称
+     * @author Joker.X
      */
     fun getFeedbackTypeName(typeValue: Int?): String {
-        if (typeValue == null) return "未知类型"
-        return _feedbackTypes.value.find { it.value == typeValue }?.name ?: "未知类型"
+        val unknownType = context.getString(R.string.unknown_type)
+        if (typeValue == null) return unknownType
+        return _feedbackTypes.value.find { it.value == typeValue }?.name ?: unknownType
     }
 
     /**
      * 导航到提交反馈页面
+     * 
+     * @author Joker.X
      */
     fun toFeedbackSubmitPage() {
         toPage(FeedbackRoutes.SUBMIT)

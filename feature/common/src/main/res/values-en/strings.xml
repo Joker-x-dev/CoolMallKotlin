@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Page Titles -->
+    <string name="settings_title">Settings</string>
+    <string name="contributors_title">Contributors</string>
+    <string name="about_title">About Us</string>
+    <string name="privacy_policy_title">Privacy Policy</string>
+    <string name="user_agreement_title">User Agreement</string>
+    <string name="web_title">Web Page</string>
+    
+    <!-- About Us Page -->
+    <string name="about_app_name">App Name</string>
+    <string name="about_version">Version</string>
+    <string name="about_version_code">Version Code</string>
+    <string name="about_copyright">© 2025 Joker.X &amp; CoolMallKotlin Contributors</string>
+    
+    <!-- About Us - Developer -->
+    <string name="about_developer">Developer</string>
+    <string name="about_developer_email">joker.x.dev@gmail.com</string>
+    <string name="about_developer_name">Joker.X</string>
+    
+    <!-- About Us - Project Links -->
+    <string name="about_section_project">Project Links</string>
+    <string name="about_github">GitHub</string>
+    <string name="about_github_url">https://github.com/Joker-x-dev/CoolMallKotlin</string>
+    <string name="about_gitee">Gitee</string>
+    <string name="about_gitee_url">https://gitee.com/Joker-x-dev/CoolMallKotlin</string>
+    
+    <!-- About Us - Related Resources -->
+    <string name="about_section_resources">Related Resources</string>
+    <string name="about_api_doc">API Documentation</string>
+    <string name="about_api_doc_desc">View detailed definitions of backend APIs</string>
+    <string name="about_demo_download">Demo Download</string>
+    <string name="about_demo_download_desc">Updated irregularly, may not sync with latest code changes</string>
+    <string name="about_icon_source">Icon Source</string>
+    <string name="about_icon_source_desc">Icons used in this project are from TuNiao Icon</string>
+    
+    <!-- About Us - Discussion -->
+    <string name="about_section_discussion">Discussion</string>
+    <string name="about_github_discussion">GitHub Discussions</string>
+    <string name="about_github_discussion_desc">Participate in project discussions on GitHub</string>
+    <string name="about_qq_group">QQ Group</string>
+    <string name="about_wechat_group">WeChat Group</string>
+    
+    <!-- About Us - Support & Help -->
+    <string name="about_section_support">Support &amp; Help</string>
+    <string name="about_translation">Translation</string>
+    <string name="about_translation_desc">Help translate this app into your language</string>
+    <string name="about_support">Support</string>
+    <string name="about_support_desc">You can sponsor to support me here</string>
+    <string name="about_help">Help</string>
+    <string name="about_help_desc">For any questions or suggestions, feel free to submit an Issue</string>
+    
+    <!-- About Us - Other -->
+    <string name="about_section_other">Other</string>
+    <string name="about_citation">Citation</string>
+    <string name="about_citation_desc">Acknowledgments for third-party libraries and resources used in this project</string>
+    <string name="about_user_agreement">User Agreement</string>
+    <string name="about_privacy_policy">Privacy Policy</string>
+    <string name="about_open_source_license">Open Source License</string>
+    
+    <!-- Settings Page -->
+    <string name="settings_account_security">Account &amp; Security</string>
+    
+    <!-- Settings - Appearance & Language -->
+    <string name="settings_section_appearance">Appearance &amp; Language</string>
+    <string name="settings_dark_mode">Dark Mode</string>
+    <string name="settings_dark_mode_follow_system">Follow System</string>
+    <string name="settings_dynamic_color">Dynamic Theme Color</string>
+    <string name="settings_dynamic_color_desc">When enabled, the app theme color will sync with system wallpaper colors</string>
+    <string name="settings_language">Language</string>
+    <string name="settings_language_chinese">Chinese</string>
+    
+    <!-- Settings - Privacy & Agreement -->
+    <string name="settings_section_privacy">Privacy &amp; Agreement</string>
+    
+    <!-- Settings - Other -->
+    <string name="settings_section_other">Other</string>
+    <string name="settings_hide_splash">Hide Splash Screen</string>
+    <string name="settings_hide_splash_desc">When enabled, the app will skip the splash screen</string>
+    <string name="settings_app_guide">App Guide</string>
+    
+    <!-- Settings - General -->
+    <string name="settings_section_general">General</string>
+    <string name="settings_clear_cache">Clear Cache</string>
+    <string name="settings_cache_size">13.24MB</string>
+    <string name="settings_feedback">Feedback</string>
+    <string name="settings_about_app">About App</string>
+    
+    <!-- WebView Page -->
+    <string name="web_menu_refresh">Refresh</string>
+    <string name="web_menu_open_browser">Open in Browser</string>
+    <string name="web_more_options">More Options</string>
+    
+    <!-- Dependency Modal -->
+    <string name="dependency_modal_title">Acknowledgments</string>
+</resources>
+

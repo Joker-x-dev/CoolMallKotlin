@@ -11,6 +11,8 @@ import com.joker.coolmall.navigation.routes.UserRoutes
 
 /**
  * 个人中心页面路由常量
+ *
+ * @author Joker.X
  */
 object ProfileRoutes {
     const val AVATAR_URL = "avatar_url"
@@ -23,6 +25,9 @@ object ProfileRoutes {
 
 /**
  * 个人中心页面导航
+ *
+ * @param sharedTransitionScope 共享转换作用域
+ * @author Joker.X
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
 fun NavGraphBuilder.profileScreen(sharedTransitionScope: SharedTransitionScope) {

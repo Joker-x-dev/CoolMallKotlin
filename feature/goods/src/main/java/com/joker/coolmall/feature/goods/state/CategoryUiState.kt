@@ -2,6 +2,8 @@ import com.joker.coolmall.core.model.entity.CategoryTree
 
 /**
  * 分类页面UI状态
+ *
+ * @author Joker.X
  */
 sealed class CategoryUiState {
     /**

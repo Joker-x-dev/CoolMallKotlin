@@ -2,6 +2,7 @@ package com.joker.coolmall.feature.goods.component
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.ui.res.stringResource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -32,6 +33,7 @@ import com.joker.coolmall.core.ui.component.rate.WeRate
 import com.joker.coolmall.core.ui.component.text.AppText
 import com.joker.coolmall.core.ui.component.text.TextSize
 import com.joker.coolmall.core.ui.component.text.TextType
+import com.joker.coolmall.feature.goods.R
 
 /**
  * 商品评价卡片组件
@@ -40,6 +42,7 @@ import com.joker.coolmall.core.ui.component.text.TextType
  *
  * @param modifier 修饰符
  * @param comment 评价数据
+ * @author Joker.X
  */
 @Composable
 fun CommentCard(comment: Comment, modifier: Modifier = Modifier) {
@@ -64,7 +67,7 @@ fun CommentCard(comment: Comment, modifier: Modifier = Modifier) {
                 SpaceBetweenRow {
                     // 用户昵称
                     AppText(
-                        text = comment.nickName ?: "匿名用户",
+                        text = comment.nickName ?: stringResource(R.string.anonymous_user),
                         size = TextSize.BODY_LARGE,
                         type = TextType.PRIMARY
                     )
@@ -120,6 +123,7 @@ fun CommentCard(comment: Comment, modifier: Modifier = Modifier) {
  * @param images 图片URL列表
  * @param modifier 修饰符
  * @param maxImages 最大显示图片数量，默认9张
+ * @author Joker.X
  */
 @Composable
 private fun CommentImageGrid(
@@ -163,6 +167,7 @@ private fun CommentImageGrid(
  *
  * @param imageUrl 图片URL
  * @param modifier 修饰符
+ * @author Joker.X
  */
 @Composable
 private fun CommentImageItem(
@@ -184,6 +189,8 @@ private fun CommentImageItem(
 
 /**
  * CommentCard 组件预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -212,6 +219,8 @@ fun CommentCardPreview() {
 
 /**
  * CommentCard 组件预览 - 无图片
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -236,6 +245,8 @@ fun CommentCardNoImagesPreview() {
 
 /**
  * CommentCard 组件预览 - 深色主题
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable

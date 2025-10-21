@@ -1,6 +1,8 @@
 <resources>
+    <!-- Empty States -->
     <string name="empty_cart">购物车是空的</string>
     <string name="empty_cart_subtitle">快去添加商品吧</string>
+    <string name="empty_cart_btn">去逛逛</string>
     <string name="empty_data">暂无数据</string>
     <string name="empty_data_subtitle">暂时没有相关内容</string>
     <string name="empty_error">加载失败</string>
@@ -8,5 +10,57 @@
     <string name="empty_network">网络连接失败</string>
     <string name="empty_network_subtitle">请检查网络连接后重试</string>
     <string name="click_retry">重新加载</string>
-    <string name="empty_cart_btn">去逛逛</string>
+    
+    <!-- Loading States -->
+    <string name="loading">加载中...</string>
+    <string name="load_more_pull">上拉加载更多</string>
+    <string name="load_more_loading">正在加载...</string>
+    <string name="load_more_success">加载成功</string>
+    <string name="load_more_error">加载失败</string>
+    <string name="load_more_error_retry">加载失败，点击重试</string>
+    <string name="load_more_no_more">没有更多了</string>
+    
+    <!-- Common Actions -->
+    <string name="confirm">确定</string>
+    <string name="cancel">取消</string>
+    <string name="delete">删除</string>
+    <string name="edit">编辑</string>
+    <string name="save">保存</string>
+    <string name="submit">提交</string>
+    <string name="search">搜索</string>
+    <string name="search_hint">输入内容进行搜索</string>
+    <string name="retry">重试</string>
+    
+    <!-- Coupon -->
+    <string name="coupon_expired">已过期</string>
+    <string name="coupon_used">已使用</string>
+    <string name="coupon_available">可使用</string>
+    <string name="coupon_conditions">满%1$s可用</string>
+    <string name="coupon_no_conditions">无门槛</string>
+    <string name="coupon_valid_date">有效期: %1$s - %2$s</string>
+    <string name="coupon_receive">立即领取</string>
+    <string name="coupon_received">已领取</string>
+    <string name="coupon_use">去使用</string>
+    
+    <!-- Address -->
+    <string name="address_default">默认</string>
+    <string name="address_edit">编辑</string>
+    <string name="address_delete">删除</string>
+    
+    <!-- Goods -->
+    <string name="goods_sold">已售%d件</string>
+    <string name="goods_select">选择</string>
+    <string name="goods_spec">规格</string>
+    <string name="goods_quantity">数量</string>
+    
+    <!-- Modal -->
+    <string name="modal_close">关闭</string>
+    <string name="modal_select_spec">选择规格</string>
+    <string name="modal_add_to_cart">加入购物车</string>
+    <string name="modal_buy_now">立即购买</string>
+    
+    <!-- Other -->
+    <string name="total">合计</string>
+    <string name="price">价格</string>
+    <string name="quantity">数量</string>
 </resources>

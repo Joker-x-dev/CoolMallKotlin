@@ -12,6 +12,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -39,6 +40,7 @@ import com.joker.coolmall.feature.user.viewmodel.ProfileViewModel
  * @param sharedTransitionScope 共享转换作用域
  * @param animatedContentScope 动画内容作用域
  * @param viewModel 个人中心ViewModel
+ * @author Joker.X
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -69,6 +71,9 @@ internal fun ProfileRoute(
  * @param onLogoutClick 退出登录回调
  * @param sharedTransitionScope 共享转换作用域
  * @param animatedContentScope 动画内容作用域
+ * @param userInfo 用户信息
+ * @param routeAvatarUrl 路由传递的头像URL
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
@@ -95,6 +100,16 @@ internal fun ProfileScreen(
     }
 }
 
+/**
+ * 个人中心内容视图
+ *
+ * @param onLogoutClick 退出登录回调
+ * @param sharedTransitionScope 共享转换作用域
+ * @param animatedContentScope 动画内容作用域
+ * @param userInfo 用户信息
+ * @param routeAvatarUrl 路由传递的头像URL
+ * @author Joker.X
+ */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 private fun ProfileContentView(
@@ -109,7 +124,7 @@ private fun ProfileContentView(
     ) {
         Card {
             AppListItem(
-                title = "头像",
+                title = stringResource(R.string.avatar),
                 showArrow = false,
                 verticalPadding = SpaceVerticalSmall,
                 horizontalPadding = SpaceHorizontalLarge,
@@ -133,14 +148,14 @@ private fun ProfileContentView(
             )
 
             AppListItem(
-                title = "昵称",
+                title = stringResource(R.string.nickname),
                 showArrow = false,
                 showDivider = false,
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge,
                 trailingContent = {
                     AppText(
-                        userInfo?.nickName ?: "未设置",
+                        userInfo?.nickName ?: stringResource(R.string.not_set),
                         type = TextType.TERTIARY
                     )
                 }
@@ -148,33 +163,33 @@ private fun ProfileContentView(
         }
 
         TitleWithLine(
-            text = "账号信息", modifier = Modifier
+            text = stringResource(R.string.account_info), modifier = Modifier
                 .padding(top = SpaceVerticalSmall)
         )
 
         Card {
             AppListItem(
-                title = "手机号",
+                title = stringResource(R.string.phone),
                 showArrow = false,
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge,
                 trailingContent = {
                     AppText(
-                        userInfo?.phone ?: "未绑定",
+                        userInfo?.phone ?: stringResource(R.string.not_bound),
                         type = TextType.TERTIARY
                     )
                 }
             )
 
             AppListItem(
-                title = "账号",
+                title = stringResource(R.string.account),
                 showArrow = false,
                 showDivider = false,
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge,
                 trailingContent = {
                     AppText(
-                        userInfo?.id?.toString() ?: "未设置",
+                        userInfo?.id?.toString() ?: stringResource(R.string.not_set),
                         type = TextType.TERTIARY
                     )
                 }
@@ -182,33 +197,33 @@ private fun ProfileContentView(
         }
 
         TitleWithLine(
-            text = "社交账号", modifier = Modifier
+            text = stringResource(R.string.social_account), modifier = Modifier
                 .padding(top = SpaceVerticalSmall)
         )
 
         Card {
             AppListItem(
-                title = "微信",
+                title = stringResource(R.string.wechat),
                 showArrow = false,
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge,
                 trailingContent = {
                     AppText(
-                        "去绑定",
+                        stringResource(R.string.go_bind),
                         type = TextType.TERTIARY
                     )
                 }
             )
 
             AppListItem(
-                title = " QQ",
+                title = stringResource(R.string.qq),
                 showArrow = false,
                 showDivider = false,
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge,
                 trailingContent = {
                     AppText(
-                        " 已绑定",
+                        stringResource(R.string.bound),
                         type = TextType.TERTIARY
                     )
                 }
@@ -216,19 +231,19 @@ private fun ProfileContentView(
         }
 
         TitleWithLine(
-            text = "安全", modifier = Modifier
+            text = stringResource(R.string.security), modifier = Modifier
                 .padding(top = SpaceVerticalSmall)
         )
 
         Card {
             AppListItem(
-                title = "修改密码",
+                title = stringResource(R.string.change_password),
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge
             )
 
             AppListItem(
-                title = " 注销账户",
+                title = stringResource(R.string.delete_account),
                 showDivider = false,
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge
@@ -243,7 +258,7 @@ private fun ProfileContentView(
                 fillMaxSize = false
             ) {
                 AppText(
-                    "退出登录",
+                    stringResource(R.string.logout),
                     type = TextType.ERROR,
                     textAlign = TextAlign.Center
                 )
@@ -254,6 +269,8 @@ private fun ProfileContentView(
 
 /**
  * 个人中心界面浅色主题预览
+ *
+ * @author Joker.X
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -266,6 +283,8 @@ fun ProfileScreenPreview() {
 
 /**
  * 个人中心界面深色主题预览
+ *
+ * @author Joker.X
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable

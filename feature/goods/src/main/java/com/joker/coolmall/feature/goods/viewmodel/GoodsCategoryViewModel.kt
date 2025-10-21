@@ -28,6 +28,12 @@ import javax.inject.Inject
 
 /**
  * 商品分类 ViewModel
+ *
+ * @param navigator 导航器
+ * @param appState 应用状态
+ * @param savedStateHandle 保存的状态句柄
+ * @param goodsRepository 商品仓库
+ * @author Joker.X
  */
 @HiltViewModel
 class GoodsCategoryViewModel @Inject constructor(
@@ -91,6 +97,9 @@ class GoodsCategoryViewModel @Inject constructor(
 
     /**
      * 获取当前搜索关键词
+     *
+     * @return 搜索关键词
+     * @author Joker.X
      */
     fun getCurrentSearchKeyword(): String = searchKeyword
 
@@ -134,6 +143,9 @@ class GoodsCategoryViewModel @Inject constructor(
 
     /**
      * 通过重写来给父类提供API请求的Flow
+     *
+     * @return 商品分页数据的网络响应Flow
+     * @author Joker.X
      */
     override fun requestListData(): Flow<NetworkResponse<NetworkPageData<Goods>>> {
         val (order, sort) = when (_currentSortType.value) {
@@ -173,6 +185,8 @@ class GoodsCategoryViewModel @Inject constructor(
 
     /**
      * 显示筛选对话框
+     *
+     * @author Joker.X
      */
     fun showFilters() {
         _filtersVisible.value = true
@@ -187,6 +201,8 @@ class GoodsCategoryViewModel @Inject constructor(
 
     /**
      * 隐藏筛选对话框
+     *
+     * @author Joker.X
      */
     fun hideFilters() {
         _filtersVisible.value = false
@@ -194,6 +210,11 @@ class GoodsCategoryViewModel @Inject constructor(
 
     /**
      * 应用筛选条件并刷新数据
+     *
+     * @param categoryIds 分类ID列表
+     * @param minPrice 最低价格
+     * @param maxPrice 最高价格
+     * @author Joker.X
      */
     fun applyFilters(categoryIds: List<Long>, minPrice: String, maxPrice: String) {
         _selectedCategoryIds.value = categoryIds
@@ -206,6 +227,8 @@ class GoodsCategoryViewModel @Inject constructor(
 
     /**
      * 重置筛选条件
+     *
+     * @author Joker.X
      */
     fun resetFilters() {
         _selectedCategoryIds.value = emptyList()
@@ -217,7 +240,9 @@ class GoodsCategoryViewModel @Inject constructor(
 
     /**
      * 处理排序点击事件
+     *
      * @param sortType 点击的排序类型
+     * @author Joker.X
      */
     fun onSortClick(sortType: SortType) {
         when (sortType) {
@@ -252,6 +277,9 @@ class GoodsCategoryViewModel @Inject constructor(
 
     /**
      * 搜索
+     *
+     * @param keyword 搜索关键词
+     * @author Joker.X
      */
     fun onSearch(keyword: String) {
         searchKeyword = keyword
@@ -260,6 +288,8 @@ class GoodsCategoryViewModel @Inject constructor(
 
     /**
      * 切换布局模式
+     *
+     * @author Joker.X
      */
     fun toggleLayoutMode() {
         _isGridLayout.value = !_isGridLayout.value
@@ -267,6 +297,8 @@ class GoodsCategoryViewModel @Inject constructor(
 
     /**
      * 加载商品分类
+     *
+     * @author Joker.X
      */
     private fun loadGoodsCategory() {
         ResultHandler.handleResultWithData(
@@ -287,6 +319,9 @@ class GoodsCategoryViewModel @Inject constructor(
 
     /**
      * 跳转到商品详情页面
+     *
+     * @param goodsId 商品ID
+     * @author Joker.X
      */
     fun toGoodsDetailPage(goodsId: Long) {
         super.toPage(GoodsRoutes.DETAIL, goodsId)
@@ -294,8 +329,10 @@ class GoodsCategoryViewModel @Inject constructor(
 
     /**
      * 将Category列表转换为CategoryTree树形结构
+     *
      * @param categories 原始分类列表
      * @return 树形结构的分类列表
+     * @author Joker.X
      */
     private fun convertToTree(categories: List<Category>): List<CategoryTree> {
         // 按sortNum排序的列表
@@ -339,9 +376,11 @@ class GoodsCategoryViewModel @Inject constructor(
 
     /**
      * 递归构建分类树
+     *
      * @param categoryTree 当前分类树节点
      * @param childrenMap 子分类映射
      * @return 构建好的分类树
+     * @author Joker.X
      */
     private fun buildCategoryTree(
         categoryTree: CategoryTree,

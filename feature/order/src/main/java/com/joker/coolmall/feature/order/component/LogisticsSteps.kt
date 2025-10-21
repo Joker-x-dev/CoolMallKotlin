@@ -27,6 +27,7 @@ import com.joker.coolmall.core.ui.component.text.TextType
  *
  * @param logisticsItems 物流轨迹列表，最新的物流信息应该在列表的第一位
  * @param modifier 修饰符
+ * @author Joker.X
  */
 @Composable
 fun LogisticsSteps(
@@ -50,6 +51,7 @@ fun LogisticsSteps(
  * @param logisticsItem 物流轨迹项数据
  * @param isFirst 是否为第一项（最新的物流信息）
  * @param isLast 是否为最后一项
+ * @author Joker.X
  */
 @Composable
 private fun LogisticsStepItem(
@@ -116,6 +118,8 @@ private fun LogisticsStepItem(
 
 /**
  * 物流步骤条组件预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable

@@ -11,6 +11,8 @@ import javax.inject.Inject
 
 /**
  * 隐私政策 ViewModel
+ * 
+ * @author Joker.X
  */
 @HiltViewModel
 class PrivacyPolicyViewModel @Inject constructor(

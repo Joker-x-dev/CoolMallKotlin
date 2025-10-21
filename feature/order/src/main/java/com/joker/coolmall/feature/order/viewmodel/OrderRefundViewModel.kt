@@ -1,8 +1,3 @@
-/**
- * 退款申请 ViewModel
- *
- * @author Joker.X
- */
 package com.joker.coolmall.feature.order.viewmodel
 
 import androidx.lifecycle.SavedStateHandle
@@ -34,6 +29,13 @@ import javax.inject.Inject
 
 /**
  * 退款申请 ViewModel
+ *
+ * @param navigator 导航器
+ * @param appState 应用状态
+ * @param savedStateHandle 保存状态句柄
+ * @param orderRepository 订单仓库
+ * @param commonRepository 通用仓库
+ * @author Joker.X
  */
 @HiltViewModel
 class OrderRefundViewModel @Inject constructor(
@@ -81,6 +83,9 @@ class OrderRefundViewModel @Inject constructor(
 
     /**
      * 重写请求API的方法
+     *
+     * @return 订单网络响应流
+     * @author Joker.X
      */
     override fun requestApiFlow(): Flow<NetworkResponse<Order>> {
         return orderRepository.getOrderInfo(requiredId)
@@ -88,6 +93,9 @@ class OrderRefundViewModel @Inject constructor(
 
     /**
      * 处理请求成功的逻辑
+     *
+     * @param data 订单数据
+     * @author Joker.X
      */
     override fun onRequestSuccess(data: Order) {
         _cartList.value = convertOrderGoodsToCart(data)
@@ -96,6 +104,8 @@ class OrderRefundViewModel @Inject constructor(
 
     /**
      * 显示退款原因选择弹窗
+     *
+     * @author Joker.X
      */
     fun showRefundModal() {
         _refundModalVisible.value = true
@@ -108,6 +118,8 @@ class OrderRefundViewModel @Inject constructor(
 
     /**
      * 隐藏退款原因选择弹窗
+     *
+     * @author Joker.X
      */
     fun hideRefundModal() {
         _refundModalVisible.value = false
@@ -115,6 +127,9 @@ class OrderRefundViewModel @Inject constructor(
 
     /**
      * 选择退款原因
+     *
+     * @param reason 退款原因
+     * @author Joker.X
      */
     fun selectRefundReason(reason: DictItem?) {
         _selectedRefundReason.value = reason
@@ -122,6 +137,8 @@ class OrderRefundViewModel @Inject constructor(
 
     /**
      * 加载退款原因字典数据
+     *
+     * @author Joker.X
      */
     fun loadRefundReasons() {
         // 如果 ui 状态为成功，则不重复加载
@@ -149,6 +166,8 @@ class OrderRefundViewModel @Inject constructor(
 
     /**
      * 提交退款申请
+     *
+     * @author Joker.X
      */
     fun submitRefundApplication() {
         val selectedReason = _selectedRefundReason.value
@@ -171,6 +190,10 @@ class OrderRefundViewModel @Inject constructor(
     /**
      * 将Order中的goodsList转换为Cart类型的列表
      * 参考OrderDetailViewModel中的处理方法
+     *
+     * @param order 订单对象
+     * @return 购物车列表
+     * @author Joker.X
      */
     private fun convertOrderGoodsToCart(order: Order): List<Cart> {
         return order.goodsList?.let { goodsList ->

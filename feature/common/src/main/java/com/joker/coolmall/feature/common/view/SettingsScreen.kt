@@ -12,6 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.joker.coolmall.core.designsystem.component.VerticalList
@@ -29,6 +30,7 @@ import com.joker.coolmall.feature.common.viewmodel.SettingsViewModel
  * 设置页面路由
  *
  * @param viewModel 设置页面ViewModel
+ * @author Joker.X
  */
 @Composable
 internal fun SettingsRoute(
@@ -51,6 +53,11 @@ internal fun SettingsRoute(
  * @param onBackClick 返回上一页回调
  * @param onUserAgreementClick 用户协议点击回调
  * @param onPrivacyPolicyClick 隐私政策点击回调
+ * @param onAccountSecurityClick 账号与安全点击回调
+ * @param onFeedbackClick 意见反馈点击回调
+ * @param onAboutAppClick 关于应用点击回调
+ * @param onAppGuideClick 应用引导点击回调
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -84,6 +91,11 @@ internal fun SettingsScreen(
  *
  * @param onUserAgreementClick 用户协议点击回调
  * @param onPrivacyPolicyClick 隐私政策点击回调
+ * @param onAccountSecurityClick 账号与安全点击回调
+ * @param onFeedbackClick 意见反馈点击回调
+ * @param onAboutAppClick 关于应用点击回调
+ * @param onAppGuideClick 应用引导点击回调
+ * @author Joker.X
  */
 @Composable
 private fun SettingsContentView(
@@ -101,7 +113,7 @@ private fun SettingsContentView(
 
         Card {
             AppListItem(
-                title = "账号与安全",
+                title = stringResource(id = R.string.settings_account_security),
                 showDivider = false,
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge,
@@ -110,27 +122,27 @@ private fun SettingsContentView(
         }
 
         TitleWithLine(
-            text = "外观与语言",
+            text = stringResource(id = R.string.settings_section_appearance),
             modifier = Modifier.padding(top = SpaceVerticalSmall)
         )
 
         Card {
             // 夜间模式
             AppListItem(
-                title = "夜间模式",
+                title = stringResource(id = R.string.settings_dark_mode),
                 showArrow = true,
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge,
-                trailingText = "跟随系统"
+                trailingText = stringResource(id = R.string.settings_dark_mode_follow_system)
             )
 
             // 动态主题色
             AppListItem(
-                title = "动态主题色",
+                title = stringResource(id = R.string.settings_dynamic_color),
                 showArrow = false,
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalSmall,
-                description = "开启后应用主题色会同步系统壁纸颜色",
+                description = stringResource(id = R.string.settings_dynamic_color_desc),
                 trailingContent = {
                     var isDynamicColor by remember { mutableStateOf(false) }
                     Switch(
@@ -141,23 +153,23 @@ private fun SettingsContentView(
             )
 
             AppListItem(
-                title = "语言切换",
+                title = stringResource(id = R.string.settings_language),
                 showDivider = false,
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge,
-                trailingText = "中文"
+                trailingText = stringResource(id = R.string.settings_language_chinese)
             )
         }
 
         TitleWithLine(
-            text = "隐私与协议",
+            text = stringResource(id = R.string.settings_section_privacy),
             modifier = Modifier.padding(top = SpaceVerticalSmall)
         )
 
         Card {
             // 隐私政策
             AppListItem(
-                title = "隐私政策",
+                title = stringResource(id = R.string.about_privacy_policy),
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge,
                 onClick = onPrivacyPolicyClick
@@ -165,7 +177,7 @@ private fun SettingsContentView(
 
             // 用户协议
             AppListItem(
-                title = "用户协议",
+                title = stringResource(id = R.string.about_user_agreement),
                 showDivider = false,
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge,
@@ -174,18 +186,18 @@ private fun SettingsContentView(
         }
 
         TitleWithLine(
-            text = "其他",
+            text = stringResource(id = R.string.settings_section_other),
             modifier = Modifier.padding(top = SpaceVerticalSmall)
         )
 
         Card {
             // 展示启动页
             AppListItem(
-                title = "不展示启动页",
+                title = stringResource(id = R.string.settings_hide_splash),
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalSmall,
                 showArrow = false,
-                description = "打开后进入应用将跳过启动页",
+                description = stringResource(id = R.string.settings_hide_splash_desc),
                 trailingContent = {
                     var showSplash by remember { mutableStateOf(false) }
                     Switch(
@@ -197,7 +209,7 @@ private fun SettingsContentView(
 
             // 应用引导
             AppListItem(
-                title = "应用引导",
+                title = stringResource(id = R.string.settings_app_guide),
                 showDivider = false,
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge,
@@ -206,22 +218,22 @@ private fun SettingsContentView(
         }
 
         TitleWithLine(
-            text = "通用",
+            text = stringResource(id = R.string.settings_section_general),
             modifier = Modifier.padding(top = SpaceVerticalSmall)
         )
 
         Card {
             // 清除缓存
             AppListItem(
-                title = "清除缓存",
+                title = stringResource(id = R.string.settings_clear_cache),
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge,
-                trailingText = "13.24MB"
+                trailingText = stringResource(id = R.string.settings_cache_size)
             )
 
             // 意见反馈
             AppListItem(
-                title = "意见反馈",
+                title = stringResource(id = R.string.settings_feedback),
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge,
                 onClick = onFeedbackClick
@@ -229,7 +241,7 @@ private fun SettingsContentView(
 
             // 关于我们
             AppListItem(
-                title = "关于应用",
+                title = stringResource(id = R.string.settings_about_app),
                 showDivider = false,
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge,
@@ -241,6 +253,8 @@ private fun SettingsContentView(
 
 /**
  * 设置页面浅色主题预览
+ * 
+ * @author Joker.X
  */
 @Composable
 @Preview(showBackground = true)
@@ -252,6 +266,8 @@ fun SettingsScreenPreview() {
 
 /**
  * 设置页面深色主题预览
+ * 
+ * @author Joker.X
  */
 @Composable
 @Preview(showBackground = true)

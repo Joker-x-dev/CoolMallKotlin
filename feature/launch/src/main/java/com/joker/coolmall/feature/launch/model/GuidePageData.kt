@@ -1,10 +1,6 @@
-/**
- * 引导页数据模型
- *
- * @author Joker.X
- */
 package com.joker.coolmall.feature.launch.model
 
+import android.content.Context
 import com.joker.coolmall.feature.launch.R
 
 /**
@@ -13,6 +9,7 @@ import com.joker.coolmall.feature.launch.R
  * @param title 页面标题
  * @param description 页面描述
  * @param image 图片资源
+ * @author Joker.X
  */
 data class GuidePageData(
     val title: String,
@@ -22,33 +19,37 @@ data class GuidePageData(
 
 /**
  * 引导页数据提供者
+ *
+ * @author Joker.X
  */
 object GuidePageProvider {
 
     /**
      * 获取所有引导页数据
      *
+     * @param context 上下文
      * @return 引导页数据列表
+     * @author Joker.X
      */
-    fun getGuidePages(): List<GuidePageData> = listOf(
+    fun getGuidePages(context: Context): List<GuidePageData> = listOf(
         GuidePageData(
-            title = "青商城 - 开源电商学习项目",
-            description = "100% Kotlin 开发的现代化电商应用\n完全开源免费，助力开发者快速成长\n提供完整的代码参考和学习资源",
+            title = context.getString(R.string.guide_page_1_title),
+            description = context.getString(R.string.guide_page_1_desc),
             image = R.drawable.ic_book_writer
         ),
         GuidePageData(
-            title = "声明式 UI 新体验",
-            description = "基于 Jetpack Compose 构建流畅界面\n采用 MVVM + Clean Architecture 架构\nHilt、Coroutines、Flow 等主流技术全整合",
+            title = context.getString(R.string.guide_page_2_title),
+            description = context.getString(R.string.guide_page_2_desc),
             image = R.drawable.ic_home_screen
         ),
         GuidePageData(
-            title = "完整电商业务流程",
-            description = "用户认证、商品展示、搜索分类\n购物车管理、订单支付全流程实现\n贴近真实商业场景的学习案例",
+            title = context.getString(R.string.guide_page_3_title),
+            description = context.getString(R.string.guide_page_3_desc),
             image = R.drawable.ic_add_to_cart
         ),
         GuidePageData(
-            title = "模块化架构设计",
-            description = "参考 Google Now in Android 最佳实践\n高内聚低耦合，便于维护与扩展\n适合学习与二次开发的优质项目",
+            title = context.getString(R.string.guide_page_4_title),
+            description = context.getString(R.string.guide_page_4_desc),
             image = R.drawable.ic_dev_productivity
         )
     )

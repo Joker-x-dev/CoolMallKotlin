@@ -34,6 +34,13 @@ import javax.inject.Inject
 
 /**
  * 订单详情视图模型
+ *
+ * @param navigator 导航器
+ * @param appState 应用状态
+ * @param savedStateHandle 保存状态句柄
+ * @param orderRepository 订单仓库
+ * @param commonRepository 通用仓库
+ * @author Joker.X
  */
 @HiltViewModel
 class OrderDetailViewModel @Inject constructor(
@@ -99,6 +106,8 @@ class OrderDetailViewModel @Inject constructor(
 
     /**
      * 重写请求API的方法
+     *
+     * @author Joker.X
      */
     override fun requestApiFlow(): Flow<NetworkResponse<Order>> {
         return orderRepository.getOrderInfo(requiredId)
@@ -106,6 +115,8 @@ class OrderDetailViewModel @Inject constructor(
 
     /**
      * 处理请求成功的逻辑
+     *
+     * @author Joker.X
      */
     override fun onRequestSuccess(data: Order) {
         _cartList.value = convertOrderGoodsToCart(data)
@@ -114,6 +125,8 @@ class OrderDetailViewModel @Inject constructor(
 
     /**
      * 确认收货
+     *
+     * @author Joker.X
      */
     fun confirmOrder() {
         showConfirmReceiveDialog()
@@ -121,6 +134,8 @@ class OrderDetailViewModel @Inject constructor(
 
     /**
      * 显示确认收货弹窗
+     *
+     * @author Joker.X
      */
     fun showConfirmReceiveDialog() {
         _showConfirmDialog.value = true
@@ -128,6 +143,8 @@ class OrderDetailViewModel @Inject constructor(
 
     /**
      * 隐藏确认收货弹窗
+     *
+     * @author Joker.X
      */
     fun hideConfirmReceiveDialog() {
         _showConfirmDialog.value = false
@@ -135,6 +152,8 @@ class OrderDetailViewModel @Inject constructor(
 
     /**
      * 确认收货订单
+     *
+     * @author Joker.X
      */
     fun confirmReceiveOrder() {
         ResultHandler.handleResultWithData(
@@ -153,6 +172,8 @@ class OrderDetailViewModel @Inject constructor(
 
     /**
      * 取消订单
+     *
+     * @author Joker.X
      */
     fun cancelOrder() {
         showCancelModal()
@@ -165,6 +186,8 @@ class OrderDetailViewModel @Inject constructor(
 
     /**
      * 加载取消原因字典数据
+     *
+     * @author Joker.X
      */
     fun loadCancelReasons() {
         // 如果 ui 状态为成功，则不重复加载
@@ -192,6 +215,8 @@ class OrderDetailViewModel @Inject constructor(
 
     /**
      * 显示取消原因选择弹窗
+     *
+     * @author Joker.X
      */
     fun showCancelModal() {
         _cancelModalVisible.value = true
@@ -199,6 +224,8 @@ class OrderDetailViewModel @Inject constructor(
 
     /**
      * 隐藏取消原因选择弹窗
+     *
+     * @author Joker.X
      */
     fun hideCancelModal() {
         _cancelModalVisible.value = false
@@ -206,6 +233,8 @@ class OrderDetailViewModel @Inject constructor(
 
     /**
      * 选择取消原因
+     *
+     * @author Joker.X
      */
     fun selectCancelReason(reason: DictItem) {
         _selectedCancelReason.value = reason
@@ -213,6 +242,8 @@ class OrderDetailViewModel @Inject constructor(
 
     /**
      * 确认取消订单
+     *
+     * @author Joker.X
      */
     fun confirmCancelOrder() {
         ResultHandler.handleResultWithData(
@@ -234,6 +265,8 @@ class OrderDetailViewModel @Inject constructor(
 
     /**
      * 跳转到支付页面
+     *
+     * @author Joker.X
      */
     fun navigateToPayment() {
         val order = super.getSuccessData()
@@ -251,6 +284,8 @@ class OrderDetailViewModel @Inject constructor(
     /**
      * 观察来自支付页面的刷新状态
      * 当从支付页面返回时，如果支付成功，则刷新订单详情
+     *
+     * @author Joker.X
      */
     fun observeRefreshState(backStackEntry: NavBackStackEntry?) {
         backStackEntry?.savedStateHandle?.let { savedStateHandle ->
@@ -274,6 +309,8 @@ class OrderDetailViewModel @Inject constructor(
     /**
      * 处理返回按钮点击
      * 根据是否需要刷新列表决定传递参数
+     *
+     * @author Joker.X
      */
     fun handleBackClick() {
         if (shouldRefreshListOnBack) {
@@ -289,6 +326,8 @@ class OrderDetailViewModel @Inject constructor(
 
     /**
      * 显示再次购买弹窗
+     *
+     * @author Joker.X
      */
     fun showRebuyModal() {
         _rebuyModalVisible.value = true
@@ -296,6 +335,8 @@ class OrderDetailViewModel @Inject constructor(
 
     /**
      * 隐藏再次购买弹窗
+     *
+     * @author Joker.X
      */
     fun hideRebuyModal() {
         _rebuyModalVisible.value = false
@@ -303,6 +344,8 @@ class OrderDetailViewModel @Inject constructor(
 
     /**
      * 显示商品评论弹窗
+     *
+     * @author Joker.X
      */
     fun showCommentModal() {
         _commentModalVisible.value = true
@@ -310,6 +353,8 @@ class OrderDetailViewModel @Inject constructor(
 
     /**
      * 隐藏商品评论弹窗
+     *
+     * @author Joker.X
      */
     fun hideCommentModal() {
         _commentModalVisible.value = false
@@ -317,6 +362,8 @@ class OrderDetailViewModel @Inject constructor(
 
     /**
      * 处理再次购买逻辑
+     *
+     * @author Joker.X
      */
     fun handleRebuy() {
         val cartList = _cartList.value
@@ -332,6 +379,8 @@ class OrderDetailViewModel @Inject constructor(
 
     /**
      * 跳转到商品详情页面（再次购买）
+     *
+     * @author Joker.X
      */
     fun toGoodsDetail(goodsId: Long) {
         // 隐藏弹窗
@@ -341,6 +390,8 @@ class OrderDetailViewModel @Inject constructor(
 
     /**
      * 跳转到订单物流页面
+     *
+     * @author Joker.X
      */
     fun toOrderLogistics() {
         val order = super.getSuccessData()
@@ -350,6 +401,8 @@ class OrderDetailViewModel @Inject constructor(
 
     /**
      * 跳转到退款申请页面
+     *
+     * @author Joker.X
      */
     fun toOrderRefund() {
         val order = super.getSuccessData()
@@ -359,6 +412,8 @@ class OrderDetailViewModel @Inject constructor(
 
     /**
      * 跳转到订单评价页面
+     *
+     * @author Joker.X
      */
     fun toOrderComment() {
         val cartList = _cartList.value
@@ -382,6 +437,8 @@ class OrderDetailViewModel @Inject constructor(
 
     /**
      * 跳转到指定商品的订单评价页面
+     *
+     * @author Joker.X
      */
     fun toOrderCommentForGoods(goodsId: Long) {
         val order = super.getSuccessData()

@@ -26,6 +26,7 @@ import com.joker.coolmall.core.ui.R
  * @param shape 按钮形状，默认圆形
  * @param selectedIcon 选中时的图标资源ID (带勾的圆圈)
  * @param unselectedIcon 未选中时的图标资源ID (空圆圈)
+ * @author Joker.X
  */
 @Composable
 fun CheckButton(

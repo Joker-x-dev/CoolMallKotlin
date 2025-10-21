@@ -16,6 +16,14 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import javax.inject.Inject
 
+/**
+ * 分类页面ViewModel
+ *
+ * @param navigator 导航器
+ * @param appState 应用状态
+ * @param goodsRepository 商品仓库
+ * @author Joker.X
+ */
 @HiltViewModel
 class CategoryViewModel @Inject constructor(
     navigator: AppNavigator,
@@ -41,6 +49,8 @@ class CategoryViewModel @Inject constructor(
 
     /**
      * 获取分类数据
+     *
+     * @author Joker.X
      */
     fun loadCategoryData() {
         ResultHandler.handleResultWithData(
@@ -60,6 +70,8 @@ class CategoryViewModel @Inject constructor(
 
     /**
      * 重试加载分类数据
+     *
+     * @author Joker.X
      */
     fun retryRequest() {
         loadCategoryData()
@@ -67,7 +79,9 @@ class CategoryViewModel @Inject constructor(
 
     /**
      * 选择分类
+     *
      * @param index 选中的分类索引
+     * @author Joker.X
      */
     fun selectCategory(index: Int) {
         _selectedCategoryIndex.value = index
@@ -75,7 +89,9 @@ class CategoryViewModel @Inject constructor(
 
     /**
      * 跳转到商品分类页面
+     *
      * @param categoryId 点击的分类ID
+     * @author Joker.X
      */
     fun toGoodsCategoryPage(categoryId: Long) {
         toPage("${GoodsRoutes.CATEGORY}?type_id=$categoryId")
@@ -83,8 +99,10 @@ class CategoryViewModel @Inject constructor(
 
     /**
      * 将Category列表转换为CategoryTree树形结构
+     *
      * @param categories 原始分类列表
      * @return 树形结构的分类列表
+     * @author Joker.X
      */
     private fun convertToTree(categories: List<Category>): List<CategoryTree> {
         // 按sortNum排序的列表
@@ -128,9 +146,11 @@ class CategoryViewModel @Inject constructor(
 
     /**
      * 递归构建分类树
+     *
      * @param categoryTree 当前分类树节点
      * @param childrenMap 子分类映射
      * @return 构建好的分类树
+     * @author Joker.X
      */
     private fun buildCategoryTree(
         categoryTree: CategoryTree,

@@ -17,6 +17,10 @@ import javax.inject.Inject
 /**
  * 商品评论 ViewModel
  *
+ * @param navigator 导航器
+ * @param appState 应用状态
+ * @param savedStateHandle 保存的状态句柄
+ * @param goodsRepository 商品仓库
  * @author Joker.X
  */
 @HiltViewModel

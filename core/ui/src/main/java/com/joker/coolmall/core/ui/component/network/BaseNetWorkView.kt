@@ -26,6 +26,7 @@ import com.joker.coolmall.core.ui.component.loading.PageLoading
  * @param customLoading 自定义加载组件，为null时使用默认组件
  * @param customError 自定义错误组件，为null时使用默认组件
  * @param content 成功状态下显示的内容，接收数据参数
+ * @author Joker.X
  */
 @Composable
 fun <T> BaseNetWorkView(

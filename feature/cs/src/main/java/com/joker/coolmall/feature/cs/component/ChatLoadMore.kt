@@ -15,9 +15,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.joker.coolmall.core.common.base.state.LoadMoreState
+import com.joker.coolmall.feature.cs.R
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.ui.component.divider.WeDivider
 import com.joker.coolmall.core.ui.component.loading.WeLoading
@@ -38,6 +40,7 @@ import com.joker.coolmall.core.ui.component.text.TextType
  * @param state 当前加载状态，默认为可上拉加载状态
  * @param listState LazyList的状态，用于自动滚动，可为空
  * @param onRetry 加载失败时的重试回调，为空时不可点击重试
+ * @author Joker.X
  */
 @Composable
 fun ChatLoadMore(
@@ -58,7 +61,7 @@ fun ChatLoadMore(
             LoadMoreState.PullToLoad -> {
                 WeDivider(modifier = Modifier.weight(1f))
                 AppText(
-                    text = "加载更多历史消息",
+                    text = stringResource(R.string.load_more_history),
                     modifier = Modifier.padding(horizontal = 8.dp),
                     type = TextType.SECONDARY
                 )
@@ -69,7 +72,7 @@ fun ChatLoadMore(
             LoadMoreState.Loading -> {
                 WeLoading() // 显示加载动画
                 Spacer(modifier = Modifier.width(8.dp))
-                AppText(text = "正在加载历史消息...")
+                AppText(text = stringResource(R.string.loading_history))
                 // 如果提供了列表状态，在聊天场景中不需要自动滚动
                 // 因为用户可能正在查看历史消息
             }
@@ -78,7 +81,7 @@ fun ChatLoadMore(
             LoadMoreState.Success -> {
                 WeDivider(modifier = Modifier.weight(1f))
                 AppText(
-                    text = "加载成功",
+                    text = stringResource(R.string.load_success),
                     modifier = Modifier.padding(horizontal = 8.dp)
                 )
                 WeDivider(modifier = Modifier.weight(1f))
@@ -89,7 +92,7 @@ fun ChatLoadMore(
                 WeDivider(modifier = Modifier.weight(1f))
                 if (onRetry != null) {
                     AppText(
-                        text = "加载失败，点击重试",
+                        text = stringResource(R.string.load_failed_retry),
                         modifier = Modifier
                             .padding(horizontal = 8.dp)
                             .clip(MaterialTheme.shapes.small)
@@ -99,7 +102,7 @@ fun ChatLoadMore(
                     )
                 } else {
                     AppText(
-                        text = "加载失败",
+                        text = stringResource(R.string.load_failed),
                         modifier = Modifier.padding(horizontal = 8.dp),
                         type = TextType.ERROR
                     )
@@ -111,7 +114,7 @@ fun ChatLoadMore(
             LoadMoreState.NoMore -> {
                 WeDivider(modifier = Modifier.weight(1f))
                 AppText(
-                    text = "没有更多消息了",
+                    text = stringResource(R.string.no_more_messages),
                     modifier = Modifier.padding(horizontal = 8.dp),
                     type = TextType.SECONDARY
                 )
@@ -123,6 +126,8 @@ fun ChatLoadMore(
 
 /**
  * ChatLoadMore 组件预览
+ * 
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -160,6 +165,8 @@ private fun ChatLoadMorePreview() {
 
 /**
  * ChatLoadMore 组件深色主题预览
+ * 
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable

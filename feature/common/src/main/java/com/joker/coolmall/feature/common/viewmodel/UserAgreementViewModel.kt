@@ -11,6 +11,8 @@ import javax.inject.Inject
 
 /**
  * 用户协议 ViewModel
+ * 
+ * @author Joker.X
  */
 @HiltViewModel
 class UserAgreementViewModel @Inject constructor(
