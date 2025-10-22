@@ -5,6 +5,8 @@ import kotlinx.serialization.Serializable
 /**
  * 退款请求实体类
  *
+ * @param orderId 订单ID
+ * @param reason 退款原因
  * @author Joker.X
  */
 @Serializable

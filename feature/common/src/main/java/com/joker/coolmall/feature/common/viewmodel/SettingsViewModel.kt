@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 /**
  * 设置页面ViewModel
- * 
+ *
  * @author Joker.X
  */
 @HiltViewModel
@@ -27,7 +27,7 @@ class SettingsViewModel @Inject constructor(
     /**
      * 点击用户协议
      * 显示用户使用协议
-     * 
+     *
      * @author Joker.X
      */
     fun onUserAgreementClick() {
@@ -37,7 +37,7 @@ class SettingsViewModel @Inject constructor(
     /**
      * 点击隐私政策
      * 显示隐私政策内容
-     * 
+     *
      * @author Joker.X
      */
     fun onPrivacyPolicyClick() {
@@ -47,7 +47,7 @@ class SettingsViewModel @Inject constructor(
     /**
      * 点击账号与安全
      * 跳转到个人中心页面
-     * 
+     *
      * @author Joker.X
      */
     fun onAccountSecurityClick() {
@@ -57,7 +57,7 @@ class SettingsViewModel @Inject constructor(
     /**
      * 点击意见反馈
      * 跳转到反馈列表页面
-     * 
+     *
      * @author Joker.X
      */
     fun onFeedbackClick() {
@@ -67,7 +67,7 @@ class SettingsViewModel @Inject constructor(
     /**
      * 点击关于应用
      * 跳转到关于我们页面
-     * 
+     *
      * @author Joker.X
      */
     fun onAboutAppClick() {
@@ -77,7 +77,7 @@ class SettingsViewModel @Inject constructor(
     /**
      * 点击应用引导
      * 跳转到引导页并标记从设置页面进入
-     * 
+     *
      * @author Joker.X
      */
     fun onAppGuideClick() {

@@ -26,6 +26,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.scale
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -43,9 +44,9 @@ import kotlin.math.sin
 /**
  * 加载中动画图标
  *
- * @param size 大小
- * @param color 颜色
- * @param isRotating 是否旋转
+ * @param size 图标大小，默认16.dp
+ * @param color 图标颜色，默认使用未指定颜色
+ * @param isRotating 是否启用旋转动画，默认为true
  */
 @Composable
 fun WeLoading(size: Dp = 16.dp, color: Color = Color.Unspecified, isRotating: Boolean = true) {
@@ -66,7 +67,7 @@ fun WeLoading(size: Dp = 16.dp, color: Color = Color.Unspecified, isRotating: Bo
 
     Icon(
         painter = painterResource(id = R.drawable.ic_loading),
-        contentDescription = "loading",
+        contentDescription = stringResource(id = R.string.loading),
         modifier = Modifier
             .size(size)
             .rotate(angle),
@@ -74,6 +75,12 @@ fun WeLoading(size: Dp = 16.dp, color: Color = Color.Unspecified, isRotating: Bo
     )
 }
 
+/**
+ * 多点加载动画 - 3个圆点依次高亮显示
+ *
+ * @param color 圆点颜色，默认使用outline颜色
+ * @param animationSpec 动画规格配置，默认1000ms
+ */
 @Composable
 fun WeLoadingMP(
     color: Color = MaterialTheme.colorScheme.outline,
@@ -111,6 +118,11 @@ fun WeLoadingMP(
     }
 }
 
+/**
+ * 小米风格Web加载动画 - 3条竖线交替缩放
+ *
+ * @param color 竖线颜色，默认使用Primary主题色
+ */
 @Composable
 fun MiLoadingWeb(color: Color = Primary) {
     val infiniteTransition = rememberInfiniteTransition(label = "")
@@ -167,6 +179,13 @@ fun MiLoadingWeb(color: Color = Primary) {
     }
 }
 
+/**
+ * 小米风格移动端加载动画 - 圆形轨道上的圆点旋转
+ *
+ * @param borderColor 圆形轨道边框颜色，默认使用onSurface颜色
+ * @param dotColor 旋转圆点的颜色，默认与边框颜色相同
+ * @param animationSpec 动画规格配置，默认1200ms线性动画
+ */
 @Composable
 fun MiLoadingMobile(
     borderColor: Color = MaterialTheme.colorScheme.onSurface,
@@ -202,6 +221,11 @@ fun MiLoadingMobile(
     }
 }
 
+/**
+ * 跳舞圆点加载动画 - 3个圆点依次上下跳动
+ *
+ * @param color 圆点颜色，默认使用Primary主题色
+ */
 @Composable
 fun DotDanceLoading(color: Color = Primary) {
     val infiniteTransition = rememberInfiniteTransition(label = "")
@@ -242,6 +266,11 @@ fun DotDanceLoading(color: Color = Primary) {
     }
 }
 
+/**
+ * Lottie动画加载组件 - 使用Lottie动画文件
+ *
+ * @param modifier 修饰符，用于自定义组件样式
+ */
 @Composable
 fun LottieLoading(
     modifier: Modifier = Modifier,
@@ -256,6 +285,9 @@ fun LottieLoading(
     )
 }
 
+/**
+ * WeLoading组件预览
+ */
 @Preview(showBackground = true)
 @Composable
 fun WeLoadingPreview() {
@@ -264,6 +296,9 @@ fun WeLoadingPreview() {
     }
 }
 
+/**
+ * WeLoadingMP组件预览
+ */
 @Preview(showBackground = true)
 @Composable
 fun WeLoadingMPPreview() {
@@ -272,6 +307,9 @@ fun WeLoadingMPPreview() {
     }
 }
 
+/**
+ * MiLoadingWeb组件预览
+ */
 @Preview(showBackground = true)
 @Composable
 fun MiLoadingWebPreview() {
@@ -280,6 +318,9 @@ fun MiLoadingWebPreview() {
     }
 }
 
+/**
+ * DotDanceLoading组件预览
+ */
 @Preview(showBackground = true)
 @Composable
 fun DotDanceLoadingPreview() {
@@ -288,6 +329,9 @@ fun DotDanceLoadingPreview() {
     }
 }
 
+/**
+ * LottieLoading组件预览
+ */
 @Preview(showBackground = true)
 @Composable
 fun LottieLoadingPreview() {

@@ -53,9 +53,9 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -419,7 +419,7 @@ private fun AnimatedAuroraBackground() {
 
 /**
  * 顶部内容区域
- * 
+ *
  * @author Joker.X
  */
 @Composable
@@ -868,7 +868,7 @@ private fun AboutAnimatedToolBar(
 
 /**
  * 关于我们界面浅色主题预览
- * 
+ *
  * @author Joker.X
  */
 @Preview(showBackground = true)
@@ -881,7 +881,7 @@ internal fun AboutScreenPreview() {
 
 /**
  * 关于我们界面深色主题预览
- * 
+ *
  * @author Joker.X
  */
 @Preview(showBackground = true)

@@ -31,6 +31,8 @@ import androidx.compose.ui.window.DialogProperties
 
 /**
  * Modal类型枚举
+ *
+ * @author Joker.X
  */
 enum class ModalType {
     /**
@@ -55,6 +57,7 @@ enum class ModalType {
  * @param dismissOnBackPress 是否允许返回键关闭
  * @param dismissOnClickOutside 是否允许点击外部关闭
  * @param content 内容
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

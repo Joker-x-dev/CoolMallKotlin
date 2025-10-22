@@ -11,6 +11,8 @@ import java.security.NoSuchAlgorithmException
  * Android 应用包信息工具类
  *
  * 提供获取应用版本、签名、安装状态等功能的便捷方法
+ *
+ * @author Joker.X
  */
 object PackageUtils {
 
@@ -19,6 +21,7 @@ object PackageUtils {
      *
      * @param context 应用上下文
      * @return 应用名称，获取失败时返回空字符串
+     * @author Joker.X
      *
      * @sample
      * ```kotlin
@@ -44,6 +47,7 @@ object PackageUtils {
      *
      * @param context 应用上下文
      * @return 版本名称字符串，获取失败时返回空字符串
+     * @author Joker.X
      *
      * @sample
      * ```kotlin
@@ -68,6 +72,7 @@ object PackageUtils {
      *
      * @param context 应用上下文
      * @return 版本号，获取失败时返回 0
+     * @author Joker.X
      *
      * @sample
      * ```kotlin
@@ -98,6 +103,7 @@ object PackageUtils {
      * @param context 应用上下文
      * @param packageName 目标应用的包名
      * @return true 表示已安装，false 表示未安装
+     * @author Joker.X
      *
      * @sample
      * ```kotlin
@@ -122,6 +128,7 @@ object PackageUtils {
      *
      * @param context 应用上下文
      * @return MD5 签名字符串，格式为小写十六进制，用冒号分隔，获取失败时返回 null
+     * @author Joker.X
      *
      * @sample
      * ```kotlin
@@ -138,6 +145,7 @@ object PackageUtils {
      *
      * @param context 应用上下文
      * @return SHA1 签名字符串，格式为小写十六进制，用冒号分隔，获取失败时返回 null
+     * @author Joker.X
      *
      * @sample
      * ```kotlin
@@ -155,6 +163,7 @@ object PackageUtils {
      * @param context 应用上下文
      * @param packageName 包名
      * @return PackageInfo 对象，获取失败时返回 null
+     * @author Joker.X
      */
     private fun getPackageInfoSafely(context: Context, packageName: String): PackageInfo? {
         return try {
@@ -171,6 +180,7 @@ object PackageUtils {
      * @param context 应用上下文
      * @param algorithm 哈希算法名称（如 "MD5", "SHA1"）
      * @return 签名哈希字符串，获取失败时返回 null
+     * @author Joker.X
      */
     private fun generateSignatureHash(context: Context, algorithm: String): String? {
         return try {

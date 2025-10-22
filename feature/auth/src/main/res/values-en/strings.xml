@@ -10,8 +10,8 @@
     <string name="phone_code">+86</string>
     <string name="verification_code">Verification code</string>
     <string name="get_verification_code">Get code</string>
-    <string name="login_agreement_prefix">By logging in, you agree to our</string>
-    <string name="register_agreement_prefix">By registering, you agree to our</string>
+    <string name="login_agreement_prefix">I agree to the</string>
+    <string name="register_agreement_prefix">I agree to the</string>
     <string name="user_agreement">User Agreement</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="and">and</string>

@@ -12,6 +12,7 @@ import com.joker.coolmall.core.util.toast.ToastUtils
 import com.joker.coolmall.core.util.validation.ValidationUtil
 import com.joker.coolmall.feature.auth.R
 import com.joker.coolmall.navigation.AppNavigator
+import com.joker.coolmall.navigation.routes.CommonRoutes
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,7 +26,7 @@ import javax.inject.Inject
 
 /**
  * 用户注册ViewModel
- * 
+ *
  * @author Joker.X
  */
 @HiltViewModel
@@ -111,7 +112,7 @@ class RegisterViewModel @Inject constructor(
 
     /**
      * 更新手机号输入
-     * 
+     *
      * @param value 手机号值
      * @author Joker.X
      */
@@ -121,7 +122,7 @@ class RegisterViewModel @Inject constructor(
 
     /**
      * 更新密码输入
-     * 
+     *
      * @param value 密码值
      * @author Joker.X
      */
@@ -131,7 +132,7 @@ class RegisterViewModel @Inject constructor(
 
     /**
      * 更新确认密码输入
-     * 
+     *
      * @param value 确认密码值
      * @author Joker.X
      */
@@ -141,7 +142,7 @@ class RegisterViewModel @Inject constructor(
 
     /**
      * 更新验证码输入
-     * 
+     *
      * @param value 验证码值
      * @author Joker.X
      */
@@ -151,7 +152,7 @@ class RegisterViewModel @Inject constructor(
 
     /**
      * 更新图形验证码输入
-     * 
+     *
      * @param value 图形验证码值
      * @author Joker.X
      */
@@ -162,7 +163,7 @@ class RegisterViewModel @Inject constructor(
     /**
      * 显示图片验证码 Popup
      * 在显示之前会先刷新验证码
-     * 
+     *
      * @author Joker.X
      */
     fun onSendCodeButtonClick() {
@@ -182,7 +183,7 @@ class RegisterViewModel @Inject constructor(
 
     /**
      * 隐藏图片验证码 Popup
-     * 
+     *
      * @author Joker.X
      */
     fun onHideImageCodePopup() {
@@ -194,7 +195,7 @@ class RegisterViewModel @Inject constructor(
     /**
      * 验证码确认
      * 当用户在图形验证码对话框中点击确认按钮时调用
-     * 
+     *
      * @param imageCode 图形验证码
      * @author Joker.X
      */
@@ -205,7 +206,7 @@ class RegisterViewModel @Inject constructor(
 
     /**
      * 发送短信验证码
-     * 
+     *
      * @author Joker.X
      */
     fun sendVerificationCode() {
@@ -234,7 +235,7 @@ class RegisterViewModel @Inject constructor(
     /**
      * 获取图片验证码
      * 当需要刷新验证码时调用（如用户点击验证码图片）
-     * 
+     *
      * @author Joker.X
      */
     fun getCaptcha() {
@@ -247,7 +248,7 @@ class RegisterViewModel @Inject constructor(
 
     /**
      * 实际获取验证码的网络请求
-     * 
+     *
      * @author Joker.X
      */
     private fun fetchCaptcha() {
@@ -262,7 +263,7 @@ class RegisterViewModel @Inject constructor(
 
     /**
      * 执行注册操作
-     * 
+     *
      * @author Joker.X
      */
     fun register() {
@@ -306,7 +307,7 @@ class RegisterViewModel @Inject constructor(
 
     /**
      * 注册成功
-     * 
+     *
      * @param authData 认证数据
      * @author Joker.X
      */
@@ -317,5 +318,25 @@ class RegisterViewModel @Inject constructor(
             appState.refreshUserInfo()
             super.navigateBack()
         }
+    }
+
+    /**
+     * 点击用户协议
+     * 显示用户使用协议
+     *
+     * @author Joker.X
+     */
+    fun onUserAgreementClick() {
+        toPage(CommonRoutes.USER_AGREEMENT)
+    }
+
+    /**
+     * 点击隐私政策
+     * 显示隐私政策内容
+     *
+     * @author Joker.X
+     */
+    fun onPrivacyPolicyClick() {
+        toPage(CommonRoutes.PRIVACY_POLICY)
     }
 }

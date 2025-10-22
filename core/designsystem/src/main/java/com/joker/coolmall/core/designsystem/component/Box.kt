@@ -32,6 +32,7 @@ import com.joker.coolmall.core.designsystem.theme.SpacePaddingSmall
  * @param fillMaxWidth 是否填充最大宽度（当fillMaxSize为false时生效）
  * @param padding 内边距
  * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun AppBox(
@@ -55,6 +56,12 @@ fun AppBox(
 
 /**
  * 填充整个屏幕的Box，便于创建全屏布局
+ *
+ * @param modifier 额外的修饰符
+ * @param contentAlignment 内容对齐方式
+ * @param padding 内边距
+ * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun FullScreenBox(
@@ -79,6 +86,7 @@ fun FullScreenBox(
  * @param fillMaxSize 是否填充最大尺寸
  * @param padding 内边距
  * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun CenterBox(
@@ -98,6 +106,13 @@ fun CenterBox(
 
 /**
  * 顶部居中对齐的Box组件
+ *
+ * @param modifier 额外的修饰符
+ * @param fillMaxSize 是否填充最大尺寸
+ * @param fillMaxWidth 是否填充最大宽度
+ * @param padding 内边距
+ * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun TopCenterBox(
@@ -119,6 +134,13 @@ fun TopCenterBox(
 
 /**
  * 底部居中对齐的Box组件
+ *
+ * @param modifier 额外的修饰符
+ * @param fillMaxSize 是否填充最大尺寸
+ * @param fillMaxWidth 是否填充最大宽度
+ * @param padding 内边距
+ * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun BottomCenterBox(
@@ -140,6 +162,13 @@ fun BottomCenterBox(
 
 /**
  * 左侧居中对齐的Box组件
+ *
+ * @param modifier 额外的修饰符
+ * @param fillMaxSize 是否填充最大尺寸
+ * @param fillMaxWidth 是否填充最大宽度
+ * @param padding 内边距
+ * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun CenterStartBox(
@@ -161,6 +190,13 @@ fun CenterStartBox(
 
 /**
  * 右侧居中对齐的Box组件
+ *
+ * @param modifier 额外的修饰符
+ * @param fillMaxSize 是否填充最大尺寸
+ * @param fillMaxWidth 是否填充最大宽度
+ * @param padding 内边距
+ * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun CenterEndBox(
@@ -189,6 +225,7 @@ fun CenterEndBox(
  * @param contentAlignment 内容对齐方式
  * @param padding 内边距
  * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun FixedSizeBox(
@@ -211,6 +248,15 @@ fun FixedSizeBox(
 
 /**
  * 圆角Box组件，常用于卡片或容器
+ *
+ * @param modifier 额外的修饰符
+ * @param contentAlignment 内容对齐方式
+ * @param fillMaxWidth 是否填充最大宽度
+ * @param cornerRadius 圆角半径
+ * @param padding 内边距
+ * @param backgroundColor 背景颜色
+ * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun RoundedBox(
@@ -234,6 +280,17 @@ fun RoundedBox(
 
 /**
  * 带边框的Box组件，常用于强调区域
+ *
+ * @param modifier 额外的修饰符
+ * @param contentAlignment 内容对齐方式
+ * @param fillMaxWidth 是否填充最大宽度
+ * @param cornerRadius 圆角半径
+ * @param padding 内边距
+ * @param borderWidth 边框宽度
+ * @param borderColor 边框颜色
+ * @param shape 形状
+ * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun BorderBox(
@@ -260,6 +317,13 @@ fun BorderBox(
 
 /**
  * 带小内边距的Box，常用于紧凑型布局
+ *
+ * @param modifier 额外的修饰符
+ * @param contentAlignment 内容对齐方式
+ * @param fillMaxSize 是否填充最大尺寸
+ * @param fillMaxWidth 是否填充最大宽度
+ * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun SmallPaddingBox(
@@ -281,6 +345,13 @@ fun SmallPaddingBox(
 
 /**
  * 带中等内边距的Box，常用于普通布局
+ *
+ * @param modifier 额外的修饰符
+ * @param contentAlignment 内容对齐方式
+ * @param fillMaxSize 是否填充最大尺寸
+ * @param fillMaxWidth 是否填充最大宽度
+ * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun MediumPaddingBox(
@@ -302,6 +373,13 @@ fun MediumPaddingBox(
 
 /**
  * 带大内边距的Box，常用于强调布局
+ *
+ * @param modifier 额外的修饰符
+ * @param contentAlignment 内容对齐方式
+ * @param fillMaxSize 是否填充最大尺寸
+ * @param fillMaxWidth 是否填充最大宽度
+ * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun LargePaddingBox(

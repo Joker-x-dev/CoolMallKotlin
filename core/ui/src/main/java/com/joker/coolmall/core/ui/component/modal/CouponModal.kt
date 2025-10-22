@@ -11,6 +11,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.joker.coolmall.core.designsystem.component.WrapColumn
@@ -18,6 +19,7 @@ import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.model.entity.Coupon
 import com.joker.coolmall.core.model.preview.previewAvailableCoupons
+import com.joker.coolmall.core.ui.R
 import com.joker.coolmall.core.ui.component.coupon.CouponCard
 import com.joker.coolmall.core.ui.component.coupon.CouponCardMode
 
@@ -27,9 +29,11 @@ import com.joker.coolmall.core.ui.component.coupon.CouponCardMode
  * @param visible 是否显示
  * @param onDismiss 关闭回调
  * @param coupons 优惠券列表
- * @param title 弹出层标题，默认为"领取优惠券"
+ * @param title 弹出层标题，默认为空（使用字符串资源）
  * @param mode 优惠券卡片模式，默认为RECEIVE
+ * @param currentPrice 当前价格，用于判断优惠券是否可用
  * @param onCouponAction 优惠券操作回调，参数为优惠券ID
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -37,11 +41,12 @@ fun CouponModal(
     visible: Boolean,
     onDismiss: () -> Unit,
     coupons: List<Coupon> = emptyList(),
-    title: String = "领取优惠券",
+    title: String = "",
     mode: CouponCardMode = CouponCardMode.RECEIVE,
     currentPrice: Double? = null,
     onCouponAction: (Long) -> Unit = {}
 ) {
+    val finalTitle = title.ifEmpty { stringResource(id = R.string.coupon_modal_title) }
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
     )
@@ -49,7 +54,7 @@ fun CouponModal(
     BottomModal(
         visible = visible,
         onDismiss = onDismiss,
-        title = title,
+        title = finalTitle,
         sheetState = sheetState,
         containerColor = MaterialTheme.colorScheme.background,
         indicatorColor = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.1f),
@@ -68,7 +73,9 @@ fun CouponModal(
  *
  * @param coupons 优惠券列表
  * @param mode 优惠券卡片模式
+ * @param currentPrice 当前价格，用于判断优惠券是否可用
  * @param onCouponAction 优惠券操作回调
+ * @author Joker.X
  */
 @Composable
 private fun CouponModalContent(
@@ -98,6 +105,8 @@ private fun CouponModalContent(
 
 /**
  * 优惠券弹出层预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable

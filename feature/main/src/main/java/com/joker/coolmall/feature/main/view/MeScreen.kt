@@ -342,7 +342,8 @@ private fun UserInfoSection(
 
             // 手机号 - 根据登录状态显示
             AppText(
-                text = if (isLoggedIn && userInfo != null && !userInfo.phone.isNullOrEmpty()) "手机号: ${userInfo.phone}"
+                text = if (isLoggedIn && userInfo != null && !userInfo.phone.isNullOrEmpty())
+                    "${stringResource(R.string.phone_number)}: ${userInfo.phone}"
                 else stringResource(R.string.click_to_login),
                 size = TextSize.BODY_MEDIUM,
                 type = TextType.TERTIARY
@@ -383,7 +384,7 @@ private fun MembershipCard() {
                 )
                 SpaceHorizontalSmall()
                 AppText(
-                    text = "会员立享5大权益!",
+                    text = stringResource(R.string.member_benefits),
                     color = Color(0xFFE0A472),
                     fontWeight = FontWeight.Bold
                 )
@@ -459,7 +460,7 @@ private fun OrderSection(
 
             OrderStatusItem(
                 icon = CoreUiR.drawable.ic_refund,
-                label = "退款/售后",
+                label = stringResource(R.string.refund_after_sale),
                 badgeCount = (orderCount?.refunding ?: 0) + (orderCount?.refunded ?: 0),
                 modifier = Modifier.weight(1f),
                 onClick = { toOrderListByTab(4) } // 售后对应的标签索引为4

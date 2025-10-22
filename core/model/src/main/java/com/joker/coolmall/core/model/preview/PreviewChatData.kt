@@ -4,6 +4,7 @@ import com.joker.coolmall.core.model.entity.CsMsg
 
 /**
  * 预览客服聊天数据
+ *
  */
 
 // 客服头像
@@ -16,6 +17,7 @@ private const val USER_AVATAR =
 
 /**
  * 订单问题聊天记录
+ *
  */
 val orderProblemChat = listOf(
     CsMsg(
@@ -166,6 +168,7 @@ val orderProblemChat = listOf(
 
 /**
  * 退款问题聊天记录
+ *
  */
 val refundProblemChat = listOf(
     CsMsg(
@@ -332,6 +335,7 @@ val refundProblemChat = listOf(
 
 /**
  * 商品咨询聊天记录
+ *
  */
 val productInquiryChat = listOf(
     CsMsg(
@@ -498,6 +502,7 @@ val productInquiryChat = listOf(
 
 /**
  * 售后服务聊天记录
+ *
  */
 val afterSaleServiceChat = listOf(
     CsMsg(
@@ -664,6 +669,7 @@ val afterSaleServiceChat = listOf(
 
 /**
  * 所有聊天记录集合
+ *
  */
 val allChatRecords = listOf(
     orderProblemChat,

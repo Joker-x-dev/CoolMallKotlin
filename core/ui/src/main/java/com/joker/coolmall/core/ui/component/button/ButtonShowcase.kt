@@ -21,6 +21,15 @@ import com.joker.coolmall.core.ui.component.title.TitleWithLine
 
 /**
  * 按钮组件展示页面
+ *
+ * 用于展示所有按钮组件的使用示例，包括：
+ * - 不同类型的按钮（默认、成功、警告、危险等）
+ * - 不同状态的按钮（禁用、加载中）
+ * - 不同形状的按钮（方形、圆形）
+ * - 不同大小的按钮（中、小、迷你）
+ * - 自定义样式的按钮（渐变）
+ *
+ * @author Joker.X
  */
 @Composable
 fun ButtonShowcase() {
@@ -216,6 +225,11 @@ fun ButtonShowcase() {
     }
 }
 
+/**
+ * 按钮组件展示页面预览 - 浅色主题
+ *
+ * @author Joker.X
+ */
 @Preview(showBackground = true)
 @Composable
 fun ButtonShowcasePreviewLight() {
@@ -224,6 +238,11 @@ fun ButtonShowcasePreviewLight() {
     }
 }
 
+/**
+ * 按钮组件展示页面预览 - 深色主题
+ *
+ * @author Joker.X
+ */
 @Preview(showBackground = true)
 @Composable
 fun ButtonShowcasePreviewDark() {

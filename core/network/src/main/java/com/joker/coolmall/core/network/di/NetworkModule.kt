@@ -18,6 +18,12 @@ import retrofit2.Retrofit
 import java.util.concurrent.TimeUnit
 import javax.inject.Singleton
 
+/**
+ * 网络模块
+ * 负责提供网络相关的依赖注入
+ *
+ * @author Joker.X
+ */
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
@@ -26,7 +32,12 @@ object NetworkModule {
     private const val BASE_URL = BuildConfig.BASE_URL
 //    private val BASE_URL = ""
 
-    // 配置Json序列化
+    /**
+     * 提供JSON序列化配置
+     *
+     * @return JSON序列化实例
+     * @author Joker.X
+     */
     @Provides
     @Singleton
     fun provideJson(): Json = Json {
@@ -36,7 +47,15 @@ object NetworkModule {
 //        encodeDefaults = true
     }
 
-    // 提供OkHttpClient
+    /**
+     * 提供OkHttpClient实例
+     *
+     * @param authInterceptor 认证拦截器
+     * @param loggingInterceptor 日志拦截器
+     * @param context 应用上下文
+     * @return OkHttpClient实例
+     * @author Joker.X
+     */
     @Provides
     @Singleton
     fun provideOkHttpClient(
@@ -60,7 +79,14 @@ object NetworkModule {
             .build()
     }
 
-    // 提供Retrofit实例
+    /**
+     * 提供Retrofit实例
+     *
+     * @param okHttpClient OkHttp客户端
+     * @param json JSON序列化实例
+     * @return Retrofit实例
+     * @author Joker.X
+     */
     @Provides
     @Singleton
     fun provideRetrofit(
@@ -75,7 +101,12 @@ object NetworkModule {
             .build()
     }
 
-    // 添加这个提供HttpLoggingInterceptor的方法
+    /**
+     * 提供日志拦截器
+     *
+     * @return 日志拦截器实例
+     * @author Joker.X
+     */
     @Provides
     @Singleton
     fun provideLoggingInterceptor(): HttpLoggingInterceptor {
@@ -88,7 +119,13 @@ object NetworkModule {
         }
     }
 
-    // 提供文件上传专用的OkHttpClient
+    /**
+     * 提供文件上传专用的OkHttpClient
+     *
+     * @param context 应用上下文
+     * @return 文件上传专用OkHttpClient实例
+     * @author Joker.X
+     */
     @Provides
     @Singleton
     @FileUploadQualifier

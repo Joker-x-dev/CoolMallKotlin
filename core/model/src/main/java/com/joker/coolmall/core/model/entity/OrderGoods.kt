@@ -4,6 +4,20 @@ import kotlinx.serialization.Serializable
 
 /**
  * 订单商品
+ *
+ * @param id ID
+ * @param orderId 订单ID
+ * @param goodsId 商品ID
+ * @param price 价格
+ * @param discountPrice 优惠金额
+ * @param count 数量
+ * @param remark 其他信息
+ * @param goodsInfo 商品信息
+ * @param spec 规格
+ * @param isComment 是否评价 0-否 1-是
+ * @param createTime 创建时间
+ * @param updateTime 更新时间
+ * @author Joker.X
  */
 @Serializable
 data class OrderGoods(

@@ -83,8 +83,8 @@ fun WeBadge(
         ) {
             content?.let {
                 Text(
-                    text = it, 
-                    color = Color.White, 
+                    text = it,
+                    color = Color.White,
                     fontSize = 10.sp,
                     textAlign = TextAlign.Center,
                     lineHeight = 10.sp

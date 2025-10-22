@@ -5,6 +5,13 @@ import kotlinx.serialization.Serializable
 
 /**
  * 分页查询消息请求
+ *
+ * @param sessionId 会话ID
+ * @param page 页码
+ * @param size 每页大小
+ * @param order 排序字段
+ * @param sort 排序方式 asc升序 desc降序
+ * @author Joker.X
  */
 @Serializable
 data class MessagePageRequest(

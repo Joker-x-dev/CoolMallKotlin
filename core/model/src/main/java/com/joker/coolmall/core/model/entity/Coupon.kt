@@ -14,6 +14,8 @@ import kotlinx.serialization.json.JsonPrimitive
 /**
  * 自定义序列化器，用于处理condition字段
  * API可能返回字符串格式或对象格式的condition
+ *
+ * @author Joker.X
  */
 object ConditionSerializer : KSerializer<Condition?> {
     override val descriptor: SerialDescriptor =
@@ -64,6 +66,22 @@ object ConditionSerializer : KSerializer<Condition?> {
 
 /**
  * 优惠券信息
+ *
+ * @param id ID
+ * @param title 标题
+ * @param description 描述
+ * @param type 类型 0-满减
+ * @param amount 金额
+ * @param num 数量
+ * @param receivedNum 已领取
+ * @param startTime 开始时间
+ * @param endTime 结束时间
+ * @param status 状态 0-禁用 1-启用
+ * @param condition 条件
+ * @param createTime 创建时间
+ * @param updateTime 更新时间
+ * @param useStatus 使用状态 0-未使用 1-已使用 2-已过期，仅在"我的优惠券"接口中返回
+ * @author Joker.X
  */
 @Serializable
 data class Coupon(

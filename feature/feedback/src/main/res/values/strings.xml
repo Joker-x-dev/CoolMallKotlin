@@ -3,26 +3,26 @@
     <!-- 页面标题 -->
     <string name="feedback_list">反馈列表</string>
     <string name="feedback_submit">我要反馈</string>
-    
+
     <!-- 按钮文本 -->
     <string name="submit">提交</string>
-    
+
     <!-- 表单字段 -->
     <string name="feedback_type">反馈类型</string>
     <string name="feedback_content">反馈内容</string>
     <string name="contact_info_optional">联系方式（选填）</string>
     <string name="problem_screenshot_optional">问题截图（选填）</string>
-    
+
     <!-- 提示文本 -->
     <string name="feedback_content_hint">请尽量详细描述遇到的问题，操作步骤，并附上相关页面截图，以便更好定位问题</string>
     <string name="contact_info_hint">QQ/微信号，手机号，邮箱</string>
-    
+
     <!-- 状态文本 -->
     <string name="status_processed">已处理</string>
     <string name="status_unprocessed">未处理</string>
     <string name="customer_service_reply">客服回复</string>
     <string name="unknown_type">未知类型</string>
-    
+
     <!-- Toast提示 -->
     <string name="please_select_type_and_fill_content">请选择反馈类型并填写反馈内容</string>
     <string name="submitting">正在提交中...</string>

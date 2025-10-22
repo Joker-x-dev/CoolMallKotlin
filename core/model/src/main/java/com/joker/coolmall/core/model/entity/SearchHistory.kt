@@ -4,6 +4,10 @@ import kotlinx.serialization.Serializable
 
 /**
  * 搜索历史模型
+ *
+ * @param keyword 搜索关键词
+ * @param searchTime 搜索时间戳
+ * @author Joker.X
  */
 @Serializable
 data class SearchHistory(

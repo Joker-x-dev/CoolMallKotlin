@@ -150,7 +150,7 @@ internal fun OrderRefundScreen(
     DictSelectModal(
         visible = refundModalVisible,
         onDismiss = onRefundModalDismiss,
-        title = stringResource(R.string.select_cancel_reason),
+        title = R.string.select_cancel_reason,
         uiState = refundReasonsModalUiState,
         selectedItem = selectedRefundReason,
         onConfirm = onReasonConfirm,

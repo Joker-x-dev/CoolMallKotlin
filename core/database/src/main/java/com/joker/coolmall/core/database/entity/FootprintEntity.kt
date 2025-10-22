@@ -5,6 +5,15 @@ import androidx.room.PrimaryKey
 
 /**
  * 用户足迹数据库实体
+ *
+ * @param goodsId 商品ID，主键
+ * @param goodsName 商品名称
+ * @param goodsSubTitle 商品副标题
+ * @param goodsMainPic 商品主图
+ * @param goodsPrice 商品价格
+ * @param goodsSold 已售数量
+ * @param viewTime 浏览时间戳
+ * @author Joker.X
  */
 @Entity(tableName = "footprints")
 data class FootprintEntity(

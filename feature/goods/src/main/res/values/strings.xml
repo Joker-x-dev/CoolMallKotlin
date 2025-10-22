@@ -3,7 +3,7 @@
     <!-- 页面标题 -->
     <string name="goods_detail">商品详情</string>
     <string name="goods_comment_title">商品评论</string>
-    
+
     <!-- 商品详情页 -->
     <string name="sold_count">已售 %d</string>
     <string name="coupon_text">满%d减%d元</string>
@@ -21,28 +21,28 @@
     <string name="buy_now">立即购买</string>
     <string name="view_all">查看全部</string>
     <string name="goods_reviews">商品评价</string>
-    
+
     <!-- 商品分类页 -->
     <string name="filter">筛选</string>
     <string name="comprehensive">综合</string>
     <string name="sales">销量</string>
     <string name="price">价格</string>
-    
+
     <!-- 商品搜索页 -->
     <string name="search_history">搜索历史</string>
     <string name="recommended_search">推荐搜索</string>
-    
+
     <!-- 筛选对话框 -->
     <string name="price_range">价格区间</string>
     <string name="min_price">最低价</string>
     <string name="max_price">最高价</string>
     <string name="reset">重置</string>
     <string name="confirm">确定</string>
-    
+
     <!-- Toast提示 -->
     <string name="add_to_cart_failed">添加购物车失败</string>
     <string name="add_to_cart_success">添加购物车成功</string>
-    
+
     <!-- 评论相关 -->
     <string name="anonymous_user">匿名用户</string>
     <string name="spec_colon">规格：%s</string>

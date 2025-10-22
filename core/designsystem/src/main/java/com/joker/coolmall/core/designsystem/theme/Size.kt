@@ -126,6 +126,7 @@ val SpaceIndicator = 2.dp // 指示器高度
 /**
  * 创建一个超大垂直间距(32dp)的Spacer组件
  * 使用方式：SpaceVerticalXXLarge()
+ * @author Joker.X
  */
 @Composable
 fun SpaceVerticalXXLarge() {
@@ -135,6 +136,7 @@ fun SpaceVerticalXXLarge() {
 /**
  * 创建一个特大垂直间距(24dp)的Spacer组件
  * 使用方式：SpaceVerticalXLarge()
+ * @author Joker.X
  */
 @Composable
 fun SpaceVerticalXLarge() {
@@ -144,6 +146,7 @@ fun SpaceVerticalXLarge() {
 /**
  * 创建一个大垂直间距(16dp)的Spacer组件
  * 使用方式：SpaceVerticalLarge()
+ * @author Joker.X
  */
 @Composable
 fun SpaceVerticalLarge() {
@@ -153,6 +156,7 @@ fun SpaceVerticalLarge() {
 /**
  * 创建一个中等垂直间距(12dp)的Spacer组件
  * 使用方式：SpaceVerticalMedium()
+ * @author Joker.X
  */
 @Composable
 fun SpaceVerticalMedium() {
@@ -162,6 +166,7 @@ fun SpaceVerticalMedium() {
 /**
  * 创建一个小垂直间距(8dp)的Spacer组件
  * 使用方式：SpaceVerticalSmall()
+ * @author Joker.X
  */
 @Composable
 fun SpaceVerticalSmall() {
@@ -171,6 +176,7 @@ fun SpaceVerticalSmall() {
 /**
  * 创建一个超小垂直间距(4dp)的Spacer组件
  * 使用方式：SpaceVerticalXSmall()
+ * @author Joker.X
  */
 @Composable
 fun SpaceVerticalXSmall() {
@@ -182,6 +188,7 @@ fun SpaceVerticalXSmall() {
 /**
  * 创建一个超大水平间距(32dp)的Spacer组件
  * 使用方式：SpaceHorizontalXXLarge()
+ * @author Joker.X
  */
 @Composable
 fun SpaceHorizontalXXLarge() {
@@ -191,6 +198,7 @@ fun SpaceHorizontalXXLarge() {
 /**
  * 创建一个特大水平间距(24dp)的Spacer组件
  * 使用方式：SpaceHorizontalXLarge()
+ * @author Joker.X
  */
 @Composable
 fun SpaceHorizontalXLarge() {
@@ -200,6 +208,7 @@ fun SpaceHorizontalXLarge() {
 /**
  * 创建一个大水平间距(16dp)的Spacer组件
  * 使用方式：SpaceHorizontalLarge()
+ * @author Joker.X
  */
 @Composable
 fun SpaceHorizontalLarge() {
@@ -209,6 +218,7 @@ fun SpaceHorizontalLarge() {
 /**
  * 创建一个中等水平间距(12dp)的Spacer组件
  * 使用方式：SpaceHorizontalMedium()
+ * @author Joker.X
  */
 @Composable
 fun SpaceHorizontalMedium() {
@@ -218,6 +228,7 @@ fun SpaceHorizontalMedium() {
 /**
  * 创建一个小水平间距(8dp)的Spacer组件
  * 使用方式：SpaceHorizontalSmall()
+ * @author Joker.X
  */
 @Composable
 fun SpaceHorizontalSmall() {
@@ -227,6 +238,7 @@ fun SpaceHorizontalSmall() {
 /**
  * 创建一个超小水平间距(4dp)的Spacer组件
  * 使用方式：SpaceHorizontalXSmall()
+ * @author Joker.X
  */
 @Composable
 fun SpaceHorizontalXSmall() {

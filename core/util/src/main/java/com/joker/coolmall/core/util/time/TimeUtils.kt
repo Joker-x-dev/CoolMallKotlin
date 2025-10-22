@@ -8,6 +8,8 @@ import kotlin.math.abs
 
 /**
  * 时间工具类
+ *
+ * @author Joker.X
  */
 object TimeUtils {
 
@@ -28,6 +30,7 @@ object TimeUtils {
      *
      * @param dateString 时间字符串，格式为 "yyyy-MM-dd HH:mm:ss" 或 "HH:mm"
      * @return 格式化后的时间字符串
+     * @author Joker.X
      */
     fun formatChatTime(dateString: String?): String {
         if (dateString.isNullOrEmpty()) {
@@ -76,6 +79,7 @@ object TimeUtils {
      * @param currentTimeString 当前消息时间字符串
      * @param previousTimeString 上一条消息时间字符串
      * @return 是否应该显示时间分隔
+     * @author Joker.X
      */
     fun shouldShowTimeHeader(currentTimeString: String?, previousTimeString: String?): Boolean {
         if (currentTimeString.isNullOrEmpty()) return false
@@ -140,6 +144,7 @@ object TimeUtils {
      * @param messages 完整的消息列表（按时间倒序排列，最新消息在前）
      * @param currentIndex 当前消息在列表中的索引
      * @return 是否应该显示时间头部
+     * @author Joker.X
      */
     fun shouldShowTimeHeaderInList(
         messages: List<com.joker.coolmall.core.model.entity.CsMsg>,

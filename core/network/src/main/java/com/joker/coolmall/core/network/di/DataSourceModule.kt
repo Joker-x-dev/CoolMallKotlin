@@ -33,23 +33,23 @@ import com.joker.coolmall.core.network.service.CommonService
 import com.joker.coolmall.core.network.service.CouponService
 import com.joker.coolmall.core.network.service.CustomerServiceService
 import com.joker.coolmall.core.network.service.FeedbackService
+import com.joker.coolmall.core.network.service.FileUploadService
 import com.joker.coolmall.core.network.service.GoodsService
 import com.joker.coolmall.core.network.service.OrderService
 import com.joker.coolmall.core.network.service.PageService
 import com.joker.coolmall.core.network.service.UserContributorService
 import com.joker.coolmall.core.network.service.UserInfoService
-import com.joker.coolmall.core.network.service.FileUploadService
-import android.content.Context
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
 /**
  * 数据源模块，提供所有网络数据源的依赖注入
  * 为Hilt提供各种网络数据源的实例
+ *
+ * @author Joker.X
  */
 @Module
 @InstallIn(SingletonComponent::class)
@@ -60,6 +60,7 @@ object DataSourceModule {
      *
      * @param pageService 页面服务接口
      * @return 页面网络数据源实现
+     * @author Joker.X
      */
     @Provides
     @Singleton
@@ -72,6 +73,7 @@ object DataSourceModule {
      *
      * @param authService 认证服务接口
      * @return 认证网络数据源实现
+     * @author Joker.X
      */
     @Provides
     @Singleton
@@ -84,6 +86,7 @@ object DataSourceModule {
      *
      * @param userInfoService 用户信息服务接口
      * @return 用户信息网络数据源实现
+     * @author Joker.X
      */
     @Provides
     @Singleton
@@ -96,6 +99,7 @@ object DataSourceModule {
      *
      * @param addressService 地址服务接口
      * @return 地址网络数据源实现
+     * @author Joker.X
      */
     @Provides
     @Singleton
@@ -108,6 +112,7 @@ object DataSourceModule {
      *
      * @param orderService 订单服务接口
      * @return 订单网络数据源实现
+     * @author Joker.X
      */
     @Provides
     @Singleton
@@ -120,6 +125,7 @@ object DataSourceModule {
      *
      * @param goodsService 商品服务接口
      * @return 商品网络数据源实现
+     * @author Joker.X
      */
     @Provides
     @Singleton
@@ -132,6 +138,7 @@ object DataSourceModule {
      *
      * @param couponService 优惠券服务接口
      * @return 优惠券网络数据源实现
+     * @author Joker.X
      */
     @Provides
     @Singleton
@@ -144,6 +151,7 @@ object DataSourceModule {
      *
      * @param bannerService 轮播图服务接口
      * @return 轮播图网络数据源实现
+     * @author Joker.X
      */
     @Provides
     @Singleton
@@ -156,6 +164,7 @@ object DataSourceModule {
      *
      * @param customerServiceService 客服服务接口
      * @return 客服网络数据源实现
+     * @author Joker.X
      */
     @Provides
     @Singleton
@@ -168,6 +177,7 @@ object DataSourceModule {
      *
      * @param commonService 通用基础服务接口
      * @return 通用基础网络数据源实现
+     * @author Joker.X
      */
     @Provides
     @Singleton
@@ -180,6 +190,7 @@ object DataSourceModule {
      *
      * @param userContributorService 用户贡献者服务接口
      * @return 用户贡献者网络数据源实现
+     * @author Joker.X
      */
     @Provides
     @Singleton
@@ -193,6 +204,7 @@ object DataSourceModule {
      * @param commonNetworkDataSource 通用网络数据源，用于获取上传配置
      * @param fileUploadService 文件上传服务接口
      * @return 文件上传网络数据源实现
+     * @author Joker.X
      */
     @Provides
     @Singleton
@@ -211,6 +223,7 @@ object DataSourceModule {
      *
      * @param feedbackService 意见反馈服务接口
      * @return 意见反馈网络数据源实现
+     * @author Joker.X
      */
     @Provides
     @Singleton

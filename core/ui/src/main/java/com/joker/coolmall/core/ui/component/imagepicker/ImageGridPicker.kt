@@ -1,8 +1,3 @@
-/**
- * 图片九宫格选择器组件
- *
- * @author Joker.X
- */
 package com.joker.coolmall.core.ui.component.imagepicker
 
 import android.net.Uri
@@ -39,6 +34,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -54,11 +50,13 @@ import com.joker.coolmall.core.ui.component.text.AppText
 import com.joker.coolmall.core.ui.component.text.TextType
 
 /**
- * 图片九宫格选择器
+ * 图片九宫格选择器组件
+ *
  * @param selectedImages 已选择的图片列表
  * @param onImagesChanged 图片列表变化回调
  * @param maxImages 最大选择图片数量，默认9张
  * @param modifier 修饰符
+ * @author Joker.X
  */
 @Composable
 fun ImageGridPicker(
@@ -144,8 +142,10 @@ fun ImageGridPicker(
 
 /**
  * 图片项组件
+ *
  * @param imageUri 图片URI
  * @param onRemove 删除回调
+ * @author Joker.X
  */
 @Composable
 private fun ImageItem(
@@ -164,7 +164,7 @@ private fun ImageItem(
                 .data(imageUri)
                 .crossfade(true)
                 .build(),
-            contentDescription = "选择的图片",
+            contentDescription = stringResource(id = R.string.selected_image),
             contentScale = ContentScale.Crop,
             modifier = Modifier.fillMaxSize()
         )
@@ -194,7 +194,9 @@ private fun ImageItem(
 
 /**
  * 添加图片按钮
+ *
  * @param onClick 点击回调
+ * @author Joker.X
  */
 @Composable
 private fun AddImageButton(
@@ -219,13 +221,13 @@ private fun AddImageButton(
         ) {
             Icon(
                 painter = painterResource(id = R.drawable.ic_add),
-                contentDescription = "添加图片",
+                contentDescription = stringResource(id = R.string.add_image),
                 tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
                 modifier = Modifier.size(32.dp)
             )
             SpaceVerticalXSmall()
             AppText(
-                text = "添加图片",
+                text = stringResource(id = R.string.add_image),
                 type = TextType.TERTIARY,
             )
         }
@@ -234,6 +236,8 @@ private fun AddImageButton(
 
 /**
  * ImageGridPicker 组件预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -249,6 +253,8 @@ fun ImageGridPickerPreview() {
 
 /**
  * ImageGridPicker 组件预览 - 包含图片
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable

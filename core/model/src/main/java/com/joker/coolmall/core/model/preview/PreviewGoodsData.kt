@@ -3,6 +3,11 @@ package com.joker.coolmall.core.model.preview
 import com.joker.coolmall.core.model.entity.Goods
 import com.joker.coolmall.core.model.entity.GoodsSpec
 
+/**
+ * 预览商品数据列表
+ *
+ * @author Joker.X
+ */
 val previewGoodsList = listOf(
     Goods(
         id = 1L,
@@ -81,5 +86,16 @@ val previewGoodsList = listOf(
     )
 )
 
+/**
+ * 单个预览商品数据
+ *
+ * @author Joker.X
+ */
 val previewGoods = previewGoodsList.first()
+
+/**
+ * 单个预览商品规格
+ *
+ * @author Joker.X
+ */
 val previewGoodsSpec = previewGoods.specs?.firstOrNull() 

@@ -3,8 +3,8 @@ package com.joker.coolmall.feature.order.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
-import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.data.repository.OrderRepository
+import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.util.toast.ToastUtils
 import com.joker.coolmall.feature.order.R
 import com.joker.coolmall.feature.order.model.Alipay

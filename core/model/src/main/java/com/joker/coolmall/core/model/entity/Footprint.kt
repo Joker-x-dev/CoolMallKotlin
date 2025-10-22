@@ -4,6 +4,15 @@ import kotlinx.serialization.Serializable
 
 /**
  * 用户足迹模型
+ *
+ * @param goodsId 商品ID
+ * @param goodsName 商品名称
+ * @param goodsSubTitle 商品副标题
+ * @param goodsMainPic 商品主图
+ * @param goodsPrice 商品价格
+ * @param goodsSold 已售数量
+ * @param viewTime 浏览时间戳
+ * @author Joker.X
  */
 @Serializable
 data class Footprint(

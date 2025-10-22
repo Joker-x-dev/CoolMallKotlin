@@ -74,7 +74,9 @@ internal fun LoginRoute(
             if (activity != null) {
                 viewModel.startQQLogin(activity)
             }
-        }
+        },
+        onUserAgreementClick = viewModel::onUserAgreementClick,
+        onPrivacyPolicyClick = viewModel::onPrivacyPolicyClick
     )
 }
 
@@ -87,6 +89,8 @@ internal fun LoginRoute(
  * @param onWechatLoginClick 微信登录点击回调
  * @param onAlipayLoginClick 支付宝登录点击回调
  * @param onQQLogin QQ 登录回调
+ * @param onUserAgreementClick 用户协议点击回调
+ * @param onPrivacyPolicyClick 隐私政策点击回调
  * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -97,7 +101,9 @@ internal fun LoginScreen(
     onBackClick: () -> Unit = {},
     onWechatLoginClick: () -> Unit = {},
     onAlipayLoginClick: () -> Unit = {},
-    onQQLogin: () -> Unit = {}
+    onQQLogin: () -> Unit = {},
+    onUserAgreementClick: () -> Unit = {},
+    onPrivacyPolicyClick: () -> Unit = {}
 ) {
     AppScaffold(
         onBackClick = onBackClick,
@@ -108,7 +114,9 @@ internal fun LoginScreen(
             toSmsLogin = toSmsLogin,
             onWechatLoginClick = onWechatLoginClick,
             onAlipayLoginClick = onAlipayLoginClick,
-            onQQLogin = onQQLogin
+            onQQLogin = onQQLogin,
+            onUserAgreementClick = onUserAgreementClick,
+            onPrivacyPolicyClick = onPrivacyPolicyClick
         )
     }
 }
@@ -121,6 +129,8 @@ internal fun LoginScreen(
  * @param onWechatLoginClick 微信登录点击回调
  * @param onAlipayLoginClick 支付宝登录点击回调
  * @param onQQLogin QQ 登录回调
+ * @param onUserAgreementClick 用户协议点击回调
+ * @param onPrivacyPolicyClick 隐私政策点击回调
  * @author Joker.X
  */
 @Composable
@@ -129,7 +139,9 @@ private fun LoginContentView(
     toSmsLogin: () -> Unit,
     onWechatLoginClick: () -> Unit,
     onAlipayLoginClick: () -> Unit,
-    onQQLogin: () -> Unit
+    onQQLogin: () -> Unit,
+    onUserAgreementClick: () -> Unit,
+    onPrivacyPolicyClick: () -> Unit
 ) {
     // 使用rememberSaveable来保持状态，即使在配置更改时也不会重置
     // isAnimationPlayed标志用于跟踪动画是否已经播放过
@@ -247,7 +259,9 @@ private fun LoginContentView(
                 // 用户协议
                 UserAgreement(
                     modifier = Modifier.padding(top = 32.dp),
-                    centerAlignment = true
+                    centerAlignment = true,
+                    onUserAgreementClick = onUserAgreementClick,
+                    onPrivacyPolicyClick = onPrivacyPolicyClick
                 )
             }
         }
@@ -289,7 +303,7 @@ fun ThirdPartyLoginButton(
 
 /**
  * 登录主页界面浅色主题预览
- * 
+ *
  * @author Joker.X
  */
 @Preview(showBackground = true)

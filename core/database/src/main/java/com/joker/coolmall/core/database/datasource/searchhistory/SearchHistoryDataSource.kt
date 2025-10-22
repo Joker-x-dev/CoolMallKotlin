@@ -11,6 +11,9 @@ import javax.inject.Singleton
 /**
  * 搜索历史数据源
  * 负责搜索历史相关的数据库操作
+ *
+ * @param searchHistoryDao 搜索历史数据访问对象
+ * @author Joker.X
  */
 @Singleton
 class SearchHistoryDataSource @Inject constructor(
@@ -19,6 +22,9 @@ class SearchHistoryDataSource @Inject constructor(
 
     /**
      * 添加搜索历史记录
+     *
+     * @param searchHistory 搜索历史记录
+     * @author Joker.X
      */
     suspend fun addSearchHistory(searchHistory: SearchHistory) {
         searchHistoryDao.insertSearchHistory(searchHistory.toSearchHistoryEntity())
@@ -26,6 +32,9 @@ class SearchHistoryDataSource @Inject constructor(
 
     /**
      * 根据关键词删除搜索历史记录
+     *
+     * @param keyword 搜索关键词
+     * @author Joker.X
      */
     suspend fun removeSearchHistory(keyword: String) {
         searchHistoryDao.deleteSearchHistoryByKeyword(keyword)
@@ -33,6 +42,8 @@ class SearchHistoryDataSource @Inject constructor(
 
     /**
      * 清空所有搜索历史记录
+     *
+     * @author Joker.X
      */
     suspend fun clearAllSearchHistory() {
         searchHistoryDao.clearAllSearchHistory()
@@ -41,6 +52,9 @@ class SearchHistoryDataSource @Inject constructor(
     /**
      * 获取所有搜索历史记录
      * 返回响应式Flow，按搜索时间倒序排列
+     *
+     * @return 搜索历史记录列表的Flow
+     * @author Joker.X
      */
     fun getAllSearchHistory(): Flow<List<SearchHistory>> {
         return searchHistoryDao.getAllSearchHistory().map { entities ->
@@ -51,6 +65,9 @@ class SearchHistoryDataSource @Inject constructor(
     /**
      * 获取搜索历史记录总数量
      * 返回响应式Flow
+     *
+     * @return 搜索历史记录数量的Flow
+     * @author Joker.X
      */
     fun getSearchHistoryCount(): Flow<Int> {
         return searchHistoryDao.getSearchHistoryCount()
@@ -58,6 +75,10 @@ class SearchHistoryDataSource @Inject constructor(
 
     /**
      * 获取指定数量的最新搜索历史记录
+     *
+     * @param limit 限制数量
+     * @return 搜索历史记录列表的Flow
+     * @author Joker.X
      */
     fun getRecentSearchHistory(limit: Int): Flow<List<SearchHistory>> {
         return searchHistoryDao.getRecentSearchHistory(limit).map { entities ->
@@ -67,6 +88,10 @@ class SearchHistoryDataSource @Inject constructor(
 
     /**
      * 根据关键词获取搜索历史记录
+     *
+     * @param keyword 搜索关键词
+     * @return 搜索历史记录，如不存在则返回null
+     * @author Joker.X
      */
     suspend fun getSearchHistoryByKeyword(keyword: String): SearchHistory? {
         return searchHistoryDao.getSearchHistoryByKeyword(keyword)?.toSearchHistory()

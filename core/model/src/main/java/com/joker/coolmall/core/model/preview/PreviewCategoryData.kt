@@ -4,6 +4,8 @@ import com.joker.coolmall.core.model.entity.Category
 
 /**
  * 预览分类数据
+ *
+ * @author Joker.X
  */
 val previewCategoryList = listOf(
     // 一级分类
@@ -72,11 +74,17 @@ val previewCategoryList = listOf(
 
 /**
  * 单个预览分类数据（一级分类）
+ *
+ * @author Joker.X
  */
 val previewCategory = previewCategoryList.first()
 
 /**
  * 获取指定一级分类下的所有二级分类
+ *
+ * @param parentId 父分类ID
+ * @return 二级分类列表
+ * @author Joker.X
  */
 fun getSubCategories(parentId: Long): List<Category> {
     return previewCategoryList.filter { it.parentId == parentId.toInt() }

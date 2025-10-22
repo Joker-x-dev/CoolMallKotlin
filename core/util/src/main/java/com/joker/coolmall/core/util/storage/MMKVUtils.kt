@@ -9,6 +9,8 @@ import java.util.Collections
 /**
  * 基于腾讯MMKV封装的高性能键值存储工具类
  * 提供统一的接口进行数据存取，支持多种数据类型和多实例模式
+ *
+ * @author Joker.X
  */
 object MMKVUtils {
 
@@ -36,6 +38,7 @@ object MMKVUtils {
      *
      * @param application Application对象
      * @return MMKV根目录
+     * @author Joker.X
      */
     fun init(application: Application): String {
         val rootDir = MMKV.initialize(application)
@@ -45,6 +48,8 @@ object MMKVUtils {
 
     /**
      * 检查MMKV是否已初始化
+     *
+     * @author Joker.X
      */
     private fun checkInitialization() {
         if (!isInitialized) {
@@ -61,6 +66,7 @@ object MMKVUtils {
      * @param cryptKey 加密密钥，传null表示不加密
      * @param rootDir 自定义存储目录，传null表示使用默认目录
      * @return MMKV实例
+     * @author Joker.X
      */
     fun getInstance(
         name: String,
@@ -86,6 +92,7 @@ object MMKVUtils {
      * @param name 实例名称
      * @param cryptKey 加密密钥，传null表示不加密
      * @return 支持多进程访问的MMKV实例
+     * @author Joker.X
      */
     fun getMultiProcessInstance(name: String, cryptKey: String? = null): MMKV {
         return getInstance(name, MMKV.MULTI_PROCESS_MODE, cryptKey)
@@ -99,6 +106,7 @@ object MMKVUtils {
      * @param cryptKey 加密密钥
      * @param multiProcess 是否支持多进程访问
      * @return 加密的MMKV实例
+     * @author Joker.X
      */
     fun getEncryptedInstance(name: String, cryptKey: String, multiProcess: Boolean = false): MMKV {
         val mode = if (multiProcess) MMKV.MULTI_PROCESS_MODE else MMKV.SINGLE_PROCESS_MODE
@@ -113,6 +121,7 @@ object MMKVUtils {
      *
      * @param key 键
      * @param value 值
+     * @author Joker.X
      */
     fun putBoolean(key: String, value: Boolean) {
         defaultMMKV.encode(key, value)
@@ -125,6 +134,7 @@ object MMKVUtils {
      * @param key 键
      * @param defaultValue 默认值
      * @return 存储的Boolean值，如不存在则返回默认值
+     * @author Joker.X
      */
     fun getBoolean(key: String, defaultValue: Boolean = false): Boolean {
         return defaultMMKV.decodeBool(key, defaultValue)
@@ -136,6 +146,7 @@ object MMKVUtils {
      *
      * @param key 键
      * @param value 值
+     * @author Joker.X
      */
     fun putInt(key: String, value: Int) {
         defaultMMKV.encode(key, value)
@@ -148,6 +159,7 @@ object MMKVUtils {
      * @param key 键
      * @param defaultValue 默认值
      * @return 存储的Int值，如不存在则返回默认值
+     * @author Joker.X
      */
     fun getInt(key: String, defaultValue: Int = 0): Int {
         return defaultMMKV.decodeInt(key, defaultValue)
@@ -159,6 +171,7 @@ object MMKVUtils {
      *
      * @param key 键
      * @param value 值
+     * @author Joker.X
      */
     fun putLong(key: String, value: Long) {
         defaultMMKV.encode(key, value)
@@ -171,6 +184,7 @@ object MMKVUtils {
      * @param key 键
      * @param defaultValue 默认值
      * @return 存储的Long值，如不存在则返回默认值
+     * @author Joker.X
      */
     fun getLong(key: String, defaultValue: Long = 0L): Long {
         return defaultMMKV.decodeLong(key, defaultValue)
@@ -182,6 +196,7 @@ object MMKVUtils {
      *
      * @param key 键
      * @param value 值
+     * @author Joker.X
      */
     fun putFloat(key: String, value: Float) {
         defaultMMKV.encode(key, value)
@@ -194,6 +209,7 @@ object MMKVUtils {
      * @param key 键
      * @param defaultValue 默认值
      * @return 存储的Float值，如不存在则返回默认值
+     * @author Joker.X
      */
     fun getFloat(key: String, defaultValue: Float = 0f): Float {
         return defaultMMKV.decodeFloat(key, defaultValue)
@@ -205,6 +221,7 @@ object MMKVUtils {
      *
      * @param key 键
      * @param value 值
+     * @author Joker.X
      */
     fun putDouble(key: String, value: Double) {
         defaultMMKV.encode(key, value)
@@ -217,6 +234,7 @@ object MMKVUtils {
      * @param key 键
      * @param defaultValue 默认值
      * @return 存储的Double值，如不存在则返回默认值
+     * @author Joker.X
      */
     fun getDouble(key: String, defaultValue: Double = 0.0): Double {
         return defaultMMKV.decodeDouble(key, defaultValue)
@@ -228,6 +246,7 @@ object MMKVUtils {
      *
      * @param key 键
      * @param value 值
+     * @author Joker.X
      */
     fun putString(key: String, value: String?) {
         defaultMMKV.encode(key, value)
@@ -240,6 +259,7 @@ object MMKVUtils {
      * @param key 键
      * @param defaultValue 默认值
      * @return 存储的String值，如不存在则返回默认值
+     * @author Joker.X
      */
     fun getString(key: String, defaultValue: String = ""): String {
         return defaultMMKV.decodeString(key, defaultValue) ?: defaultValue
@@ -251,6 +271,7 @@ object MMKVUtils {
      *
      * @param key 键
      * @param value 值
+     * @author Joker.X
      */
     fun putBytes(key: String, value: ByteArray?) {
         defaultMMKV.encode(key, value)
@@ -262,6 +283,7 @@ object MMKVUtils {
      *
      * @param key 键
      * @return 存储的ByteArray值，如不存在则返回null
+     * @author Joker.X
      */
     fun getBytes(key: String): ByteArray? {
         return defaultMMKV.decodeBytes(key)
@@ -273,6 +295,7 @@ object MMKVUtils {
      *
      * @param key 键
      * @param value 值，需实现Parcelable接口
+     * @author Joker.X
      */
     fun <T : Parcelable> putParcelable(key: String, value: T?) {
         defaultMMKV.encode(key, value)
@@ -285,6 +308,7 @@ object MMKVUtils {
      * @param key 键
      * @param clazz 对象类型
      * @return 存储的对象，如不存在则返回null
+     * @author Joker.X
      */
     fun <T : Parcelable> getParcelable(key: String, clazz: Class<T>): T? {
         return defaultMMKV.decodeParcelable(key, clazz)
@@ -296,6 +320,7 @@ object MMKVUtils {
      *
      * @param key 键
      * @param value 值，需加 @Serializable 注解
+     * @author Joker.X
      */
     inline fun <reified T> putObject(key: String, value: T) {
         val json = Json.encodeToString(value)
@@ -308,6 +333,7 @@ object MMKVUtils {
      *
      * @param key 键
      * @return 存储的对象，如不存在或解析失败则返回null
+     * @author Joker.X
      */
     inline fun <reified T> getObject(key: String): T? {
         val json = getString(key, "")
@@ -328,6 +354,7 @@ object MMKVUtils {
      *
      * @param key 键
      * @param value 值
+     * @author Joker.X
      */
     fun putStringSet(key: String, value: Set<String>?) {
         defaultMMKV.encode(key, value)
@@ -340,6 +367,7 @@ object MMKVUtils {
      * @param key 键
      * @param defaultValue 默认值
      * @return 存储的Set<String>，如不存在则返回默认值
+     * @author Joker.X
      */
     fun getStringSet(key: String, defaultValue: Set<String> = emptySet()): Set<String> {
         return defaultMMKV.decodeStringSet(key, defaultValue) ?: defaultValue
@@ -351,6 +379,7 @@ object MMKVUtils {
      *
      * @param key 键
      * @return 是否包含该键
+     * @author Joker.X
      */
     fun containsKey(key: String): Boolean {
         return defaultMMKV.containsKey(key)
@@ -361,6 +390,7 @@ object MMKVUtils {
      * 用法示例：MMKVUtils.remove("username")
      *
      * @param key 键
+     * @author Joker.X
      */
     fun remove(key: String) {
         defaultMMKV.removeValueForKey(key)
@@ -371,6 +401,7 @@ object MMKVUtils {
      * 用法示例：MMKVUtils.removeValuesForKeys("user_")
      *
      * @param keyPrefix 键前缀
+     * @author Joker.X
      */
     fun removeValuesForKeys(keyPrefix: String) {
         val keys = defaultMMKV.allKeys()
@@ -383,6 +414,8 @@ object MMKVUtils {
     /**
      * 清除所有数据
      * 用法示例：MMKVUtils.clearAll()
+     *
+     * @author Joker.X
      */
     fun clearAll() {
         defaultMMKV.clearAll()
@@ -393,6 +426,7 @@ object MMKVUtils {
      * 用法示例：val allKeys = MMKVUtils.getAllKeys()
      *
      * @return 所有键的集合，如果没有则返回空集合
+     * @author Joker.X
      */
     fun getAllKeys(): Set<String> {
         return defaultMMKV.allKeys()?.toSet() ?: emptySet()
@@ -403,6 +437,7 @@ object MMKVUtils {
      * 用法示例：val size = MMKVUtils.totalSize()
      *
      * @return MMKV实例占用的大小（字节）
+     * @author Joker.X
      */
     fun totalSize(): Long {
         return defaultMMKV.totalSize()
@@ -413,6 +448,7 @@ object MMKVUtils {
      * 用法示例：val count = MMKVUtils.count()
      *
      * @return MMKV实例中的条目数量
+     * @author Joker.X
      */
     fun count(): Long {
         return defaultMMKV.count()

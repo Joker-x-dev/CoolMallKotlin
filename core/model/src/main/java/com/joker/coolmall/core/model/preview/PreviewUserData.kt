@@ -4,6 +4,8 @@ import com.joker.coolmall.core.model.entity.User
 
 /**
  * 预览用户数据
+ *
+ * @author Joker.X
  */
 val previewUserList = listOf(
     User(
@@ -34,5 +36,7 @@ val previewUserList = listOf(
 
 /**
  * 单个预览用户数据
+ *
+ * @author Joker.X
  */
 val previewUser = previewUserList.first() 

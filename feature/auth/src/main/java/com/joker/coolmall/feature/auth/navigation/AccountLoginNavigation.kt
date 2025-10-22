@@ -7,7 +7,7 @@ import com.joker.coolmall.navigation.routes.AuthRoutes
 
 /**
  * 账号登录页面导航
- * 
+ *
  * @author Joker.X
  */
 fun NavGraphBuilder.accountLoginScreen() {

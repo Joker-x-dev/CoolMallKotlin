@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.joker.coolmall.core.designsystem.theme.CommonIcon
 import com.joker.coolmall.core.designsystem.theme.Primary
@@ -40,7 +41,7 @@ fun CheckButton(
 ) {
     CommonIcon(
         resId = if (selected) selectedIcon else unselectedIcon,
-        contentDescription = if (selected) "已选择" else "未选择",
+        contentDescription = stringResource(id = if (selected) R.string.selected else R.string.unselected),
         modifier = modifier
             .size(size.dp)
             .clip(shape)

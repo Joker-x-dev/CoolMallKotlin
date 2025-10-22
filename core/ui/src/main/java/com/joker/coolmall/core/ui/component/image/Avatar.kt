@@ -15,6 +15,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -100,7 +101,7 @@ private fun DefaultAvatar(
     ) {
         Icon(
             painter = painterResource(id = R.drawable.ic_my_fill),
-            contentDescription = "默认头像",
+            contentDescription = stringResource(id = R.string.default_avatar),
             modifier = Modifier.size(size * 0.5f), // 图标大小为头像的一半
             tint = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.5f)
         )
@@ -159,6 +160,9 @@ fun MediumAvatar(
     )
 }
 
+/**
+ * 默认头像预览
+ */
 @Preview(showBackground = true)
 @Composable
 private fun DefaultAvatarPreview() {

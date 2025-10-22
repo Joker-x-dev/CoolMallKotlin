@@ -20,10 +20,10 @@ import com.joker.coolmall.core.model.request.CreateOrderRequest
 import com.joker.coolmall.core.model.request.CreateOrderRequest.CreateOrder
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.util.storage.MMKVUtils
+import com.joker.coolmall.feature.order.R
 import com.joker.coolmall.feature.order.navigation.OrderPayRoutes
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.OrderRoutes
-import com.joker.coolmall.feature.order.R
 import com.joker.coolmall.navigation.routes.UserRoutes
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
@@ -50,7 +50,7 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class OrderConfirmViewModel @Inject constructor(
-    @ApplicationContext private val context: Context,
+    @param:ApplicationContext private val context: Context,
     navigator: AppNavigator,
     appState: AppState,
     private val orderRepository: OrderRepository,

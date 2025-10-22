@@ -18,6 +18,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.joker.coolmall.core.designsystem.component.SpaceBetweenRow
@@ -29,6 +30,7 @@ import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalLarge
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.model.entity.Address
+import com.joker.coolmall.core.ui.R
 import com.joker.coolmall.core.ui.component.divider.WeDivider
 import com.joker.coolmall.core.ui.component.tag.Tag
 import com.joker.coolmall.core.ui.component.tag.TagSize
@@ -127,7 +129,7 @@ fun AddressCard(
                         // 默认地址标签
                         if (address.isDefault) {
                             Tag(
-                                text = "默认地址",
+                                text = stringResource(id = R.string.address_default),
                                 type = TagType.PRIMARY,
                                 size = TagSize.SMALL,
                                 shape = ShapeMedium
@@ -145,7 +147,7 @@ fun AddressCard(
                         .padding(SpacePaddingMedium)
                 ) {
                     AppText(
-                        text = "您还没有选择收货地址",
+                        text = stringResource(id = R.string.address_not_selected),
                         size = TextSize.TITLE_LARGE
                     )
                     ArrowRightIcon()
@@ -163,7 +165,7 @@ fun AddressCard(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     AppText(
-                        text = "点击添加收货地址",
+                        text = stringResource(id = R.string.address_add_hint),
                         type = TextType.SECONDARY
                     )
                 }
@@ -177,6 +179,7 @@ fun AddressCard(
  *
  * @param onClick 点击回调
  * @param iconResId 图标资源ID
+ * @author Joker.X
  */
 @Composable
 fun AddressActionButton(
@@ -201,6 +204,8 @@ fun AddressActionButton(
 
 /**
  * 收货地址卡片默认样式预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -223,6 +228,8 @@ private fun AddressCardPreview() {
 
 /**
  * 收货地址卡片在订单确认场景的预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -246,6 +253,8 @@ private fun AddressCardOrderConfirmPreview() {
 
 /**
  * 收货地址卡片自定义操作区域预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -285,6 +294,8 @@ private fun AddressCardWithActionsPreview() {
 
 /**
  * 深色主题下的收货地址卡片预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -307,6 +318,8 @@ private fun AddressCardDarkPreview() {
 
 /**
  * 空地址状态的收货地址卡片预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -321,6 +334,8 @@ private fun AddressCardEmptyPreview() {
 
 /**
  * 深色主题下空地址状态的收货地址卡片预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable

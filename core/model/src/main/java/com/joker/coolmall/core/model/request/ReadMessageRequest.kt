@@ -4,6 +4,9 @@ import kotlinx.serialization.Serializable
 
 /**
  * 已读消息请求模型
+ *
+ * @param ids 消息ID数组，用于批量已读
+ * @author Joker.X
  */
 @Serializable
 data class ReadMessageRequest(

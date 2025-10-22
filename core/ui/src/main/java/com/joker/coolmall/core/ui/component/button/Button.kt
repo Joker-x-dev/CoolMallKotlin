@@ -39,6 +39,8 @@ import com.joker.coolmall.core.designsystem.theme.TextWhite
 
 /**
  * 按钮类型
+ *
+ * @author Joker.X
  */
 enum class ButtonType {
     /**
@@ -74,6 +76,8 @@ enum class ButtonType {
 
 /**
  * 按钮样式
+ *
+ * @author Joker.X
  */
 enum class ButtonStyle {
     /**
@@ -94,6 +98,8 @@ enum class ButtonStyle {
 
 /**
  * 按钮大小
+ *
+ * @author Joker.X
  */
 enum class ButtonSize {
     /**
@@ -114,6 +120,8 @@ enum class ButtonSize {
 
 /**
  * 按钮形状
+ *
+ * @author Joker.X
  */
 enum class ButtonShape {
     /**
@@ -140,6 +148,7 @@ enum class ButtonShape {
  * @param enabled 是否启用，默认为true
  * @param loading 是否显示加载状态，默认为false
  * @param fullWidth 是否占满宽度，默认为true
+ * @author Joker.X
  */
 @Composable
 fun AppButton(
@@ -288,6 +297,7 @@ fun AppButton(
  * @param enabled 是否启用，默认为true
  * @param loading 是否显示加载状态，默认为false
  * @param contentPadding 内容内边距
+ * @author Joker.X
  */
 @Composable
 fun AppButtonFixed(
@@ -436,6 +446,8 @@ fun AppButtonFixed(
  * @param contentPadding 内容内边距
  * @param color 自定义颜色，优先级比type高
  * @param textStyle 按钮文本样式
+ * @param height 自定义高度
+ * @author Joker.X
  */
 @Composable
 fun AppButtonBordered(
@@ -519,6 +531,7 @@ fun AppButtonBordered(
  * @param enabled 是否启用，默认为true
  * @param loading 是否显示加载状态，默认为false
  * @param textStyle 按钮文本样式
+ * @author Joker.X
  */
 @Composable
 fun AppButtonCustomSize(

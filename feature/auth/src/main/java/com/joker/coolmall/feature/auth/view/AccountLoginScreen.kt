@@ -52,7 +52,9 @@ internal fun AccountLoginRoute(
         onLoginClick = viewModel::login,
         onBackClick = viewModel::navigateBack,
         toResetPassword = viewModel::toResetPasswordPage,
-        toRegister = viewModel::toRegisterPage
+        toRegister = viewModel::toRegisterPage,
+        onUserAgreementClick = viewModel::onUserAgreementClick,
+        onPrivacyPolicyClick = viewModel::onPrivacyPolicyClick
     )
 }
 
@@ -68,6 +70,8 @@ internal fun AccountLoginRoute(
  * @param onBackClick 返回上一页回调
  * @param toResetPassword 导航到重置密码页面
  * @param toRegister 导航到注册页面
+ * @param onUserAgreementClick 用户协议点击回调
+ * @param onPrivacyPolicyClick 隐私政策点击回调
  * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -81,7 +85,9 @@ internal fun AccountLoginScreen(
     onLoginClick: () -> Unit = {},
     onBackClick: () -> Unit = {},
     toResetPassword: () -> Unit = {},
-    toRegister: () -> Unit = {}
+    toRegister: () -> Unit = {},
+    onUserAgreementClick: () -> Unit = {},
+    onPrivacyPolicyClick: () -> Unit = {}
 ) {
     AnimatedAuthPage(
         title = stringResource(id = R.string.welcome_login),
@@ -95,7 +101,9 @@ internal fun AccountLoginScreen(
             onPasswordChange = onPasswordChange,
             onLoginClick = onLoginClick,
             toResetPassword = toResetPassword,
-            toRegister = toRegister
+            toRegister = toRegister,
+            onUserAgreementClick = onUserAgreementClick,
+            onPrivacyPolicyClick = onPrivacyPolicyClick
         )
     }
 }
@@ -111,6 +119,8 @@ internal fun AccountLoginScreen(
  * @param onLoginClick 登录按钮点击回调
  * @param toResetPassword 导航到重置密码页面
  * @param toRegister 导航到注册页面
+ * @param onUserAgreementClick 用户协议点击回调
+ * @param onPrivacyPolicyClick 隐私政策点击回调
  * @author Joker.X
  */
 @Composable
@@ -122,7 +132,9 @@ private fun AccountLoginContentView(
     onPasswordChange: (String) -> Unit,
     onLoginClick: () -> Unit,
     toResetPassword: () -> Unit,
-    toRegister: () -> Unit
+    toRegister: () -> Unit,
+    onUserAgreementClick: () -> Unit,
+    onPrivacyPolicyClick: () -> Unit
 ) {
     // 记录输入框焦点状态
     val accountFieldFocused = remember { mutableStateOf(false) }
@@ -152,7 +164,9 @@ private fun AccountLoginContentView(
 
     // 使用封装的用户协议组件
     UserAgreement(
-        prefix = stringResource(id = R.string.login_agreement_prefix)
+        prefix = stringResource(id = R.string.login_agreement_prefix),
+        onUserAgreementClick = onUserAgreementClick,
+        onPrivacyPolicyClick = onPrivacyPolicyClick
     )
 
     SpaceVerticalXLarge()
@@ -175,7 +189,7 @@ private fun AccountLoginContentView(
 
 /**
  * 账号密码登录界面浅色主题预览
- * 
+ *
  * @author Joker.X
  */
 @Preview(showBackground = true)

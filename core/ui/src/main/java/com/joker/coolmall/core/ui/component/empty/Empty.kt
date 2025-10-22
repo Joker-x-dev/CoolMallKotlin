@@ -21,7 +21,6 @@ import com.joker.coolmall.core.designsystem.theme.CommonIcon
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXLarge
-import com.joker.coolmall.core.designsystem.theme.TextQuaternaryDark
 import com.joker.coolmall.core.designsystem.theme.appTextColors
 import com.joker.coolmall.core.ui.R
 

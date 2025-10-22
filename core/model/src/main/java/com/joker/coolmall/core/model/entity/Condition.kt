@@ -4,6 +4,9 @@ import kotlinx.serialization.Serializable
 
 /**
  * 优惠券条件
+ *
+ * @param fullAmount 满多少金额
+ * @author Joker.X
  */
 @Serializable
 data class Condition(

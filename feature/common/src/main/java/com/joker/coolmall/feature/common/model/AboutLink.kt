@@ -2,7 +2,7 @@ package com.joker.coolmall.feature.common.model
 
 /**
  * 链接项
- * 
+ *
  * @author Joker.X
  */
 data class LinkItem(
@@ -13,7 +13,7 @@ data class LinkItem(
 
 /**
  * 链接分类
- * 
+ *
  * @author Joker.X
  */
 data class LinkCategory(

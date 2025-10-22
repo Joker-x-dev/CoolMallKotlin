@@ -16,7 +16,7 @@ import javax.inject.Inject
 
 /**
  * 贡献者列表 ViewModel
- * 
+ *
  * @author Joker.X
  */
 @HiltViewModel
@@ -62,8 +62,10 @@ class ContributorsViewModel @Inject constructor(
 
     /**
      * 跳转到网页页面
+     *
      * @param url 网页URL
      * @param title 页面标题
+     * @author Joker.X
      */
     private fun toWebPage(url: String, title: String) {
         super.toPage(

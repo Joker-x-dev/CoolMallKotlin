@@ -142,7 +142,7 @@ private fun ContributorsContentView(
 
 /**
  * 贡献者列表界面浅色主题预览
- * 
+ *
  * @author Joker.X
  */
 @Preview(showBackground = true)
@@ -155,7 +155,7 @@ internal fun ContributorsScreenPreview() {
 
 /**
  * 贡献者列表界面深色主题预览
- * 
+ *
  * @author Joker.X
  */
 @Preview(showBackground = true)

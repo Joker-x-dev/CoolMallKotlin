@@ -287,7 +287,7 @@ private fun WebViewContent(
 
 /**
  * 网页界面浅色主题预览
- * 
+ *
  * @author Joker.X
  */
 @Preview(showBackground = true)
@@ -307,7 +307,7 @@ internal fun WebScreenPreview() {
 
 /**
  * 网页界面深色主题预览
- * 
+ *
  * @author Joker.X
  */
 @Preview(showBackground = true)

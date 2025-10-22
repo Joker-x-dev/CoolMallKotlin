@@ -5,6 +5,8 @@ import kotlinx.serialization.Serializable
 /**
  * 物流轨迹项实体类
  *
+ * @param time 时间
+ * @param status 状态描述
  * @author Joker.X
  */
 @Serializable

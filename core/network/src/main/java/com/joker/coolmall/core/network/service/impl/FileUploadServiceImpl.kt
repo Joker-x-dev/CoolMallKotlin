@@ -9,9 +9,9 @@ package com.joker.coolmall.core.network.service.impl
 import android.content.Context
 import android.net.Uri
 import android.util.Log
+import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.network.di.FileUploadQualifier
 import com.joker.coolmall.core.network.service.FileUploadService
-import com.joker.coolmall.core.model.response.NetworkResponse
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import okhttp3.MediaType.Companion.toMediaType
@@ -20,7 +20,7 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import java.io.IOException
-import java.util.*
+import java.util.UUID
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -43,20 +43,24 @@ class FileUploadServiceImpl @Inject constructor(
     ): NetworkResponse<String> = withContext(Dispatchers.IO) {
         try {
             val fileName = generateFileName(imageUri)
-            
+
             // 从URI读取文件内容
             val inputStream = context.contentResolver.openInputStream(imageUri)
             val fileBytes = inputStream?.readBytes()
             inputStream?.close()
-            
+
             if (fileBytes == null) {
-                return@withContext NetworkResponse(data = null, code = 400, message = "无法读取文件内容")
+                return@withContext NetworkResponse(
+                    data = null,
+                    code = 400,
+                    message = "无法读取文件内容"
+                )
             }
-            
+
             // 获取文件的MIME类型
             val mimeType = context.contentResolver.getType(imageUri) ?: "image/jpeg"
             val fileRequestBody = fileBytes.toRequestBody(mimeType.toMediaType())
-            
+
             // 构建multipart请求体
             val requestBody = MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
@@ -73,7 +77,7 @@ class FileUploadServiceImpl @Inject constructor(
                 .build()
 
             val response = okHttpClient.newCall(request).execute()
-            
+
             if (response.isSuccessful) {
                 // 根据腾讯云COS规则生成文件访问URL
                 // 格式: https://bucket-appid.cos.region.myqcloud.com/key
@@ -83,7 +87,11 @@ class FileUploadServiceImpl @Inject constructor(
                 NetworkResponse(data = fileUrl, code = 1000, message = "上传成功")
             } else {
                 Log.e(TAG, "文件上传失败，响应码: ${response.code}")
-                NetworkResponse(data = null, code = response.code, message = "上传失败: ${response.message}")
+                NetworkResponse(
+                    data = null,
+                    code = response.code,
+                    message = "上传失败: ${response.message}"
+                )
             }
         } catch (e: IOException) {
             Log.e(TAG, "文件上传异常", e)
@@ -103,7 +111,7 @@ class FileUploadServiceImpl @Inject constructor(
     ): NetworkResponse<List<String>> = withContext(Dispatchers.IO) {
         try {
             val uploadedUrls = mutableListOf<String>()
-            
+
             for (uri in imageUris) {
                 val singleResult = uploadImageToTencent(
                     imageUri = uri,
@@ -112,15 +120,19 @@ class FileUploadServiceImpl @Inject constructor(
                     tmpSecretKey = tmpSecretKey,
                     sessionToken = sessionToken
                 )
-                
+
                 if (singleResult.isSucceeded) {
                     singleResult.data?.let { uploadedUrls.add(it) }
                 } else {
                     Log.e(TAG, "批量上传失败: ${singleResult.message}")
-                    return@withContext NetworkResponse(data = null, code = singleResult.code, message = "批量上传失败: ${singleResult.message}")
+                    return@withContext NetworkResponse(
+                        data = null,
+                        code = singleResult.code,
+                        message = "批量上传失败: ${singleResult.message}"
+                    )
                 }
             }
-            
+
             Log.d(TAG, "批量上传成功，共上传 ${uploadedUrls.size} 个文件")
             NetworkResponse(data = uploadedUrls.toList(), code = 1000, message = "批量上传成功")
         } catch (e: Exception) {

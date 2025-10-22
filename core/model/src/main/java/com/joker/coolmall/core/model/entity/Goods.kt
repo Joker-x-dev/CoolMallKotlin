@@ -4,6 +4,25 @@ import kotlinx.serialization.Serializable
 
 /**
  * 商品模型
+ *
+ * @param id ID
+ * @param typeId 类型ID
+ * @param title 标题
+ * @param subTitle 副标题
+ * @param mainPic 主图
+ * @param pics 图片
+ * @param price 价格
+ * @param sold 已售
+ * @param content 详情富文本(已弃用)
+ * @param contentPics 详情图片
+ * @param recommend 推荐
+ * @param featured 精选
+ * @param status 状态 0-下架 1-上架
+ * @param sortNum 排序
+ * @param specs 规格
+ * @param createTime 创建时间
+ * @param updateTime 更新时间
+ * @author Joker.X
  */
 @Serializable
 data class Goods(

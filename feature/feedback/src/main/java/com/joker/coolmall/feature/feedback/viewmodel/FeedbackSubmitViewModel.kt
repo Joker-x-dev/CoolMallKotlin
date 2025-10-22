@@ -3,8 +3,6 @@ package com.joker.coolmall.feature.feedback.viewmodel
 import android.content.Context
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
-import com.joker.coolmall.feature.feedback.R
-import dagger.hilt.android.qualifiers.ApplicationContext
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
 import com.joker.coolmall.core.data.repository.CommonRepository
 import com.joker.coolmall.core.data.repository.FeedbackRepository
@@ -17,10 +15,12 @@ import com.joker.coolmall.core.model.response.DictDataResponse
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.util.log.LogUtils
 import com.joker.coolmall.core.util.toast.ToastUtils
+import com.joker.coolmall.feature.feedback.R
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -30,7 +30,7 @@ import javax.inject.Inject
 
 /**
  * 提交反馈 ViewModel
- * 
+ *
  * @param context 应用上下文
  * @param navigator 导航器
  * @param appState 应用状态
@@ -143,7 +143,7 @@ class FeedbackSubmitViewModel @Inject constructor(
 
     /**
      * 按钮点击处理方法
-     * 
+     *
      * @author Joker.X
      */
     fun onSubmitButtonClick() {
@@ -169,7 +169,7 @@ class FeedbackSubmitViewModel @Inject constructor(
 
     /**
      * 上传图片并提交反馈
-     * 
+     *
      * @author Joker.X
      */
     private fun uploadImagesAndSubmit() {
@@ -203,7 +203,7 @@ class FeedbackSubmitViewModel @Inject constructor(
 
     /**
      * 提交反馈到服务器
-     * 
+     *
      * @author Joker.X
      */
     private fun submitFeedbackToServer() {
@@ -228,7 +228,7 @@ class FeedbackSubmitViewModel @Inject constructor(
 
     /**
      * 通过重写来给父类提供API请求的Flow
-     * 
+     *
      * @return 字典数据的Flow
      * @author Joker.X
      */

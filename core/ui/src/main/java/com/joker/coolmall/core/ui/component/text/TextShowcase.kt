@@ -18,7 +18,15 @@ import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.ui.component.title.TitleWithLine
 
 /**
- * 文本组件展示页
+ * 文本组件展示页面
+ *
+ * 用于展示所有文本组件的使用示例，包括：
+ * - 不同类型的文本（默认、次要、辅助、成功、警告、危险、链接）
+ * - 不同大小的文本（特大、大号、中大、中号、正常、小号）
+ * - 不同样式的文本（粗体、可选择）
+ * - 组合使用（大号粗体、小号次要、粗体链接）
+ *
+ * @author Joker.X
  */
 @Composable
 fun TextShowcase() {
@@ -201,6 +209,11 @@ fun TextShowcase() {
     }
 }
 
+/**
+ * 文本组件展示页面预览 - 浅色主题
+ *
+ * @author Joker.X
+ */
 @Preview(showBackground = true)
 @Composable
 fun TextShowcasePreviewLight() {
@@ -209,6 +222,11 @@ fun TextShowcasePreviewLight() {
     }
 }
 
+/**
+ * 文本组件展示页面预览 - 深色主题
+ *
+ * @author Joker.X
+ */
 @Preview(showBackground = true)
 @Composable
 fun TextShowcasePreviewDark() {

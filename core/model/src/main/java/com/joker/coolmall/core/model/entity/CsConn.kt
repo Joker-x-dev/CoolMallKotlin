@@ -4,6 +4,14 @@ import kotlinx.serialization.Serializable
 
 /**
  * 客服连接
+ *
+ * @param id ID
+ * @param userId 用户ID
+ * @param connId 连接ID
+ * @param type 类型 0-客户 1-后台
+ * @param createTime 创建时间
+ * @param updateTime 更新时间
+ * @author Joker.X
  */
 @Serializable
 data class CsConn(

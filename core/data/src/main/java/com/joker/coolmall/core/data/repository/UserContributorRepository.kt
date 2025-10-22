@@ -13,12 +13,19 @@ import javax.inject.Inject
 
 /**
  * 用户贡献者相关仓库
+ *
+ * @param userContributorNetworkDataSource 用户贡献者网络数据源
+ * @author Joker.X
  */
 class UserContributorRepository @Inject constructor(
     private val userContributorNetworkDataSource: UserContributorNetworkDataSource
 ) {
     /**
      * 分页查询用户贡献者
+     *
+     * @param params 分页请求参数
+     * @return 用户贡献者分页数据Flow
+     * @author Joker.X
      */
     fun getUserContributorPage(params: PageRequest): Flow<NetworkResponse<NetworkPageData<UserContributor>>> =
         flow {

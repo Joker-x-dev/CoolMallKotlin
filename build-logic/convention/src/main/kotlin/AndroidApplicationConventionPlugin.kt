@@ -1,7 +1,6 @@
 import com.android.build.api.dsl.ApplicationExtension
 import com.joker.coolmall.configureKotlinAndroid
 import com.joker.coolmall.libs
-import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
@@ -16,12 +15,15 @@ import org.gradle.kotlin.dsl.configure
  * - 产品变体配置
  *
  * 主要通过扩展Android Gradle Plugin的ApplicationExtension来实现配置
+ *
+ * @author Joker.X
  */
 class AndroidApplicationConventionPlugin : Plugin<Project> {
     /**
      * 插件应用入口
      *
      * @param target 目标项目实例
+     * @author Joker.X
      */
     override fun apply(target: Project) {
         with(target) {
@@ -35,7 +37,7 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             extensions.configure<ApplicationExtension> {
                 // 使用统一的 Kotlin Android 配置
                 configureKotlinAndroid(this)
-                
+
                 // 从版本目录获取并设置应用包名
                 namespace = libs.findVersion("namespace").get().toString()
 

@@ -4,6 +4,7 @@ import com.joker.coolmall.core.model.entity.GoodsSearchKeyword
 
 /**
  * 预览搜索关键词数据
+ *
  */
 val previewGoodsSearchKeywordList = listOf(
     GoodsSearchKeyword(
@@ -80,5 +81,6 @@ val previewGoodsSearchKeywordList = listOf(
 
 /**
  * 单个预览搜索关键词数据
+ *
  */
 val previewGoodsSearchKeyword = previewGoodsSearchKeywordList.first() 

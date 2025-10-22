@@ -8,7 +8,7 @@ import com.joker.coolmall.feature.cs.R
 /**
  * 聊天音效管理器
  * 负责播放发送和接收消息的提示音
- * 
+ *
  * @param context 应用上下文
  * @author Joker.X
  */
@@ -25,7 +25,7 @@ class ChatSoundManager(private val context: Context) {
 
     /**
      * 初始化SoundPool
-     * 
+     *
      * @author Joker.X
      */
     private fun initSoundPool() {
@@ -59,7 +59,7 @@ class ChatSoundManager(private val context: Context) {
 
     /**
      * 播放发送消息音效
-     * 
+     *
      * @author Joker.X
      */
     fun playMessageSentSound() {
@@ -77,7 +77,7 @@ class ChatSoundManager(private val context: Context) {
 
     /**
      * 播放接收消息音效
-     * 
+     *
      * @author Joker.X
      */
     fun playMessageReceivedSound() {
@@ -95,7 +95,7 @@ class ChatSoundManager(private val context: Context) {
 
     /**
      * 释放资源
-     * 
+     *
      * @author Joker.X
      */
     fun release() {

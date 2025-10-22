@@ -224,7 +224,7 @@ private fun ResetPasswordContentView(
 
 /**
  * 找回密码界面浅色主题预览
- * 
+ *
  * @author Joker.X
  */
 @Preview(showBackground = true)

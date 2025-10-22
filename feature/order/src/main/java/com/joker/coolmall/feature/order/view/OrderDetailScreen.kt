@@ -31,13 +31,13 @@ import com.joker.coolmall.core.model.entity.DictItem
 import com.joker.coolmall.core.model.entity.Order
 import com.joker.coolmall.core.model.preview.previewOrder
 import com.joker.coolmall.core.ui.component.address.AddressCard
+import com.joker.coolmall.core.ui.component.dialog.WeDialog
 import com.joker.coolmall.core.ui.component.goods.OrderGoodsCard
 import com.joker.coolmall.core.ui.component.list.AppListItem
 import com.joker.coolmall.core.ui.component.modal.DictSelectModal
 import com.joker.coolmall.core.ui.component.modal.OrderGoodsModal
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkView
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
-import com.joker.coolmall.core.ui.component.dialog.WeDialog
 import com.joker.coolmall.core.ui.component.text.AppText
 import com.joker.coolmall.core.ui.component.text.PriceText
 import com.joker.coolmall.core.ui.component.text.TextSize
@@ -250,14 +250,14 @@ internal fun OrderDetailScreen(
     DictSelectModal(
         visible = cancelModalVisible,
         onDismiss = onCancelModalDismiss,
-        title = stringResource(R.string.select_cancel_reason),
+        title = R.string.select_cancel_reason,
         uiState = cancelReasonsModalUiState,
         selectedItem = selectedCancelReason,
         onItemSelected = onCancelReasonSelected,
         onConfirm = { onCancelConfirm() },
         onRetry = onCancelRetry
     )
-    
+
     // 确认收货弹窗
     if (showConfirmDialog) {
         WeDialog(

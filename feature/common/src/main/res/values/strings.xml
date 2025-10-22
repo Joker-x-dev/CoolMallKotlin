@@ -7,25 +7,25 @@
     <string name="privacy_policy_title">隐私政策</string>
     <string name="user_agreement_title">用户协议</string>
     <string name="web_title">网页</string>
-    
+
     <!-- 关于我们页面 -->
     <string name="about_app_name">应用名称</string>
     <string name="about_version">版本号</string>
     <string name="about_version_code">版本代码</string>
     <string name="about_copyright">© 2025 Joker.X &amp; CoolMallKotlin Contributors</string>
-    
+
     <!-- 关于我们 - 开发者 -->
     <string name="about_developer">开发者</string>
     <string name="about_developer_email">joker.x.dev@gmail.com</string>
     <string name="about_developer_name">Joker.X</string>
-    
+
     <!-- 关于我们 - 项目地址 -->
     <string name="about_section_project">项目地址</string>
     <string name="about_github">GitHub</string>
     <string name="about_github_url">https://github.com/Joker-x-dev/CoolMallKotlin</string>
     <string name="about_gitee">Gitee</string>
     <string name="about_gitee_url">https://gitee.com/Joker-x-dev/CoolMallKotlin</string>
-    
+
     <!-- 关于我们 - 相关资源 -->
     <string name="about_section_resources">相关资源</string>
     <string name="about_api_doc">API 文档</string>
@@ -34,14 +34,14 @@
     <string name="about_demo_download_desc">不定时更新，可能不会同步最新代码变更</string>
     <string name="about_icon_source">图标来源</string>
     <string name="about_icon_source_desc">项目使用的图标库来自图鸟 Icon</string>
-    
+
     <!-- 关于我们 - 讨论 -->
     <string name="about_section_discussion">讨论</string>
     <string name="about_github_discussion">GitHub 讨论区</string>
     <string name="about_github_discussion_desc">在 GitHub 上参与项目讨论</string>
     <string name="about_qq_group">QQ 交流群</string>
     <string name="about_wechat_group">微信交流群</string>
-    
+
     <!-- 关于我们 - 支持与帮助 -->
     <string name="about_section_support">支持与帮助</string>
     <string name="about_translation">翻译</string>
@@ -50,7 +50,7 @@
     <string name="about_support_desc">您可以在此赞助以支持我</string>
     <string name="about_help">帮助</string>
     <string name="about_help_desc">有任何问题或建议，欢迎提交 Issue</string>
-    
+
     <!-- 关于我们 - 其他 -->
     <string name="about_section_other">其他</string>
     <string name="about_citation">引用</string>
@@ -58,10 +58,10 @@
     <string name="about_user_agreement">用户协议</string>
     <string name="about_privacy_policy">隐私政策</string>
     <string name="about_open_source_license">开源许可</string>
-    
+
     <!-- 设置页面 -->
     <string name="settings_account_security">账号与安全</string>
-    
+
     <!-- 设置 - 外观与语言 -->
     <string name="settings_section_appearance">外观与语言</string>
     <string name="settings_dark_mode">夜间模式</string>
@@ -70,28 +70,28 @@
     <string name="settings_dynamic_color_desc">开启后应用主题色会同步系统壁纸颜色</string>
     <string name="settings_language">语言切换</string>
     <string name="settings_language_chinese">中文</string>
-    
+
     <!-- 设置 - 隐私与协议 -->
     <string name="settings_section_privacy">隐私与协议</string>
-    
+
     <!-- 设置 - 其他 -->
     <string name="settings_section_other">其他</string>
     <string name="settings_hide_splash">不展示启动页</string>
     <string name="settings_hide_splash_desc">打开后进入应用将跳过启动页</string>
     <string name="settings_app_guide">应用引导</string>
-    
+
     <!-- 设置 - 通用 -->
     <string name="settings_section_general">通用</string>
     <string name="settings_clear_cache">清除缓存</string>
     <string name="settings_cache_size">13.24MB</string>
     <string name="settings_feedback">意见反馈</string>
     <string name="settings_about_app">关于应用</string>
-    
+
     <!-- WebView页面 -->
     <string name="web_menu_refresh">刷新</string>
     <string name="web_menu_open_browser">用浏览器打开</string>
     <string name="web_more_options">更多选项</string>
-    
+
     <!-- 依赖弹窗 -->
     <string name="dependency_modal_title">引用致谢</string>
 </resources>

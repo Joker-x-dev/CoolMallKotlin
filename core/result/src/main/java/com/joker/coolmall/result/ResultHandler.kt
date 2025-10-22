@@ -14,6 +14,8 @@ import java.io.StringWriter
 /**
  * 网络请求结果处理工具类
  * 用于简化ViewModel中对网络请求结果的处理
+ *
+ * @author Joker.X
  */
 object ResultHandler {
 
@@ -29,6 +31,7 @@ object ResultHandler {
      * @param onSuccessWithData 成功且有数据状态的回调，接收数据对象
      * @param onError 错误状态的回调，接收错误消息和异常
      * @param onFinally 最终执行的回调，无论成功或失败都会执行
+     * @author Joker.X
      */
     fun <T> handleResult(
         scope: CoroutineScope,
@@ -86,6 +89,7 @@ object ResultHandler {
      * @param onData 成功且有数据状态的回调，只有当请求成功且有数据时才会调用
      * @param onError 错误状态的回调，接收错误消息和异常
      * @param onFinally 最终执行的回调，无论成功或失败都会执行
+     * @author Joker.X
      */
     fun <T> handleResultWithData(
         scope: CoroutineScope,
@@ -109,6 +113,10 @@ object ResultHandler {
 
     /**
      * 获取完整的异常堆栈信息
+     *
+     * @param throwable 异常对象
+     * @return 堆栈信息字符串
+     * @author Joker.X
      */
     private fun getStackTraceString(throwable: Throwable): String {
         return StringWriter().apply {
@@ -118,6 +126,12 @@ object ResultHandler {
 
     /**
      * 格式化错误日志信息
+     *
+     * @param errorMsg 错误消息
+     * @param throwable 异常对象
+     * @param additionalInfo 附加信息
+     * @return 格式化后的错误日志
+     * @author Joker.X
      */
     private fun formatErrorLog(
         errorMsg: String,
@@ -139,6 +153,10 @@ object ResultHandler {
 
     /**
      * 获取错误类型描述
+     *
+     * @param throwable 异常对象
+     * @return 错误类型描述
+     * @author Joker.X
      */
     private fun getErrorTypeDescription(throwable: Throwable): String = when (throwable) {
         is SerializationException -> buildString {
@@ -154,6 +172,12 @@ object ResultHandler {
 
     /**
      * 处理错误状态
+     *
+     * @param errorMsg 错误消息
+     * @param throwable 异常对象
+     * @param showToast 是否显示Toast
+     * @param onError 错误回调
+     * @author Joker.X
      */
     private fun handleError(
         errorMsg: String,
@@ -171,6 +195,14 @@ object ResultHandler {
 
     /**
      * 处理成功状态
+     *
+     * @param T 数据类型
+     * @param response 网络响应对象
+     * @param onSuccess 成功回调
+     * @param onSuccessWithData 成功且有数据回调
+     * @param showToast 是否显示Toast
+     * @param onError 错误回调
+     * @author Joker.X
      */
     private fun <T> handleSuccess(
         response: NetworkResponse<T>,

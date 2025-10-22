@@ -15,6 +15,9 @@ import javax.inject.Singleton
 
 /**
  * 数据库模块
+ * 负责提供数据库实例及相关DAO的依赖注入
+ *
+ * @author Joker.X
  */
 @Module
 @InstallIn(SingletonComponent::class)
@@ -22,6 +25,10 @@ object DatabaseModule {
 
     /**
      * 提供数据库实例
+     *
+     * @param context 应用上下文
+     * @return 应用数据库实例
+     * @author Joker.X
      */
     @Provides
     @Singleton
@@ -37,6 +44,10 @@ object DatabaseModule {
 
     /**
      * 提供购物车DAO
+     *
+     * @param database 应用数据库实例
+     * @return 购物车数据访问对象
+     * @author Joker.X
      */
     @Provides
     @Singleton
@@ -46,6 +57,10 @@ object DatabaseModule {
 
     /**
      * 提供足迹DAO
+     *
+     * @param database 应用数据库实例
+     * @return 足迹数据访问对象
+     * @author Joker.X
      */
     @Provides
     @Singleton
@@ -55,6 +70,10 @@ object DatabaseModule {
 
     /**
      * 提供搜索历史DAO
+     *
+     * @param database 应用数据库实例
+     * @return 搜索历史数据访问对象
+     * @author Joker.X
      */
     @Provides
     @Singleton

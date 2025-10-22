@@ -9,6 +9,8 @@ import com.joker.coolmall.core.util.toast.ToastUtils
 /**
  * 权限工具类，基于 XXPermissions 框架封装
  * 提供常用权限的快捷申请方法
+ *
+ * @author Joker.X
  */
 object PermissionUtils {
 
@@ -22,6 +24,7 @@ object PermissionUtils {
      * @param permissionName 权限名称（用于错误提示）
      * @param callback 权限申请结果回调
      * @param permissions 申请的权限（可变参数）
+     * @author Joker.X
      */
     private fun handlePermissionResult(
         activity: android.app.Activity,
@@ -54,6 +57,7 @@ object PermissionUtils {
      *
      * @param context Activity 或 Fragment 的上下文
      * @param callback 权限申请结果回调
+     * @author Joker.X
      */
     fun requestStoragePermission(
         context: Context,
@@ -83,13 +87,13 @@ object PermissionUtils {
     }
 
 
-
     /**
      * 申请相机权限
      * 用法示例：PermissionUtils.requestCameraPermission(this) { granted -> ... }
      *
      * @param context Activity 或 Fragment 的上下文
      * @param callback 权限申请结果回调
+     * @author Joker.X
      */
     fun requestCameraPermission(
         context: Context,
@@ -117,13 +121,13 @@ object PermissionUtils {
     }
 
 
-
     /**
      * 申请相册权限（读取媒体文件）
      * 用法示例：PermissionUtils.requestGalleryPermission(this) { granted -> ... }
      *
      * @param context Activity 或 Fragment 的上下文
      * @param callback 权限申请结果回调
+     * @author Joker.X
      */
     fun requestGalleryPermission(
         context: Context,
@@ -157,6 +161,7 @@ object PermissionUtils {
      *
      * @param context Activity 或 Fragment 的上下文
      * @param callback 权限申请结果回调
+     * @author Joker.X
      */
     fun requestNotificationPermission(
         context: Context,
@@ -190,6 +195,7 @@ object PermissionUtils {
      *
      * @param context Activity 或 Fragment 的上下文
      * @param callback 权限申请结果回调
+     * @author Joker.X
      */
     fun requestAudioPermission(
         context: Context,
@@ -217,13 +223,13 @@ object PermissionUtils {
     }
 
 
-
     /**
      * 申请位置权限
      * 用法示例：PermissionUtils.requestLocationPermission(this) { granted -> ... }
      *
      * @param context Activity 或 Fragment 的上下文
      * @param callback 权限申请结果回调
+     * @author Joker.X
      */
     fun requestLocationPermission(
         context: Context,
@@ -258,6 +264,7 @@ object PermissionUtils {
      *
      * @param context Activity 或 Fragment 的上下文
      * @param callback 权限申请结果回调
+     * @author Joker.X
      */
     fun requestCameraAndGalleryPermission(
         context: Context,
@@ -297,6 +304,7 @@ object PermissionUtils {
      * @param permissions 权限数组
      * @param permissionName 权限名称（用于错误提示）
      * @param callback 权限申请结果回调
+     * @author Joker.X
      */
     fun requestCustomPermissions(
         context: Context,
@@ -316,15 +324,15 @@ object PermissionUtils {
             permissionBuilder.permission(permission)
         }
         permissionBuilder.request { grantedList, deniedList ->
-                handlePermissionResult(
-                    activity,
-                    grantedList,
-                    deniedList,
-                    permissionName,
-                    callback,
-                    *permissions
-                )
-            }
+            handlePermissionResult(
+                activity,
+                grantedList,
+                deniedList,
+                permissionName,
+                callback,
+                *permissions
+            )
+        }
     }
 
 
@@ -334,6 +342,7 @@ object PermissionUtils {
      *
      * @param context 输入的 Context
      * @return Activity 实例，如果无法获取则返回 null
+     * @author Joker.X
      */
     private fun getActivityFromContext(context: Context): android.app.Activity? {
         return when (context) {
@@ -358,6 +367,7 @@ object PermissionUtils {
      * @param context Context
      * @param permission 权限对象
      * @return 是否已授予权限
+     * @author Joker.X
      */
     fun hasPermission(context: Context, permission: IPermission): Boolean {
         return XXPermissions.isGrantedPermission(context, permission)
@@ -370,6 +380,7 @@ object PermissionUtils {
      * @param context Context
      * @param permissions 权限数组
      * @return 是否全部权限都已授予
+     * @author Joker.X
      */
     fun hasPermissions(context: Context, permissions: Array<IPermission>): Boolean {
         return XXPermissions.isGrantedPermissions(context, permissions)
@@ -380,6 +391,7 @@ object PermissionUtils {
      * 用法示例：PermissionUtils.openPermissionSettings(this)
      *
      * @param context Context
+     * @author Joker.X
      */
     fun openPermissionSettings(context: Context) {
         XXPermissions.startPermissionActivity(context)
@@ -391,6 +403,7 @@ object PermissionUtils {
      *
      * @param context Context
      * @param permissions 权限数组
+     * @author Joker.X
      */
     fun openPermissionSettings(context: Context, permissions: Array<IPermission>) {
         XXPermissions.startPermissionActivity(context, *permissions)

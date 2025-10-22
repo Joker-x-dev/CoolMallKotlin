@@ -19,12 +19,12 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.joker.coolmall.core.common.base.state.LoadMoreState
-import com.joker.coolmall.feature.cs.R
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.ui.component.divider.WeDivider
 import com.joker.coolmall.core.ui.component.loading.WeLoading
 import com.joker.coolmall.core.ui.component.text.AppText
 import com.joker.coolmall.core.ui.component.text.TextType
+import com.joker.coolmall.feature.cs.R
 
 /**
  * 聊天消息加载更多组件
@@ -126,7 +126,7 @@ fun ChatLoadMore(
 
 /**
  * ChatLoadMore 组件预览
- * 
+ *
  * @author Joker.X
  */
 @Preview(showBackground = true)
@@ -165,7 +165,7 @@ private fun ChatLoadMorePreview() {
 
 /**
  * ChatLoadMore 组件深色主题预览
- * 
+ *
  * @author Joker.X
  */
 @Preview(showBackground = true)

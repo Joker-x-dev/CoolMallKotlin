@@ -10,6 +10,8 @@ import com.joker.coolmall.navigation.routes.UserRoutes
 /**
  * 路由拦截器
  * 负责管理需要登录的页面配置和路由拦截逻辑
+ *
+ * @author Joker.X
  */
 class RouteInterceptor {
 
@@ -48,6 +50,7 @@ class RouteInterceptor {
      *
      * @param route 要检查的路由
      * @return true表示需要登录，false表示不需要登录
+     * @author Joker.X
      */
     fun requiresLogin(route: String): Boolean {
         // 提取基础路由（去除参数部分）
@@ -63,6 +66,7 @@ class RouteInterceptor {
      * 获取登录页面路由
      *
      * @return 登录页面的路由
+     * @author Joker.X
      */
     fun getLoginRoute(): String {
         return AuthRoutes.HOME
@@ -73,6 +77,7 @@ class RouteInterceptor {
      *
      * @param route 完整路由
      * @return 基础路由
+     * @author Joker.X
      */
     private fun extractBaseRoute(route: String): String {
         // 去除查询参数
@@ -94,6 +99,7 @@ class RouteInterceptor {
      * 添加需要登录的路由
      *
      * @param route 需要登录的路由
+     * @author Joker.X
      */
     fun addLoginRequiredRoute(route: String) {
         (loginRequiredRoutes as MutableSet).add(route)
@@ -103,6 +109,7 @@ class RouteInterceptor {
      * 移除需要登录的路由
      *
      * @param route 不再需要登录的路由
+     * @author Joker.X
      */
     fun removeLoginRequiredRoute(route: String) {
         (loginRequiredRoutes as MutableSet).remove(route)
@@ -112,6 +119,7 @@ class RouteInterceptor {
      * 获取所有需要登录的路由
      *
      * @return 需要登录的路由集合
+     * @author Joker.X
      */
     fun getLoginRequiredRoutes(): Set<String> {
         return loginRequiredRoutes.toSet()

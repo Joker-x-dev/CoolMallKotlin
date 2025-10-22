@@ -3,7 +3,7 @@
     <!-- Page titles -->
     <string name="goods_detail">Product Details</string>
     <string name="goods_comment_title">Product Reviews</string>
-    
+
     <!-- Product detail page -->
     <string name="sold_count">Sold %d</string>
     <string name="coupon_text">%d off when you spend %d</string>
@@ -12,37 +12,37 @@
     <string name="select_spec">Select Spec</string>
     <string name="shipping_and_service">Shipping &amp; Service</string>
     <string name="shipping">Shipping</string>
-    <string name="shipping_location">Yunnan Province, Kunming</string>
+    <string name="shipping_location">Yunnan, Kunming</string>
     <string name="service">Service</string>
-    <string name="service_details">7-day returns · Shipping insurance · Ships in 48 hours</string>
+    <string name="service_details">7-day returns · Insurance · 48h shipping</string>
     <string name="customer_service">Service</string>
     <string name="shopping_cart">Cart</string>
     <string name="add_to_cart">Add to Cart</string>
     <string name="buy_now">Buy Now</string>
     <string name="view_all">View All</string>
     <string name="goods_reviews">Reviews</string>
-    
+
     <!-- Category page -->
     <string name="filter">Filter</string>
     <string name="comprehensive">All</string>
     <string name="sales">Sales</string>
     <string name="price">Price</string>
-    
+
     <!-- Search page -->
     <string name="search_history">Search History</string>
     <string name="recommended_search">Recommended</string>
-    
+
     <!-- Filter dialog -->
-    <string name="price_range">Price Range</string>
-    <string name="min_price">Min Price</string>
-    <string name="max_price">Max Price</string>
+    <string name="price_range">Price</string>
+    <string name="min_price">Min</string>
+    <string name="max_price">Max</string>
     <string name="reset">Reset</string>
     <string name="confirm">Confirm</string>
-    
+
     <!-- Toast messages -->
     <string name="add_to_cart_failed">Failed to add to cart</string>
     <string name="add_to_cart_success">Added to cart successfully</string>
-    
+
     <!-- Comment related -->
     <string name="anonymous_user">Anonymous</string>
     <string name="spec_colon">Spec: %s</string>

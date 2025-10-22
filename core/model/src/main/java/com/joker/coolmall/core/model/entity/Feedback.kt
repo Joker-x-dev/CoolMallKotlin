@@ -1,14 +1,22 @@
-/**
- * 意见反馈模型
- *
- * @author Joker.X
- */
 package com.joker.coolmall.core.model.entity
 
 import kotlinx.serialization.Serializable
 
 /**
  * 意见反馈模型
+ *
+ * @param id ID
+ * @param userId 用户ID
+ * @param contact 联系方式
+ * @param type 类型
+ * @param content 内容
+ * @param images 图片
+ * @param status 状态 0-未处理 1-已处理
+ * @param handlerId 处理人ID
+ * @param remark 备注
+ * @param createTime 创建时间
+ * @param updateTime 更新时间
+ * @author Joker.X
  */
 @Serializable
 data class Feedback(

@@ -15,14 +15,15 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.Shape
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImagePainter
 import coil.compose.SubcomposeAsyncImage
 import coil.compose.SubcomposeAsyncImageContent
-import com.joker.coolmall.core.common.R
-import com.joker.coolmall.core.util.R as CoreUtilR
 import com.joker.coolmall.core.ui.component.loading.WeLoading
+import com.joker.coolmall.core.ui.R as UiR
+import com.joker.coolmall.core.util.R as CoreUtilR
 
 /**
  * 带加载状态的网络图片组件
@@ -114,7 +115,7 @@ fun NetWorkImage(
                         IconButton(onClick = onErrorClick) {
                             Icon(
                                 painter = painterResource(id = CoreUtilR.drawable.ic_error),
-                                contentDescription = "Error",
+                                contentDescription = stringResource(id = UiR.string.image_load_error),
                                 tint = errorColor,
                                 modifier = Modifier.size(24.dp)
                             )
@@ -123,7 +124,7 @@ fun NetWorkImage(
                         // 否则显示普通图标
                         Icon(
                             painter = painterResource(id = CoreUtilR.drawable.ic_error),
-                            contentDescription = "Error",
+                            contentDescription = stringResource(id = UiR.string.image_load_error),
                             tint = errorColor,
                             modifier = Modifier.size(24.dp)
                         )

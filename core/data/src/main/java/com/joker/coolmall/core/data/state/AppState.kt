@@ -25,6 +25,12 @@ import javax.inject.Singleton
  * - 用户个人信息
  *
  * 通过StateFlow提供响应式的状态管理，任何组件都可以订阅状态变化
+ *
+ * @param authStoreRepository 认证信息存储仓库
+ * @param userInfoStoreRepository 用户信息存储仓库
+ * @param userInfoRepository 用户信息网络仓库
+ * @param applicationScope 应用级协程作用域
+ * @author Joker.X
  */
 @Singleton
 class AppState @Inject constructor(
@@ -49,7 +55,12 @@ class AppState @Inject constructor(
     private val _userInfo = MutableStateFlow<User?>(null)
     val userInfo: StateFlow<User?> = _userInfo.asStateFlow()
 
-    // 初始化状态 - 由外部调用而不是自动初始化
+    /**
+     * 初始化应用状态
+     * 由外部调用而不是自动初始化
+     *
+     * @author Joker.X
+     */
     fun initialize() {
         applicationScope.launch {
             initializeState()
@@ -58,6 +69,8 @@ class AppState @Inject constructor(
 
     /**
      * 从本地存储初始化应用状态
+     *
+     * @author Joker.X
      */
     private suspend fun initializeState() {
         // 获取认证信息
@@ -76,8 +89,10 @@ class AppState @Inject constructor(
 
     /**
      * 更新用户登录状态
+     *
      * @param auth 认证信息
      * @param user 用户信息
+     * @author Joker.X
      */
     suspend fun updateUserState(auth: Auth, user: User) {
         // 保存到本地存储
@@ -93,7 +108,9 @@ class AppState @Inject constructor(
 
     /**
      * 更新用户信息
+     *
      * @param user 新的用户信息
+     * @author Joker.X
      */
     suspend fun updateUserInfo(user: User) {
         // 保存到本地存储
@@ -106,7 +123,9 @@ class AppState @Inject constructor(
 
     /**
      * 更新认证信息（如token刷新）
+     *
      * @param auth 新的认证信息
+     * @author Joker.X
      */
     suspend fun updateAuth(auth: Auth) {
         // 保存到本地存储
@@ -121,6 +140,8 @@ class AppState @Inject constructor(
 
     /**
      * 用户登出
+     *
+     * @author Joker.X
      */
     suspend fun logout() {
         // 清除本地存储
@@ -136,7 +157,9 @@ class AppState @Inject constructor(
 
     /**
      * 检查token是否需要刷新
+     *
      * @return 是否需要刷新token
+     * @author Joker.X
      */
     suspend fun shouldRefreshToken(): Boolean {
         return authStoreRepository.shouldRefreshToken()
@@ -144,6 +167,8 @@ class AppState @Inject constructor(
 
     /**
      * 从网络获取最新的用户信息并更新到状态
+     *
+     * @author Joker.X
      */
     fun refreshUserInfo() {
         if (!_isLoggedIn.value) return

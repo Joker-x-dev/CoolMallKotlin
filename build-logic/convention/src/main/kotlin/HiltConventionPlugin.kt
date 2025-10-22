@@ -14,6 +14,8 @@ import org.gradle.kotlin.dsl.dependencies
  * - 自动添加 Hilt Navigation Compose 和测试依赖
  *
  * 参考 Now in Android 项目的 HiltConventionPlugin 实现
+ *
+ * @author Joker.X
  */
 class HiltConventionPlugin : Plugin<Project> {
     override fun apply(target: Project) {

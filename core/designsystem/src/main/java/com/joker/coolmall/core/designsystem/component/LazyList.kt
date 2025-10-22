@@ -31,6 +31,7 @@ import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
  * @param fillMaxSize 是否填充最大尺寸
  * @param fillMaxWidth 是否填充最大宽度（当fillMaxSize为false时生效）
  * @param content 列表内容构建器
+ * @author Joker.X
  */
 @Composable
 fun AppLazyColumn(
@@ -61,6 +62,16 @@ fun AppLazyColumn(
 
 /**
  * 带小内边距的垂直懒加载列表
+ *
+ * @param modifier 额外的修饰符
+ * @param listState 列表状态
+ * @param verticalArrangement 垂直排列方式
+ * @param horizontalAlignment 水平对齐方式
+ * @param reverseLayout 是否反向布局
+ * @param fillMaxSize 是否填充最大尺寸
+ * @param fillMaxWidth 是否填充最大宽度
+ * @param content 列表内容构建器
+ * @author Joker.X
  */
 @Composable
 fun SmallPaddingLazyColumn(
@@ -88,6 +99,16 @@ fun SmallPaddingLazyColumn(
 
 /**
  * 带中等内边距的垂直懒加载列表
+ *
+ * @param modifier 额外的修饰符
+ * @param listState 列表状态
+ * @param verticalArrangement 垂直排列方式
+ * @param horizontalAlignment 水平对齐方式
+ * @param reverseLayout 是否反向布局
+ * @param fillMaxSize 是否填充最大尺寸
+ * @param fillMaxWidth 是否填充最大宽度
+ * @param content 列表内容构建器
+ * @author Joker.X
  */
 @Composable
 fun MediumPaddingLazyColumn(
@@ -115,6 +136,16 @@ fun MediumPaddingLazyColumn(
 
 /**
  * 带大内边距的垂直懒加载列表
+ *
+ * @param modifier 额外的修饰符
+ * @param listState 列表状态
+ * @param verticalArrangement 垂直排列方式
+ * @param horizontalAlignment 水平对齐方式
+ * @param reverseLayout 是否反向布局
+ * @param fillMaxSize 是否填充最大尺寸
+ * @param fillMaxWidth 是否填充最大宽度
+ * @param content 列表内容构建器
+ * @author Joker.X
  */
 @Composable
 fun LargePaddingLazyColumn(
@@ -142,6 +173,17 @@ fun LargePaddingLazyColumn(
 
 /**
  * 垂直列表项目，预设了间距
+ *
+ * @param modifier 额外的修饰符
+ * @param listState 列表状态
+ * @param contentPadding 内容内边距
+ * @param itemSpacing 列表项间距
+ * @param horizontalAlignment 水平对齐方式
+ * @param reverseLayout 是否反向布局
+ * @param fillMaxSize 是否填充最大尺寸
+ * @param fillMaxWidth 是否填充最大宽度
+ * @param content 列表内容构建器
+ * @author Joker.X
  */
 @Composable
 fun VerticalListItems(
@@ -178,6 +220,7 @@ fun VerticalListItems(
  * @param verticalAlignment 垂直对齐方式
  * @param reverseLayout 是否反向布局
  * @param content 列表内容构建器
+ * @author Joker.X
  */
 @Composable
 fun AppLazyRow(
@@ -202,6 +245,14 @@ fun AppLazyRow(
 
 /**
  * 带小内边距的水平懒加载列表
+ *
+ * @param modifier 额外的修饰符
+ * @param listState 列表状态
+ * @param horizontalArrangement 水平排列方式
+ * @param verticalAlignment 垂直对齐方式
+ * @param reverseLayout 是否反向布局
+ * @param content 列表内容构建器
+ * @author Joker.X
  */
 @Composable
 fun SmallPaddingLazyRow(
@@ -225,6 +276,14 @@ fun SmallPaddingLazyRow(
 
 /**
  * 带中等内边距的水平懒加载列表
+ *
+ * @param modifier 额外的修饰符
+ * @param listState 列表状态
+ * @param horizontalArrangement 水平排列方式
+ * @param verticalAlignment 垂直对齐方式
+ * @param reverseLayout 是否反向布局
+ * @param content 列表内容构建器
+ * @author Joker.X
  */
 @Composable
 fun MediumPaddingLazyRow(

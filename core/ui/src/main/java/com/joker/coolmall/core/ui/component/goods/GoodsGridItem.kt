@@ -13,6 +13,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -23,11 +24,17 @@ import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.designsystem.theme.TextTertiaryLight
 import com.joker.coolmall.core.model.entity.Goods
 import com.joker.coolmall.core.model.preview.previewGoods
+import com.joker.coolmall.core.ui.R
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
 import com.joker.coolmall.core.ui.component.text.PriceText
 
 /**
  * 商品网格卡片
+ *
+ * @param modifier 修饰符
+ * @param goods 商品数据
+ * @param onClick 点击回调
+ * @author Joker.X
  */
 @Composable
 fun GoodsGridItem(
@@ -72,7 +79,7 @@ fun GoodsGridItem(
             ) {
                 PriceText(goods.price)
                 Text(
-                    text = "已售 ${goods.sold}",
+                    text = stringResource(id = R.string.goods_sold, goods.sold),
                     style = MaterialTheme.typography.bodySmall,
                     color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
                 )
@@ -81,6 +88,11 @@ fun GoodsGridItem(
     }
 }
 
+/**
+ * 商品网格卡片预览
+ *
+ * @author Joker.X
+ */
 @Preview(showBackground = true)
 @Composable
 fun GoodsGridItemPreview() {

@@ -15,6 +15,7 @@ _🛍️ A modern e-commerce application based on Kotlin and Jetpack Compose_
 [![Gitee](https://img.shields.io/badge/Gitee-CoolMallKotlin-red?style=flat-square&logo=gitee)](https://gitee.com/Joker-x-dev/CoolMallKotlin)
 [![Demo](https://img.shields.io/badge/Demo-Download-green?style=flat-square&logo=android)](https://www.pgyer.com/CoolMallKotlinProdRelease)
 [![API](https://img.shields.io/badge/API-Documentation-orange?style=flat-square&logo=postman)](https://coolmall.apifox.cn)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/Joker-x-dev/CoolMallKotlin)
 
 </div>
 
@@ -79,12 +80,12 @@ to join.
 
 ### 📍 Project Links
 
-- **GitHub Repository
-  **: [https://github.com/Joker-x-dev/CoolMallKotlin](https://github.com/Joker-x-dev/CoolMallKotlin)
-- **Gitee Repository
-  **: [https://gitee.com/Joker-x-dev/CoolMallKotlin](https://gitee.com/Joker-x-dev/CoolMallKotlin)
+- **GitHub Repository**: [https://github.com/Joker-x-dev/CoolMallKotlin](https://github.com/Joker-x-dev/CoolMallKotlin)
+- **Gitee Repository**: [https://gitee.com/Joker-x-dev/CoolMallKotlin](https://gitee.com/Joker-x-dev/CoolMallKotlin)
 
 ### Demo Download
+
+> 🌟 **Tip**: The customer service chat and feedback features are fully functional. I genuinely read every message you send and will respond to each one, so please don't call me a bot....
 
 - **Release Version (Recommended 4MB)
   **: [Click to Download](https://www.pgyer.com/CoolMallKotlinProdRelease)
@@ -120,29 +121,29 @@ to join.
 
 | Category                | Technology                | Version    | Description                            |
 |-------------------------|---------------------------|------------|----------------------------------------|
-| Programming Language    | Kotlin                    | 2.2.10     | 100% Kotlin Development                |
+| Programming Language    | Kotlin                    | 2.2.20     | 100% Kotlin Development                |
 | UI Framework            | Jetpack Compose           | 2025.09.00 | Declarative UI Framework               |
 | Architecture Pattern    | MVVM + Clean Architecture | -          | MVVM + Clean Architecture              |
-| Dependency Injection    | Hilt                      | 2.57.1     | Dagger-based DI Framework              |
+| Dependency Injection    | Hilt                      | 2.57.2     | Dagger-based DI Framework              |
 | Asynchronous Processing | Coroutines + Flow         | 1.9.0      | Coroutines + Flow Reactive Programming |
 
 ### Functional Modules
 
 | Category              | Technology            | Version       | Description                   |
 |-----------------------|-----------------------|---------------|-------------------------------|
-| Navigation            | Navigation Compose    | 2.9.4         | Compose Navigation Component  |
+| Navigation            | Navigation Compose    | 2.9.5         | Compose Navigation Component  |
 | Data Serialization    | Kotlinx Serialization | 1.9.0         | JSON Serialization Processing |
-| Network Requests      | Retrofit + OkHttp     | 3.0.0 + 5.1.0 | HTTP Client                   |
+| Network Requests      | Retrofit + OkHttp     | 3.0.0 + 5.2.0 | HTTP Client                   |
 | Image Loading         | Coil Compose          | 2.7.0         | Image Loading and Caching     |
-| Animation Effects     | Lottie Compose        | 6.6.7         | After Effects Animation       |
+| Animation Effects     | Lottie Compose        | 6.6.9         | After Effects Animation       |
 | Permission Management | XXPermissions         | 26.5          | Dynamic Permission Request    |
 
 ### Data Storage
 
 | Category      | Technology | Version | Description                        |
 |---------------|------------|---------|------------------------------------|
-| Database      | Room       | 2.8.0   | SQLite Database                    |
-| Local Storage | MMKV       | 2.2.3   | High-performance Key-Value Storage |
+| Database      | Room       | 2.8.2   | SQLite Database                    |
+| Local Storage | MMKV       | 2.2.4   | High-performance Key-Value Storage |
 
 ### Development Tools
 
@@ -169,7 +170,6 @@ to join.
 - **Design Standards**: Strictly follows Material Design 3 design specifications and best practices
 - **Theme Adaptation**: Complete support for light/dark theme dynamic switching
 - **Internationalization**: Supports Chinese and English language switching for global promotion
-  `To be improved`
 - **Reactive Programming**: Reactive programming paradigm based on Coroutines + Flow
 - **Complete Test Coverage** `Planned`
 - **Large Screen Adaptation (Tablet/Foldable)** `Planned`

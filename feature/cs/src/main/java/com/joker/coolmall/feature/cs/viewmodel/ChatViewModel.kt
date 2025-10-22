@@ -33,7 +33,7 @@ private const val TAG = "ChatViewModel"
 
 /**
  * 客服聊天 ViewModel
- * 
+ *
  * @param customerServiceRepository 客服仓库
  * @param appState 应用状态
  * @param context 应用上下文
@@ -104,7 +104,7 @@ class ChatViewModel @Inject constructor(
 
     /**
      * 设置WebSocket回调
-     * 
+     *
      * @author Joker.X
      */
     private fun setupWebSocketCallbacks() {
@@ -119,7 +119,7 @@ class ChatViewModel @Inject constructor(
 
     /**
      * 创建客服会话
-     * 
+     *
      * @author Joker.X
      */
     private fun createSession() {
@@ -154,7 +154,7 @@ class ChatViewModel @Inject constructor(
 
     /**
      * 加载历史消息
-     * 
+     *
      * @author Joker.X
      */
     fun loadHistoryMessages() {
@@ -229,7 +229,7 @@ class ChatViewModel @Inject constructor(
 
     /**
      * 加载更多历史消息
-     * 
+     *
      * @author Joker.X
      */
     fun loadMoreMessages() {
@@ -247,7 +247,7 @@ class ChatViewModel @Inject constructor(
 
     /**
      * 刷新消息列表
-     * 
+     *
      * @author Joker.X
      */
     fun refreshMessages() {
@@ -260,7 +260,7 @@ class ChatViewModel @Inject constructor(
 
     /**
      * 建立WebSocket连接
-     * 
+     *
      * @author Joker.X
      */
     fun connectWebSocket() {
@@ -270,7 +270,7 @@ class ChatViewModel @Inject constructor(
 
     /**
      * 添加新消息到列表
-     * 
+     *
      * @param message 消息数据
      * @author Joker.X
      */
@@ -299,7 +299,7 @@ class ChatViewModel @Inject constructor(
 
     /**
      * 更新输入框文本
-     * 
+     *
      * @param text 输入文本
      * @author Joker.X
      */
@@ -309,7 +309,7 @@ class ChatViewModel @Inject constructor(
 
     /**
      * 清除消息动画状态
-     * 
+     *
      * @param messageId 消息ID
      * @author Joker.X
      */
@@ -319,7 +319,7 @@ class ChatViewModel @Inject constructor(
 
     /**
      * 发送消息
-     * 
+     *
      * @param content 消息内容
      * @param type 消息类型
      * @author Joker.X
@@ -355,7 +355,7 @@ class ChatViewModel @Inject constructor(
 
     /**
      * 标记消息为已读
-     * 
+     *
      * @author Joker.X
      */
     fun markMessagesAsRead() {
@@ -379,7 +379,7 @@ class ChatViewModel @Inject constructor(
 
     /**
      * 重试请求
-     * 
+     *
      * @author Joker.X
      */
     fun retryRequest() {
@@ -392,7 +392,7 @@ class ChatViewModel @Inject constructor(
 
     /**
      * 断开WebSocket连接
-     * 
+     *
      * @author Joker.X
      */
     fun disconnectWebSocket() {

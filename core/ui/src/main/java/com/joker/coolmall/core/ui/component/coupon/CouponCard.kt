@@ -22,6 +22,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -56,6 +57,8 @@ import java.util.Locale
 
 /**
  * 优惠券卡片模式
+ *
+ * @author Joker.X
  */
 enum class CouponCardMode {
     RECEIVE,    // 领取模式
@@ -65,6 +68,8 @@ enum class CouponCardMode {
 
 /**
  * 优惠券状态（自动计算）
+ *
+ * @author Joker.X
  */
 private enum class CouponStatus {
     AVAILABLE,    // 可用
@@ -76,6 +81,10 @@ private enum class CouponStatus {
 
 /**
  * 判断优惠券是否过期
+ *
+ * @param endTime 优惠券结束时间
+ * @return 是否过期
+ * @author Joker.X
  */
 private fun isExpired(endTime: String?): Boolean {
     if (endTime.isNullOrEmpty()) return false
@@ -102,6 +111,7 @@ private fun isExpired(endTime: String?): Boolean {
  * @param onActionClick 操作按钮点击回调
  * @param showDescription 是否显示详细描述，默认为true
  * @param expandable 是否可展开查看详情，默认为true
+ * @author Joker.X
  */
 @Composable
 fun CouponCard(
@@ -175,6 +185,16 @@ fun CouponCard(
 
 /**
  * 优惠券卡片内容
+ *
+ * @param coupon 优惠券数据
+ * @param status 优惠券状态
+ * @param mode 卡片模式
+ * @param isExpanded 是否展开
+ * @param onExpandedChange 展开状态变化回调
+ * @param onActionClick 操作按钮点击回调
+ * @param showDescription 是否显示描述
+ * @param expandable 是否可展开
+ * @author Joker.X
  */
 @Composable
 private fun CouponCardContent(
@@ -234,7 +254,7 @@ private fun CouponCardContent(
                 // 有效期
                 coupon.endTime?.let { endTime ->
                     AppText(
-                        text = "有效期至 $endTime",
+                        text = stringResource(id = R.string.coupon_valid_until, endTime),
                         size = TextSize.BODY_MEDIUM,
                         type = TextType.TERTIARY
                     )
@@ -253,7 +273,10 @@ private fun CouponCardContent(
                 // 使用条件
                 coupon.condition?.let { condition ->
                     AppText(
-                        text = "满${condition.fullAmount.toInt()}元可用",
+                        text = stringResource(
+                            id = R.string.coupon_conditions,
+                            condition.fullAmount.toInt()
+                        ),
                         size = TextSize.BODY_MEDIUM,
                         type = TextType.SECONDARY
                     )
@@ -284,7 +307,7 @@ private fun CouponCardContent(
                                 .clickable { onExpandedChange(!isExpanded) }
                         ) {
                             AppText(
-                                text = "使用说明",
+                                text = stringResource(id = R.string.coupon_usage_instructions),
                                 size = TextSize.BODY_MEDIUM,
                                 type = TextType.TERTIARY
                             )
@@ -340,6 +363,7 @@ private fun CouponCardContent(
  * @param status 优惠券状态
  * @param mode 卡片模式
  * @param onClick 点击回调
+ * @author Joker.X
  */
 @Composable
 private fun CouponActionButton(
@@ -349,13 +373,13 @@ private fun CouponActionButton(
 ) {
     when (status) {
         CouponStatus.AVAILABLE -> {
-            val buttonText = when (mode) {
-                CouponCardMode.RECEIVE -> "领取"
-                CouponCardMode.SELECT -> "选择"
-                CouponCardMode.VIEW -> "去使用"
+            val buttonTextResId = when (mode) {
+                CouponCardMode.RECEIVE -> R.string.coupon_receive
+                CouponCardMode.SELECT -> R.string.goods_select
+                CouponCardMode.VIEW -> R.string.coupon_use
             }
             AppButton(
-                text = buttonText,
+                text = stringResource(id = buttonTextResId),
                 onClick = onClick,
                 fullWidth = false,
                 size = ButtonSize.MINI
@@ -364,7 +388,7 @@ private fun CouponActionButton(
 
         CouponStatus.SELECTED -> {
             AppText(
-                text = "已选择",
+                text = stringResource(id = R.string.selected),
                 type = TextType.LINK,
                 size = TextSize.BODY_MEDIUM
             )
@@ -372,7 +396,7 @@ private fun CouponActionButton(
 
         CouponStatus.USED -> {
             AppText(
-                text = "已使用",
+                text = stringResource(id = R.string.coupon_used),
                 type = TextType.TERTIARY,
                 size = TextSize.BODY_MEDIUM
             )
@@ -380,7 +404,7 @@ private fun CouponActionButton(
 
         CouponStatus.EXPIRED -> {
             AppText(
-                text = "已过期",
+                text = stringResource(id = R.string.coupon_expired),
                 type = TextType.TERTIARY,
                 size = TextSize.BODY_MEDIUM
             )
@@ -388,7 +412,7 @@ private fun CouponActionButton(
 
         CouponStatus.INSUFFICIENT -> {
             AppText(
-                text = "不满足条件",
+                text = stringResource(id = R.string.coupon_insufficient),
                 type = TextType.TERTIARY,
                 size = TextSize.BODY_MEDIUM
             )
@@ -398,6 +422,8 @@ private fun CouponActionButton(
 
 /**
  * 优惠券卡片预览 - 领取模式
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -412,6 +438,8 @@ private fun CouponCardReceivePreview() {
 
 /**
  * 优惠券卡片预览 - 选择模式
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -426,6 +454,8 @@ private fun CouponCardSelectPreview() {
 
 /**
  * 优惠券卡片预览 - 查看模式
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -440,6 +470,8 @@ private fun CouponCardViewPreview() {
 
 /**
  * 优惠券卡片预览 - 已选择状态
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -455,6 +487,8 @@ private fun CouponCardSelectedPreview() {
 
 /**
  * 优惠券卡片预览 - 深色主题
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -469,6 +503,8 @@ private fun CouponCardDarkPreview() {
 
 /**
  * 优惠券卡片预览 - 已使用状态
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -483,6 +519,8 @@ private fun CouponCardUsedPreview() {
 
 /**
  * 优惠券卡片预览 - 已过期状态
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable

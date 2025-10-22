@@ -11,6 +11,7 @@ import com.joker.coolmall.core.util.validation.ValidationUtil
 import com.joker.coolmall.feature.auth.R
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.AuthRoutes
+import com.joker.coolmall.navigation.routes.CommonRoutes
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,7 +23,7 @@ import javax.inject.Inject
 
 /**
  * 账号密码登录ViewModel
- * 
+ *
  * @author Joker.X
  */
 @HiltViewModel
@@ -66,7 +67,7 @@ class AccountLoginViewModel @Inject constructor(
 
     /**
      * 更新账号输入
-     * 
+     *
      * @param value 账号值
      * @author Joker.X
      */
@@ -76,7 +77,7 @@ class AccountLoginViewModel @Inject constructor(
 
     /**
      * 更新密码输入
-     * 
+     *
      * @param value 密码值
      * @author Joker.X
      */
@@ -86,7 +87,7 @@ class AccountLoginViewModel @Inject constructor(
 
     /**
      * 执行登录操作
-     * 
+     *
      * @author Joker.X
      */
     fun login() {
@@ -116,7 +117,7 @@ class AccountLoginViewModel @Inject constructor(
 
     /**
      * 登录成功
-     * 
+     *
      * @param authData 认证数据
      * @author Joker.X
      */
@@ -135,7 +136,7 @@ class AccountLoginViewModel @Inject constructor(
 
     /**
      * 加载已保存的凭据
-     * 
+     *
      * @author Joker.X
      */
     private fun loadSavedCredentials() {
@@ -152,7 +153,7 @@ class AccountLoginViewModel @Inject constructor(
 
     /**
      * 保存凭据
-     * 
+     *
      * @param phone 手机号
      * @param password 密码
      * @author Joker.X
@@ -164,7 +165,7 @@ class AccountLoginViewModel @Inject constructor(
 
     /**
      * 导航到注册页面
-     * 
+     *
      * @author Joker.X
      */
     fun toRegisterPage() {
@@ -173,10 +174,30 @@ class AccountLoginViewModel @Inject constructor(
 
     /**
      * 导航到重置密码页面
-     * 
+     *
      * @author Joker.X
      */
     fun toResetPasswordPage() {
         super.toPage(AuthRoutes.RESET_PASSWORD)
+    }
+
+    /**
+     * 点击用户协议
+     * 显示用户使用协议
+     *
+     * @author Joker.X
+     */
+    fun onUserAgreementClick() {
+        toPage(CommonRoutes.USER_AGREEMENT)
+    }
+
+    /**
+     * 点击隐私政策
+     * 显示隐私政策内容
+     *
+     * @author Joker.X
+     */
+    fun onPrivacyPolicyClick() {
+        toPage(CommonRoutes.PRIVACY_POLICY)
     }
 }

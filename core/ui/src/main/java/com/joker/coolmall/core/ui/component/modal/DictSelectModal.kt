@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
@@ -39,6 +40,7 @@ import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.model.entity.DictItem
+import com.joker.coolmall.core.ui.R
 import com.joker.coolmall.core.ui.component.button.AppButton
 import com.joker.coolmall.core.ui.component.button.ButtonSize
 import com.joker.coolmall.core.ui.component.empty.EmptyNetwork
@@ -56,7 +58,7 @@ import com.joker.coolmall.core.ui.component.text.TextType
  *
  * @param visible 是否显示弹出层
  * @param onDismiss 关闭弹出层的回调
- * @param title 弹出层标题，默认为"请选择"
+ * @param title 弹出层标题资源ID
  * @param uiState 字典数据的网络状态，包含加载、错误、成功等状态
  * @param selectedItem 当前选中的字典项，可为空
  * @param onItemSelected 字典项选择回调，当用户点击某个字典项时触发
@@ -68,7 +70,7 @@ import com.joker.coolmall.core.ui.component.text.TextType
 fun DictSelectModal(
     visible: Boolean,
     onDismiss: () -> Unit,
-    title: String = "请选择",
+    title: Int = R.string.please_select,
     uiState: BaseNetWorkUiState<List<DictItem>> = BaseNetWorkUiState.Loading,
     selectedItem: DictItem? = null,
     onItemSelected: (DictItem) -> Unit = {},
@@ -85,7 +87,7 @@ fun DictSelectModal(
     BottomModal(
         visible = visible,
         onDismiss = onDismiss,
-        title = title,
+        title = stringResource(id = title),
         sheetState = sheetState
     ) {
         BaseNetWorkView(
@@ -152,7 +154,7 @@ private fun DictSelectModalContent(
 
         // 确认按钮
         AppButton(
-            text = "确认",
+            text = stringResource(id = R.string.confirm),
             onClick = onConfirm,
             enabled = selectedItem != null,
             size = ButtonSize.MEDIUM,

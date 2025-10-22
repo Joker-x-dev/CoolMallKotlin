@@ -5,6 +5,10 @@ import androidx.room.PrimaryKey
 
 /**
  * 搜索历史数据库实体
+ *
+ * @param keyword 搜索关键词，主键
+ * @param searchTime 搜索时间戳
+ * @author Joker.X
  */
 @Entity(tableName = "search_history")
 data class SearchHistoryEntity(

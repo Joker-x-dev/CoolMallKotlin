@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 /**
  * 用户协议 ViewModel
- * 
+ *
  * @author Joker.X
  */
 @HiltViewModel
@@ -25,6 +25,12 @@ class UserAgreementViewModel @Inject constructor(
         super.executeRequest()
     }
 
+    /**
+     * 请求用户协议数据
+     *
+     * @return 用户协议HTML内容的Flow
+     * @author Joker.X
+     */
     override fun requestApiFlow(): Flow<NetworkResponse<String>> {
         return commonRepository.getParam("userAgreement")
     }

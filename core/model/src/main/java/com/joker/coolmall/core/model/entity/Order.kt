@@ -4,6 +4,31 @@ import kotlinx.serialization.Serializable
 
 /**
  * 订单信息
+ *
+ * @param id ID
+ * @param userId 用户ID
+ * @param title 标题
+ * @param payType 支付方式 0-待支付 1-微信 2-支付宝
+ * @param payTime 支付时间
+ * @param orderNum 订单号
+ * @param status 状态 0-待付款 1-待发货 2-待收货 3-待评价 4-交易完成 5-退款中 6-已退款 7-已关闭
+ * @param price 价格
+ * @param discountPrice 优惠金额
+ * @param realPrice 实际支付金额
+ * @param discountSource 优惠来源
+ * @param address 地址
+ * @param logistics 物流信息
+ * @param refund 退款
+ * @param refundStatus 退款状态
+ * @param refundApplyTime 退款申请时间
+ * @param remark 备注
+ * @param closeRemark 关闭备注
+ * @param invoice 已开票 0-未开票 1-已开票
+ * @param wxType 微信类型 0-小程序 1-公众号 2-App
+ * @param goodsList 订单商品列表
+ * @param createTime 创建时间
+ * @param updateTime 更新时间
+ * @author Joker.X
  */
 @Serializable
 data class Order(
@@ -126,6 +151,11 @@ data class Order(
 
     /**
      * 优惠来源
+     *
+     * @param type 类型 0-优惠券
+     * @param objectId 对象ID
+     * @param info 优惠信息
+     * @author Joker.X
      */
     @Serializable
     data class DiscountSource(
@@ -147,6 +177,17 @@ data class Order(
 
     /**
      * 优惠信息详情
+     *
+     * @param id ID
+     * @param num 数量
+     * @param type 类型
+     * @param title 标题
+     * @param description 描述
+     * @param amount 金额
+     * @param minAmount 最低消费
+     * @param startTime 开始时间
+     * @param endTime 结束时间
+     * @author Joker.X
      */
     @Serializable
     data class DiscountInfo(
@@ -198,6 +239,10 @@ data class Order(
 
     /**
      * 物流信息
+     *
+     * @param company 物流公司
+     * @param num 物流单号
+     * @author Joker.X
      */
     @Serializable
     data class Logistics(
@@ -214,6 +259,16 @@ data class Order(
 
     /**
      * 退款信息
+     *
+     * @param orderNum 退款单号
+     * @param amount 金额
+     * @param realAmount 实际退款金额
+     * @param status 状态 0-申请中 1-已退款 2-拒绝
+     * @param applyTime 申请时间
+     * @param time 退款时间
+     * @param reason 退款原因
+     * @param refuseReason 拒绝原因
+     * @author Joker.X
      */
     @Serializable
     data class Refund(

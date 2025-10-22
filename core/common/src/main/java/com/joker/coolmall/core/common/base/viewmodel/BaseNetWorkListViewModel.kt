@@ -27,6 +27,8 @@ import kotlinx.coroutines.launch
  *
  * @param T 列表项数据类型
  * @param navigator 导航控制器
+ * @param appState 应用状态
+ * @author Joker.X
  */
 abstract class BaseNetWorkListViewModel<T : Any>(
     navigator: AppNavigator,

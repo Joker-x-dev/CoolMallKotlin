@@ -9,7 +9,7 @@ import com.joker.coolmall.feature.order.R
  * @param labelRes 状态显示文本资源ID
  * @author Joker.X
  */
-enum class OrderStatus(@StringRes val labelRes: Int) {
+enum class OrderStatus(@param:StringRes val labelRes: Int) {
     ALL(R.string.order_status_all),
     UNPAID(R.string.order_status_unpaid),
     UNSHIPPED(R.string.order_status_unshipped),

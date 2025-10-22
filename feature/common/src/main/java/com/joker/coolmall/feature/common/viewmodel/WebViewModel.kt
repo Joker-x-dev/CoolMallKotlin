@@ -18,7 +18,7 @@ import javax.inject.Inject
 
 /**
  * 网页 ViewModel
- * 
+ *
  * @author Joker.X
  */
 @HiltViewModel
@@ -62,7 +62,8 @@ class WebViewModel @Inject constructor(
     init {
         // 从路由参数获取 URL
         val url = savedStateHandle.get<String>(WebRoutes.URL_ARG) ?: ""
-        val title = savedStateHandle.get<String>(WebRoutes.TITLE_ARG) ?: "网页"
+        val title = savedStateHandle.get<String>(WebRoutes.TITLE_ARG)
+            ?: context.getString(com.joker.coolmall.feature.common.R.string.web_title)
 
         if (url.isNotEmpty()) {
             _webViewData.value = WebViewData(url = url, title = title)
@@ -92,7 +93,7 @@ class WebViewModel @Inject constructor(
 
     /**
      * 刷新页面
-     * 
+     *
      * @author Joker.X
      */
     fun refreshPage() {
@@ -102,7 +103,7 @@ class WebViewModel @Inject constructor(
 
     /**
      * 重置刷新状态
-     * 
+     *
      * @author Joker.X
      */
     fun resetRefreshState() {
@@ -111,7 +112,7 @@ class WebViewModel @Inject constructor(
 
     /**
      * 用浏览器打开当前页面
-     * 
+     *
      * @author Joker.X
      */
     fun openInBrowser() {
@@ -132,7 +133,7 @@ class WebViewModel @Inject constructor(
 
     /**
      * 显示下拉菜单
-     * 
+     *
      * @author Joker.X
      */
     fun showDropdownMenu() {
@@ -141,7 +142,7 @@ class WebViewModel @Inject constructor(
 
     /**
      * 隐藏下拉菜单
-     * 
+     *
      * @author Joker.X
      */
     fun dismissDropdownMenu() {

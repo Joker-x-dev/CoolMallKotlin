@@ -4,6 +4,8 @@ import com.joker.coolmall.core.model.entity.Address
 
 /**
  * 预览地址数据
+ *
+ * @author Joker.X
  */
 val previewAddressList = listOf(
     Address(
@@ -36,5 +38,7 @@ val previewAddressList = listOf(
 
 /**
  * 单个预览地址数据
+ *
+ * @author Joker.X
  */
 val previewAddress = previewAddressList.first() 

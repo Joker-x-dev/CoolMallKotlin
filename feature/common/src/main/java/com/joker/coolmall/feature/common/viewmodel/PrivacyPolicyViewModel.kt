@@ -11,7 +11,7 @@ import javax.inject.Inject
 
 /**
  * 隐私政策 ViewModel
- * 
+ *
  * @author Joker.X
  */
 @HiltViewModel
@@ -25,6 +25,12 @@ class PrivacyPolicyViewModel @Inject constructor(
         super.executeRequest()
     }
 
+    /**
+     * 请求隐私政策数据
+     *
+     * @return 隐私政策HTML内容的Flow
+     * @author Joker.X
+     */
     override fun requestApiFlow(): Flow<NetworkResponse<String>> {
         return commonRepository.getParam("privacyPolicy")
     }

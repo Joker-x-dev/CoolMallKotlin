@@ -1,8 +1,3 @@
-/**
- * 意见反馈相关仓库
- *
- * @author Joker.X
- */
 package com.joker.coolmall.core.data.repository
 
 import com.joker.coolmall.core.model.entity.Feedback
@@ -19,12 +14,19 @@ import javax.inject.Inject
 
 /**
  * 意见反馈相关仓库
+ *
+ * @param feedbackNetworkDataSource 意见反馈网络数据源
+ * @author Joker.X
  */
 class FeedbackRepository @Inject constructor(
     private val feedbackNetworkDataSource: FeedbackNetworkDataSource
 ) {
     /**
      * 提交意见反馈
+     *
+     * @param params 反馈提交请求参数
+     * @return 提交结果Flow
+     * @author Joker.X
      */
     fun submitFeedback(params: FeedbackSubmitRequest): Flow<NetworkResponse<Boolean>> = flow {
         emit(feedbackNetworkDataSource.submitFeedback(params))
@@ -32,8 +34,13 @@ class FeedbackRepository @Inject constructor(
 
     /**
      * 分页查询意见反馈列表
+     *
+     * @param params 分页请求参数
+     * @return 反馈列表分页数据Flow
+     * @author Joker.X
      */
-    fun getFeedbackPage(params: PageRequest): Flow<NetworkResponse<NetworkPageData<Feedback>>> = flow {
-        emit(feedbackNetworkDataSource.getFeedbackPage(params))
-    }.flowOn(Dispatchers.IO)
+    fun getFeedbackPage(params: PageRequest): Flow<NetworkResponse<NetworkPageData<Feedback>>> =
+        flow {
+            emit(feedbackNetworkDataSource.getFeedbackPage(params))
+        }.flowOn(Dispatchers.IO)
 }

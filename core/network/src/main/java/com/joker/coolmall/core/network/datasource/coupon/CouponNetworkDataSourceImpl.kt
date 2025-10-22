@@ -13,7 +13,8 @@ import javax.inject.Inject
  * 优惠券相关数据源实现类
  * 负责处理所有与优惠券相关的网络请求
  *
- * @property couponService 优惠券服务接口，用于发起实际的网络请求
+ * @param couponService 优惠券服务接口，用于发起实际的网络请求
+ * @author Joker.X
  */
 class CouponNetworkDataSourceImpl @Inject constructor(
     private val couponService: CouponService
@@ -24,6 +25,7 @@ class CouponNetworkDataSourceImpl @Inject constructor(
      *
      * @param request 领取优惠券请求参数
      * @return 领取结果响应数据
+     * @author Joker.X
      */
     override suspend fun receiveCoupon(request: ReceiveCouponRequest): NetworkResponse<String> {
         return couponService.receiveCoupon(request)
@@ -34,6 +36,7 @@ class CouponNetworkDataSourceImpl @Inject constructor(
      *
      * @param params 请求参数，包含分页和查询条件
      * @return 用户优惠券分页列表响应数据
+     * @author Joker.X
      */
     override suspend fun getUserCouponPage(params: PageRequest): NetworkResponse<NetworkPageData<Coupon>> {
         return couponService.getUserCouponPage(params)
@@ -44,6 +47,7 @@ class CouponNetworkDataSourceImpl @Inject constructor(
      *
      * @param params 请求参数，包含查询条件
      * @return 用户优惠券列表响应数据
+     * @author Joker.X
      */
     override suspend fun getUserCouponList(params: Any): NetworkResponse<List<Coupon>> {
         return couponService.getUserCouponList(params)

@@ -6,6 +6,7 @@ import com.joker.coolmall.core.model.entity.Order
 
 /**
  * 预览订单列表
+ *
  */
 val previewOrders = listOf(
     Order(
@@ -106,5 +107,6 @@ val previewOrders = listOf(
 
 /**
  * 单个预览订单数据
+ *
  */
 val previewOrder = previewOrders.first()

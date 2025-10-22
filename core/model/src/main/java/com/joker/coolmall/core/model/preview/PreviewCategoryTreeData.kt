@@ -4,6 +4,7 @@ import com.joker.coolmall.core.model.entity.CategoryTree
 
 /**
  * 预览分类树形数据
+ *
  */
 val previewCategoryTreeList = listOf(
     CategoryTree(
@@ -74,5 +75,6 @@ val previewCategoryTreeList = listOf(
 
 /**
  * 单个预览分类数据（一级分类）
+ *
  */
 val previewCategoryTree = previewCategoryList.first()

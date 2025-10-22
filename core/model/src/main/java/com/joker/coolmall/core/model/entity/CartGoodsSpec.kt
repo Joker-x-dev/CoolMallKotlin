@@ -5,6 +5,15 @@ import kotlinx.serialization.Serializable
 /**
  * 购物车商品规格
  * 用于购物车中展示商品的规格信息(不来自服务端)
+ *
+ * @param id ID
+ * @param goodsId 商品ID
+ * @param name 名称
+ * @param price 价格
+ * @param stock 库存
+ * @param count 购买数量
+ * @param images 图片
+ * @author Joker.X
  */
 @Serializable
 data class CartGoodsSpec(

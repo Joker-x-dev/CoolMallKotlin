@@ -7,6 +7,8 @@ import kotlinx.serialization.json.Json
 /**
  * 购物车规格类型转换器
  * 用于将CartGoodsSpec列表转换为字符串存储在数据库中
+ *
+ * @author Joker.X
  */
 class CartSpecConverter {
 
@@ -14,6 +16,10 @@ class CartSpecConverter {
 
     /**
      * 将CartGoodsSpec列表转换为JSON字符串
+     *
+     * @param value 购物车规格列表
+     * @return JSON字符串
+     * @author Joker.X
      */
     @TypeConverter
     fun fromSpecList(value: List<CartGoodsSpec>?): String {
@@ -26,6 +32,10 @@ class CartSpecConverter {
 
     /**
      * 将JSON字符串转换为CartGoodsSpec列表
+     *
+     * @param value JSON字符串
+     * @return 购物车规格列表
+     * @author Joker.X
      */
     @TypeConverter
     fun toSpecList(value: String): List<CartGoodsSpec> {

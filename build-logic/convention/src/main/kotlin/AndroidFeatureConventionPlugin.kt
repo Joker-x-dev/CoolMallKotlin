@@ -5,19 +5,22 @@ import org.gradle.kotlin.dsl.dependencies
 
 /**
  * Android Feature模块构建插件
- * 
+ *
  * 该插件用于配置Android功能模块的构建设置，主要功能包括：
  * - 应用基础的Android库和Compose配置
  * - 启用BuildConfig生成
  * - 配置Feature模块通用依赖
- * 
+ *
  * Feature模块是应用的功能模块，通常包含特定功能的UI和业务逻辑
+ *
+ * @author Joker.X
  */
 class AndroidFeatureConventionPlugin : Plugin<Project> {
     /**
      * 插件应用入口
-     * 
+     *
      * @param target 目标项目实例
+     * @author Joker.X
      */
     override fun apply(target: Project) {
         with(target) {
@@ -26,7 +29,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 apply("com.joker.coolmall.android.library.compose") // 应用Android库和Compose配置
                 apply("com.joker.coolmall.hilt") // 应用Hilt依赖注入
             }
-            
+
             // 配置Android库扩展
             // buildConfig 配置已在 configureKotlinAndroid 中统一处理
 
@@ -48,7 +51,9 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 // Hilt依赖注入相关
                 "implementation"(libs.findLibrary("hilt.navigation.compose").get()) // Hilt导航集成
                 "kspAndroidTest"(libs.findLibrary("hilt.compiler").get()) // 测试用Hilt编译器
-                "androidTestImplementation"(libs.findLibrary("hilt.android.testing").get()) // Hilt测试支持
+                "androidTestImplementation"(
+                    libs.findLibrary("hilt.android.testing").get()
+                ) // Hilt测试支持
             }
         }
     }

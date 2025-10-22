@@ -1,5 +1,3 @@
-
-
 package com.joker.coolmall
 
 import com.android.build.api.dsl.CommonExtension
@@ -15,12 +13,15 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
 
 /**
  * 配置基础的 Kotlin Android 选项
- * 
+ *
  * 此函数统一配置 Android 项目的 Kotlin 编译选项，包括：
  * - 编译 SDK 版本设置
  * - Java 11 兼容性配置（通过 desugaring 支持）
  * - Kotlin JVM 目标版本配置
  * - Core library desugaring 启用
+ *
+ * @param commonExtension Android通用扩展
+ * @author Joker.X
  */
 internal fun Project.configureKotlinAndroid(
     commonExtension: CommonExtension<*, *, *, *, *, *>,
@@ -55,8 +56,10 @@ internal fun Project.configureKotlinAndroid(
 
 /**
  * 配置基础的 Kotlin JVM 选项（非 Android 项目）
- * 
+ *
  * 此函数为纯 JVM 项目配置 Kotlin 编译选项
+ *
+ * @author Joker.X
  */
 internal fun Project.configureKotlinJvm() {
     extensions.configure<JavaPluginExtension> {
@@ -71,11 +74,13 @@ internal fun Project.configureKotlinJvm() {
 
 /**
  * 配置基础的 Kotlin 编译选项
- * 
+ *
  * 此函数配置通用的 Kotlin 编译器选项，包括：
  * - JVM 目标版本设置为 Java 11
  * - 警告处理配置
  * - 实验性 API 启用
+ *
+ * @author Joker.X
  */
 private inline fun <reified T : KotlinBaseExtension> Project.configureKotlin() = configure<T> {
     // 将所有 Kotlin 警告视为错误（默认禁用）
@@ -83,7 +88,7 @@ private inline fun <reified T : KotlinBaseExtension> Project.configureKotlin() =
     val warningsAsErrors = providers.gradleProperty("warningsAsErrors").map {
         it.toBoolean()
     }.orElse(false)
-    
+
     when (this) {
         is KotlinAndroidProjectExtension -> compilerOptions
         is KotlinJvmProjectExtension -> compilerOptions

@@ -25,7 +25,8 @@
     <string name="order_status_refunding">退款中</string>
     <string name="order_status_refunded">已退款</string>
     <string name="order_status_closed">已关闭</string>
-    
+    <string name="order_status_unknown">未知状态</string>
+
     <!-- 订单列表页面 -->
     <string name="total_items">共 %d 件</string>
     <string name="select_cancel_reason">选择取消原因</string>
@@ -37,7 +38,7 @@
     <string name="rebuy">再次购买</string>
     <string name="select_goods_to_comment">选择要评价的商品</string>
     <string name="go_to_comment">去评价</string>
-    
+
     <!-- 订单详情页面 -->
     <string name="price_detail">价格明细</string>
     <string name="goods_total_price">商品总价</string>
@@ -64,7 +65,7 @@
     <string name="not_paid">未支付</string>
     <string name="order_time">下单时间</string>
     <string name="order_remark">订单备注</string>
-    
+
     <!-- 订单确认页面 -->
     <string name="purchase_goods">购买商品</string>
     <string name="select_coupon">选择优惠券</string>
@@ -76,7 +77,7 @@
     <string name="order_remark_label">订单备注</string>
     <string name="order_remark_placeholder">选填，付款后商家可见</string>
     <string name="submit_order">提交订单</string>
-    
+
     <!-- 订单支付页面 -->
     <string name="go_to_pay">去支付</string>
     <string name="order_pay_button">去支付</string>
@@ -87,12 +88,12 @@
     <string name="pay_method_wechat">微信支付</string>
     <string name="pay_method_qq">QQ支付</string>
     <string name="order_pay_tip">提示：实际支付金额经过处理，都是一分钱</string>
-    
+
     <!-- 订单退款页面 -->
     <string name="submit">提交</string>
     <string name="refund_info">退款信息</string>
     <string name="please_select">请选择</string>
-    
+
     <!-- 物流详情页面 -->
     <string name="logistics_info">物流信息</string>
     <string name="express_company">快递公司</string>
@@ -103,7 +104,7 @@
     <string name="call">拨打</string>
     <string name="transport_time">运输耗时</string>
     <string name="logistics_track">物流轨迹</string>
-    
+
     <!-- 订单评价页面 -->
     <string name="submit_comment">提交评价</string>
     <string name="please_rate">请点击星星进行评分</string>
@@ -113,7 +114,7 @@
     <string name="rating_good">满意</string>
     <string name="rating_excellent">非常满意</string>
     <string name="comment_placeholder">请输入您的评价内容...</string>
-    
+
     <!-- 订单按钮 -->
     <string name="cancel_order">取消订单</string>
     <string name="pay_now">去支付</string>
@@ -122,7 +123,7 @@
     <string name="view_logistics">查看物流</string>
     <string name="comment_now">去评价</string>
     <string name="rebuy_now">再次购买</string>
-    
+
     <!-- Toast提示 -->
     <string name="please_fill_comment">请先填写评价内容和评分</string>
     <string name="comment_submit_success">评价提交成功</string>

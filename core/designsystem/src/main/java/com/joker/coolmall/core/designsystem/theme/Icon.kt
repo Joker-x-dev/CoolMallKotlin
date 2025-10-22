@@ -22,6 +22,7 @@ import com.joker.coolmall.core.designsystem.R
  * @param modifier 修饰符
  * @param size 图标大小，为null时使用默认大小
  * @param tint 图标着色，默认使用当前内容颜色
+ * @author Joker.X
  */
 @Composable
 fun CommonIcon(
@@ -53,6 +54,7 @@ fun CommonIcon(
  * @param modifier 修饰符
  * @param size 图标大小，为null时使用默认大小
  * @param tint 图标着色，默认使用当前内容颜色
+ * @author Joker.X
  */
 @Composable
 fun CommonIcon(
@@ -84,6 +86,7 @@ fun CommonIcon(
  * @param modifier 修饰符
  * @param size 图标大小，为null时使用默认大小
  * @param tint 图标着色，默认使用当前内容颜色
+ * @author Joker.X
  */
 @Composable
 fun CommonIcon(
@@ -109,6 +112,7 @@ fun CommonIcon(
  *
  * @param modifier 修饰符
  * @param size 图标大小，默认24dp
+ * @author Joker.X
  */
 @Composable
 fun LogoIcon(modifier: Modifier = Modifier, size: Dp = 24.dp) {
@@ -126,6 +130,7 @@ fun LogoIcon(modifier: Modifier = Modifier, size: Dp = 24.dp) {
  * @param modifier 修饰符
  * @param size 图标大小，默认为28dp
  * @param tint 图标着色，默认使用当前内容颜色
+ * @author Joker.X
  */
 @Composable
 fun ArrowLeftIcon(
@@ -147,6 +152,7 @@ fun ArrowLeftIcon(
  * @param modifier 修饰符
  * @param size 图标大小，默认为24dp
  * @param tint 图标着色，默认使用当前内容颜色
+ * @author Joker.X
  */
 @Composable
 fun ArrowRightIcon(

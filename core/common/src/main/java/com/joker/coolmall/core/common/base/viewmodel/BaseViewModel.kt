@@ -14,6 +14,11 @@ import kotlinx.coroutines.launch
  * 提供所有ViewModel通用的功能：
  * 1. 导航
  * 2. 路由拦截
+ *
+ * @param navigator 导航控制器
+ * @param appState 应用状态
+ * @param routeInterceptor 路由拦截器
+ * @author Joker.X
  */
 abstract class BaseViewModel(
     protected val navigator: AppNavigator,
@@ -23,6 +28,8 @@ abstract class BaseViewModel(
 
     /**
      * 导航回上一页
+     *
+     * @author Joker.X
      */
     fun navigateBack() {
         viewModelScope.launch {
@@ -32,6 +39,9 @@ abstract class BaseViewModel(
 
     /**
      * 导航回上一页并携带结果
+     *
+     * @param result 返回结果数据
+     * @author Joker.X
      */
     fun navigateBack(result: Map<String, Any>) {
         viewModelScope.launch {
@@ -44,6 +54,7 @@ abstract class BaseViewModel(
      * 自动处理登录拦截逻辑
      *
      * @param route 目标路由
+     * @author Joker.X
      */
     fun toPage(route: String) {
         viewModelScope.launch {
@@ -58,6 +69,7 @@ abstract class BaseViewModel(
      *
      * @param route 目标路由
      * @param currentRoute 当前页面路由，将被关闭
+     * @author Joker.X
      */
     fun toPageAndCloseCurrent(route: String, currentRoute: String) {
         viewModelScope.launch {
@@ -79,6 +91,7 @@ abstract class BaseViewModel(
      *
      * @param route 基础路由
      * @param id ID参数值
+     * @author Joker.X
      */
     fun toPage(route: String, id: Long) {
         toPage("${route}/$id")
@@ -91,6 +104,7 @@ abstract class BaseViewModel(
      * @param route 基础路由
      * @param id ID参数值
      * @param currentRoute 当前页面路由，将被关闭
+     * @author Joker.X
      */
     fun toPageAndCloseCurrent(route: String, id: Long, currentRoute: String) {
         toPageAndCloseCurrent("${route}/$id", currentRoute)
@@ -102,6 +116,7 @@ abstract class BaseViewModel(
      *
      * @param route 基础路由
      * @param args 参数Map
+     * @author Joker.X
      */
     fun toPage(route: String, args: Map<String, Any>) {
         viewModelScope.launch {
@@ -118,6 +133,7 @@ abstract class BaseViewModel(
      * @param route 基础路由
      * @param args 参数Map
      * @param currentRoute 当前页面路由，将被关闭
+     * @author Joker.X
      */
     fun toPageAndCloseCurrent(route: String, args: Map<String, Any>, currentRoute: String) {
         viewModelScope.launch {
@@ -139,6 +155,7 @@ abstract class BaseViewModel(
      *
      * @param route 目标路由
      * @return 如果需要拦截返回登录页面路由，否则返回原路由
+     * @author Joker.X
      */
     private fun checkRouteInterception(route: String): String {
         return if (routeInterceptor.requiresLogin(route) && !appState.isLoggedIn.value) {
@@ -156,6 +173,7 @@ abstract class BaseViewModel(
      * @param baseRoute 基础路由
      * @param args 参数Map
      * @return 完整路由字符串
+     * @author Joker.X
      */
     private fun buildRouteWithArgs(baseRoute: String, args: Map<String, Any>): String {
         if (args.isEmpty()) return baseRoute

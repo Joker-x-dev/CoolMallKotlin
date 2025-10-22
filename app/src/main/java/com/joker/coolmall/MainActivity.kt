@@ -18,6 +18,8 @@ import javax.inject.Inject
 /**
  * 应用的主Activity
  * 使用@AndroidEntryPoint注解标记为Hilt依赖注入的入口点
+ *
+ * @author Joker.X
  */
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
@@ -49,8 +51,14 @@ class MainActivity : ComponentActivity() {
 
     /**
      * 处理 Activity 结果回调，目前主要用于三方登录
+     *
+     * @param requestCode 请求码
+     * @param resultCode 结果码
+     * @param data 返回数据
+     * @author Joker.X
      */
     @Deprecated("")
+    @Suppress("DEPRECATION")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         // 处理 QQ 登录回调
         if (requestCode == Constants.REQUEST_LOGIN || requestCode == Constants.REQUEST_APPBAR) {

@@ -14,6 +14,8 @@ import javax.inject.Inject
 
 /**
  * 全局Application
+ *
+ * @author Joker.X
  */
 @HiltAndroidApp
 class Application : Application() {
@@ -36,6 +38,8 @@ class Application : Application() {
 
     /**
      * 初始化 Toast 框架
+     *
+     * @author Joker.X
      */
     private fun initToast() {
         // 检测当前是否为深色模式
@@ -48,13 +52,17 @@ class Application : Application() {
 
     /**
      * 初始化 Log 框架
+     *
+     * @author Joker.X
      */
     private fun initLog() {
         LogUtils.init(this, BuildConfig.DEBUG)
     }
 
     /**
-     * 初始化 mmkv 框架
+     * 初始化 MMKV 框架
+     *
+     * @author Joker.X
      */
     private fun initMMKV() {
         MMKVUtils.init(this)
@@ -62,6 +70,8 @@ class Application : Application() {
 
     /**
      * 初始化 QQ SDK
+     *
+     * @author Joker.X
      */
     private fun initQQ() {
         QQLoginManager.getInstance().init(this, AppConfig.QQ_APP_ID)
@@ -69,6 +79,9 @@ class Application : Application() {
 
     /**
      * 应用配置变化时调用（如切换深色模式）
+     *
+     * @param newConfig 新的配置信息
+     * @author Joker.X
      */
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)

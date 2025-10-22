@@ -25,6 +25,7 @@ import com.joker.coolmall.core.designsystem.theme.SpacePaddingSmall
  * @param fillMaxWidth 是否填充最大宽度
  * @param padding 内边距
  * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun AppRow(
@@ -54,6 +55,7 @@ fun AppRow(
  * @param fillMaxWidth 是否填充最大宽度
  * @param padding 内边距
  * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun CenterRow(
@@ -79,6 +81,7 @@ fun CenterRow(
  * @param fillMaxWidth 是否填充最大宽度
  * @param padding 内边距
  * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun SpaceBetweenRow(
@@ -104,6 +107,7 @@ fun SpaceBetweenRow(
  * @param fillMaxWidth 是否填充最大宽度
  * @param padding 内边距
  * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun SpaceEvenlyRow(
@@ -129,6 +133,7 @@ fun SpaceEvenlyRow(
  * @param fillMaxWidth 是否填充最大宽度
  * @param padding 内边距
  * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun SpaceAroundRow(
@@ -154,6 +159,7 @@ fun SpaceAroundRow(
  * @param fillMaxWidth 是否填充最大宽度
  * @param padding 内边距
  * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun StartRow(
@@ -179,6 +185,7 @@ fun StartRow(
  * @param fillMaxWidth 是否填充最大宽度
  * @param padding 内边距
  * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun EndRow(
@@ -205,6 +212,7 @@ fun EndRow(
  * @param verticalAlignment 垂直对齐方式
  * @param padding 内边距
  * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun WrapRow(
@@ -233,6 +241,7 @@ fun WrapRow(
  * @param fillMaxWidth 是否填充最大宽度
  * @param padding 内边距
  * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun HorizontalList(
@@ -255,6 +264,13 @@ fun HorizontalList(
 
 /**
  * 带小内边距的Row，常用于紧凑型布局
+ *
+ * @param modifier 额外的修饰符
+ * @param horizontalArrangement 水平排列方式
+ * @param verticalAlignment 垂直对齐方式
+ * @param fillMaxWidth 是否填充最大宽度
+ * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun SmallPaddingRow(
@@ -276,6 +292,13 @@ fun SmallPaddingRow(
 
 /**
  * 带中等内边距的Row，常用于普通布局
+ *
+ * @param modifier 额外的修饰符
+ * @param horizontalArrangement 水平排列方式
+ * @param verticalAlignment 垂直对齐方式
+ * @param fillMaxWidth 是否填充最大宽度
+ * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun MediumPaddingRow(
@@ -297,6 +320,13 @@ fun MediumPaddingRow(
 
 /**
  * 带大内边距的Row，常用于强调布局
+ *
+ * @param modifier 额外的修饰符
+ * @param horizontalArrangement 水平排列方式
+ * @param verticalAlignment 垂直对齐方式
+ * @param fillMaxWidth 是否填充最大宽度
+ * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun LargePaddingRow(

@@ -25,6 +25,10 @@ import kotlinx.coroutines.flow.collectLatest
 /**
  * 应用导航宿主
  * 配置整个应用的导航图和动画
+ *
+ * @param navigator 导航管理器
+ * @param modifier 修饰符
+ * @author Joker.X
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
@@ -88,7 +92,7 @@ fun AppNavHost(
             commonGraph(navController)
             marketGraph(navController)
             feedbackGraph(navController)
-            launchGraph(navController,this@SharedTransitionLayout)
+            launchGraph(navController, this@SharedTransitionLayout)
         }
     }
 }

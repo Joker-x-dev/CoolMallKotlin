@@ -33,6 +33,7 @@ import com.joker.coolmall.core.designsystem.theme.SpacePaddingSmall
  * @param fillMaxWidth 是否填充最大宽度 (仅当fillMaxSize为false时生效)
  * @param flingBehavior 滑动行为
  * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun VerticalScroll(
@@ -60,6 +61,14 @@ fun VerticalScroll(
 
 /**
  * 带小内边距的垂直滚动组件
+ *
+ * @param modifier 额外的修饰符
+ * @param horizontalAlignment 水平对齐方式
+ * @param verticalArrangement 垂直排列方式
+ * @param fillMaxSize 是否填充最大尺寸
+ * @param fillMaxWidth 是否填充最大宽度
+ * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun SmallPaddingVerticalScroll(
@@ -83,6 +92,14 @@ fun SmallPaddingVerticalScroll(
 
 /**
  * 带中等内边距的垂直滚动组件
+ *
+ * @param modifier 额外的修饰符
+ * @param horizontalAlignment 水平对齐方式
+ * @param verticalArrangement 垂直排列方式
+ * @param fillMaxSize 是否填充最大尺寸
+ * @param fillMaxWidth 是否填充最大宽度
+ * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun MediumPaddingVerticalScroll(
@@ -106,6 +123,14 @@ fun MediumPaddingVerticalScroll(
 
 /**
  * 带大内边距的垂直滚动组件
+ *
+ * @param modifier 额外的修饰符
+ * @param horizontalAlignment 水平对齐方式
+ * @param verticalArrangement 垂直排列方式
+ * @param fillMaxSize 是否填充最大尺寸
+ * @param fillMaxWidth 是否填充最大宽度
+ * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun LargePaddingVerticalScroll(
@@ -136,6 +161,7 @@ fun LargePaddingVerticalScroll(
  * @param verticalAlignment 垂直对齐方式
  * @param flingBehavior 滑动行为
  * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun HorizontalScroll(
@@ -160,6 +186,12 @@ fun HorizontalScroll(
 
 /**
  * 带小内边距的水平滚动组件
+ *
+ * @param modifier 额外的修饰符
+ * @param horizontalArrangement 水平排列方式
+ * @param verticalAlignment 垂直对齐方式
+ * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun SmallPaddingHorizontalScroll(
@@ -179,6 +211,12 @@ fun SmallPaddingHorizontalScroll(
 
 /**
  * 带中等内边距的水平滚动组件
+ *
+ * @param modifier 额外的修饰符
+ * @param horizontalArrangement 水平排列方式
+ * @param verticalAlignment 垂直对齐方式
+ * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun MediumPaddingHorizontalScroll(

@@ -5,14 +5,14 @@ import com.joker.coolmall.feature.common.model.Dependency
 /**
  * 依赖库数据源
  * 提供项目中使用的第三方依赖库信息
- * 
+ *
  * @author Joker.X
  */
 object DependencyDataSource {
-    
+
     /**
      * 获取所有依赖库列表
-     * 
+     *
      * @return 依赖库列表
      * @author Joker.X
      */
@@ -40,7 +40,7 @@ object DependencyDataSource {
                 websiteUrl = "https://developer.android.com/jetpack/androidx/releases/activity",
                 category = "Android 核心"
             ),
-            
+
             // Jetpack Compose
             Dependency(
                 name = "Jetpack Compose BOM",
@@ -56,7 +56,7 @@ object DependencyDataSource {
                 websiteUrl = "https://developer.android.com/jetpack/compose/designsystems/material3",
                 category = "UI 框架"
             ),
-            
+
             // 导航
             Dependency(
                 name = "Navigation Compose",
@@ -65,7 +65,7 @@ object DependencyDataSource {
                 websiteUrl = "https://developer.android.com/jetpack/androidx/releases/navigation",
                 category = "导航"
             ),
-            
+
             // 网络请求
             Dependency(
                 name = "OkHttp",
@@ -88,7 +88,7 @@ object DependencyDataSource {
                 websiteUrl = "https://github.com/ChuckerTeam/chucker",
                 category = "调试工具"
             ),
-            
+
             // 序列化
             Dependency(
                 name = "Kotlinx Serialization JSON",
@@ -97,7 +97,7 @@ object DependencyDataSource {
                 websiteUrl = "https://github.com/Kotlin/kotlinx.serialization",
                 category = "序列化"
             ),
-            
+
             // 依赖注入
             Dependency(
                 name = "Hilt",
@@ -106,7 +106,7 @@ object DependencyDataSource {
                 websiteUrl = "https://developer.android.com/training/dependency-injection/hilt-android",
                 category = "依赖注入"
             ),
-            
+
             // 图片加载
             Dependency(
                 name = "Coil Compose",
@@ -115,7 +115,7 @@ object DependencyDataSource {
                 websiteUrl = "https://coil-kt.github.io/coil/compose/",
                 category = "图片加载"
             ),
-            
+
             // 日志
             Dependency(
                 name = "Timber",
@@ -124,7 +124,7 @@ object DependencyDataSource {
                 websiteUrl = "https://github.com/JakeWharton/timber",
                 category = "日志"
             ),
-            
+
             // 数据存储
             Dependency(
                 name = "MMKV",
@@ -140,7 +140,7 @@ object DependencyDataSource {
                 websiteUrl = "https://developer.android.com/training/data-storage/room",
                 category = "数据存储"
             ),
-            
+
             // 动画
             Dependency(
                 name = "Lottie Compose",
@@ -149,7 +149,7 @@ object DependencyDataSource {
                 websiteUrl = "https://airbnb.io/lottie/#/android-compose",
                 category = "动画"
             ),
-            
+
             // 调试工具
             Dependency(
                 name = "LeakCanary",
@@ -158,7 +158,7 @@ object DependencyDataSource {
                 websiteUrl = "https://github.com/square/leakcanary",
                 category = "调试工具"
             ),
-            
+
             // Toast
             Dependency(
                 name = "Toaster",
@@ -167,7 +167,7 @@ object DependencyDataSource {
                 websiteUrl = "https://github.com/getActivity/Toaster",
                 category = "UI 组件"
             ),
-            
+
             // 权限
             Dependency(
                 name = "XXPermissions",
@@ -176,7 +176,7 @@ object DependencyDataSource {
                 websiteUrl = "https://github.com/getActivity/XXPermissions",
                 category = "权限管理"
             ),
-            
+
             // 支付
             Dependency(
                 name = "支付宝 SDK",
@@ -185,7 +185,7 @@ object DependencyDataSource {
                 websiteUrl = "https://opendocs.alipay.com/open/54/104509",
                 category = "支付"
             ),
-            
+
             // 启动页
             Dependency(
                 name = "AndroidX Core Splashscreen",
@@ -196,10 +196,10 @@ object DependencyDataSource {
             )
         )
     }
-    
+
     /**
      * 根据分类获取依赖库列表
-     * 
+     *
      * @param category 分类名称
      * @return 指定分类的依赖库列表
      * @author Joker.X
@@ -207,10 +207,10 @@ object DependencyDataSource {
     fun getDependenciesByCategory(category: String): List<Dependency> {
         return getAllDependencies().filter { it.category == category }
     }
-    
+
     /**
      * 获取所有分类
-     * 
+     *
      * @return 分类列表
      * @author Joker.X
      */

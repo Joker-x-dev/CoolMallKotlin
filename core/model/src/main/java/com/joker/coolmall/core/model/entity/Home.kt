@@ -4,6 +4,15 @@ import kotlinx.serialization.Serializable
 
 /**
  * 首页模型
+ *
+ * @param banner 轮播图
+ * @param category 分类
+ * @param categoryAll 全部分类
+ * @param flashSale 限时精选商品
+ * @param recommend 推荐商品
+ * @param coupon 优惠券
+ * @param goods 第一页全部商品
+ * @author Joker.X
  */
 @Serializable
 data class Home(

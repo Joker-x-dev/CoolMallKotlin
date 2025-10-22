@@ -4,6 +4,12 @@ import kotlinx.serialization.Serializable
 
 /**
  * 解析网络响应
+ *
+ * @param T 数据类型
+ * @param data 真实数据
+ * @param code 状态码 等于1000表示成功
+ * @param message 出错的提示信息
+ * @author Joker.X
  */
 @Serializable
 data class NetworkResponse<T>(
@@ -30,7 +36,8 @@ data class NetworkResponse<T>(
     /**
      * 是否成功
      *
-     * @return
+     * @return 是否成功
+     * @author Joker.X
      */
     val isSucceeded: Boolean
         get() = code == 1000

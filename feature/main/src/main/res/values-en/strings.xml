@@ -5,7 +5,7 @@
     <string name="category">Category</string>
     <string name="cart">Cart</string>
     <string name="me">Me</string>
-    
+
     <!-- Shopping Cart -->
     <string name="edit">Edit</string>
     <string name="complete">Done</string>
@@ -13,12 +13,12 @@
     <string name="delete_count">Delete(%d)</string>
     <string name="select_all">Select All</string>
     <string name="total">Total:</string>
-    <string name="price">¥%.2f</string>
+    <string name="price_format">¥%.2f</string>
     <string name="settle_account">Checkout</string>
     <string name="settle_account_count">Checkout(%d)</string>
     <string name="cart_empty">Your cart is empty~</string>
     <string name="go_shopping">Go Shopping</string>
-    
+
     <!-- Home Page -->
     <string name="search">Search</string>
     <string name="search_goods">Search Products</string>
@@ -27,17 +27,20 @@
     <string name="flash_sale">Flash Sale</string>
     <string name="view_all">View All</string>
     <string name="receive">Receive</string>
-    
+
     <!-- Personal Center -->
     <string name="not_logged_in">Not Logged In</string>
     <string name="click_to_login">Click to Login</string>
+    <string name="phone_number">Phone</string>
     <string name="member">Member</string>
-    <string name="activate_now">Activate Now</string>
+    <string name="member_benefits">5 VIP Benefits!</string>
+    <string name="activate_now">Activate</string>
     <string name="my_orders">My Orders</string>
-    <string name="pending_payment">Pending Payment</string>
-    <string name="pending_shipment">Pending Shipment</string>
-    <string name="pending_receipt">Pending Receipt</string>
-    <string name="pending_review">Pending Review</string>
+    <string name="pending_payment">To Pay</string>
+    <string name="pending_shipment">To Ship</string>
+    <string name="pending_receipt">To Receive</string>
+    <string name="pending_review">To Review</string>
+    <string name="refund_after_sale">Refund</string>
     <string name="my_footprint">My Footprint</string>
     <string name="coupons">Coupons</string>
     <string name="shipping_address">Shipping Address</string>
@@ -45,11 +48,11 @@
     <string name="feedback">Feedback</string>
     <string name="about_us">About Us</string>
     <string name="settings">Settings</string>
-    
+
     <!-- Category Page -->
     <string name="category_all">All Categories</string>
     <string name="category_empty">No Categories</string>
-    
+
     <!-- Toast Messages -->
     <string name="please_select_settlement_goods">Please select items to checkout</string>
     <string name="get_selected_goods_failed">Failed to get selected items</string>

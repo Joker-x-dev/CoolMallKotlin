@@ -3,6 +3,9 @@ package com.joker.coolmall.core.common.base.state
 /**
  * 网络请求UI状态
  * 只包含最基本的网络请求状态
+ *
+ * @param T 数据类型
+ * @author Joker.X
  */
 sealed class BaseNetWorkUiState<out T> {
     /**

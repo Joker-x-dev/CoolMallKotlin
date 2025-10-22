@@ -4,6 +4,19 @@ import kotlinx.serialization.Serializable
 
 /**
  * 商品评价
+ *
+ * @param id ID
+ * @param userId 用户ID
+ * @param goodsId 商品ID
+ * @param orderId 订单ID
+ * @param content 内容
+ * @param starCount 星数
+ * @param pics 图片
+ * @param nickName 用户昵称
+ * @param avatarUrl 用户头像
+ * @param createTime 创建时间
+ * @param updateTime 更新时间
+ * @author Joker.X
  */
 @Serializable
 data class Comment(

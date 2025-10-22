@@ -11,6 +11,9 @@ import javax.inject.Singleton
 /**
  * 用户足迹数据源
  * 负责足迹相关的数据库操作
+ *
+ * @param footprintDao 足迹数据访问对象
+ * @author Joker.X
  */
 @Singleton
 class FootprintDataSource @Inject constructor(
@@ -19,6 +22,9 @@ class FootprintDataSource @Inject constructor(
 
     /**
      * 添加足迹记录
+     *
+     * @param footprint 足迹记录
+     * @author Joker.X
      */
     suspend fun addFootprint(footprint: Footprint) {
         footprintDao.insertFootprint(footprint.toFootprintEntity())
@@ -26,6 +32,9 @@ class FootprintDataSource @Inject constructor(
 
     /**
      * 根据商品ID删除足迹记录
+     *
+     * @param goodsId 商品ID
+     * @author Joker.X
      */
     suspend fun removeFootprint(goodsId: Long) {
         footprintDao.deleteFootprintByGoodsId(goodsId)
@@ -33,6 +42,8 @@ class FootprintDataSource @Inject constructor(
 
     /**
      * 清空所有足迹记录
+     *
+     * @author Joker.X
      */
     suspend fun clearAllFootprints() {
         footprintDao.clearAllFootprints()
@@ -41,6 +52,9 @@ class FootprintDataSource @Inject constructor(
     /**
      * 获取所有足迹记录
      * 返回响应式Flow，按浏览时间倒序排列
+     *
+     * @return 足迹记录列表的Flow
+     * @author Joker.X
      */
     fun getAllFootprints(): Flow<List<Footprint>> {
         return footprintDao.getAllFootprints().map { entities ->
@@ -51,6 +65,9 @@ class FootprintDataSource @Inject constructor(
     /**
      * 获取足迹记录总数量
      * 返回响应式Flow
+     *
+     * @return 记录数量的Flow
+     * @author Joker.X
      */
     fun getFootprintCount(): Flow<Int> {
         return footprintDao.getFootprintCount()
@@ -58,6 +75,10 @@ class FootprintDataSource @Inject constructor(
 
     /**
      * 获取指定数量的最新足迹记录
+     *
+     * @param limit 限制数量
+     * @return 足迹记录列表的Flow
+     * @author Joker.X
      */
     fun getRecentFootprints(limit: Int): Flow<List<Footprint>> {
         return footprintDao.getRecentFootprints(limit).map { entities ->
@@ -67,6 +88,10 @@ class FootprintDataSource @Inject constructor(
 
     /**
      * 根据商品ID获取足迹记录
+     *
+     * @param goodsId 商品ID
+     * @return 足迹记录，如不存在则返回null
+     * @author Joker.X
      */
     suspend fun getFootprintByGoodsId(goodsId: Long): Footprint? {
         return footprintDao.getFootprintByGoodsId(goodsId)?.toFootprint()

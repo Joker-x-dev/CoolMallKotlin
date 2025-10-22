@@ -87,6 +87,7 @@ fun OrderGoodsModal(
  * @param cartList 商品列表
  * @param buttonText 操作按钮文本
  * @param onItemButtonClick 商品操作按钮点击回调
+ * @author Joker.X
  */
 @Composable
 private fun OrderGoodsModalContent(
@@ -120,6 +121,7 @@ private fun OrderGoodsModalContent(
  * @param buttonText 按钮文本
  * @param onButtonClick 按钮点击回调
  * @param modifier 修饰符
+ * @author Joker.X
  */
 @Composable
 private fun OrderGoodsItem(
@@ -165,6 +167,8 @@ private fun OrderGoodsItem(
 
 /**
  * 订单商品弹出层预览
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable

@@ -2,8 +2,6 @@ package com.joker.coolmall.feature.feedback.viewmodel
 
 import android.content.Context
 import androidx.lifecycle.viewModelScope
-import com.joker.coolmall.feature.feedback.R
-import dagger.hilt.android.qualifiers.ApplicationContext
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkListViewModel
 import com.joker.coolmall.core.data.repository.CommonRepository
 import com.joker.coolmall.core.data.repository.FeedbackRepository
@@ -14,15 +12,15 @@ import com.joker.coolmall.core.model.request.DictDataRequest
 import com.joker.coolmall.core.model.request.PageRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
+import com.joker.coolmall.feature.feedback.R
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.FeedbackRoutes
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 /**
@@ -69,7 +67,7 @@ class FeedbackListViewModel @Inject constructor(
 
     /**
      * 加载反馈类型字典数据
-     * 
+     *
      * @author Joker.X
      */
     fun loadFeedbackTypes() {
@@ -101,7 +99,7 @@ class FeedbackListViewModel @Inject constructor(
 
     /**
      * 导航到提交反馈页面
-     * 
+     *
      * @author Joker.X
      */
     fun toFeedbackSubmitPage() {

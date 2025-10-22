@@ -25,6 +25,19 @@ import androidx.compose.ui.unit.dp
 import com.joker.coolmall.core.designsystem.theme.Primary
 import kotlinx.coroutines.delay
 
+/**
+ * 轮播组件 - 支持自动播放和自定义指示器
+ *
+ * @param options 轮播项数据列表
+ * @param modifier 修饰符，用于自定义组件样式
+ * @param state 分页状态，默认根据options大小创建
+ * @param contentPadding 内容内边距，默认为0
+ * @param pageSpacing 页面间距，默认为0
+ * @param autoplay 是否自动播放，默认为true
+ * @param interval 自动播放间隔时间（毫秒），默认3000ms
+ * @param indicator 指示器组件，为null时不显示指示器
+ * @param content 轮播项内容组件
+ */
 @Composable
 fun <T> WeSwiper(
     options: List<T>,
@@ -71,7 +84,17 @@ fun <T> WeSwiper(
     }
 }
 
+/**
+ * WeSwiper默认配置对象
+ */
 object WeSwiperDefaults {
+    /**
+     * 默认指示器组件 - 横向进度条样式
+     *
+     * @param count 总页数
+     * @param current 当前页索引
+     * @param modifier 修饰符，用于自定义组件样式
+     */
     @Composable
     fun Indicator(count: Int, current: Int, modifier: Modifier = Modifier) {
         Row(

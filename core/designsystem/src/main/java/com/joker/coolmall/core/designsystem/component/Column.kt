@@ -27,6 +27,7 @@ import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
  * @param fillMaxWidth 是否填充最大宽度
  * @param padding 内边距
  * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun AppColumn(
@@ -51,6 +52,13 @@ fun AppColumn(
 
 /**
  * 填充整个屏幕的Column，便于创建全屏页面布局
+ *
+ * @param modifier 额外的修饰符
+ * @param verticalArrangement 垂直排列方式
+ * @param horizontalAlignment 水平对齐方式
+ * @param padding 内边距
+ * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun FullScreenColumn(
@@ -77,6 +85,7 @@ fun FullScreenColumn(
  * @param fillMaxWidth 是否填充最大宽度
  * @param padding 内边距
  * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun CenterColumn(
@@ -97,6 +106,13 @@ fun CenterColumn(
 
 /**
  * 顶部对齐的Column组件
+ *
+ * @param modifier 额外的修饰符
+ * @param horizontalAlignment 水平对齐方式
+ * @param fillMaxWidth 是否填充最大宽度
+ * @param padding 内边距
+ * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun TopColumn(
@@ -118,6 +134,13 @@ fun TopColumn(
 
 /**
  * 底部对齐的Column组件
+ *
+ * @param modifier 额外的修饰符
+ * @param horizontalAlignment 水平对齐方式
+ * @param fillMaxWidth 是否填充最大宽度
+ * @param padding 内边距
+ * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun BottomColumn(
@@ -139,6 +162,13 @@ fun BottomColumn(
 
 /**
  * 两端对齐的Column组件
+ *
+ * @param modifier 额外的修饰符
+ * @param horizontalAlignment 水平对齐方式
+ * @param fillMaxWidth 是否填充最大宽度
+ * @param padding 内边距
+ * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun SpaceBetweenColumn(
@@ -160,6 +190,13 @@ fun SpaceBetweenColumn(
 
 /**
  * 均匀分布的Column组件
+ *
+ * @param modifier 额外的修饰符
+ * @param horizontalAlignment 水平对齐方式
+ * @param fillMaxWidth 是否填充最大宽度
+ * @param padding 内边距
+ * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun SpaceEvenlyColumn(
@@ -181,6 +218,13 @@ fun SpaceEvenlyColumn(
 
 /**
  * 居左对齐的Column组件
+ *
+ * @param modifier 额外的修饰符
+ * @param verticalArrangement 垂直排列方式
+ * @param fillMaxWidth 是否填充最大宽度
+ * @param padding 内边距
+ * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun StartAlignColumn(
@@ -202,6 +246,13 @@ fun StartAlignColumn(
 
 /**
  * 居右对齐的Column组件
+ *
+ * @param modifier 额外的修饰符
+ * @param verticalArrangement 垂直排列方式
+ * @param fillMaxWidth 是否填充最大宽度
+ * @param padding 内边距
+ * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun EndAlignColumn(
@@ -229,6 +280,7 @@ fun EndAlignColumn(
  * @param horizontalAlignment 水平对齐方式
  * @param padding 内边距
  * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun WrapColumn(
@@ -258,6 +310,7 @@ fun WrapColumn(
  * @param fillMaxWidth 是否填充最大宽度
  * @param padding 内边距
  * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun VerticalList(
@@ -280,6 +333,13 @@ fun VerticalList(
 
 /**
  * 卡片内容列表，适用于卡片内部的内容排列
+ *
+ * @param modifier 额外的修饰符
+ * @param verticalArrangement 垂直排列方式
+ * @param horizontalAlignment 水平对齐方式
+ * @param padding 内边距
+ * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun CardContentList(
@@ -301,6 +361,13 @@ fun CardContentList(
 
 /**
  * 带小内边距的Column，常用于紧凑型布局
+ *
+ * @param modifier 额外的修饰符
+ * @param verticalArrangement 垂直排列方式
+ * @param horizontalAlignment 水平对齐方式
+ * @param fillMaxWidth 是否填充最大宽度
+ * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun SmallPaddingColumn(
@@ -322,6 +389,13 @@ fun SmallPaddingColumn(
 
 /**
  * 带中等内边距的Column，常用于普通布局
+ *
+ * @param modifier 额外的修饰符
+ * @param verticalArrangement 垂直排列方式
+ * @param horizontalAlignment 水平对齐方式
+ * @param fillMaxWidth 是否填充最大宽度
+ * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun MediumPaddingColumn(
@@ -343,6 +417,13 @@ fun MediumPaddingColumn(
 
 /**
  * 带大内边距的Column，常用于强调布局
+ *
+ * @param modifier 额外的修饰符
+ * @param verticalArrangement 垂直排列方式
+ * @param horizontalAlignment 水平对齐方式
+ * @param fillMaxWidth 是否填充最大宽度
+ * @param content 内容
+ * @author Joker.X
  */
 @Composable
 fun LargePaddingColumn(

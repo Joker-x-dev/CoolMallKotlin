@@ -5,6 +5,11 @@ import kotlinx.serialization.Serializable
 
 /**
  * 订单分页查询请求模型
+ *
+ * @param page 页码
+ * @param size 每页大小
+ * @param status 订单状态列表
+ * @author Joker.X
  */
 @Serializable
 data class OrderPageRequest(

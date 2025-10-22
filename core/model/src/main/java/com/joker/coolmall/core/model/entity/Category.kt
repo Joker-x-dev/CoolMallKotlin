@@ -4,6 +4,16 @@ import kotlinx.serialization.Serializable
 
 /**
  * 商品类型
+ *
+ * @param id ID
+ * @param name 名称
+ * @param parentId 父ID
+ * @param sortNum 排序
+ * @param pic 图片
+ * @param status 状态 0-禁用 1-启用
+ * @param createTime 创建时间
+ * @param updateTime 更新时间
+ * @author Joker.X
  */
 @Serializable
 data class Category(

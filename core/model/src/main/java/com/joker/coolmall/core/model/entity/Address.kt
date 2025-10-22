@@ -6,6 +6,19 @@ import kotlinx.serialization.Serializable
 
 /**
  * 用户收货地址模型
+ *
+ * @param id ID
+ * @param userId 用户ID
+ * @param contact 联系人
+ * @param phone 手机号
+ * @param province 省
+ * @param city 市
+ * @param district 区
+ * @param address 地址
+ * @param isDefault 是否默认
+ * @param createTime 创建时间
+ * @param updateTime 更新时间
+ * @author Joker.X
  */
 @Serializable
 data class Address(

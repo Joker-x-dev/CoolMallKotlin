@@ -119,7 +119,7 @@ fun UserContributorCard(
 
 /**
  * 组件预览
- * 
+ *
  * @author Joker.X
  */
 @Preview(showBackground = true)

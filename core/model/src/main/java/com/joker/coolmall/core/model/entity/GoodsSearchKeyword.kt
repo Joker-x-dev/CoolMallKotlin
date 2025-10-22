@@ -4,6 +4,13 @@ import kotlinx.serialization.Serializable
 
 /**
  * 搜索关键词
+ *
+ * @param id ID
+ * @param name 名称
+ * @param sortNum 排序
+ * @param createTime 创建时间
+ * @param updateTime 更新时间
+ * @author Joker.X
  */
 @Serializable
 data class GoodsSearchKeyword(

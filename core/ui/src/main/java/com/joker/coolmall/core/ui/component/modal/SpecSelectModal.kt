@@ -40,6 +40,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.platform.LocalWindowInfo
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
@@ -95,6 +96,7 @@ import com.joker.coolmall.core.ui.component.title.TitleWithLine
  * @param onBuyNow 立即购买按钮点击回调
  * @param onRetry 重试回调
  * @param selectedSpec 当前选中的规格，由外部传入并保持状态
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -150,7 +152,7 @@ fun SpecSelectModal(
     BottomModal(
         visible = visible,
         onDismiss = onDismiss,
-        title = "选择规格",
+        title = stringResource(id = R.string.modal_select_spec),
         sheetState = sheetState
     ) {
         BaseNetWorkView(
@@ -234,6 +236,7 @@ fun SpecSelectModal(
  * @param onViewModeChanged 视图模式切换回调，参数为新的视图模式布尔值
  * @param onAddToCart 添加到购物车回调，参数为选中的规格对象
  * @param onBuyNow 立即购买回调，参数为选中的规格对象
+ * @author Joker.X
  */
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
@@ -272,7 +275,7 @@ private fun SpecSelectModalContentView(
         SpaceVerticalMedium()
 
         SpaceBetweenRow {
-            TitleWithLine("规格分类")
+            TitleWithLine(stringResource(id = R.string.spec_category))
             CommonIcon(
                 resId = if (isGridMode) R.drawable.ic_menu_list else R.drawable.ic_menu,
                 tint = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f),
@@ -352,6 +355,10 @@ private fun SpecSelectModalContentView(
 
 /**
  * 规格选择头部商品信息
+ *
+ * @param goods 商品数据
+ * @param selectedSpec 选中的规格
+ * @author Joker.X
  */
 @Composable
 private fun SpecHeaderInfo(
@@ -389,13 +396,13 @@ private fun SpecHeaderInfo(
             // 选中规格显示"已选"，未选中显示"未选择"
             if (selectedSpec != null) {
                 AppText(
-                    text = "已选：${selectedSpec.name}",
+                    text = stringResource(id = R.string.spec_selected) + "：${selectedSpec.name}",
                     type = TextType.SECONDARY,
                     size = TextSize.BODY_MEDIUM
                 )
             } else {
                 AppText(
-                    text = "未选择",
+                    text = stringResource(id = R.string.spec_not_selected),
                     type = TextType.SECONDARY,
                     size = TextSize.BODY_MEDIUM
                 )
@@ -405,7 +412,7 @@ private fun SpecHeaderInfo(
 
             // 库存 - 选中规格时显示规格库存，否则显示0
             AppText(
-                text = "库存：${selectedSpec?.stock ?: 0}",
+                text = stringResource(id = R.string.spec_stock) + "：${selectedSpec?.stock ?: 0}",
                 type = TextType.TERTIARY,
                 size = TextSize.BODY_MEDIUM
             )
@@ -415,6 +422,12 @@ private fun SpecHeaderInfo(
 
 /**
  * 网格模式的规格选择内容
+ *
+ * @param specs 规格列表
+ * @param selectedIndex 选中的索引
+ * @param onSpecSelected 规格选择回调
+ * @param coverImage 封面图
+ * @author Joker.X
  */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -513,6 +526,12 @@ private fun GridSpecSelectionContent(
 
 /**
  * 列表模式的规格选择内容
+ *
+ * @param specs 规格列表
+ * @param selectedIndex 选中的索引
+ * @param onSpecSelected 规格选择回调
+ * @param coverImage 封面图
+ * @author Joker.X
  */
 @Composable
 private fun ListSpecSelectionContent(
@@ -577,6 +596,11 @@ private fun ListSpecSelectionContent(
 
 /**
  * 数量选择器
+ *
+ * @param quantity 数量
+ * @param onDecrement 减少回调
+ * @param onIncrement 增加回调
+ * @author Joker.X
  */
 @Composable
 private fun QuantitySelector(
@@ -585,7 +609,7 @@ private fun QuantitySelector(
     onIncrement: () -> Unit
 ) {
     SpaceBetweenRow {
-        TitleWithLine("数量")
+        TitleWithLine(stringResource(id = R.string.quantity))
         QuantityStepper(
             quantity = quantity,
             onQuantityChanged = { newQuantity ->
@@ -601,6 +625,11 @@ private fun QuantitySelector(
 
 /**
  * 底部按钮
+ *
+ * @param selectedSpec 选中的规格
+ * @param onAddToCart 加入购物车回调
+ * @param onBuyNow 立即购买回调
+ * @author Joker.X
  */
 @Composable
 private fun SpecBottomButtons(
@@ -614,7 +643,7 @@ private fun SpecBottomButtons(
 
     Row {
         AppButtonBordered(
-            text = "加入购物车",
+            text = stringResource(id = R.string.modal_add_to_cart),
             onClick = { selectedSpec?.let { onAddToCart(it) } },
             modifier = Modifier.weight(1f),
             enabled = buttonEnabled,
@@ -624,7 +653,7 @@ private fun SpecBottomButtons(
         SpaceHorizontalMedium()
 
         AppButton(
-            text = "立即购买",
+            text = stringResource(id = R.string.modal_buy_now),
             onClick = { selectedSpec?.let { onBuyNow(it) } },
             modifier = Modifier.weight(1f),
             enabled = buttonEnabled,
@@ -634,6 +663,11 @@ private fun SpecBottomButtons(
     }
 }
 
+/**
+ * 规格选择底部弹出层预览
+ *
+ * @author Joker.X
+ */
 @Preview(showBackground = true)
 @Composable
 private fun SpecSelectModalPreview() {
@@ -735,6 +769,11 @@ private fun SpecSelectModalPreview() {
     }
 }
 
+/**
+ * 规格选择底部弹出层预览 - 深色主题
+ *
+ * @author Joker.X
+ */
 @Preview(showBackground = true)
 @Composable
 private fun SpecSelectModalPreviewDark() {

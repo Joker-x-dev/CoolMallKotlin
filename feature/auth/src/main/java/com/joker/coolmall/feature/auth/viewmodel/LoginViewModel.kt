@@ -13,6 +13,7 @@ import com.joker.coolmall.core.util.toast.ToastUtils
 import com.joker.coolmall.feature.auth.R
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.AuthRoutes
+import com.joker.coolmall.navigation.routes.CommonRoutes
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +22,7 @@ import javax.inject.Inject
 
 /**
  * 登录主页 ViewModel
- * 
+ *
  * @author Joker.X
  */
 @HiltViewModel
@@ -35,7 +36,7 @@ class LoginViewModel @Inject constructor(
 ) {
     /**
      * 导航到短信登录页面
-     * 
+     *
      * @author Joker.X
      */
     fun toSMSLoginPage() {
@@ -44,7 +45,7 @@ class LoginViewModel @Inject constructor(
 
     /**
      * 导航到账号密码登录页面
-     * 
+     *
      * @author Joker.X
      */
     fun toAccountLoginPage() {
@@ -53,7 +54,7 @@ class LoginViewModel @Inject constructor(
 
     /**
      * 启动 QQ 登录
-     * 
+     *
      * @param activity 当前 Activity 实例
      * @author Joker.X
      */
@@ -96,7 +97,7 @@ class LoginViewModel @Inject constructor(
 
     /**
      * QQ 登录成功
-     * 
+     *
      * @param accessToken QQ 登录成功返回的 accessToken
      * @param openId QQ 登录成功返回的 openId
      * @author Joker.X
@@ -116,7 +117,7 @@ class LoginViewModel @Inject constructor(
 
     /**
      * 登录成功统一处理
-     * 
+     *
      * @param authData 登录成功返回的认证数据
      * @author Joker.X
      */
@@ -131,7 +132,7 @@ class LoginViewModel @Inject constructor(
 
     /**
      * 微信登录点击
-     * 
+     *
      * @author Joker.X
      */
     fun onWechatLoginClick() {
@@ -140,7 +141,7 @@ class LoginViewModel @Inject constructor(
 
     /**
      * 支付宝登录点击
-     * 
+     *
      * @author Joker.X
      */
     fun onAlipayLoginClick() {
@@ -149,10 +150,30 @@ class LoginViewModel @Inject constructor(
 
     /**
      * 微信和支付宝登录提示
-     * 
+     *
      * @author Joker.X
      */
     fun onWechatAndAlipayLoginTipClick() {
         ToastUtils.showWarning(R.string.third_party_login_only_qq)
+    }
+
+    /**
+     * 点击用户协议
+     * 显示用户使用协议
+     *
+     * @author Joker.X
+     */
+    fun onUserAgreementClick() {
+        toPage(CommonRoutes.USER_AGREEMENT)
+    }
+
+    /**
+     * 点击隐私政策
+     * 显示隐私政策内容
+     *
+     * @author Joker.X
+     */
+    fun onPrivacyPolicyClick() {
+        toPage(CommonRoutes.PRIVACY_POLICY)
     }
 }

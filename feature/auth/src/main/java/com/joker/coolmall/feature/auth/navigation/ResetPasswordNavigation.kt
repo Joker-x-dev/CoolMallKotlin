@@ -7,7 +7,7 @@ import com.joker.coolmall.navigation.routes.AuthRoutes
 
 /**
  * 找回密码页面导航
- * 
+ *
  * @author Joker.X
  */
 fun NavGraphBuilder.resetPasswordScreen() {

@@ -289,7 +289,7 @@ internal fun OrderListScreen(
     // 取消订单弹窗
     DictSelectModal(
         visible = cancelModalVisible,
-        title = stringResource(R.string.select_cancel_reason),
+        title = R.string.select_cancel_reason,
         uiState = cancelReasonsModalUiState,
         selectedItem = selectedCancelReason,
         onDismiss = onCancelModalDismiss,

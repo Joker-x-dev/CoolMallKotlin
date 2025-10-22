@@ -28,6 +28,8 @@ import com.joker.coolmall.core.designsystem.theme.Primary
 
 /**
  * 文本类型
+ *
+ * @author Joker.X
  */
 enum class TextType {
     /**
@@ -76,6 +78,8 @@ enum class TextType {
 
 /**
  * 文本大小
+ *
+ * @author Joker.X
  */
 enum class TextSize {
     /**
@@ -137,6 +141,7 @@ enum class TextSize {
  * @param onClick 点击回调，设置后文本将变为可点击状态
  * @param style 自定义文本样式，会覆盖其他样式设置
  * @param selectable 是否可选择，默认为false
+ * @author Joker.X
  */
 @Composable
 fun AppText(
@@ -261,6 +266,7 @@ fun AppText(
  * @param onClick 点击回调，设置后文本将变为可点击状态
  * @param style 自定义文本样式，会覆盖其他样式设置
  * @param selectable 是否可选择，默认为false
+ * @author Joker.X
  */
 @Composable
 fun AppText(
@@ -366,6 +372,16 @@ fun AppText(
  * 基础文本组件 - 字符串版本
  *
  * 该组件是对 Material3 Text 的轻量封装，主要用于设置ContentColor
+ *
+ * @param text 文本内容
+ * @param modifier 修饰符
+ * @param style 文本样式
+ * @param overflow 文本溢出处理方式
+ * @param softWrap 是否自动换行
+ * @param maxLines 最大行数
+ * @param minLines 最小行数
+ * @param onTextLayout 文本布局回调
+ * @author Joker.X
  */
 @Composable
 private fun BasicText(
@@ -398,6 +414,16 @@ private fun BasicText(
  * 基础文本组件 - AnnotatedString版本
  *
  * 该组件是对 Material3 Text 的轻量封装，主要用于设置ContentColor
+ *
+ * @param text 富文本内容
+ * @param modifier 修饰符
+ * @param style 文本样式
+ * @param overflow 文本溢出处理方式
+ * @param softWrap 是否自动换行
+ * @param maxLines 最大行数
+ * @param minLines 最小行数
+ * @param onTextLayout 文本布局回调
+ * @author Joker.X
  */
 @Composable
 private fun BasicText(

@@ -13,6 +13,8 @@ import com.joker.coolmall.core.designsystem.R
 /**
  * 通知工具类
  * 用于发送系统通知，支持普通通知和验证码通知
+ *
+ * @author Joker.X
  */
 object NotificationUtil {
 
@@ -24,6 +26,7 @@ object NotificationUtil {
      * 建议在应用启动时调用此方法
      *
      * @param context 上下文
+     * @author Joker.X
      */
     fun initNotificationChannels(context: Context) {
         val notificationManager =
@@ -66,6 +69,7 @@ object NotificationUtil {
      * @param intent 点击通知时触发的Intent，默认为null
      * @param autoCancel 点击后是否自动取消通知，默认为true
      * @return 通知ID
+     * @author Joker.X
      */
     @SuppressLint("MissingPermission")
     fun sendNotification(
@@ -121,6 +125,7 @@ object NotificationUtil {
      * @param code 验证码
      * @param iconResId 通知图标资源ID，默认使用系统信息图标
      * @return 通知ID
+     * @author Joker.X
      */
     @SuppressLint("MissingPermission")
     fun sendVerificationCodeNotification(
@@ -160,6 +165,7 @@ object NotificationUtil {
      *
      * @param context 上下文
      * @param notificationId 通知ID
+     * @author Joker.X
      */
     fun cancelNotification(context: Context, notificationId: Int) {
         NotificationManagerCompat.from(context).cancel(notificationId)
@@ -169,6 +175,7 @@ object NotificationUtil {
      * 取消所有通知
      *
      * @param context 上下文
+     * @author Joker.X
      */
     fun cancelAllNotifications(context: Context) {
         NotificationManagerCompat.from(context).cancelAll()
@@ -181,6 +188,7 @@ object NotificationUtil {
      * @param channelId 渠道ID
      * @param channelName 渠道名称
      * @param importance 重要性级别
+     * @author Joker.X
      */
     private fun ensureChannelExists(
         context: Context,

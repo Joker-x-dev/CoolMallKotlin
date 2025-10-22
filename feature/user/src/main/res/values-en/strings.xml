@@ -2,9 +2,7 @@
 <resources>
     <!-- Profile -->
     <string name="profile_title">Profile</string>
-    <string name="my_footprint">My Footprint</string>
     <string name="address_management">Address Management</string>
-    <string name="logout">Logout</string>
 
     <!-- Settings -->
     <string name="settings_title">Settings</string>
@@ -39,7 +37,7 @@
     <string name="footprint_empty">No browsing history yet</string>
     <string name="go_browse">Go Browse</string>
     <string name="clear_with_count">Clear (%d)</string>
-    
+
     <!-- Personal Info -->
     <string name="avatar">Avatar</string>
     <string name="nickname">Nickname</string>

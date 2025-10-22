@@ -11,6 +11,8 @@ import kotlinx.serialization.json.jsonObject
 /**
  * 本地用户信息相关数据源实现类
  * 负责处理所有与用户信息相关的本地存储
+ *
+ * @author Joker.X
  */
 class UserInfoStoreDataSourceImpl @Inject constructor() : UserInfoStoreDataSource {
 
@@ -22,7 +24,9 @@ class UserInfoStoreDataSourceImpl @Inject constructor() : UserInfoStoreDataSourc
 
     /**
      * 保存用户信息
+     *
      * @param user 用户信息对象
+     * @author Joker.X
      */
     override suspend fun saveUserInfo(user: User) {
         val userJson = json.encodeToString(user)
@@ -31,7 +35,9 @@ class UserInfoStoreDataSourceImpl @Inject constructor() : UserInfoStoreDataSourc
 
     /**
      * 获取用户信息
+     *
      * @return 用户信息对象，如不存在则返回null
+     * @author Joker.X
      */
     override suspend fun getUserInfo(): User? {
         val userJson = MMKVUtils.getString(KEY_USER_INFO, "")
@@ -46,7 +52,9 @@ class UserInfoStoreDataSourceImpl @Inject constructor() : UserInfoStoreDataSourc
 
     /**
      * 更新用户信息中的特定字段
+     *
      * @param updates 需要更新的字段映射
+     * @author Joker.X
      */
     override suspend fun updateUserInfo(updates: Map<String, Any?>) {
         val currentUser = getUserInfo() ?: return
@@ -77,6 +85,8 @@ class UserInfoStoreDataSourceImpl @Inject constructor() : UserInfoStoreDataSourc
 
     /**
      * 清除用户信息
+     *
+     * @author Joker.X
      */
     override suspend fun clearUserInfo() {
         MMKVUtils.remove(KEY_USER_INFO)
@@ -84,7 +94,9 @@ class UserInfoStoreDataSourceImpl @Inject constructor() : UserInfoStoreDataSourc
 
     /**
      * 获取用户ID
+     *
      * @return 用户ID，如不存在则返回0
+     * @author Joker.X
      */
     override suspend fun getUserId(): Long {
         return getUserInfo()?.id ?: 0L
@@ -92,7 +104,9 @@ class UserInfoStoreDataSourceImpl @Inject constructor() : UserInfoStoreDataSourc
 
     /**
      * 获取用户昵称
+     *
      * @return 用户昵称，如不存在则返回null
+     * @author Joker.X
      */
     override suspend fun getNickName(): String? {
         return getUserInfo()?.nickName
@@ -100,7 +114,9 @@ class UserInfoStoreDataSourceImpl @Inject constructor() : UserInfoStoreDataSourc
 
     /**
      * 获取用户头像URL
+     *
      * @return 用户头像URL，如不存在则返回null
+     * @author Joker.X
      */
     override suspend fun getAvatarUrl(): String? {
         return getUserInfo()?.avatarUrl

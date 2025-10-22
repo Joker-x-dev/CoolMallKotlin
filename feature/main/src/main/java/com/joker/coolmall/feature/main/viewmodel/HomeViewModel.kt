@@ -239,7 +239,7 @@ class HomeViewModel @Inject constructor(
             super.toPage(AuthRoutes.HOME)
             return
         }
-        
+
         val request = ReceiveCouponRequest(couponId = coupon.id)
         ResultHandler.handleResultWithData(
             scope = viewModelScope,

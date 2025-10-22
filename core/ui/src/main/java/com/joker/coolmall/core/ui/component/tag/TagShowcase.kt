@@ -25,7 +25,17 @@ import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.ui.component.title.TitleWithLine
 
 /**
- * Tag组件展示
+ * Tag组件展示页面
+ *
+ * 用于展示所有标签组件的使用示例，包括：
+ * - 基础样式（默认、主要、警告、危险、成功）
+ * - 浅色样式
+ * - 空心样式
+ * - 不同大小（小、中、大）
+ * - 可关闭标签
+ * - 不同样式的可关闭标签
+ *
+ * @author Joker.X
  */
 @OptIn(ExperimentalLayoutApi::class)
 @Composable
@@ -201,6 +211,11 @@ fun TagShowcase() {
     }
 }
 
+/**
+ * Tag组件展示页面预览 - 浅色主题
+ *
+ * @author Joker.X
+ */
 @Preview(showBackground = true)
 @Composable
 fun TagShowcasePreviewLight() {
@@ -209,6 +224,11 @@ fun TagShowcasePreviewLight() {
     }
 }
 
+/**
+ * Tag组件展示页面预览 - 深色主题
+ *
+ * @author Joker.X
+ */
 @Preview(showBackground = true)
 @Composable
 fun TagShowcasePreviewDark() {

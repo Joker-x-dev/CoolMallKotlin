@@ -15,6 +15,7 @@ _🛍️ 基于 Kotlin 和 Jetpack Compose 的现代化电商应用_
 [![Gitee](https://img.shields.io/badge/Gitee-CoolMallKotlin-red?style=flat-square&logo=gitee)](https://gitee.com/Joker-x-dev/CoolMallKotlin)
 [![Demo](https://img.shields.io/badge/Demo-蒲公英下载-green?style=flat-square&logo=android)](https://www.pgyer.com/CoolMallKotlinProdRelease)
 [![API](https://img.shields.io/badge/API-文档-orange?style=flat-square&logo=postman)](https://coolmall.apifox.cn)
+[![Ask DeepWiki](https://deepwiki.com/badge.svg)](https://deepwiki.com/Joker-x-dev/CoolMallKotlin)
 
 </div>
 
@@ -70,12 +71,12 @@ Android 开发感兴趣，无论是学习还是共同创造，都欢迎加入。
 
 ### 📍 项目地址
 
-- **GitHub 地址
-  **：[https://github.com/Joker-x-dev/CoolMallKotlin](https://github.com/Joker-x-dev/CoolMallKotlin)
-- **Gitee 地址
-  **：[https://gitee.com/Joker-x-dev/CoolMallKotlin](https://gitee.com/Joker-x-dev/CoolMallKotlin)
+- **GitHub 地址**：[https://github.com/Joker-x-dev/CoolMallKotlin](https://github.com/Joker-x-dev/CoolMallKotlin)
+- **Gitee 地址**：[https://gitee.com/Joker-x-dev/CoolMallKotlin](https://gitee.com/Joker-x-dev/CoolMallKotlin)
 
 ### Demo 下载
+
+> 🌟 **提示**：客服聊天和意见反馈功能均为真实可用的，大家给我的留言我每一条都会去看，也会回复，所以不要说我是人机了....
 
 - **Release 版本（推荐 4MB）**：[点击下载体验](https://www.pgyer.com/CoolMallKotlinProdRelease)
     - 为日常使用和体验优化的稳定版本，具有最佳性能和体积。
@@ -103,29 +104,29 @@ Android 开发感兴趣，无论是学习还是共同创造，都欢迎加入。
 
 | 类别    | 技术选型                      | 版本号        | 说明                |
 |-------|---------------------------|------------|-------------------|
-| 编程语言  | Kotlin                    | 2.2.10     | 100% Kotlin 开发    |
+| 编程语言  | Kotlin                    | 2.2.20     | 100% Kotlin 开发    |
 | UI 框架 | Jetpack Compose           | 2025.09.00 | 声明式 UI 框架         |
 | 架构模式  | MVVM + Clean Architecture | -          | MVVM + Clean 架构   |
-| 依赖注入  | Hilt                      | 2.57.1     | 基于 Dagger 的依赖注入框架 |
+| 依赖注入  | Hilt                      | 2.57.2     | 基于 Dagger 的依赖注入框架 |
 | 异步处理  | Coroutines + Flow         | 1.9.0      | 协程 + Flow 响应式编程   |
 
 ### 功能模块
 
 | 类别    | 技术选型                  | 版本号           | 说明               |
 |-------|-----------------------|---------------|------------------|
-| 导航    | Navigation Compose    | 2.9.4         | Compose 导航组件     |
+| 导航    | Navigation Compose    | 2.9.5         | Compose 导航组件     |
 | 数据序列化 | Kotlinx Serialization | 1.9.0         | JSON 序列化处理       |
-| 网络请求  | Retrofit + OkHttp     | 3.0.0 + 5.1.0 | HTTP 客户端         |
+| 网络请求  | Retrofit + OkHttp     | 3.0.0 + 5.2.0 | HTTP 客户端         |
 | 图片加载  | Coil Compose          | 2.7.0         | 图片加载与缓存          |
-| 动画效果  | Lottie Compose        | 6.6.7         | After Effects 动画 |
+| 动画效果  | Lottie Compose        | 6.6.9         | After Effects 动画 |
 | 权限管理  | XXPermissions         | 26.5          | 动态权限申请           |
 
 ### 数据存储
 
 | 类别   | 技术选型 | 版本号   | 说明         |
 |------|------|-------|------------|
-| 数据库  | Room | 2.8.0 | SQLite 数据库 |
-| 本地存储 | MMKV | 2.2.3 | 高性能键值存储    |
+| 数据库  | Room | 2.8.2 | SQLite 数据库 |
+| 本地存储 | MMKV | 2.2.4 | 高性能键值存储    |
 
 ### 开发工具
 
@@ -148,7 +149,7 @@ Android 开发感兴趣，无论是学习还是共同创造，都欢迎加入。
 - **声明式 UI**: 使用 Jetpack Compose 构建现代化用户界面
 - **设计规范**: 严格遵循 Material Design 3 设计规范和最佳实践
 - **主题适配**: 完整支持浅色/深色主题动态切换
-- **国际化**: 支持中英文语言切换，便于全球化推广 `待完善`
+- **国际化**: 支持中英文语言切换，便于全球化推广
 - **响应式编程**: 基于 Coroutines + Flow 的响应式编程范式
 - **完整的测试覆盖** `计划中`
 - **大屏适配（平板/折叠屏）** `计划中`

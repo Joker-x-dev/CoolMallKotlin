@@ -12,12 +12,19 @@ import javax.inject.Inject
 
 /**
  * 通用基础仓库
+ *
+ * @param commonNetworkDataSource 通用网络数据源
+ * @author Joker.X
  */
 class CommonRepository @Inject constructor(
     private val commonNetworkDataSource: CommonNetworkDataSource
 ) {
     /**
-     * 参数配置
+     * 获取参数配置
+     *
+     * @param key 参数键名
+     * @return 参数值Flow
+     * @author Joker.X
      */
     fun getParam(key: String): Flow<NetworkResponse<String>> = flow {
         emit(commonNetworkDataSource.getParam(key))
@@ -25,6 +32,10 @@ class CommonRepository @Inject constructor(
 
     /**
      * 获取字典数据
+     *
+     * @param request 字典数据请求参数
+     * @return 字典数据Flow
+     * @author Joker.X
      */
     fun getDictData(request: DictDataRequest): Flow<NetworkResponse<DictDataResponse>> = flow {
         emit(commonNetworkDataSource.getDictData(request))

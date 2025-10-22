@@ -10,7 +10,7 @@
     <string name="empty_network">Network Error</string>
     <string name="empty_network_subtitle">Please check your connection</string>
     <string name="click_retry">Retry</string>
-    
+
     <!-- Loading States -->
     <string name="loading">Loading...</string>
     <string name="load_more_pull">Pull to Load More</string>
@@ -19,7 +19,7 @@
     <string name="load_more_error">Load Failed</string>
     <string name="load_more_error_retry">Load Failed, Click to Retry</string>
     <string name="load_more_no_more">No More Data</string>
-    
+
     <!-- Common Actions -->
     <string name="confirm">Confirm</string>
     <string name="cancel">Cancel</string>
@@ -28,37 +28,61 @@
     <string name="save">Save</string>
     <string name="submit">Submit</string>
     <string name="search">Search</string>
-    <string name="search_hint">Enter content to search</string>
+    <string name="search_hint">Search products...</string>
     <string name="retry">Retry</string>
-    
+    <string name="selected">Selected</string>
+    <string name="unselected">Unselected</string>
+
     <!-- Coupon -->
     <string name="coupon_expired">Expired</string>
     <string name="coupon_used">Used</string>
     <string name="coupon_available">Available</string>
-    <string name="coupon_conditions">Min %1$s</string>
+    <string name="coupon_conditions">Min ¥%1$d</string>
     <string name="coupon_no_conditions">No Conditions</string>
     <string name="coupon_valid_date">Valid: %1$s - %2$s</string>
+    <string name="coupon_valid_until">Valid until %1$s</string>
     <string name="coupon_receive">Receive</string>
     <string name="coupon_received">Received</string>
     <string name="coupon_use">Use Now</string>
-    
+    <string name="coupon_insufficient">Insufficient</string>
+    <string name="coupon_usage_instructions">Usage Instructions</string>
+    <string name="coupon_modal_title">Receive Coupons</string>
+
     <!-- Address -->
     <string name="address_default">Default</string>
     <string name="address_edit">Edit</string>
     <string name="address_delete">Delete</string>
-    
+    <string name="address_not_selected">No shipping address selected</string>
+    <string name="address_add_hint">Tap to add shipping address</string>
+
     <!-- Goods -->
     <string name="goods_sold">%d Sold</string>
     <string name="goods_select">Select</string>
     <string name="goods_spec">Specs</string>
     <string name="goods_quantity">Quantity</string>
-    
+
+    <!-- Spec -->
+    <string name="spec_category">Specification Category</string>
+    <string name="please_select">Please Select</string>
+    <string name="spec_selected">Selected</string>
+    <string name="spec_not_selected">Not Selected</string>
+    <string name="spec_stock">Stock</string>
+
+    <!-- Rate -->
+    <string name="rate_star">Rating Star</string>
+
+    <!-- Image -->
+    <string name="default_avatar">Default Avatar</string>
+    <string name="image_load_error">Image Load Error</string>
+    <string name="selected_image">Selected Image</string>
+    <string name="add_image">Add Image</string>
+
     <!-- Modal -->
     <string name="modal_close">Close</string>
     <string name="modal_select_spec">Select Specification</string>
     <string name="modal_add_to_cart">Add to Cart</string>
     <string name="modal_buy_now">Buy Now</string>
-    
+
     <!-- Other -->
     <string name="total">Total</string>
     <string name="price">Price</string>

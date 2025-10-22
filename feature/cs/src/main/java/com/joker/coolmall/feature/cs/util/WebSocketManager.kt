@@ -22,7 +22,7 @@ private const val TAG = "WebSocketManager"
 /**
  * WebSocket管理器
  * 负责处理WebSocket连接、消息发送和接收
- * 
+ *
  * @author Joker.X
  */
 class WebSocketManager {
@@ -46,7 +46,7 @@ class WebSocketManager {
 
     /**
      * 设置消息接收回调
-     * 
+     *
      * @param callback 消息接收回调函数
      * @author Joker.X
      */
@@ -56,7 +56,7 @@ class WebSocketManager {
 
     /**
      * 设置连接状态变化回调
-     * 
+     *
      * @param callback 连接状态变化回调函数
      * @author Joker.X
      */
@@ -66,7 +66,7 @@ class WebSocketManager {
 
     /**
      * 建立WebSocket连接
-     * 
+     *
      * @param token 用户认证Token
      * @param scope 协程作用域
      * @author Joker.X
@@ -144,7 +144,7 @@ class WebSocketManager {
 
     /**
      * 重试连接
-     * 
+     *
      * @param scope 协程作用域
      * @author Joker.X
      */
@@ -161,7 +161,7 @@ class WebSocketManager {
 
     /**
      * 处理WebSocket消息
-     * 
+     *
      * @param text 消息文本
      * @author Joker.X
      */
@@ -227,7 +227,7 @@ class WebSocketManager {
 
     /**
      * 发送消息
-     * 
+     *
      * @param sessionId 会话ID
      * @param content 消息内容
      * @param type 消息类型
@@ -260,7 +260,7 @@ class WebSocketManager {
 
     /**
      * 断开WebSocket连接
-     * 
+     *
      * @author Joker.X
      */
     fun disconnect() {
@@ -274,7 +274,7 @@ class WebSocketManager {
 
     /**
      * 更新连接状态
-     * 
+     *
      * @param state 新的连接状态
      * @author Joker.X
      */
@@ -285,7 +285,7 @@ class WebSocketManager {
 
     /**
      * 获取当前连接状态
-     * 
+     *
      * @return 是否已连接
      * @author Joker.X
      */

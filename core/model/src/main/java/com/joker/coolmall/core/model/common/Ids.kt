@@ -4,6 +4,9 @@ import kotlinx.serialization.Serializable
 
 /**
  * 删除请求模型
+ *
+ * @param ids 地址ID数组，用于批量删除
+ * @author Joker.X
  */
 @Serializable
 data class Ids(

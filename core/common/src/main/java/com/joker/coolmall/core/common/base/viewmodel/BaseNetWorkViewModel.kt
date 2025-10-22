@@ -26,8 +26,10 @@ import kotlinx.coroutines.launch
  *
  * @param T 数据类型
  * @param navigator 导航控制器
+ * @param appState 应用状态
  * @param savedStateHandle 保存状态句柄，用于获取路由参数
  * @param idKey 路由参数ID的键名，默认为null
+ * @author Joker.X
  */
 abstract class BaseNetWorkViewModel<T>(
     navigator: AppNavigator,
@@ -82,7 +84,7 @@ abstract class BaseNetWorkViewModel<T>(
      * @throws IllegalStateException 当ID参数不存在时抛出
      */
     protected val requiredId: Long by lazy {
-        checkNotNull(id) { "必须的路由参数ID不存在，请确保传入了正确的SavedStateHandle和idKey" }
+        checkNotNull(id) { "Required route parameter ID does not exist. Please ensure correct SavedStateHandle and idKey are provided" }
     }
 
     /**
@@ -191,7 +193,7 @@ abstract class BaseNetWorkViewModel<T>(
      */
     fun getSuccessData(): T {
         return (uiState.value as? BaseNetWorkUiState.Success)?.data
-            ?: throw IllegalStateException("当前页面的 uiState 不为成功状态，无法获取数据")
+            ?: throw IllegalStateException("Current page uiState is not in Success state, unable to retrieve data")
     }
 
 

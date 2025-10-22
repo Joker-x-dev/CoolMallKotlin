@@ -253,7 +253,7 @@ private fun SettingsContentView(
 
 /**
  * 设置页面浅色主题预览
- * 
+ *
  * @author Joker.X
  */
 @Composable
@@ -266,7 +266,7 @@ fun SettingsScreenPreview() {
 
 /**
  * 设置页面深色主题预览
- * 
+ *
  * @author Joker.X
  */
 @Composable

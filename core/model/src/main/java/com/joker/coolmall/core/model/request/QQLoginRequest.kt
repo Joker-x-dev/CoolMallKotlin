@@ -4,6 +4,10 @@ import kotlinx.serialization.Serializable
 
 /**
  * QQ 登录/绑定请求模型
+ *
+ * @param accessToken 访问令牌
+ * @param openId 用户唯一标识
+ * @author Joker.X
  */
 @Serializable
 data class QQLoginRequest(

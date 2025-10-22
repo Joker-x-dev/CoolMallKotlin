@@ -2,6 +2,8 @@ package com.joker.coolmall.navigation.routes
 
 /**
  * 用户模块路由常量
+ *
+ * @author Joker.X
  */
 object UserRoutes {
     /**

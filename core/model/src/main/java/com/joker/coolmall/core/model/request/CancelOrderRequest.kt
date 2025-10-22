@@ -4,6 +4,10 @@ import kotlinx.serialization.Serializable
 
 /**
  * 取消订单请求模型
+ *
+ * @param orderId 订单ID
+ * @param remark 取消原因
+ * @author Joker.X
  */
 @Serializable
 data class CancelOrderRequest(

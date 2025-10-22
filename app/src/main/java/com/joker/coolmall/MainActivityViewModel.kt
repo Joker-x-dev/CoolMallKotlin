@@ -6,6 +6,8 @@ import javax.inject.Inject
 
 /**
  * 主界面 ViewModel
+ *
+ * @author Joker.X
  */
 @HiltViewModel
 class MainActivityViewModel @Inject constructor(

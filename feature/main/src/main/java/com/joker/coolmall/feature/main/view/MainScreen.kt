@@ -6,7 +6,6 @@ import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.exclude
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.pager.HorizontalPager
@@ -27,7 +26,6 @@ import com.joker.coolmall.feature.main.component.BottomNavigationBar
 import com.joker.coolmall.feature.main.model.TopLevelDestination
 import com.joker.coolmall.feature.main.viewmodel.MainViewModel
 import kotlinx.coroutines.launch
-import kotlin.math.absoluteValue
 
 /**
  * 主界面路由入口

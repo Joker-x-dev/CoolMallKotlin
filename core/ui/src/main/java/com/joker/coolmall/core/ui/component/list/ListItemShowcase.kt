@@ -22,7 +22,17 @@ import com.joker.coolmall.core.ui.component.text.TextType
 import com.joker.coolmall.core.ui.component.title.TitleWithLine
 
 /**
- * 列表项组件展示
+ * 列表项组件展示页面
+ *
+ * 用于展示所有列表项组件的使用示例，包括：
+ * - 基础列表项（带图标、描述、尾部文本）
+ * - 自定义内边距的列表项
+ * - 无点击效果的列表项
+ * - 标题栏风格列表项
+ * - 分组列表
+ * - 自定义样式的列表项（无箭头、无分隔线等）
+ *
+ * @author Joker.X
  */
 @Composable
 fun AppListItemShowcase() {
@@ -239,6 +249,11 @@ fun AppListItemShowcase() {
     }
 }
 
+/**
+ * 列表项组件展示页面预览 - 浅色主题
+ *
+ * @author Joker.X
+ */
 @Preview(showBackground = true)
 @Composable
 fun AppListItemShowcasePreviewLight() {
@@ -247,6 +262,11 @@ fun AppListItemShowcasePreviewLight() {
     }
 }
 
+/**
+ * 列表项组件展示页面预览 - 深色主题
+ *
+ * @author Joker.X
+ */
 @Preview(showBackground = true)
 @Composable
 fun AppListItemShowcasePreviewDark() {

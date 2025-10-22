@@ -72,6 +72,7 @@ private val LightColorScheme = lightColorScheme(
  * @param darkTheme 是否使用深色主题，默认跟随系统设置
  * @param dynamicColor 是否使用动态颜色（Android 12+特性），默认关闭
  * @param content 需要应用主题的内容
+ * @author Joker.X
  */
 @Composable
 fun AppTheme(

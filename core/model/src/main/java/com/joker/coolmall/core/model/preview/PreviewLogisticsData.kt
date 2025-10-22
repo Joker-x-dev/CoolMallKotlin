@@ -55,10 +55,14 @@ val previewLogisticsData = Logistics(
 
 /**
  * 预览物流轨迹列表
+ *
+ * @author Joker.X
  */
 val previewLogisticsItemList = previewLogisticsData.list ?: emptyList()
 
 /**
  * 单个预览物流轨迹项
+ *
+ * @author Joker.X
  */
 val previewLogisticsItem = previewLogisticsItemList.firstOrNull()

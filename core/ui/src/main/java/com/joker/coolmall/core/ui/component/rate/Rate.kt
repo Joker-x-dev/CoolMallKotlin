@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.onSizeChanged
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -32,10 +33,11 @@ import kotlin.math.roundToInt
 
 /**
  * 评分组件 - 支持整星评分，带动画效果
- * @param value 当前评分值
+ *
+ * @param value 当前评分值（1-5星）
  * @param count 星星总数，默认5个
  * @param size 星星大小，默认26.dp
- * @param onChange 评分变化回调
+ * @param onChange 评分变化回调，为null时禁用交互
  * @param animationEnabled 是否启用动画效果，默认true
  */
 @Composable
@@ -98,12 +100,13 @@ fun WeRate(
 
 /**
  * 星星图标组件 - 带动画效果
- * @param isActive 是否激活状态
- * @param isClicked 是否被点击
- * @param animationEnabled 是否启用动画
- * @param animationDelay 动画延迟时间
- * @param animationTrigger 动画触发器
- * @param modifier 修饰符
+ *
+ * @param isActive 是否激活状态（已选中）
+ * @param isClicked 是否被点击（用于触发点击动画）
+ * @param animationEnabled 是否启用动画效果
+ * @param animationDelay 动画延迟时间（毫秒）
+ * @param animationTrigger 动画触发器（变化时重新触发动画）
+ * @param modifier 修饰符，用于自定义组件样式
  */
 @Composable
 private fun StarItem(
@@ -163,7 +166,7 @@ private fun StarItem(
         painter = painterResource(
             id = R.drawable.ic_star_fill
         ),
-        contentDescription = "评分星星",
+        contentDescription = stringResource(id = R.string.rate_star),
         tint = tintColor,
         modifier = modifier
             .scale(scale * animatedScale)
@@ -172,9 +175,10 @@ private fun StarItem(
 
 /**
  * 根据触摸位置计算评分值
- * @param starWidth 单个星星的宽度
+ *
+ * @param starWidth 单个星星的宽度（像素）
  * @param count 星星总数
- * @return 计算后的整数评分值
+ * @return 计算后的整数评分值（1-count）
  */
 private fun Offset.calculateRateValue(starWidth: Int, count: Int): Int {
     val newRating = (this.x / starWidth)
@@ -185,6 +189,9 @@ private fun Offset.calculateRateValue(starWidth: Int, count: Int): Int {
         .coerceIn(0, count)
 }
 
+/**
+ * WeRate组件预览
+ */
 @Preview(showBackground = true)
 @Composable
 private fun PreviewWeRate() {

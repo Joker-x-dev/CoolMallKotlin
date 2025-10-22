@@ -13,6 +13,7 @@ import com.joker.coolmall.core.util.toast.ToastUtils
 import com.joker.coolmall.core.util.validation.ValidationUtil
 import com.joker.coolmall.feature.auth.R
 import com.joker.coolmall.navigation.AppNavigator
+import com.joker.coolmall.navigation.routes.CommonRoutes
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -25,7 +26,7 @@ import javax.inject.Inject
 
 /**
  * 短信登录ViewModel
- * 
+ *
  * @author Joker.X
  */
 @HiltViewModel
@@ -42,6 +43,7 @@ class SmsLoginViewModel @Inject constructor(
     companion object {
         private const val KEY_SAVED_PHONE = "saved_phone"
     }
+
     /**
      * 手机号输入
      */
@@ -100,7 +102,7 @@ class SmsLoginViewModel @Inject constructor(
     /**
      * 显示图片验证码 Popup
      * 在显示之前会先刷新验证码
-     * 
+     *
      * @author Joker.X
      */
     fun onSendCodeButtonClick() {
@@ -120,7 +122,7 @@ class SmsLoginViewModel @Inject constructor(
 
     /**
      * 隐藏图片验证码 Popup
-     * 
+     *
      * @author Joker.X
      */
     fun onHideImageCodePopup() {
@@ -131,7 +133,7 @@ class SmsLoginViewModel @Inject constructor(
 
     /**
      * 更新手机号输入
-     * 
+     *
      * @param value 手机号值
      * @author Joker.X
      */
@@ -141,7 +143,7 @@ class SmsLoginViewModel @Inject constructor(
 
     /**
      * 更新验证码输入
-     * 
+     *
      * @param value 验证码值
      * @author Joker.X
      */
@@ -151,7 +153,7 @@ class SmsLoginViewModel @Inject constructor(
 
     /**
      * 更新图形验证码输入
-     * 
+     *
      * @param value 图形验证码值
      * @author Joker.X
      */
@@ -162,7 +164,7 @@ class SmsLoginViewModel @Inject constructor(
     /**
      * 验证码确认
      * 当用户在图形验证码对话框中点击确认按钮时调用
-     * 
+     *
      * @param imageCode 图形验证码
      * @author Joker.X
      */
@@ -173,7 +175,7 @@ class SmsLoginViewModel @Inject constructor(
 
     /**
      * 发送短信验证码
-     * 
+     *
      * @author Joker.X
      */
     fun sendVerificationCode() {
@@ -201,7 +203,7 @@ class SmsLoginViewModel @Inject constructor(
 
     /**
      * 执行短信登录操作
-     * 
+     *
      * @author Joker.X
      */
     fun login() {
@@ -230,7 +232,7 @@ class SmsLoginViewModel @Inject constructor(
 
     /**
      * 登录成功
-     * 
+     *
      * @param authData 认证数据
      * @author Joker.X
      */
@@ -238,7 +240,7 @@ class SmsLoginViewModel @Inject constructor(
         viewModelScope.launch {
             // 保存手机号
             savePhone(_phone.value)
-            
+
             ToastUtils.showSuccess(R.string.login_success)
             appState?.updateAuth(authData)
             appState?.refreshUserInfo()
@@ -249,7 +251,7 @@ class SmsLoginViewModel @Inject constructor(
 
     /**
      * 加载已保存的手机号
-     * 
+     *
      * @author Joker.X
      */
     private fun loadSavedPhone() {
@@ -261,7 +263,7 @@ class SmsLoginViewModel @Inject constructor(
 
     /**
      * 保存手机号
-     * 
+     *
      * @param phone 手机号
      * @author Joker.X
      */
@@ -272,7 +274,7 @@ class SmsLoginViewModel @Inject constructor(
     /**
      * 获取图片验证码
      * 当需要刷新验证码时调用（如用户点击验证码图片）
-     * 
+     *
      * @author Joker.X
      */
     fun getCaptcha() {
@@ -285,7 +287,7 @@ class SmsLoginViewModel @Inject constructor(
 
     /**
      * 实际获取验证码的网络请求
-     * 
+     *
      * @author Joker.X
      */
     private fun fetchCaptcha() {
@@ -296,5 +298,25 @@ class SmsLoginViewModel @Inject constructor(
                 _captcha.value = captcha
             }
         )
+    }
+
+    /**
+     * 点击用户协议
+     * 显示用户使用协议
+     *
+     * @author Joker.X
+     */
+    fun onUserAgreementClick() {
+        toPage(CommonRoutes.USER_AGREEMENT)
+    }
+
+    /**
+     * 点击隐私政策
+     * 显示隐私政策内容
+     *
+     * @author Joker.X
+     */
+    fun onPrivacyPolicyClick() {
+        toPage(CommonRoutes.PRIVACY_POLICY)
     }
 }

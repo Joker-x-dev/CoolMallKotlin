@@ -2,6 +2,8 @@ package com.joker.coolmall.navigation.routes
 
 /**
  * 公共信息模块路由常量
+ *
+ * @author Joker.X
  */
 object CommonRoutes {
     /**

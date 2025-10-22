@@ -19,7 +19,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.joker.coolmall.feature.feedback.R
 import com.joker.coolmall.core.designsystem.component.SpaceBetweenRow
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.ShapeMedium
@@ -36,6 +35,7 @@ import com.joker.coolmall.core.ui.component.tag.TagType
 import com.joker.coolmall.core.ui.component.text.AppText
 import com.joker.coolmall.core.ui.component.text.TextSize
 import com.joker.coolmall.core.ui.component.text.TextType
+import com.joker.coolmall.feature.feedback.R
 
 /**
  * 反馈卡片组件
@@ -212,7 +212,7 @@ private fun FeedbackImageItem(
 
 /**
  * 反馈卡片预览
- * 
+ *
  * @author Joker.X
  */
 @Preview(showBackground = true)

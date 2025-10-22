@@ -51,7 +51,7 @@ fun LargeTopAppBar(
         stop = 16.sp,
         fraction = scrollFraction
     )
-    
+
     // 根据滚动状态动态计算背景色
     val backgroundColor = lerp(
         start = expandedBackgroundColor,

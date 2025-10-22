@@ -26,13 +26,13 @@ import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridS
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.material3.pulltorefresh.PullToRefreshBox
-import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import com.joker.coolmall.core.common.base.state.LoadMoreState
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalXXLarge
@@ -136,12 +136,13 @@ fun RefreshLayout(
 
 /**
  * 列表内容组件
- * 
+ *
  * @param listState 列表状态，如果为 null 则创建新的状态
  * @param loadMoreState 加载更多状态
  * @param onLoadMore 加载更多回调
  * @param shouldTriggerLoadMore 判断是否应该触发加载更多的函数
  * @param content 列表内容构建器
+ * @author Joker.X
  */
 @Composable
 private fun RefreshListContent(
@@ -205,12 +206,13 @@ private fun RefreshListContent(
 
 /**
  * 网格内容组件（已改为交错瀑布流 StaggeredGrid）
- * 
+ *
  * @param gridState 网格状态，如果为 null 则创建新的状态
  * @param loadMoreState 加载更多状态
  * @param onLoadMore 加载更多回调
  * @param shouldTriggerLoadMore 判断是否应该触发加载更多的函数
  * @param content 网格内容构建器
+ * @author Joker.X
  */
 @Composable
 private fun RefreshGridContent(

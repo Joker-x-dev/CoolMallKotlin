@@ -95,6 +95,8 @@ internal fun SmsLoginRoute(
         onRefreshCaptcha = viewModel::getCaptcha,
         onLoginClick = viewModel::login,
         onBackClick = viewModel::navigateBack,
+        onUserAgreementClick = viewModel::onUserAgreementClick,
+        onPrivacyPolicyClick = viewModel::onPrivacyPolicyClick
     )
 }
 
@@ -116,6 +118,8 @@ internal fun SmsLoginRoute(
  * @param onRefreshCaptcha 刷新验证码回调
  * @param onLoginClick 登录按钮点击回调
  * @param onBackClick 返回上一页回调
+ * @param onUserAgreementClick 用户协议点击回调
+ * @param onPrivacyPolicyClick 隐私政策点击回调
  * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -135,7 +139,9 @@ internal fun SmsLoginScreen(
     onImageCodeConfirm: (String) -> Unit = {},
     onRefreshCaptcha: () -> Unit = {},
     onLoginClick: () -> Unit = {},
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
+    onUserAgreementClick: () -> Unit = {},
+    onPrivacyPolicyClick: () -> Unit = {}
 ) {
     AnimatedAuthPage(
         title = stringResource(id = R.string.welcome_login),
@@ -150,7 +156,9 @@ internal fun SmsLoginScreen(
             onVerificationCodeChange = onVerificationCodeChange,
             onSendVerificationCode = onSendVerificationCode,
             onLoginClick = onLoginClick,
-            onBackClick = onBackClick
+            onBackClick = onBackClick,
+            onUserAgreementClick = onUserAgreementClick,
+            onPrivacyPolicyClick = onPrivacyPolicyClick
         )
     }
 
@@ -176,6 +184,8 @@ internal fun SmsLoginScreen(
  * @param onSendVerificationCode 发送验证码回调
  * @param onLoginClick 登录按钮点击回调
  * @param onBackClick 返回上一页回调
+ * @param onUserAgreementClick 用户协议点击回调
+ * @param onPrivacyPolicyClick 隐私政策点击回调
  * @author Joker.X
  */
 @Composable
@@ -188,7 +198,9 @@ private fun SmsLoginContentView(
     onVerificationCodeChange: (String) -> Unit,
     onSendVerificationCode: () -> Unit,
     onLoginClick: () -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onUserAgreementClick: () -> Unit,
+    onPrivacyPolicyClick: () -> Unit
 ) {
     // 记录输入框焦点状态
     val phoneFieldFocused = remember { mutableStateOf(false) }
@@ -220,7 +232,9 @@ private fun SmsLoginContentView(
 
     // 使用封装的用户协议组件
     UserAgreement(
-        prefix = stringResource(id = R.string.login_agreement_prefix)
+        prefix = stringResource(id = R.string.login_agreement_prefix),
+        onUserAgreementClick = onUserAgreementClick,
+        onPrivacyPolicyClick = onPrivacyPolicyClick
     )
 
     SpaceVerticalXLarge()
@@ -242,7 +256,7 @@ private fun SmsLoginContentView(
 
 /**
  * 短信登录界面浅色主题预览
- * 
+ *
  * @author Joker.X
  */
 @Preview(showBackground = true)

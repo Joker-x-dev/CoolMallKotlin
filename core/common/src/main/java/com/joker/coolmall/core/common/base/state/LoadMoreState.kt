@@ -2,6 +2,8 @@ package com.joker.coolmall.core.common.base.state
 
 /**
  * 加载更多状态
+ *
+ * @author Joker.X
  */
 sealed class LoadMoreState {
     /**

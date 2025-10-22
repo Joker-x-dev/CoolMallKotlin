@@ -1,10 +1,19 @@
 package com.joker.coolmall.core.model.entity
 
-import com.joker.coolmall.core.model.entity.Category
-
 /**
  * 商品分类树结构
  * 用于UI展示的树形分类数据
+ *
+ * @param id ID
+ * @param name 名称
+ * @param parentId 父ID
+ * @param sortNum 排序
+ * @param pic 图片
+ * @param status 状态 0-禁用 1-启用
+ * @param createTime 创建时间
+ * @param updateTime 更新时间
+ * @param children 子分类列表
+ * @author Joker.X
  */
 data class CategoryTree(
     /**
@@ -55,6 +64,10 @@ data class CategoryTree(
     companion object {
         /**
          * 从Category转换为CategoryTree
+         *
+         * @param category 商品分类
+         * @return 商品分类树结构
+         * @author Joker.X
          */
         fun fromCategory(category: Category): CategoryTree {
             return CategoryTree(

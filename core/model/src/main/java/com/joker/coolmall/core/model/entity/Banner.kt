@@ -4,6 +4,16 @@ import kotlinx.serialization.Serializable
 
 /**
  * 轮播图模型
+ *
+ * @param id ID
+ * @param description 描述
+ * @param path 跳转路径
+ * @param pic 图片
+ * @param sortNum 排序
+ * @param status 状态 1:启用 2:禁用
+ * @param createTime 创建时间
+ * @param updateTime 更新时间
+ * @author Joker.X
  */
 @Serializable
 data class Banner(

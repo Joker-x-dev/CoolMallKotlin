@@ -19,7 +19,7 @@ fun NavGraphBuilder.mainGraph(
 ) {
     // 只调用页面级导航函数，不包含其他逻辑
     mainScreen(sharedTransitionScope)
-    
+
     // 购物车页面导航
     cartScreen()
 

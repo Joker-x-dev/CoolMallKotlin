@@ -5,6 +5,19 @@ import kotlinx.serialization.Serializable
 /**
  * 物流信息实体类
  *
+ * @param number 物流单号
+ * @param type 物流公司类型
+ * @param list 物流轨迹列表
+ * @param deliverystatus 配送状态
+ * @param issign 是否签收
+ * @param expName 快递公司名称
+ * @param expSite 快递公司官网
+ * @param expPhone 快递公司电话
+ * @param logo 快递公司logo
+ * @param courier 快递员姓名
+ * @param courierPhone 快递员电话
+ * @param updateTime 更新时间
+ * @param takeTime 耗时
  * @author Joker.X
  */
 @Serializable

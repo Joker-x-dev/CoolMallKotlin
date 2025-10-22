@@ -9,12 +9,12 @@ import com.joker.coolmall.core.network.service.CouponService
 import com.joker.coolmall.core.network.service.CustomerServiceService
 import com.joker.coolmall.core.network.service.FeedbackService
 import com.joker.coolmall.core.network.service.FileUploadService
-import com.joker.coolmall.core.network.service.impl.FileUploadServiceImpl
 import com.joker.coolmall.core.network.service.GoodsService
 import com.joker.coolmall.core.network.service.OrderService
 import com.joker.coolmall.core.network.service.PageService
 import com.joker.coolmall.core.network.service.UserContributorService
 import com.joker.coolmall.core.network.service.UserInfoService
+import com.joker.coolmall.core.network.service.impl.FileUploadServiceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -27,6 +27,8 @@ import javax.inject.Singleton
 /**
  * 服务模块，提供所有网络服务接口的依赖注入
  * 为Hilt提供各种网络服务接口的实例
+ *
+ * @author Joker.X
  */
 @Module
 @InstallIn(SingletonComponent::class)
@@ -37,6 +39,7 @@ object ServiceModule {
      *
      * @param retrofit Retrofit实例
      * @return 页面服务接口实现
+     * @author Joker.X
      */
     @Provides
     @Singleton
@@ -49,6 +52,7 @@ object ServiceModule {
      *
      * @param retrofit Retrofit实例
      * @return 认证服务接口实现
+     * @author Joker.X
      */
     @Provides
     @Singleton
@@ -61,6 +65,7 @@ object ServiceModule {
      *
      * @param retrofit Retrofit实例
      * @return 用户信息服务接口实现
+     * @author Joker.X
      */
     @Provides
     @Singleton
@@ -73,6 +78,7 @@ object ServiceModule {
      *
      * @param retrofit Retrofit实例
      * @return 地址服务接口实现
+     * @author Joker.X
      */
     @Provides
     @Singleton
@@ -85,6 +91,7 @@ object ServiceModule {
      *
      * @param retrofit Retrofit实例
      * @return 订单服务接口实现
+     * @author Joker.X
      */
     @Provides
     @Singleton
@@ -97,6 +104,7 @@ object ServiceModule {
      *
      * @param retrofit Retrofit实例
      * @return 商品服务接口实现
+     * @author Joker.X
      */
     @Provides
     @Singleton
@@ -109,6 +117,7 @@ object ServiceModule {
      *
      * @param retrofit Retrofit实例
      * @return 优惠券服务接口实现
+     * @author Joker.X
      */
     @Provides
     @Singleton
@@ -121,6 +130,7 @@ object ServiceModule {
      *
      * @param retrofit Retrofit实例
      * @return 轮播图服务接口实现
+     * @author Joker.X
      */
     @Provides
     @Singleton
@@ -133,6 +143,7 @@ object ServiceModule {
      *
      * @param retrofit Retrofit实例
      * @return 客服服务接口实现
+     * @author Joker.X
      */
     @Provides
     @Singleton
@@ -145,6 +156,7 @@ object ServiceModule {
      *
      * @param retrofit Retrofit实例
      * @return 通用基础服务接口实现
+     * @author Joker.X
      */
     @Provides
     @Singleton
@@ -158,6 +170,7 @@ object ServiceModule {
      * @param okHttpClient OkHttpClient实例
      * @param context 应用上下文
      * @return 文件上传服务接口实现
+     * @author Joker.X
      */
     @Provides
     @Singleton
@@ -176,6 +189,7 @@ object ServiceModule {
      *
      * @param retrofit Retrofit实例
      * @return 意见反馈服务接口实现
+     * @author Joker.X
      */
     @Provides
     @Singleton
@@ -188,6 +202,7 @@ object ServiceModule {
      *
      * @param retrofit Retrofit实例
      * @return 用户贡献者服务接口实现
+     * @author Joker.X
      */
     @Provides
     @Singleton

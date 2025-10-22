@@ -8,6 +8,12 @@ import com.joker.coolmall.core.model.entity.CartGoodsSpec
 
 /**
  * 购物车数据库实体
+ *
+ * @param goodsId 商品ID，主键
+ * @param goodsName 商品名称
+ * @param goodsMainPic 商品主图
+ * @param spec 规格列表，使用类型转换器存储
+ * @author Joker.X
  */
 @Entity(tableName = "carts")
 data class CartEntity(
@@ -30,6 +36,6 @@ data class CartEntity(
     /**
      * 规格列表 - 需要类型转换器
      */
-     @param:TypeConverters(CartSpecConverter::class)
+    @param:TypeConverters(CartSpecConverter::class)
     val spec: List<CartGoodsSpec> = emptyList()
 )

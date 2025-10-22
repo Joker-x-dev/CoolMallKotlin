@@ -47,12 +47,14 @@ import com.joker.coolmall.core.ui.component.text.TextType
  *
  * @param modifier 修饰符
  * @param data 购物车数据
+ * @param deletingSpecIds 正在删除的规格ID集合
  * @param onGoodsClick 商品点击回调
  * @param onSpecClick 规格点击回调
  * @param onQuantityChanged 数量变更回调，参数为商品ID和新数量
  * @param enableQuantityStepper 是否启用数量调节器
  * @param itemSelectSlot 商品选择框插槽生成器，参数为商品数据
  * @param itemActionSlot 商品操作区域插槽生成器，参数为商品数据
+ * @author Joker.X
  */
 @Composable
 fun OrderGoodsCard(
@@ -106,6 +108,7 @@ fun OrderGoodsCard(
  * 订单商品条目组件
  *
  * 该组件可以用于购物车、确认订单和订单详情等多个场景
+ *
  * @param modifier 组件修饰符
  * @param data 规格数据
  * @param goodsId 商品 id
@@ -116,6 +119,7 @@ fun OrderGoodsCard(
  * @param enableQuantityStepper 是否启用数量调节器
  * @param selectSlot 选择框插槽，在购物车场景需要传入，订单场景不需要
  * @param actionSlot 操作插槽，可以自定义右侧操作区域
+ * @author Joker.X
  */
 @Composable
 fun OrderGoodsItem(
@@ -209,6 +213,8 @@ fun OrderGoodsItem(
  * 订单商品条目预览
  *
  * 展示商品条目的基本样式，不包含选择框，启用数量调节器
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -239,6 +245,8 @@ private fun OrderGoodsItemPreview() {
  * 带选择框的订单商品条目预览
  *
  * 展示包含选择框的商品条目样式，适用于购物车场景
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -285,6 +293,8 @@ private fun OrderGoodsItemWithCheckboxPreview() {
  * 不带数量调节器的订单商品条目预览
  *
  * 展示禁用数量调节器的商品条目样式，适用于订单确认和订单详情场景
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -315,6 +325,8 @@ private fun OrderGoodsItemNoStepperPreview() {
  * 订单商品卡片预览
  *
  * 展示包含多个商品规格的商品卡片，适用于浅色主题
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable
@@ -328,6 +340,8 @@ private fun OrderGoodsCardPreview() {
  * 深色模式下的订单商品卡片预览
  *
  * 展示深色主题下的商品卡片样式
+ *
+ * @author Joker.X
  */
 @Preview(showBackground = true)
 @Composable

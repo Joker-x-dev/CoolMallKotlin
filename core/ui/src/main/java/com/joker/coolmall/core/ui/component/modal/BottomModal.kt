@@ -57,6 +57,7 @@ import kotlinx.coroutines.launch
  * @param titleStyle 标题样式
  * @param indicatorColor 指示条颜色
  * @param content 内容
+ * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

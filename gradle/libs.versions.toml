@@ -6,9 +6,9 @@
 
 # 项目基础配置
 # 构建版本
-versionCode = "2025092301"
+versionCode = "2025102201"
 # 版本号
-versionName = "1.0.2"
+versionName = "1.0.3"
 # 包名
 namespace = "com.joker.coolmall"
 
@@ -24,7 +24,7 @@ targetSdk = "36"
 # Android Gradle Plugin: https://developer.android.com/studio/releases/gradle-plugin
 agp = "8.13.0"
 # Kotlin 编译器: https://kotlinlang.org/docs/releases.html
-# 注意: 当前 kotlin 版本为 2.2.10 注意需要和 hilt 版本对应
+# 注意: 需要和 hilt 版本对应
 kotlin = "2.2.20"
 
 # Android 核心库版本

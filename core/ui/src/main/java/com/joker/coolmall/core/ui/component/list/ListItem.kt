@@ -43,6 +43,7 @@ import com.joker.coolmall.core.ui.component.text.TextType
  * @param verticalPadding 垂直内边距
  * @param horizontalPadding 水平内边距
  * @param onClick 点击回调
+ * @author Joker.X
  */
 @Composable
 fun AppListItem(
@@ -139,6 +140,7 @@ fun AppListItem(
  * @param items 列表项内容
  * @param modifier 修饰符
  * @param showDivider 是否显示底部分隔线，默认为true
+ * @author Joker.X
  */
 @Composable
 fun GroupAppListItem(
@@ -189,6 +191,7 @@ fun GroupAppListItem(
  * @param showDivider 是否显示底部分隔线，默认为false
  * @param verticalPadding 垂直内边距
  * @param horizontalPadding 水平内边距
+ * @author Joker.X
  */
 @Composable
 fun StaticAppListItem(

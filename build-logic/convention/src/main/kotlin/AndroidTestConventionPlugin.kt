@@ -1,26 +1,28 @@
 import com.android.build.gradle.TestExtension
 import com.joker.coolmall.configureKotlinAndroid
 import com.joker.coolmall.libs
-import org.gradle.api.JavaVersion
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.configure
 
 /**
  * Android测试模块构建插件
- * 
+ *
  * 该插件用于配置Android测试模块的基本构建设置，包括：
  * - SDK版本配置
  * - 测试运行器设置
  * - Java编译选项
- * 
+ *
  * 主要通过扩展Android Gradle Plugin的TestExtension来实现配置
+ *
+ * @author Joker.X
  */
 class AndroidTestConventionPlugin : Plugin<Project> {
     /**
      * 插件应用入口
-     * 
+     *
      * @param target 目标项目实例
+     * @author Joker.X
      */
     override fun apply(target: Project) {
         with(target) {
@@ -34,7 +36,7 @@ class AndroidTestConventionPlugin : Plugin<Project> {
             extensions.configure<TestExtension> {
                 // 使用统一的 Kotlin Android 配置
                 configureKotlinAndroid(this)
-                
+
                 // 默认配置
                 defaultConfig {
                     // 设置目标SDK版本

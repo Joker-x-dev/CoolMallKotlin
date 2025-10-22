@@ -64,7 +64,6 @@ import com.joker.coolmall.core.designsystem.theme.SpacePaddingXSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.model.entity.CategoryTree
 import com.joker.coolmall.core.model.preview.previewCategoryTreeList
-import com.joker.coolmall.core.ui.R as CoreUiR
 import com.joker.coolmall.core.ui.component.button.AppButton
 import com.joker.coolmall.core.ui.component.button.AppButtonBordered
 import com.joker.coolmall.core.ui.component.button.ButtonSize
@@ -77,6 +76,7 @@ import com.joker.coolmall.core.ui.component.text.AppText
 import com.joker.coolmall.core.ui.component.text.TextSize
 import com.joker.coolmall.core.ui.component.text.TextType
 import com.joker.coolmall.feature.goods.R
+import com.joker.coolmall.core.ui.R as CoreUiR
 
 /**
  * 筛选对话框

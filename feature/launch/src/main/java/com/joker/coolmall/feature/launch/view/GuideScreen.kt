@@ -1,9 +1,6 @@
-
 package com.joker.coolmall.feature.launch.view
 
-import androidx.compose.animation.AnimatedContentScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
-import androidx.compose.animation.SharedTransitionScope
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
@@ -221,7 +218,10 @@ private fun GuideContentView(
             )
 
             // 下一页按钮 - 带宽度变化动画
-            val buttonText = if (isLastPage) stringResource(R.string.guide_start_experience) else stringResource(R.string.guide_continue)
+            val buttonText =
+                if (isLastPage) stringResource(R.string.guide_start_experience) else stringResource(
+                    R.string.guide_continue
+                )
             val animatedButtonWidth by animateDpAsState(
                 targetValue = if (isLastPage) 160.dp else 120.dp,
                 animationSpec = tween(300),

@@ -4,6 +4,8 @@ import com.joker.coolmall.core.model.entity.Banner
 
 /**
  * 预览轮播图数据
+ *
+ * @author Joker.X
  */
 val previewBannerList = listOf(
     Banner(
@@ -40,5 +42,7 @@ val previewBannerList = listOf(
 
 /**
  * 单个预览轮播图数据
+ *
+ * @author Joker.X
  */
 val previewBanner = previewBannerList.first() 

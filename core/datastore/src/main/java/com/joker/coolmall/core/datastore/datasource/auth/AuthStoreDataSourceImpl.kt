@@ -8,6 +8,8 @@ import kotlinx.serialization.json.Json
 /**
  * 本地用户认证相关数据源实现类
  * 负责处理所有与用户认证相关的本地存储
+ *
+ * @author Joker.X
  */
 class AuthStoreDataSourceImpl @Inject constructor() : AuthStoreDataSource {
 
@@ -19,7 +21,9 @@ class AuthStoreDataSourceImpl @Inject constructor() : AuthStoreDataSource {
 
     /**
      * 保存认证信息
+     *
      * @param auth 认证信息对象
+     * @author Joker.X
      */
     override suspend fun saveAuth(auth: Auth) {
         val authJson = json.encodeToString(auth)
@@ -28,7 +32,9 @@ class AuthStoreDataSourceImpl @Inject constructor() : AuthStoreDataSource {
 
     /**
      * 获取认证信息
+     *
      * @return 认证信息对象，如不存在则返回null
+     * @author Joker.X
      */
     override suspend fun getAuth(): Auth? {
         val authJson = MMKVUtils.getString(KEY_AUTH, "")
@@ -43,7 +49,9 @@ class AuthStoreDataSourceImpl @Inject constructor() : AuthStoreDataSource {
 
     /**
      * 获取用户 token
+     *
      * @return token字符串，如不存在则返回null
+     * @author Joker.X
      */
     override suspend fun getToken(): String? {
         return getAuth()?.token
@@ -51,6 +59,8 @@ class AuthStoreDataSourceImpl @Inject constructor() : AuthStoreDataSource {
 
     /**
      * 清除认证信息
+     *
+     * @author Joker.X
      */
     override suspend fun clearAuth() {
         MMKVUtils.remove(KEY_AUTH)
@@ -58,7 +68,9 @@ class AuthStoreDataSourceImpl @Inject constructor() : AuthStoreDataSource {
 
     /**
      * 检查是否已登录（有认证信息且未过期）
+     *
      * @return 是否已登录
+     * @author Joker.X
      */
     override suspend fun isLoggedIn(): Boolean {
         val auth = getAuth() ?: return false

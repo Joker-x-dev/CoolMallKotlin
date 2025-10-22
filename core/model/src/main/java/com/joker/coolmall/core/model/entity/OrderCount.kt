@@ -5,6 +5,14 @@ import kotlinx.serialization.Serializable
 
 /**
  * 用户订单统计
+ *
+ * @param pendingPayment 待付款订单数量
+ * @param pendingShipment 待发货订单数量
+ * @param pendingReceive 待收货订单数量
+ * @param pendingReview 待评价订单数量
+ * @param refunding 退款中订单数量
+ * @param refunded 已退款订单数量
+ * @author Joker.X
  */
 @Serializable
 data class OrderCount(

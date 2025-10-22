@@ -101,7 +101,9 @@ internal fun RegisterRoute(
         onImageCodeConfirm = viewModel::onImageCodeConfirm,
         onRefreshCaptcha = viewModel::getCaptcha,
         onRegisterClick = viewModel::register,
-        onBackClick = viewModel::navigateBack
+        onBackClick = viewModel::navigateBack,
+        onUserAgreementClick = viewModel::onUserAgreementClick,
+        onPrivacyPolicyClick = viewModel::onPrivacyPolicyClick
     )
 }
 
@@ -127,6 +129,8 @@ internal fun RegisterRoute(
  * @param onRefreshCaptcha 刷新验证码回调
  * @param onRegisterClick 注册按钮点击回调
  * @param onBackClick 返回上一页回调
+ * @param onUserAgreementClick 用户协议点击回调
+ * @param onPrivacyPolicyClick 隐私政策点击回调
  * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -150,7 +154,9 @@ internal fun RegisterScreen(
     onImageCodeConfirm: (String) -> Unit = {},
     onRefreshCaptcha: () -> Unit = {},
     onRegisterClick: () -> Unit = {},
-    onBackClick: () -> Unit = {}
+    onBackClick: () -> Unit = {},
+    onUserAgreementClick: () -> Unit = {},
+    onPrivacyPolicyClick: () -> Unit = {}
 ) {
     AnimatedAuthPage(
         title = stringResource(id = R.string.welcome_register),
@@ -170,7 +176,9 @@ internal fun RegisterScreen(
             onConfirmPasswordChange = onConfirmPasswordChange,
             onSendVerificationCode = onSendVerificationCode,
             onRegisterClick = onRegisterClick,
-            onBackClick = onBackClick
+            onBackClick = onBackClick,
+            onUserAgreementClick = onUserAgreementClick,
+            onPrivacyPolicyClick = onPrivacyPolicyClick
         )
     }
 
@@ -200,6 +208,8 @@ internal fun RegisterScreen(
  * @param onSendVerificationCode 发送验证码回调
  * @param onRegisterClick 注册按钮点击回调
  * @param onBackClick 返回上一页回调
+ * @param onUserAgreementClick 用户协议点击回调
+ * @param onPrivacyPolicyClick 隐私政策点击回调
  * @author Joker.X
  */
 @Composable
@@ -216,7 +226,9 @@ private fun RegisterContentView(
     onConfirmPasswordChange: (String) -> Unit,
     onSendVerificationCode: () -> Unit,
     onRegisterClick: () -> Unit,
-    onBackClick: () -> Unit
+    onBackClick: () -> Unit,
+    onUserAgreementClick: () -> Unit,
+    onPrivacyPolicyClick: () -> Unit
 ) {
     // 记录输入框焦点状态
     val phoneFieldFocused = remember { mutableStateOf(false) }
@@ -272,7 +284,9 @@ private fun RegisterContentView(
 
     // 使用封装的用户协议组件
     UserAgreement(
-        prefix = stringResource(id = R.string.register_agreement_prefix)
+        prefix = stringResource(id = R.string.register_agreement_prefix),
+        onUserAgreementClick = onUserAgreementClick,
+        onPrivacyPolicyClick = onPrivacyPolicyClick
     )
 
     SpaceVerticalXLarge()
@@ -293,7 +307,7 @@ private fun RegisterContentView(
 
 /**
  * 注册界面浅色主题预览
- * 
+ *
  * @author Joker.X
  */
 @Preview(showBackground = true)

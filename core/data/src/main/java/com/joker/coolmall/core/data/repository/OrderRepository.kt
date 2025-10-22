@@ -20,6 +20,9 @@ import javax.inject.Inject
 
 /**
  * 订单相关仓库
+ *
+ * @param orderNetworkDataSource 订单网络数据源
+ * @author Joker.X
  */
 class OrderRepository @Inject constructor(
     private val orderNetworkDataSource: OrderNetworkDataSource
@@ -27,13 +30,21 @@ class OrderRepository @Inject constructor(
 
     /**
      * 支付宝APP支付
+     *
+     * @param params 支付参数
+     * @return 支付信息Flow
+     * @author Joker.X
      */
     fun alipayAppPay(params: Map<String, Long>): Flow<NetworkResponse<String>> = flow {
         emit(orderNetworkDataSource.alipayAppPay(params))
     }.flowOn(Dispatchers.IO)
 
     /**
-     * 退款
+     * 申请退款
+     *
+     * @param params 退款请求参数
+     * @return 退款结果Flow
+     * @author Joker.X
      */
     fun refundOrder(params: RefundOrderRequest): Flow<NetworkResponse<Boolean>> = flow {
         emit(orderNetworkDataSource.refundOrder(params))
@@ -41,6 +52,10 @@ class OrderRepository @Inject constructor(
 
     /**
      * 分页查询订单
+     *
+     * @param params 订单分页查询参数
+     * @return 订单分页数据Flow
+     * @author Joker.X
      */
     fun getOrderPage(params: OrderPageRequest): Flow<NetworkResponse<NetworkPageData<Order>>> =
         flow {
@@ -49,6 +64,10 @@ class OrderRepository @Inject constructor(
 
     /**
      * 创建订单
+     *
+     * @param params 创建订单请求参数
+     * @return 订单信息Flow
+     * @author Joker.X
      */
     fun createOrder(params: CreateOrderRequest): Flow<NetworkResponse<Order>> = flow {
         emit(orderNetworkDataSource.createOrder(params))
@@ -56,13 +75,20 @@ class OrderRepository @Inject constructor(
 
     /**
      * 取消订单
+     *
+     * @param params 取消订单请求参数
+     * @return 取消结果Flow
+     * @author Joker.X
      */
     fun cancelOrder(params: CancelOrderRequest): Flow<NetworkResponse<Boolean>> = flow {
         emit(orderNetworkDataSource.cancelOrder(params))
     }.flowOn(Dispatchers.IO)
 
     /**
-     * 用户订单统计
+     * 获取用户订单统计
+     *
+     * @return 订单统计Flow
+     * @author Joker.X
      */
     fun getUserOrderCount(): Flow<NetworkResponse<OrderCount>> = flow {
         emit(orderNetworkDataSource.getUserOrderCount())
@@ -70,8 +96,10 @@ class OrderRepository @Inject constructor(
 
     /**
      * 获取订单物流信息
+     *
      * @param orderId 订单ID
-     * @return 物流信息流
+     * @return 物流信息Flow
+     * @author Joker.X
      */
     fun getOrderLogistics(orderId: Long): Flow<NetworkResponse<Logistics>> = flow {
         emit(orderNetworkDataSource.getOrderLogistics(orderId))
@@ -79,8 +107,10 @@ class OrderRepository @Inject constructor(
 
     /**
      * 获取订单详情
+     *
      * @param id 订单ID
-     * @return 订单详情流
+     * @return 订单详情Flow
+     * @author Joker.X
      */
     fun getOrderInfo(id: Long): Flow<NetworkResponse<Order>> = flow {
         emit(orderNetworkDataSource.getOrderInfo(id))
@@ -88,8 +118,10 @@ class OrderRepository @Inject constructor(
 
     /**
      * 确认收货
+     *
      * @param orderId 订单ID
-     * @return 确认结果流
+     * @return 确认结果Flow
+     * @author Joker.X
      */
     fun confirmReceive(orderId: Long): Flow<NetworkResponse<Boolean>> = flow {
         emit(orderNetworkDataSource.confirmReceive(orderId))
