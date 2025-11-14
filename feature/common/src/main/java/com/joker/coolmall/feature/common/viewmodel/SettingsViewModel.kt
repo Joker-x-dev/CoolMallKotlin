@@ -31,7 +31,7 @@ class SettingsViewModel @Inject constructor(
      * @author Joker.X
      */
     fun onUserAgreementClick() {
-        toPage(CommonRoutes.USER_AGREEMENT)
+        navigate(CommonRoutes.UserAgreement)
     }
 
     /**
@@ -41,7 +41,7 @@ class SettingsViewModel @Inject constructor(
      * @author Joker.X
      */
     fun onPrivacyPolicyClick() {
-        toPage(CommonRoutes.PRIVACY_POLICY)
+        navigate(CommonRoutes.PrivacyPolicy)
     }
 
     /**
@@ -51,7 +51,7 @@ class SettingsViewModel @Inject constructor(
      * @author Joker.X
      */
     fun onAccountSecurityClick() {
-        toPage(UserRoutes.PROFILE)
+        navigate(UserRoutes.Profile)
     }
 
     /**
@@ -61,7 +61,7 @@ class SettingsViewModel @Inject constructor(
      * @author Joker.X
      */
     fun onFeedbackClick() {
-        toPage(FeedbackRoutes.LIST)
+        navigate(FeedbackRoutes.List)
     }
 
     /**
@@ -71,7 +71,7 @@ class SettingsViewModel @Inject constructor(
      * @author Joker.X
      */
     fun onAboutAppClick() {
-        toPage(CommonRoutes.ABOUT)
+        navigate(CommonRoutes.About)
     }
 
     /**
@@ -81,6 +81,6 @@ class SettingsViewModel @Inject constructor(
      * @author Joker.X
      */
     fun onAppGuideClick() {
-        toPage("${LaunchRoutes.GUIDE}?from_settings=true")
+        navigate(LaunchRoutes.Guide(fromSettings = true))
     }
 }

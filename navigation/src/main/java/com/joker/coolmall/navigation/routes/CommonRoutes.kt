@@ -1,43 +1,63 @@
 package com.joker.coolmall.navigation.routes
 
+import kotlinx.serialization.Serializable
+
 /**
- * 公共信息模块路由常量
+ * 公共信息模块路由
  *
  * @author Joker.X
  */
 object CommonRoutes {
     /**
-     * 公共信息模块根路由
-     */
-    private const val COMMON_ROUTE = "common"
-
-    /**
      * 关于我们路由
+     *
+     * @author Joker.X
      */
-    const val ABOUT = "$COMMON_ROUTE/about"
+    @Serializable
+    data object About
 
     /**
      * WebView 页面路由
+     *
+     * @param url 要加载的URL
+     * @param title 页面标题（可选）
+     * @author Joker.X
      */
-    const val WEB = "$COMMON_ROUTE/web"
+    @Serializable
+    data class Web(
+        val url: String,
+        val title: String? = null
+    )
 
     /**
      * 设置页面路由
+     *
+     * @author Joker.X
      */
-    const val SETTINGS = "$COMMON_ROUTE/settings"
+    @Serializable
+    data object Settings
 
     /**
      * 用户协议路由
+     *
+     * @author Joker.X
      */
-    const val USER_AGREEMENT = "$COMMON_ROUTE/user_agreement"
+    @Serializable
+    data object UserAgreement
 
     /**
      * 隐私政策路由
+     *
+     * @author Joker.X
      */
-    const val PRIVACY_POLICY = "$COMMON_ROUTE/privacy_policy"
+    @Serializable
+    data object PrivacyPolicy
 
     /**
      * 贡献者列表路由
+     *
+     * @author Joker.X
      */
-    const val CONTRIBUTORS = "$COMMON_ROUTE/contributors"
+    @Serializable
+    data object Contributors
 }

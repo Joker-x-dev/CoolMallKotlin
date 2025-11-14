@@ -42,15 +42,12 @@ internal fun MainRoute(
     animatedContentScope: AnimatedContentScope,
     viewModel: MainViewModel = hiltViewModel()
 ) {
-    // 当前导航目的地
-    val currentDestination by viewModel.currentDestination.collectAsState()
     // 当前页面索引
     val currentPageIndex by viewModel.currentPageIndex.collectAsState()
 
     MainScreen(
         sharedTransitionScope = sharedTransitionScope,
         animatedContentScope = animatedContentScope,
-        currentDestination = currentDestination,
         currentPageIndex = currentPageIndex,
         onPageChanged = viewModel::updatePageIndex,
         onNavigationItemSelected = viewModel::updateDestination
@@ -63,7 +60,6 @@ internal fun MainRoute(
  *
  * @param sharedTransitionScope 共享转场作用域
  * @param animatedContentScope 动画内容作用域
- * @param currentDestination 当前导航目的地
  * @param currentPageIndex 当前页面索引
  * @param onPageChanged 页面改变回调
  * @param onNavigationItemSelected 导航项选中回调
@@ -74,7 +70,6 @@ internal fun MainRoute(
 internal fun MainScreen(
     sharedTransitionScope: SharedTransitionScope? = null,
     animatedContentScope: AnimatedContentScope? = null,
-    currentDestination: String = TopLevelDestination.HOME.route,
     currentPageIndex: Int = 0,
     onPageChanged: (Int) -> Unit = {},
     onNavigationItemSelected: (Int) -> Unit = {}
@@ -109,7 +104,7 @@ internal fun MainScreen(
                         pageState.scrollToPage(index)
                     }
                 },
-                currentDestination = currentDestination,
+                currentPageIndex = currentPageIndex,
                 modifier = Modifier
             )
         }

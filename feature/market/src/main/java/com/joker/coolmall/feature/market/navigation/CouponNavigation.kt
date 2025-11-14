@@ -11,7 +11,7 @@ import com.joker.coolmall.navigation.routes.MarketRoutes
  * @author Joker.X
  */
 fun NavGraphBuilder.couponScreen() {
-    composable(route = MarketRoutes.COUPON) {
+    composable<MarketRoutes.Coupon> {
         CouponRoute()
     }
 }

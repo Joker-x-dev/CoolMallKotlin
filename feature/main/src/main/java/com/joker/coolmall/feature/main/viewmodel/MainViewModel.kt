@@ -16,10 +16,6 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor() : ViewModel() {
 
-    // 当前选中的导航目标
-    private val _currentDestination = MutableStateFlow(TopLevelDestination.HOME.route)
-    val currentDestination: StateFlow<String> = _currentDestination.asStateFlow()
-
     // 当前页面索引
     private val _currentPageIndex = MutableStateFlow(0)
     val currentPageIndex: StateFlow<Int> = _currentPageIndex.asStateFlow()
@@ -31,9 +27,7 @@ class MainViewModel @Inject constructor() : ViewModel() {
      * @author Joker.X
      */
     fun updateDestination(index: Int) {
-        val destination = TopLevelDestination.entries[index]
         _currentPageIndex.value = index
-        _currentDestination.value = destination.route
     }
 
     /**
@@ -44,7 +38,6 @@ class MainViewModel @Inject constructor() : ViewModel() {
      */
     fun updatePageIndex(index: Int) {
         _currentPageIndex.value = index
-        _currentDestination.value = TopLevelDestination.entries[index].route
     }
 }
 

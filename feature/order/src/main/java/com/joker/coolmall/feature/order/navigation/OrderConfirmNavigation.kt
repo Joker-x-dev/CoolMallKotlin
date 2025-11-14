@@ -13,7 +13,7 @@ import com.joker.coolmall.navigation.routes.OrderRoutes
  * @author Joker.X
  */
 fun NavGraphBuilder.orderConfirmScreen(navController: NavHostController) {
-    composable(route = OrderRoutes.CONFIRM) {
+    composable<OrderRoutes.Confirm> {
         OrderConfirmRoute(navController = navController)
     }
 }

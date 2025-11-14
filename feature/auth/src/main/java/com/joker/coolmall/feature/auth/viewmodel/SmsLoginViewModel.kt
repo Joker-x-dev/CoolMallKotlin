@@ -242,8 +242,8 @@ class SmsLoginViewModel @Inject constructor(
             savePhone(_phone.value)
 
             ToastUtils.showSuccess(R.string.login_success)
-            appState?.updateAuth(authData)
-            appState?.refreshUserInfo()
+            appState.updateAuth(authData)
+            appState.refreshUserInfo()
             super.navigateBack()
             super.navigateBack()
         }
@@ -307,7 +307,7 @@ class SmsLoginViewModel @Inject constructor(
      * @author Joker.X
      */
     fun onUserAgreementClick() {
-        toPage(CommonRoutes.USER_AGREEMENT)
+        navigate(CommonRoutes.UserAgreement)
     }
 
     /**
@@ -317,6 +317,6 @@ class SmsLoginViewModel @Inject constructor(
      * @author Joker.X
      */
     fun onPrivacyPolicyClick() {
-        toPage(CommonRoutes.PRIVACY_POLICY)
+        navigate(CommonRoutes.PrivacyPolicy)
     }
 }

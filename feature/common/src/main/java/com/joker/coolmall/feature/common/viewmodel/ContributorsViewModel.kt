@@ -68,13 +68,6 @@ class ContributorsViewModel @Inject constructor(
      * @author Joker.X
      */
     private fun toWebPage(url: String, title: String) {
-        super.toPage(
-            "${CommonRoutes.WEB}?url=${
-                URLEncoder.encode(
-                    url,
-                    "UTF-8"
-                )
-            }&title=${URLEncoder.encode(title, "UTF-8")}"
-        )
+        navigate(CommonRoutes.Web(url = url, title = title))
     }
 }

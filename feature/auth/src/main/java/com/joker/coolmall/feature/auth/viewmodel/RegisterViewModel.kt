@@ -327,7 +327,7 @@ class RegisterViewModel @Inject constructor(
      * @author Joker.X
      */
     fun onUserAgreementClick() {
-        toPage(CommonRoutes.USER_AGREEMENT)
+        navigate(CommonRoutes.UserAgreement)
     }
 
     /**
@@ -337,6 +337,6 @@ class RegisterViewModel @Inject constructor(
      * @author Joker.X
      */
     fun onPrivacyPolicyClick() {
-        toPage(CommonRoutes.PRIVACY_POLICY)
+        navigate(CommonRoutes.PrivacyPolicy)
     }
 }

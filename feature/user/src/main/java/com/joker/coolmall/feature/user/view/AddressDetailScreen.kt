@@ -65,7 +65,6 @@ internal fun AddressDetailRoute(
 
     AddressDetailScreen(
         isEditMode = viewModel.isEditMode,
-        addressId = viewModel.addressId,
         uiState = uiState,
         contactName = contactName,
         phone = phone,
@@ -89,7 +88,6 @@ internal fun AddressDetailRoute(
  * 收货地址详情界面
  *
  * @param isEditMode 是否为编辑模式
- * @param addressId 地址ID，仅在编辑模式下使用
  * @param uiState 界面状态
  * @param contactName 联系人
  * @param phone 手机号
@@ -112,7 +110,6 @@ internal fun AddressDetailRoute(
 @Composable
 internal fun AddressDetailScreen(
     isEditMode: Boolean = false,
-    addressId: Long? = null,
     uiState: BaseNetWorkUiState<Address> = BaseNetWorkUiState.Loading,
     contactName: String = "",
     phone: String = "",

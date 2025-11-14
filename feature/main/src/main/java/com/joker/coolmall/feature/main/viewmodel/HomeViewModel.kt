@@ -134,7 +134,7 @@ class HomeViewModel @Inject constructor(
      * @author Joker.X
      */
     fun toGoodsSearch() {
-        super.toPage(GoodsRoutes.SEARCH)
+        navigate(GoodsRoutes.Search)
     }
 
     /**
@@ -144,7 +144,7 @@ class HomeViewModel @Inject constructor(
      * @author Joker.X
      */
     fun toGoodsDetail(goodsId: Long) {
-        super.toPage(GoodsRoutes.DETAIL, goodsId)
+        navigate(GoodsRoutes.Detail(goodsId = goodsId))
     }
 
     /**
@@ -159,7 +159,7 @@ class HomeViewModel @Inject constructor(
             findChildCategoryIds(categoryId, data.categoryAll ?: emptyList())
         // 如果有子分类，传递子分类ID
         val typeIdParam = childCategoryIds.joinToString(",")
-        super.toPage("${GoodsRoutes.CATEGORY}?type_id=$typeIdParam")
+        navigate(GoodsRoutes.Category(typeId = typeIdParam, featured = false, recommend = false, keyword = null))
     }
 
     /**
@@ -168,7 +168,7 @@ class HomeViewModel @Inject constructor(
      * @author Joker.X
      */
     fun toFlashSalePage() {
-        super.toPage("${GoodsRoutes.CATEGORY}?featured=true")
+        navigate(GoodsRoutes.Category(typeId = null, featured = true, recommend = false, keyword = null))
     }
 
     /**
@@ -177,7 +177,7 @@ class HomeViewModel @Inject constructor(
      * @author Joker.X
      */
     fun toRecommendPage() {
-        super.toPage("${GoodsRoutes.CATEGORY}?recommend=true")
+        navigate(GoodsRoutes.Category(typeId = null, featured = false, recommend = true, keyword = null))
     }
 
     /**
@@ -188,14 +188,7 @@ class HomeViewModel @Inject constructor(
     fun toGitHubPage() {
         val url = "https://github.com/Joker-x-dev/CoolMallKotlin"
         val title = "GitHub"
-        super.toPage(
-            "${CommonRoutes.WEB}?url=${
-                java.net.URLEncoder.encode(
-                    url,
-                    "UTF-8"
-                )
-            }&title=${java.net.URLEncoder.encode(title, "UTF-8")}"
-        )
+        navigate(CommonRoutes.Web(url = url, title = title))
     }
 
     /**
@@ -204,7 +197,7 @@ class HomeViewModel @Inject constructor(
      * @author Joker.X
      */
     fun toAboutPage() {
-        super.toPage(CommonRoutes.ABOUT)
+        navigate(CommonRoutes.About)
     }
 
     /**
@@ -236,7 +229,7 @@ class HomeViewModel @Inject constructor(
         if (!appState.isLoggedIn.value) {
             hideCouponModal()
             // 未登录，跳转到登录页面
-            super.toPage(AuthRoutes.HOME)
+            navigate(AuthRoutes.Login)
             return
         }
 

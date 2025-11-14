@@ -51,14 +51,15 @@ import kotlinx.coroutines.withContext
 internal fun OrderPayRoute(
     viewModel: OrderPayViewModel = hiltViewModel()
 ) {
-    // 支付价格
-    val price by viewModel.price.collectAsState()
+    // 订单支付路由参数
+    val orderPayRoute by viewModel.orderPayRoute.collectAsState()
     // 支付宝支付信息
     val alipayPayInfo by viewModel.alipayPayInfo.collectAsState()
+    // 上下文
     val context = LocalContext.current
 
     OrderPayScreen(
-        price = price,
+        price = orderPayRoute.price,
         onBackClick = viewModel::handleBackClick,
         onPayClick = viewModel::startAlipayPayment
     )

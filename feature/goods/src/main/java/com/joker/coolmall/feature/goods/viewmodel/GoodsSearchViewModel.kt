@@ -79,7 +79,7 @@ class GoodsSearchViewModel @Inject constructor(
                 // 添加到搜索历史
                 searchHistoryRepository.addSearchHistory(keyword)
                 // 跳转到商品分类页面，传递搜索关键词
-                super.toPage("${GoodsRoutes.CATEGORY}?keyword=$keyword")
+                navigate(GoodsRoutes.Category(typeId = null, featured = false, recommend = false, keyword = keyword))
             }
         }
     }

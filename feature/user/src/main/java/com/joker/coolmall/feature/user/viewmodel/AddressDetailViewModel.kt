@@ -2,13 +2,15 @@ package com.joker.coolmall.feature.user.viewmodel
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
 import com.joker.coolmall.core.data.repository.AddressRepository
 import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.entity.Address
 import com.joker.coolmall.core.model.response.NetworkResponse
-import com.joker.coolmall.feature.user.navigation.AddressDetailRoutes
 import com.joker.coolmall.navigation.AppNavigator
+import com.joker.coolmall.navigation.RefreshResultKey
+import com.joker.coolmall.navigation.routes.UserRoutes
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,19 +32,13 @@ class AddressDetailViewModel @Inject constructor(
     private val addressRepository: AddressRepository
 ) : BaseNetWorkViewModel<Address>(
     navigator = navigator,
-    appState = appState,
-    savedStateHandle = savedStateHandle,
-    idKey = AddressDetailRoutes.ADDRESS_ID_ARG
+    appState = appState
 ) {
-    // 是否为编辑模式
-    val isEditMode: Boolean =
-        savedStateHandle.get<Boolean>(AddressDetailRoutes.IS_EDIT_MODE_ARG) ?: false
+    // 从路由获取参数
+    private val addressDetailRoute = savedStateHandle.toRoute<UserRoutes.AddressDetail>()
 
-    // 直接使用父类提供的 id
-    val addressId: Long? = if (isEditMode) {
-        // 从父类中获取 id
-        super.id
-    } else null
+    // 是否编辑模式
+    val isEditMode: Boolean = addressDetailRoute.isEditMode
 
     /**
      * 联系人
@@ -88,7 +84,7 @@ class AddressDetailViewModel @Inject constructor(
 
     init {
         // 如果是编辑模式且地址ID有效，则执行请求
-        if (isEditMode && addressId != null) {
+        if (addressDetailRoute.isEditMode && addressDetailRoute.addressId > 0) {
             super.executeRequest()
         } else {
             // 新增模式，设置初始状态为成功
@@ -104,8 +100,7 @@ class AddressDetailViewModel @Inject constructor(
      * @author Joker.X
      */
     override fun requestApiFlow(): Flow<NetworkResponse<Address>> {
-        // 此处使用父类提供的 requiredId
-        return addressRepository.getAddressInfo(requiredId)
+        return addressRepository.getAddressInfo(addressDetailRoute.addressId)
     }
 
     /**
@@ -186,7 +181,8 @@ class AddressDetailViewModel @Inject constructor(
      */
     fun saveAddress() {
         val address = Address(
-            id = addressId ?: 0,
+            // 编辑模式下使用已有地址ID，新建模式下为 0
+            id = if (isEditMode) addressDetailRoute.addressId else 0L,
             contact = _contactName.value,
             phone = _phone.value,
             province = _province.value,
@@ -210,11 +206,12 @@ class AddressDetailViewModel @Inject constructor(
      * @author Joker.X
      */
     private fun updateAddress(address: Address) {
-        ResultHandler.handleResultWithData(
+        ResultHandler.handleResult(
             scope = viewModelScope,
             flow = addressRepository.updateAddress(address).asResult(),
-            onData = {
-                super.navigateBack(mapOf("refresh" to true))
+            onSuccess = { _ ->
+                // 使用 NavigationResult 回传刷新信号，通知地址列表页面刷新
+                super.popBackStackWithResult(RefreshResultKey, true)
             }
         )
     }
@@ -226,11 +223,12 @@ class AddressDetailViewModel @Inject constructor(
      * @author Joker.X
      */
     private fun addAddress(address: Address) {
-        ResultHandler.handleResultWithData(
+        ResultHandler.handleResult(
             scope = viewModelScope,
             flow = addressRepository.addAddress(address).asResult(),
-            onData = {
-                super.navigateBack(mapOf("refresh" to true))
+            onSuccess = { _ ->
+                // 使用 NavigationResult 回传刷新信号，通知地址列表页面刷新
+                super.popBackStackWithResult(RefreshResultKey, true)
             }
         )
     }

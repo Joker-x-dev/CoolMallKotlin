@@ -3,6 +3,7 @@ package com.joker.coolmall.feature.goods.viewmodel
 import CategoryUiState
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkListViewModel
 import com.joker.coolmall.core.data.repository.GoodsRepository
 import com.joker.coolmall.core.data.state.AppState
@@ -93,7 +94,7 @@ class GoodsCategoryViewModel @Inject constructor(
     /**
      * 搜索关键词
      */
-    private var searchKeyword = savedStateHandle.get<String>("keyword") ?: ""
+    private var searchKeyword = ""
 
     /**
      * 获取当前搜索关键词
@@ -120,8 +121,11 @@ class GoodsCategoryViewModel @Inject constructor(
     private var isRecommend = false
 
     init {
+        // 从路由获取参数
+        val route = savedStateHandle.toRoute<GoodsRoutes.Category>()
+        
         // 从路由参数获取分类ID并设置
-        val typeIdParam = savedStateHandle.get<String>("type_id")
+        val typeIdParam = route.typeId
         if (!typeIdParam.isNullOrBlank()) {
             val categoryIds = typeIdParam.split(",")
                 .mapNotNull { it.trim().toLongOrNull() }
@@ -129,13 +133,13 @@ class GoodsCategoryViewModel @Inject constructor(
         }
 
         // 从路由参数获取featured参数
-        isFeatured = savedStateHandle.get<Boolean>("featured") ?: false
+        isFeatured = route.featured
 
         // 从路由参数获取recommend参数
-        isRecommend = savedStateHandle.get<Boolean>("recommend") ?: false
+        isRecommend = route.recommend
 
         // 从路由参数获取搜索关键词
-        searchKeyword = savedStateHandle.get<String>("keyword") ?: ""
+        searchKeyword = route.keyword ?: ""
 
         // 加载数据
         initLoad()
@@ -324,7 +328,7 @@ class GoodsCategoryViewModel @Inject constructor(
      * @author Joker.X
      */
     fun toGoodsDetailPage(goodsId: Long) {
-        super.toPage(GoodsRoutes.DETAIL, goodsId)
+        navigate(GoodsRoutes.Detail(goodsId = goodsId))
     }
 
     /**

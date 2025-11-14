@@ -11,7 +11,7 @@ import com.joker.coolmall.navigation.routes.CommonRoutes
  * @author Joker.X
  */
 fun NavGraphBuilder.settingsScreen() {
-    composable(route = CommonRoutes.SETTINGS) {
+    composable<CommonRoutes.Settings> {
         SettingsRoute()
     }
 }

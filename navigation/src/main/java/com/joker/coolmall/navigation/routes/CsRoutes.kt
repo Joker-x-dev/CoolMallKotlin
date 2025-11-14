@@ -1,18 +1,18 @@
 package com.joker.coolmall.navigation.routes
 
+import kotlinx.serialization.Serializable
+
 /**
- * 客服模块路由常量
+ * 客服模块路由
  *
  * @author Joker.X
  */
 object CsRoutes {
     /**
-     * 客服模块根路由
-     */
-    private const val CS_ROUTE = "cs"
-
-    /**
      * 客服聊天路由
+     *
+     * @author Joker.X
      */
-    const val CHAT = "$CS_ROUTE/chat"
-} 
+    @Serializable
+    data object Chat
+}

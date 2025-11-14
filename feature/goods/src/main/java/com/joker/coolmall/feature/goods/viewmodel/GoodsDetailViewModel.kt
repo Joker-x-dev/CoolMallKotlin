@@ -2,6 +2,7 @@ package com.joker.coolmall.feature.goods.viewmodel
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
 import com.joker.coolmall.core.data.repository.CartRepository
@@ -23,7 +24,6 @@ import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.util.storage.MMKVUtils
 import com.joker.coolmall.core.util.toast.ToastUtils
 import com.joker.coolmall.feature.goods.R
-import com.joker.coolmall.feature.goods.navigation.GoodsDetailRoutes
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.AuthRoutes
 import com.joker.coolmall.navigation.routes.CsRoutes
@@ -67,10 +67,13 @@ class GoodsDetailViewModel @Inject constructor(
     private val couponRepository: CouponRepository,
 ) : BaseNetWorkViewModel<GoodsDetail>(
     navigator = navigator,
-    appState = appState,
-    savedStateHandle = savedStateHandle,
-    idKey = GoodsDetailRoutes.GOODS_ID_ARG
+    appState = appState
 ) {
+
+    /**
+     * 从路由获取商品 ID
+     */
+    private val goodsId: Long = savedStateHandle.toRoute<GoodsRoutes.Detail>().goodsId
 
     /**
      * 规格选择弹窗的显示状态
@@ -120,7 +123,7 @@ class GoodsDetailViewModel @Inject constructor(
      * @author Joker.X
      */
     override fun requestApiFlow(): Flow<NetworkResponse<GoodsDetail>> {
-        return pageRepository.getGoodsDetail(requiredId)
+        return pageRepository.getGoodsDetail(goodsId)
     }
 
     /**
@@ -174,7 +177,7 @@ class GoodsDetailViewModel @Inject constructor(
         ResultHandler.handleResultWithData(
             scope = viewModelScope,
             flow = goodsRepository.getGoodsSpecList(
-                mapOf("goodsId" to super.requiredId)
+                mapOf("goodsId" to goodsId)
             ).asResult(),
             showToast = false,
             onLoading = { _specsModalUiState.value = BaseNetWorkUiState.Loading },
@@ -266,7 +269,7 @@ class GoodsDetailViewModel @Inject constructor(
         if (!appState.isLoggedIn.value) {
             hideCouponModal()
             // 未登录，跳转到登录页面
-            super.toPage(AuthRoutes.HOME)
+            navigate(AuthRoutes.Login)
             return
         }
 
@@ -347,7 +350,7 @@ class GoodsDetailViewModel @Inject constructor(
             MMKVUtils.putObject("selectedGoodsList", listOf(selectedGoods))
             // 隐藏规格选择弹窗
             hideSpecModal()
-            super.toPage(OrderRoutes.CONFIRM)
+            navigate(OrderRoutes.Confirm)
         }
     }
 
@@ -358,7 +361,7 @@ class GoodsDetailViewModel @Inject constructor(
      * @author Joker.X
      */
     fun toGoodsCommentPage() {
-        super.toPage(GoodsRoutes.COMMENT, requiredId)
+        navigate(GoodsRoutes.Comment(goodsId = goodsId))
     }
 
     /**
@@ -367,7 +370,7 @@ class GoodsDetailViewModel @Inject constructor(
      * @author Joker.X
      */
     fun toCartPage() {
-        super.toPage("${MainRoutes.CART}?show_back_icon=true")
+        navigate(MainRoutes.Cart(showBackIcon = true))
     }
 
     /**
@@ -376,7 +379,7 @@ class GoodsDetailViewModel @Inject constructor(
      * @author Joker.X
      */
     fun toCsPage() {
-        super.toPage(CsRoutes.CHAT)
+        navigate(CsRoutes.Chat)
     }
 
     /**

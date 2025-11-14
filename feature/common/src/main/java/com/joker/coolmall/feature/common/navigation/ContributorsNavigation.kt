@@ -11,7 +11,7 @@ import com.joker.coolmall.navigation.routes.CommonRoutes
  * @author Joker.X
  */
 fun NavGraphBuilder.contributorsScreen() {
-    composable(route = CommonRoutes.CONTRIBUTORS) {
+    composable<CommonRoutes.Contributors> {
         ContributorsRoute()
     }
 }

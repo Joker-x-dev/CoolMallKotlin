@@ -1,6 +1,7 @@
 package com.joker.coolmall.feature.feedback.navigation
 
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import com.joker.coolmall.feature.feedback.view.FeedbackListRoute
 import com.joker.coolmall.navigation.routes.FeedbackRoutes
@@ -10,8 +11,8 @@ import com.joker.coolmall.navigation.routes.FeedbackRoutes
  *
  * @author Joker.X
  */
-fun NavGraphBuilder.feedbackListScreen() {
-    composable(route = FeedbackRoutes.LIST) {
-        FeedbackListRoute()
+fun NavGraphBuilder.feedbackListScreen(navController: NavHostController) {
+    composable<FeedbackRoutes.List> {
+        FeedbackListRoute(navController = navController)
     }
 }

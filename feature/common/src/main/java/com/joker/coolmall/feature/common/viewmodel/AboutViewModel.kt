@@ -55,7 +55,7 @@ class AboutViewModel @Inject constructor(
      * @author Joker.X
      */
     fun onContributorsClick() {
-        toPage(CommonRoutes.CONTRIBUTORS)
+        navigate(CommonRoutes.Contributors)
     }
 
     // ==================== 项目地址相关点击事件 ====================
@@ -206,7 +206,7 @@ class AboutViewModel @Inject constructor(
      * @author Joker.X
      */
     fun onUserAgreementClick() {
-        toPage(CommonRoutes.USER_AGREEMENT)
+        navigate(CommonRoutes.UserAgreement)
     }
 
     /**
@@ -216,7 +216,7 @@ class AboutViewModel @Inject constructor(
      * @author Joker.X
      */
     fun onPrivacyPolicyClick() {
-        toPage(CommonRoutes.PRIVACY_POLICY)
+        navigate(CommonRoutes.PrivacyPolicy)
     }
 
     /**
@@ -236,13 +236,6 @@ class AboutViewModel @Inject constructor(
      * @author Joker.X
      */
     private fun toWebPage(url: String, title: String) {
-        super.toPage(
-            "${CommonRoutes.WEB}?url=${
-                URLEncoder.encode(
-                    url,
-                    "UTF-8"
-                )
-            }&title=${URLEncoder.encode(title, "UTF-8")}"
-        )
+        navigate(CommonRoutes.Web(url = url, title = title))
     }
 }

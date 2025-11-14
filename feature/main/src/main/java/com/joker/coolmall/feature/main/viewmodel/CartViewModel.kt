@@ -2,6 +2,7 @@ package com.joker.coolmall.feature.main.viewmodel
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
 import com.joker.coolmall.core.data.repository.CartRepository
 import com.joker.coolmall.core.data.state.AppState
@@ -12,9 +13,9 @@ import com.joker.coolmall.core.model.entity.SelectedGoods
 import com.joker.coolmall.core.util.storage.MMKVUtils
 import com.joker.coolmall.core.util.toast.ToastUtils
 import com.joker.coolmall.feature.main.R
-import com.joker.coolmall.feature.main.navigation.CartRoutes
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.GoodsRoutes
+import com.joker.coolmall.navigation.routes.MainRoutes
 import com.joker.coolmall.navigation.routes.OrderRoutes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -145,8 +146,8 @@ class CartViewModel @Inject constructor(
     )
 
     init {
-        // 从导航参数中获取是否显示返回按钮
-        _showBackIcon.value = savedStateHandle.get<Boolean>(CartRoutes.SHOW_BACK_ICON_ARG) ?: false
+        // 从路由中获取是否显示返回按钮
+        _showBackIcon.value = savedStateHandle.toRoute<MainRoutes.Cart>().showBackIcon
     }
 
     /**
@@ -297,7 +298,7 @@ class CartViewModel @Inject constructor(
             MMKVUtils.putObject("selectedGoodsList", selectedGoodsList)
 
             // 5. 导航到订单确认页面
-            super.toPage(OrderRoutes.CONFIRM)
+            navigate(OrderRoutes.Confirm)
         }
     }
 
@@ -375,7 +376,7 @@ class CartViewModel @Inject constructor(
      * @author Joker.X
      */
     fun toGoodsDetailPage(goodsId: Long) {
-        super.toPage(GoodsRoutes.DETAIL, goodsId)
+        navigate(GoodsRoutes.Detail(goodsId = goodsId))
     }
 }
 

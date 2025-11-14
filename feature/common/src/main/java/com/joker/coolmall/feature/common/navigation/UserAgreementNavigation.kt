@@ -11,7 +11,7 @@ import com.joker.coolmall.navigation.routes.CommonRoutes
  * @author Joker.X
  */
 fun NavGraphBuilder.userAgreementScreen() {
-    composable(route = CommonRoutes.USER_AGREEMENT) {
+    composable<CommonRoutes.UserAgreement> {
         UserAgreementRoute()
     }
 }

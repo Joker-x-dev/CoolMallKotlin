@@ -2,6 +2,7 @@ package com.joker.coolmall.feature.order.viewmodel
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
 import com.joker.coolmall.core.data.repository.CommonRepository
@@ -14,8 +15,9 @@ import com.joker.coolmall.core.model.entity.Order
 import com.joker.coolmall.core.model.request.DictDataRequest
 import com.joker.coolmall.core.model.request.RefundOrderRequest
 import com.joker.coolmall.core.model.response.NetworkResponse
-import com.joker.coolmall.feature.order.navigation.OrderRefundRoutes
 import com.joker.coolmall.navigation.AppNavigator
+import com.joker.coolmall.navigation.RefreshResultKey
+import com.joker.coolmall.navigation.routes.OrderRoutes
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -46,10 +48,11 @@ class OrderRefundViewModel @Inject constructor(
     private val commonRepository: CommonRepository
 ) : BaseNetWorkViewModel<Order>(
     navigator = navigator,
-    appState = appState,
-    savedStateHandle = savedStateHandle,
-    idKey = OrderRefundRoutes.ORDER_ID_ARG
+    appState = appState
 ) {
+    // 从路由获取订单ID
+    private val refundRoute = savedStateHandle.toRoute<OrderRoutes.Refund>()
+    private val requiredOrderId: Long = refundRoute.orderId
 
     /**
      * 退款原因选择弹窗的显示状态
@@ -88,7 +91,7 @@ class OrderRefundViewModel @Inject constructor(
      * @author Joker.X
      */
     override fun requestApiFlow(): Flow<NetworkResponse<Order>> {
-        return orderRepository.getOrderInfo(requiredId)
+        return orderRepository.getOrderInfo(requiredOrderId)
     }
 
     /**
@@ -177,12 +180,13 @@ class OrderRefundViewModel @Inject constructor(
             scope = viewModelScope,
             flow = orderRepository.refundOrder(
                 RefundOrderRequest(
-                    orderId = requiredId,
+                    orderId = requiredOrderId,
                     reason = selectedReason.name ?: ""
                 )
             ).asResult(),
             onData = { _ ->
-                navigateBack(mapOf("refresh" to true))
+                // 使用 NavigationResult 回传刷新信号，通知上一个页面刷新
+                popBackStackWithResult(RefreshResultKey, true)
             }
         )
     }

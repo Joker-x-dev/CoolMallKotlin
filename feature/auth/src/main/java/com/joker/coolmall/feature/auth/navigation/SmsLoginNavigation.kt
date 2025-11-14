@@ -11,7 +11,7 @@ import com.joker.coolmall.navigation.routes.AuthRoutes
  * @author Joker.X
  */
 fun NavGraphBuilder.smsLoginScreen() {
-    composable(route = AuthRoutes.SMS_LOGIN) {
+    composable<AuthRoutes.SmsLogin> {
         SmsLoginRoute()
     }
-} 
+}

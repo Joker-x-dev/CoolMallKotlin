@@ -62,7 +62,7 @@ internal fun AddressListRoute(
         onRetry = viewModel::retryRequest,
         onDeleteClick = { viewModel.showDeleteDialog(it) },
         isSelectMode = viewModel.isSelectMode,
-        onAddressClick = { address -> viewModel.onAddressClick(address, backStackEntry) }
+        onAddressClick = viewModel::onAddressClick
     )
 
     // 删除确认对话框

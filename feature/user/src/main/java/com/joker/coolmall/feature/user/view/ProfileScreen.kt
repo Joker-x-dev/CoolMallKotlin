@@ -48,8 +48,6 @@ internal fun ProfileRoute(
     animatedContentScope: AnimatedContentScope,
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
-    // 收集登录状态
-    val isLoggedIn by viewModel.isLoggedIn.collectAsStateWithLifecycle()
     // 收集用户信息
     val userInfo by viewModel.userInfo.collectAsStateWithLifecycle()
 
@@ -59,7 +57,6 @@ internal fun ProfileRoute(
         sharedTransitionScope = sharedTransitionScope,
         animatedContentScope = animatedContentScope,
         userInfo = userInfo,
-        routeAvatarUrl = viewModel.routeAvatarUrl
     )
 }
 
@@ -71,7 +68,6 @@ internal fun ProfileRoute(
  * @param sharedTransitionScope 共享转换作用域
  * @param animatedContentScope 动画内容作用域
  * @param userInfo 用户信息
- * @param routeAvatarUrl 路由传递的头像URL
  * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
@@ -82,7 +78,6 @@ internal fun ProfileScreen(
     sharedTransitionScope: SharedTransitionScope? = null,
     animatedContentScope: AnimatedContentScope? = null,
     userInfo: User? = null,
-    routeAvatarUrl: String? = null
 ) {
     AppScaffold(
         title = R.string.profile_title,
@@ -94,7 +89,6 @@ internal fun ProfileScreen(
             sharedTransitionScope = sharedTransitionScope,
             animatedContentScope = animatedContentScope,
             userInfo = userInfo,
-            routeAvatarUrl = routeAvatarUrl
         )
     }
 }
@@ -106,7 +100,6 @@ internal fun ProfileScreen(
  * @param sharedTransitionScope 共享转换作用域
  * @param animatedContentScope 动画内容作用域
  * @param userInfo 用户信息
- * @param routeAvatarUrl 路由传递的头像URL
  * @author Joker.X
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -116,7 +109,6 @@ private fun ProfileContentView(
     sharedTransitionScope: SharedTransitionScope? = null,
     animatedContentScope: AnimatedContentScope? = null,
     userInfo: User? = null,
-    routeAvatarUrl: String? = null
 ) {
     VerticalList(
         modifier = Modifier.verticalScroll(rememberScrollState())
@@ -129,7 +121,7 @@ private fun ProfileContentView(
                 horizontalPadding = SpaceHorizontalLarge,
                 trailingContent = {
                     SmallAvatar(
-                        avatarUrl = routeAvatarUrl ?: userInfo?.avatarUrl,
+                        avatarUrl = userInfo?.avatarUrl,
                         modifier = Modifier.let { modifier ->
                             if (sharedTransitionScope != null && animatedContentScope != null) {
                                 with(sharedTransitionScope) {

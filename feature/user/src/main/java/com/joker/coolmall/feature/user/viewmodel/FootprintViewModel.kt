@@ -77,7 +77,7 @@ class FootprintViewModel @Inject constructor(
      * @author Joker.X
      */
     fun toGoodsDetail(goodsId: Long) {
-        super.toPage(GoodsRoutes.DETAIL, goodsId)
+        navigate(GoodsRoutes.Detail(goodsId = goodsId))
     }
 
     /**

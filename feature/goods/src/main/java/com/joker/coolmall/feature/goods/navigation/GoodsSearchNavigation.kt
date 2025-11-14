@@ -11,7 +11,7 @@ import com.joker.coolmall.navigation.routes.GoodsRoutes
  * @author Joker.X
  */
 fun NavGraphBuilder.goodsSearchScreen() {
-    composable(route = GoodsRoutes.SEARCH) {
+    composable<GoodsRoutes.Search> {
         GoodsSearchRoute()
     }
 }

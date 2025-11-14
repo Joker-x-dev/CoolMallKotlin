@@ -112,7 +112,7 @@ class MeViewModel @Inject constructor(
      * @author Joker.X
      */
     fun toOrderListPage() {
-        super.toPage(OrderRoutes.LIST)
+        navigate(OrderRoutes.List())
     }
 
     /**
@@ -122,8 +122,7 @@ class MeViewModel @Inject constructor(
      * @author Joker.X
      */
     fun toOrderListPage(tabIndex: Int) {
-        val route = "${OrderRoutes.LIST}?tab=$tabIndex"
-        super.toPage(route)
+        navigate(OrderRoutes.List(tab = tabIndex.toString()))
     }
 
     /**
@@ -142,7 +141,7 @@ class MeViewModel @Inject constructor(
      * @author Joker.X
      */
     fun toGoodsDetailPage(goodsId: Long) {
-        super.toPage(GoodsRoutes.DETAIL, goodsId)
+        navigate(GoodsRoutes.Detail(goodsId = goodsId))
     }
 
     /**
@@ -151,7 +150,7 @@ class MeViewModel @Inject constructor(
      * @author Joker.X
      */
     fun toUserFootprintPage() {
-        super.toPage(UserRoutes.FOOTPRINT)
+        navigate(UserRoutes.Footprint)
     }
 
     /**
@@ -160,7 +159,7 @@ class MeViewModel @Inject constructor(
      * @author Joker.X
      */
     fun toAddressListPage() {
-        super.toPage(UserRoutes.ADDRESS_LIST)
+        navigate(UserRoutes.AddressList())
     }
 
     /**
@@ -169,7 +168,7 @@ class MeViewModel @Inject constructor(
      * @author Joker.X
      */
     fun toCouponPage() {
-        super.toPage(MarketRoutes.COUPON)
+        navigate(MarketRoutes.Coupon)
     }
 
     /**
@@ -178,13 +177,7 @@ class MeViewModel @Inject constructor(
      * @author Joker.X
      */
     fun toProfilePage() {
-        val avatarUrl = userInfo.value?.avatarUrl
-        val route = if (avatarUrl?.isNotEmpty() == true) {
-            "${UserRoutes.PROFILE}?avatar_url=${java.net.URLEncoder.encode(avatarUrl, "UTF-8")}"
-        } else {
-            UserRoutes.PROFILE
-        }
-        super.toPage(route)
+        navigate(UserRoutes.Profile)
     }
 
     /**
@@ -193,7 +186,7 @@ class MeViewModel @Inject constructor(
      * @author Joker.X
      */
     fun toChatPage() {
-        super.toPage(CsRoutes.CHAT)
+        navigate(CsRoutes.Chat)
     }
 
     /**
@@ -202,7 +195,7 @@ class MeViewModel @Inject constructor(
      * @author Joker.X
      */
     fun toFeedbackPage() {
-        super.toPage(FeedbackRoutes.LIST)
+        navigate(FeedbackRoutes.List)
     }
 
     /**
@@ -211,7 +204,7 @@ class MeViewModel @Inject constructor(
      * @author Joker.X
      */
     fun toAboutPage() {
-        super.toPage(CommonRoutes.ABOUT)
+        navigate(CommonRoutes.About)
     }
 
     /**
@@ -220,6 +213,6 @@ class MeViewModel @Inject constructor(
      * @author Joker.X
      */
     fun toSettingsPage() {
-        super.toPage(CommonRoutes.SETTINGS)
+        navigate(CommonRoutes.Settings)
     }
 }

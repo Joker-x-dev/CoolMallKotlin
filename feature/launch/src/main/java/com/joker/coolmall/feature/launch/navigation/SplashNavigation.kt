@@ -15,7 +15,7 @@ import com.joker.coolmall.navigation.routes.LaunchRoutes
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
 fun NavGraphBuilder.splashScreen(sharedTransitionScope: SharedTransitionScope) {
-    composable(route = LaunchRoutes.SPLASH) {
+    composable<LaunchRoutes.Splash> {
         SplashRoute(sharedTransitionScope, this@composable)
     }
 }

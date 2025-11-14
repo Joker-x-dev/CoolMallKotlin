@@ -112,22 +112,4 @@ class ResetPasswordViewModel @Inject constructor(
             // TODO: 实现实际重置密码逻辑
         }
     }
-
-    /**
-     * 导航到账号密码登录页面
-     *
-     * @author Joker.X
-     */
-    fun toAccountLoginPage() {
-        super.toPage(AuthRoutes.ACCOUNT_LOGIN)
-    }
-
-    /**
-     * 导航到短信登录页面
-     *
-     * @author Joker.X
-     */
-    fun toSmsLoginPage() {
-        super.toPage(AuthRoutes.SMS_LOGIN)
-    }
 }

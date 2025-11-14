@@ -4,11 +4,12 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.net.toUri
 import androidx.lifecycle.SavedStateHandle
+import androidx.navigation.toRoute
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
 import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.feature.common.model.WebViewData
-import com.joker.coolmall.feature.common.navigation.WebRoutes
 import com.joker.coolmall.navigation.AppNavigator
+import com.joker.coolmall.navigation.routes.CommonRoutes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -32,8 +33,13 @@ class WebViewModel @Inject constructor(
     /**
      * WebView 数据
      */
-    private val _webViewData = MutableStateFlow<WebViewData>(WebViewData())
+    private val _webViewData = MutableStateFlow(WebViewData())
     val webViewData: StateFlow<WebViewData> = _webViewData.asStateFlow()
+
+    /**
+     * 从路由获取 WebView 路由参数
+     */
+    val webViewRoute = savedStateHandle.toRoute<CommonRoutes.Web>()
 
     /**
      * 页面标题
@@ -60,9 +66,9 @@ class WebViewModel @Inject constructor(
     val showDropdownMenu: StateFlow<Boolean> = _showDropdownMenu.asStateFlow()
 
     init {
-        // 从路由参数获取 URL
-        val url = savedStateHandle.get<String>(WebRoutes.URL_ARG) ?: ""
-        val title = savedStateHandle.get<String>(WebRoutes.TITLE_ARG)
+        // 从路由获取参数
+        val url = webViewRoute.url
+        val title = webViewRoute.title
             ?: context.getString(com.joker.coolmall.feature.common.R.string.web_title)
 
         if (url.isNotEmpty()) {

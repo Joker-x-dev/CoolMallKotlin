@@ -10,32 +10,32 @@ import com.joker.coolmall.navigation.routes.MainRoutes
  *
  * @param titleTextId 标题文本资源ID
  * @param animationResId 动画资源ID
- * @param route 路由地址
+ * @param route 路由对象，用于类型安全导航
  * @author Joker.X
  */
 enum class TopLevelDestination(
     @param:StringRes val titleTextId: Int,
     @param:RawRes val animationResId: Int,
-    val route: String
+    val route: Any
 ) {
     HOME(
         titleTextId = R.string.home,
         animationResId = R.raw.home,
-        route = MainRoutes.HOME
+        route = MainRoutes.Home
     ),
     CATEGORY(
         titleTextId = R.string.category,
         animationResId = R.raw.category,
-        route = MainRoutes.CATEGORY
+        route = MainRoutes.Category
     ),
     CART(
         titleTextId = R.string.cart,
         animationResId = R.raw.cart,
-        route = MainRoutes.CART
+        route = MainRoutes.Cart()
     ),
     ME(
         titleTextId = R.string.me,
         animationResId = R.raw.me,
-        route = MainRoutes.ME
+        route = MainRoutes.Mine
     )
 }

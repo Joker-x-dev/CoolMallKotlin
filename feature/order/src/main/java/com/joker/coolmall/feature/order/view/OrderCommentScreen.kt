@@ -45,11 +45,16 @@ import com.joker.coolmall.feature.order.viewmodel.OrderCommentViewModel
 internal fun OrderCommentRoute(
     viewModel: OrderCommentViewModel = hiltViewModel()
 ) {
-    val rating by viewModel.rating.collectAsState() // 评分
-    val commentContent by viewModel.commentContent.collectAsState() // 评论内容
-    val selectedImages by viewModel.selectedImages.collectAsState() // 选中的图片
-    val uploadedImageUrls by viewModel.uploadedImageUrls.collectAsState() // 已上传的图片URL
-    val isSubmitting by viewModel.isSubmitting.collectAsState() // 是否正在提交
+    // 评分
+    val rating by viewModel.rating.collectAsState()
+    // 评论内容
+    val commentContent by viewModel.commentContent.collectAsState()
+    // 选中的图片
+    val selectedImages by viewModel.selectedImages.collectAsState()
+    // 已上传的图片URL
+    val uploadedImageUrls by viewModel.uploadedImageUrls.collectAsState()
+    // 是否正在提交
+    val isSubmitting by viewModel.isSubmitting.collectAsState()
 
     OrderCommentScreen(
         rating = rating,

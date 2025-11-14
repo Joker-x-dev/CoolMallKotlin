@@ -3,6 +3,7 @@ package com.joker.coolmall.feature.order.viewmodel
 import android.net.Uri
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
 import com.joker.coolmall.core.data.repository.FileUploadRepository
 import com.joker.coolmall.core.data.repository.GoodsRepository
@@ -12,8 +13,9 @@ import com.joker.coolmall.core.model.request.GoodsCommentSubmitRequest
 import com.joker.coolmall.core.util.log.LogUtils
 import com.joker.coolmall.core.util.toast.ToastUtils
 import com.joker.coolmall.feature.order.R
-import com.joker.coolmall.feature.order.navigation.OrderCommentRoutes
 import com.joker.coolmall.navigation.AppNavigator
+import com.joker.coolmall.navigation.RefreshResultKey
+import com.joker.coolmall.navigation.routes.OrderRoutes
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -45,21 +47,8 @@ class OrderCommentViewModel @Inject constructor(
     appState = appState,
 ) {
 
-    /**
-     * 订单ID
-     */
-    var orderId = 0L
-
-    /**
-     * 商品ID
-     */
-    var goodsId = 0L
-
-    init {
-        // 从路由参数中获取订单ID和商品ID
-        orderId = savedStateHandle.get<Long>(OrderCommentRoutes.ORDER_ID_ARG) ?: 0L
-        goodsId = savedStateHandle.get<Long>(OrderCommentRoutes.GOODS_ID_ARG) ?: 0L
-    }
+    // 订单评价路由参数
+    private val orderCommentRoute = savedStateHandle.toRoute<OrderRoutes.Comment>()
 
     // 评价内容
     private val _commentContent = MutableStateFlow("")
@@ -76,7 +65,6 @@ class OrderCommentViewModel @Inject constructor(
     // 上传的图片URL列表
     private val _uploadedImageUrls = MutableStateFlow<List<String>>(emptyList())
     val uploadedImageUrls: StateFlow<List<String>> = _uploadedImageUrls.asStateFlow()
-
 
     // 提交状态
     private val _isSubmitting = MutableStateFlow(false)
@@ -183,9 +171,9 @@ class OrderCommentViewModel @Inject constructor(
     private fun submitCommentToServer() {
         // 创建提交请求
         val request = GoodsCommentSubmitRequest(
-            orderId = orderId, data = Comment(
-                orderId = orderId,
-                goodsId = goodsId,
+            orderId = orderCommentRoute.orderId, data = Comment(
+                orderId = orderCommentRoute.orderId,
+                goodsId = orderCommentRoute.goodsId,
                 content = _commentContent.value,
                 starCount = _rating.value,
                 pics = _uploadedImageUrls.value.ifEmpty { null })
@@ -194,10 +182,11 @@ class OrderCommentViewModel @Inject constructor(
         ResultHandler.handleResultWithData(
             scope = viewModelScope,
             flow = goodsRepository.submitGoodsComment(request).asResult(),
-            onData = { success ->
+            onData = { _ ->
                 ToastUtils.showSuccess(R.string.comment_submit_success)
                 LogUtils.d("评价提交成功")
-                navigateBack(mapOf("refresh" to true))
+                // 使用 NavigationResult 回传刷新信号，通知上一个页面刷新
+                popBackStackWithResult(RefreshResultKey, true)
             },
             onFinally = { _isSubmitting.value = false })
     }

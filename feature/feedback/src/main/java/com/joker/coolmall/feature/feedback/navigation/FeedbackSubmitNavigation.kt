@@ -11,7 +11,7 @@ import com.joker.coolmall.navigation.routes.FeedbackRoutes
  * @author Joker.X
  */
 fun NavGraphBuilder.feedbackSubmitScreen() {
-    composable(route = FeedbackRoutes.SUBMIT) {
+    composable<FeedbackRoutes.Submit> {
         FeedbackSubmitRoute()
     }
 }

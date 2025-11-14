@@ -1,9 +1,7 @@
 package com.joker.coolmall.feature.order.viewmodel
 
 import android.content.Context
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavBackStackEntry
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
 import com.joker.coolmall.core.data.repository.CartRepository
 import com.joker.coolmall.core.data.repository.OrderRepository
@@ -21,7 +19,6 @@ import com.joker.coolmall.core.model.request.CreateOrderRequest.CreateOrder
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.util.storage.MMKVUtils
 import com.joker.coolmall.feature.order.R
-import com.joker.coolmall.feature.order.navigation.OrderPayRoutes
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.OrderRoutes
 import com.joker.coolmall.navigation.routes.UserRoutes
@@ -34,7 +31,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 /**
@@ -223,17 +219,12 @@ class OrderConfirmViewModel @Inject constructor(
     fun navigateToPayment(order: Order) {
         val orderId = order.id
         val paymentPrice = order.price - order.discountPrice // 实付金额
-
-        // 构建带参数的支付路由：/order/pay/{orderId}/{paymentPrice}?from=confirm
-        val paymentRoute = OrderPayRoutes.ORDER_PAY_PATTERN
-            .replace("{${OrderPayRoutes.ORDER_ID_ARG}}", orderId.toString())
-            .replace("{${OrderPayRoutes.PRICE_ARG}}", paymentPrice.toString()) +
-                // 添加来源参数，表示从确认订单页面来
-                "?${OrderPayRoutes.FROM_ARG}=${OrderPayRoutes.FROM_ORDER_CONFIRM}"
-
-        // 使用封装方法跳转到支付页面并关闭当前页面
-        // 传入当前页面的路由 OrderRoutes.CONFIRM (order/confirm)
-        toPageAndCloseCurrent(paymentRoute, OrderRoutes.CONFIRM)
+        
+        // 跳转到支付页面并关闭当前页面
+        navigateAndCloseCurrent(
+            OrderRoutes.Pay(orderId = orderId, price = paymentPrice, from = "confirm"),
+            OrderRoutes.Confirm
+        )
     }
 
     /**
@@ -353,36 +344,19 @@ class OrderConfirmViewModel @Inject constructor(
      * @author Joker.X
      */
     fun navigateToAddressSelection() {
-        // 构建带选择模式参数的地址列表路由
-        val addressListRoute = "${UserRoutes.ADDRESS_LIST}?is_select_mode=true"
-
-        toPage(addressListRoute)
+        navigate(UserRoutes.AddressList(isSelectMode = true))
     }
 
     /**
-     * 监听地址选择返回的数据
+     * 处理地址选择结果
+     * 使用类型安全的 NavigationResultKey 接收地址选择结果
      *
-     * @param backStackEntry 导航返回栈条目
+     * @param address 选中的地址
      * @author Joker.X
      */
-    fun observeAddressSelection(backStackEntry: NavBackStackEntry?) {
-        if (backStackEntry == null) return
-        val owner: LifecycleOwner = backStackEntry
-        backStackEntry.savedStateHandle
-            .getLiveData<String>("selected_address")
-            .observe(owner) { selectedAddressJson ->
-                if (selectedAddressJson != null) {
-                    try {
-                        val selectedAddress = Json.decodeFromString<Address>(selectedAddressJson)
-                        val currentData = super.getSuccessData()
-                        val updatedData = currentData.copy(defaultAddress = selectedAddress)
-                        super.setSuccessState(updatedData)
-                        // 清除返回数据，避免重复处理
-                        backStackEntry.savedStateHandle["selected_address"] = null
-                    } catch (_: Exception) {
-                        // JSON解析失败，忽略
-                    }
-                }
-            }
+    fun onAddressSelected(address: Address) {
+        val currentData = super.getSuccessData()
+        val updatedData = currentData.copy(defaultAddress = address)
+        super.setSuccessState(updatedData)
     }
 }

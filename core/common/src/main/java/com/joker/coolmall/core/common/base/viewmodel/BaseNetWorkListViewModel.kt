@@ -10,6 +10,8 @@ import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.navigation.AppNavigator
+import com.joker.coolmall.navigation.NavigationResultKey
+import com.joker.coolmall.navigation.RefreshResultKey
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import kotlinx.coroutines.delay
@@ -173,7 +175,7 @@ abstract class BaseNetWorkListViewModel<T : Any>(
                 viewModelScope.launch {
                     _loadMoreState.value = LoadMoreState.Success
                     delay(400)
-                    _listData.value = _listData.value + newList
+                    _listData.value += newList
                     _loadMoreState.value =
                         if (hasNextPage) LoadMoreState.PullToLoad else LoadMoreState.NoMore
                 }
@@ -270,25 +272,35 @@ abstract class BaseNetWorkListViewModel<T : Any>(
     }
 
     /**
-     * 视图层调用此方法，监听页面刷新信号。
-     * @param backStackEntry 当前页面的NavBackStackEntry
-     * @param key 刷新信号的key，默认是"refresh"，可自定义
+     * 视图层调用此方法，监听页面刷新信号（基于 NavigationResultKey）。
      *
-     * 用法：在Composable中调用 viewModel.observeRefreshState(backStackEntry, key = "refreshXXX")
+     * @param backStackEntry 当前页面的 NavBackStackEntry
+     * @param key 刷新结果的类型安全 Key，默认使用全局的 [RefreshResultKey]
+     *
+     * 用法：在 Composable 中调用
+     * ```kotlin
+     * val backStackEntry = navController.currentBackStackEntry
+     * LaunchedEffect(backStackEntry) {
+     *     viewModel.observeRefreshState(backStackEntry)
+     * }
+     * ```
+     *
      * 只需调用一次，自动去重和解绑，无内存泄漏。
+     * 语义等价于旧方案中的 "refresh" 布尔标记。
      */
-    fun observeRefreshState(backStackEntry: NavBackStackEntry?, key: String = "refresh") {
+    fun observeRefreshState(
+        backStackEntry: NavBackStackEntry?,
+        key: NavigationResultKey<Boolean> = RefreshResultKey
+    ) {
         if (backStackEntry == null) return
         val owner: LifecycleOwner = backStackEntry
         backStackEntry.savedStateHandle
-            .getLiveData<Boolean>(key)
-            .observe(owner, object : Observer<Boolean> {
-                override fun onChanged(value: Boolean) {
-                    if (value == true) {
-                        onRefresh()
-                        // 只刷新一次
-                        backStackEntry.savedStateHandle[key] = false
-                    }
+            .getLiveData<Boolean>(key.key)
+            .observe(owner, Observer<Boolean> { value ->
+                if (value) {
+                    onRefresh()
+                    // 只刷新一次
+                    backStackEntry.savedStateHandle[key.key] = false
                 }
             })
     }

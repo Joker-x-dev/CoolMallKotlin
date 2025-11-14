@@ -2,11 +2,11 @@ package com.joker.coolmall.feature.launch.viewmodel
 
 import android.content.Context
 import androidx.lifecycle.SavedStateHandle
+import androidx.navigation.toRoute
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
 import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.util.storage.MMKVUtils
 import com.joker.coolmall.feature.launch.model.GuidePageProvider
-import com.joker.coolmall.feature.launch.navigation.GuideRoutes
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.LaunchRoutes
 import com.joker.coolmall.navigation.routes.MainRoutes
@@ -41,9 +41,9 @@ class GuideViewModel @Inject constructor(
         private const val KEY_GUIDE_SHOWN = "guide_shown"
     }
 
-    // 是否从设置页面进入
+    // 是否从设置页面进入（从类型安全路由获取）
     private val isFromSettings: Boolean =
-        savedStateHandle.get<Boolean>(GuideRoutes.FROM_SETTINGS_ARG) ?: false
+        savedStateHandle.toRoute<LaunchRoutes.Guide>().fromSettings
 
     // 引导页数据
     val guidePages = GuidePageProvider.getGuidePages(context)
@@ -112,7 +112,10 @@ class GuideViewModel @Inject constructor(
         } else {
             // 正常流程，标记引导页已显示并跳转到主页面
             markGuideAsShown()
-            toPageAndCloseCurrent(MainRoutes.MAIN, LaunchRoutes.GUIDE)
+            navigateAndCloseCurrent(
+                route = MainRoutes.Main,
+                currentRoute = LaunchRoutes.Guide()
+            )
         }
     }
 

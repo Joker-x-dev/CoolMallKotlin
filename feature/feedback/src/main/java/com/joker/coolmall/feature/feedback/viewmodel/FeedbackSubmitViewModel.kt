@@ -17,6 +17,7 @@ import com.joker.coolmall.core.util.log.LogUtils
 import com.joker.coolmall.core.util.toast.ToastUtils
 import com.joker.coolmall.feature.feedback.R
 import com.joker.coolmall.navigation.AppNavigator
+import com.joker.coolmall.navigation.RefreshResultKey
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -220,7 +221,8 @@ class FeedbackSubmitViewModel @Inject constructor(
             flow = feedbackRepository.submitFeedback(request).asResult(),
             onData = { success ->
                 ToastUtils.showSuccess(R.string.feedback_submit_success)
-                navigateBack(mapOf("refresh" to true))
+                // 使用 NavigationResult 回传刷新信号，通知反馈列表刷新
+                popBackStackWithResult(RefreshResultKey, true)
             },
             onFinally = { _isSubmitting.value = false }
         )

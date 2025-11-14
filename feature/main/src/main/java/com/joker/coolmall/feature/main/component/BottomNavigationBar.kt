@@ -34,7 +34,7 @@ import com.joker.coolmall.feature.main.model.TopLevelDestination
  *
  * @param destinations 底部导航栏目的地列表
  * @param onNavigateToDestination 点击导航项的回调
- * @param currentDestination 当前选中的导航项
+ * @param currentPageIndex 当前选中的页面索引
  * @param modifier 修饰符
  * @author Joker.X
  */
@@ -42,7 +42,7 @@ import com.joker.coolmall.feature.main.model.TopLevelDestination
 fun BottomNavigationBar(
     destinations: List<TopLevelDestination>,
     onNavigateToDestination: (Int) -> Unit,
-    currentDestination: String,
+    currentPageIndex: Int,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -52,7 +52,7 @@ fun BottomNavigationBar(
             .navigationBarsPadding()
     ) {
         destinations.forEachIndexed { index, destination ->
-            val selected = destination.route == currentDestination
+            val selected = index == currentPageIndex
 
             var isPressed by remember { mutableStateOf(false) }
 
@@ -132,6 +132,6 @@ fun MyNavigationBarPreview() {
     BottomNavigationBar(
         destinations = TopLevelDestination.entries,
         onNavigateToDestination = {},
-        currentDestination = TopLevelDestination.HOME.route
+        currentPageIndex = 0
     )
 }

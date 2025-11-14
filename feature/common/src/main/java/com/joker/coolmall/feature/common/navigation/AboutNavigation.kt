@@ -11,7 +11,7 @@ import com.joker.coolmall.navigation.routes.CommonRoutes
  * @author Joker.X
  */
 fun NavGraphBuilder.aboutScreen() {
-    composable(route = CommonRoutes.ABOUT) {
+    composable<CommonRoutes.About> {
         AboutRoute()
     }
-} 
+}

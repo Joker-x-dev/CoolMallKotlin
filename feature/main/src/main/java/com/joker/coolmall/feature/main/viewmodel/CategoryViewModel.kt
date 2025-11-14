@@ -94,7 +94,7 @@ class CategoryViewModel @Inject constructor(
      * @author Joker.X
      */
     fun toGoodsCategoryPage(categoryId: Long) {
-        toPage("${GoodsRoutes.CATEGORY}?type_id=$categoryId")
+        navigate(GoodsRoutes.Category(typeId = categoryId.toString(), featured = false, recommend = false, keyword = null))
     }
 
     /**

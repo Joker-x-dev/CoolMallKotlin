@@ -15,7 +15,7 @@ import com.joker.coolmall.navigation.routes.MainRoutes
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
 fun NavGraphBuilder.mainScreen(sharedTransitionScope: SharedTransitionScope) {
-    composable(MainRoutes.MAIN) {
+    composable<MainRoutes.Main> {
         MainRoute(sharedTransitionScope, this@composable)
     }
 }

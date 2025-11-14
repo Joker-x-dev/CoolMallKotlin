@@ -1,38 +1,50 @@
 package com.joker.coolmall.navigation.routes
 
+import kotlinx.serialization.Serializable
+
 /**
- * 认证模块路由常量
+ * 认证模块路由
  *
  * @author Joker.X
  */
 object AuthRoutes {
     /**
-     * 认证模块根路由
-     */
-    private const val AUTH_ROUTE = "auth"
-
-    /**
      * 登录主页路由
+     *
+     * @author Joker.X
      */
-    const val HOME = "$AUTH_ROUTE/home"
+    @Serializable
+    data object Login
 
     /**
      * 账号密码登录路由
+     *
+     * @author Joker.X
      */
-    const val ACCOUNT_LOGIN = "$AUTH_ROUTE/account-login"
+    @Serializable
+    data object AccountLogin
 
     /**
      * 短信验证码登录路由
+     *
+     * @author Joker.X
      */
-    const val SMS_LOGIN = "$AUTH_ROUTE/sms-login"
+    @Serializable
+    data object SmsLogin
 
     /**
      * 注册页面路由
+     *
+     * @author Joker.X
      */
-    const val REGISTER = "$AUTH_ROUTE/register"
+    @Serializable
+    data object Register
 
     /**
      * 找回密码路由
+     *
+     * @author Joker.X
      */
-    const val RESET_PASSWORD = "$AUTH_ROUTE/reset-password"
+    @Serializable
+    data object ResetPassword
 }

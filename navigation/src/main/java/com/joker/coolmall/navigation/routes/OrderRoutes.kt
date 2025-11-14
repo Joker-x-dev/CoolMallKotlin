@@ -1,48 +1,79 @@
 package com.joker.coolmall.navigation.routes
 
+import kotlinx.serialization.Serializable
+
 /**
- * 订单模块路由常量
+ * 订单模块路由
  *
  * @author Joker.X
  */
 object OrderRoutes {
     /**
-     * 订单模块根路由
-     */
-    private const val ORDER_ROUTE = "order"
-
-    /**
      * 订单列表路由
+     *
+     * @param tab Tab标签（可选）
+     * @author Joker.X
      */
-    const val LIST = "$ORDER_ROUTE/list"
+    @Serializable
+    data class List(val tab: String? = null)
 
     /**
      * 确认订单路由
+     *
+     * @author Joker.X
      */
-    const val CONFIRM = "$ORDER_ROUTE/confirm"
+    @Serializable
+    data object Confirm
 
     /**
      * 订单详情路由
+     *
+     * @param orderId 订单ID
+     * @author Joker.X
      */
-    const val DETAIL = "$ORDER_ROUTE/detail"
+    @Serializable
+    data class Detail(val orderId: Long)
 
     /**
      * 订单支付路由
+     *
+     * @param orderId 订单ID
+     * @param price 支付价格
+     * @param from 来源（可选）
+     * @author Joker.X
      */
-    const val PAY = "$ORDER_ROUTE/pay"
+    @Serializable
+    data class Pay(
+        val orderId: Long,
+        val price: Int,
+        val from: String? = null
+    )
 
     /**
      * 退款申请路由
+     *
+     * @param orderId 订单ID
+     * @author Joker.X
      */
-    const val REFUND = "$ORDER_ROUTE/refund"
+    @Serializable
+    data class Refund(val orderId: Long)
 
     /**
      * 订单评价路由
+     *
+     * @param orderId 订单ID
+     * @param goodsId 商品ID
+     * @author Joker.X
      */
-    const val COMMENT = "$ORDER_ROUTE/comment"
+    @Serializable
+    data class Comment(val orderId: Long, val goodsId: Long)
 
     /**
      * 订单物流路由
+     *
+     * @param orderId 订单ID
+     * @author Joker.X
      */
-    const val LOGISTICS = "$ORDER_ROUTE/logistics"
+    @Serializable
+    data class Logistics(val orderId: Long)
 }

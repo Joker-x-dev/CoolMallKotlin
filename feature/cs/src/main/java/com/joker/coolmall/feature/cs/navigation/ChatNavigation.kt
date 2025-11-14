@@ -11,7 +11,7 @@ import com.joker.coolmall.navigation.routes.CsRoutes
  * @author Joker.X
  */
 fun NavGraphBuilder.chatScreen() {
-    composable(route = CsRoutes.CHAT) {
+    composable<CsRoutes.Chat> {
         ChatRoute()
     }
-} 
+}

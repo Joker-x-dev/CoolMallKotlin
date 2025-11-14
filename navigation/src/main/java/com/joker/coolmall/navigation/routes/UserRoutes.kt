@@ -1,33 +1,48 @@
 package com.joker.coolmall.navigation.routes
 
+import kotlinx.serialization.Serializable
+
 /**
- * 用户模块路由常量
+ * 用户模块路由
  *
  * @author Joker.X
  */
 object UserRoutes {
     /**
-     * 用户模块根路由
-     */
-    private const val USER_ROUTE = "user"
-
-    /**
      * 个人中心路由
+     *
+     * @author Joker.X
      */
-    const val PROFILE = "$USER_ROUTE/profile"
+    @Serializable
+    data object Profile
 
     /**
      * 收货地址列表路由
+     *
+     * @param isSelectMode 是否为选择模式（选择后返回地址）
+     * @author Joker.X
      */
-    const val ADDRESS_LIST = "$USER_ROUTE/address-list"
+    @Serializable
+    data class AddressList(val isSelectMode: Boolean = false)
 
     /**
-     * 收货地址详情路由
+     * 收货地址详情/编辑路由
+     *
+     * @param isEditMode 是否为编辑模式
+     * @param addressId 地址ID（0表示新增）
+     * @author Joker.X
      */
-    const val ADDRESS_DETAIL = "$USER_ROUTE/address-detail"
+    @Serializable
+    data class AddressDetail(
+        val isEditMode: Boolean = false,
+        val addressId: Long = 0L
+    )
 
     /**
      * 用户足迹路由
+     *
+     * @author Joker.X
      */
-    const val FOOTPRINT = "$USER_ROUTE/footprint"
+    @Serializable
+    data object Footprint
 }

@@ -44,9 +44,11 @@ import com.joker.coolmall.feature.user.viewmodel.FootprintViewModel
 internal fun FootprintRoute(
     viewModel: FootprintViewModel = hiltViewModel()
 ) {
+    // 收集页面UI状态
     val uiState by viewModel.uiState.collectAsState()
     // 收集足迹数据
     val footprints by viewModel.footprints.collectAsStateWithLifecycle()
+    // 收集足迹总数
     val footprintCount by viewModel.footprintCount.collectAsStateWithLifecycle()
 
     FootprintScreen(

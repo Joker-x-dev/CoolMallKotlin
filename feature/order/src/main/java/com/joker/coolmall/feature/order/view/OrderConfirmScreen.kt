@@ -15,7 +15,6 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -27,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
+import com.joker.coolmall.navigation.extension.CollectResult
 import com.joker.coolmall.core.designsystem.component.FullScreenBox
 import com.joker.coolmall.core.designsystem.component.SpaceBetweenRow
 import com.joker.coolmall.core.designsystem.component.VerticalList
@@ -36,6 +36,7 @@ import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.model.entity.Cart
 import com.joker.coolmall.core.model.entity.ConfirmOrder
 import com.joker.coolmall.core.model.entity.Coupon
+import com.joker.coolmall.navigation.results.SelectAddressResultKey
 import com.joker.coolmall.core.model.preview.previewAddress
 import com.joker.coolmall.core.model.preview.previewCartList
 import com.joker.coolmall.core.ui.component.address.AddressCard
@@ -72,15 +73,20 @@ internal fun OrderConfirmRoute(
     viewModel: OrderConfirmViewModel = hiltViewModel(),
     navController: NavController
 ) {
-    // 注册地址选择监听
-    val backStackEntry = navController.currentBackStackEntry
-    val uiState by viewModel.uiState.collectAsState() // UI状态
-    val remark by viewModel.remark.collectAsState() // 订单备注
-    val couponModalVisible by viewModel.couponModalVisible.collectAsState() // 优惠券弹窗显示状态
-    val selectedCoupon by viewModel.selectedCoupon.collectAsState() // 选中的优惠券
-    val originalPrice by viewModel.originalPrice.collectAsState() // 原始价格
-    val discountAmount by viewModel.discountAmount.collectAsState() // 折扣金额
-    val totalPrice by viewModel.totalPrice.collectAsState() // 总价格
+    // UI状态
+    val uiState by viewModel.uiState.collectAsState()
+    // 订单备注
+    val remark by viewModel.remark.collectAsState()
+    // 优惠券弹窗显示状态
+    val couponModalVisible by viewModel.couponModalVisible.collectAsState()
+    // 选中的优惠券
+    val selectedCoupon by viewModel.selectedCoupon.collectAsState()
+    // 原始价格
+    val originalPrice by viewModel.originalPrice.collectAsState()
+    // 折扣金额
+    val discountAmount by viewModel.discountAmount.collectAsState()
+    // 总价格
+    val totalPrice by viewModel.totalPrice.collectAsState()
 
     OrderConfirmScreen(
         uiState = uiState,
@@ -101,9 +107,9 @@ internal fun OrderConfirmRoute(
         onAddressClick = viewModel::navigateToAddressSelection
     )
 
-    // 监听地址选择返回的数据
-    LaunchedEffect(backStackEntry) {
-        viewModel.observeAddressSelection(backStackEntry)
+    // 使用类型安全的 NavigationResultKey 监听地址选择结果
+    navController.CollectResult(SelectAddressResultKey) { address ->
+        viewModel.onAddressSelected(address)
     }
 }
 

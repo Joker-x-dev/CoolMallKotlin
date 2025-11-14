@@ -11,7 +11,7 @@ import com.joker.coolmall.navigation.routes.AuthRoutes
  * @author Joker.X
  */
 fun NavGraphBuilder.registerScreen() {
-    composable(route = AuthRoutes.REGISTER) {
+    composable<AuthRoutes.Register> {
         RegisterRoute()
     }
-} 
+}

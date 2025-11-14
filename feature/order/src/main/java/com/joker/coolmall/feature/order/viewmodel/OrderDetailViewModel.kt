@@ -3,6 +3,7 @@ package com.joker.coolmall.feature.order.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavBackStackEntry
+import androidx.navigation.toRoute
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
 import com.joker.coolmall.core.data.repository.CommonRepository
@@ -15,10 +16,8 @@ import com.joker.coolmall.core.model.entity.Order
 import com.joker.coolmall.core.model.request.CancelOrderRequest
 import com.joker.coolmall.core.model.request.DictDataRequest
 import com.joker.coolmall.core.model.response.NetworkResponse
-import com.joker.coolmall.feature.order.navigation.OrderCommentRoutes
-import com.joker.coolmall.feature.order.navigation.OrderDetailRoutes
-import com.joker.coolmall.feature.order.navigation.OrderPayRoutes
 import com.joker.coolmall.navigation.AppNavigator
+import com.joker.coolmall.navigation.RefreshResultKey
 import com.joker.coolmall.navigation.routes.GoodsRoutes
 import com.joker.coolmall.navigation.routes.OrderRoutes
 import com.joker.coolmall.result.ResultHandler
@@ -51,10 +50,11 @@ class OrderDetailViewModel @Inject constructor(
     private val commonRepository: CommonRepository
 ) : BaseNetWorkViewModel<Order>(
     navigator = navigator,
-    appState = appState,
-    savedStateHandle = savedStateHandle,
-    idKey = OrderDetailRoutes.ORDER_ID_ARG
+    appState = appState
 ) {
+    // 从路由获取订单ID
+    private val detailRoute = savedStateHandle.toRoute<OrderRoutes.Detail>()
+    private val requiredOrderId: Long = detailRoute.orderId
 
     private val _cartList = MutableStateFlow<List<Cart>>(emptyList())
     val cartList = _cartList.asStateFlow()
@@ -110,7 +110,7 @@ class OrderDetailViewModel @Inject constructor(
      * @author Joker.X
      */
     override fun requestApiFlow(): Flow<NetworkResponse<Order>> {
-        return orderRepository.getOrderInfo(requiredId)
+        return orderRepository.getOrderInfo(requiredOrderId)
     }
 
     /**
@@ -158,7 +158,7 @@ class OrderDetailViewModel @Inject constructor(
     fun confirmReceiveOrder() {
         ResultHandler.handleResultWithData(
             scope = viewModelScope,
-            flow = orderRepository.confirmReceive(requiredId).asResult(),
+            flow = orderRepository.confirmReceive(requiredOrderId).asResult(),
             onData = { _ ->
                 // 刷新订单详情
                 retryRequest()
@@ -250,7 +250,7 @@ class OrderDetailViewModel @Inject constructor(
             scope = viewModelScope,
             flow = orderRepository.cancelOrder(
                 CancelOrderRequest(
-                    orderId = requiredId,
+                    orderId = requiredOrderId,
                     remark = _selectedCancelReason.value?.name ?: ""
                 )
             ).asResult(),
@@ -273,12 +273,7 @@ class OrderDetailViewModel @Inject constructor(
         val orderId = order.id
         val paymentPrice = order.price - order.discountPrice // 实付金额
 
-        // 构建带参数的支付路由：/order/pay/{orderId}/{paymentPrice}
-        val paymentRoute = OrderPayRoutes.ORDER_PAY_PATTERN
-            .replace("{${OrderPayRoutes.ORDER_ID_ARG}}", orderId.toString())
-            .replace("{${OrderPayRoutes.PRICE_ARG}}", paymentPrice.toString())
-
-        toPage(paymentRoute)
+        navigate(OrderRoutes.Pay(orderId = orderId, price = paymentPrice))
     }
 
     /**
@@ -290,18 +285,19 @@ class OrderDetailViewModel @Inject constructor(
     fun observeRefreshState(backStackEntry: NavBackStackEntry?) {
         backStackEntry?.savedStateHandle?.let { savedStateHandle ->
             viewModelScope.launch {
-                savedStateHandle.getStateFlow<Boolean>("refresh", false).collect { shouldRefresh ->
-                    if (shouldRefresh) {
-                        // 刷新订单详情
-                        retryRequest()
+                savedStateHandle.getStateFlow(RefreshResultKey.key, false)
+                    .collect { shouldRefresh ->
+                        if (shouldRefresh) {
+                            // 刷新订单详情
+                            retryRequest()
 
-                        // 标记需要在返回时刷新列表
-                        shouldRefreshListOnBack = true
+                            // 标记需要在返回时刷新列表
+                            shouldRefreshListOnBack = true
 
-                        // 重置刷新标志，避免重复刷新
-                        savedStateHandle["refresh"] = false
+                            // 重置刷新标志，避免重复刷新
+                            savedStateHandle[RefreshResultKey.key] = false
+                        }
                     }
-                }
             }
         }
     }
@@ -314,12 +310,10 @@ class OrderDetailViewModel @Inject constructor(
      */
     fun handleBackClick() {
         if (shouldRefreshListOnBack) {
-            // 如果需要刷新列表，则传递刷新标志
-            navigateBack(mapOf("refresh" to true))
-            // 重置标志
+            // 使用 NavigationResult 回传刷新状态给上一个页面（通常是订单列表）
+            popBackStackWithResult(RefreshResultKey, true)
             shouldRefreshListOnBack = false
         } else {
-            // 正常返回
             navigateBack()
         }
     }
@@ -385,7 +379,7 @@ class OrderDetailViewModel @Inject constructor(
     fun toGoodsDetail(goodsId: Long) {
         // 隐藏弹窗
         hideRebuyModal()
-        toPage(GoodsRoutes.DETAIL, goodsId)
+        navigate(GoodsRoutes.Detail(goodsId = goodsId))
     }
 
     /**
@@ -396,7 +390,7 @@ class OrderDetailViewModel @Inject constructor(
     fun toOrderLogistics() {
         val order = super.getSuccessData()
         val orderId = order.id
-        toPage(OrderRoutes.LOGISTICS, orderId)
+        navigate(OrderRoutes.Logistics(orderId = orderId))
     }
 
     /**
@@ -407,7 +401,7 @@ class OrderDetailViewModel @Inject constructor(
     fun toOrderRefund() {
         val order = super.getSuccessData()
         val orderId = order.id
-        toPage(OrderRoutes.REFUND, orderId)
+        navigate(OrderRoutes.Refund(orderId = orderId))
     }
 
     /**
@@ -425,13 +419,7 @@ class OrderDetailViewModel @Inject constructor(
             val order = super.getSuccessData()
             val orderId = order.id
             val goodsId = cartList.firstOrNull()?.goodsId ?: 0L
-
-            // 构建带参数的评价路由：/order/comment/{orderId}/{goodsId}
-            val commentRoute = OrderCommentRoutes.COMMENT_PATTERN
-                .replace("{${OrderCommentRoutes.ORDER_ID_ARG}}", orderId.toString())
-                .replace("{${OrderCommentRoutes.GOODS_ID_ARG}}", goodsId.toString())
-
-            toPage(commentRoute)
+            navigate(OrderRoutes.Comment(orderId = orderId, goodsId = goodsId))
         }
     }
 
@@ -446,12 +434,7 @@ class OrderDetailViewModel @Inject constructor(
         // 隐藏弹窗
         hideCommentModal()
 
-        // 构建带参数的评价路由：/order/comment/{orderId}/{goodsId}
-        val commentRoute = OrderCommentRoutes.COMMENT_PATTERN
-            .replace("{${OrderCommentRoutes.ORDER_ID_ARG}}", orderId.toString())
-            .replace("{${OrderCommentRoutes.GOODS_ID_ARG}}", goodsId.toString())
-
-        toPage(commentRoute)
+        navigate(OrderRoutes.Comment(orderId = orderId, goodsId = goodsId))
     }
 
     /**

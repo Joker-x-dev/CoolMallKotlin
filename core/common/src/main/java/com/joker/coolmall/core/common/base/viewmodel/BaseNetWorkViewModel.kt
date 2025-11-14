@@ -9,6 +9,8 @@ import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.navigation.AppNavigator
+import com.joker.coolmall.navigation.NavigationResultKey
+import com.joker.coolmall.navigation.RefreshResultKey
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import kotlinx.coroutines.delay
@@ -28,14 +30,12 @@ import kotlinx.coroutines.launch
  * @param navigator 导航控制器
  * @param appState 应用状态
  * @param savedStateHandle 保存状态句柄，用于获取路由参数
- * @param idKey 路由参数ID的键名，默认为null
  * @author Joker.X
  */
 abstract class BaseNetWorkViewModel<T>(
     navigator: AppNavigator,
     appState: AppState,
     protected val savedStateHandle: SavedStateHandle? = null,
-    protected val idKey: String? = null
 ) : BaseViewModel(navigator, appState) {
 
     /**
@@ -62,30 +62,6 @@ abstract class BaseNetWorkViewModel<T>(
      * 请求开始时间，用于计算最少加载时间
      */
     private var requestStartTime: Long = 0
-
-    /**
-     * 通用路由参数ID，子类可直接使用
-     * 需要在构造函数中传入SavedStateHandle和idKey才能使用
-     * 返回可空的Long类型ID参数
-     */
-    protected val id: Long? by lazy {
-        if (savedStateHandle != null && idKey != null) {
-            savedStateHandle[idKey]
-        } else {
-            null
-        }
-    }
-
-    /**
-     * 获取必须存在的ID参数，如果不存在则抛出异常
-     * 当确定路由参数必须存在时使用此方法
-     * 返回非空的Long类型ID参数
-     *
-     * @throws IllegalStateException 当ID参数不存在时抛出
-     */
-    protected val requiredId: Long by lazy {
-        checkNotNull(id) { "Required route parameter ID does not exist. Please ensure correct SavedStateHandle and idKey are provided" }
-    }
 
     /**
      * 子类必须重写此方法，提供API请求的Flow
@@ -198,25 +174,35 @@ abstract class BaseNetWorkViewModel<T>(
 
 
     /**
-     * 视图层调用此方法，监听页面刷新信号。
-     * @param backStackEntry 当前页面的NavBackStackEntry
-     * @param key 刷新信号的key，默认是"refresh"，可自定义
+     * 视图层调用此方法，监听页面刷新信号（基于 NavigationResultKey）。
      *
-     * 用法：在Composable中调用 viewModel.observeRefreshState(backStackEntry, key = "refreshXXX")
+     * @param backStackEntry 当前页面的 NavBackStackEntry
+     * @param key 刷新结果的类型安全 Key，默认使用全局的 [RefreshResultKey]
+     *
+     * 用法：在 Composable 中调用
+     * ```kotlin
+     * val backStackEntry = navController.currentBackStackEntry
+     * LaunchedEffect(backStackEntry) {
+     *     viewModel.observeRefreshState(backStackEntry)
+     * }
+     * ```
+     *
      * 只需调用一次，自动去重和解绑，无内存泄漏。
+     * 语义等价于旧方案中的 "refresh" 布尔标记。
      */
-    fun observeRefreshState(backStackEntry: NavBackStackEntry?, key: String = "refresh") {
+    fun observeRefreshState(
+        backStackEntry: NavBackStackEntry?,
+        key: NavigationResultKey<Boolean> = RefreshResultKey
+    ) {
         if (backStackEntry == null) return
         val owner: LifecycleOwner = backStackEntry
         backStackEntry.savedStateHandle
-            .getLiveData<Boolean>(key)
-            .observe(owner, object : Observer<Boolean> {
-                override fun onChanged(value: Boolean) {
-                    if (value == true) {
-                        executeRequest()
-                        // 只刷新一次
-                        backStackEntry.savedStateHandle[key] = false
-                    }
+            .getLiveData<Boolean>(key.key)
+            .observe(owner, Observer<Boolean> { value ->
+                if (value) {
+                    executeRequest()
+                    // 只刷新一次
+                    backStackEntry.savedStateHandle[key.key] = false
                 }
             })
     }

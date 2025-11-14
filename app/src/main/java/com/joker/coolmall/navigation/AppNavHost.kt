@@ -48,33 +48,33 @@ fun AppNavHost(
     SharedTransitionLayout {
         NavHost(
             navController = navController,
-            startDestination = LaunchRoutes.SPLASH,
+            startDestination = LaunchRoutes.Splash,
             modifier = modifier,
             // 页面进入动画
             enterTransition = {
                 slideIntoContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
                     animationSpec = tween(300)
                 )
             },
             // 页面退出动画
             exitTransition = {
                 slideOutOfContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Left,
+                    towards = AnimatedContentTransitionScope.SlideDirection.Left,
                     animationSpec = tween(300)
                 )
             },
             // 返回时页面进入动画
             popEnterTransition = {
                 slideIntoContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
                     animationSpec = tween(300)
                 )
             },
             // 返回时页面退出动画
             popExitTransition = {
                 slideOutOfContainer(
-                    AnimatedContentTransitionScope.SlideDirection.Right,
+                    towards = AnimatedContentTransitionScope.SlideDirection.Right,
                     animationSpec = tween(300)
                 )
             }

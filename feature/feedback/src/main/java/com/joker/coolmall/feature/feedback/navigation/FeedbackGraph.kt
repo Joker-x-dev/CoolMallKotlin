@@ -2,6 +2,7 @@ package com.joker.coolmall.feature.feedback.navigation
 
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
+import androidx.navigation.NavHostController
 
 /**
  * 反馈模块导航图
@@ -11,7 +12,7 @@ import androidx.navigation.NavGraphBuilder
  */
 fun NavGraphBuilder.feedbackGraph(navController: NavController) {
     // 反馈列表页面
-    feedbackListScreen()
+    feedbackListScreen(navController as NavHostController)
 
     // 提交反馈页面
     feedbackSubmitScreen()

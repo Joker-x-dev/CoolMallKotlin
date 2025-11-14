@@ -2,19 +2,21 @@ package com.joker.coolmall.feature.order.viewmodel
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
 import com.joker.coolmall.core.data.repository.OrderRepository
 import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.util.toast.ToastUtils
 import com.joker.coolmall.feature.order.R
 import com.joker.coolmall.feature.order.model.Alipay
-import com.joker.coolmall.feature.order.navigation.OrderPayRoutes
 import com.joker.coolmall.navigation.AppNavigator
+import com.joker.coolmall.navigation.RefreshResultKey
 import com.joker.coolmall.navigation.routes.OrderRoutes
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
@@ -36,35 +38,16 @@ class OrderPayViewModel @Inject constructor(
 ) : BaseViewModel(navigator, appState) {
 
     /**
-     * 订单ID
+     * 订单支付路由参数
      */
-    var orderId = 0L
-
-    /**
-     * 订单价格
-     */
-    private val _price = MutableStateFlow(0)
-    val price = _price.asStateFlow()
+    private val _orderPayRoute = MutableStateFlow(savedStateHandle.toRoute<OrderRoutes.Pay>())
+    val orderPayRoute: StateFlow<OrderRoutes.Pay> = _orderPayRoute.asStateFlow()
 
     /**
      * 支付宝支付参数
      */
     private val _alipayPayInfo = MutableStateFlow("")
     val alipayPayInfo = _alipayPayInfo.asStateFlow()
-
-    /**
-     * 来源参数，用于判断返回行为
-     */
-    private val fromSource: String?
-
-    init {
-        // 从路由参数中获取订单ID和价格
-        orderId = savedStateHandle.get<Long>(OrderPayRoutes.ORDER_ID_ARG) ?: 0L
-        _price.value = savedStateHandle.get<Int>(OrderPayRoutes.PRICE_ARG) ?: 0
-
-        // 获取来源参数
-        fromSource = savedStateHandle.get<String>(OrderPayRoutes.FROM_ARG)
-    }
 
     /**
      * 发起支付宝支付
@@ -74,7 +57,8 @@ class OrderPayViewModel @Inject constructor(
     fun startAlipayPayment() {
         ResultHandler.handleResultWithData(
             scope = viewModelScope,
-            flow = orderRepository.alipayAppPay(mapOf("orderId" to orderId)).asResult(),
+            flow = orderRepository.alipayAppPay(mapOf("orderId" to _orderPayRoute.value.orderId))
+                .asResult(),
             showToast = true,
             onData = { data -> _alipayPayInfo.value = data }
         )
@@ -126,15 +110,16 @@ class OrderPayViewModel @Inject constructor(
      */
     private fun handleBackAfterPayment(isPaySuccess: Boolean) {
         // 如果来源是确认订单页面，无论支付是否成功，都跳转到订单详情页面
-        if (fromSource == OrderPayRoutes.FROM_ORDER_CONFIRM) {
+        if (_orderPayRoute.value.from == "confirm") {
             // 返回上一级(确认订单页面)
             navigateBack()
             // 导航到订单详情页面
-            toPage(OrderRoutes.DETAIL, orderId)
+            navigate(OrderRoutes.Detail(orderId = _orderPayRoute.value.orderId))
         } else {
-            // 其他情况正常返回，如果支付成功则带上refresh参数
+            // 其他情况正常返回
             if (isPaySuccess) {
-                navigateBack(mapOf("refresh" to true))
+                // 支付成功，使用 NavigationResult 回传刷新信号
+                popBackStackWithResult(RefreshResultKey, true)
             } else {
                 navigateBack()
             }

@@ -1,18 +1,18 @@
 package com.joker.coolmall.navigation.routes
 
+import kotlinx.serialization.Serializable
+
 /**
- * 营销模块路由常量
+ * 营销模块路由
  *
  * @author Joker.X
  */
 object MarketRoutes {
     /**
-     * 营销模块根路由
+     * 优惠券管理路由
+     *
+     * @author Joker.X
      */
-    private const val MARKET_ROUTE = "market"
-
-    /**
-     * 我的优惠券路由
-     */
-    const val COUPON = "$MARKET_ROUTE/coupon"
+    @Serializable
+    data object Coupon
 }

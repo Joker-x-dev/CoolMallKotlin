@@ -2,11 +2,13 @@ package com.joker.coolmall.feature.feedback.view
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.joker.coolmall.core.common.base.state.BaseNetWorkListUiState
 import com.joker.coolmall.core.common.base.state.LoadMoreState
 import com.joker.coolmall.core.designsystem.theme.AppTheme
@@ -27,7 +29,8 @@ import com.joker.coolmall.feature.feedback.viewmodel.FeedbackListViewModel
  */
 @Composable
 internal fun FeedbackListRoute(
-    viewModel: FeedbackListViewModel = hiltViewModel()
+    viewModel: FeedbackListViewModel = hiltViewModel(),
+    navController: NavHostController
 ) {
     // 反馈列表UI状态
     val uiState by viewModel.uiState.collectAsState()
@@ -37,6 +40,12 @@ internal fun FeedbackListRoute(
     val isRefreshing by viewModel.isRefreshing.collectAsState()
     // 加载更多状态
     val loadMoreState by viewModel.loadMoreState.collectAsState()
+
+    // 注册返回刷新监听（使用 BaseNetWorkListViewModel 内置的 observeRefreshState）
+    val backStackEntry = navController.currentBackStackEntry
+    LaunchedEffect(backStackEntry) {
+        viewModel.observeRefreshState(backStackEntry)
+    }
 
     FeedbackListScreen(
         uiState = uiState,

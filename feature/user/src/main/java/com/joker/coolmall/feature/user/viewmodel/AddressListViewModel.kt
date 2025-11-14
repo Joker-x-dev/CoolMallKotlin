@@ -2,17 +2,16 @@ package com.joker.coolmall.feature.user.viewmodel
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavBackStackEntry
+import androidx.navigation.toRoute
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkListViewModel
 import com.joker.coolmall.core.data.repository.AddressRepository
 import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.common.Ids
 import com.joker.coolmall.core.model.entity.Address
+import com.joker.coolmall.navigation.results.SelectAddressResultKey
 import com.joker.coolmall.core.model.request.PageRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
-import com.joker.coolmall.feature.user.navigation.AddressDetailRoutes
-import com.joker.coolmall.feature.user.navigation.AddressListRoutes
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.UserRoutes
 import com.joker.coolmall.result.ResultHandler
@@ -22,7 +21,6 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.serialization.json.Json
 import javax.inject.Inject
 
 /**
@@ -34,14 +32,19 @@ import javax.inject.Inject
 class AddressListViewModel @Inject constructor(
     navigator: AppNavigator,
     appState: AppState,
+    savedStateHandle: SavedStateHandle,
     private val addressRepository: AddressRepository,
-    private val savedStateHandle: SavedStateHandle
 ) : BaseNetWorkListViewModel<Address>(navigator, appState) {
 
     /**
      * 是否为选择模式
      */
-    val isSelectMode = savedStateHandle.get<Boolean>(AddressListRoutes.IS_SELECT_MODE_ARG) ?: false
+    private val addressListRoute = savedStateHandle.toRoute<UserRoutes.AddressList>()
+
+    /**
+     * 是否为选择模式
+     */
+    val isSelectMode = addressListRoute.isSelectMode
 
     /**
      * 是否显示删除确认弹窗
@@ -80,10 +83,7 @@ class AddressListViewModel @Inject constructor(
      * @author Joker.X
      */
     fun toAddressDetailPage() {
-        val args = mapOf(
-            AddressDetailRoutes.IS_EDIT_MODE_ARG to false, AddressDetailRoutes.ADDRESS_ID_ARG to ""
-        )
-        super.toPage(UserRoutes.ADDRESS_DETAIL, args)
+        navigate(UserRoutes.AddressDetail(isEditMode = false, addressId = 0L))
     }
 
     /**
@@ -93,11 +93,7 @@ class AddressListViewModel @Inject constructor(
      * @author Joker.X
      */
     fun toAddressDetailEditPage(addressId: Long) {
-        val args = mapOf(
-            AddressDetailRoutes.IS_EDIT_MODE_ARG to true,
-            AddressDetailRoutes.ADDRESS_ID_ARG to addressId.toString()
-        )
-        super.toPage(UserRoutes.ADDRESS_DETAIL, args)
+        navigate(UserRoutes.AddressDetail(isEditMode = true, addressId = addressId))
     }
 
     /**
@@ -139,32 +135,16 @@ class AddressListViewModel @Inject constructor(
     }
 
     /**
-     * 选择地址（仅在选择模式下使用）
-     * 将选中的地址数据返回给上一个页面
-     *
-     * @param address 选中的地址
-     * @param backStackEntry 导航返回栈条目
-     * @author Joker.X
-     */
-    private fun selectAddress(address: Address, backStackEntry: NavBackStackEntry?) {
-        if (isSelectMode && backStackEntry != null) {
-            // 使用kotlinx.serialization将Address对象序列化为JSON字符串后传递
-            val addressJson = Json.encodeToString(address)
-            super.navigateBack(mapOf("selected_address" to addressJson))
-        }
-    }
-
-    /**
      * 处理地址卡片点击事件
      * 根据当前模式决定是编辑地址还是选择地址
      *
      * @param address 点击的地址
-     * @param backStackEntry 导航返回栈条目
      * @author Joker.X
      */
-    fun onAddressClick(address: Address, backStackEntry: NavBackStackEntry? = null) {
+    fun onAddressClick(address: Address) {
         if (isSelectMode) {
-            selectAddress(address, backStackEntry)
+            // 使用类型安全的 NavigationResultKey 返回选中的地址
+            popBackStackWithResult(SelectAddressResultKey, address)
         } else {
             toAddressDetailEditPage(address.id)
         }

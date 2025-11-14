@@ -103,6 +103,6 @@ class FeedbackListViewModel @Inject constructor(
      * @author Joker.X
      */
     fun toFeedbackSubmitPage() {
-        toPage(FeedbackRoutes.SUBMIT)
+        navigate(FeedbackRoutes.Submit)
     }
 }

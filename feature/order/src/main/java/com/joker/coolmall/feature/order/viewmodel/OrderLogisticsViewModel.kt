@@ -2,14 +2,15 @@ package com.joker.coolmall.feature.order.viewmodel
 
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
+import androidx.navigation.toRoute
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
 import com.joker.coolmall.core.data.repository.OrderRepository
 import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.entity.Logistics
 import com.joker.coolmall.core.model.entity.Order
 import com.joker.coolmall.core.model.response.NetworkResponse
-import com.joker.coolmall.feature.order.navigation.OrderLogisticsRoutes
 import com.joker.coolmall.navigation.AppNavigator
+import com.joker.coolmall.navigation.routes.OrderRoutes
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,10 +36,13 @@ class OrderLogisticsViewModel @Inject constructor(
     private val orderRepository: OrderRepository,
 ) : BaseNetWorkViewModel<Order>(
     navigator = navigator,
-    appState = appState,
-    savedStateHandle = savedStateHandle,
-    idKey = OrderLogisticsRoutes.ORDER_ID_ARG
+    appState = appState
 ) {
+    // 从路由获取订单ID
+    private val logisticsRoute = savedStateHandle.toRoute<OrderRoutes.Logistics>()
+
+    // 从路由获取订单ID
+    private val requiredOrderId: Long = logisticsRoute.orderId
 
     /**
      * 订单物流数据
@@ -58,7 +62,7 @@ class OrderLogisticsViewModel @Inject constructor(
      * @author Joker.X
      */
     override fun requestApiFlow(): Flow<NetworkResponse<Order>> {
-        return orderRepository.getOrderInfo(requiredId)
+        return orderRepository.getOrderInfo(requiredOrderId)
     }
 
     /**
@@ -69,7 +73,7 @@ class OrderLogisticsViewModel @Inject constructor(
     fun getOrderLogistics() {
         ResultHandler.handleResultWithData(
             scope = viewModelScope,
-            flow = orderRepository.getOrderLogistics(requiredId).asResult(),
+            flow = orderRepository.getOrderLogistics(requiredOrderId).asResult(),
             onData = { data -> _orderLogisticsUiState.value = data }
         )
     }

@@ -11,7 +11,7 @@ import com.joker.coolmall.navigation.routes.UserRoutes
  * @author Joker.X
  */
 fun NavGraphBuilder.footprintScreen() {
-    composable(route = UserRoutes.FOOTPRINT) {
+    composable<UserRoutes.Footprint> {
         FootprintRoute()
     }
-} 
+}

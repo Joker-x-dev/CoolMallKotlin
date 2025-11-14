@@ -11,7 +11,7 @@ import com.joker.coolmall.navigation.routes.AuthRoutes
  * @author Joker.X
  */
 fun NavGraphBuilder.resetPasswordScreen() {
-    composable(route = AuthRoutes.RESET_PASSWORD) {
+    composable<AuthRoutes.ResetPassword> {
         ResetPasswordRoute()
     }
-} 
+}

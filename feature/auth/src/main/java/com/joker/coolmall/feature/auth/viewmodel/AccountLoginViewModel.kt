@@ -169,7 +169,7 @@ class AccountLoginViewModel @Inject constructor(
      * @author Joker.X
      */
     fun toRegisterPage() {
-        super.toPage(AuthRoutes.REGISTER)
+        navigate(AuthRoutes.Register)
     }
 
     /**
@@ -178,7 +178,7 @@ class AccountLoginViewModel @Inject constructor(
      * @author Joker.X
      */
     fun toResetPasswordPage() {
-        super.toPage(AuthRoutes.RESET_PASSWORD)
+        navigate(AuthRoutes.ResetPassword)
     }
 
     /**
@@ -188,7 +188,7 @@ class AccountLoginViewModel @Inject constructor(
      * @author Joker.X
      */
     fun onUserAgreementClick() {
-        toPage(CommonRoutes.USER_AGREEMENT)
+        navigate(CommonRoutes.UserAgreement)
     }
 
     /**
@@ -198,6 +198,6 @@ class AccountLoginViewModel @Inject constructor(
      * @author Joker.X
      */
     fun onPrivacyPolicyClick() {
-        toPage(CommonRoutes.PRIVACY_POLICY)
+        navigate(CommonRoutes.PrivacyPolicy)
     }
 }

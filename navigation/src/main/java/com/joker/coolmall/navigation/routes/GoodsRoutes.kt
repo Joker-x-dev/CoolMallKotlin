@@ -1,33 +1,53 @@
 package com.joker.coolmall.navigation.routes
 
+import kotlinx.serialization.Serializable
+
 /**
- * 商品模块路由常量
+ * 商品模块路由
  *
  * @author Joker.X
  */
 object GoodsRoutes {
     /**
-     * 商品根路由
-     */
-    private const val GOODS_ROUTE = "goods"
-
-    /**
      * 商品详情路由
+     *
+     * @param goodsId 商品ID
+     * @author Joker.X
      */
-    const val DETAIL = "${GOODS_ROUTE}/detail"
+    @Serializable
+    data class Detail(val goodsId: Long)
 
     /**
      * 商品搜索路由
+     *
+     * @author Joker.X
      */
-    const val SEARCH = "${GOODS_ROUTE}/search"
+    @Serializable
+    data object Search
 
     /**
      * 商品分类页面路由
+     *
+     * @param typeId 类型ID列表（逗号分隔，可选）
+     * @param featured 是否精选
+     * @param recommend 是否推荐
+     * @param keyword 关键词（可选）
+     * @author Joker.X
      */
-    const val CATEGORY = "${GOODS_ROUTE}/category"
+    @Serializable
+    data class Category(
+        val typeId: String? = null,
+        val featured: Boolean = false,
+        val recommend: Boolean = false,
+        val keyword: String? = null
+    )
 
     /**
      * 商品评价路由
+     *
+     * @param goodsId 商品ID
+     * @author Joker.X
      */
-    const val COMMENT = "${GOODS_ROUTE}/comment"
+    @Serializable
+    data class Comment(val goodsId: Long)
 }

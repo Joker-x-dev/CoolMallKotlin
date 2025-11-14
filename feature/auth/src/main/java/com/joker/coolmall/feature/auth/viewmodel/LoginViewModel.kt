@@ -40,7 +40,7 @@ class LoginViewModel @Inject constructor(
      * @author Joker.X
      */
     fun toSMSLoginPage() {
-        super.toPage(AuthRoutes.SMS_LOGIN)
+        navigate(AuthRoutes.SmsLogin)
     }
 
     /**
@@ -49,7 +49,7 @@ class LoginViewModel @Inject constructor(
      * @author Joker.X
      */
     fun toAccountLoginPage() {
-        super.toPage(AuthRoutes.ACCOUNT_LOGIN)
+        navigate(AuthRoutes.AccountLogin)
     }
 
     /**
@@ -90,7 +90,7 @@ class LoginViewModel @Inject constructor(
                     }
                 }
             }
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             ToastUtils.showError(R.string.start_qq_login_failed)
         }
     }
@@ -113,7 +113,6 @@ class LoginViewModel @Inject constructor(
             onData = { authData -> loginSuccess(authData) }
         )
     }
-
 
     /**
      * 登录成功统一处理
@@ -164,7 +163,7 @@ class LoginViewModel @Inject constructor(
      * @author Joker.X
      */
     fun onUserAgreementClick() {
-        toPage(CommonRoutes.USER_AGREEMENT)
+        navigate(CommonRoutes.UserAgreement)
     }
 
     /**
@@ -174,6 +173,6 @@ class LoginViewModel @Inject constructor(
      * @author Joker.X
      */
     fun onPrivacyPolicyClick() {
-        toPage(CommonRoutes.PRIVACY_POLICY)
+        navigate(CommonRoutes.PrivacyPolicy)
     }
 }

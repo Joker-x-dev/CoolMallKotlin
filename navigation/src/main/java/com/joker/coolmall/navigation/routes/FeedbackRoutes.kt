@@ -1,23 +1,26 @@
 package com.joker.coolmall.navigation.routes
 
+import kotlinx.serialization.Serializable
+
 /**
- * 反馈模块路由常量
+ * 反馈模块路由
  *
  * @author Joker.X
  */
 object FeedbackRoutes {
     /**
-     * 反馈模块根路由
-     */
-    private const val FEEDBACK_ROUTE = "feedback"
-
-    /**
      * 反馈列表路由
+     *
+     * @author Joker.X
      */
-    const val LIST = "$FEEDBACK_ROUTE/list"
+    @Serializable
+    data object List
 
     /**
      * 提交反馈路由
+     *
+     * @author Joker.X
      */
-    const val SUBMIT = "$FEEDBACK_ROUTE/submit"
+    @Serializable
+    data object Submit
 }

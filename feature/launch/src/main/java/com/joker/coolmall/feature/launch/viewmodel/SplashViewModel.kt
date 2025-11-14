@@ -60,7 +60,10 @@ class SplashViewModel @Inject constructor(
      * @author Joker.X
      */
     private fun toGuidePage() {
-        toPageAndCloseCurrent(LaunchRoutes.GUIDE, LaunchRoutes.SPLASH)
+        navigateAndCloseCurrent(
+            route = LaunchRoutes.Guide(),
+            currentRoute = LaunchRoutes.Splash
+        )
     }
 
     /**
@@ -69,6 +72,9 @@ class SplashViewModel @Inject constructor(
      * @author Joker.X
      */
     fun toMainPage() {
-        toPageAndCloseCurrent(MainRoutes.MAIN, LaunchRoutes.SPLASH)
+        navigateAndCloseCurrent(
+            route = MainRoutes.Main,
+            currentRoute = LaunchRoutes.Splash
+        )
     }
 }

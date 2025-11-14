@@ -8,6 +8,8 @@ plugins {
     alias(libs.plugins.kotlin.android) apply false
     // Kotlin Compose插件，用于Jetpack Compose UI开发
     alias(libs.plugins.kotlin.compose) apply false
+    // Kotlin Serialization插件
+    alias(libs.plugins.kotlin.serialization) apply false
 
     // 依赖注入相关插件
     // Hilt插件，用于依赖注入框架的支持

@@ -3,6 +3,7 @@ package com.joker.coolmall.feature.order.viewmodel
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavBackStackEntry
+import androidx.navigation.toRoute
 import com.joker.coolmall.core.common.base.state.BaseNetWorkListUiState
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.common.base.state.LoadMoreState
@@ -19,9 +20,8 @@ import com.joker.coolmall.core.model.request.DictDataRequest
 import com.joker.coolmall.core.model.request.OrderPageRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.feature.order.model.OrderStatus
-import com.joker.coolmall.feature.order.navigation.OrderCommentRoutes
-import com.joker.coolmall.feature.order.navigation.OrderPayRoutes
 import com.joker.coolmall.navigation.AppNavigator
+import com.joker.coolmall.navigation.RefreshResultKey
 import com.joker.coolmall.navigation.routes.GoodsRoutes
 import com.joker.coolmall.navigation.routes.OrderRoutes
 import com.joker.coolmall.result.ResultHandler
@@ -189,8 +189,9 @@ class OrderListViewModel @Inject constructor(
     val commentCurrentOrder: StateFlow<Order?> = _commentCurrentOrder.asStateFlow()
 
     init {
-        // 从URL参数中获取初始标签索引
-        savedStateHandle.get<String>("tab")?.toIntOrNull()?.let { tabIndex ->
+        // 从路由获取 tab 参数
+        val orderListRoute = savedStateHandle.toRoute<OrderRoutes.List>()
+        orderListRoute.tab?.toIntOrNull()?.let { tabIndex ->
             if (tabIndex in OrderStatus.entries.indices) {
                 _selectedTabIndex.value = tabIndex
             }
@@ -209,15 +210,16 @@ class OrderListViewModel @Inject constructor(
     fun observeRefreshState(backStackEntry: NavBackStackEntry?) {
         backStackEntry?.savedStateHandle?.let { savedStateHandle ->
             viewModelScope.launch {
-                savedStateHandle.getStateFlow<Boolean>("refresh", false).collect { shouldRefresh ->
-                    if (shouldRefresh) {
-                        // 刷新全部标签页
-                        refreshSpecificTabs(listOf(0, 1, 2, 3, 4, 5, 6))
+                savedStateHandle.getStateFlow<Boolean>(RefreshResultKey.key, false)
+                    .collect { shouldRefresh ->
+                        if (shouldRefresh) {
+                            // 刷新全部标签页
+                            refreshSpecificTabs(listOf(0, 1, 2, 3, 4, 5, 6))
 
-                        // 重置刷新标志，避免重复刷新
-                        savedStateHandle["refresh"] = false
+                            // 重置刷新标志，避免重复刷新
+                            savedStateHandle[RefreshResultKey.key] = false
+                        }
                     }
-                }
             }
         }
     }
@@ -479,7 +481,7 @@ class OrderListViewModel @Inject constructor(
      * @author Joker.X
      */
     fun toOrderDetailPage(orderId: Long) {
-        super.toPage(OrderRoutes.DETAIL, orderId)
+        navigate(OrderRoutes.Detail(orderId = orderId))
     }
 
     /**
@@ -493,12 +495,7 @@ class OrderListViewModel @Inject constructor(
         val orderId = order.id
         val paymentPrice = order.price - order.discountPrice // 实付金额
 
-        // 构建带参数的支付路由：/order/pay/{orderId}/{paymentPrice}
-        val paymentRoute = OrderPayRoutes.ORDER_PAY_PATTERN
-            .replace("{${OrderPayRoutes.ORDER_ID_ARG}}", orderId.toString())
-            .replace("{${OrderPayRoutes.PRICE_ARG}}", paymentPrice.toString())
-
-        toPage(paymentRoute)
+        navigate(OrderRoutes.Pay(orderId = orderId, price = paymentPrice))
     }
 
     /**
@@ -509,7 +506,7 @@ class OrderListViewModel @Inject constructor(
     fun toGoodsDetail(goodsId: Long) {
         // 隐藏弹窗
         hideRebuyModal()
-        toPage(GoodsRoutes.DETAIL, goodsId)
+        navigate(GoodsRoutes.Detail(goodsId = goodsId))
     }
 
     /**
@@ -518,7 +515,7 @@ class OrderListViewModel @Inject constructor(
      * @author Joker.X
      */
     fun toOrderLogistics(orderId: Long) {
-        toPage(OrderRoutes.LOGISTICS, orderId)
+        navigate(OrderRoutes.Logistics(orderId = orderId))
     }
 
     /**
@@ -527,15 +524,7 @@ class OrderListViewModel @Inject constructor(
      * @author Joker.X
      */
     fun toOrderRefund(orderId: Long) {
-        toPage(OrderRoutes.REFUND, orderId)
-    }
-
-    /**
-     * 跳转到订单评价页面（已废弃，使用 handleOrderComment 替代）
-     */
-    @Deprecated("使用 handleOrderComment(order: Order) 替代")
-    fun toOrderComment(orderId: Long) {
-        toPage(OrderRoutes.COMMENT, orderId)
+        navigate(OrderRoutes.Refund(orderId = orderId))
     }
 
     /**
@@ -750,14 +739,12 @@ class OrderListViewModel @Inject constructor(
         } else {
             // 单个商品时直接跳转
             val orderId = order.id
-            val goodsId = cartList.firstOrNull()?.goodsId ?: 0L
-
-            // 构建带参数的评价路由：/order/comment/{orderId}/{goodsId}
-            val commentRoute = OrderCommentRoutes.COMMENT_PATTERN
-                .replace("{${OrderCommentRoutes.ORDER_ID_ARG}}", orderId.toString())
-                .replace("{${OrderCommentRoutes.GOODS_ID_ARG}}", goodsId.toString())
-
-            toPage(commentRoute)
+            navigate(
+                OrderRoutes.Comment(
+                    orderId = orderId,
+                    goodsId = cartList.firstOrNull()?.goodsId ?: 0L
+                )
+            )
         }
     }
 
@@ -770,12 +757,8 @@ class OrderListViewModel @Inject constructor(
         val order = _commentCurrentOrder.value ?: return
         val orderId = order.id
 
-        // 构建带参数的评价路由：/order/comment/{orderId}/{goodsId}
-        val commentRoute = OrderCommentRoutes.COMMENT_PATTERN
-            .replace("{${OrderCommentRoutes.ORDER_ID_ARG}}", orderId.toString())
-            .replace("{${OrderCommentRoutes.GOODS_ID_ARG}}", goodsId.toString())
-
-        toPage(commentRoute)
+        // 添加 goodsId 参数
+        navigate(OrderRoutes.Comment(orderId = orderId, goodsId = goodsId))
         hideCommentModal()
     }
 
@@ -786,7 +769,7 @@ class OrderListViewModel @Inject constructor(
      */
     fun toGoodsDetailForRebuy(goodsId: Long) {
         // 先跳转，再隐藏弹窗
-        toPage(GoodsRoutes.DETAIL, goodsId)
+        navigate(GoodsRoutes.Detail(goodsId = goodsId))
         hideRebuyModal()
     }
 

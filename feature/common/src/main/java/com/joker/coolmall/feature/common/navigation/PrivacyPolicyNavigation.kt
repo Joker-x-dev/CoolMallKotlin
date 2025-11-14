@@ -11,7 +11,7 @@ import com.joker.coolmall.navigation.routes.CommonRoutes
  * @author Joker.X
  */
 fun NavGraphBuilder.privacyPolicyScreen() {
-    composable(route = CommonRoutes.PRIVACY_POLICY) {
+    composable<CommonRoutes.PrivacyPolicy> {
         PrivacyPolicyRoute()
     }
 }

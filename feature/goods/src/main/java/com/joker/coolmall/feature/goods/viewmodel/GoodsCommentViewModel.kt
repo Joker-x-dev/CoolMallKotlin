@@ -4,12 +4,13 @@ import androidx.lifecycle.SavedStateHandle
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkListViewModel
 import com.joker.coolmall.core.data.repository.GoodsRepository
 import com.joker.coolmall.core.data.state.AppState
+import androidx.navigation.toRoute
 import com.joker.coolmall.core.model.entity.Comment
 import com.joker.coolmall.core.model.request.GoodsCommentPageRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
-import com.joker.coolmall.feature.goods.navigation.GoodsCommentRoutes
 import com.joker.coolmall.navigation.AppNavigator
+import com.joker.coolmall.navigation.routes.GoodsRoutes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -34,7 +35,7 @@ class GoodsCommentViewModel @Inject constructor(
     /**
      * 商品ID
      */
-    private val goodsId = savedStateHandle.get<Long>(GoodsCommentRoutes.GOODS_ID_ARG) ?: 0L
+    private val goodsId = savedStateHandle.toRoute<GoodsRoutes.Comment>().goodsId
 
     init {
         initLoad()

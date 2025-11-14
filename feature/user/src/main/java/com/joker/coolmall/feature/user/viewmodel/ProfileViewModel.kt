@@ -1,11 +1,9 @@
 package com.joker.coolmall.feature.user.viewmodel
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
 import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.entity.User
-import com.joker.coolmall.feature.user.navigation.ProfileRoutes
 import com.joker.coolmall.navigation.AppNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -22,17 +20,11 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     navigator: AppNavigator,
-    savedStateHandle: SavedStateHandle,
     appState: AppState
 ) : BaseViewModel(
     navigator = navigator,
     appState = appState
 ) {
-
-    // 从路由传递过来的头像URL
-    val routeAvatarUrl: String? = savedStateHandle.get<String>(ProfileRoutes.AVATAR_URL)?.let {
-        if (it.isNotEmpty()) java.net.URLDecoder.decode(it, "UTF-8") else null
-    }
 
     // 用户登录状态
     val isLoggedIn: StateFlow<Boolean> = appState.isLoggedIn
