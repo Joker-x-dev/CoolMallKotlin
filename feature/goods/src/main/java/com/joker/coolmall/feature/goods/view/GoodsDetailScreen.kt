@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.exclude
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.navigationBars
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.offset
@@ -29,11 +30,11 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBars
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -73,6 +74,7 @@ import com.joker.coolmall.core.designsystem.theme.ArrowRightIcon
 import com.joker.coolmall.core.designsystem.theme.ColorDanger
 import com.joker.coolmall.core.designsystem.theme.CommonIcon
 import com.joker.coolmall.core.designsystem.theme.Primary
+import com.joker.coolmall.core.designsystem.theme.RadiusMedium
 import com.joker.coolmall.core.designsystem.theme.ShapeCircle
 import com.joker.coolmall.core.designsystem.theme.ShapeSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceDivider
@@ -469,76 +471,110 @@ private fun GoodsDetailContentWithScroll(
     onShowCouponModal: () -> Unit = {},
     onCommentClick: () -> Unit = {}
 ) {
-    val scrollState = rememberScrollState()
+    val lazyListState = rememberLazyListState()
 
-    LaunchedEffect(scrollState) {
+    LaunchedEffect(lazyListState) {
         snapshotFlow {
-            scrollState.value
-        }.collectLatest { scrollY ->
-            var alpha = scrollY
-            if (alpha > 255) {
-                alpha = 255
+            val firstVisibleIndex = lazyListState.firstVisibleItemIndex
+            val firstVisibleOffset = lazyListState.firstVisibleItemScrollOffset
+
+            if (firstVisibleIndex > 0) {
+                255
+            } else {
+                firstVisibleOffset.coerceIn(0, 255)
             }
+        }.collectLatest { alpha ->
             onTopBarAlphaChanged(alpha)
         }
     }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(scrollState)
+    LazyColumn(
+        modifier = Modifier.fillMaxSize(),
+        state = lazyListState
     ) {
         // 轮播图直接放在顶部，没有状态栏的padding
-        GoodsBanner(data.pics!!)
+        item {
+            GoodsBanner(data.pics!!)
+        }
 
-        Column(
-            modifier = Modifier.padding(SpacePaddingMedium)
-        ) {
-            // 基本信息
-            GoodsInfoCard(data, coupons, selectedSpec, onShowSpecModal, onShowCouponModal)
+        // 基本信息
+        item {
+            Column(modifier = Modifier.padding(SpacePaddingMedium)) {
+                GoodsInfoCard(data, coupons, selectedSpec, onShowSpecModal, onShowCouponModal)
+            }
+        }
 
+        // 配送信息
+        item {
+            Column(modifier = Modifier.padding(horizontal = SpacePaddingMedium)) {
+                GoodsDeliveryCard()
+            }
+        }
+
+        item {
             SpaceVerticalMedium()
+        }
 
-            // 配送信息
-            GoodsDeliveryCard()
-
-            SpaceVerticalMedium()
-
-            // 评论列表
-            if (comments.isNotEmpty()) {
-                Card {
-                    Column {
-                        AppListItem(
-                            title = "",
-                            trailingText = stringResource(R.string.view_all),
-                            leadingContent = {
-                                TitleWithLine(text = stringResource(R.string.goods_reviews))
-                            },
-                            onClick = onCommentClick
-                        )
-
-                        comments.forEachIndexed { index, comment ->
-                            CommentItem(
-                                comment = comment,
-                                onClick = onCommentClick
-                            )
-                            // 添加分割线，最后一个评论项不添加
-                            if (index < comments.size - 1) {
-                                WeDivider()
-                            }
-                        }
-                    }
+        // 评论列表
+        if (comments.isNotEmpty()) {
+            item {
+                Column(modifier = Modifier.padding(horizontal = SpacePaddingMedium)) {
+                    GoodsCommentsCard(comments = comments, onCommentClick = onCommentClick)
                 }
+            }
+
+            item {
                 SpaceVerticalMedium()
             }
+        }
 
-            // 图文详情
-            if (data.contentPics != null) {
-                GoodsDetailCard(data.contentPics!!)
+        item {
+            Surface(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = SpacePaddingMedium),
+                shape = RoundedCornerShape(topStart = RadiusMedium, topEnd = RadiusMedium),
+            ) {
+                AppListItem(
+                    title = "",
+                    showArrow = false,
+                    leadingContent = {
+                        TitleWithLine(text = stringResource(id = R.string.goods_detail))
+                    }
+                )
             }
+        }
 
-            // 底部安全区域（为底部操作栏留出空间）
-            Spacer(modifier = Modifier.height(80.dp))
+        // 图文详情
+        data.contentPics!!.forEachIndexed { index, pic ->
+            val isLastItem = index == data.contentPics!!.size - 1
+            item {
+                NetWorkImage(
+                    model = pic,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .heightIn(min = 200.dp)
+                        .padding(horizontal = SpacePaddingMedium)
+                        .then(
+                            if (isLastItem) {
+                                // 最后一张图片设置下圆角
+                                Modifier.clip(
+                                    RoundedCornerShape(
+                                        bottomStart = RadiusMedium,
+                                        bottomEnd = RadiusMedium
+                                    )
+                                )
+                            } else {
+                                Modifier
+                            }
+                        )
+                )
+            }
+        }
+
+        // 底部安全区域（为底部操作栏留出空间）
+        item {
+            Spacer(modifier = Modifier.height(120.dp))
         }
     }
 }
@@ -804,6 +840,43 @@ private fun SpecSelection(
 }
 
 /**
+ * 商品评论卡片
+ *
+ * @param comments 评论列表
+ * @param onCommentClick 点击评论区域的回调，用于跳转到评论页面
+ * @author Joker.X
+ */
+@Composable
+private fun GoodsCommentsCard(
+    comments: List<Comment>,
+    onCommentClick: () -> Unit = {}
+) {
+    Card {
+        Column {
+            AppListItem(
+                title = "",
+                trailingText = stringResource(R.string.view_all),
+                leadingContent = {
+                    TitleWithLine(text = stringResource(R.string.goods_reviews))
+                },
+                onClick = onCommentClick
+            )
+
+            comments.forEachIndexed { index, comment ->
+                CommentItem(
+                    comment = comment,
+                    onClick = onCommentClick
+                )
+                // 添加分割线，最后一个评论项不添加
+                if (index < comments.size - 1) {
+                    WeDivider()
+                }
+            }
+        }
+    }
+}
+
+/**
  * 配送信息卡片
  *
  * 显示商品的配送相关信息，包括送货地址和服务承诺
@@ -833,33 +906,6 @@ private fun GoodsDeliveryCard() {
             showDivider = false,
             trailingText = stringResource(R.string.service_details)
         )
-    }
-}
-
-/**
- * 商品详情卡片
- *
- * @param contentPics 商品详情图片列表
- * @author Joker.X
- */
-@Composable
-private fun GoodsDetailCard(contentPics: List<String>) {
-    Card {
-        AppListItem(
-            title = "",
-            showArrow = false,
-            leadingContent = {
-                TitleWithLine(text = stringResource(id = R.string.goods_detail))
-            }
-        )
-
-        // 循环图片
-        contentPics.forEachIndexed { index, pic ->
-            NetWorkImage(
-                model = pic,
-                modifier = Modifier.fillMaxWidth()
-            )
-        }
     }
 }
 

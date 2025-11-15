@@ -26,7 +26,6 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
-import com.joker.coolmall.navigation.extension.CollectResult
 import com.joker.coolmall.core.designsystem.component.FullScreenBox
 import com.joker.coolmall.core.designsystem.component.SpaceBetweenRow
 import com.joker.coolmall.core.designsystem.component.VerticalList
@@ -36,7 +35,6 @@ import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.model.entity.Cart
 import com.joker.coolmall.core.model.entity.ConfirmOrder
 import com.joker.coolmall.core.model.entity.Coupon
-import com.joker.coolmall.navigation.results.SelectAddressResultKey
 import com.joker.coolmall.core.model.preview.previewAddress
 import com.joker.coolmall.core.model.preview.previewCartList
 import com.joker.coolmall.core.ui.component.address.AddressCard
@@ -58,7 +56,9 @@ import com.joker.coolmall.core.ui.component.text.TextSize
 import com.joker.coolmall.core.ui.component.text.TextType
 import com.joker.coolmall.core.ui.component.title.TitleWithLine
 import com.joker.coolmall.feature.order.R
+import com.joker.coolmall.feature.order.extension.observeResult
 import com.joker.coolmall.feature.order.viewmodel.OrderConfirmViewModel
+import com.joker.coolmall.navigation.results.SelectAddressResultKey
 import com.joker.coolmall.core.ui.R as CoreUiR
 
 /**
@@ -108,7 +108,7 @@ internal fun OrderConfirmRoute(
     )
 
     // 使用类型安全的 NavigationResultKey 监听地址选择结果
-    navController.CollectResult(SelectAddressResultKey) { address ->
+    navController.observeResult(SelectAddressResultKey) { address ->
         viewModel.onAddressSelected(address)
     }
 }

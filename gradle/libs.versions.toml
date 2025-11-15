@@ -16,7 +16,7 @@ namespace = "com.joker.coolmall"
 # 编译 SDK 版本
 compileSdk = "36"
 # 最低支持的 SDK 版本
-minSdk = "26"
+minSdk = "23"
 # 目标 SDK 版本
 targetSdk = "36"
 

@@ -45,6 +45,8 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
                 defaultConfig {
                     // 设置应用ID（通常与包名相同）
                     applicationId = libs.findVersion("namespace").get().toString()
+                    // 设置目标 SDK 版本
+                    targetSdk = libs.findVersion("targetSdk").get().toString().toInt()
                     // 设置应用版本号
                     versionCode = libs.findVersion("versionCode").get().toString().toInt()
                     // 设置应用版本名称

@@ -1,7 +1,6 @@
 package com.joker.coolmall.core.util.permission
 
 import android.content.Context
-import android.os.Build
 import com.hjq.permissions.XXPermissions
 import com.hjq.permissions.permission.PermissionLists
 import com.hjq.permissions.permission.base.IPermission
@@ -172,16 +171,6 @@ object PermissionUtils {
         if (activity == null) {
             ToastUtils.showError("无法获取Activity实例，权限申请失败")
             callback(false)
-            return
-        }
-
-        // Android 13（API 33）及以上才真正需要 POST_NOTIFICATIONS 运行时权限
-        // 且要求应用的 targetSdkVersion 也必须 >= 33，
-        // 否则 XXPermissions 内部会直接抛出 IllegalStateException。
-        val targetSdk = activity.applicationInfo.targetSdkVersion
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU || targetSdk < Build.VERSION_CODES.TIRAMISU) {
-            // 对于老 targetSdk 或老系统版本：系统默认允许通知，不需要单独申请运行时权限
-            callback(true)
             return
         }
 
