@@ -141,6 +141,11 @@ class GoodsCategoryViewModel @Inject constructor(
         // 从路由参数获取搜索关键词
         searchKeyword = route.keyword ?: ""
 
+        // 从路由参数获取最小金额（用于优惠券跳转）
+        route.minPrice?.let {
+            _minPrice.value = it
+        }
+
         // 加载数据
         initLoad()
     }

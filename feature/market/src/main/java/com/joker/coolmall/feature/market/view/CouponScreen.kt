@@ -46,7 +46,8 @@ internal fun CouponRoute(
         onLoadMore = viewModel::onLoadMore,
         shouldTriggerLoadMore = viewModel::shouldTriggerLoadMore,
         onBackClick = viewModel::navigateBack,
-        onRetry = viewModel::retryRequest
+        onRetry = viewModel::retryRequest,
+        onUseCoupon = viewModel::navigateToGoodsCategory
     )
 }
 
@@ -62,6 +63,7 @@ internal fun CouponRoute(
  * @param shouldTriggerLoadMore 是否应触发加载更多的判断函数
  * @param onBackClick 返回按钮回调
  * @param onRetry 重试请求回调
+ * @param onUseCoupon 使用优惠券回调
  * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -75,7 +77,8 @@ internal fun CouponScreen(
     onLoadMore: () -> Unit = {},
     shouldTriggerLoadMore: (lastIndex: Int, totalCount: Int) -> Boolean = { _, _ -> false },
     onBackClick: () -> Unit = {},
-    onRetry: () -> Unit = {}
+    onRetry: () -> Unit = {},
+    onUseCoupon: (Coupon) -> Unit = {}
 ) {
     AppScaffold(
         title = com.joker.coolmall.feature.market.R.string.coupon_title,
@@ -91,7 +94,8 @@ internal fun CouponScreen(
                 loadMoreState = loadMoreState,
                 onRefresh = onRefresh,
                 onLoadMore = onLoadMore,
-                shouldTriggerLoadMore = shouldTriggerLoadMore
+                shouldTriggerLoadMore = shouldTriggerLoadMore,
+                onUseCoupon = onUseCoupon
             )
         }
     }
@@ -106,6 +110,7 @@ internal fun CouponScreen(
  * @param onRefresh 刷新回调
  * @param onLoadMore 加载更多回调
  * @param shouldTriggerLoadMore 是否应触发加载更多的判断函数
+ * @param onUseCoupon 使用优惠券回调
  * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -116,7 +121,8 @@ private fun CouponContentView(
     loadMoreState: LoadMoreState,
     onRefresh: () -> Unit,
     onLoadMore: () -> Unit,
-    shouldTriggerLoadMore: (lastIndex: Int, totalCount: Int) -> Boolean
+    shouldTriggerLoadMore: (lastIndex: Int, totalCount: Int) -> Boolean,
+    onUseCoupon: (Coupon) -> Unit
 ) {
     RefreshLayout(
         isRefreshing = isRefreshing,
@@ -129,7 +135,8 @@ private fun CouponContentView(
         items(data.size) { index ->
             CouponCard(
                 coupon = data[index],
-                mode = CouponCardMode.VIEW
+                mode = CouponCardMode.VIEW,
+                onActionClick = { onUseCoupon(data[index]) }
             )
         }
     }

@@ -8,6 +8,7 @@ import com.joker.coolmall.core.model.request.PageRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.navigation.AppNavigator
+import com.joker.coolmall.navigation.routes.GoodsRoutes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -42,6 +43,22 @@ class CouponViewModel @Inject constructor(
             PageRequest(
                 page = super.currentPage,
                 size = super.pageSize
+            )
+        )
+    }
+
+    /**
+     * 跳转到商品分类页面使用优惠券
+     *
+     * @param coupon 优惠券信息
+     * @author Joker.X
+     */
+    fun navigateToGoodsCategory(coupon: Coupon) {
+        // 获取满减金额作为最小金额
+        val minPrice = coupon.condition?.fullAmount?.toString() ?: ""
+        navigate(
+            GoodsRoutes.Category(
+                minPrice = minPrice
             )
         )
     }

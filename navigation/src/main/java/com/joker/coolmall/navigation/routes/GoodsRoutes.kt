@@ -28,10 +28,11 @@ object GoodsRoutes {
     /**
      * 商品分类页面路由
      *
-     * @param typeId 类型ID列表（逗号分隔，可选）
+     * @param typeId 类型 ID 列表（逗号分隔，可选）
      * @param featured 是否精选
      * @param recommend 是否推荐
      * @param keyword 关键词（可选）
+     * @param minPrice 最小金额（可选，用于优惠券跳转）
      * @author Joker.X
      */
     @Serializable
@@ -39,7 +40,8 @@ object GoodsRoutes {
         val typeId: String? = null,
         val featured: Boolean = false,
         val recommend: Boolean = false,
-        val keyword: String? = null
+        val keyword: String? = null,
+        val minPrice: String? = null
     )
 
     /**
