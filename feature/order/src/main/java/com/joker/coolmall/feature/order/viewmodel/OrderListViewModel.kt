@@ -535,11 +535,17 @@ class OrderListViewModel @Inject constructor(
     fun cancelOrder(orderId: Long) {
         _currentCancelOrderId = orderId
         showCancelModal()
-        viewModelScope.launch {
-            // 延迟加载商品规格，避免阻塞UI线程
-            delay(300)
-            loadCancelReasons()
-        }
+    }
+
+    /**
+     * 取消订单弹窗展开完成后加载取消原因
+     *
+     * 由 View 层在弹窗动画完成后调用，避免在动画过程中网络请求卡顿UI
+     *
+     * @author Joker.X
+     */
+    fun onCancelModalExpanded() {
+        loadCancelReasons()
     }
 
     /**

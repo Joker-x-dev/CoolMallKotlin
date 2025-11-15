@@ -64,6 +64,7 @@ internal fun OrderRefundRoute(
         onRetry = viewModel::retryRequest,
         onReasonClick = viewModel::showRefundModal,
         onRefundModalDismiss = viewModel::hideRefundModal,
+        onRefundModalExpanded = viewModel::onRefundModalExpanded,
         onReasonSelected = viewModel::selectRefundReason,
         onReasonConfirm = viewModel::selectRefundReason,
         onReasonRetry = viewModel::loadRefundReasons,
@@ -83,6 +84,7 @@ internal fun OrderRefundRoute(
  * @param onRetry 重试请求回调
  * @param onReasonClick 选择退款原因回调
  * @param onRefundModalDismiss 关闭退款原因弹窗回调
+ * @param onRefundModalExpanded 退款弹窗展开完成回调
  * @param onReasonSelected 退款原因选择回调
  * @param onReasonConfirm 退款原因确认回调
  * @param onReasonRetry 重试加载退款原因回调
@@ -101,6 +103,7 @@ internal fun OrderRefundScreen(
     onRetry: () -> Unit = {},
     onReasonClick: () -> Unit = {},
     onRefundModalDismiss: () -> Unit = {},
+    onRefundModalExpanded: () -> Unit = {},
     onReasonSelected: (DictItem) -> Unit = {},
     onReasonConfirm: (DictItem?) -> Unit = {},
     onReasonRetry: () -> Unit = {},
@@ -154,7 +157,8 @@ internal fun OrderRefundScreen(
         uiState = refundReasonsModalUiState,
         selectedItem = selectedRefundReason,
         onConfirm = onReasonConfirm,
-        onRetry = onReasonRetry
+        onRetry = onReasonRetry,
+        onExpanded = onRefundModalExpanded
     )
 }
 

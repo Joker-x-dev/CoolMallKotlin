@@ -151,6 +151,7 @@ internal fun GoodsDetailRoute(
         onSpecSelected = viewModel::selectSpec,
         onShowSpecModal = viewModel::showSpecModal,
         onHideSpecModal = viewModel::hideSpecModal,
+        onSpecModalExpanded = viewModel::onSpecModalExpanded,
         onAddToCart = viewModel::addToCart,
         onBuyNow = viewModel::buyNow,
         onSpecRetry = viewModel::loadGoodsSpecs,
@@ -179,6 +180,7 @@ internal fun GoodsDetailRoute(
  * @param onSpecSelected 规格选择回调，当用户选择一个规格时触发
  * @param onShowSpecModal 显示规格选择弹窗的回调
  * @param onHideSpecModal 隐藏规格选择弹窗的回调
+ * @param onSpecModalExpanded 规格弹窗展开完成回调，用于在动画完成后加载数据
  * @param onAddToCart 加入购物车回调，参数为包含商品和规格信息的购物车对象
  * @param onBuyNow 立即购买回调，参数为包含商品和规格信息的购物车对象
  * @param hasAnimated 是否已播放动画
@@ -205,6 +207,7 @@ internal fun GoodsDetailScreen(
     onSpecSelected: (GoodsSpec) -> Unit = {},
     onShowSpecModal: () -> Unit = {},
     onHideSpecModal: () -> Unit = {},
+    onSpecModalExpanded: () -> Unit = {},
     onAddToCart: (SelectedGoods) -> Unit = {},
     onBuyNow: (SelectedGoods) -> Unit = {},
     hasAnimated: Boolean = false,
@@ -254,7 +257,8 @@ internal fun GoodsDetailScreen(
                 onAddToCart = onAddToCart,
                 onBuyNow = onBuyNow,
                 onRetry = onSpecRetry,
-                selectedSpec = selectedSpec
+                selectedSpec = selectedSpec,
+                onExpanded = onSpecModalExpanded
             )
 
             // 优惠券弹出层

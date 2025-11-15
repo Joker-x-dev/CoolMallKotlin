@@ -140,6 +140,7 @@ internal fun OrderListRoute(
         cancelReasonsModalUiState = cancelReasonsModalUiState,
         selectedCancelReason = selectedCancelReason,
         onCancelModalDismiss = viewModel::hideCancelModal,
+        onCancelModalExpanded = viewModel::onCancelModalExpanded,
         onCancelReasonSelected = viewModel::selectCancelReason,
         onConfirmCancel = { viewModel.confirmCancelOrder() },
         showConfirmDialog = showConfirmDialog,
@@ -190,6 +191,7 @@ internal fun OrderListRoute(
  * @param cancelReasonsModalUiState 取消原因弹出层UI状态
  * @param selectedCancelReason 选中的取消原因
  * @param onCancelModalDismiss 取消订单弹窗关闭回调
+ * @param onCancelModalExpanded 取消订单弹窗展开完成回调
  * @param onCancelReasonSelected 取消原因选中回调
  * @param onConfirmCancel 确认取消订单回调
  * @param showConfirmDialog 确认收货弹窗显示状态
@@ -229,6 +231,7 @@ internal fun OrderListScreen(
     cancelReasonsModalUiState: BaseNetWorkUiState<List<DictItem>> = BaseNetWorkUiState.Loading,
     selectedCancelReason: DictItem? = null,
     onCancelModalDismiss: () -> Unit = {},
+    onCancelModalExpanded: () -> Unit = {},
     onCancelReasonSelected: (DictItem) -> Unit = {},
     onConfirmCancel: () -> Unit = {},
     showConfirmDialog: Boolean = false,
@@ -296,7 +299,8 @@ internal fun OrderListScreen(
         onItemSelected = onCancelReasonSelected,
         onConfirm = { reason ->
             onConfirmCancel()
-        }
+        },
+        onExpanded = onCancelModalExpanded
     )
 
     // 确认收货弹窗

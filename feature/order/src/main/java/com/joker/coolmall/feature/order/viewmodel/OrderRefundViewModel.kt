@@ -112,11 +112,17 @@ class OrderRefundViewModel @Inject constructor(
      */
     fun showRefundModal() {
         _refundModalVisible.value = true
-        viewModelScope.launch {
-            // 延迟加载退款原因，避免阻塞UI线程
-            delay(300)
-            loadRefundReasons()
-        }
+    }
+
+    /**
+     * 退款弹窗展开完成后加载退款原因
+     *
+     * 由 View 层在弹窗动画完成后调用，避免在动画过程中网络请求卡顿UI
+     *
+     * @author Joker.X
+     */
+    fun onRefundModalExpanded() {
+        loadRefundReasons()
     }
 
     /**

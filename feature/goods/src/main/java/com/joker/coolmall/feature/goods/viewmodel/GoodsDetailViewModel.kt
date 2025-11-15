@@ -212,12 +212,17 @@ class GoodsDetailViewModel @Inject constructor(
      */
     fun showSpecModal() {
         _specModalVisible.value = true
-        viewModelScope.launch {
-            // 延迟加载商品规格，避免阻塞UI线程
-            delay(300)
-            // 加载商品规格
-            loadGoodsSpecs()
-        }
+    }
+
+    /**
+     * 规格弹窗展开完成后加载规格数据
+     *
+     * 由 View 层在弹窗动画完成后调用，避免在动画过程中网络请求卡顿UI
+     *
+     * @author Joker.X
+     */
+    fun onSpecModalExpanded() {
+        loadGoodsSpecs()
     }
 
     /**

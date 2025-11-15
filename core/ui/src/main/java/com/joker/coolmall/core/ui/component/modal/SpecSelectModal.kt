@@ -96,6 +96,7 @@ import com.joker.coolmall.core.ui.component.title.TitleWithLine
  * @param onBuyNow 立即购买按钮点击回调
  * @param onRetry 重试回调
  * @param selectedSpec 当前选中的规格，由外部传入并保持状态
+ * @param onExpanded 弹窗展开完成回调，用于在动画完成后加载数据
  * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -110,6 +111,7 @@ fun SpecSelectModal(
     onBuyNow: (SelectedGoods) -> Unit = {},
     onRetry: () -> Unit = {},
     selectedSpec: GoodsSpec? = null, // 添加已选择的规格参数
+    onExpanded: () -> Unit = {}, // 弹窗展开完成回调
 ) {
     // 记录当前选中的规格索引
     var selectedSpecIndex by remember { mutableIntStateOf(-1) }
@@ -129,10 +131,17 @@ fun SpecSelectModal(
         confirmValueChange = { it != SheetValue.PartiallyExpanded }
     )
 
-    // 确保弹窗在初始状态下展开到最大
+    // 确保弹窗在初始状态下展开到最大，并在展开完成后触发回调
     LaunchedEffect(visible) {
         if (visible && sheetState.currentValue != SheetValue.Expanded) {
             sheetState.expand()
+        }
+    }
+
+    // 监听 sheetState 变化，当完全展开时触发回调
+    LaunchedEffect(sheetState.currentValue) {
+        if (sheetState.currentValue == SheetValue.Expanded && visible) {
+            onExpanded()
         }
     }
 

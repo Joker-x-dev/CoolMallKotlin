@@ -22,10 +22,10 @@ targetSdk = "36"
 
 # 构建工具版本
 # Android Gradle Plugin: https://developer.android.com/studio/releases/gradle-plugin
-agp = "8.13.0"
+agp = "8.13.1"
 # Kotlin 编译器: https://kotlinlang.org/docs/releases.html
 # 注意: 需要和 hilt 版本对应
-kotlin = "2.2.20"
+kotlin = "2.2.21"
 
 # Android 核心库版本
 # AndroidX Core KTX: https://developer.android.com/jetpack/androidx/releases/core
@@ -46,11 +46,11 @@ espressoCore = "3.7.0"
 # Jetpack Compose 相关版本
 # Compose BOM: https://developer.android.com/jetpack/compose/bom
 # 说明: BOM 统一管理所有 Compose 库版本，确保兼容性
-composeBom = "2025.09.00"
+composeBom = "2025.11.00"
 
 # 导航相关版本
 # Navigation Compose: https://developer.android.com/jetpack/androidx/releases/navigation
-navigationCompose = "2.9.5"
+navigationCompose = "2.9.6"
 
 # 序列化相关版本
 # Kotlinx Serialization JSON: https://github.com/Kotlin/kotlinx.serialization
@@ -92,12 +92,12 @@ coilCompose = "2.7.0"
 # AndroidX AppCompat: https://developer.android.com/jetpack/androidx/releases/appcompat
 appcompat = "1.7.1"
 # Material Design Components: https://github.com/material-components/material-components-android
-material = "1.14.0-alpha05"
+material = "1.14.0-alpha06"
 
 # 启动页相关版本
 # AndroidX Core Splashscreen: https://developer.android.com/jetpack/androidx/releases/core
 # 说明: 提供启动画面 API，兼容 Android 12+ 的启动画面
-androidxCoreSplashscreen = "1.0.1"
+androidxCoreSplashscreen = "1.2.0"
 
 # Toast 相关版本
 # Toaster 吐司框架: https://github.com/getActivity/Toaster
@@ -125,7 +125,7 @@ androidDesugarJdkLibs = "2.1.5"
 # 数据库相关版本
 # Room 数据库框架: https://developer.android.com/training/data-storage/room
 # 说明: SQLite 的抽象层，提供流畅的数据库访问
-room = "2.8.2"
+room = "2.8.3"
 
 # 支付相关版本
 # 支付宝支付 SDK: https://opendocs.alipay.com/open/54/104509

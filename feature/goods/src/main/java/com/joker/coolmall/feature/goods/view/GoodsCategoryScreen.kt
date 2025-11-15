@@ -392,7 +392,7 @@ private fun FilterBar(
         Spacer(modifier = Modifier.weight(1f))
 
         AnimatedVisibility(
-            visible = scrollBehavior.state.collapsedFraction >= 1f,
+            visible = scrollBehavior.state.collapsedFraction >= 0.8f,
             enter = scaleIn(),
             exit = scaleOut()
         ) {

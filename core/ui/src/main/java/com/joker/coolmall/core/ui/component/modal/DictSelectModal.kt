@@ -64,6 +64,7 @@ import com.joker.coolmall.core.ui.component.text.TextType
  * @param onItemSelected 字典项选择回调，当用户点击某个字典项时触发
  * @param onConfirm 确认按钮回调，传递当前选中的字典项
  * @param onRetry 重试回调，当网络请求失败时用户点击重试按钮触发
+ * @param onExpanded 弹窗展开完成回调，用于在动画完成后加载数据
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -75,7 +76,8 @@ fun DictSelectModal(
     selectedItem: DictItem? = null,
     onItemSelected: (DictItem) -> Unit = {},
     onConfirm: (DictItem?) -> Unit = {},
-    onRetry: () -> Unit = {}
+    onRetry: () -> Unit = {},
+    onExpanded: () -> Unit = {}
 ) {
     // 内部选中状态，用于管理用户的选择
     var internalSelectedItem by remember(selectedItem) { mutableStateOf(selectedItem) }
@@ -83,6 +85,13 @@ fun DictSelectModal(
     val sheetState = rememberModalBottomSheetState(
         skipPartiallyExpanded = true
     )
+
+    // 监听弹窗展开状态，在完全展开后触发回调
+    androidx.compose.runtime.LaunchedEffect(sheetState.currentValue) {
+        if (sheetState.currentValue == androidx.compose.material3.SheetValue.Expanded && visible) {
+            onExpanded()
+        }
+    }
 
     BottomModal(
         visible = visible,

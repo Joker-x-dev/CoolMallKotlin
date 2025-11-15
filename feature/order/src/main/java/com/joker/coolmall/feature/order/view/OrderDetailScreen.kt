@@ -102,6 +102,7 @@ internal fun OrderDetailRoute(
         onCommentModalDismiss = viewModel::hideCommentModal,
         onCommentGoodsClick = viewModel::toOrderCommentForGoods,
         onCancelModalDismiss = viewModel::hideCancelModal,
+        onCancelModalExpanded = viewModel::onCancelModalExpanded,
         onCancelReasonSelected = viewModel::selectCancelReason,
         onCancelConfirm = viewModel::confirmCancelOrder,
         onCancelRetry = viewModel::loadCancelReasons,
@@ -145,6 +146,7 @@ internal fun OrderDetailRoute(
  * @param onCommentModalDismiss 商品评论弹窗关闭回调
  * @param onCommentGoodsClick 商品评论商品点击回调
  * @param onCancelModalDismiss 取消订单弹窗关闭回调
+ * @param onCancelModalExpanded 取消订单弹窗展开完成回调
  * @param onCancelReasonSelected 取消原因选中回调
  * @param onCancelConfirm 确认取消订单回调
  * @param onCancelRetry 取消原因重试回调
@@ -177,6 +179,7 @@ internal fun OrderDetailScreen(
     onCommentModalDismiss: () -> Unit = {},
     onCommentGoodsClick: (Long) -> Unit = {},
     onCancelModalDismiss: () -> Unit = {},
+    onCancelModalExpanded: () -> Unit = {},
     onCancelReasonSelected: (DictItem) -> Unit = {},
     onCancelConfirm: () -> Unit = {},
     onCancelRetry: () -> Unit = {},
@@ -255,7 +258,8 @@ internal fun OrderDetailScreen(
         selectedItem = selectedCancelReason,
         onItemSelected = onCancelReasonSelected,
         onConfirm = { onCancelConfirm() },
-        onRetry = onCancelRetry
+        onRetry = onCancelRetry,
+        onExpanded = onCancelModalExpanded
     )
 
     // 确认收货弹窗
