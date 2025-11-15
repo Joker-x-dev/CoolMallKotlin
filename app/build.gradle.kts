@@ -28,6 +28,7 @@ android {
 
     signingConfigs {
         // 通用签名配置
+        // 实际使用时请替换为自己的签名文件
         create("common") {
             // 哪个签名文件
             storeFile = file("joker_open_key.keystore")
@@ -50,13 +51,13 @@ android {
     buildTypes {
         debug {
             // debug 模式下也使用正式签名配置 - 方便调试支付以及三方登录等功能
-            signingConfig = signingConfigs["common"]
+            signingConfig = signingConfigs["common"] // 没有签名请注释掉这行使用默认签名
             // debug 模式下包名后缀
             applicationIdSuffix = ".debug"
         }
 
         release {
-            signingConfig = signingConfigs["common"]
+            signingConfig = signingConfigs["common"] // 没有签名请注释掉这行使用默认签名
             // 是否启用代码压缩
             isMinifyEnabled = true
             // 资源压缩

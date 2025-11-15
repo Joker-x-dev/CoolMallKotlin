@@ -104,7 +104,7 @@ to join.
       notifications from Chucker, it's recommended to enable app notification permissions.
 
 
-- **Supported Systems**: Android 8.0 and above
+- **Supported Systems**: Android 6.0 and above
 - **Update Notes**: Preview versions will be updated from time to time and may not fully sync with
   the latest code changes
 
@@ -121,8 +121,8 @@ to join.
 
 | Category                | Technology                | Version    | Description                            |
 |-------------------------|---------------------------|------------|----------------------------------------|
-| Programming Language    | Kotlin                    | 2.2.20     | 100% Kotlin Development                |
-| UI Framework            | Jetpack Compose           | 2025.09.00 | Declarative UI Framework               |
+| Programming Language    | Kotlin                    | 2.2.21     | 100% Kotlin Development                |
+| UI Framework            | Jetpack Compose           | 2025.11.00 | Declarative UI Framework               |
 | Architecture Pattern    | MVVM + Clean Architecture | -          | MVVM + Clean Architecture              |
 | Dependency Injection    | Hilt                      | 2.57.2     | Dagger-based DI Framework              |
 | Asynchronous Processing | Coroutines + Flow         | 1.9.0      | Coroutines + Flow Reactive Programming |
@@ -131,7 +131,7 @@ to join.
 
 | Category              | Technology            | Version       | Description                   |
 |-----------------------|-----------------------|---------------|-------------------------------|
-| Navigation            | Navigation Compose    | 2.9.5         | Compose Navigation Component  |
+| Navigation            | Navigation Compose    | 2.9.6         | Compose Navigation Component  |
 | Data Serialization    | Kotlinx Serialization | 1.9.0         | JSON Serialization Processing |
 | Network Requests      | Retrofit + OkHttp     | 3.0.0 + 5.2.0 | HTTP Client                   |
 | Image Loading         | Coil Compose          | 2.7.0         | Image Loading and Caching     |
@@ -142,7 +142,7 @@ to join.
 
 | Category      | Technology | Version | Description                        |
 |---------------|------------|---------|------------------------------------|
-| Database      | Room       | 2.8.2   | SQLite Database                    |
+| Database      | Room       | 2.8.3   | SQLite Database                    |
 | Local Storage | MMKV       | 2.2.4   | High-performance Key-Value Storage |
 
 ### Development Tools
@@ -225,7 +225,7 @@ to join.
 
 
 - **Marketing Module (market)**
-    - Coupon Management (coupon) `To be improved`
+    - Coupon Management (coupon) `Completed`
 
 
 - **Customer Service Module (cs)**
@@ -343,6 +343,16 @@ quality improvement and ecosystem enhancement:
 5. **Multi-platform Ecosystem Expansion**: Advance development plans for HarmonyOS and iOS versions
 6. **Community Building**: Improve development documentation, establish contributor guidelines, and
    promote open source community development
+
+
+## 👥 Join the Community
+
+Welcome to join the CoolMall Developer Community to share learning experiences and discuss technical issues!
+
+<div align="left">
+  <img src="docs/images/group/qq.jpg" width="200" alt="QQ Group QR Code"/>
+  <p>Scan or search for the group number to join QQ Group</p>
+</div>
 
 ## 🤝 Contributing
 
