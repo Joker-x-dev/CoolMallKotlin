@@ -15,6 +15,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.joker.coolmall.core.common.config.ThemePreference
 import com.joker.coolmall.core.designsystem.component.VerticalList
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalLarge
@@ -24,6 +26,7 @@ import com.joker.coolmall.core.ui.component.list.AppListItem
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
 import com.joker.coolmall.core.ui.component.title.TitleWithLine
 import com.joker.coolmall.feature.common.R
+import com.joker.coolmall.feature.common.component.ThemeModeModal
 import com.joker.coolmall.feature.common.viewmodel.SettingsViewModel
 
 /**
@@ -36,20 +39,32 @@ import com.joker.coolmall.feature.common.viewmodel.SettingsViewModel
 internal fun SettingsRoute(
     viewModel: SettingsViewModel = hiltViewModel()
 ) {
+    // 主题模式
+    val themeMode by viewModel.themeMode.collectAsStateWithLifecycle()
+    // 是否显示主题选择弹窗
+    val showThemeModal by viewModel.showThemeModal.collectAsStateWithLifecycle()
+
     SettingsScreen(
+        themeMode = themeMode,
+        showThemeModal = showThemeModal,
         onBackClick = viewModel::navigateBack,
         onUserAgreementClick = viewModel::onUserAgreementClick,
         onPrivacyPolicyClick = viewModel::onPrivacyPolicyClick,
         onAccountSecurityClick = viewModel::onAccountSecurityClick,
         onFeedbackClick = viewModel::onFeedbackClick,
         onAboutAppClick = viewModel::onAboutAppClick,
-        onAppGuideClick = viewModel::onAppGuideClick
+        onAppGuideClick = viewModel::onAppGuideClick,
+        onDarkModeClick = viewModel::onDarkModeClick,
+        onThemeModeSelected = viewModel::onThemeModeSelected,
+        onThemeModalDismiss = viewModel::dismissThemeModal
     )
 }
 
 /**
  * 设置页面界面
  *
+ * @param themeMode 当前主题模式
+ * @param showThemeModal 是否显示主题选择弹窗
  * @param onBackClick 返回上一页回调
  * @param onUserAgreementClick 用户协议点击回调
  * @param onPrivacyPolicyClick 隐私政策点击回调
@@ -62,13 +77,18 @@ internal fun SettingsRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun SettingsScreen(
+    themeMode: ThemePreference = ThemePreference.FOLLOW_SYSTEM,
+    showThemeModal: Boolean = false,
     onBackClick: () -> Unit = {},
     onUserAgreementClick: () -> Unit = {},
     onPrivacyPolicyClick: () -> Unit = {},
     onAccountSecurityClick: () -> Unit = {},
     onFeedbackClick: () -> Unit = {},
     onAboutAppClick: () -> Unit = {},
-    onAppGuideClick: () -> Unit = {}
+    onAppGuideClick: () -> Unit = {},
+    onDarkModeClick: () -> Unit = {},
+    onThemeModeSelected: (ThemePreference) -> Unit = {},
+    onThemeModalDismiss: () -> Unit = {}
 ) {
     AppScaffold(
         title = R.string.settings_title,
@@ -76,19 +96,29 @@ internal fun SettingsScreen(
         onBackClick = onBackClick
     ) {
         SettingsContentView(
+            themeMode = themeMode,
             onUserAgreementClick = onUserAgreementClick,
             onPrivacyPolicyClick = onPrivacyPolicyClick,
             onAccountSecurityClick = onAccountSecurityClick,
             onFeedbackClick = onFeedbackClick,
             onAboutAppClick = onAboutAppClick,
-            onAppGuideClick = onAppGuideClick
+            onAppGuideClick = onAppGuideClick,
+            onDarkModeClick = onDarkModeClick
         )
     }
+
+    ThemeModeModal(
+        visible = showThemeModal,
+        selectedMode = themeMode,
+        onDismiss = onThemeModalDismiss,
+        onSelect = onThemeModeSelected
+    )
 }
 
 /**
  * 设置页面内容视图
  *
+ * @param themeMode 当前主题模式
  * @param onUserAgreementClick 用户协议点击回调
  * @param onPrivacyPolicyClick 隐私政策点击回调
  * @param onAccountSecurityClick 账号与安全点击回调
@@ -99,17 +129,24 @@ internal fun SettingsScreen(
  */
 @Composable
 private fun SettingsContentView(
+    themeMode: ThemePreference = ThemePreference.FOLLOW_SYSTEM,
     onUserAgreementClick: () -> Unit = {},
     onPrivacyPolicyClick: () -> Unit = {},
     onAccountSecurityClick: () -> Unit = {},
     onFeedbackClick: () -> Unit = {},
     onAboutAppClick: () -> Unit = {},
-    onAppGuideClick: () -> Unit = {}
+    onAppGuideClick: () -> Unit = {},
+    onDarkModeClick: () -> Unit = {}
 ) {
 
     VerticalList(
         modifier = Modifier.verticalScroll(rememberScrollState())
     ) {
+        val themeModeText = when (themeMode) {
+            ThemePreference.FOLLOW_SYSTEM -> stringResource(id = R.string.settings_dark_mode_follow_system)
+            ThemePreference.LIGHT -> stringResource(id = R.string.settings_dark_mode_light)
+            ThemePreference.DARK -> stringResource(id = R.string.settings_dark_mode_dark)
+        }
 
         Card {
             AppListItem(
@@ -133,7 +170,8 @@ private fun SettingsContentView(
                 showArrow = true,
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge,
-                trailingText = stringResource(id = R.string.settings_dark_mode_follow_system)
+                trailingText = themeModeText,
+                onClick = onDarkModeClick
             )
 
             // 动态主题色

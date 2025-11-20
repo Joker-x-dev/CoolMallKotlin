@@ -66,6 +66,8 @@
     <string name="settings_section_appearance">Appearance &amp; Language</string>
     <string name="settings_dark_mode">Dark Mode</string>
     <string name="settings_dark_mode_follow_system">Follow System</string>
+    <string name="settings_dark_mode_light">Light Mode</string>
+    <string name="settings_dark_mode_dark">Dark Mode</string>
     <string name="settings_dynamic_color">Dynamic Theme Color</string>
     <string name="settings_dynamic_color_desc">When enabled, the app theme color will sync with system wallpaper colors</string>
     <string name="settings_language">Language</string>
@@ -95,4 +97,3 @@
     <!-- Dependency Modal -->
     <string name="dependency_modal_title">Acknowledgments</string>
 </resources>
-

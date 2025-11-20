@@ -1,6 +1,8 @@
 package com.joker.coolmall.feature.common.viewmodel
 
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
+import com.joker.coolmall.core.common.config.ThemePreference
+import com.joker.coolmall.core.common.manager.ThemePreferenceManager
 import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.CommonRoutes
@@ -8,6 +10,9 @@ import com.joker.coolmall.navigation.routes.FeedbackRoutes
 import com.joker.coolmall.navigation.routes.LaunchRoutes
 import com.joker.coolmall.navigation.routes.UserRoutes
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 /**
@@ -23,6 +28,17 @@ class SettingsViewModel @Inject constructor(
     navigator = navigator,
     appState = appState
 ) {
+
+    /**
+     * 当前主题模式
+     */
+    val themeMode: StateFlow<ThemePreference> = ThemePreferenceManager.themeMode
+
+    /**
+     * 主题选择弹窗
+     */
+    private val _showThemeModal = MutableStateFlow(false)
+    val showThemeModal: StateFlow<Boolean> = _showThemeModal.asStateFlow()
 
     /**
      * 点击用户协议
@@ -82,5 +98,27 @@ class SettingsViewModel @Inject constructor(
      */
     fun onAppGuideClick() {
         navigate(LaunchRoutes.Guide(fromSettings = true))
+    }
+
+    /**
+     * 显示主题选择弹窗
+     */
+    fun onDarkModeClick() {
+        _showThemeModal.value = true
+    }
+
+    /**
+     * 隐藏主题选择弹窗
+     */
+    fun dismissThemeModal() {
+        _showThemeModal.value = false
+    }
+
+    /**
+     * 选择主题
+     */
+    fun onThemeModeSelected(mode: ThemePreference) {
+        ThemePreferenceManager.updateThemeMode(mode)
+        dismissThemeModal()
     }
 }

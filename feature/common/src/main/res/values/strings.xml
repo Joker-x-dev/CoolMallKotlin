@@ -66,6 +66,8 @@
     <string name="settings_section_appearance">外观与语言</string>
     <string name="settings_dark_mode">夜间模式</string>
     <string name="settings_dark_mode_follow_system">跟随系统</string>
+    <string name="settings_dark_mode_light">浅色模式</string>
+    <string name="settings_dark_mode_dark">深色模式</string>
     <string name="settings_dynamic_color">动态主题色</string>
     <string name="settings_dynamic_color_desc">开启后应用主题色会同步系统壁纸颜色</string>
     <string name="settings_language">语言切换</string>
