@@ -122,7 +122,7 @@ to join.
 | Category                | Technology                | Version    | Description                            |
 |-------------------------|---------------------------|------------|----------------------------------------|
 | Programming Language    | Kotlin                    | 2.2.21     | 100% Kotlin Development                |
-| UI Framework            | Jetpack Compose           | 2025.11.00 | Declarative UI Framework               |
+| UI Framework            | Jetpack Compose           | 2025.11.01 | Declarative UI Framework               |
 | Architecture Pattern    | MVVM + Clean Architecture | -          | MVVM + Clean Architecture              |
 | Dependency Injection    | Hilt                      | 2.57.2     | Dagger-based DI Framework              |
 | Asynchronous Processing | Coroutines + Flow         | 1.9.0      | Coroutines + Flow Reactive Programming |
@@ -133,7 +133,7 @@ to join.
 |-----------------------|-----------------------|---------------|-------------------------------|
 | Navigation            | Navigation Compose    | 2.9.6         | Compose Navigation Component  |
 | Data Serialization    | Kotlinx Serialization | 1.9.0         | JSON Serialization Processing |
-| Network Requests      | Retrofit + OkHttp     | 3.0.0 + 5.2.0 | HTTP Client                   |
+| Network Requests      | Retrofit + OkHttp     | 3.0.0 + 5.3.2 | HTTP Client                   |
 | Image Loading         | Coil Compose          | 2.7.0         | Image Loading and Caching     |
 | Animation Effects     | Lottie Compose        | 6.6.9         | After Effects Animation       |
 | Permission Management | XXPermissions         | 26.5          | Dynamic Permission Request    |
@@ -142,7 +142,7 @@ to join.
 
 | Category      | Technology | Version | Description                        |
 |---------------|------------|---------|------------------------------------|
-| Database      | Room       | 2.8.3   | SQLite Database                    |
+| Database      | Room       | 2.8.4   | SQLite Database                    |
 | Local Storage | MMKV       | 2.2.4   | High-performance Key-Value Storage |
 
 ### Development Tools

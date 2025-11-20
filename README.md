@@ -105,7 +105,7 @@ Android 开发感兴趣，无论是学习还是共同创造，都欢迎加入。
 | 类别    | 技术选型                      | 版本号        | 说明                |
 |-------|---------------------------|------------|-------------------|
 | 编程语言  | Kotlin                    | 2.2.21     | 100% Kotlin 开发    |
-| UI 框架 | Jetpack Compose           | 2025.11.00 | 声明式 UI 框架         |
+| UI 框架 | Jetpack Compose           | 2025.11.01 | 声明式 UI 框架         |
 | 架构模式  | MVVM + Clean Architecture | -          | MVVM + Clean 架构   |
 | 依赖注入  | Hilt                      | 2.57.2     | 基于 Dagger 的依赖注入框架 |
 | 异步处理  | Coroutines + Flow         | 1.9.0      | 协程 + Flow 响应式编程   |
@@ -116,7 +116,7 @@ Android 开发感兴趣，无论是学习还是共同创造，都欢迎加入。
 |-------|-----------------------|---------------|------------------|
 | 导航    | Navigation Compose    | 2.9.6         | Compose 导航组件     |
 | 数据序列化 | Kotlinx Serialization | 1.9.0         | JSON 序列化处理       |
-| 网络请求  | Retrofit + OkHttp     | 3.0.0 + 5.2.0 | HTTP 客户端         |
+| 网络请求  | Retrofit + OkHttp     | 3.0.0 + 5.3.2 | HTTP 客户端         |
 | 图片加载  | Coil Compose          | 2.7.0         | 图片加载与缓存          |
 | 动画效果  | Lottie Compose        | 6.6.9         | After Effects 动画 |
 | 权限管理  | XXPermissions         | 26.5          | 动态权限申请           |
@@ -125,7 +125,7 @@ Android 开发感兴趣，无论是学习还是共同创造，都欢迎加入。
 
 | 类别   | 技术选型 | 版本号   | 说明         |
 |------|------|-------|------------|
-| 数据库  | Room | 2.8.3 | SQLite 数据库 |
+| 数据库  | Room | 2.8.4 | SQLite 数据库 |
 | 本地存储 | MMKV | 2.2.4 | 高性能键值存储    |
 
 ### 开发工具
