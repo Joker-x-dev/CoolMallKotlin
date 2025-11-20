@@ -30,7 +30,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import androidx.compose.ui.window.DialogProperties
-import com.joker.coolmall.core.designsystem.theme.Primary
 import com.joker.coolmall.core.ui.component.divider.WeDivider
 
 /**
@@ -51,11 +50,17 @@ fun WeDialog(
     content: String? = null,
     okText: String = "确定",
     cancelText: String = "取消",
-    okColor: Color = Primary,
+    okColor: Color = Color.Unspecified,
     onOk: () -> Unit,
     onCancel: (() -> Unit)? = null,
     onDismiss: () -> Unit
 ) {
+    val confirmColor = if (okColor == Color.Unspecified) {
+        MaterialTheme.colorScheme.primary
+    } else {
+        okColor
+    }
+
     Dialog(
         onDismissRequest = onDismiss,
         properties = DialogProperties(
@@ -113,9 +118,9 @@ fun WeDialog(
                                 .clickable(onClick = onCancel),
                             contentAlignment = Alignment.Center
                         ) {
-                            Text(
-                                text = cancelText,
-                                color = MaterialTheme.colorScheme.onSurface,
+                        Text(
+                            text = cancelText,
+                            color = MaterialTheme.colorScheme.onSurface,
                                 fontSize = 17.sp,
                                 fontWeight = FontWeight.Bold
                             )
@@ -135,7 +140,7 @@ fun WeDialog(
                     ) {
                         Text(
                             text = okText,
-                            color = okColor,
+                            color = confirmColor,
                             fontSize = 17.sp,
                             fontWeight = FontWeight.Bold
                         )
@@ -161,7 +166,7 @@ interface DialogState {
         content: String? = null,
         okText: String = "确定",
         cancelText: String = "取消",
-        okColor: Color = Primary,
+        okColor: Color? = null,
         closeOnAction: Boolean = true,
         onCancel: (() -> Unit)? = {},
         onOk: (() -> Unit)? = null
@@ -184,7 +189,7 @@ fun rememberDialogState(): DialogState {
                 content = props.content,
                 okText = props.okText,
                 cancelText = props.cancelText,
-                okColor = props.okColor,
+                okColor = props.okColor ?: Color.Unspecified,
                 onOk = {
                     props.onOk?.invoke()
                     if (props.closeOnAction) {
@@ -219,7 +224,7 @@ private class DialogStateImpl : DialogState {
         content: String?,
         okText: String,
         cancelText: String,
-        okColor: Color,
+        okColor: Color?,
         closeOnAction: Boolean,
         onCancel: (() -> Unit)?,
         onOk: (() -> Unit)?
@@ -247,7 +252,7 @@ private data class DialogProps(
     val content: String?,
     val okText: String,
     val cancelText: String,
-    val okColor: Color,
+    val okColor: Color?,
     val closeOnAction: Boolean,
     val onCancel: (() -> Unit)?,
     val onOk: (() -> Unit)?

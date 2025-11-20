@@ -8,6 +8,8 @@ import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.graphics.Color
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.joker.coolmall.core.common.config.ThemePreference
 import com.joker.coolmall.core.common.manager.ThemePreferenceManager
@@ -41,13 +43,20 @@ class MainActivity : ComponentActivity() {
         // 设置Compose内容
         setContent {
             val themeMode by ThemePreferenceManager.themeMode.collectAsState()
+            val themeColorOption by ThemePreferenceManager.themeColor.collectAsState()
             val isDarkTheme = when (themeMode) {
                 ThemePreference.FOLLOW_SYSTEM -> isSystemInDarkTheme()
                 ThemePreference.LIGHT -> false
                 ThemePreference.DARK -> true
             }
+            val primaryColor = remember(themeColorOption) {
+                Color(themeColorOption.colorHex)
+            }
             // 应用主题包装
-            AppTheme(darkTheme = isDarkTheme) {
+            AppTheme(
+                darkTheme = isDarkTheme,
+                themeColor = primaryColor
+            ) {
                 // 设置应用的导航宿主，并传入导航管理器和路由注册器
                 // 这样所有页面都可以通过导航管理器进行导航操作
                 AppNavHost(navigator = navigator)

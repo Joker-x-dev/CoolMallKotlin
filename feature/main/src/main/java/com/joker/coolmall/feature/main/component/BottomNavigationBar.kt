@@ -25,7 +25,9 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.animateLottieCompositionAsState
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.Primary
+import com.joker.coolmall.core.designsystem.theme.PrimaryDefault
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.feature.main.model.TopLevelDestination
 
@@ -83,7 +85,7 @@ fun BottomNavigationBar(
                 Text(
                     text = stringResource(id = destination.titleTextId),
                     style = MaterialTheme.typography.bodySmall,
-                    color = if (selected) Primary else MaterialTheme.colorScheme.onSurface.copy(
+                    color = if (selected) PrimaryDefault else MaterialTheme.colorScheme.onSurface.copy(
                         alpha = 0.5f
                     )
                 )
@@ -129,9 +131,11 @@ private fun TabLottieAnimation(
 @Preview(showBackground = true)
 @Composable
 fun MyNavigationBarPreview() {
-    BottomNavigationBar(
-        destinations = TopLevelDestination.entries,
-        onNavigateToDestination = {},
-        currentPageIndex = 0
-    )
+    AppTheme {
+        BottomNavigationBar(
+            destinations = TopLevelDestination.entries,
+            onNavigateToDestination = {},
+            currentPageIndex = 0
+        )
+    }
 }

@@ -1,6 +1,10 @@
 package com.joker.coolmall.core.designsystem.theme
 
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.lerp
 
 /**
  * 颜色规范
@@ -13,7 +17,15 @@ import androidx.compose.ui.graphics.Color
  * 适用场景：主要按钮、主题色、重要操作元素等
  * 在浅色和深色模式下保持一致
  */
-val Primary = Color(0xFF465CFF) // 浅色模式和深色模式相同
+val PrimaryDefault = Color(0xFF465CFF) // 默认主色
+
+/**
+ * 当前主题主色（受主题切换影响）
+ */
+val Primary: Color
+    @Composable
+    @ReadOnlyComposable
+    get() = MaterialTheme.colorScheme.primary
 
 // 辅助色
 /**
@@ -203,17 +215,32 @@ val BorderLight = Color(0xFFEEEEEE) // 浅色模式边框
 val BorderDark = Color(0xFF242424) // 深色模式边框
 
 // 渐变色起点和终点颜色
-/**
- * 主色渐变起点：#465CFF
- * 适用场景：与主色渐变终点配合使用，用于渐变按钮、背景等
- */
-val GradientPrimaryStart = Color(0xFF465CFF) // 主色渐变起点
+private val GradientPrimaryStartDefault = Color(0xFF465CFF)
+private val GradientPrimaryEndDefault = Color(0xFF6831FF)
 
 /**
- * 主色渐变终点：#6831FF
- * 适用场景：与主色渐变起点配合使用，用于渐变按钮、背景等
+ * 主色渐变起点：根据当前主题主色，在默认起点的基础上略微增亮
  */
-val GradientPrimaryEnd = Color(0xFF6831FF) // 主色渐变终点
+val GradientPrimaryStart: Color
+    @Composable
+    @ReadOnlyComposable
+    get() = lerp(
+        start = Primary,
+        stop = Color.White,
+        fraction = 0.15f
+    ).copy(alpha = GradientPrimaryStartDefault.alpha)
+
+/**
+ * 主色渐变终点：根据当前主题主色，在默认终点的基础上略微加深
+ */
+val GradientPrimaryEnd: Color
+    @Composable
+    @ReadOnlyComposable
+    get() = lerp(
+        start = Primary,
+        stop = Color.Black,
+        fraction = 0.15f
+    ).copy(alpha = GradientPrimaryEndDefault.alpha)
 
 /**
  * 红色渐变起点：#FD8C8C

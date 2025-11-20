@@ -68,6 +68,12 @@
     <string name="settings_dark_mode_follow_system">跟随系统</string>
     <string name="settings_dark_mode_light">浅色模式</string>
     <string name="settings_dark_mode_dark">深色模式</string>
+    <string name="settings_theme_color">主题颜色</string>
+    <string name="settings_theme_color_default">木槿紫</string>
+    <string name="settings_theme_color_purple">幻彩紫</string>
+    <string name="settings_theme_color_green">清爽绿</string>
+    <string name="settings_theme_color_orange">暖日橙</string>
+    <string name="settings_theme_color_red">能量红</string>
     <string name="settings_dynamic_color">动态主题色</string>
     <string name="settings_dynamic_color_desc">开启后应用主题色会同步系统壁纸颜色</string>
     <string name="settings_language">语言切换</string>

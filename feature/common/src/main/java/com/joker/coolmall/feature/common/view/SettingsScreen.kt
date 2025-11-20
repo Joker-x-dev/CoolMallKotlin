@@ -1,7 +1,11 @@
 package com.joker.coolmall.feature.common.view
 
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -12,10 +16,14 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.joker.coolmall.core.common.config.ThemeColorOption
 import com.joker.coolmall.core.common.config.ThemePreference
 import com.joker.coolmall.core.designsystem.component.VerticalList
 import com.joker.coolmall.core.designsystem.theme.AppTheme
@@ -26,6 +34,7 @@ import com.joker.coolmall.core.ui.component.list.AppListItem
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
 import com.joker.coolmall.core.ui.component.title.TitleWithLine
 import com.joker.coolmall.feature.common.R
+import com.joker.coolmall.feature.common.component.ThemeColorModal
 import com.joker.coolmall.feature.common.component.ThemeModeModal
 import com.joker.coolmall.feature.common.viewmodel.SettingsViewModel
 
@@ -43,10 +52,16 @@ internal fun SettingsRoute(
     val themeMode by viewModel.themeMode.collectAsStateWithLifecycle()
     // 是否显示主题选择弹窗
     val showThemeModal by viewModel.showThemeModal.collectAsStateWithLifecycle()
+    // 主题颜色
+    val themeColor by viewModel.themeColor.collectAsStateWithLifecycle()
+    // 是否显示主题颜色选择弹窗
+    val showThemeColorModal by viewModel.showThemeColorModal.collectAsStateWithLifecycle()
 
     SettingsScreen(
         themeMode = themeMode,
+        themeColor = themeColor,
         showThemeModal = showThemeModal,
+        showThemeColorModal = showThemeColorModal,
         onBackClick = viewModel::navigateBack,
         onUserAgreementClick = viewModel::onUserAgreementClick,
         onPrivacyPolicyClick = viewModel::onPrivacyPolicyClick,
@@ -56,7 +71,10 @@ internal fun SettingsRoute(
         onAppGuideClick = viewModel::onAppGuideClick,
         onDarkModeClick = viewModel::onDarkModeClick,
         onThemeModeSelected = viewModel::onThemeModeSelected,
-        onThemeModalDismiss = viewModel::dismissThemeModal
+        onThemeModalDismiss = viewModel::dismissThemeModal,
+        onThemeColorClick = viewModel::onThemeColorClick,
+        onThemeColorSelected = viewModel::onThemeColorSelected,
+        onThemeColorModalDismiss = viewModel::dismissThemeColorModal
     )
 }
 
@@ -64,7 +82,9 @@ internal fun SettingsRoute(
  * 设置页面界面
  *
  * @param themeMode 当前主题模式
+ * @param themeColor 当前主题颜色
  * @param showThemeModal 是否显示主题选择弹窗
+ * @param showThemeColorModal 是否显示主题颜色选择弹窗
  * @param onBackClick 返回上一页回调
  * @param onUserAgreementClick 用户协议点击回调
  * @param onPrivacyPolicyClick 隐私政策点击回调
@@ -78,7 +98,9 @@ internal fun SettingsRoute(
 @Composable
 internal fun SettingsScreen(
     themeMode: ThemePreference = ThemePreference.FOLLOW_SYSTEM,
+    themeColor: ThemeColorOption = ThemeColorOption.DEFAULT,
     showThemeModal: Boolean = false,
+    showThemeColorModal: Boolean = false,
     onBackClick: () -> Unit = {},
     onUserAgreementClick: () -> Unit = {},
     onPrivacyPolicyClick: () -> Unit = {},
@@ -88,7 +110,10 @@ internal fun SettingsScreen(
     onAppGuideClick: () -> Unit = {},
     onDarkModeClick: () -> Unit = {},
     onThemeModeSelected: (ThemePreference) -> Unit = {},
-    onThemeModalDismiss: () -> Unit = {}
+    onThemeModalDismiss: () -> Unit = {},
+    onThemeColorClick: () -> Unit = {},
+    onThemeColorSelected: (ThemeColorOption) -> Unit = {},
+    onThemeColorModalDismiss: () -> Unit = {}
 ) {
     AppScaffold(
         title = R.string.settings_title,
@@ -97,13 +122,15 @@ internal fun SettingsScreen(
     ) {
         SettingsContentView(
             themeMode = themeMode,
+            themeColor = themeColor,
             onUserAgreementClick = onUserAgreementClick,
             onPrivacyPolicyClick = onPrivacyPolicyClick,
             onAccountSecurityClick = onAccountSecurityClick,
             onFeedbackClick = onFeedbackClick,
             onAboutAppClick = onAboutAppClick,
             onAppGuideClick = onAppGuideClick,
-            onDarkModeClick = onDarkModeClick
+            onDarkModeClick = onDarkModeClick,
+            onThemeColorClick = onThemeColorClick
         )
     }
 
@@ -113,12 +140,20 @@ internal fun SettingsScreen(
         onDismiss = onThemeModalDismiss,
         onSelect = onThemeModeSelected
     )
+
+    ThemeColorModal(
+        visible = showThemeColorModal,
+        selectedColor = themeColor,
+        onDismiss = onThemeColorModalDismiss,
+        onSelect = onThemeColorSelected
+    )
 }
 
 /**
  * 设置页面内容视图
  *
  * @param themeMode 当前主题模式
+ * @param themeColor 当前主题颜色
  * @param onUserAgreementClick 用户协议点击回调
  * @param onPrivacyPolicyClick 隐私政策点击回调
  * @param onAccountSecurityClick 账号与安全点击回调
@@ -130,13 +165,15 @@ internal fun SettingsScreen(
 @Composable
 private fun SettingsContentView(
     themeMode: ThemePreference = ThemePreference.FOLLOW_SYSTEM,
+    themeColor: ThemeColorOption = ThemeColorOption.DEFAULT,
     onUserAgreementClick: () -> Unit = {},
     onPrivacyPolicyClick: () -> Unit = {},
     onAccountSecurityClick: () -> Unit = {},
     onFeedbackClick: () -> Unit = {},
     onAboutAppClick: () -> Unit = {},
     onAppGuideClick: () -> Unit = {},
-    onDarkModeClick: () -> Unit = {}
+    onDarkModeClick: () -> Unit = {},
+    onThemeColorClick: () -> Unit = {}
 ) {
 
     VerticalList(
@@ -174,20 +211,21 @@ private fun SettingsContentView(
                 onClick = onDarkModeClick
             )
 
-            // 动态主题色
+            // 主题颜色
             AppListItem(
-                title = stringResource(id = R.string.settings_dynamic_color),
-                showArrow = false,
+                title = stringResource(id = R.string.settings_theme_color),
+                showArrow = true,
                 horizontalPadding = SpaceHorizontalLarge,
-                verticalPadding = SpaceVerticalSmall,
-                description = stringResource(id = R.string.settings_dynamic_color_desc),
+                verticalPadding = SpaceVerticalLarge,
                 trailingContent = {
-                    var isDynamicColor by remember { mutableStateOf(false) }
-                    Switch(
-                        checked = isDynamicColor,
-                        onCheckedChange = { isDynamicColor = it }
+                    Box(
+                        modifier = Modifier
+                            .size(20.dp)
+                            .clip(CircleShape)
+                            .background(Color(themeColor.colorHex))
                     )
-                }
+                },
+                onClick = onThemeColorClick
             )
 
             AppListItem(

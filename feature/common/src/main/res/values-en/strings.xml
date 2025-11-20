@@ -68,6 +68,12 @@
     <string name="settings_dark_mode_follow_system">Follow System</string>
     <string name="settings_dark_mode_light">Light Mode</string>
     <string name="settings_dark_mode_dark">Dark Mode</string>
+    <string name="settings_theme_color">Theme Color</string>
+    <string name="settings_theme_color_default">Aurora Blue</string>
+    <string name="settings_theme_color_purple">Mystic Purple</string>
+    <string name="settings_theme_color_green">Fresh Green</string>
+    <string name="settings_theme_color_orange">Sunset Orange</string>
+    <string name="settings_theme_color_red">Vital Red</string>
     <string name="settings_dynamic_color">Dynamic Theme Color</string>
     <string name="settings_dynamic_color_desc">When enabled, the app theme color will sync with system wallpaper colors</string>
     <string name="settings_language">Language</string>

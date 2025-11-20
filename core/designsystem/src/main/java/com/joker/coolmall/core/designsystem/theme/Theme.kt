@@ -8,6 +8,7 @@ import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 
 /**
@@ -15,12 +16,8 @@ import androidx.compose.ui.platform.LocalContext
  * 整合颜色、排版、形状等设计系统，定义深色和浅色主题
  */
 
-/**
- * 深色主题配色方案
- * 定义MaterialTheme中深色模式下的各种颜色
- */
 private val DarkColorScheme = darkColorScheme(
-    primary = Primary,
+    primary = PrimaryDefault,
     secondary = ColorPurple,
     tertiary = ColorSuccess,
     background = BgGreyDark,
@@ -45,7 +42,7 @@ private val DarkColorScheme = darkColorScheme(
  * 定义MaterialTheme中浅色模式下的各种颜色
  */
 private val LightColorScheme = lightColorScheme(
-    primary = Primary,
+    primary = PrimaryDefault,
     secondary = ColorPurple,
     tertiary = ColorSuccess,
     background = BgGreyLight,
@@ -59,7 +56,7 @@ private val LightColorScheme = lightColorScheme(
     onError = TextWhite,
     outline = BorderLight,
     surfaceVariant = BgContentLight,
-    surfaceTint = Primary,
+    surfaceTint = PrimaryDefault,
     surfaceContainer = BgWhiteLight,
     surfaceContainerHigh = BgWhiteLight,
     surfaceContainerHighest = BgWhiteLight
@@ -77,6 +74,7 @@ private val LightColorScheme = lightColorScheme(
 @Composable
 fun AppTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
+    themeColor: Color = PrimaryDefault,
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit
@@ -87,8 +85,15 @@ fun AppTheme(
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        darkTheme -> DarkColorScheme.copy(
+            primary = themeColor,
+            surfaceTint = themeColor
+        )
+
+        else -> LightColorScheme.copy(
+            primary = themeColor,
+            surfaceTint = themeColor
+        )
     }
 
     MaterialTheme(
