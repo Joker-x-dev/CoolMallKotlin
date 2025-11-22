@@ -82,7 +82,7 @@ hilt = "2.57.2"
 hiltNavigationCompose = "1.3.0"
 # KSP (Kotlin Symbol Processing): https://github.com/google/ksp
 # 说明: Kotlin 注解处理器，用于代码生成
-ksp = "2.2.20-2.0.4"
+ksp = "2.3.2"
 
 # 图片加载相关版本
 # Coil Compose 图片加载库: https://coil-kt.github.io/coil/compose/

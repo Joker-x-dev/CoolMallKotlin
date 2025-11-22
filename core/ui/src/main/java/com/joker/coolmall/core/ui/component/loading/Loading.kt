@@ -208,11 +208,11 @@ fun MiLoadingMobile(
 
     Canvas(
         modifier = Modifier
-            .size(34.dp)
+            .size(28.dp)
             .border(2.dp, borderColor, CircleShape)
     ) {
         val circleRadius = size.minDimension / 2 - 8.dp.toPx()
-        val dotRadius = 4.dp.toPx()
+        val dotRadius = 3.dp.toPx()
         val center = size.center
         val dotX = cos(Math.toRadians(angle.value.toDouble())) * circleRadius + center.x
         val dotY = sin(Math.toRadians(angle.value.toDouble())) * circleRadius + center.y
@@ -271,7 +271,7 @@ fun DotDanceLoading(color: Color = Primary) {
  *
  * @param modifier 修饰符，用于自定义组件样式
  */
-@Composable
+/*@Composable
 fun LottieLoading(
     modifier: Modifier = Modifier,
 ) {
@@ -283,7 +283,7 @@ fun LottieLoading(
         modifier = modifier
             .size(80.dp),
     )
-}
+}*/
 
 /**
  * WeLoading组件预览
@@ -319,6 +319,17 @@ fun MiLoadingWebPreview() {
 }
 
 /**
+ * 小米风格移动端加载动画
+ */
+@Preview(showBackground = true)
+@Composable
+fun MiLoadingMobilePreview() {
+    AppTheme {
+        MiLoadingMobile()
+    }
+}
+
+/**
  * DotDanceLoading组件预览
  */
 @Preview(showBackground = true)
@@ -332,10 +343,11 @@ fun DotDanceLoadingPreview() {
 /**
  * LottieLoading组件预览
  */
+/*
 @Preview(showBackground = true)
 @Composable
 fun LottieLoadingPreview() {
     AppTheme {
         LottieLoading()
     }
-}
+}*/
