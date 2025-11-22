@@ -131,4 +131,5 @@
     <string name="payment_success">支付成功</string>
     <string name="payment_failed">支付失败</string>
     <string name="payment_cancel">支付已取消</string>
+    <string name="select_address">请选择收货地址</string>
 </resources>

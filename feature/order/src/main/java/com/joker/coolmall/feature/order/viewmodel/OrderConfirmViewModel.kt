@@ -18,6 +18,7 @@ import com.joker.coolmall.core.model.request.CreateOrderRequest
 import com.joker.coolmall.core.model.request.CreateOrderRequest.CreateOrder
 import com.joker.coolmall.core.model.response.NetworkResponse
 import com.joker.coolmall.core.util.storage.MMKVUtils
+import com.joker.coolmall.core.util.toast.ToastUtils
 import com.joker.coolmall.feature.order.R
 import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.navigation.routes.OrderRoutes
@@ -178,7 +179,11 @@ class OrderConfirmViewModel @Inject constructor(
      * @author Joker.X
      */
     fun onSubmitOrderClick() {
-        val addressId = super.getSuccessData().defaultAddress?.id ?: return
+        val addressId = super.getSuccessData().defaultAddress?.id
+        if (addressId == null) {
+            ToastUtils.showError(R.string.select_address)
+            return
+        }
 
         // 创建订单请求参数
         val params = CreateOrderRequest(
@@ -219,7 +224,7 @@ class OrderConfirmViewModel @Inject constructor(
     fun navigateToPayment(order: Order) {
         val orderId = order.id
         val paymentPrice = order.price - order.discountPrice // 实付金额
-        
+
         // 跳转到支付页面并关闭当前页面
         navigateAndCloseCurrent(
             OrderRoutes.Pay(orderId = orderId, price = paymentPrice, from = "confirm"),

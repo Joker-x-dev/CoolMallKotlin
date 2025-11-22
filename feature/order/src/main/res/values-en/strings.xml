@@ -131,5 +131,6 @@
     <string name="payment_success">Payment successful</string>
     <string name="payment_failed">Payment failed</string>
     <string name="payment_cancel">Payment cancelled</string>
+    <string name="select_address">Please select a shipping address</string>
 </resources>
 
