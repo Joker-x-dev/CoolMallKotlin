@@ -6,9 +6,9 @@
 
 # 项目基础配置
 # 构建版本
-versionCode = "2025112001"
+versionCode = "2025112401"
 # 版本号
-versionName = "1.0.5"
+versionName = "1.0.6"
 # 包名
 namespace = "com.joker.coolmall"
 

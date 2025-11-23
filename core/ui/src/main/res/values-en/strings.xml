@@ -19,6 +19,10 @@
     <string name="load_more_error">Load Failed</string>
     <string name="load_more_error_retry">Load Failed, Click to Retry</string>
     <string name="load_more_no_more">No More Data</string>
+    <string name="refresh_pull_down">Pull to Refresh</string>
+    <string name="refresh_release">Release to Refresh</string>
+    <string name="refresh_refreshing">Refreshing...</string>
+    <string name="refresh_complete">Refresh Complete</string>
 
     <!-- Common Actions -->
     <string name="confirm">Confirm</string>

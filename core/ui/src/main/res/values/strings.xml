@@ -19,6 +19,10 @@
     <string name="load_more_error">加载失败</string>
     <string name="load_more_error_retry">加载失败，点击重试</string>
     <string name="load_more_no_more">没有更多了</string>
+    <string name="refresh_pull_down">下拉刷新</string>
+    <string name="refresh_release">松开刷新</string>
+    <string name="refresh_refreshing">刷新中...</string>
+    <string name="refresh_complete">刷新完成</string>
 
     <!-- Common Actions -->
     <string name="confirm">确定</string>

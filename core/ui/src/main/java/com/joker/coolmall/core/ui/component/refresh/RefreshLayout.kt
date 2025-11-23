@@ -1,54 +1,31 @@
 package com.joker.coolmall.core.ui.component.refresh
 
-import androidx.compose.animation.AnimatedContent
-import androidx.compose.animation.core.LinearEasing
-import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
-import androidx.compose.animation.scaleIn
-import androidx.compose.animation.scaleOut
-import androidx.compose.animation.togetherWith
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.LazyListState
-import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridScope
 import androidx.compose.foundation.lazy.staggeredgrid.LazyStaggeredGridState
-import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
-import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridItemSpan
-import androidx.compose.foundation.lazy.staggeredgrid.rememberLazyStaggeredGridState
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarScrollBehavior
-import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.layout.Layout
+import androidx.compose.ui.unit.dp
 import com.joker.coolmall.core.common.base.state.LoadMoreState
-import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalMedium
-import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalXXLarge
-import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
-import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
-import com.joker.coolmall.core.ui.component.loading.LoadMore
+import kotlinx.coroutines.delay
+import kotlin.math.roundToInt
 
 /**
  * 支持下拉刷新和上拉加载更多的布局组件
- * 支持列表和网格两种模式
  *
- * 基于 Compose 原生组件实现的可刷新布局，包含：
- * 1. 下拉刷新功能 - 使用 PullToRefreshBox
- * 2. 自动检测加载更多 - 通过监听滚动位置
- * 3. 状态管理 - 维护 LazyListState 或 LazyGridState
- * 4. 加载更多组件 - 显示不同的加载状态
+ * 基于 Compose 自定义 Layout 和 NestedScrollConnection 实现。
+ * 替换了官方的 PullToRefreshBox
  *
  * @param modifier 修饰符
  * @param isGrid 是否为网格模式，默认为 false（列表模式）
@@ -80,192 +57,94 @@ fun RefreshLayout(
     gridContent: LazyStaggeredGridScope.() -> Unit = {},
     content: LazyListScope.() -> Unit = {},
 ) {
-    // 下拉刷新容器
-    PullToRefreshBox(
-        isRefreshing = isRefreshing,
-        onRefresh = onRefresh,
-        modifier = modifier.let { mod ->
-            if (scrollBehavior != null) {
-                mod.nestedScroll(scrollBehavior.nestedScrollConnection)
-            } else {
-                mod
+    val coroutineScope = rememberCoroutineScope()
+    val refreshState = rememberRefreshState(coroutineScope)
+
+    // 同步刷新状态
+    LaunchedEffect(isRefreshing) {
+        if (!isRefreshing && refreshState.isRefreshing) {
+            // 从刷新状态变为非刷新状态时，如果还有偏移量，说明需要进入结束动画
+            // 立即设置 isFinishing 为 true，防止 UI 闪烁（Loading 动画重置）
+            if (refreshState.indicatorOffset > 0) {
+                refreshState.isFinishing = true
             }
         }
-    ) {
-        // 添加布局切换动画
-        AnimatedContent(
-            targetState = isGrid,
-            transitionSpec = {
-                (fadeIn(animationSpec = tween(300, easing = LinearEasing)) +
-                        scaleIn(
-                            initialScale = 0.92f,
-                            animationSpec = tween(300, easing = LinearEasing)
-                        ))
-                    .togetherWith(
-                        fadeOut(animationSpec = tween(300, easing = LinearEasing)) +
-                                scaleOut(
-                                    targetScale = 0.92f,
-                                    animationSpec = tween(300, easing = LinearEasing)
-                                )
-                    )
-            },
-            label = "layout_switch_animation"
-        ) { targetIsGrid ->
-            if (targetIsGrid) {
-                // 网格模式
-                RefreshGridContent(
-                    gridState = gridState,
-                    loadMoreState = loadMoreState,
-                    onLoadMore = onLoadMore,
-                    shouldTriggerLoadMore = shouldTriggerLoadMore,
-                    content = gridContent
-                )
+        refreshState.isRefreshing = isRefreshing
+    }
+
+    // 监听刷新状态变化
+    LaunchedEffect(refreshState.isRefreshing) {
+        if (refreshState.isRefreshing) {
+            refreshState.animateIsOver = false
+            refreshState.isFinishing = false
+            onRefresh()
+        } else {
+            // 刷新结束，如果有偏移量（说明是刚刷新完），则显示完成状态并延迟收起
+            if (refreshState.indicatorOffset > 0) {
+                refreshState.isFinishing = true
+                delay(800)
+                refreshState.isFinishing = false
+                refreshState.animateOffsetTo(0f)
             } else {
-                // 列表模式
-                RefreshListContent(
-                    listState = listState,
-                    loadMoreState = loadMoreState,
-                    onLoadMore = onLoadMore,
-                    shouldTriggerLoadMore = shouldTriggerLoadMore,
-                    content = content
-                )
+                refreshState.animateOffsetTo(0f)
             }
         }
     }
-}
 
-/**
- * 列表内容组件
- *
- * @param listState 列表状态，如果为 null 则创建新的状态
- * @param loadMoreState 加载更多状态
- * @param onLoadMore 加载更多回调
- * @param shouldTriggerLoadMore 判断是否应该触发加载更多的函数
- * @param content 列表内容构建器
- * @author Joker.X
- */
-@Composable
-private fun RefreshListContent(
-    listState: LazyListState?,
-    loadMoreState: LoadMoreState,
-    onLoadMore: () -> Unit,
-    shouldTriggerLoadMore: (lastIndex: Int, totalCount: Int) -> Boolean,
-    content: LazyListScope.() -> Unit
-) {
-    // 如果未提供列表状态，则创建一个
-    val actualListState = listState ?: rememberLazyListState()
-
-    // 监听是否需要加载更多
-    val shouldLoadMore by remember {
-        derivedStateOf {
-            val lastVisibleItem = actualListState.layoutInfo.visibleItemsInfo.lastOrNull()
-            if (lastVisibleItem != null) {
-                shouldTriggerLoadMore(
-                    lastVisibleItem.index,
-                    actualListState.layoutInfo.totalItemsCount
-                )
-            } else false
-        }
-    }
-
-    // 触发加载更多
-    LaunchedEffect(shouldLoadMore) {
-        if (shouldLoadMore) {
-            onLoadMore()
-        }
-    }
-
-    // 列表模式
-    LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(SpaceVerticalMedium),
-        state = actualListState,
-        modifier = Modifier
+    // 使用 Layout 实现自定义布局
+    Layout(
+        modifier = modifier
+            .clipToBounds()
             .fillMaxSize()
-            .padding(horizontal = SpaceHorizontalMedium)
-    ) {
+            .nestedScroll(refreshState.connection)
+            .let { mod ->
+                if (scrollBehavior != null) {
+                    mod.nestedScroll(scrollBehavior.nestedScrollConnection)
+                } else {
+                    mod
+                }
+            },
+        content = {
+            // 内容区域
+            RefreshContent(
+                isGrid = isGrid,
+                listState = listState,
+                gridState = gridState,
+                loadMoreState = loadMoreState,
+                onLoadMore = onLoadMore,
+                shouldTriggerLoadMore = shouldTriggerLoadMore,
+                gridContent = gridContent,
+                content = content
+            )
 
-        // 顶部占高
-        item {
-            Spacer(modifier = Modifier)
-        }
-
-        // 列表内容
-        content()
-
-        // 添加加载更多组件
-        item {
-            LoadMore(
-                modifier = Modifier.padding(horizontal = SpaceHorizontalXXLarge),
-                state = loadMoreState,
-                listState = if (loadMoreState == LoadMoreState.Loading) actualListState else null,
-                onRetry = onLoadMore
+            // 刷新指示器
+            RefreshHeader(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(52.dp), // 调整高度为标准高度，避免遮挡
+                state = refreshState
             )
         }
-    }
-}
+    ) { measurables, constraints ->
+        val contentPlaceable = measurables[0].measure(constraints)
+        val headerPlaceable = measurables.getOrNull(1)?.measure(
+            constraints.copy(minHeight = 0, maxHeight = constraints.maxHeight)
+        )
 
-/**
- * 网格内容组件（已改为交错瀑布流 StaggeredGrid）
- *
- * @param gridState 网格状态，如果为 null 则创建新的状态
- * @param loadMoreState 加载更多状态
- * @param onLoadMore 加载更多回调
- * @param shouldTriggerLoadMore 判断是否应该触发加载更多的函数
- * @param content 网格内容构建器
- * @author Joker.X
- */
-@Composable
-private fun RefreshGridContent(
-    gridState: LazyStaggeredGridState? = null,
-    loadMoreState: LoadMoreState,
-    onLoadMore: () -> Unit,
-    shouldTriggerLoadMore: (lastIndex: Int, totalCount: Int) -> Boolean,
-    content: LazyStaggeredGridScope.() -> Unit
-) {
+        // 设定触发刷新的阈值高度
+        // 使用测量的高度作为阈值，确保完全显示
+        refreshState.headerHeight = headerPlaceable?.height?.toFloat() ?: 0f
 
-    // 如果未提供列表状态，则创建一个
-    val actualGridState = gridState ?: rememberLazyStaggeredGridState()
+        layout(constraints.maxWidth, constraints.maxHeight) {
+            // 内容随刷新offset移动
+            contentPlaceable.placeRelative(0, refreshState.indicatorOffset.roundToInt())
 
-    // 监听是否需要加载更多
-    val shouldLoadMore by remember {
-        derivedStateOf {
-            val lastVisibleItem = actualGridState.layoutInfo.visibleItemsInfo.lastOrNull()
-            if (lastVisibleItem != null) {
-                shouldTriggerLoadMore(
-                    lastVisibleItem.index,
-                    actualGridState.layoutInfo.totalItemsCount
-                )
-            } else false
-        }
-    }
-
-    // 触发加载更多
-    LaunchedEffect(shouldLoadMore) {
-        if (shouldLoadMore) {
-            onLoadMore()
-        }
-    }
-
-    // 网格模式
-    LazyVerticalStaggeredGrid(
-        columns = StaggeredGridCells.Fixed(2),
-        modifier = Modifier.fillMaxSize(),
-        contentPadding = PaddingValues(SpacePaddingMedium),
-        horizontalArrangement = Arrangement.spacedBy(SpacePaddingMedium),
-        verticalItemSpacing = SpacePaddingMedium,
-        state = actualGridState
-    ) {
-
-        // 内容
-        content()
-
-        // 添加加载更多组件
-        item(span = StaggeredGridItemSpan.FullLine) {
-            LoadMore(
-                modifier = Modifier.padding(horizontal = SpaceHorizontalXXLarge),
-                state = loadMoreState,
-                listState = null,
-                onRetry = onLoadMore
+            // 刷新指示器
+            // 它的位置需要精心计算以保持"拉伸"的视觉中心感
+            // 这里我们将它固定在顶部区域，通过 offset 移动
+            headerPlaceable?.placeRelative(
+                0,
+                -headerPlaceable.height + refreshState.indicatorOffset.roundToInt()
             )
         }
     }
