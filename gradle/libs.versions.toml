@@ -110,7 +110,7 @@ mmkv = "2.2.4"
 # 动画相关版本
 # Lottie Compose 动画库: https://airbnb.io/lottie/#/android-compose
 # 说明: 支持 After Effects 动画的 Compose 库
-lottieCompose = "6.6.9"
+lottieCompose = "6.7.1"
 
 # 调试工具相关版本
 # LeakCanary 内存泄漏检测工具: https://github.com/square/leakcanary
@@ -133,7 +133,7 @@ alipaysdkAndroid = "15.8.40"
 
 # 权限相关版本
 # XXPermissions 权限框架: https://github.com/getActivity/XXPermissions
-xxpermissions = "26.5"
+xxpermissions = "28.0"
 
 [libraries]
 

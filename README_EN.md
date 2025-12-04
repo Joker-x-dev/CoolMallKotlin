@@ -78,6 +78,14 @@ to join.
 <img src="docs/images/preview/Dark 4.png"  alt="CoolMall App Dark Mode Preview 4"/>
 <img src="docs/images/preview/Dark 5.png"  alt="CoolMall App Dark Mode Preview 5"/>
 
+### 🌈 Theme
+
+<img src="docs/images/preview/Theme.png" alt="CoolMall Theme Preview"/>
+
+### 🌐 Internationalization
+
+<img src="docs/images/preview/i18n.png" alt="CoolMall Internationalization Preview"/>
+
 ### 📍 Project Links
 
 - **GitHub Repository**: [https://github.com/Joker-x-dev/CoolMallKotlin](https://github.com/Joker-x-dev/CoolMallKotlin)
@@ -108,12 +116,15 @@ to join.
 - **Update Notes**: Preview versions will be updated from time to time and may not fully sync with
   the latest code changes
 
-### API Documentation
+### Related Docs
 
-- **Interface Documentation**: [View Online](https://coolmall.apifox.cn)
-- **Description**: The interface documentation will be updated synchronously with project
-  development progress, mainly containing request parameters and return data examples for each
-  interface
+- **CoolMall API Docs**: [View Online](https://coolmall.apifox.cn)
+  - The API documentation is kept in sync with project progress and mainly includes request parameters and response samples for each endpoint.
+
+
+- **Scaffold Docs**: [View Online](https://compose.dusksnow.top)
+  - A lightweight single-module Jetpack Compose scaffold “AndroidProject-Compose” prepared for quick secondary development on the same stack, with detailed documentation for learning.
+  - It keeps only the basic capabilities and sample routes—clone and run, then plug in your own business logic. Most of CoolMall’s foundational capabilities and docs also apply there for faster ramp-up.
 
 ## 🛠️ Tech Stack
 
@@ -135,8 +146,8 @@ to join.
 | Data Serialization    | Kotlinx Serialization | 1.9.0         | JSON Serialization Processing |
 | Network Requests      | Retrofit + OkHttp     | 3.0.0 + 5.3.2 | HTTP Client                   |
 | Image Loading         | Coil Compose          | 2.7.0         | Image Loading and Caching     |
-| Animation Effects     | Lottie Compose        | 6.6.9         | After Effects Animation       |
-| Permission Management | XXPermissions         | 26.5          | Dynamic Permission Request    |
+| Animation Effects     | Lottie Compose        | 6.7.1         | After Effects Animation       |
+| Permission Management | XXPermissions         | 28.0          | Dynamic Permission Request    |
 
 ### Data Storage
 
@@ -152,7 +163,7 @@ to join.
 | Logging Framework     | Timber        | 5.0.1   | Log Management             |
 | Network Debugging     | Chucker       | 4.2.0   | Network Request Monitoring |
 | Memory Detection      | LeakCanary    | 2.14    | Memory Leak Detection      |
-| Permission Management | XXPermissions | 26.5    | Dynamic Permission Request |
+| Permission Management | XXPermissions | 28.0    | Dynamic Permission Request |
 | Testing Framework     | JUnit         | 4.13.2  | Unit Testing + UI Testing  |
 
 ## 📚 Resources and References

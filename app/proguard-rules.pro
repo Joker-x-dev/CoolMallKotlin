@@ -20,12 +20,6 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
-# toast 混淆规则
--keep class com.hjq.toast.** {*;}
-
-# 权限混淆规则
--keep class com.hjq.permissions.** { *; }
-
 # QQ互联 SDK 混淆规则
 -keep class com.tencent.** { *; }
 -keep class com.tencent.open.** { *; }

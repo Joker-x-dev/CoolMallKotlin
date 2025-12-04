@@ -69,6 +69,14 @@ Android 开发感兴趣，无论是学习还是共同创造，都欢迎加入。
 <img src="docs/images/preview/Dark 4.png" alt="青商城应用深色模式预览4"/>
 <img src="docs/images/preview/Dark 5.png" alt="青商城应用深色模式预览5"/>
 
+### 🌈 主题
+
+<img src="docs/images/preview/Theme.png" alt="青商城应用主题预览"/>
+
+### 🌐 国际化
+
+<img src="docs/images/preview/i18n.png" alt="青商城应用国际化预览"/>
+
 ### 📍 项目地址
 
 - **GitHub 地址**：[https://github.com/Joker-x-dev/CoolMallKotlin](https://github.com/Joker-x-dev/CoolMallKotlin)
@@ -93,10 +101,15 @@ Android 开发感兴趣，无论是学习还是共同创造，都欢迎加入。
 - **支持系统**：Android 6.0 及以上
 - **更新说明**：预览版本会不定时更新，可能不会完全同步最新的代码变更
 
-### API 文档
+### 相关文档
 
-- **接口文档**：[在线查看](https://coolmall.apifox.cn)
-- **说明**：接口文档会随着项目开发进度同步更新，主要包含各接口的请求参数和返回数据示例
+- **青商城 API 接口文档**：[在线查看](https://coolmall.apifox.cn)
+  - 接口文档会随着项目开发进度同步更新，主要包含各接口的请求参数和返回数据示例
+
+
+- **脚手架文档**：[在线查看](https://compose.dusksnow.top)
+  - 很多同学希望在青商城的基础上二次开发或基于相同技术栈快速启动业务，我额外准备了一个精简的单模块 Jetpack Compose 空脚手架「AndroidProject-Compose」，并配套了详细文档方便学习。
+  - 它只保留基础能力与示例路由，拉仓库即可运行并按需填充业务逻辑，也便于学习架构拆分与模块化落地；青商城的大部分基础能力与文档说明在此同样适用，便于快速上手项目。
 
 ## 🛠️ 技术栈
 
@@ -118,8 +131,8 @@ Android 开发感兴趣，无论是学习还是共同创造，都欢迎加入。
 | 数据序列化 | Kotlinx Serialization | 1.9.0         | JSON 序列化处理       |
 | 网络请求  | Retrofit + OkHttp     | 3.0.0 + 5.3.2 | HTTP 客户端         |
 | 图片加载  | Coil Compose          | 2.7.0         | 图片加载与缓存          |
-| 动画效果  | Lottie Compose        | 6.6.9         | After Effects 动画 |
-| 权限管理  | XXPermissions         | 26.5          | 动态权限申请           |
+| 动画效果  | Lottie Compose        | 6.7.1         | After Effects 动画 |
+| 权限管理  | XXPermissions         | 28.0          | 动态权限申请           |
 
 ### 数据存储
 
