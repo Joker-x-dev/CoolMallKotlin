@@ -201,7 +201,7 @@ class GoodsCategoryViewModel @Inject constructor(
         _filtersVisible.value = true
         // 只在第一次显示时加载分类数据
         if (categoryDataLoaded) return
-        // 计时 360 毫秒等待动画结束后加载分类数据
+        // 计时 340 毫秒等待动画结束后加载分类数据
         viewModelScope.launch {
             delay(340)
             loadGoodsCategory()

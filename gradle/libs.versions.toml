@@ -6,9 +6,9 @@
 
 # 项目基础配置
 # 构建版本
-versionCode = "2025112401"
+versionCode = "2026011201"
 # 版本号
-versionName = "1.0.6"
+versionName = "1.0.7"
 # 包名
 namespace = "com.joker.coolmall"
 
@@ -22,7 +22,7 @@ targetSdk = "36"
 
 # 构建工具版本
 # Android Gradle Plugin: https://developer.android.com/studio/releases/gradle-plugin
-agp = "8.13.1"
+agp = "8.13.2"
 # Kotlin 编译器: https://kotlinlang.org/docs/releases.html
 # 注意: 需要和 hilt 版本对应
 kotlin = "2.2.21"
@@ -31,7 +31,7 @@ kotlin = "2.2.21"
 # AndroidX Core KTX: https://developer.android.com/jetpack/androidx/releases/core
 coreKtx = "1.17.0"
 # AndroidX Activity Compose: https://developer.android.com/jetpack/androidx/releases/activity
-activityCompose = "1.12.0"
+activityCompose = "1.12.2"
 # AndroidX Lifecycle Runtime KTX: https://developer.android.com/jetpack/androidx/releases/lifecycle
 lifecycleRuntimeKtx = "2.10.0"
 
@@ -46,7 +46,7 @@ espressoCore = "3.7.0"
 # Jetpack Compose 相关版本
 # Compose BOM: https://developer.android.com/jetpack/compose/bom
 # 说明: BOM 统一管理所有 Compose 库版本，确保兼容性
-composeBom = "2025.11.01"
+composeBom = "2025.12.01"
 
 # 导航相关版本
 # Navigation Compose: https://developer.android.com/jetpack/androidx/releases/navigation
@@ -92,7 +92,7 @@ coilCompose = "2.7.0"
 # AndroidX AppCompat: https://developer.android.com/jetpack/androidx/releases/appcompat
 appcompat = "1.7.1"
 # Material Design Components: https://github.com/material-components/material-components-android
-material = "1.14.0-alpha07"
+material = "1.14.0-alpha08"
 
 # 启动页相关版本
 # AndroidX Core Splashscreen: https://developer.android.com/jetpack/androidx/releases/core
@@ -101,11 +101,11 @@ androidxCoreSplashscreen = "1.2.0"
 
 # Toast 相关版本
 # Toaster 吐司框架: https://github.com/getActivity/Toaster
-toaster = "13.2"
+toaster = "13.8"
 
 # 数据存储相关版本
 # 腾讯 MMKV 高性能存储: https://github.com/Tencent/MMKV
-mmkv = "2.2.4"
+mmkv = "2.3.0"
 
 # 动画相关版本
 # Lottie Compose 动画库: https://airbnb.io/lottie/#/android-compose

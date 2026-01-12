@@ -309,10 +309,13 @@ interested in contributing, whether in code, design, or documentation, you will 
 - **Tech Stack**: Kotlin + Jetpack Compose + MVVM
 - **Architecture Features**: Modular Design + Clean Architecture
 
-### 🌟 HarmonyOS Version (Planned)
+### 🌟 HarmonyOS Version (In Development)
 
 - **Tech Stack**: ArkTS + ArkUI + MVVM
 - **Architecture Features**: Modular Design + Atomic Services
+- **Repository Links**:
+    - **GitHub**: [https://github.com/Joker-x-dev/CoolMallArkTS](https://github.com/Joker-x-dev/CoolMallArkTS)
+    - **Gitee**: [https://gitee.com/Joker-x-dev/CoolMallArkTS](https://gitee.com/Joker-x-dev/CoolMallArkTS)
 
 ### 🍎 iOS Version (Planned)
 

@@ -21,7 +21,7 @@ data class NetworkResponse<T>(
 
     /**
      * 状态码
-     * 等于0表示成功
+     * 等于1000表示成功
      */
     val code: Int = 1000,
 

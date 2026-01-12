@@ -2,8 +2,13 @@ package com.joker.coolmall.feature.cs.view
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.Spring
+import androidx.compose.animation.core.spring
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.scaleIn
+import androidx.compose.animation.scaleOut
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -687,20 +692,20 @@ fun JumpToBottom(
     onClicked: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    androidx.compose.animation.AnimatedVisibility(
+    AnimatedVisibility(
         visible = enabled,
-        enter = androidx.compose.animation.fadeIn(androidx.compose.animation.core.tween(300)) +
-                androidx.compose.animation.scaleIn(
+        enter = fadeIn(tween(300)) +
+                scaleIn(
                     initialScale = 0.8f,
-                    animationSpec = androidx.compose.animation.core.spring(
-                        dampingRatio = androidx.compose.animation.core.Spring.DampingRatioMediumBouncy,
-                        stiffness = androidx.compose.animation.core.Spring.StiffnessLow
+                    animationSpec = spring(
+                        dampingRatio = Spring.DampingRatioMediumBouncy,
+                        stiffness = Spring.StiffnessLow
                     )
                 ),
-        exit = androidx.compose.animation.fadeOut(androidx.compose.animation.core.tween(200)) +
-                androidx.compose.animation.scaleOut(
+        exit = fadeOut(tween(200)) +
+                scaleOut(
                     targetScale = 0.8f,
-                    animationSpec = androidx.compose.animation.core.tween(200)
+                    animationSpec = tween(200)
                 ),
         modifier = modifier
     ) {

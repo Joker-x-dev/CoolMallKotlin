@@ -283,10 +283,13 @@ Android 开发技术的实践平台。
 - **技术栈**: Kotlin + Jetpack Compose + MVVM
 - **架构特点**: 模块化设计 + Clean Architecture
 
-### 🌟 鸿蒙版本（计划中）
+### 🌟 鸿蒙版本（开发中）
 
 - **技术栈**: ArkTS + ArkUI + MVVM
 - **架构特点**: 模块化设计 + 原子化服务
+- **项目地址**:
+    - **GitHub**：[https://github.com/Joker-x-dev/CoolMallArkTS](https://github.com/Joker-x-dev/CoolMallArkTS)
+    - **Gitee**：[https://gitee.com/Joker-x-dev/CoolMallArkTS](https://gitee.com/Joker-x-dev/CoolMallArkTS)
 
 ### 🍎 iOS 版本（计划中）
 
