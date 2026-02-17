@@ -2,25 +2,38 @@ package com.joker.coolmall.feature.user.navigation
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
+import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.ui.LocalNavAnimatedContentScope
+import com.joker.coolmall.core.navigation.user.UserRoutes
+import com.joker.coolmall.feature.user.view.AddressDetailRoute
+import com.joker.coolmall.feature.user.view.AddressListRoute
+import com.joker.coolmall.feature.user.view.FootprintRoute
+import com.joker.coolmall.feature.user.view.ProfileRoute
 
 /**
  * 用户模块导航图
  *
- * 整合用户模块下所有页面的导航
- *
- * @param navController 导航控制器
  * @param sharedTransitionScope 共享转换作用域
  * @author Joker.X
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
-fun NavGraphBuilder.userGraph(
-    navController: NavHostController,
-    sharedTransitionScope: SharedTransitionScope
+fun EntryProviderScope<NavKey>.userGraph(
+    sharedTransitionScope: SharedTransitionScope,
 ) {
-    profileScreen(sharedTransitionScope)
-    addressListScreen(navController)
-    addressDetailScreen()
-    footprintScreen()
+    entry<UserRoutes.Profile> {
+        ProfileRoute(
+            sharedTransitionScope = sharedTransitionScope,
+            animatedContentScope = LocalNavAnimatedContentScope.current,
+        )
+    }
+    entry<UserRoutes.AddressList> { key ->
+        AddressListRoute(navKey = key)
+    }
+    entry<UserRoutes.AddressDetail> { key ->
+        AddressDetailRoute(navKey = key)
+    }
+    entry<UserRoutes.Footprint> {
+        FootprintRoute()
+    }
 }

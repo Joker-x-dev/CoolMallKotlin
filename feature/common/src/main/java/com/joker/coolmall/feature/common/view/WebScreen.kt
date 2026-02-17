@@ -31,6 +31,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.joker.coolmall.core.designsystem.component.FullScreenBox
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.CommonIcon
+import com.joker.coolmall.core.navigation.common.CommonRoutes
+import com.joker.coolmall.core.navigation.navigateBack
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
 import com.joker.coolmall.feature.common.R
 import com.joker.coolmall.feature.common.model.WebViewData
@@ -39,12 +41,18 @@ import com.joker.coolmall.feature.common.viewmodel.WebViewModel
 /**
  * 网页路由
  *
+ * @param navKey 路由参数
  * @param viewModel 网页 ViewModel
  * @author Joker.X
  */
 @Composable
 internal fun WebRoute(
-    viewModel: WebViewModel = hiltViewModel()
+    navKey: CommonRoutes.Web,
+    viewModel: WebViewModel = hiltViewModel<WebViewModel, WebViewModel.Factory>(
+        creationCallback = { factory ->
+            factory.create(navKey)
+        }
+    ),
 ) {
     // 收集WebView数据
     val webViewData by viewModel.webViewData.collectAsState()
@@ -63,7 +71,6 @@ internal fun WebRoute(
         currentProgress = currentProgress,
         shouldRefresh = shouldRefresh,
         showDropdownMenu = showDropdownMenu,
-        onBackClick = viewModel::navigateBack,
         onTitleChange = viewModel::updatePageTitle,
         onProgressChange = viewModel::updateProgress,
         onRefreshClick = viewModel::refreshPage,
@@ -82,7 +89,6 @@ internal fun WebRoute(
  * @param currentProgress 当前加载进度
  * @param shouldRefresh 是否应该刷新页面
  * @param showDropdownMenu 是否显示下拉菜单
- * @param onBackClick 返回按钮回调
  * @param onTitleChange 标题变化回调
  * @param onProgressChange 进度变化回调
  * @param onRefreshClick 刷新按钮回调
@@ -100,7 +106,6 @@ internal fun WebScreen(
     currentProgress: Int = 0,
     shouldRefresh: Boolean = false,
     showDropdownMenu: Boolean = false,
-    onBackClick: () -> Unit = {},
     onTitleChange: (String) -> Unit = {},
     onProgressChange: (Int) -> Unit = {},
     onRefreshClick: () -> Unit = {},
@@ -111,7 +116,7 @@ internal fun WebScreen(
 ) {
     AppScaffold(
         titleText = pageTitle,
-        onBackClick = onBackClick,
+        onBackClick = { navigateBack() },
         topBarActions = {
             WebScreenTopBarActions(
                 showDropdownMenu = showDropdownMenu,

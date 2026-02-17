@@ -10,6 +10,8 @@ import com.joker.coolmall.core.common.base.state.BaseNetWorkListUiState
 import com.joker.coolmall.core.common.base.state.LoadMoreState
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.model.entity.UserContributor
+import com.joker.coolmall.core.navigation.common.CommonNavigator
+import com.joker.coolmall.core.navigation.navigateBack
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkListView
 import com.joker.coolmall.core.ui.component.refresh.RefreshLayout
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
@@ -44,9 +46,7 @@ internal fun ContributorsRoute(
         onRefresh = viewModel::onRefresh,
         onLoadMore = viewModel::onLoadMore,
         shouldTriggerLoadMore = viewModel::shouldTriggerLoadMore,
-        onBackClick = viewModel::navigateBack,
-        onRetry = viewModel::retryRequest,
-        onContributorClick = viewModel::onContributorClick
+        onRetry = viewModel::retryRequest
     )
 }
 
@@ -60,9 +60,7 @@ internal fun ContributorsRoute(
  * @param onRefresh 刷新事件
  * @param onLoadMore 加载更多事件
  * @param shouldTriggerLoadMore 是否应该触发加载更多
- * @param onBackClick 返回点击事件
  * @param onRetry 重试点击事件
- * @param onContributorClick 贡献者点击事件
  * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -75,13 +73,11 @@ internal fun ContributorsScreen(
     onRefresh: () -> Unit = {},
     onLoadMore: () -> Unit = {},
     shouldTriggerLoadMore: (Int, Int) -> Boolean = { _, _ -> false },
-    onBackClick: () -> Unit = {},
-    onRetry: () -> Unit = {},
-    onContributorClick: (UserContributor) -> Unit = {}
+    onRetry: () -> Unit = {}
 ) {
     AppScaffold(
         title = R.string.contributors_title,
-        onBackClick = onBackClick
+        onBackClick = { navigateBack() }
     ) {
         BaseNetWorkListView(
             uiState = uiState,
@@ -93,8 +89,7 @@ internal fun ContributorsScreen(
                 loadMoreState = loadMoreState,
                 onRefresh = onRefresh,
                 onLoadMore = onLoadMore,
-                shouldTriggerLoadMore = shouldTriggerLoadMore,
-                onContributorClick = onContributorClick
+                shouldTriggerLoadMore = shouldTriggerLoadMore
             )
         }
     }
@@ -109,7 +104,6 @@ internal fun ContributorsScreen(
  * @param onRefresh 下拉刷新回调
  * @param onLoadMore 加载更多回调
  * @param shouldTriggerLoadMore 是否应触发加载更多的判断函数
- * @param onContributorClick 贡献者点击事件
  * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -120,8 +114,7 @@ private fun ContributorsContentView(
     loadMoreState: LoadMoreState = LoadMoreState.Success,
     onRefresh: () -> Unit = {},
     onLoadMore: () -> Unit = {},
-    shouldTriggerLoadMore: (lastIndex: Int, totalCount: Int) -> Boolean = { _, _ -> false },
-    onContributorClick: (UserContributor) -> Unit = {}
+    shouldTriggerLoadMore: (lastIndex: Int, totalCount: Int) -> Boolean = { _, _ -> false }
 ) {
     RefreshLayout(
         isRefreshing = isRefreshing,
@@ -134,7 +127,11 @@ private fun ContributorsContentView(
         items(data.size) { index ->
             UserContributorCard(
                 contributor = data[index],
-                onClick = onContributorClick
+                onClick = { contributor ->
+                    contributor.websiteUrl?.takeIf { it.isNotBlank() }?.let { url ->
+                        CommonNavigator.toWeb(url = url, title = contributor.nickName)
+                    }
+                }
             )
         }
     }

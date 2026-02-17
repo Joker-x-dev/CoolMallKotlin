@@ -27,6 +27,8 @@ import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.ShapeMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXXLarge
+import com.joker.coolmall.core.navigation.navigateBack
+import com.joker.coolmall.core.navigation.order.OrderRoutes
 import com.joker.coolmall.core.ui.component.bottombar.AppBottomButton
 import com.joker.coolmall.core.ui.component.imagepicker.ImageGridPicker
 import com.joker.coolmall.core.ui.component.rate.WeRate
@@ -38,12 +40,18 @@ import com.joker.coolmall.feature.order.viewmodel.OrderCommentViewModel
 /**
  * 订单评价路由
  *
+ * @param navKey 路由参数
  * @param viewModel 订单评价 ViewModel
  * @author Joker.X
  */
 @Composable
 internal fun OrderCommentRoute(
-    viewModel: OrderCommentViewModel = hiltViewModel()
+    navKey: OrderRoutes.Comment,
+    viewModel: OrderCommentViewModel = hiltViewModel<OrderCommentViewModel, OrderCommentViewModel.Factory>(
+        creationCallback = { factory ->
+            factory.create(navKey)
+        }
+    ),
 ) {
     // 评分
     val rating by viewModel.rating.collectAsState()
@@ -63,7 +71,6 @@ internal fun OrderCommentRoute(
         uploadedImageUrls = uploadedImageUrls,
         isSubmitting = isSubmitting,
         isFormValid = viewModel.isFormValid(),
-        onBackClick = viewModel::navigateBack,
         onRatingChange = viewModel::updateRating,
         onCommentChange = viewModel::updateCommentContent,
         onImagesChange = viewModel::updateSelectedImages,
@@ -80,7 +87,6 @@ internal fun OrderCommentRoute(
  * @param uploadedImageUrls 已上传的图片URL列表
  * @param isSubmitting 是否正在提交
  * @param isFormValid 表单是否有效
- * @param onBackClick 返回按钮回调
  * @param onRatingChange 评分变化回调
  * @param onCommentChange 评论内容变化回调
  * @param onImagesChange 图片变化回调
@@ -96,7 +102,6 @@ internal fun OrderCommentScreen(
     uploadedImageUrls: List<String> = emptyList(),
     isSubmitting: Boolean = false,
     isFormValid: Boolean = true,
-    onBackClick: () -> Unit = {},
     onRatingChange: (Int) -> Unit = {},
     onCommentChange: (String) -> Unit = {},
     onImagesChange: (List<Uri>) -> Unit = {},
@@ -105,7 +110,7 @@ internal fun OrderCommentScreen(
     AppScaffold(
         titleText = stringResource(R.string.order_comment),
         useLargeTopBar = true,
-        onBackClick = onBackClick,
+        onBackClick = { navigateBack() },
         backgroundColor = MaterialTheme.colorScheme.surface,
         largeTopBarExpandedBackgroundColor = MaterialTheme.colorScheme.surface,
         largeTopBarCollapsedBackgroundColor = MaterialTheme.colorScheme.surface,

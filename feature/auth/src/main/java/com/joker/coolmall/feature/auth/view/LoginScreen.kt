@@ -40,6 +40,9 @@ import com.joker.coolmall.core.designsystem.component.SpaceEvenlyRow
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.LogoIcon
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXLarge
+import com.joker.coolmall.core.navigation.auth.AuthNavigator
+import com.joker.coolmall.core.navigation.common.CommonNavigator
+import com.joker.coolmall.core.navigation.navigateBack
 import com.joker.coolmall.core.ui.component.button.AppButton
 import com.joker.coolmall.core.ui.component.button.ButtonStyle
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
@@ -63,9 +66,6 @@ internal fun LoginRoute(
     val context = LocalContext.current
 
     LoginScreen(
-        toAccountLogin = viewModel::toAccountLoginPage,
-        toSmsLogin = viewModel::toSMSLoginPage,
-        onBackClick = viewModel::navigateBack,
         onWechatLoginClick = viewModel::onWechatLoginClick,
         onAlipayLoginClick = viewModel::onAlipayLoginClick,
         onQQLogin = {
@@ -74,49 +74,33 @@ internal fun LoginRoute(
             if (activity != null) {
                 viewModel.startQQLogin(activity)
             }
-        },
-        onUserAgreementClick = viewModel::onUserAgreementClick,
-        onPrivacyPolicyClick = viewModel::onPrivacyPolicyClick
+        }
     )
 }
 
 /**
  * 登录主页界面
  *
- * @param toAccountLogin 导航到账号密码登录页面回调
- * @param toSmsLogin 导航到短信登录页面回调
- * @param onBackClick 返回按钮回调
  * @param onWechatLoginClick 微信登录点击回调
  * @param onAlipayLoginClick 支付宝登录点击回调
  * @param onQQLogin QQ 登录回调
- * @param onUserAgreementClick 用户协议点击回调
- * @param onPrivacyPolicyClick 隐私政策点击回调
  * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun LoginScreen(
-    toAccountLogin: () -> Unit = {},
-    toSmsLogin: () -> Unit = {},
-    onBackClick: () -> Unit = {},
     onWechatLoginClick: () -> Unit = {},
     onAlipayLoginClick: () -> Unit = {},
     onQQLogin: () -> Unit = {},
-    onUserAgreementClick: () -> Unit = {},
-    onPrivacyPolicyClick: () -> Unit = {}
 ) {
     AppScaffold(
-        onBackClick = onBackClick,
+        onBackClick = { navigateBack() },
         backgroundColor = MaterialTheme.colorScheme.surface
     ) {
         LoginContentView(
-            toAccountLogin = toAccountLogin,
-            toSmsLogin = toSmsLogin,
             onWechatLoginClick = onWechatLoginClick,
             onAlipayLoginClick = onAlipayLoginClick,
-            onQQLogin = onQQLogin,
-            onUserAgreementClick = onUserAgreementClick,
-            onPrivacyPolicyClick = onPrivacyPolicyClick
+            onQQLogin = onQQLogin
         )
     }
 }
@@ -124,24 +108,16 @@ internal fun LoginScreen(
 /**
  * 登录主页内容视图
  *
- * @param toAccountLogin 导航到账号密码登录页面回调
- * @param toSmsLogin 导航到短信登录页面回调
  * @param onWechatLoginClick 微信登录点击回调
  * @param onAlipayLoginClick 支付宝登录点击回调
  * @param onQQLogin QQ 登录回调
- * @param onUserAgreementClick 用户协议点击回调
- * @param onPrivacyPolicyClick 隐私政策点击回调
  * @author Joker.X
  */
 @Composable
 private fun LoginContentView(
-    toAccountLogin: () -> Unit,
-    toSmsLogin: () -> Unit,
     onWechatLoginClick: () -> Unit,
     onAlipayLoginClick: () -> Unit,
     onQQLogin: () -> Unit,
-    onUserAgreementClick: () -> Unit,
-    onPrivacyPolicyClick: () -> Unit
 ) {
     // 使用rememberSaveable来保持状态，即使在配置更改时也不会重置
     // isAnimationPlayed标志用于跟踪动画是否已经播放过
@@ -210,7 +186,7 @@ private fun LoginContentView(
                 // 验证码登录按钮（主按钮）
                 AppButton(
                     text = stringResource(id = R.string.sms_login),
-                    onClick = toSmsLogin
+                    onClick = { AuthNavigator.toSmsLogin() }
                 )
 
                 SpaceVerticalXLarge()
@@ -218,7 +194,7 @@ private fun LoginContentView(
                 // 账号密码登录按钮（次要按钮）
                 AppButton(
                     text = stringResource(id = R.string.account_login),
-                    onClick = toAccountLogin,
+                    onClick = { AuthNavigator.toAccountLogin() },
                     style = ButtonStyle.OUTLINED
                 )
 
@@ -260,8 +236,8 @@ private fun LoginContentView(
                 UserAgreement(
                     modifier = Modifier.padding(top = 32.dp),
                     centerAlignment = true,
-                    onUserAgreementClick = onUserAgreementClick,
-                    onPrivacyPolicyClick = onPrivacyPolicyClick
+                    onUserAgreementClick = CommonNavigator::toUserAgreement,
+                    onPrivacyPolicyClick = CommonNavigator::toPrivacyPolicy
                 )
             }
         }

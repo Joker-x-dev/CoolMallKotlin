@@ -22,6 +22,7 @@ import com.joker.coolmall.core.designsystem.component.StartRow
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXLarge
+import com.joker.coolmall.core.navigation.navigateBack
 import com.joker.coolmall.core.ui.component.button.AppButton
 import com.joker.coolmall.feature.auth.R
 import com.joker.coolmall.feature.auth.component.AnimatedAuthPage
@@ -59,8 +60,7 @@ internal fun ResetPasswordRoute(
         onConfirmPasswordChange = viewModel::updateConfirmPassword,
         onVerificationCodeChange = viewModel::updateVerificationCode,
         onSendVerificationCode = viewModel::sendVerificationCode,
-        onResetPasswordClick = viewModel::resetPassword,
-        onBackClick = viewModel::navigateBack
+        onResetPasswordClick = viewModel::resetPassword
     )
 }
 
@@ -77,7 +77,6 @@ internal fun ResetPasswordRoute(
  * @param onVerificationCodeChange 验证码变更回调
  * @param onSendVerificationCode 发送验证码回调
  * @param onResetPasswordClick 重置密码按钮点击回调
- * @param onBackClick 返回上一页回调
  * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -92,13 +91,12 @@ internal fun ResetPasswordScreen(
     onConfirmPasswordChange: (String) -> Unit = {},
     onVerificationCodeChange: (String) -> Unit = {},
     onSendVerificationCode: () -> Unit = {},
-    onResetPasswordClick: () -> Unit = {},
-    onBackClick: () -> Unit = {}
+    onResetPasswordClick: () -> Unit = {}
 ) {
     AnimatedAuthPage(
         title = stringResource(id = R.string.reset_password),
         withFadeIn = true,
-        onBackClick = onBackClick
+        onBackClick = { navigateBack() }
     ) {
         ResetPasswordContentView(
             phone = phone,

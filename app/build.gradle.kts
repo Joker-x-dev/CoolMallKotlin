@@ -72,11 +72,16 @@ android {
 }
 
 dependencies {
-    implementation(projects.navigation)
     implementation(projects.core.designsystem)
     implementation(projects.core.util)
     implementation(projects.core.data)
     implementation(projects.core.common)
+
+    // 导航
+    implementation(projects.core.navigation)
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
 
     // 网络相关依赖
     implementation(libs.okhttp3)
@@ -102,11 +107,10 @@ dependencies {
     // 启动流程模块
     implementation(projects.feature.launch)
 
-    // region 依赖注入
+    // 依赖注入
     // https://developer.android.google.cn/training/dependency-injection/hilt-android?hl=zh-cn
     kspAndroidTest(libs.hilt.compiler)
     androidTestImplementation(libs.hilt.android.testing)
-    //endregion
 
     compileOnly(libs.ksp.gradlePlugin)
 

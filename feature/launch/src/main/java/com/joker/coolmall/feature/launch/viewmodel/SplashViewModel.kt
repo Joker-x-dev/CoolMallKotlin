@@ -1,26 +1,20 @@
 package com.joker.coolmall.feature.launch.viewmodel
 
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
-import com.joker.coolmall.core.data.state.AppState
+import com.joker.coolmall.core.navigation.launch.LaunchNavigator
+import com.joker.coolmall.core.navigation.launch.LaunchRoutes
+import com.joker.coolmall.core.navigation.main.MainNavigator
 import com.joker.coolmall.core.util.storage.MMKVUtils
-import com.joker.coolmall.navigation.AppNavigator
-import com.joker.coolmall.navigation.routes.LaunchRoutes
-import com.joker.coolmall.navigation.routes.MainRoutes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
 /**
  * 启动页 ViewModel
  *
- * @param navigator 应用导航器
- * @param appState 应用状态
  * @author Joker.X
  */
 @HiltViewModel
-class SplashViewModel @Inject constructor(
-    navigator: AppNavigator,
-    appState: AppState,
-) : BaseViewModel(navigator, appState) {
+class SplashViewModel @Inject constructor() : BaseViewModel() {
 
     companion object {
         /**
@@ -60,10 +54,7 @@ class SplashViewModel @Inject constructor(
      * @author Joker.X
      */
     private fun toGuidePage() {
-        navigateAndCloseCurrent(
-            route = LaunchRoutes.Guide(),
-            currentRoute = LaunchRoutes.Splash
-        )
+        LaunchNavigator.toGuideAndCloseCurrent(currentRoute = LaunchRoutes.Splash)
     }
 
     /**
@@ -72,9 +63,6 @@ class SplashViewModel @Inject constructor(
      * @author Joker.X
      */
     fun toMainPage() {
-        navigateAndCloseCurrent(
-            route = MainRoutes.Main,
-            currentRoute = LaunchRoutes.Splash
-        )
+        MainNavigator.toMainAndCloseCurrent(currentRoute = LaunchRoutes.Splash)
     }
 }

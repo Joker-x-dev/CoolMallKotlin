@@ -1,17 +1,29 @@
 package com.joker.coolmall.feature.goods.navigation
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
+import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.NavKey
+import com.joker.coolmall.core.navigation.goods.GoodsRoutes
+import com.joker.coolmall.feature.goods.view.GoodsCategoryRoute
+import com.joker.coolmall.feature.goods.view.GoodsCommentRoute
+import com.joker.coolmall.feature.goods.view.GoodsDetailRoute
+import com.joker.coolmall.feature.goods.view.GoodsSearchRoute
 
 /**
  * 商品模块导航图
  *
- * @param navController 导航控制器
  * @author Joker.X
  */
-fun NavGraphBuilder.goodsGraph(navController: NavHostController) {
-    goodsDetailScreen()
-    goodsSearchScreen()
-    goodsCommentScreen()
-    goodsCategoryScreen()
+fun EntryProviderScope<NavKey>.goodsGraph() {
+    entry<GoodsRoutes.Detail> { key ->
+        GoodsDetailRoute(navKey = key)
+    }
+    entry<GoodsRoutes.Search> {
+        GoodsSearchRoute()
+    }
+    entry<GoodsRoutes.Comment> { key ->
+        GoodsCommentRoute(navKey = key)
+    }
+    entry<GoodsRoutes.Category> { key ->
+        GoodsCategoryRoute(navKey = key)
+    }
 }

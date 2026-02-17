@@ -4,7 +4,6 @@ import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
 import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.entity.User
-import com.joker.coolmall.navigation.AppNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -19,12 +18,8 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
-    navigator: AppNavigator,
-    appState: AppState
-) : BaseViewModel(
-    navigator = navigator,
-    appState = appState
-) {
+    private val appState: AppState
+) : BaseViewModel() {
 
     // 用户登录状态
     val isLoggedIn: StateFlow<Boolean> = appState.isLoggedIn
@@ -59,7 +54,7 @@ class ProfileViewModel @Inject constructor(
     fun logout() {
         viewModelScope.launch {
             appState.logout()
-            super.navigateBack()
+            com.joker.coolmall.core.navigation.navigateBack()
         }
     }
 }

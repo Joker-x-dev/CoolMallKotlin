@@ -3,12 +3,9 @@ package com.joker.coolmall.feature.main.viewmodel
 import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
 import com.joker.coolmall.core.data.repository.GoodsRepository
-import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.entity.Category
 import com.joker.coolmall.core.model.entity.CategoryTree
 import com.joker.coolmall.feature.main.state.CategoryUiState
-import com.joker.coolmall.navigation.AppNavigator
-import com.joker.coolmall.navigation.routes.GoodsRoutes
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,17 +16,13 @@ import javax.inject.Inject
 /**
  * 分类页面ViewModel
  *
- * @param navigator 导航器
- * @param appState 应用状态
  * @param goodsRepository 商品仓库
  * @author Joker.X
  */
 @HiltViewModel
 class CategoryViewModel @Inject constructor(
-    navigator: AppNavigator,
-    appState: AppState,
     private val goodsRepository: GoodsRepository
-) : BaseViewModel(navigator, appState) {
+) : BaseViewModel() {
 
     /**
      * 分类UI状态
@@ -85,16 +78,6 @@ class CategoryViewModel @Inject constructor(
      */
     fun selectCategory(index: Int) {
         _selectedCategoryIndex.value = index
-    }
-
-    /**
-     * 跳转到商品分类页面
-     *
-     * @param categoryId 点击的分类ID
-     * @author Joker.X
-     */
-    fun toGoodsCategoryPage(categoryId: Long) {
-        navigate(GoodsRoutes.Category(typeId = categoryId.toString(), featured = false, recommend = false, keyword = null))
     }
 
     /**

@@ -2,17 +2,17 @@ package com.joker.coolmall.feature.feedback.view
 
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.navigation.NavHostController
 import com.joker.coolmall.core.common.base.state.BaseNetWorkListUiState
 import com.joker.coolmall.core.common.base.state.LoadMoreState
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.model.entity.Feedback
+import com.joker.coolmall.core.navigation.feedback.FeedbackNavigator
+import com.joker.coolmall.core.navigation.navigateBack
 import com.joker.coolmall.core.ui.component.bottombar.AppBottomButton
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkListView
 import com.joker.coolmall.core.ui.component.refresh.RefreshLayout
@@ -30,7 +30,6 @@ import com.joker.coolmall.feature.feedback.viewmodel.FeedbackListViewModel
 @Composable
 internal fun FeedbackListRoute(
     viewModel: FeedbackListViewModel = hiltViewModel(),
-    navController: NavHostController
 ) {
     // 反馈列表UI状态
     val uiState by viewModel.uiState.collectAsState()
@@ -41,12 +40,6 @@ internal fun FeedbackListRoute(
     // 加载更多状态
     val loadMoreState by viewModel.loadMoreState.collectAsState()
 
-    // 注册返回刷新监听（使用 BaseNetWorkListViewModel 内置的 observeRefreshState）
-    val backStackEntry = navController.currentBackStackEntry
-    LaunchedEffect(backStackEntry) {
-        viewModel.observeRefreshState(backStackEntry)
-    }
-
     FeedbackListScreen(
         uiState = uiState,
         listData = listData,
@@ -55,9 +48,7 @@ internal fun FeedbackListRoute(
         onRefresh = viewModel::onRefresh,
         onLoadMore = viewModel::onLoadMore,
         shouldTriggerLoadMore = viewModel::shouldTriggerLoadMore,
-        onBackClick = viewModel::navigateBack,
         onRetry = viewModel::retryRequest,
-        onSubmitClick = viewModel::toFeedbackSubmitPage,
         getFeedbackTypeName = viewModel::getFeedbackTypeName
     )
 }
@@ -72,9 +63,7 @@ internal fun FeedbackListRoute(
  * @param onRefresh 下拉刷新回调
  * @param onLoadMore 加载更多回调
  * @param shouldTriggerLoadMore 是否应触发加载更多的判断函数
- * @param onBackClick 返回按钮回调
  * @param onRetry 重试请求回调
- * @param onSubmitClick 提交反馈按钮回调
  * @param getFeedbackTypeName 获取反馈类型名称的方法
  * @author Joker.X
  */
@@ -88,19 +77,17 @@ internal fun FeedbackListScreen(
     onRefresh: () -> Unit = {},
     onLoadMore: () -> Unit = {},
     shouldTriggerLoadMore: (lastIndex: Int, totalCount: Int) -> Boolean = { _, _ -> false },
-    onBackClick: () -> Unit = {},
     onRetry: () -> Unit = {},
-    onSubmitClick: () -> Unit = {},
     getFeedbackTypeName: (Int?) -> String = { it.toString() }
 ) {
     AppScaffold(
         title = R.string.feedback_list,
-        onBackClick = onBackClick,
+        onBackClick = { navigateBack() },
         bottomBar = {
             if (uiState != BaseNetWorkListUiState.Loading && uiState != BaseNetWorkListUiState.Error) {
                 AppBottomButton(
                     text = stringResource(R.string.feedback_submit),
-                    onClick = onSubmitClick
+                    onClick = FeedbackNavigator::toSubmit
                 )
             }
         }

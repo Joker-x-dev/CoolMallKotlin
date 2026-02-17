@@ -1,22 +1,21 @@
 package com.joker.coolmall.feature.main.viewmodel
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
 import com.joker.coolmall.core.data.repository.CartRepository
-import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.entity.Cart
 import com.joker.coolmall.core.model.entity.Goods
 import com.joker.coolmall.core.model.entity.GoodsSpec
 import com.joker.coolmall.core.model.entity.SelectedGoods
+import com.joker.coolmall.core.navigation.main.MainRoutes
+import com.joker.coolmall.core.navigation.navigate
+import com.joker.coolmall.core.navigation.order.OrderRoutes
 import com.joker.coolmall.core.util.storage.MMKVUtils
 import com.joker.coolmall.core.util.toast.ToastUtils
 import com.joker.coolmall.feature.main.R
-import com.joker.coolmall.navigation.AppNavigator
-import com.joker.coolmall.navigation.routes.GoodsRoutes
-import com.joker.coolmall.navigation.routes.MainRoutes
-import com.joker.coolmall.navigation.routes.OrderRoutes
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -27,24 +26,19 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 /**
  * 购物车页面ViewModel
  *
- * @param navigator 导航器
- * @param appState 应用状态
+ * @param navKey 路由参数
  * @param cartRepository 购物车仓库
- * @param savedStateHandle 保存状态句柄
  * @author Joker.X
  */
-@HiltViewModel
-class CartViewModel @Inject constructor(
-    navigator: AppNavigator,
-    appState: AppState,
+@HiltViewModel(assistedFactory = CartViewModel.Factory::class)
+class CartViewModel @AssistedInject constructor(
+    @Assisted navKey: MainRoutes.Cart,
     private val cartRepository: CartRepository,
-    private val savedStateHandle: SavedStateHandle
-) : BaseViewModel(navigator, appState) {
+) : BaseViewModel() {
 
     /**
      * 是否显示返回按钮
@@ -147,7 +141,7 @@ class CartViewModel @Inject constructor(
 
     init {
         // 从路由中获取是否显示返回按钮
-        _showBackIcon.value = savedStateHandle.toRoute<MainRoutes.Cart>().showBackIcon
+        _showBackIcon.value = navKey.showBackIcon
     }
 
     /**
@@ -370,13 +364,20 @@ class CartViewModel @Inject constructor(
     }
 
     /**
-     * 跳转到商品详情
+     * Assisted Factory
      *
-     * @param goodsId 商品ID
      * @author Joker.X
      */
-    fun toGoodsDetailPage(goodsId: Long) {
-        navigate(GoodsRoutes.Detail(goodsId = goodsId))
+    @AssistedFactory
+    interface Factory {
+        /**
+         * 创建 ViewModel 实例
+         *
+         * @param navKey 路由参数
+         * @return ViewModel 实例
+         * @author Joker.X
+         */
+        fun create(navKey: MainRoutes.Cart): CartViewModel
     }
-}
 
+}

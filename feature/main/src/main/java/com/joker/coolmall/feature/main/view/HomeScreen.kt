@@ -69,6 +69,8 @@ import com.joker.coolmall.core.model.preview.previewAvailableCoupons
 import com.joker.coolmall.core.model.preview.previewBannerList
 import com.joker.coolmall.core.model.preview.previewCategoryList
 import com.joker.coolmall.core.model.preview.previewGoodsList
+import com.joker.coolmall.core.navigation.common.CommonNavigator
+import com.joker.coolmall.core.navigation.goods.GoodsNavigator
 import com.joker.coolmall.core.ui.component.card.AppCard
 import com.joker.coolmall.core.ui.component.goods.GoodsGridItem
 import com.joker.coolmall.core.ui.component.goods.GoodsListItem
@@ -127,12 +129,7 @@ internal fun HomeRoute(
         onRefresh = viewModel::onRefresh,
         onLoadMore = viewModel::onLoadMore,
         shouldTriggerLoadMore = viewModel::shouldTriggerLoadMore,
-        toGoodsSearch = viewModel::toGoodsSearch,
-        toGoodsDetail = viewModel::toGoodsDetail,
         toGoodsCategory = viewModel::toGoodsCategoryPage,
-        toFlashSalePage = viewModel::toFlashSalePage,
-        toGitHubPage = viewModel::toGitHubPage,
-        toAboutPage = viewModel::toAboutPage,
         onShowCouponModal = viewModel::showCouponModal,
         onHideCouponModal = viewModel::hideCouponModal,
         onCouponReceive = viewModel::receiveCoupon,
@@ -154,12 +151,7 @@ internal fun HomeRoute(
  * @param onRefresh 下拉刷新回调
  * @param onLoadMore 加载更多回调
  * @param shouldTriggerLoadMore 是否应该触发加载更多的判断函数
- * @param toGoodsSearch 跳转到商品搜索页
- * @param toGoodsDetail 跳转到商品详情页
  * @param toGoodsCategory 跳转到商品分类页
- * @param toFlashSalePage 跳转到限时精选页
- * @param toGitHubPage 跳转到GitHub页
- * @param toAboutPage 跳转到关于页
  * @param onShowCouponModal 显示优惠券弹窗回调
  * @param onHideCouponModal 隐藏优惠券弹窗回调
  * @param onCouponReceive 领取优惠券回调
@@ -180,12 +172,7 @@ internal fun HomeScreen(
     onRefresh: () -> Unit = {},
     onLoadMore: () -> Unit = {},
     shouldTriggerLoadMore: (lastIndex: Int, totalCount: Int) -> Boolean = { _, _ -> false },
-    toGoodsSearch: () -> Unit = {},
-    toGoodsDetail: (Long) -> Unit = {},
     toGoodsCategory: (Long) -> Unit = {},
-    toFlashSalePage: () -> Unit = {},
-    toGitHubPage: () -> Unit = {},
-    toAboutPage: () -> Unit = {},
     onShowCouponModal: () -> Unit = {},
     onHideCouponModal: () -> Unit = {},
     onCouponReceive: (Coupon) -> Unit = {},
@@ -199,9 +186,6 @@ internal fun HomeScreen(
                 scrollBehavior = scrollBehavior,
                 sharedTransitionScope = sharedTransitionScope,
                 animatedContentScope = animatedContentScope,
-                toGoodsSearch = toGoodsSearch,
-                toGitHubPage = toGitHubPage,
-                toAboutPage = toAboutPage
             )
         },
         scrollBehavior = scrollBehavior
@@ -220,10 +204,7 @@ internal fun HomeScreen(
                 onRefresh = onRefresh,
                 onLoadMore = onLoadMore,
                 shouldTriggerLoadMore = shouldTriggerLoadMore,
-                toGoodsDetail = toGoodsDetail,
                 toGoodsCategory = toGoodsCategory,
-                toFlashSalePage = toFlashSalePage,
-                toGitHubPage = toGitHubPage,
                 onShowCouponModal = onShowCouponModal
             )
         }
@@ -253,10 +234,7 @@ internal fun HomeScreen(
  * @param onRefresh 下拉刷新回调
  * @param onLoadMore 加载更多回调
  * @param shouldTriggerLoadMore 是否应该触发加载更多的判断函数
- * @param toGoodsDetail 跳转到商品详情页
  * @param toGoodsCategory 跳转到商品分类页
- * @param toFlashSalePage 跳转到限时精选页
- * @param toGitHubPage 跳转到GitHub页
  * @param onShowCouponModal 显示优惠券弹窗回调
  * @author Joker.X
  */
@@ -271,10 +249,7 @@ private fun HomeContentView(
     onRefresh: () -> Unit,
     onLoadMore: () -> Unit,
     shouldTriggerLoadMore: (lastIndex: Int, totalCount: Int) -> Boolean,
-    toGoodsDetail: (Long) -> Unit,
     toGoodsCategory: (Long) -> Unit,
-    toFlashSalePage: () -> Unit,
-    toGitHubPage: () -> Unit,
     onShowCouponModal: () -> Unit = {}
 ) {
 
@@ -319,9 +294,7 @@ private fun HomeContentView(
             item(span = StaggeredGridItemSpan.FullLine) {
                 data.flashSale?.let { flashSaleGoods ->
                     FlashSale(
-                        goods = flashSaleGoods,
-                        toGoodsDetail = toGoodsDetail,
-                        toFlashSalePage = toFlashSalePage
+                        goods = flashSaleGoods
                     )
                 }
             }
@@ -342,7 +315,7 @@ private fun HomeContentView(
                     data.recommend?.forEach { goods ->
                         GoodsListItem(
                             goods = goods,
-                            onClick = { toGoodsDetail(goods.id) },
+                            onClick = { GoodsNavigator.toDetail(goods.id) },
                         )
                     }
                 }
@@ -362,7 +335,7 @@ private fun HomeContentView(
             listData.let { goods ->
                 items(goods.size) { index ->
                     GoodsGridItem(goods = goods[index], onClick = {
-                        toGoodsDetail(goods[index].id)
+                        GoodsNavigator.toDetail(goods[index].id)
                     })
                 }
             }
@@ -487,22 +460,20 @@ private fun CategoryItem(
  * 限时精选卡片 - 使用LazyRow
  *
  * @param goods 商品列表
- * @param toGoodsDetail 跳转到商品详情页的回调
- * @param toFlashSalePage 跳转到限时精选页面的回调
  * @author Joker.X
  */
 @Composable
 private fun FlashSale(
-    goods: List<Goods>,
-    toGoodsDetail: (Long) -> Unit,
-    toFlashSalePage: () -> Unit
+    goods: List<Goods>
 ) {
     Card {
         AppListItem(
             title = stringResource(R.string.flash_sale),
             trailingText = stringResource(R.string.view_all),
             leadingIcon = R.drawable.ic_time,
-            onClick = toFlashSalePage
+            onClick = {
+                GoodsNavigator.toCategory(featured = true)
+            }
         )
 
         // 商品列表 - 使用LazyRow
@@ -512,7 +483,9 @@ private fun FlashSale(
         ) {
             items(goods.size) { index ->
                 val goods = goods[index]
-                FlashSaleItem(goods = goods, onClick = toGoodsDetail)
+                FlashSaleItem(
+                    goods = goods,
+                    onClick = { goodsId -> GoodsNavigator.toDetail(goodsId) })
             }
         }
     }
@@ -524,9 +497,6 @@ private fun FlashSale(
  * @param scrollBehavior 滚动行为
  * @param sharedTransitionScope 共享转换作用域
  * @param animatedContentScope 动画内容作用域
- * @param toGoodsSearch 跳转到商品搜索页
- * @param toGitHubPage 跳转到GitHub页
- * @param toAboutPage 跳转到关于页
  * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
@@ -535,9 +505,6 @@ private fun HomeTopAppBar(
     scrollBehavior: TopAppBarScrollBehavior,
     sharedTransitionScope: SharedTransitionScope? = null,
     animatedContentScope: AnimatedContentScope? = null,
-    toGoodsSearch: () -> Unit,
-    toGitHubPage: () -> Unit,
-    toAboutPage: () -> Unit
 ) {
     TopAppBar(
         scrollBehavior = scrollBehavior,
@@ -545,7 +512,7 @@ private fun HomeTopAppBar(
             LogoIcon(
                 modifier = Modifier
                     .padding(horizontal = 8.dp)
-                    .clickable { toAboutPage() }
+                    .clickable { CommonNavigator.toAbout() }
                     .let { modifier ->
                         if (sharedTransitionScope != null && animatedContentScope != null) {
                             with(sharedTransitionScope) {
@@ -569,7 +536,7 @@ private fun HomeTopAppBar(
                     .fillMaxWidth()
                     .height(38.dp)
                     .clip(ShapeMedium)
-                    .clickable { toGoodsSearch() }
+                    .clickable { GoodsNavigator.toSearch() }
             ) {
                 Row(
                     modifier = Modifier
@@ -596,7 +563,12 @@ private fun HomeTopAppBar(
         },
         actions = {
             IconButton(
-                onClick = toGitHubPage,
+                onClick = {
+                    CommonNavigator.toWeb(
+                        url = "https://github.com/Joker-x-dev/CoolMallKotlin",
+                        title = "GitHub",
+                    )
+                },
                 modifier = Modifier
                     .padding(horizontal = 8.dp)
                     .size(27.dp)

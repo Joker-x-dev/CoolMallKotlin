@@ -30,6 +30,11 @@ import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
+import com.joker.coolmall.core.navigation.common.CommonNavigator
+import com.joker.coolmall.core.navigation.feedback.FeedbackNavigator
+import com.joker.coolmall.core.navigation.launch.LaunchNavigator
+import com.joker.coolmall.core.navigation.navigateBack
+import com.joker.coolmall.core.navigation.user.UserNavigator
 import com.joker.coolmall.core.ui.component.list.AppListItem
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
 import com.joker.coolmall.core.ui.component.title.TitleWithLine
@@ -62,13 +67,6 @@ internal fun SettingsRoute(
         themeColor = themeColor,
         showThemeModal = showThemeModal,
         showThemeColorModal = showThemeColorModal,
-        onBackClick = viewModel::navigateBack,
-        onUserAgreementClick = viewModel::onUserAgreementClick,
-        onPrivacyPolicyClick = viewModel::onPrivacyPolicyClick,
-        onAccountSecurityClick = viewModel::onAccountSecurityClick,
-        onFeedbackClick = viewModel::onFeedbackClick,
-        onAboutAppClick = viewModel::onAboutAppClick,
-        onAppGuideClick = viewModel::onAppGuideClick,
         onDarkModeClick = viewModel::onDarkModeClick,
         onThemeModeSelected = viewModel::onThemeModeSelected,
         onThemeModalDismiss = viewModel::dismissThemeModal,
@@ -85,13 +83,6 @@ internal fun SettingsRoute(
  * @param themeColor 当前主题颜色
  * @param showThemeModal 是否显示主题选择弹窗
  * @param showThemeColorModal 是否显示主题颜色选择弹窗
- * @param onBackClick 返回上一页回调
- * @param onUserAgreementClick 用户协议点击回调
- * @param onPrivacyPolicyClick 隐私政策点击回调
- * @param onAccountSecurityClick 账号与安全点击回调
- * @param onFeedbackClick 意见反馈点击回调
- * @param onAboutAppClick 关于应用点击回调
- * @param onAppGuideClick 应用引导点击回调
  * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -101,13 +92,6 @@ internal fun SettingsScreen(
     themeColor: ThemeColorOption = ThemeColorOption.DEFAULT,
     showThemeModal: Boolean = false,
     showThemeColorModal: Boolean = false,
-    onBackClick: () -> Unit = {},
-    onUserAgreementClick: () -> Unit = {},
-    onPrivacyPolicyClick: () -> Unit = {},
-    onAccountSecurityClick: () -> Unit = {},
-    onFeedbackClick: () -> Unit = {},
-    onAboutAppClick: () -> Unit = {},
-    onAppGuideClick: () -> Unit = {},
     onDarkModeClick: () -> Unit = {},
     onThemeModeSelected: (ThemePreference) -> Unit = {},
     onThemeModalDismiss: () -> Unit = {},
@@ -118,17 +102,11 @@ internal fun SettingsScreen(
     AppScaffold(
         title = R.string.settings_title,
         useLargeTopBar = true,
-        onBackClick = onBackClick
+        onBackClick = { navigateBack() }
     ) {
         SettingsContentView(
             themeMode = themeMode,
             themeColor = themeColor,
-            onUserAgreementClick = onUserAgreementClick,
-            onPrivacyPolicyClick = onPrivacyPolicyClick,
-            onAccountSecurityClick = onAccountSecurityClick,
-            onFeedbackClick = onFeedbackClick,
-            onAboutAppClick = onAboutAppClick,
-            onAppGuideClick = onAppGuideClick,
             onDarkModeClick = onDarkModeClick,
             onThemeColorClick = onThemeColorClick
         )
@@ -154,24 +132,12 @@ internal fun SettingsScreen(
  *
  * @param themeMode 当前主题模式
  * @param themeColor 当前主题颜色
- * @param onUserAgreementClick 用户协议点击回调
- * @param onPrivacyPolicyClick 隐私政策点击回调
- * @param onAccountSecurityClick 账号与安全点击回调
- * @param onFeedbackClick 意见反馈点击回调
- * @param onAboutAppClick 关于应用点击回调
- * @param onAppGuideClick 应用引导点击回调
  * @author Joker.X
  */
 @Composable
 private fun SettingsContentView(
     themeMode: ThemePreference = ThemePreference.FOLLOW_SYSTEM,
     themeColor: ThemeColorOption = ThemeColorOption.DEFAULT,
-    onUserAgreementClick: () -> Unit = {},
-    onPrivacyPolicyClick: () -> Unit = {},
-    onAccountSecurityClick: () -> Unit = {},
-    onFeedbackClick: () -> Unit = {},
-    onAboutAppClick: () -> Unit = {},
-    onAppGuideClick: () -> Unit = {},
     onDarkModeClick: () -> Unit = {},
     onThemeColorClick: () -> Unit = {}
 ) {
@@ -191,7 +157,7 @@ private fun SettingsContentView(
                 showDivider = false,
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge,
-                onClick = onAccountSecurityClick
+                onClick = UserNavigator::toProfile
             )
         }
 
@@ -248,7 +214,7 @@ private fun SettingsContentView(
                 title = stringResource(id = R.string.about_privacy_policy),
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge,
-                onClick = onPrivacyPolicyClick
+                onClick = CommonNavigator::toPrivacyPolicy
             )
 
             // 用户协议
@@ -257,7 +223,7 @@ private fun SettingsContentView(
                 showDivider = false,
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge,
-                onClick = onUserAgreementClick
+                onClick = CommonNavigator::toUserAgreement
             )
         }
 
@@ -289,7 +255,7 @@ private fun SettingsContentView(
                 showDivider = false,
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge,
-                onClick = onAppGuideClick
+                onClick = { LaunchNavigator.toGuide(fromSettings = true) }
             )
         }
 
@@ -312,7 +278,7 @@ private fun SettingsContentView(
                 title = stringResource(id = R.string.settings_feedback),
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge,
-                onClick = onFeedbackClick
+                onClick = FeedbackNavigator::toList
             )
 
             // 关于我们
@@ -321,7 +287,7 @@ private fun SettingsContentView(
                 showDivider = false,
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge,
-                onClick = onAboutAppClick
+                onClick = CommonNavigator::toAbout
             )
         }
     }

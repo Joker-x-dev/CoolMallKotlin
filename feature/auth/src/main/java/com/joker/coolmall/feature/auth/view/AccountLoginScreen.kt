@@ -17,6 +17,9 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXLarge
+import com.joker.coolmall.core.navigation.auth.AuthNavigator
+import com.joker.coolmall.core.navigation.common.CommonNavigator
+import com.joker.coolmall.core.navigation.navigateBack
 import com.joker.coolmall.core.ui.component.button.AppButton
 import com.joker.coolmall.feature.auth.R
 import com.joker.coolmall.feature.auth.component.AnimatedAuthPage
@@ -49,12 +52,7 @@ internal fun AccountLoginRoute(
         isLoginEnabled = isLoginEnabled,
         onAccountChange = viewModel::updateAccount,
         onPasswordChange = viewModel::updatePassword,
-        onLoginClick = viewModel::login,
-        onBackClick = viewModel::navigateBack,
-        toResetPassword = viewModel::toResetPasswordPage,
-        toRegister = viewModel::toRegisterPage,
-        onUserAgreementClick = viewModel::onUserAgreementClick,
-        onPrivacyPolicyClick = viewModel::onPrivacyPolicyClick
+        onLoginClick = viewModel::login
     )
 }
 
@@ -67,11 +65,6 @@ internal fun AccountLoginRoute(
  * @param onAccountChange 账号变更回调
  * @param onPasswordChange 密码变更回调
  * @param onLoginClick 登录按钮点击回调
- * @param onBackClick 返回上一页回调
- * @param toResetPassword 导航到重置密码页面
- * @param toRegister 导航到注册页面
- * @param onUserAgreementClick 用户协议点击回调
- * @param onPrivacyPolicyClick 隐私政策点击回调
  * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -83,15 +76,10 @@ internal fun AccountLoginScreen(
     onAccountChange: (String) -> Unit = {},
     onPasswordChange: (String) -> Unit = {},
     onLoginClick: () -> Unit = {},
-    onBackClick: () -> Unit = {},
-    toResetPassword: () -> Unit = {},
-    toRegister: () -> Unit = {},
-    onUserAgreementClick: () -> Unit = {},
-    onPrivacyPolicyClick: () -> Unit = {}
 ) {
     AnimatedAuthPage(
         title = stringResource(id = R.string.welcome_login),
-        onBackClick = onBackClick
+        onBackClick = { navigateBack() }
     ) {
         AccountLoginContentView(
             account = account,
@@ -99,11 +87,7 @@ internal fun AccountLoginScreen(
             isLoginEnabled = isLoginEnabled,
             onAccountChange = onAccountChange,
             onPasswordChange = onPasswordChange,
-            onLoginClick = onLoginClick,
-            toResetPassword = toResetPassword,
-            toRegister = toRegister,
-            onUserAgreementClick = onUserAgreementClick,
-            onPrivacyPolicyClick = onPrivacyPolicyClick
+            onLoginClick = onLoginClick
         )
     }
 }
@@ -117,10 +101,6 @@ internal fun AccountLoginScreen(
  * @param onAccountChange 账号变更回调
  * @param onPasswordChange 密码变更回调
  * @param onLoginClick 登录按钮点击回调
- * @param toResetPassword 导航到重置密码页面
- * @param toRegister 导航到注册页面
- * @param onUserAgreementClick 用户协议点击回调
- * @param onPrivacyPolicyClick 隐私政策点击回调
  * @author Joker.X
  */
 @Composable
@@ -131,10 +111,6 @@ private fun AccountLoginContentView(
     onAccountChange: (String) -> Unit,
     onPasswordChange: (String) -> Unit,
     onLoginClick: () -> Unit,
-    toResetPassword: () -> Unit,
-    toRegister: () -> Unit,
-    onUserAgreementClick: () -> Unit,
-    onPrivacyPolicyClick: () -> Unit
 ) {
     // 记录输入框焦点状态
     val accountFieldFocused = remember { mutableStateOf(false) }
@@ -165,8 +141,8 @@ private fun AccountLoginContentView(
     // 使用封装的用户协议组件
     UserAgreement(
         prefix = stringResource(id = R.string.login_agreement_prefix),
-        onUserAgreementClick = onUserAgreementClick,
-        onPrivacyPolicyClick = onPrivacyPolicyClick
+        onUserAgreementClick = CommonNavigator::toUserAgreement,
+        onPrivacyPolicyClick = CommonNavigator::toPrivacyPolicy
     )
 
     SpaceVerticalXLarge()
@@ -181,8 +157,8 @@ private fun AccountLoginContentView(
     BottomNavigationRow(
         messageText = stringResource(id = R.string.go_register),
         actionText = stringResource(id = R.string.forgot_password),
-        onCancelClick = toRegister,
-        onActionClick = toResetPassword,
+        onCancelClick = { AuthNavigator.toRegister() },
+        onActionClick = { AuthNavigator.toResetPassword() },
         divider = true
     )
 }

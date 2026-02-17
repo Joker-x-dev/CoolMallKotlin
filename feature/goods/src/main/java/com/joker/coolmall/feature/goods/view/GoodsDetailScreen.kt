@@ -96,6 +96,11 @@ import com.joker.coolmall.core.model.entity.GoodsSpec
 import com.joker.coolmall.core.model.entity.SelectedGoods
 import com.joker.coolmall.core.model.preview.previewGoods
 import com.joker.coolmall.core.model.preview.previewMyCoupons
+import com.joker.coolmall.core.navigation.cs.CsNavigator
+import com.joker.coolmall.core.navigation.goods.GoodsNavigator
+import com.joker.coolmall.core.navigation.goods.GoodsRoutes
+import com.joker.coolmall.core.navigation.main.MainNavigator
+import com.joker.coolmall.core.navigation.navigateBack
 import com.joker.coolmall.core.ui.component.button.AppButtonBordered
 import com.joker.coolmall.core.ui.component.button.AppButtonFixed
 import com.joker.coolmall.core.ui.component.button.ButtonShape
@@ -123,12 +128,18 @@ import com.joker.coolmall.core.ui.R as CoreUiR
 /**
  * 商品详情页面路由入口
  *
+ * @param navKey 路由参数
  * @param viewModel 商品详情 ViewModel
  * @author Joker.X
  */
 @Composable
 internal fun GoodsDetailRoute(
-    viewModel: GoodsDetailViewModel = hiltViewModel()
+    navKey: GoodsRoutes.Detail,
+    viewModel: GoodsDetailViewModel = hiltViewModel<GoodsDetailViewModel, GoodsDetailViewModel.Factory>(
+        creationCallback = { factory ->
+            factory.create(navKey)
+        }
+    ),
 ) {
     // UI状态
     val uiState by viewModel.uiState.collectAsState()
@@ -145,7 +156,6 @@ internal fun GoodsDetailRoute(
 
     GoodsDetailScreen(
         uiState = uiState,
-        onBackClick = viewModel::navigateBack,
         onRetry = viewModel::retryRequest,
         specModalVisible = specModalVisible,
         specsModalUiState = specsModalUiState,
@@ -162,10 +172,7 @@ internal fun GoodsDetailRoute(
         couponModalVisible = couponModalVisible,
         onShowCouponModal = viewModel::showCouponModal,
         onHideCouponModal = viewModel::hideCouponModal,
-        onCouponReceive = viewModel::receiveCoupon,
-        onCommentClick = viewModel::toGoodsCommentPage,
-        onCsClick = viewModel::toCsPage,
-        onCartClick = viewModel::toCartPage
+        onCouponReceive = viewModel::receiveCoupon
     )
 }
 
@@ -173,7 +180,6 @@ internal fun GoodsDetailRoute(
  * 商品详情页面UI
  *
  * @param uiState 商品详情UI状态，包含商品数据的网络请求状态
- * @param onBackClick 返回按钮点击回调，点击后返回上一页
  * @param onRetry 商品详情加载失败时的重试回调
  * @param onSpecRetry 规格列表加载失败时的重试回调
  * @param specModalVisible 规格选择弹窗是否可见
@@ -191,16 +197,12 @@ internal fun GoodsDetailRoute(
  * @param onShowCouponModal 显示优惠券弹窗回调
  * @param onHideCouponModal 隐藏优惠券弹窗回调
  * @param onCouponReceive 领取优惠券回调
- * @param onCommentClick 跳转到评论页面的回调，点击评论相关区域时触发
- * @param onCsClick 跳转到客服页面的回调
- * @param onCartClick 跳转到购物车页面的回调
  * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun GoodsDetailScreen(
     uiState: BaseNetWorkUiState<GoodsDetail> = BaseNetWorkUiState.Loading,
-    onBackClick: () -> Unit = {},
     onRetry: () -> Unit = {},
     onSpecRetry: () -> Unit = {},
     specModalVisible: Boolean = false,
@@ -218,9 +220,6 @@ internal fun GoodsDetailScreen(
     onShowCouponModal: () -> Unit = {},
     onHideCouponModal: () -> Unit = {},
     onCouponReceive: (Coupon) -> Unit = {},
-    onCommentClick: () -> Unit = {},
-    onCsClick: () -> Unit = {},
-    onCartClick: () -> Unit = {}
 ) {
     Scaffold(
         contentWindowInsets = ScaffoldDefaults
@@ -237,16 +236,15 @@ internal fun GoodsDetailScreen(
                 data = goodsDetail,
                 coupons = goodsDetail.coupon,
                 comments = goodsDetail.comment,
-                onBackClick = onBackClick,
                 paddingValues = paddingValues,
                 selectedSpec = selectedSpec,
                 onShowSpecModal = onShowSpecModal,
                 hasAnimated = hasAnimated,
                 onTriggerAnimation = onTriggerAnimation,
                 onShowCouponModal = onShowCouponModal,
-                onCommentClick = onCommentClick,
-                onCsClick = onCsClick,
-                onCartClick = onCartClick
+                onCommentClick = {
+                    GoodsNavigator.toComment(goodsId = goodsDetail.goodsInfo.id)
+                },
             )
 
             // 规格选择底部弹出层
@@ -284,16 +282,12 @@ internal fun GoodsDetailScreen(
  * @param data 商品详情数据对象
  * @param coupons 优惠券列表
  * @param comments 评论列表
- * @param onBackClick 返回按钮点击回调
  * @param paddingValues 页面内边距值，用于适配系统UI（如状态栏、导航栏）
  * @param selectedSpec 当前选中的商品规格，若为null则表示未选择规格
  * @param onShowSpecModal 显示规格选择弹窗的回调函数
  * @param hasAnimated 是否已播放动画
  * @param onTriggerAnimation 触发动画回调
  * @param onShowCouponModal 显示优惠券弹窗回调
- * @param onCommentClick 跳转到评论页面的回调函数
- * @param onCsClick 跳转到客服页面的回调
- * @param onCartClick 跳转到购物车页面的回调
  * @author Joker.X
  */
 @Composable
@@ -301,7 +295,6 @@ private fun GoodsDetailContentView(
     data: GoodsDetail,
     coupons: List<Coupon> = emptyList(),
     comments: List<Comment> = emptyList(),
-    onBackClick: () -> Unit,
     paddingValues: PaddingValues,
     selectedSpec: GoodsSpec? = null,
     onShowSpecModal: () -> Unit = {},
@@ -309,8 +302,6 @@ private fun GoodsDetailContentView(
     onTriggerAnimation: () -> Unit = {},
     onShowCouponModal: () -> Unit = {},
     onCommentClick: () -> Unit = {},
-    onCsClick: () -> Unit = {},
-    onCartClick: () -> Unit = {}
 ) {
     // 主内容容器
     var topBarAlpha by remember { mutableIntStateOf(0) }
@@ -339,7 +330,6 @@ private fun GoodsDetailContentView(
 
         // 导航栏浮动在顶部
         GoodsDetailTopBar(
-            onBackClick = onBackClick,
             onShareClick = { /* TODO: 分享功能 */ },
             topBarAlpha = topBarAlpha,
             hasAnimated = hasAnimated,
@@ -352,8 +342,8 @@ private fun GoodsDetailContentView(
             onAddToCartClick = onShowSpecModal,
             onBuyNowClick = onShowSpecModal,
             hasAnimated = hasAnimated,
-            onCsClick = onCsClick,
-            onCartClick = onCartClick
+            onCsClick = CsNavigator::toChat,
+            onCartClick = { MainNavigator.toCart(showBackIcon = true) }
         )
     }
 }
@@ -362,7 +352,6 @@ private fun GoodsDetailContentView(
  * 顶部导航栏
  *
  * @param modifier 应用于顶部导航栏的Modifier
- * @param onBackClick 返回按钮点击回调
  * @param onShareClick 分享按钮点击回调
  * @param topBarAlpha 顶部导航栏的透明度值(0-255)，用于实现滚动时的渐变效果
  * @param hasAnimated 是否已播放动画
@@ -371,7 +360,6 @@ private fun GoodsDetailContentView(
 @Composable
 private fun GoodsDetailTopBar(
     modifier: Modifier = Modifier,
-    onBackClick: () -> Unit = {},
     onShareClick: () -> Unit = {},
     topBarAlpha: Int = 0,
     hasAnimated: Boolean = false
@@ -396,7 +384,7 @@ private fun GoodsDetailTopBar(
     ) {
         CircleIconButton(
             icon = com.joker.coolmall.core.designsystem.R.drawable.ic_left,
-            onClick = onBackClick,
+            onClick = { navigateBack() },
             iconSize = 28.dp,
             scale = buttonScale
         )

@@ -14,7 +14,6 @@ import com.joker.coolmall.core.util.log.LogUtils
 import com.joker.coolmall.feature.cs.state.WebSocketConnectionState
 import com.joker.coolmall.feature.cs.util.ChatSoundManager
 import com.joker.coolmall.feature.cs.util.WebSocketManager
-import com.joker.coolmall.navigation.AppNavigator
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -43,10 +42,9 @@ private const val TAG = "ChatViewModel"
 @HiltViewModel
 class ChatViewModel @Inject constructor(
     private val customerServiceRepository: CustomerServiceRepository,
-    appState: AppState,
+    private val appState: AppState,
     @param:ApplicationContext private val context: Context,
-    navigator: AppNavigator,
-) : BaseViewModel(navigator, appState) {
+) : BaseViewModel() {
 
     // 页面UI状态
     private val _uiState = MutableStateFlow<BaseNetWorkUiState<Unit>>(BaseNetWorkUiState.Loading)

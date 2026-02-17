@@ -2,13 +2,12 @@ package com.joker.coolmall.feature.market.viewmodel
 
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkListViewModel
 import com.joker.coolmall.core.data.repository.CouponRepository
-import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.entity.Coupon
 import com.joker.coolmall.core.model.request.PageRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
-import com.joker.coolmall.navigation.AppNavigator
-import com.joker.coolmall.navigation.routes.GoodsRoutes
+import com.joker.coolmall.core.navigation.goods.GoodsRoutes
+import com.joker.coolmall.core.navigation.navigate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
@@ -16,17 +15,13 @@ import javax.inject.Inject
 /**
  * 我的优惠券 ViewModel
  *
- * @param navigator 导航器
- * @param appState 应用状态
  * @param couponRepository 优惠券仓库
  * @author Joker.X
  */
 @HiltViewModel
 class CouponViewModel @Inject constructor(
-    navigator: AppNavigator,
-    appState: AppState,
     private val couponRepository: CouponRepository,
-) : BaseNetWorkListViewModel<Coupon>(navigator, appState) {
+) : BaseNetWorkListViewModel<Coupon>() {
 
     init {
         initLoad()

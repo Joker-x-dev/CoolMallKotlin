@@ -26,7 +26,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.joker.coolmall.core.common.base.state.BaseNetWorkListUiState
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.common.base.state.LoadMoreState
@@ -40,6 +39,9 @@ import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.model.entity.DictItem
 import com.joker.coolmall.core.model.entity.Order
+import com.joker.coolmall.core.navigation.navigateBack
+import com.joker.coolmall.core.navigation.order.OrderNavigator
+import com.joker.coolmall.core.navigation.order.OrderRoutes
 import com.joker.coolmall.core.ui.component.dialog.WeDialog
 import com.joker.coolmall.core.ui.component.divider.WeDivider
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
@@ -64,14 +66,18 @@ import kotlinx.coroutines.launch
  * 订单列表路由 - 顶层入口
  *
  * 负责收集ViewModel数据并传递给Screen层
+ * @param navKey 路由参数
  * @param viewModel 订单列表ViewModel，提供数据和事件处理，默认通过hiltViewModel()注入
- * @param navController 导航控制器
  * @author Joker.X
  */
 @Composable
 internal fun OrderListRoute(
-    viewModel: OrderListViewModel = hiltViewModel(),
-    navController: NavController
+    navKey: OrderRoutes.List,
+    viewModel: OrderListViewModel = hiltViewModel<OrderListViewModel, OrderListViewModel.Factory>(
+        creationCallback = { factory ->
+            factory.create(navKey)
+        }
+    ),
 ) {
     // 当前选中的标签索引
     val selectedTabIndex by viewModel.selectedTabIndex.collectAsState()
@@ -104,9 +110,6 @@ internal fun OrderListRoute(
     // 商品评论的当前订单
     val commentCurrentOrder: Order? by viewModel.commentCurrentOrder.collectAsState()
 
-    // 注册页面刷新监听
-    val backStackEntry = navController.currentBackStackEntry
-
     // 获取标签页状态提供者
     val tabStateProvider: @Composable (Int) -> OrderTabState = { index ->
         val uiState by viewModel.uiStates[index].collectAsState()
@@ -129,11 +132,7 @@ internal fun OrderListRoute(
     }
 
     OrderListScreen(
-        toOrderDetail = viewModel::toOrderDetailPage,
-        toPay = viewModel::toPaymentPage,
         toGoodsDetail = viewModel::handleRebuy,
-        toOrderLogistics = viewModel::toOrderLogistics,
-        toOrderRefund = viewModel::toOrderRefund,
         toOrderComment = viewModel::handleOrderComment,
         cancelOrder = viewModel::cancelOrder,
         cancelModalVisible = cancelModalVisible,
@@ -155,23 +154,16 @@ internal fun OrderListRoute(
         commentCurrentOrder = commentCurrentOrder,
         onRebuyModalDismiss = viewModel::hideRebuyModal,
         onCommentModalDismiss = viewModel::hideCommentModal,
-        onRebuyGoodsSelected = viewModel::toGoodsDetailForRebuy,
-        onCommentGoodsSelected = { orderId, goodsId ->
-            viewModel.toOrderCommentForGoods(goodsId)
-        },
+        onRebuyGoodsSelected = viewModel::toGoodsDetail,
+        onCommentGoodsSelected = viewModel::toOrderCommentForGoods,
         selectedTabIndex = selectedTabIndex,
         isAnimatingTabChange = isAnimatingTabChange,
         onTabSelected = viewModel::updateSelectedTab,
         onTabByPageChanged = viewModel::updateTabByPage,
         onAnimationCompleted = viewModel::notifyAnimationCompleted,
-        onBackClick = viewModel::navigateBack,
         tabStateProvider = tabStateProvider
     )
 
-    // 只要backStackEntry不为null就注册监听
-    LaunchedEffect(backStackEntry) {
-        viewModel.observeRefreshState(backStackEntry)
-    }
 }
 
 /**
@@ -180,11 +172,7 @@ internal fun OrderListRoute(
  * 包含AppScaffold和页面整体布局
  * 所有参数都提供默认值，方便预览
  *
- * @param toOrderDetail 跳转到订单详情页面
- * @param toPay 跳转到支付页面
  * @param toGoodsDetail 跳转到商品详情页面（再次购买）
- * @param toOrderLogistics 跳转到订单物流页面
- * @param toOrderRefund 跳转到退款申请页面
  * @param toOrderComment 跳转到订单评价页面
  * @param cancelOrder 取消订单
  * @param cancelModalVisible 取消订单弹窗显示状态
@@ -213,18 +201,13 @@ internal fun OrderListRoute(
  * @param onTabSelected 标签被选择时的回调，参数为选中的标签索引
  * @param onTabByPageChanged 通过页面滑动切换标签时的回调，参数为新的标签索引
  * @param onAnimationCompleted 标签切换动画完成时的回调
- * @param onBackClick 返回按钮点击事件回调
  * @param tabStateProvider 标签页状态提供者函数，根据索引返回对应标签页的状态
  * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun OrderListScreen(
-    toOrderDetail: (Long) -> Unit = {},
-    toPay: (Order) -> Unit = {},
     toGoodsDetail: (Order) -> Unit = {},
-    toOrderLogistics: (Long) -> Unit = {},
-    toOrderRefund: (Long) -> Unit = {},
     toOrderComment: (Order) -> Unit = {},
     cancelOrder: (Long) -> Unit = {},
     cancelModalVisible: Boolean = false,
@@ -253,7 +236,6 @@ internal fun OrderListScreen(
     onTabSelected: (Int) -> Unit = {},
     onTabByPageChanged: (Int) -> Unit = {},
     onAnimationCompleted: () -> Unit = {},
-    onBackClick: () -> Unit = {},
     tabStateProvider: @Composable (Int) -> OrderTabState = { _ ->
         OrderTabState(
             uiState = BaseNetWorkListUiState.Loading,
@@ -269,14 +251,10 @@ internal fun OrderListScreen(
 ) {
     AppScaffold(
         title = R.string.order_list,
-        onBackClick = onBackClick
+        onBackClick = { navigateBack() }
     ) {
         OrderListContentView(
-            toOrderDetail = toOrderDetail,
-            toPay = toPay,
             toGoodsDetail = toGoodsDetail,
-            toOrderLogistics = toOrderLogistics,
-            toOrderRefund = toOrderRefund,
             toOrderComment = toOrderComment,
             cancelOrder = cancelOrder,
             onConfirmClick = onConfirmClick,
@@ -345,11 +323,7 @@ internal fun OrderListScreen(
  * 订单列表内容视图
  *
  * @param modifier Compose修饰符，用于设置组件样式和布局，默认为Modifier
- * @param toOrderDetail 跳转到订单详情
- * @param toPay 跳转到支付页面
  * @param toGoodsDetail 跳转到商品详情页面（再次购买）
- * @param toOrderLogistics 跳转到订单物流页面
- * @param toOrderRefund 跳转到退款申请页面
  * @param toOrderComment 跳转到订单评价页面
  * @param cancelOrder 取消订单
  * @param onConfirmClick 确认收货按钮点击回调
@@ -365,11 +339,7 @@ internal fun OrderListScreen(
 @Composable
 private fun OrderListContentView(
     modifier: Modifier = Modifier,
-    toOrderDetail: (Long) -> Unit,
-    toPay: (Order) -> Unit,
     toGoodsDetail: (Order) -> Unit,
-    toOrderLogistics: (Long) -> Unit,
-    toOrderRefund: (Long) -> Unit,
     toOrderComment: (Order) -> Unit,
     cancelOrder: (Long) -> Unit,
     onConfirmClick: (Long) -> Unit,
@@ -427,11 +397,7 @@ private fun OrderListContentView(
             ) {
                 // 标签页的内容
                 OrderTabContent(
-                    toOrderDetail = toOrderDetail,
-                    toPay = toPay,
                     toGoodsDetail = toGoodsDetail,
-                    toOrderLogistics = toOrderLogistics,
-                    toOrderRefund = toOrderRefund,
                     toOrderComment = toOrderComment,
                     cancelOrder = cancelOrder,
                     onConfirmClick = onConfirmClick,
@@ -450,11 +416,7 @@ private fun OrderListContentView(
 /**
  * 标签页内容
  *
- * @param toOrderDetail 跳转到订单详情
- * @param toPay 跳转到支付页面
  * @param toGoodsDetail 跳转到商品详情页面（再次购买）
- * @param toOrderLogistics 跳转到订单物流页面
- * @param toOrderRefund 跳转到退款申请页面
  * @param toOrderComment 跳转到订单评价页面
  * @param cancelOrder 取消订单
  * @param onConfirmClick 确认收货按钮点击回调
@@ -469,11 +431,7 @@ private fun OrderListContentView(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun OrderTabContent(
-    toOrderDetail: (Long) -> Unit,
-    toPay: (Order) -> Unit,
     toGoodsDetail: (Order) -> Unit,
-    toOrderLogistics: (Long) -> Unit,
-    toOrderRefund: (Long) -> Unit,
     toOrderComment: (Order) -> Unit,
     cancelOrder: (Long) -> Unit,
     onConfirmClick: (Long) -> Unit,
@@ -496,15 +454,11 @@ private fun OrderTabContent(
             val order = orderList[index]
             OrderCard(
                 order = order,
-                toOrderDetail = toOrderDetail,
-                toPay = { toPay(order) },
                 toGoodsDetail = {
                     // 使用 ViewModel 的 handleRebuy 方法处理再次购买逻辑
                     toGoodsDetail(order)
                 },
-                toLogistics = { toOrderLogistics(order.id) },
                 toComment = { toOrderComment(order) },
-                toRefund = { toOrderRefund(order.id) },
                 onCancelClick = { cancelOrder(order.id) },
                 onConfirmClick = { onConfirmClick(order.id) }
             )
@@ -517,9 +471,7 @@ private fun OrderTabContent(
  *
  * @param modifier Compose修饰符
  * @param order 订单数据对象，包含订单的所有信息
- * @param toOrderDetail 跳转到订单详情页面
  * @param toGoodsDetail 跳转到商品详情页面
- * @param toPay 跳转到支付页面
  * @param toLogistics 跳转到物流详情页面
  * @param toComment 跳转到评价页面
  * @param toRefund 跳转到退款/售后页面
@@ -531,12 +483,8 @@ private fun OrderTabContent(
 private fun OrderCard(
     modifier: Modifier = Modifier,
     order: Order,
-    toOrderDetail: (Long) -> Unit = {},
     toGoodsDetail: () -> Unit = {},
-    toPay: () -> Unit = {},
-    toLogistics: () -> Unit = {},
     toComment: () -> Unit = {},
-    toRefund: () -> Unit = {},
     onCancelClick: () -> Unit = {},
     onConfirmClick: () -> Unit = {}
 ) {
@@ -545,14 +493,14 @@ private fun OrderCard(
             .clip(ShapeMedium)
             .clickable(
                 onClick = {
-                    toOrderDetail(order.id)
+                    OrderNavigator.toDetail(order.id)
                 }
             )) {
         AppListItem(
             title = order.orderNum,
             showArrow = false,
             onClick = {
-                toOrderDetail(order.id)
+                OrderNavigator.toDetail(order.id)
             },
             trailingText = stringResource(
                 when (order.status) {
@@ -613,10 +561,13 @@ private fun OrderCard(
             OrderButtons(
                 order = order,
                 onCancelClick = onCancelClick,
-                onPayClick = toPay,
-                onRefundClick = toRefund,
+                onPayClick = {
+                    val paymentPrice = order.price - order.discountPrice
+                    OrderNavigator.toPay(orderId = order.id, price = paymentPrice)
+                },
+                onRefundClick = { OrderNavigator.toRefund(order.id) },
                 onConfirmClick = onConfirmClick,
-                onLogisticsClick = toLogistics,
+                onLogisticsClick = { OrderNavigator.toLogistics(order.id) },
                 onCommentClick = toComment,
                 onRebuyClick = toGoodsDetail
             )

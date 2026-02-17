@@ -3,11 +3,8 @@ package com.joker.coolmall.feature.user.viewmodel
 import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
 import com.joker.coolmall.core.data.repository.FootprintRepository
-import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.entity.Footprint
 import com.joker.coolmall.feature.user.state.FootprintUiState
-import com.joker.coolmall.navigation.AppNavigator
-import com.joker.coolmall.navigation.routes.GoodsRoutes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -23,13 +20,8 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class FootprintViewModel @Inject constructor(
-    navigator: AppNavigator,
-    appState: AppState,
     private val footprintRepository: FootprintRepository
-) : BaseViewModel(
-    navigator = navigator,
-    appState = appState
-) {
+) : BaseViewModel() {
 
     /**
      * 所有足迹记录
@@ -69,16 +61,6 @@ class FootprintViewModel @Inject constructor(
             started = SharingStarted.WhileSubscribed(5000),
             initialValue = 0
         )
-
-    /**
-     * 跳转到商品详情页面
-     *
-     * @param goodsId 商品ID
-     * @author Joker.X
-     */
-    fun toGoodsDetail(goodsId: Long) {
-        navigate(GoodsRoutes.Detail(goodsId = goodsId))
-    }
 
     /**
      * 删除指定足迹记录

@@ -36,7 +36,7 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
             // 配置Feature模块依赖
             dependencies {
                 // 项目内基础模块依赖
-                "implementation"(project(":navigation")) // 导航模块
+                "implementation"(project(":core:navigation")) // 导航模块
                 "implementation"(project(":core:designsystem")) // 设计系统
                 "implementation"(project(":core:ui")) // UI组件库
                 "implementation"(project(":core:util")) // 工具类
@@ -45,11 +45,15 @@ class AndroidFeatureConventionPlugin : Plugin<Project> {
                 "implementation"(project(":core:model")) // 模型
                 "implementation"(project(":core:result")) // 结果处理
 
-                // Jetpack Navigation Compose导航框架
-                "implementation"(libs.findLibrary("navigation.compose").get())
+                // Navigation3 导航框架
+                "implementation"(libs.findLibrary("androidx.navigation3.runtime").get())
+                "implementation"(libs.findLibrary("androidx.navigation3.ui").get())
+                "implementation"(libs.findLibrary("androidx.lifecycle.viewmodel.navigation3").get())
 
                 // Hilt依赖注入相关
-                "implementation"(libs.findLibrary("hilt.navigation.compose").get()) // Hilt导航集成
+                "implementation"(
+                    libs.findLibrary("hilt.lifecycle.viewmodel.compose").get()
+                ) // Hilt导航集成
                 "kspAndroidTest"(libs.findLibrary("hilt.compiler").get()) // 测试用Hilt编译器
                 "androidTestImplementation"(
                     libs.findLibrary("hilt.android.testing").get()

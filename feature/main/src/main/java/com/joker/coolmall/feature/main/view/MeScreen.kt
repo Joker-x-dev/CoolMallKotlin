@@ -56,6 +56,13 @@ import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.model.entity.Footprint
 import com.joker.coolmall.core.model.entity.OrderCount
 import com.joker.coolmall.core.model.entity.User
+import com.joker.coolmall.core.navigation.common.CommonNavigator
+import com.joker.coolmall.core.navigation.cs.CsNavigator
+import com.joker.coolmall.core.navigation.feedback.FeedbackNavigator
+import com.joker.coolmall.core.navigation.goods.GoodsNavigator
+import com.joker.coolmall.core.navigation.market.MarketNavigator
+import com.joker.coolmall.core.navigation.order.OrderNavigator
+import com.joker.coolmall.core.navigation.user.UserNavigator
 import com.joker.coolmall.core.ui.component.badge.WeBadge
 import com.joker.coolmall.core.ui.component.image.Avatar
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
@@ -110,17 +117,6 @@ internal fun MeRoute(
         userInfo = userInfo,
         orderCount = orderCount,
         recentFootprints = recentFootprints,
-        onHeadClick = viewModel::onHeadClick,
-        toAddressList = viewModel::toAddressListPage,
-        toOrderList = viewModel::toOrderListPage,
-        toOrderListByTab = viewModel::toOrderListPage,
-        toUserFootprint = viewModel::toUserFootprintPage,
-        toGoodsDetail = viewModel::toGoodsDetailPage,
-        toChat = viewModel::toChatPage,
-        toCoupon = viewModel::toCouponPage,
-        toFeedback = viewModel::toFeedbackPage,
-        toAbout = viewModel::toAboutPage,
-        toSettings = viewModel::toSettingsPage,
     )
 }
 
@@ -133,17 +129,6 @@ internal fun MeRoute(
  * @param userInfo 用户信息
  * @param orderCount 订单统计数据
  * @param recentFootprints 最近足迹列表
- * @param onHeadClick 头像点击回调
- * @param toAddressList 跳转到地址列表
- * @param toOrderList 跳转到订单列表
- * @param toOrderListByTab 跳转到订单列表指定标签
- * @param toUserFootprint 跳转到用户足迹
- * @param toGoodsDetail 跳转到商品详情
- * @param toChat 跳转到在线客服
- * @param toCoupon 跳转到优惠券
- * @param toFeedback 跳转到意见反馈
- * @param toAbout 跳转到关于我们
- * @param toSettings 跳转到设置
  * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
@@ -155,17 +140,6 @@ internal fun MeScreen(
     userInfo: User? = null,
     orderCount: OrderCount? = null,
     recentFootprints: List<Footprint> = emptyList(),
-    onHeadClick: () -> Unit = {},
-    toAddressList: () -> Unit = {},
-    toOrderList: () -> Unit = {},
-    toOrderListByTab: (Int) -> Unit = {},
-    toUserFootprint: () -> Unit = {},
-    toGoodsDetail: (Long) -> Unit = {},
-    toChat: () -> Unit = {},
-    toCoupon: () -> Unit = {},
-    toFeedback: () -> Unit = {},
-    toAbout: () -> Unit = {},
-    toSettings: () -> Unit = {},
 ) {
     CommonScaffold(topBar = { }) { paddingValues ->
         MeContentView(
@@ -173,17 +147,6 @@ internal fun MeScreen(
             userInfo = userInfo ?: User(),
             orderCount = orderCount ?: OrderCount(),
             recentFootprints = recentFootprints,
-            onHeadClick = onHeadClick,
-            toAddressList = toAddressList,
-            toOrderList = toOrderList,
-            toOrderListByTab = toOrderListByTab,
-            toUserFootprint = toUserFootprint,
-            toGoodsDetail = toGoodsDetail,
-            toChat = toChat,
-            toCoupon = toCoupon,
-            toFeedback = toFeedback,
-            toAbout = toAbout,
-            toSettings = toSettings,
             sharedTransitionScope = sharedTransitionScope,
             animatedContentScope = animatedContentScope,
             modifier = Modifier.padding(paddingValues)
@@ -200,17 +163,6 @@ internal fun MeScreen(
  * @param userInfo 用户信息
  * @param orderCount 订单统计数据
  * @param recentFootprints 最近足迹列表
- * @param onHeadClick 头像点击回调
- * @param toAddressList 跳转到地址列表
- * @param toOrderList 跳转到订单列表
- * @param toOrderListByTab 跳转到订单列表指定标签
- * @param toUserFootprint 跳转到用户足迹
- * @param toGoodsDetail 跳转到商品详情
- * @param toChat 跳转到在线客服
- * @param toCoupon 跳转到优惠券
- * @param toFeedback 跳转到意见反馈
- * @param toAbout 跳转到关于我们
- * @param toSettings 跳转到设置
  * @param modifier 修饰符
  * @author Joker.X
  */
@@ -221,17 +173,6 @@ private fun MeContentView(
     userInfo: User,
     orderCount: OrderCount,
     recentFootprints: List<Footprint>,
-    onHeadClick: () -> Unit,
-    toAddressList: () -> Unit,
-    toOrderList: () -> Unit,
-    toOrderListByTab: (Int) -> Unit,
-    toUserFootprint: () -> Unit,
-    toGoodsDetail: (Long) -> Unit,
-    toChat: () -> Unit,
-    toCoupon: () -> Unit,
-    toFeedback: () -> Unit,
-    toAbout: () -> Unit,
-    toSettings: () -> Unit,
     sharedTransitionScope: SharedTransitionScope? = null,
     animatedContentScope: AnimatedContentScope? = null,
     modifier: Modifier = Modifier
@@ -249,8 +190,7 @@ private fun MeContentView(
             sharedTransitionScope = sharedTransitionScope,
             animatedContentScope = animatedContentScope,
             isLoggedIn = isLoggedIn,
-            userInfo = userInfo,
-            onHeadClick = onHeadClick
+            userInfo = userInfo
         )
 
         // 会员权益卡片
@@ -258,28 +198,18 @@ private fun MeContentView(
 
         // 订单区域
         OrderSection(
-            orderCount = orderCount,
-            toOrderList = toOrderList,
-            toOrderListByTab = toOrderListByTab
+            orderCount = orderCount
         )
 
         // 我的足迹
         if (recentFootprints.isNotEmpty()) {
             MyFootprintSection(
                 footprints = recentFootprints,
-                toUserFootprint = toUserFootprint,
-                toGoodsDetail = toGoodsDetail
             )
         }
 
         // 功能菜单区域
         FunctionMenuSection(
-            toAddressList = toAddressList,
-            toChat = toChat,
-            toCoupon = toCoupon,
-            toFeedback = toFeedback,
-            toAbout = toAbout,
-            toSettings = toSettings,
         )
     }
 }
@@ -291,7 +221,6 @@ private fun MeContentView(
  * @param animatedContentScope 动画内容作用域
  * @param isLoggedIn 是否已登录
  * @param userInfo 用户信息
- * @param onHeadClick 头像点击回调
  * @author Joker.X
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -301,12 +230,11 @@ private fun UserInfoSection(
     animatedContentScope: AnimatedContentScope? = null,
     isLoggedIn: Boolean,
     userInfo: User?,
-    onHeadClick: () -> Unit
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onHeadClick() },
+            .clickable { UserNavigator.toProfile() },
         verticalAlignment = Alignment.CenterVertically
     ) {
         // 头像
@@ -405,15 +333,11 @@ private fun MembershipCard() {
  * 订单区域
  *
  * @param orderCount 订单统计数据
- * @param toOrderList 跳转到订单列表
- * @param toOrderListByTab 跳转到订单列表指定标签
  * @author Joker.X
  */
 @Composable
 private fun OrderSection(
     orderCount: OrderCount? = null,
-    toOrderList: () -> Unit = {},
-    toOrderListByTab: (Int) -> Unit = {}
 ) {
     Card {
         // 标题行
@@ -422,7 +346,7 @@ private fun OrderSection(
             trailingText = stringResource(R.string.view_all),
             leadingIcon = R.drawable.ic_order_fill,
             leadingIconTint = Primary,
-            onClick = toOrderList
+            onClick = { OrderNavigator.toList() }
         )
         // 订单状态图标
         SpaceEvenlyRow {
@@ -431,7 +355,7 @@ private fun OrderSection(
                 label = stringResource(R.string.pending_payment),
                 badgeCount = orderCount?.pendingPayment ?: 0,
                 modifier = Modifier.weight(1f),
-                onClick = { toOrderListByTab(1) } // 待付款对应的标签索引为1
+                onClick = { OrderNavigator.toList(tab = "1") } // 待付款对应的标签索引为1
             )
 
             OrderStatusItem(
@@ -439,7 +363,7 @@ private fun OrderSection(
                 label = stringResource(R.string.pending_shipment),
                 badgeCount = orderCount?.pendingShipment ?: 0,
                 modifier = Modifier.weight(1f),
-                onClick = { toOrderListByTab(2) } // 待发货对应的标签索引为2
+                onClick = { OrderNavigator.toList(tab = "2") } // 待发货对应的标签索引为2
             )
 
             OrderStatusItem(
@@ -447,7 +371,7 @@ private fun OrderSection(
                 label = stringResource(R.string.pending_receipt),
                 badgeCount = orderCount?.pendingReceive ?: 0,
                 modifier = Modifier.weight(1f),
-                onClick = { toOrderListByTab(3) } // 待收货对应的标签索引为3
+                onClick = { OrderNavigator.toList(tab = "3") } // 待收货对应的标签索引为3
             )
 
             OrderStatusItem(
@@ -455,7 +379,7 @@ private fun OrderSection(
                 label = stringResource(R.string.pending_review),
                 badgeCount = orderCount?.pendingReview ?: 0,
                 modifier = Modifier.weight(1f),
-                onClick = { toOrderListByTab(5) } // 待评价对应的标签索引为5
+                onClick = { OrderNavigator.toList(tab = "5") } // 待评价对应的标签索引为5
             )
 
             OrderStatusItem(
@@ -463,7 +387,7 @@ private fun OrderSection(
                 label = stringResource(R.string.refund_after_sale),
                 badgeCount = (orderCount?.refunding ?: 0) + (orderCount?.refunded ?: 0),
                 modifier = Modifier.weight(1f),
-                onClick = { toOrderListByTab(4) } // 售后对应的标签索引为4
+                onClick = { OrderNavigator.toList(tab = "4") } // 售后对应的标签索引为4
             )
         }
     }
@@ -473,15 +397,11 @@ private fun OrderSection(
  * 我的足迹区域
  *
  * @param footprints 足迹列表
- * @param toUserFootprint 跳转到足迹页面
- * @param toGoodsDetail 跳转到商品详情
  * @author Joker.X
  */
 @Composable
 private fun MyFootprintSection(
     footprints: List<Footprint> = emptyList(),
-    toUserFootprint: () -> Unit = {},
-    toGoodsDetail: (Long) -> Unit = {}
 ) {
     Card {
         AppListItem(
@@ -489,7 +409,7 @@ private fun MyFootprintSection(
             trailingText = stringResource(R.string.view_all),
             leadingIcon = R.drawable.ic_footprint_fill,
             leadingIconTint = Color(0xFFFF9800),
-            onClick = toUserFootprint
+            onClick = { UserNavigator.toFootprint() }
         )
         // 水平滚动的产品列表
         LazyRow(
@@ -499,7 +419,7 @@ private fun MyFootprintSection(
             items(footprints) { footprint ->
                 FootprintItem(
                     footprint = footprint,
-                    onClick = { toGoodsDetail(footprint.goodsId) }
+                    onClick = { GoodsNavigator.toDetail(footprint.goodsId) }
                 )
             }
         }
@@ -599,30 +519,17 @@ private fun OrderStatusItem(
 /**
  * 功能菜单区域
  *
- * @param toAddressList 跳转到地址列表
- * @param toChat 跳转到在线客服
- * @param toCoupon 跳转到优惠券
- * @param toFeedback 跳转到意见反馈
- * @param toAbout 跳转到关于我们
- * @param toSettings 跳转到设置
  * @author Joker.X
  */
 @Composable
-private fun FunctionMenuSection(
-    toAddressList: () -> Unit,
-    toChat: () -> Unit,
-    toCoupon: () -> Unit,
-    toFeedback: () -> Unit,
-    toAbout: () -> Unit,
-    toSettings: () -> Unit,
-) {
+private fun FunctionMenuSection() {
     Card {
         AppListItem(
             title = stringResource(R.string.coupons),
             leadingIcon = R.drawable.ic_coupon_fill,
             leadingIconTint = Color(0xFF6A9BE6),
             verticalPadding = SpaceVerticalLarge,
-            onClick = toCoupon
+            onClick = { MarketNavigator.toCoupon() }
         )
 
         AppListItem(
@@ -630,7 +537,7 @@ private fun FunctionMenuSection(
             leadingIcon = R.drawable.ic_location_fill,
             leadingIconTint = Color(0xFF66BB6A),
             verticalPadding = SpaceVerticalLarge,
-            onClick = toAddressList
+            onClick = { UserNavigator.toAddressList() }
         )
 
         AppListItem(
@@ -638,7 +545,7 @@ private fun FunctionMenuSection(
             leadingIcon = R.drawable.ic_service_fill,
             leadingIconTint = Color(0xFFF87C7B),
             verticalPadding = SpaceVerticalLarge,
-            onClick = toChat
+            onClick = { CsNavigator.toChat() }
         )
 
         AppListItem(
@@ -646,7 +553,7 @@ private fun FunctionMenuSection(
             leadingIcon = R.drawable.ic_creative_fill,
             leadingIconTint = Color(0xFFF3AF76),
             verticalPadding = SpaceVerticalLarge,
-            onClick = toFeedback
+            onClick = { FeedbackNavigator.toList() }
         )
 
         AppListItem(
@@ -655,7 +562,7 @@ private fun FunctionMenuSection(
             leadingIconTint = Color(0xFF9179F1),
             verticalPadding = SpaceVerticalLarge,
             showDivider = false,
-            onClick = toAbout
+            onClick = { CommonNavigator.toAbout() }
         )
     }
 
@@ -667,7 +574,7 @@ private fun FunctionMenuSection(
             leadingIconTint = Color(0xFF26A69A),
             verticalPadding = SpaceVerticalLarge,
             showDivider = false,
-            onClick = toSettings
+            onClick = { CommonNavigator.toSettings() }
         )
     }
 }

@@ -1,45 +1,45 @@
 package com.joker.coolmall.feature.user.viewmodel
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkListViewModel
 import com.joker.coolmall.core.data.repository.AddressRepository
-import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.common.Ids
 import com.joker.coolmall.core.model.entity.Address
-import com.joker.coolmall.navigation.results.SelectAddressResultKey
 import com.joker.coolmall.core.model.request.PageRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
-import com.joker.coolmall.navigation.AppNavigator
-import com.joker.coolmall.navigation.routes.UserRoutes
+import com.joker.coolmall.core.navigation.popBackStackWithResult
+import com.joker.coolmall.core.navigation.user.SelectAddressResultKey
+import com.joker.coolmall.core.navigation.user.UserNavigator
+import com.joker.coolmall.core.navigation.user.UserRoutes
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import javax.inject.Inject
 
 /**
  * 收货地址列表 ViewModel
  *
+ * @param navKey 路由参数
+ * @param addressRepository 地址仓库
  * @author Joker.X
  */
-@HiltViewModel
-class AddressListViewModel @Inject constructor(
-    navigator: AppNavigator,
-    appState: AppState,
-    savedStateHandle: SavedStateHandle,
+@HiltViewModel(assistedFactory = AddressListViewModel.Factory::class)
+class AddressListViewModel @AssistedInject constructor(
+    @Assisted navKey: UserRoutes.AddressList,
     private val addressRepository: AddressRepository,
-) : BaseNetWorkListViewModel<Address>(navigator, appState) {
+) : BaseNetWorkListViewModel<Address>() {
 
     /**
      * 是否为选择模式
      */
-    private val addressListRoute = savedStateHandle.toRoute<UserRoutes.AddressList>()
+    private val addressListRoute = navKey
 
     /**
      * 是否为选择模式
@@ -59,6 +59,7 @@ class AddressListViewModel @Inject constructor(
     val deleteId: StateFlow<Long?> = _deleteId.asStateFlow()
 
     init {
+        observeRefreshState()
         initLoad()
     }
 
@@ -75,25 +76,6 @@ class AddressListViewModel @Inject constructor(
                 size = super.pageSize
             )
         )
-    }
-
-    /**
-     * 跳转到收货地址详情 - 新增模式
-     *
-     * @author Joker.X
-     */
-    fun toAddressDetailPage() {
-        navigate(UserRoutes.AddressDetail(isEditMode = false, addressId = 0L))
-    }
-
-    /**
-     * 跳转到收货地址详情 - 编辑模式
-     *
-     * @param addressId 待编辑的地址ID
-     * @author Joker.X
-     */
-    fun toAddressDetailEditPage(addressId: Long) {
-        navigate(UserRoutes.AddressDetail(isEditMode = true, addressId = addressId))
     }
 
     /**
@@ -146,7 +128,24 @@ class AddressListViewModel @Inject constructor(
             // 使用类型安全的 NavigationResultKey 返回选中的地址
             popBackStackWithResult(SelectAddressResultKey, address)
         } else {
-            toAddressDetailEditPage(address.id)
+            UserNavigator.toAddressDetail(isEditMode = true, addressId = address.id)
         }
+    }
+
+    /**
+     * Assisted Factory
+     *
+     * @author Joker.X
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * 创建 ViewModel 实例
+         *
+         * @param navKey 路由参数
+         * @return ViewModel 实例
+         * @author Joker.X
+         */
+        fun create(navKey: UserRoutes.AddressList): AddressListViewModel
     }
 }

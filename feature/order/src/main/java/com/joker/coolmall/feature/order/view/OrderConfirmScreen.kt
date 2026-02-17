@@ -24,7 +24,6 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.designsystem.component.FullScreenBox
 import com.joker.coolmall.core.designsystem.component.SpaceBetweenRow
@@ -37,6 +36,8 @@ import com.joker.coolmall.core.model.entity.ConfirmOrder
 import com.joker.coolmall.core.model.entity.Coupon
 import com.joker.coolmall.core.model.preview.previewAddress
 import com.joker.coolmall.core.model.preview.previewCartList
+import com.joker.coolmall.core.navigation.navigateBack
+import com.joker.coolmall.core.navigation.user.UserNavigator
 import com.joker.coolmall.core.ui.component.address.AddressCard
 import com.joker.coolmall.core.ui.component.button.AppButtonFixed
 import com.joker.coolmall.core.ui.component.button.ButtonShape
@@ -56,22 +57,18 @@ import com.joker.coolmall.core.ui.component.text.TextSize
 import com.joker.coolmall.core.ui.component.text.TextType
 import com.joker.coolmall.core.ui.component.title.TitleWithLine
 import com.joker.coolmall.feature.order.R
-import com.joker.coolmall.feature.order.extension.observeResult
 import com.joker.coolmall.feature.order.viewmodel.OrderConfirmViewModel
-import com.joker.coolmall.navigation.results.SelectAddressResultKey
 import com.joker.coolmall.core.ui.R as CoreUiR
 
 /**
  * 确认订单路由
  *
  * @param viewModel 确认订单ViewModel
- * @param navController 导航控制器
  * @author Joker.X
  */
 @Composable
 internal fun OrderConfirmRoute(
     viewModel: OrderConfirmViewModel = hiltViewModel(),
-    navController: NavController
 ) {
     // UI状态
     val uiState by viewModel.uiState.collectAsState()
@@ -91,7 +88,6 @@ internal fun OrderConfirmRoute(
     OrderConfirmScreen(
         uiState = uiState,
         onRetry = viewModel::retryRequest,
-        onBackClick = viewModel::navigateBack,
         cartList = viewModel.cartList,
         remark = remark,
         onRemarkChange = viewModel::updateRemark,
@@ -103,14 +99,9 @@ internal fun OrderConfirmRoute(
         totalPrice = totalPrice,
         onShowCouponModal = viewModel::showCouponModal,
         onHideCouponModal = viewModel::hideCouponModal,
-        onSelectCoupon = viewModel::selectCoupon,
-        onAddressClick = viewModel::navigateToAddressSelection
+        onSelectCoupon = viewModel::selectCoupon
     )
 
-    // 使用类型安全的 NavigationResultKey 监听地址选择结果
-    navController.observeResult(SelectAddressResultKey) { address ->
-        viewModel.onAddressSelected(address)
-    }
 }
 
 /**
@@ -118,7 +109,6 @@ internal fun OrderConfirmRoute(
  *
  * @param uiState UI状态
  * @param onRetry 重试请求回调
- * @param onBackClick 返回按钮回调
  * @param cartList 购物车列表
  * @param remark 订单备注
  * @param onRemarkChange 订单备注变更回调
@@ -131,7 +121,6 @@ internal fun OrderConfirmRoute(
  * @param onShowCouponModal 显示优惠券弹出层回调
  * @param onHideCouponModal 隐藏优惠券弹出层回调
  * @param onSelectCoupon 选择优惠券回调
- * @param onAddressClick 地址点击回调
  * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -139,7 +128,6 @@ internal fun OrderConfirmRoute(
 internal fun OrderConfirmScreen(
     uiState: BaseNetWorkUiState<ConfirmOrder> = BaseNetWorkUiState.Loading,
     onRetry: () -> Unit = {},
-    onBackClick: () -> Unit = {},
     cartList: List<Cart> = emptyList(),
     remark: String = "",
     onRemarkChange: (String) -> Unit = {},
@@ -151,8 +139,7 @@ internal fun OrderConfirmScreen(
     totalPrice: Double = 0.0,
     onShowCouponModal: () -> Unit = {},
     onHideCouponModal: () -> Unit = {},
-    onSelectCoupon: (Coupon?) -> Unit = {},
-    onAddressClick: () -> Unit = {}
+    onSelectCoupon: (Coupon?) -> Unit = {}
 ) {
     AppScaffold(
         modifier = Modifier
@@ -160,7 +147,7 @@ internal fun OrderConfirmScreen(
             .imePadding(),
         title = R.string.order_confirm,
         useLargeTopBar = true,
-        onBackClick = onBackClick,
+        onBackClick = { navigateBack() },
         contentShouldConsumePadding = true,
         bottomBar = {
             if (uiState is BaseNetWorkUiState.Success) {
@@ -191,8 +178,7 @@ internal fun OrderConfirmScreen(
                     remark = remark,
                     onRemarkChange = onRemarkChange,
                     selectedCoupon = selectedCoupon,
-                    onShowCouponModal = onShowCouponModal,
-                    onAddressClick = onAddressClick
+                    onShowCouponModal = onShowCouponModal
                 )
             }
         }
@@ -235,7 +221,6 @@ internal fun OrderConfirmScreen(
  * @param onRemarkChange 订单备注变更回调
  * @param selectedCoupon 选中的优惠券
  * @param onShowCouponModal 显示优惠券弹出层回调
- * @param onAddressClick 地址点击回调
  * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -249,14 +234,13 @@ private fun OrderConfirmContentView(
     remark: String,
     onRemarkChange: (String) -> Unit,
     selectedCoupon: Coupon? = null,
-    onShowCouponModal: () -> Unit = {},
-    onAddressClick: () -> Unit = {}
+    onShowCouponModal: () -> Unit = {}
 ) {
     VerticalList {
         // 地址选择卡片
         AddressCard(
             address = pageData.defaultAddress,
-            onClick = onAddressClick,
+            onClick = { UserNavigator.toAddressList(isSelectMode = true) },
             addressSelected = true
         )
 

@@ -26,6 +26,8 @@ import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.model.entity.Footprint
 import com.joker.coolmall.core.model.entity.Goods
+import com.joker.coolmall.core.navigation.goods.GoodsNavigator
+import com.joker.coolmall.core.navigation.navigateBack
 import com.joker.coolmall.core.ui.component.empty.EmptyData
 import com.joker.coolmall.core.ui.component.goods.GoodsGridItem
 import com.joker.coolmall.core.ui.component.loading.PageLoading
@@ -55,8 +57,6 @@ internal fun FootprintRoute(
         uiState = uiState,
         footprints = footprints,
         footprintCount = footprintCount,
-        onBackClick = viewModel::navigateBack,
-        onFootprintClick = viewModel::toGoodsDetail,
         onClearAll = viewModel::clearAllFootprints
     )
 }
@@ -67,8 +67,6 @@ internal fun FootprintRoute(
  * @param uiState 页面UI状态
  * @param footprints 足迹列表
  * @param footprintCount 足迹总数
- * @param onBackClick 返回上一页回调
- * @param onFootprintClick 点击足迹项回调
  * @param onClearAll 清空所有足迹回调
  * @author Joker.X
  */
@@ -78,13 +76,11 @@ internal fun FootprintScreen(
     uiState: FootprintUiState = FootprintUiState.Loading,
     footprints: List<Footprint> = emptyList(),
     footprintCount: Int = 0,
-    onBackClick: () -> Unit = {},
-    onFootprintClick: (Long) -> Unit = {},
     onClearAll: () -> Unit = {}
 ) {
     AppScaffold(
         title = R.string.footprint_title,
-        onBackClick = onBackClick,
+        onBackClick = { navigateBack() },
         topBarActions = {
             if (footprints.isNotEmpty()) {
                 TextButton(onClick = onClearAll) {
@@ -109,7 +105,6 @@ internal fun FootprintScreen(
                 is FootprintUiState.Success -> {
                     FootprintContentView(
                         footprints = footprints,
-                        onFootprintClick = onFootprintClick,
                     )
                 }
             }
@@ -121,14 +116,12 @@ internal fun FootprintScreen(
  * 足迹内容视图
  *
  * @param footprints 足迹列表
- * @param onFootprintClick 点击足迹项回调
  * @param modifier 修饰符
  * @author Joker.X
  */
 @Composable
 private fun FootprintContentView(
     footprints: List<Footprint>,
-    onFootprintClick: (Long) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyVerticalStaggeredGrid(
@@ -141,7 +134,7 @@ private fun FootprintContentView(
         items(footprints.size) { index ->
             GoodsGridItem(
                 goods = footprints[index].toGoods(),
-                onClick = onFootprintClick
+                onClick = GoodsNavigator::toDetail
             )
         }
     }

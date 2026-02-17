@@ -4,12 +4,11 @@ import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
 import com.joker.coolmall.core.data.repository.GoodsRepository
 import com.joker.coolmall.core.data.repository.SearchHistoryRepository
-import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.entity.GoodsSearchKeyword
 import com.joker.coolmall.core.model.entity.SearchHistory
 import com.joker.coolmall.core.model.response.NetworkResponse
-import com.joker.coolmall.navigation.AppNavigator
-import com.joker.coolmall.navigation.routes.GoodsRoutes
+import com.joker.coolmall.core.navigation.goods.GoodsRoutes
+import com.joker.coolmall.core.navigation.navigate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -21,19 +20,15 @@ import javax.inject.Inject
 /**
  * 商品搜索 ViewModel
  *
- * @param navigator 导航器
- * @param appState 应用状态
  * @param goodsRepository 商品仓库
  * @param searchHistoryRepository 搜索历史仓库
  * @author Joker.X
  */
 @HiltViewModel
 class GoodsSearchViewModel @Inject constructor(
-    navigator: AppNavigator,
-    appState: AppState,
     private val goodsRepository: GoodsRepository,
     private val searchHistoryRepository: SearchHistoryRepository
-) : BaseNetWorkViewModel<List<GoodsSearchKeyword>>(navigator, appState) {
+) : BaseNetWorkViewModel<List<GoodsSearchKeyword>>() {
 
     // 搜索历史状态
     private val _searchHistoryList = MutableStateFlow<List<SearchHistory>>(emptyList())
@@ -79,7 +74,14 @@ class GoodsSearchViewModel @Inject constructor(
                 // 添加到搜索历史
                 searchHistoryRepository.addSearchHistory(keyword)
                 // 跳转到商品分类页面，传递搜索关键词
-                navigate(GoodsRoutes.Category(typeId = null, featured = false, recommend = false, keyword = keyword))
+                navigate(
+                    GoodsRoutes.Category(
+                        typeId = null,
+                        featured = false,
+                        recommend = false,
+                        keyword = keyword
+                    )
+                )
             }
         }
     }

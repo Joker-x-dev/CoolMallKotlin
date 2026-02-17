@@ -1,19 +1,17 @@
 package com.joker.coolmall.core.common.base.viewmodel
 
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavBackStackEntry
 import com.joker.coolmall.core.common.base.state.BaseNetWorkListUiState
 import com.joker.coolmall.core.common.base.state.LoadMoreState
-import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
-import com.joker.coolmall.navigation.AppNavigator
-import com.joker.coolmall.navigation.NavigationResultKey
-import com.joker.coolmall.navigation.RefreshResultKey
+import com.joker.coolmall.core.navigation.NavigationResultKey
+import com.joker.coolmall.core.navigation.RefreshResult
+import com.joker.coolmall.core.navigation.RefreshResultKey
+import com.joker.coolmall.core.navigation.resultEvents
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -28,14 +26,16 @@ import kotlinx.coroutines.launch
  * 封装了常见的列表操作逻辑，简化子类实现
  *
  * @param T 列表项数据类型
- * @param navigator 导航控制器
- * @param appState 应用状态
  * @author Joker.X
  */
-abstract class BaseNetWorkListViewModel<T : Any>(
-    navigator: AppNavigator,
-    appState: AppState
-) : BaseViewModel(navigator, appState) {
+abstract class BaseNetWorkListViewModel<T : Any> : BaseViewModel() {
+    /**
+     * 刷新结果监听任务
+     *
+     * 用于保证只注册一次刷新结果监听，避免重复 collect 导致重复刷新和内存浪费。
+     * 当该任务不为 null 时，表示当前 ViewModel 已经建立监听。
+     */
+    private var refreshObserveJob: Job? = null
 
     /**
      * 当前页码
@@ -272,36 +272,23 @@ abstract class BaseNetWorkListViewModel<T : Any>(
     }
 
     /**
-     * 视图层调用此方法，监听页面刷新信号（基于 NavigationResultKey）。
+     * 注册页面刷新信号监听（基于 NavigationResultKey）。
      *
-     * @param backStackEntry 当前页面的 NavBackStackEntry
+     * 推荐在 ViewModel 的 `init` 中调用一次，不依赖 View 层 `LaunchedEffect`。
+     * 内部已做去重：重复调用不会重复注册。
+     *
      * @param key 刷新结果的类型安全 Key，默认使用全局的 [RefreshResultKey]
-     *
-     * 用法：在 Composable 中调用
-     * ```kotlin
-     * val backStackEntry = navController.currentBackStackEntry
-     * LaunchedEffect(backStackEntry) {
-     *     viewModel.observeRefreshState(backStackEntry)
-     * }
-     * ```
-     *
-     * 只需调用一次，自动去重和解绑，无内存泄漏。
-     * 语义等价于旧方案中的 "refresh" 布尔标记。
      */
     fun observeRefreshState(
-        backStackEntry: NavBackStackEntry?,
-        key: NavigationResultKey<Boolean> = RefreshResultKey
+        key: NavigationResultKey<RefreshResult> = RefreshResultKey,
     ) {
-        if (backStackEntry == null) return
-        val owner: LifecycleOwner = backStackEntry
-        backStackEntry.savedStateHandle
-            .getLiveData<Boolean>(key.key)
-            .observe(owner, Observer<Boolean> { value ->
-                if (value) {
+        if (refreshObserveJob != null) return
+        refreshObserveJob = viewModelScope.launch {
+            resultEvents(key).collect { refreshResult ->
+                if (refreshResult.refresh == true) {
                     onRefresh()
-                    // 只刷新一次
-                    backStackEntry.savedStateHandle[key.key] = false
                 }
-            })
+            }
+        }
     }
 }

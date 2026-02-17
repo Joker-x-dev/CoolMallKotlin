@@ -12,8 +12,6 @@ import com.joker.coolmall.core.util.storage.MMKVUtils
 import com.joker.coolmall.core.util.toast.ToastUtils
 import com.joker.coolmall.core.util.validation.ValidationUtil
 import com.joker.coolmall.feature.auth.R
-import com.joker.coolmall.navigation.AppNavigator
-import com.joker.coolmall.navigation.routes.CommonRoutes
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -31,14 +29,10 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class SmsLoginViewModel @Inject constructor(
-    navigator: AppNavigator,
-    appState: AppState,
+    private val appState: AppState,
     private val authRepository: AuthRepository,
     @param:ApplicationContext private val context: Context
-) : BaseViewModel(
-    navigator = navigator,
-    appState = appState
-) {
+) : BaseViewModel() {
 
     companion object {
         private const val KEY_SAVED_PHONE = "saved_phone"
@@ -244,8 +238,8 @@ class SmsLoginViewModel @Inject constructor(
             ToastUtils.showSuccess(R.string.login_success)
             appState.updateAuth(authData)
             appState.refreshUserInfo()
-            super.navigateBack()
-            super.navigateBack()
+            com.joker.coolmall.core.navigation.navigateBack()
+            com.joker.coolmall.core.navigation.navigateBack()
         }
     }
 
@@ -300,23 +294,4 @@ class SmsLoginViewModel @Inject constructor(
         )
     }
 
-    /**
-     * 点击用户协议
-     * 显示用户使用协议
-     *
-     * @author Joker.X
-     */
-    fun onUserAgreementClick() {
-        navigate(CommonRoutes.UserAgreement)
-    }
-
-    /**
-     * 点击隐私政策
-     * 显示隐私政策内容
-     *
-     * @author Joker.X
-     */
-    fun onPrivacyPolicyClick() {
-        navigate(CommonRoutes.PrivacyPolicy)
-    }
 }

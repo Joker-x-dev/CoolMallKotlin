@@ -1,19 +1,21 @@
 package com.joker.coolmall.feature.feedback.navigation
 
-import androidx.navigation.NavController
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
+import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.NavKey
+import com.joker.coolmall.core.navigation.feedback.FeedbackRoutes
+import com.joker.coolmall.feature.feedback.view.FeedbackListRoute
+import com.joker.coolmall.feature.feedback.view.FeedbackSubmitRoute
 
 /**
  * 反馈模块导航图
  *
- * @param navController 导航控制器
  * @author Joker.X
  */
-fun NavGraphBuilder.feedbackGraph(navController: NavController) {
-    // 反馈列表页面
-    feedbackListScreen(navController as NavHostController)
-
-    // 提交反馈页面
-    feedbackSubmitScreen()
+fun EntryProviderScope<NavKey>.feedbackGraph() {
+    entry<FeedbackRoutes.List> {
+        FeedbackListRoute()
+    }
+    entry<FeedbackRoutes.Submit> {
+        FeedbackSubmitRoute()
+    }
 }

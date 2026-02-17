@@ -11,6 +11,7 @@ import com.joker.coolmall.core.common.base.state.LoadMoreState
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.model.entity.Coupon
 import com.joker.coolmall.core.model.preview.previewMyCoupons
+import com.joker.coolmall.core.navigation.navigateBack
 import com.joker.coolmall.core.ui.component.coupon.CouponCard
 import com.joker.coolmall.core.ui.component.coupon.CouponCardMode
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkListView
@@ -45,7 +46,6 @@ internal fun CouponRoute(
         onRefresh = viewModel::onRefresh,
         onLoadMore = viewModel::onLoadMore,
         shouldTriggerLoadMore = viewModel::shouldTriggerLoadMore,
-        onBackClick = viewModel::navigateBack,
         onRetry = viewModel::retryRequest,
         onUseCoupon = viewModel::navigateToGoodsCategory
     )
@@ -61,7 +61,6 @@ internal fun CouponRoute(
  * @param onRefresh 刷新回调
  * @param onLoadMore 加载更多回调
  * @param shouldTriggerLoadMore 是否应触发加载更多的判断函数
- * @param onBackClick 返回按钮回调
  * @param onRetry 重试请求回调
  * @param onUseCoupon 使用优惠券回调
  * @author Joker.X
@@ -76,13 +75,12 @@ internal fun CouponScreen(
     onRefresh: () -> Unit = {},
     onLoadMore: () -> Unit = {},
     shouldTriggerLoadMore: (lastIndex: Int, totalCount: Int) -> Boolean = { _, _ -> false },
-    onBackClick: () -> Unit = {},
     onRetry: () -> Unit = {},
     onUseCoupon: (Coupon) -> Unit = {}
 ) {
     AppScaffold(
         title = com.joker.coolmall.feature.market.R.string.coupon_title,
-        onBackClick = onBackClick
+        onBackClick = { navigateBack() }
     ) {
         BaseNetWorkListView(
             uiState = uiState,

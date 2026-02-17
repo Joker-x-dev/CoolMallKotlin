@@ -1,46 +1,44 @@
 package com.joker.coolmall.feature.order.viewmodel
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
 import com.joker.coolmall.core.data.repository.OrderRepository
-import com.joker.coolmall.core.data.state.AppState
+import com.joker.coolmall.core.navigation.RefreshResult
+import com.joker.coolmall.core.navigation.RefreshResultKey
+import com.joker.coolmall.core.navigation.navigate
+import com.joker.coolmall.core.navigation.navigateBack
+import com.joker.coolmall.core.navigation.order.OrderRoutes
+import com.joker.coolmall.core.navigation.popBackStackWithResult
 import com.joker.coolmall.core.util.toast.ToastUtils
 import com.joker.coolmall.feature.order.R
 import com.joker.coolmall.feature.order.model.Alipay
-import com.joker.coolmall.navigation.AppNavigator
-import com.joker.coolmall.navigation.RefreshResultKey
-import com.joker.coolmall.navigation.routes.OrderRoutes
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import javax.inject.Inject
 
 /**
  * 订单支付 ViewModel
  *
- * @param navigator 导航器
- * @param appState 应用状态
- * @param savedStateHandle 保存状态句柄
+ * @param navKey 路由参数
  * @param orderRepository 订单仓库
  * @author Joker.X
  */
-@HiltViewModel
-class OrderPayViewModel @Inject constructor(
-    navigator: AppNavigator,
-    appState: AppState,
-    savedStateHandle: SavedStateHandle,
+@HiltViewModel(assistedFactory = OrderPayViewModel.Factory::class)
+class OrderPayViewModel @AssistedInject constructor(
+    @Assisted navKey: OrderRoutes.Pay,
     private val orderRepository: OrderRepository
-) : BaseViewModel(navigator, appState) {
+) : BaseViewModel() {
 
     /**
      * 订单支付路由参数
      */
-    private val _orderPayRoute = MutableStateFlow(savedStateHandle.toRoute<OrderRoutes.Pay>())
+    private val _orderPayRoute = MutableStateFlow(navKey)
     val orderPayRoute: StateFlow<OrderRoutes.Pay> = _orderPayRoute.asStateFlow()
 
     /**
@@ -119,10 +117,27 @@ class OrderPayViewModel @Inject constructor(
             // 其他情况正常返回
             if (isPaySuccess) {
                 // 支付成功，使用 NavigationResult 回传刷新信号
-                popBackStackWithResult(RefreshResultKey, true)
+                popBackStackWithResult(RefreshResultKey, RefreshResult(refresh = true))
             } else {
                 navigateBack()
             }
         }
+    }
+
+    /**
+     * Assisted Factory
+     *
+     * @author Joker.X
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * 创建 ViewModel 实例
+         *
+         * @param navKey 路由参数
+         * @return ViewModel 实例
+         * @author Joker.X
+         */
+        fun create(navKey: OrderRoutes.Pay): OrderPayViewModel
     }
 }

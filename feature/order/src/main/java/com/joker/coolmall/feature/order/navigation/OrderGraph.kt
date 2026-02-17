@@ -1,35 +1,41 @@
 package com.joker.coolmall.feature.order.navigation
 
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
+import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.NavKey
+import com.joker.coolmall.core.navigation.order.OrderRoutes
+import com.joker.coolmall.feature.order.view.OrderCommentRoute
+import com.joker.coolmall.feature.order.view.OrderConfirmRoute
+import com.joker.coolmall.feature.order.view.OrderDetailRoute
+import com.joker.coolmall.feature.order.view.OrderListRoute
+import com.joker.coolmall.feature.order.view.OrderLogisticsRoute
+import com.joker.coolmall.feature.order.view.OrderPayRoute
+import com.joker.coolmall.feature.order.view.OrderRefundRoute
 
 /**
  * 订单模块导航图
  *
- * 整合订单模块下所有页面的导航
- *
- * @param navController 导航控制器
  * @author Joker.X
  */
-fun NavGraphBuilder.orderGraph(navController: NavHostController) {
-    // 订单列表页面
-    orderListScreen(navController)
-
-    // 订单确认页面
-    orderConfirmScreen(navController)
-
-    // 订单详情页面
-    orderDetailScreen(navController)
-
-    // 订单支付页面
-    orderPayScreen()
-
-    // 订单物流页面
-    orderLogisticsScreen(navController)
-
-    // 订单退款页面
-    orderRefundScreen(navController)
-
-    // 订单评论页面
-    orderCommentScreen(navController)
+fun EntryProviderScope<NavKey>.orderGraph() {
+    entry<OrderRoutes.List> { key ->
+        OrderListRoute(navKey = key)
+    }
+    entry<OrderRoutes.Confirm> {
+        OrderConfirmRoute()
+    }
+    entry<OrderRoutes.Detail> { key ->
+        OrderDetailRoute(navKey = key)
+    }
+    entry<OrderRoutes.Pay> { key ->
+        OrderPayRoute(navKey = key)
+    }
+    entry<OrderRoutes.Logistics> { key ->
+        OrderLogisticsRoute(navKey = key)
+    }
+    entry<OrderRoutes.Refund> { key ->
+        OrderRefundRoute(navKey = key)
+    }
+    entry<OrderRoutes.Comment> { key ->
+        OrderCommentRoute(navKey = key)
+    }
 }

@@ -5,13 +5,11 @@ import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
 import com.joker.coolmall.core.data.repository.AuthRepository
 import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.entity.Auth
+import com.joker.coolmall.core.navigation.navigateBack
 import com.joker.coolmall.core.util.storage.MMKVUtils
 import com.joker.coolmall.core.util.toast.ToastUtils
 import com.joker.coolmall.core.util.validation.ValidationUtil
 import com.joker.coolmall.feature.auth.R
-import com.joker.coolmall.navigation.AppNavigator
-import com.joker.coolmall.navigation.routes.AuthRoutes
-import com.joker.coolmall.navigation.routes.CommonRoutes
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -28,13 +26,9 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class AccountLoginViewModel @Inject constructor(
-    navigator: AppNavigator,
-    appState: AppState,
+    private val appState: AppState,
     private val authRepository: AuthRepository,
-) : BaseViewModel(
-    navigator = navigator,
-    appState = appState
-) {
+) : BaseViewModel() {
 
     companion object {
         private const val KEY_SAVED_PHONE = "saved_phone"
@@ -129,8 +123,8 @@ class AccountLoginViewModel @Inject constructor(
             ToastUtils.showSuccess(R.string.login_success)
             appState.updateAuth(authData)
             appState.refreshUserInfo()
-            super.navigateBack()
-            super.navigateBack()
+            navigateBack()
+            navigateBack()
         }
     }
 
@@ -161,43 +155,5 @@ class AccountLoginViewModel @Inject constructor(
     private fun saveCredentials(phone: String, password: String) {
         MMKVUtils.putString(KEY_SAVED_PHONE, phone)
         MMKVUtils.putString(KEY_SAVED_PASSWORD, password)
-    }
-
-    /**
-     * 导航到注册页面
-     *
-     * @author Joker.X
-     */
-    fun toRegisterPage() {
-        navigate(AuthRoutes.Register)
-    }
-
-    /**
-     * 导航到重置密码页面
-     *
-     * @author Joker.X
-     */
-    fun toResetPasswordPage() {
-        navigate(AuthRoutes.ResetPassword)
-    }
-
-    /**
-     * 点击用户协议
-     * 显示用户使用协议
-     *
-     * @author Joker.X
-     */
-    fun onUserAgreementClick() {
-        navigate(CommonRoutes.UserAgreement)
-    }
-
-    /**
-     * 点击隐私政策
-     * 显示隐私政策内容
-     *
-     * @author Joker.X
-     */
-    fun onPrivacyPolicyClick() {
-        navigate(CommonRoutes.PrivacyPolicy)
     }
 }

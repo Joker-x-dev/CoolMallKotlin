@@ -11,16 +11,17 @@ android {
 }
 
 dependencies {
+    // Navigation3 Runtime（BaseViewModel 导航桥接需要 NavKey）
+    implementation(libs.androidx.navigation3.runtime)
+
     // 引入 model 模块
     implementation(projects.core.model)
     // 引入 navigation 模块
-    implementation(projects.navigation)
+    implementation(projects.core.navigation)
     // 引入 data 模块
     implementation(projects.core.data)
     // 引入 result 模块
     implementation(projects.core.result)
-    // 导航
-    implementation(libs.navigation.compose)
     // QQ SDK 依赖
     implementation(files("libs/open_sdk_lite.jar"))
 }

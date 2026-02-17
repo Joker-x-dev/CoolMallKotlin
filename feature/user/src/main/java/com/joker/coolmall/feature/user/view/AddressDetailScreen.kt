@@ -35,6 +35,8 @@ import com.joker.coolmall.core.designsystem.theme.ShapeMedium
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.model.entity.Address
+import com.joker.coolmall.core.navigation.navigateBack
+import com.joker.coolmall.core.navigation.user.UserRoutes
 import com.joker.coolmall.core.ui.component.bottombar.AppBottomButton
 import com.joker.coolmall.core.ui.component.list.AppListItem
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkView
@@ -47,12 +49,18 @@ import com.joker.coolmall.feature.user.viewmodel.AddressDetailViewModel
 /**
  * 收货地址详情路由
  *
+ * @param navKey 路由参数
  * @param viewModel 收货地址详情ViewModel
  * @author Joker.X
  */
 @Composable
 internal fun AddressDetailRoute(
-    viewModel: AddressDetailViewModel = hiltViewModel()
+    navKey: UserRoutes.AddressDetail,
+    viewModel: AddressDetailViewModel = hiltViewModel<AddressDetailViewModel, AddressDetailViewModel.Factory>(
+        creationCallback = { factory ->
+            factory.create(navKey)
+        }
+    ),
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val contactName by viewModel.contactName.collectAsState()
@@ -79,7 +87,6 @@ internal fun AddressDetailRoute(
         onDetailAddressChange = viewModel::updateDetailAddress,
         onDefaultAddressChange = viewModel::updateIsDefaultAddress,
         onSaveClick = viewModel::saveAddress,
-        onBackClick = viewModel::navigateBack,
         onRetry = viewModel::retryRequest
     )
 }
@@ -102,7 +109,6 @@ internal fun AddressDetailRoute(
  * @param onDetailAddressChange 详细地址变更回调
  * @param onDefaultAddressChange 默认地址变更回调
  * @param onSaveClick 保存按钮点击回调
- * @param onBackClick 返回上一页回调
  * @param onRetry 重试请求回调
  * @author Joker.X
  */
@@ -124,7 +130,6 @@ internal fun AddressDetailScreen(
     onDetailAddressChange: (String) -> Unit = {},
     onDefaultAddressChange: (Boolean) -> Unit = {},
     onSaveClick: () -> Unit = {},
-    onBackClick: () -> Unit = {},
     onRetry: () -> Unit = {}
 ) {
     val titleResId = if (isEditMode) R.string.edit_address else R.string.add_address
@@ -140,7 +145,7 @@ internal fun AddressDetailScreen(
                 )
             }
         },
-        onBackClick = onBackClick
+        onBackClick = { navigateBack() }
     ) {
         BaseNetWorkView(
             uiState = uiState,

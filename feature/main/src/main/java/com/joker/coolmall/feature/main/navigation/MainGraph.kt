@@ -2,30 +2,30 @@ package com.joker.coolmall.feature.main.navigation
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionScope
-import androidx.navigation.NavGraphBuilder
-import androidx.navigation.NavHostController
+import androidx.navigation3.runtime.EntryProviderScope
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.ui.LocalNavAnimatedContentScope
+import com.joker.coolmall.core.navigation.main.MainRoutes
+import com.joker.coolmall.feature.main.view.CartRoute
+import com.joker.coolmall.feature.main.view.MainRoute
 
 /**
  * 主模块导航图
  *
- * @param navController 导航控制器
- * @param sharedTransitionScope 共享转场作用域
+ * @param sharedTransitionScope 共享转换作用域
  * @author Joker.X
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
-fun NavGraphBuilder.mainGraph(
-    navController: NavHostController,
-    sharedTransitionScope: SharedTransitionScope
+fun EntryProviderScope<NavKey>.mainGraph(
+    sharedTransitionScope: SharedTransitionScope,
 ) {
-    // 只调用页面级导航函数，不包含其他逻辑
-    mainScreen(sharedTransitionScope)
-
-    // 购物车页面导航
-    cartScreen()
-
-    // 如果主页面内部的子页面需要在Navigation中注册，也可以在这里调用
-    // homeScreen()
-    // categoryScreen()
-    // meScreen()
+    entry<MainRoutes.Main> {
+        MainRoute(
+            sharedTransitionScope = sharedTransitionScope,
+            animatedContentScope = LocalNavAnimatedContentScope.current,
+        )
+    }
+    entry<MainRoutes.Cart> { key ->
+        CartRoute(navKey = key)
+    }
 }
-

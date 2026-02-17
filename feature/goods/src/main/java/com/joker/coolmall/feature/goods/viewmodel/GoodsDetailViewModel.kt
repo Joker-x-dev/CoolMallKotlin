@@ -1,8 +1,6 @@
 package com.joker.coolmall.feature.goods.viewmodel
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
 import com.joker.coolmall.core.data.repository.CartRepository
@@ -21,33 +19,30 @@ import com.joker.coolmall.core.model.entity.GoodsSpec
 import com.joker.coolmall.core.model.entity.SelectedGoods
 import com.joker.coolmall.core.model.request.ReceiveCouponRequest
 import com.joker.coolmall.core.model.response.NetworkResponse
+import com.joker.coolmall.core.navigation.auth.AuthRoutes
+import com.joker.coolmall.core.navigation.goods.GoodsRoutes
+import com.joker.coolmall.core.navigation.navigate
+import com.joker.coolmall.core.navigation.order.OrderRoutes
 import com.joker.coolmall.core.util.storage.MMKVUtils
 import com.joker.coolmall.core.util.toast.ToastUtils
 import com.joker.coolmall.feature.goods.R
-import com.joker.coolmall.navigation.AppNavigator
-import com.joker.coolmall.navigation.routes.AuthRoutes
-import com.joker.coolmall.navigation.routes.CsRoutes
-import com.joker.coolmall.navigation.routes.GoodsRoutes
-import com.joker.coolmall.navigation.routes.MainRoutes
-import com.joker.coolmall.navigation.routes.OrderRoutes
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 /**
  * 商品详情页面ViewModel
  *
- * @param navigator 导航器
+ * @param navKey 路由参数
  * @param appState 应用状态
- * @param savedStateHandle 保存的状态句柄
- * @param context 应用上下文
  * @param goodsRepository 商品仓库
  * @param cartRepository 购物车仓库
  * @param footprintRepository 足迹仓库
@@ -55,25 +50,21 @@ import javax.inject.Inject
  * @param couponRepository 优惠券仓库
  * @author Joker.X
  */
-@HiltViewModel
-class GoodsDetailViewModel @Inject constructor(
-    navigator: AppNavigator,
-    appState: AppState,
-    savedStateHandle: SavedStateHandle,
+@HiltViewModel(assistedFactory = GoodsDetailViewModel.Factory::class)
+class GoodsDetailViewModel @AssistedInject constructor(
+    @Assisted private val navKey: GoodsRoutes.Detail,
+    private val appState: AppState,
     private val goodsRepository: GoodsRepository,
     private val cartRepository: CartRepository,
     private val footprintRepository: FootprintRepository,
     private val pageRepository: PageRepository,
     private val couponRepository: CouponRepository,
-) : BaseNetWorkViewModel<GoodsDetail>(
-    navigator = navigator,
-    appState = appState
-) {
+) : BaseNetWorkViewModel<GoodsDetail>() {
 
     /**
      * 从路由获取商品 ID
      */
-    private val goodsId: Long = savedStateHandle.toRoute<GoodsRoutes.Detail>().goodsId
+    private val goodsId: Long = navKey.goodsId
 
     /**
      * 规格选择弹窗的显示状态
@@ -360,34 +351,6 @@ class GoodsDetailViewModel @Inject constructor(
     }
 
     /**
-     * 跳转到商品评论页面
-     * 从商品详情页面跳转到该商品的评论列表页面，传递当前商品ID作为参数
-     *
-     * @author Joker.X
-     */
-    fun toGoodsCommentPage() {
-        navigate(GoodsRoutes.Comment(goodsId = goodsId))
-    }
-
-    /**
-     * 跳转到购物车页面
-     *
-     * @author Joker.X
-     */
-    fun toCartPage() {
-        navigate(MainRoutes.Cart(showBackIcon = true))
-    }
-
-    /**
-     * 跳转到客服页面
-     *
-     * @author Joker.X
-     */
-    fun toCsPage() {
-        navigate(CsRoutes.Chat)
-    }
-
-    /**
      * 将商品规格转换为购物车商品规格
      *
      * @param count 数量
@@ -404,5 +367,22 @@ class GoodsDetailViewModel @Inject constructor(
             count = count,
             images = this.images
         )
+    }
+
+    /**
+     * Assisted Factory
+     *
+     * @author Joker.X
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * 创建 ViewModel 实例
+         *
+         * @param navKey 路由参数
+         * @return ViewModel 实例
+         * @author Joker.X
+         */
+        fun create(navKey: GoodsRoutes.Detail): GoodsDetailViewModel
     }
 }

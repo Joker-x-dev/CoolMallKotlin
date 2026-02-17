@@ -51,7 +51,6 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.luminance
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalUriHandler
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -72,6 +71,8 @@ import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXLarge
+import com.joker.coolmall.core.navigation.common.CommonNavigator
+import com.joker.coolmall.core.navigation.navigateBack
 import com.joker.coolmall.core.ui.component.list.AppListItem
 import com.joker.coolmall.core.ui.component.text.AppText
 import com.joker.coolmall.core.ui.component.text.TextSize
@@ -102,24 +103,7 @@ internal fun AboutRoute(
     val showDependencyModal by viewModel.showDependencyModal.collectAsState()
 
     AboutScreen(
-        onBackClick = viewModel::navigateBack,
-        onDeveloperClick = viewModel::onDeveloperClick,
-        onContributorsClick = viewModel::onContributorsClick,
-        onGitHubClick = viewModel::onGitHubClick,
-        onGiteeClick = viewModel::onGiteeClick,
-        onApiDocClick = viewModel::onApiDocClick,
-        onDemoDownloadClick = viewModel::onDemoDownloadClick,
-        onIconSourceClick = viewModel::onIconSourceClick,
-        onGitHubDiscussionClick = viewModel::onGitHubDiscussionClick,
-        onQQGroupClick = viewModel::onQQGroupClick,
-        onWeChatGroupClick = viewModel::onWeChatGroupClick,
-        onTranslationClick = viewModel::onTranslationClick,
-        onSupportClick = viewModel::onSupportClick,
-        onHelpClick = viewModel::onHelpClick,
         onCitationClick = viewModel::onCitationClick,
-        onUserAgreementClick = viewModel::onUserAgreementClick,
-        onPrivacyPolicyClick = viewModel::onPrivacyPolicyClick,
-        onOpenSourceLicenseClick = viewModel::onOpenSourceLicenseClick
     )
 
     DependencyModal(
@@ -133,50 +117,15 @@ internal fun AboutRoute(
 /**
  * 关于我们界面
  *
- * @param onBackClick 返回按钮回调
- * @param onDeveloperClick 点击开发者信息回调
- * @param onContributorsClick 点击贡献者列表回调
- * @param onGitHubClick 点击GitHub项目地址回调
- * @param onGiteeClick 点击Gitee项目地址回调
- * @param onApiDocClick 点击API文档回调
- * @param onDemoDownloadClick 点击Demo下载回调
- * @param onIconSourceClick 点击图标来源回调
- * @param onGitHubDiscussionClick 点击GitHub讨论区回调
- * @param onQQGroupClick 点击QQ交流群回调
- * @param onWeChatGroupClick 点击微信交流群回调
- * @param onTranslationClick 点击翻译帮助回调
- * @param onSupportClick 点击支持项目回调
- * @param onHelpClick 点击帮助与反馈回调
  * @param onCitationClick 点击引用致谢回调
- * @param onUserAgreementClick 点击用户协议回调
- * @param onPrivacyPolicyClick 点击隐私政策回调
- * @param onOpenSourceLicenseClick 点击开源许可回调
  * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AboutScreen(
-    onBackClick: () -> Unit = {},
-    onDeveloperClick: () -> Unit = {},
-    onContributorsClick: () -> Unit = {},
-    onGitHubClick: () -> Unit = {},
-    onGiteeClick: () -> Unit = {},
-    onApiDocClick: () -> Unit = {},
-    onDemoDownloadClick: () -> Unit = {},
-    onIconSourceClick: () -> Unit = {},
-    onGitHubDiscussionClick: () -> Unit = {},
-    onQQGroupClick: () -> Unit = {},
-    onWeChatGroupClick: () -> Unit = {},
-    onTranslationClick: () -> Unit = {},
-    onSupportClick: () -> Unit = {},
-    onHelpClick: () -> Unit = {},
     onCitationClick: () -> Unit = {},
-    onUserAgreementClick: () -> Unit = {},
-    onPrivacyPolicyClick: () -> Unit = {},
-    onOpenSourceLicenseClick: () -> Unit = {}
 ) {
     val scrollState = rememberScrollState(0)
-    val uriHandler = LocalUriHandler.current
 
     val scrollFadeThresholdPx = with(LocalDensity.current) { 220.dp.toPx() }
     val scrollFraction = (scrollState.value / scrollFadeThresholdPx).coerceIn(0f, 1f)
@@ -241,28 +190,11 @@ internal fun AboutScreen(
         // 底部滚动内容
         AboutBottomScrollableContent(
             scrollState = scrollState,
-            uriHandler = uriHandler,
-            onDeveloperClick = onDeveloperClick,
-            onContributorsClick = onContributorsClick,
-            onGitHubClick = onGitHubClick,
-            onGiteeClick = onGiteeClick,
-            onApiDocClick = onApiDocClick,
-            onDemoDownloadClick = onDemoDownloadClick,
-            onIconSourceClick = onIconSourceClick,
-            onGitHubDiscussionClick = onGitHubDiscussionClick,
-            onQQGroupClick = onQQGroupClick,
-            onWeChatGroupClick = onWeChatGroupClick,
-            onTranslationClick = onTranslationClick,
-            onSupportClick = onSupportClick,
-            onHelpClick = onHelpClick,
             onCitationClick = onCitationClick,
-            onUserAgreementClick = onUserAgreementClick,
-            onPrivacyPolicyClick = onPrivacyPolicyClick,
-            onOpenSourceLicenseClick = onOpenSourceLicenseClick
         )
 
         // 动画工具栏
-        AboutAnimatedToolBar(onBackClick = onBackClick, toolbarAlpha = toolbarAlpha)
+        AboutAnimatedToolBar(toolbarAlpha = toolbarAlpha)
     }
 }
 
@@ -468,47 +400,13 @@ private fun AboutTopSection() {
  * 底部可滚动内容区域
  *
  * @param scrollState 滚动状态
- * @param uriHandler URI处理器，用于打开外部链接
- * @param onDeveloperClick 点击开发者信息回调
- * @param onContributorsClick 点击贡献者列表回调
- * @param onGitHubClick 点击GitHub项目地址回调
- * @param onGiteeClick 点击Gitee项目地址回调
- * @param onApiDocClick 点击API文档回调
- * @param onDemoDownloadClick 点击Demo下载回调
- * @param onIconSourceClick 点击图标来源回调
- * @param onGitHubDiscussionClick 点击GitHub讨论区回调
- * @param onQQGroupClick 点击QQ交流群回调
- * @param onWeChatGroupClick 点击微信交流群回调
- * @param onTranslationClick 点击翻译帮助回调
- * @param onSupportClick 点击支持项目回调
- * @param onHelpClick 点击帮助与反馈回调
  * @param onCitationClick 点击引用致谢回调
- * @param onUserAgreementClick 点击用户协议回调
- * @param onPrivacyPolicyClick 点击隐私政策回调
- * @param onOpenSourceLicenseClick 点击开源许可回调
  * @author Joker.X
  */
 @Composable
 private fun AboutBottomScrollableContent(
     scrollState: ScrollState,
-    uriHandler: androidx.compose.ui.platform.UriHandler,
-    onDeveloperClick: () -> Unit,
-    onContributorsClick: () -> Unit,
-    onGitHubClick: () -> Unit,
-    onGiteeClick: () -> Unit,
-    onApiDocClick: () -> Unit,
-    onDemoDownloadClick: () -> Unit,
-    onIconSourceClick: () -> Unit,
-    onGitHubDiscussionClick: () -> Unit,
-    onQQGroupClick: () -> Unit,
-    onWeChatGroupClick: () -> Unit,
-    onTranslationClick: () -> Unit,
-    onSupportClick: () -> Unit,
-    onHelpClick: () -> Unit,
     onCitationClick: () -> Unit,
-    onUserAgreementClick: () -> Unit,
-    onPrivacyPolicyClick: () -> Unit,
-    onOpenSourceLicenseClick: () -> Unit
 ) {
     val context = LocalContext.current
 
@@ -587,7 +485,7 @@ private fun AboutBottomScrollableContent(
                 showDivider = true,
                 horizontalPadding = SpaceHorizontalLarge,
                 onClick = {
-                    onDeveloperClick()
+                    CommonNavigator.toWeb(url = "https://github.com/Joker-x-dev", title = "Joker.X")
                 }
             )
             // 贡献者
@@ -598,7 +496,7 @@ private fun AboutBottomScrollableContent(
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge,
                 onClick = {
-                    onContributorsClick()
+                    CommonNavigator.toContributors()
                 }
             )
         }
@@ -616,7 +514,10 @@ private fun AboutBottomScrollableContent(
                 showArrow = true,
                 showDivider = true,
                 onClick = {
-                    onGitHubClick()
+                    CommonNavigator.toWeb(
+                        url = "https://github.com/Joker-x-dev/CoolMallKotlin",
+                        title = "GitHub",
+                    )
                 },
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge
@@ -628,7 +529,10 @@ private fun AboutBottomScrollableContent(
                 showArrow = true,
                 showDivider = false,
                 onClick = {
-                    onGiteeClick()
+                    CommonNavigator.toWeb(
+                        url = "https://gitee.com/Joker-x-dev/CoolMallKotlin",
+                        title = "Gitee",
+                    )
                 },
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge
@@ -647,7 +551,7 @@ private fun AboutBottomScrollableContent(
                 showArrow = true,
                 showDivider = true,
                 onClick = {
-                    onApiDocClick()
+                    CommonNavigator.toWeb(url = "https://coolmall.apifox.cn", title = "API 文档")
                 },
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge
@@ -659,7 +563,10 @@ private fun AboutBottomScrollableContent(
                 showArrow = true,
                 showDivider = true,
                 onClick = {
-                    onDemoDownloadClick()
+                    CommonNavigator.toWeb(
+                        url = "https://www.pgyer.com/CoolMallKotlinProdRelease",
+                        title = "Demo 下载",
+                    )
                 },
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge
@@ -671,7 +578,7 @@ private fun AboutBottomScrollableContent(
                 showArrow = true,
                 showDivider = false,
                 onClick = {
-                    onIconSourceClick()
+                    CommonNavigator.toWeb(url = "https://github.com/tuniaoTech", title = "图标来源")
                 },
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge
@@ -690,7 +597,10 @@ private fun AboutBottomScrollableContent(
                 showArrow = true,
                 showDivider = true,
                 onClick = {
-                    onGitHubDiscussionClick()
+                    CommonNavigator.toWeb(
+                        url = "https://github.com/Joker-x-dev/CoolMallKotlin/discussions",
+                        title = "GitHub 讨论区",
+                    )
                 },
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge
@@ -701,7 +611,6 @@ private fun AboutBottomScrollableContent(
                 showArrow = true,
                 showDivider = true,
                 onClick = {
-                    onQQGroupClick()
                 },
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge
@@ -712,7 +621,6 @@ private fun AboutBottomScrollableContent(
                 showArrow = true,
                 showDivider = false,
                 onClick = {
-                    onWeChatGroupClick()
                 },
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge
@@ -731,7 +639,10 @@ private fun AboutBottomScrollableContent(
                 showArrow = true,
                 showDivider = true,
                 onClick = {
-                    onTranslationClick()
+                    CommonNavigator.toWeb(
+                        url = "https://github.com/Joker-x-dev/CoolMallKotlin/issues",
+                        title = "翻译",
+                    )
                 },
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge
@@ -743,7 +654,10 @@ private fun AboutBottomScrollableContent(
                 showArrow = true,
                 showDivider = true,
                 onClick = {
-                    onSupportClick()
+                    CommonNavigator.toWeb(
+                        url = "https://github.com/Joker-x-dev/CoolMallKotlin",
+                        title = "支持",
+                    )
                 },
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge
@@ -755,7 +669,10 @@ private fun AboutBottomScrollableContent(
                 showArrow = true,
                 showDivider = false,
                 onClick = {
-                    onHelpClick()
+                    CommonNavigator.toWeb(
+                        url = "https://github.com/Joker-x-dev/CoolMallKotlin/issues",
+                        title = "帮助",
+                    )
                 },
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge
@@ -785,7 +702,7 @@ private fun AboutBottomScrollableContent(
                 showArrow = true,
                 showDivider = true,
                 onClick = {
-                    onUserAgreementClick()
+                    CommonNavigator.toUserAgreement()
                 },
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge
@@ -796,7 +713,7 @@ private fun AboutBottomScrollableContent(
                 showArrow = true,
                 showDivider = true,
                 onClick = {
-                    onPrivacyPolicyClick()
+                    CommonNavigator.toPrivacyPolicy()
                 },
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge
@@ -807,7 +724,10 @@ private fun AboutBottomScrollableContent(
                 showArrow = true,
                 showDivider = false,
                 onClick = {
-                    onOpenSourceLicenseClick()
+                    CommonNavigator.toWeb(
+                        url = "https://github.com/Joker-x-dev/CoolMallKotlin/blob/main/LICENSE",
+                        title = "开源许可",
+                    )
                 },
                 horizontalPadding = SpaceHorizontalLarge,
                 verticalPadding = SpaceVerticalLarge
@@ -830,14 +750,12 @@ private fun AboutBottomScrollableContent(
 /**
  * 动画工具栏
  *
- * @param onBackClick 返回按钮回调
  * @param toolbarAlpha 工具栏透明度
  * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun AboutAnimatedToolBar(
-    onBackClick: () -> Unit,
     toolbarAlpha: Float
 ) {
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior()
@@ -851,7 +769,7 @@ private fun AboutAnimatedToolBar(
             )
         },
         navigationIcon = {
-            IconButton(onClick = onBackClick) {
+            IconButton(onClick = { navigateBack() }) {
                 ArrowLeftIcon()
             }
         },

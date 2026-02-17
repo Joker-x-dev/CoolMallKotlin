@@ -38,8 +38,8 @@ class HiltConventionPlugin : Plugin<Project> {
                 apply(plugin = "dagger.hilt.android.plugin")
                 dependencies {
                     "implementation"(libs.findLibrary("hilt.android").get())
-                    // 添加 Hilt Navigation Compose 支持
-                    "implementation"(libs.findLibrary("hilt.navigation.compose").get())
+                    // 添加 Hilt ViewModel Navigation3 支持
+                    "implementation"(libs.findLibrary("hilt.lifecycle.viewmodel.compose").get())
                     // 添加 Hilt 测试支持
                     "kspAndroidTest"(libs.findLibrary("hilt.compiler").get())
                     "androidTestImplementation"(libs.findLibrary("hilt.android.testing").get())

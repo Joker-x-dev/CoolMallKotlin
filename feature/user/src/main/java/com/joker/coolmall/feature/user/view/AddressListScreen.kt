@@ -4,19 +4,20 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.joker.coolmall.core.common.base.state.BaseNetWorkListUiState
 import com.joker.coolmall.core.common.base.state.LoadMoreState
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.model.entity.Address
 import com.joker.coolmall.core.model.preview.previewAddressList
+import com.joker.coolmall.core.navigation.navigateBack
+import com.joker.coolmall.core.navigation.user.UserNavigator
+import com.joker.coolmall.core.navigation.user.UserRoutes
 import com.joker.coolmall.core.ui.component.address.AddressActionButton
 import com.joker.coolmall.core.ui.component.address.AddressCard
 import com.joker.coolmall.core.ui.component.bottombar.AppBottomButton
@@ -30,17 +31,19 @@ import com.joker.coolmall.feature.user.viewmodel.AddressListViewModel
 /**
  * 收货地址列表路由
  *
+ * @param navKey 路由参数
  * @param viewModel 收货地址列表ViewModel
- * @param navController 导航控制器
  * @author Joker.X
  */
 @Composable
 internal fun AddressListRoute(
-    viewModel: AddressListViewModel = hiltViewModel(),
-    navController: NavController
+    navKey: UserRoutes.AddressList,
+    viewModel: AddressListViewModel = hiltViewModel<AddressListViewModel, AddressListViewModel.Factory>(
+        creationCallback = { factory ->
+            factory.create(navKey)
+        }
+    ),
 ) {
-    // 注册页面刷新监听
-    val backStackEntry = navController.currentBackStackEntry
     val uiState by viewModel.uiState.collectAsState()
     val listData by viewModel.listData.collectAsState()
     val isRefreshing by viewModel.isRefreshing.collectAsState()
@@ -56,9 +59,6 @@ internal fun AddressListRoute(
         onRefresh = viewModel::onRefresh,
         onLoadMore = viewModel::onLoadMore,
         shouldTriggerLoadMore = viewModel::shouldTriggerLoadMore,
-        toAddressDetail = viewModel::toAddressDetailPage,
-        toAddressDetailEdit = viewModel::toAddressDetailEditPage,
-        onBackClick = viewModel::navigateBack,
         onRetry = viewModel::retryRequest,
         onDeleteClick = { viewModel.showDeleteDialog(it) },
         isSelectMode = viewModel.isSelectMode,
@@ -77,11 +77,6 @@ internal fun AddressListRoute(
             onDismiss = { viewModel.hideDeleteDialog() }
         )
     }
-
-    // 只要backStackEntry不为null就注册监听
-    LaunchedEffect(backStackEntry) {
-        viewModel.observeRefreshState(backStackEntry)
-    }
 }
 
 /**
@@ -94,9 +89,6 @@ internal fun AddressListRoute(
  * @param onRefresh 刷新回调
  * @param onLoadMore 加载更多回调
  * @param shouldTriggerLoadMore 是否应触发加载更多的判断函数
- * @param toAddressDetail 导航到收货地址详情（新增模式）
- * @param toAddressDetailEdit 导航到收货地址详情（编辑模式）
- * @param onBackClick 返回上一页回调
  * @param onRetry 重试请求回调
  * @param onDeleteClick 删除地址回调
  * @param isSelectMode 是否为选择模式
@@ -113,9 +105,6 @@ internal fun AddressListScreen(
     onRefresh: () -> Unit = {},
     onLoadMore: () -> Unit = {},
     shouldTriggerLoadMore: (lastIndex: Int, totalCount: Int) -> Boolean = { _, _ -> false },
-    toAddressDetail: () -> Unit = {},
-    toAddressDetailEdit: (Long) -> Unit = {},
-    onBackClick: () -> Unit = {},
     onRetry: () -> Unit = {},
     onDeleteClick: (Long) -> Unit = {},
     isSelectMode: Boolean = false,
@@ -123,11 +112,12 @@ internal fun AddressListScreen(
 ) {
     AppScaffold(
         title = R.string.address_list_title,
-        onBackClick = onBackClick,
+        onBackClick = { navigateBack() },
         bottomBar = {
             if (uiState != BaseNetWorkListUiState.Loading && uiState != BaseNetWorkListUiState.Error) {
                 AppBottomButton(
-                    text = stringResource(id = R.string.address_add_new), onClick = toAddressDetail
+                    text = stringResource(id = R.string.address_add_new),
+                    onClick = { UserNavigator.toAddressDetail(isEditMode = false, addressId = 0L) }
                 )
             }
         }) {
@@ -142,7 +132,6 @@ internal fun AddressListScreen(
                 onRefresh = onRefresh,
                 onLoadMore = onLoadMore,
                 shouldTriggerLoadMore = shouldTriggerLoadMore,
-                toAddressDetailEdit = toAddressDetailEdit,
                 onDeleteClick = onDeleteClick,
                 isSelectMode = isSelectMode,
                 onAddressClick = onAddressClick
@@ -161,7 +150,6 @@ internal fun AddressListScreen(
  * @param onLoadMore 加载更多回调
  * @param onRetry 重试请求回调
  * @param shouldTriggerLoadMore 是否应触发加载更多的判断函数
- * @param toAddressDetailEdit 导航到收货地址详情（编辑模式）
  * @param onDeleteClick 删除地址回调
  * @param isSelectMode 是否为选择模式
  * @param onAddressClick 地址点击回调
@@ -177,7 +165,6 @@ private fun AddressListContentView(
     onLoadMore: () -> Unit,
     onRetry: () -> Unit = {},
     shouldTriggerLoadMore: (lastIndex: Int, totalCount: Int) -> Boolean,
-    toAddressDetailEdit: (Long) -> Unit,
     onDeleteClick: (Long) -> Unit,
     isSelectMode: Boolean = false,
     onAddressClick: (Address) -> Unit = {}
@@ -197,7 +184,7 @@ private fun AddressListContentView(
                     if (isSelectMode) {
                         onAddressClick(data[index])
                     } else {
-                        toAddressDetailEdit(data[index].id)
+                        UserNavigator.toAddressDetail(isEditMode = true, addressId = data[index].id)
                     }
                 },
                 actionSlot = {
@@ -207,7 +194,12 @@ private fun AddressListContentView(
                     ) {
                         // 编辑按钮
                         AddressActionButton(
-                            onClick = { toAddressDetailEdit(data[index].id) },
+                            onClick = {
+                                UserNavigator.toAddressDetail(
+                                    isEditMode = true,
+                                    addressId = data[index].id
+                                )
+                            },
                             iconResId = R.drawable.ic_edit_fill
                         )
 

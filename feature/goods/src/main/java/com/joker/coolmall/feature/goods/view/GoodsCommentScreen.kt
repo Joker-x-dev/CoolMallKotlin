@@ -10,6 +10,8 @@ import com.joker.coolmall.core.common.base.state.BaseNetWorkListUiState
 import com.joker.coolmall.core.common.base.state.LoadMoreState
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.model.entity.Comment
+import com.joker.coolmall.core.navigation.goods.GoodsRoutes
+import com.joker.coolmall.core.navigation.navigateBack
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkListView
 import com.joker.coolmall.core.ui.component.refresh.RefreshLayout
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
@@ -20,12 +22,18 @@ import com.joker.coolmall.feature.goods.viewmodel.GoodsCommentViewModel
 /**
  * 商品评论路由
  *
+ * @param navKey 路由参数
  * @param viewModel 商品评论 ViewModel
  * @author Joker.X
  */
 @Composable
 internal fun GoodsCommentRoute(
-    viewModel: GoodsCommentViewModel = hiltViewModel()
+    navKey: GoodsRoutes.Comment,
+    viewModel: GoodsCommentViewModel = hiltViewModel<GoodsCommentViewModel, GoodsCommentViewModel.Factory>(
+        creationCallback = { factory ->
+            factory.create(navKey)
+        }
+    ),
 ) {
     // 商品评论列表UI状态
     val uiState by viewModel.uiState.collectAsState()
@@ -44,7 +52,6 @@ internal fun GoodsCommentRoute(
         onRefresh = viewModel::onRefresh,
         onLoadMore = viewModel::onLoadMore,
         shouldTriggerLoadMore = viewModel::shouldTriggerLoadMore,
-        onBackClick = viewModel::navigateBack,
         onRetry = viewModel::retryRequest
     )
 }
@@ -59,7 +66,6 @@ internal fun GoodsCommentRoute(
  * @param onRefresh 下拉刷新回调
  * @param onLoadMore 加载更多回调
  * @param shouldTriggerLoadMore 是否应触发加载更多的判断函数
- * @param onBackClick 返回按钮回调
  * @param onRetry 重试请求回调
  * @author Joker.X
  */
@@ -73,12 +79,11 @@ internal fun GoodsCommentScreen(
     onRefresh: () -> Unit = {},
     onLoadMore: () -> Unit = {},
     shouldTriggerLoadMore: (lastIndex: Int, totalCount: Int) -> Boolean = { _, _ -> false },
-    onBackClick: () -> Unit = {},
     onRetry: () -> Unit = {}
 ) {
     AppScaffold(
         title = R.string.goods_comment_title,
-        onBackClick = onBackClick
+        onBackClick = { navigateBack() }
     ) {
         BaseNetWorkListView(
             uiState = uiState,

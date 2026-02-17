@@ -12,6 +12,8 @@
 ```kotlin
 package com.joker.coolmall.feature.${FEATURE_NAME}.view
 
+import com.joker.coolmall.core.navigation.navigateBack
+
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
@@ -34,7 +36,6 @@ internal fun ${PAGE_NAME}Route(
     viewModel: ${PAGE_NAME}ViewModel = hiltViewModel()
 ) {
     ${PAGE_NAME}Screen(
-        onBackClick = viewModel::navigateBack,
         onRetry = {}
     )
 }
@@ -43,18 +44,16 @@ internal fun ${PAGE_NAME}Route(
  * ${CN_NAME}界面
  *
  * @param uiState UI状态
- * @param onBackClick 返回按钮回调
  * @param onRetry 重试请求回调
  */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun ${PAGE_NAME}Screen(
     uiState: BaseNetWorkUiState<Any> = BaseNetWorkUiState.Loading,
-    onBackClick: () -> Unit = {},
     onRetry: () -> Unit = {}
 ) {
     AppScaffold(
-        onBackClick = onBackClick
+        onBackClick = { navigateBack() }
     ) {
         BaseNetWorkView(
             uiState = uiState,
@@ -106,6 +105,7 @@ internal fun ${PAGE_NAME}ScreenPreviewDark() {
     }
 }
 ```
+
 
 ## 变量自动推导（Android Studio设置）
 

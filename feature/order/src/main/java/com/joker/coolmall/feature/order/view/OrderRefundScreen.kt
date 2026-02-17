@@ -26,6 +26,8 @@ import com.joker.coolmall.core.model.entity.DictItem
 import com.joker.coolmall.core.model.entity.Order
 import com.joker.coolmall.core.model.preview.previewCartList
 import com.joker.coolmall.core.model.preview.previewOrder
+import com.joker.coolmall.core.navigation.navigateBack
+import com.joker.coolmall.core.navigation.order.OrderRoutes
 import com.joker.coolmall.core.ui.component.button.AppButton
 import com.joker.coolmall.core.ui.component.goods.OrderGoodsCard
 import com.joker.coolmall.core.ui.component.list.AppListItem
@@ -41,18 +43,29 @@ import com.joker.coolmall.feature.order.viewmodel.OrderRefundViewModel
 /**
  * 退款申请路由
  *
+ * @param navKey 路由参数
  * @param viewModel 退款申请 ViewModel
  * @author Joker.X
  */
 @Composable
 internal fun OrderRefundRoute(
-    viewModel: OrderRefundViewModel = hiltViewModel()
+    navKey: OrderRoutes.Refund,
+    viewModel: OrderRefundViewModel = hiltViewModel<OrderRefundViewModel, OrderRefundViewModel.Factory>(
+        creationCallback = { factory ->
+            factory.create(navKey)
+        }
+    ),
 ) {
-    val uiState by viewModel.uiState.collectAsState() // 订单数据状态
-    val cartList by viewModel.cartList.collectAsState() // 购物车列表
-    val refundModalVisible by viewModel.refundModalVisible.collectAsState() // 退款原因弹窗显示状态
-    val refundReasonsModalUiState by viewModel.refundReasonsModalUiState.collectAsState() // 退款原因弹窗UI状态
-    val selectedRefundReason by viewModel.selectedRefundReason.collectAsState() // 选中的退款原因
+    // 订单数据状态
+    val uiState by viewModel.uiState.collectAsState()
+    // 购物车列表
+    val cartList by viewModel.cartList.collectAsState()
+    // 退款原因弹窗显示状态
+    val refundModalVisible by viewModel.refundModalVisible.collectAsState()
+    // 退款原因弹窗UI状态
+    val refundReasonsModalUiState by viewModel.refundReasonsModalUiState.collectAsState()
+    // 选中的退款原因
+    val selectedRefundReason by viewModel.selectedRefundReason.collectAsState()
 
     OrderRefundScreen(
         uiState = uiState,
@@ -60,7 +73,6 @@ internal fun OrderRefundRoute(
         refundModalVisible = refundModalVisible,
         refundReasonsModalUiState = refundReasonsModalUiState,
         selectedRefundReason = selectedRefundReason,
-        onBackClick = viewModel::navigateBack,
         onRetry = viewModel::retryRequest,
         onReasonClick = viewModel::showRefundModal,
         onRefundModalDismiss = viewModel::hideRefundModal,
@@ -80,7 +92,6 @@ internal fun OrderRefundRoute(
  * @param refundModalVisible 退款原因弹窗是否可见
  * @param refundReasonsModalUiState 退款原因弹窗UI状态
  * @param selectedRefundReason 选中的退款原因
- * @param onBackClick 返回按钮回调
  * @param onRetry 重试请求回调
  * @param onReasonClick 选择退款原因回调
  * @param onRefundModalDismiss 关闭退款原因弹窗回调
@@ -99,7 +110,6 @@ internal fun OrderRefundScreen(
     refundModalVisible: Boolean = false,
     refundReasonsModalUiState: BaseNetWorkUiState<List<DictItem>> = BaseNetWorkUiState.Loading,
     selectedRefundReason: DictItem? = null,
-    onBackClick: () -> Unit = {},
     onRetry: () -> Unit = {},
     onReasonClick: () -> Unit = {},
     onRefundModalDismiss: () -> Unit = {},
@@ -111,7 +121,7 @@ internal fun OrderRefundScreen(
 ) {
     AppScaffold(
         titleText = stringResource(R.string.order_refund),
-        onBackClick = onBackClick,
+        onBackClick = { navigateBack() },
         useLargeTopBar = true,
         bottomBar = {
             if (uiState is BaseNetWorkUiState.Success) {

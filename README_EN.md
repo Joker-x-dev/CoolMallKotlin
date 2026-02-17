@@ -133,7 +133,7 @@ to join.
 | Category                | Technology                | Version    | Description                            |
 |-------------------------|---------------------------|------------|----------------------------------------|
 | Programming Language    | Kotlin                    | 2.2.21     | 100% Kotlin Development                |
-| UI Framework            | Jetpack Compose           | 2025.11.01 | Declarative UI Framework               |
+| UI Framework            | Jetpack Compose           | 2026.02.00 | Declarative UI Framework               |
 | Architecture Pattern    | MVVM + Clean Architecture | -          | MVVM + Clean Architecture              |
 | Dependency Injection    | Hilt                      | 2.57.2     | Dagger-based DI Framework              |
 | Asynchronous Processing | Coroutines + Flow         | 1.9.0      | Coroutines + Flow Reactive Programming |
@@ -142,8 +142,8 @@ to join.
 
 | Category              | Technology            | Version       | Description                   |
 |-----------------------|-----------------------|---------------|-------------------------------|
-| Navigation            | Navigation Compose    | 2.9.6         | Compose Navigation Component  |
-| Data Serialization    | Kotlinx Serialization | 1.9.0         | JSON Serialization Processing |
+| Navigation            | Navigation3 + Lifecycle ViewModel Navigation3 | 1.0.1 + 2.10.0 | Navigation3 Component |
+| Data Serialization    | Kotlinx Serialization | 1.10.0        | JSON Serialization Processing |
 | Network Requests      | Retrofit + OkHttp     | 3.0.0 + 5.3.2 | HTTP Client                   |
 | Image Loading         | Coil Compose          | 2.7.0         | Image Loading and Caching     |
 | Animation Effects     | Lottie Compose        | 6.7.1         | After Effects Animation       |
@@ -161,7 +161,7 @@ to join.
 | Category              | Technology    | Version | Description                |
 |-----------------------|---------------|---------|----------------------------|
 | Logging Framework     | Timber        | 5.0.1   | Log Management             |
-| Network Debugging     | Chucker       | 4.2.0   | Network Request Monitoring |
+| Network Debugging     | Chucker       | 4.3.0   | Network Request Monitoring |
 | Memory Detection      | LeakCanary    | 2.14    | Memory Leak Detection      |
 | Permission Management | XXPermissions | 28.0    | Dynamic Permission Request |
 | Testing Framework     | JUnit         | 4.13.2  | Unit Testing + UI Testing  |

@@ -43,6 +43,9 @@ import com.joker.coolmall.core.designsystem.theme.SpacePaddingXSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.model.entity.Goods
+import com.joker.coolmall.core.navigation.goods.GoodsNavigator
+import com.joker.coolmall.core.navigation.goods.GoodsRoutes
+import com.joker.coolmall.core.navigation.navigateBack
 import com.joker.coolmall.core.ui.component.appbar.SearchTopAppBar
 import com.joker.coolmall.core.ui.component.goods.GoodsGridItem
 import com.joker.coolmall.core.ui.component.goods.GoodsListItem
@@ -61,13 +64,19 @@ import com.joker.coolmall.core.ui.R as CoreUiR
 /**
  * 商品分类路由
  *
+ * @param navKey 路由参数
  * @param viewModel 商品分类 ViewModel
  * @author Joker.X
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 internal fun GoodsCategoryRoute(
-    viewModel: GoodsCategoryViewModel = hiltViewModel()
+    navKey: GoodsRoutes.Category,
+    viewModel: GoodsCategoryViewModel = hiltViewModel<GoodsCategoryViewModel, GoodsCategoryViewModel.Factory>(
+        creationCallback = { factory ->
+            factory.create(navKey)
+        }
+    ),
 ) {
     // 网络请求UI状态
     val uiState by viewModel.uiState.collectAsState()
@@ -103,7 +112,6 @@ internal fun GoodsCategoryRoute(
             onRefresh = viewModel::onRefresh,
             onLoadMore = viewModel::onLoadMore,
             shouldTriggerLoadMore = viewModel::shouldTriggerLoadMore,
-            onBackClick = viewModel::navigateBack,
             onRetry = viewModel::retryRequest,
             onSearch = viewModel::onSearch,
             initialSearchText = viewModel.getCurrentSearchKeyword(),
@@ -112,7 +120,6 @@ internal fun GoodsCategoryRoute(
             currentSortType = currentSortType,
             currentSortState = currentSortState,
             onSortClick = viewModel::onSortClick,
-            toGoodsDetail = viewModel::toGoodsDetailPage,
             isGridLayout = isGridLayout,
             onToggleLayout = viewModel::toggleLayoutMode,
             sharedTransitionScope = this@SharedTransitionLayout
@@ -148,7 +155,6 @@ internal fun GoodsCategoryRoute(
  * @param onRefresh 下拉刷新回调
  * @param onLoadMore 加载更多回调
  * @param shouldTriggerLoadMore 是否应该触发加载更多的判断函数
- * @param onBackClick 返回按钮回调
  * @param onRetry 重试请求回调
  * @param onSearch 搜索回调
  * @param initialSearchText 初始搜索文本
@@ -157,7 +163,6 @@ internal fun GoodsCategoryRoute(
  * @param currentSortType 当前排序类型
  * @param currentSortState 当前排序状态
  * @param onSortClick 排序按钮点击回调
- * @param toGoodsDetail 跳转到商品详情回调
  * @param isGridLayout 是否为网格布局
  * @param onToggleLayout 切换布局模式回调
  * @param sharedTransitionScope 共享转场作用域
@@ -173,7 +178,6 @@ internal fun GoodsCategoryScreen(
     onRefresh: () -> Unit = {},
     onLoadMore: () -> Unit = {},
     shouldTriggerLoadMore: (lastIndex: Int, totalCount: Int) -> Boolean = { _, _ -> false },
-    onBackClick: () -> Unit = {},
     onRetry: () -> Unit = {},
     onSearch: (String) -> Unit = {},
     initialSearchText: String = "",
@@ -182,7 +186,6 @@ internal fun GoodsCategoryScreen(
     currentSortType: SortType = SortType.COMPREHENSIVE,
     currentSortState: SortState = SortState.NONE,
     onSortClick: (SortType) -> Unit = {},
-    toGoodsDetail: (Long) -> Unit = {},
     isGridLayout: Boolean = true,
     onToggleLayout: () -> Unit = {},
     sharedTransitionScope: SharedTransitionScope
@@ -197,7 +200,7 @@ internal fun GoodsCategoryScreen(
                     .background(MaterialTheme.colorScheme.surface)
             ) {
                 SearchTopAppBar(
-                    onBackClick = onBackClick,
+                    onBackClick = { navigateBack() },
                     onSearch = onSearch,
                     initialSearchText = initialSearchText,
                     scrollBehavior = scrollBehavior,
@@ -238,7 +241,6 @@ internal fun GoodsCategoryScreen(
                 onRefresh = onRefresh,
                 onLoadMore = onLoadMore,
                 shouldTriggerLoadMore = shouldTriggerLoadMore,
-                toGoodsDetail = toGoodsDetail,
                 isGridLayout = isGridLayout
             )
         }
@@ -254,7 +256,6 @@ internal fun GoodsCategoryScreen(
  * @param onRefresh 下拉刷新回调
  * @param onLoadMore 加载更多回调
  * @param shouldTriggerLoadMore 是否应该触发加载更多的判断函数
- * @param toGoodsDetail 跳转到商品详情回调
  * @param isGridLayout 是否为网格布局
  * @author Joker.X
  */
@@ -267,7 +268,6 @@ private fun GoodsCategoryContentView(
     onRefresh: () -> Unit,
     onLoadMore: () -> Unit,
     shouldTriggerLoadMore: (lastIndex: Int, totalCount: Int) -> Boolean,
-    toGoodsDetail: (Long) -> Unit,
     isGridLayout: Boolean
 ) {
     RefreshLayout(
@@ -280,14 +280,14 @@ private fun GoodsCategoryContentView(
         gridContent = {
             items(data.size) { index ->
                 GoodsGridItem(goods = data[index], onClick = {
-                    toGoodsDetail(data[index].id)
+                    GoodsNavigator.toDetail(data[index].id)
                 })
             }
         }
     ) {
         items(data.size) { index ->
             GoodsListItem(goods = data[index], onClick = {
-                toGoodsDetail(data[index].id)
+                GoodsNavigator.toDetail(data[index].id)
             })
         }
     }

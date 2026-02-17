@@ -1,38 +1,33 @@
 package com.joker.coolmall.feature.launch.viewmodel
 
 import android.content.Context
-import androidx.lifecycle.SavedStateHandle
-import androidx.navigation.toRoute
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
-import com.joker.coolmall.core.data.state.AppState
+import com.joker.coolmall.core.navigation.launch.LaunchRoutes
+import com.joker.coolmall.core.navigation.main.MainNavigator
+import com.joker.coolmall.core.navigation.navigateBack
 import com.joker.coolmall.core.util.storage.MMKVUtils
 import com.joker.coolmall.feature.launch.model.GuidePageProvider
-import com.joker.coolmall.navigation.AppNavigator
-import com.joker.coolmall.navigation.routes.LaunchRoutes
-import com.joker.coolmall.navigation.routes.MainRoutes
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import javax.inject.Inject
 
 /**
  * 引导页 ViewModel
  *
- * @param navigator 应用导航器
- * @param appState 应用状态
- * @param savedStateHandle 保存的状态句柄
+ * @param navKey 路由参数
  * @param context 应用上下文
  * @author Joker.X
  */
-@HiltViewModel
-class GuideViewModel @Inject constructor(
-    navigator: AppNavigator,
-    appState: AppState,
-    private val savedStateHandle: SavedStateHandle,
+@HiltViewModel(assistedFactory = GuideViewModel.Factory::class)
+class GuideViewModel @AssistedInject constructor(
+    @Assisted navKey: LaunchRoutes.Guide,
     @param:ApplicationContext private val context: Context,
-) : BaseViewModel(navigator, appState) {
+) : BaseViewModel() {
 
     companion object {
         /**
@@ -42,8 +37,7 @@ class GuideViewModel @Inject constructor(
     }
 
     // 是否从设置页面进入（从类型安全路由获取）
-    private val isFromSettings: Boolean =
-        savedStateHandle.toRoute<LaunchRoutes.Guide>().fromSettings
+    private val isFromSettings: Boolean = navKey.fromSettings
 
     // 引导页数据
     val guidePages = GuidePageProvider.getGuidePages(context)
@@ -112,10 +106,7 @@ class GuideViewModel @Inject constructor(
         } else {
             // 正常流程，标记引导页已显示并跳转到主页面
             markGuideAsShown()
-            navigateAndCloseCurrent(
-                route = MainRoutes.Main,
-                currentRoute = LaunchRoutes.Guide()
-            )
+            MainNavigator.toMainAndCloseCurrent(currentRoute = LaunchRoutes.Guide())
         }
     }
 
@@ -136,5 +127,22 @@ class GuideViewModel @Inject constructor(
      */
     fun isLastPage(): Boolean {
         return _currentPageIndex.value == guidePages.size - 1
+    }
+
+    /**
+     * Assisted Factory
+     *
+     * @author Joker.X
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * 创建 ViewModel 实例
+         *
+         * @param navKey 路由参数
+         * @return ViewModel 实例
+         * @author Joker.X
+         */
+        fun create(navKey: LaunchRoutes.Guide): GuideViewModel
     }
 }

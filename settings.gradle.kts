@@ -53,7 +53,7 @@ include(":core:util")
 include(":core:result")
 
 // 导航模块
-include(":navigation")
+include(":core:navigation")
 
 // feature 功能模块
 // 首页模块

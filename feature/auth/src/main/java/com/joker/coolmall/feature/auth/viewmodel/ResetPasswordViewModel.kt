@@ -2,9 +2,6 @@ package com.joker.coolmall.feature.auth.viewmodel
 
 import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
-import com.joker.coolmall.core.data.state.AppState
-import com.joker.coolmall.navigation.AppNavigator
-import com.joker.coolmall.navigation.routes.AuthRoutes
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,13 +14,7 @@ import javax.inject.Inject
  * @author Joker.X
  */
 @HiltViewModel
-class ResetPasswordViewModel @Inject constructor(
-    navigator: AppNavigator,
-    appState: AppState
-) : BaseViewModel(
-    navigator = navigator,
-    appState = appState
-) {
+class ResetPasswordViewModel @Inject constructor() : BaseViewModel() {
 
     /**
      * 手机号输入

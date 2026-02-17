@@ -6,9 +6,9 @@
 
 # 项目基础配置
 # 构建版本
-versionCode = "2026011201"
+versionCode = "2026021701"
 # 版本号
-versionName = "1.0.7"
+versionName = "1.0.8"
 # 包名
 namespace = "com.joker.coolmall"
 
@@ -31,7 +31,7 @@ kotlin = "2.2.21"
 # AndroidX Core KTX: https://developer.android.com/jetpack/androidx/releases/core
 coreKtx = "1.17.0"
 # AndroidX Activity Compose: https://developer.android.com/jetpack/androidx/releases/activity
-activityCompose = "1.12.2"
+activityCompose = "1.12.4"
 # AndroidX Lifecycle Runtime KTX: https://developer.android.com/jetpack/androidx/releases/lifecycle
 lifecycleRuntimeKtx = "2.10.0"
 
@@ -46,15 +46,17 @@ espressoCore = "3.7.0"
 # Jetpack Compose 相关版本
 # Compose BOM: https://developer.android.com/jetpack/compose/bom
 # 说明: BOM 统一管理所有 Compose 库版本，确保兼容性
-composeBom = "2025.12.01"
+composeBom = "2026.02.00"
 
 # 导航相关版本
-# Navigation Compose: https://developer.android.com/jetpack/androidx/releases/navigation
-navigationCompose = "2.9.6"
+# AndroidX Navigation3: https://developer.android.com/jetpack/androidx/releases/navigation3
+navigation3 = "1.0.1"
+# AndroidX Lifecycle: https://developer.android.com/jetpack/androidx/releases/lifecycle
+lifecycleViewModelNavigation3 = "2.10.0"
 
 # 序列化相关版本
 # Kotlinx Serialization JSON: https://github.com/Kotlin/kotlinx.serialization
-kotlinxSerializationJson = "1.9.0"
+kotlinxSerializationJson = "1.10.0"
 
 # 网络请求相关版本
 # OkHttp HTTP 客户端: https://square.github.io/okhttp/
@@ -67,7 +69,7 @@ retrofit2KotlinxSerializationConverter = "1.0.0"
 loggingInterceptor = "5.3.2"
 # Chucker 网络调试工具: https://github.com/ChuckerTeam/chucker
 # 说明: 通过 OkHttp 拦截器机制在应用通知栏显示网络请求功能
-chucker = "4.2.0"
+chucker = "4.3.0"
 
 # 日志框架版本
 # Timber 日志库: https://github.com/JakeWharton/timber
@@ -78,8 +80,8 @@ timber = "5.0.1"
 # GitHub: https://github.com/google/dagger
 # 说明: 基于 Dagger 的 Android 依赖注入库
 hilt = "2.57.2"
-# Hilt Navigation Compose: https://developer.android.com/jetpack/androidx/releases/hilt
-hiltNavigationCompose = "1.3.0"
+# Hilt Lifecycle ViewModel Compose: https://developer.android.com/jetpack/androidx/releases/hilt
+hiltLifecycleViewModelCompose = "1.3.0"
 # KSP (Kotlin Symbol Processing): https://github.com/google/ksp
 # 说明: Kotlin 注解处理器，用于代码生成
 ksp = "2.3.2"
@@ -92,7 +94,7 @@ coilCompose = "2.7.0"
 # AndroidX AppCompat: https://developer.android.com/jetpack/androidx/releases/appcompat
 appcompat = "1.7.1"
 # Material Design Components: https://github.com/material-components/material-components-android
-material = "1.14.0-alpha08"
+material = "1.14.0-alpha09"
 
 # 启动页相关版本
 # AndroidX Core Splashscreen: https://developer.android.com/jetpack/androidx/releases/core
@@ -158,7 +160,9 @@ androidx-ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit
 androidx-material3 = { group = "androidx.compose.material3", name = "material3" }
 
 # 导航相关库
-navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+androidx-navigation3-runtime = { group = "androidx.navigation3", name = "navigation3-runtime", version.ref = "navigation3" }
+androidx-navigation3-ui = { group = "androidx.navigation3", name = "navigation3-ui", version.ref = "navigation3" }
+androidx-lifecycle-viewmodel-navigation3 = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-navigation3", version.ref = "lifecycleViewModelNavigation3" }
 
 # 序列化相关库
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
@@ -177,7 +181,7 @@ ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devto
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
 hilt-android-testing = { module = "com.google.dagger:hilt-android-testing", version.ref = "hilt" }
-hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
+hilt-lifecycle-viewmodel-compose = { module = "androidx.hilt:hilt-lifecycle-viewmodel-compose", version.ref = "hiltLifecycleViewModelCompose" }
 
 # 图片加载相关库
 coil-compose = { module = "io.coil-kt:coil-compose", version.ref = "coilCompose" }

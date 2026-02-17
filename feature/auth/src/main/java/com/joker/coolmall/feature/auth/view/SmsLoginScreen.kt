@@ -20,6 +20,8 @@ import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXLarge
 import com.joker.coolmall.core.model.entity.Captcha
+import com.joker.coolmall.core.navigation.common.CommonNavigator
+import com.joker.coolmall.core.navigation.navigateBack
 import com.joker.coolmall.core.ui.component.button.AppButton
 import com.joker.coolmall.core.ui.component.button.ButtonShape
 import com.joker.coolmall.core.util.permission.PermissionUtils
@@ -93,10 +95,7 @@ internal fun SmsLoginRoute(
         onSendVerificationCode = onSendVerificationCodeWithPermission,
         onImageCodeConfirm = viewModel::onImageCodeConfirm,
         onRefreshCaptcha = viewModel::getCaptcha,
-        onLoginClick = viewModel::login,
-        onBackClick = viewModel::navigateBack,
-        onUserAgreementClick = viewModel::onUserAgreementClick,
-        onPrivacyPolicyClick = viewModel::onPrivacyPolicyClick
+        onLoginClick = viewModel::login
     )
 }
 
@@ -117,9 +116,6 @@ internal fun SmsLoginRoute(
  * @param onImageCodeConfirm 图形验证码确认回调
  * @param onRefreshCaptcha 刷新验证码回调
  * @param onLoginClick 登录按钮点击回调
- * @param onBackClick 返回上一页回调
- * @param onUserAgreementClick 用户协议点击回调
- * @param onPrivacyPolicyClick 隐私政策点击回调
  * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -138,14 +134,11 @@ internal fun SmsLoginScreen(
     onSendVerificationCode: () -> Unit = {},
     onImageCodeConfirm: (String) -> Unit = {},
     onRefreshCaptcha: () -> Unit = {},
-    onLoginClick: () -> Unit = {},
-    onBackClick: () -> Unit = {},
-    onUserAgreementClick: () -> Unit = {},
-    onPrivacyPolicyClick: () -> Unit = {}
+    onLoginClick: () -> Unit = {}
 ) {
     AnimatedAuthPage(
         title = stringResource(id = R.string.welcome_login),
-        onBackClick = onBackClick
+        onBackClick = { navigateBack() }
     ) {
         SmsLoginContentView(
             phone = phone,
@@ -155,10 +148,7 @@ internal fun SmsLoginScreen(
             onPhoneChange = onPhoneChange,
             onVerificationCodeChange = onVerificationCodeChange,
             onSendVerificationCode = onSendVerificationCode,
-            onLoginClick = onLoginClick,
-            onBackClick = onBackClick,
-            onUserAgreementClick = onUserAgreementClick,
-            onPrivacyPolicyClick = onPrivacyPolicyClick
+            onLoginClick = onLoginClick
         )
     }
 
@@ -183,9 +173,6 @@ internal fun SmsLoginScreen(
  * @param onVerificationCodeChange 验证码变更回调
  * @param onSendVerificationCode 发送验证码回调
  * @param onLoginClick 登录按钮点击回调
- * @param onBackClick 返回上一页回调
- * @param onUserAgreementClick 用户协议点击回调
- * @param onPrivacyPolicyClick 隐私政策点击回调
  * @author Joker.X
  */
 @Composable
@@ -197,10 +184,7 @@ private fun SmsLoginContentView(
     onPhoneChange: (String) -> Unit,
     onVerificationCodeChange: (String) -> Unit,
     onSendVerificationCode: () -> Unit,
-    onLoginClick: () -> Unit,
-    onBackClick: () -> Unit,
-    onUserAgreementClick: () -> Unit,
-    onPrivacyPolicyClick: () -> Unit
+    onLoginClick: () -> Unit
 ) {
     // 记录输入框焦点状态
     val phoneFieldFocused = remember { mutableStateOf(false) }
@@ -233,8 +217,8 @@ private fun SmsLoginContentView(
     // 使用封装的用户协议组件
     UserAgreement(
         prefix = stringResource(id = R.string.login_agreement_prefix),
-        onUserAgreementClick = onUserAgreementClick,
-        onPrivacyPolicyClick = onPrivacyPolicyClick
+        onUserAgreementClick = CommonNavigator::toUserAgreement,
+        onPrivacyPolicyClick = CommonNavigator::toPrivacyPolicy
     )
 
     SpaceVerticalXLarge()
@@ -250,7 +234,7 @@ private fun SmsLoginContentView(
     BottomNavigationRow(
         messageText = stringResource(id = R.string.sms_not_available),
         actionText = stringResource(id = R.string.use_third_party_login),
-        onActionClick = onBackClick
+        onActionClick = { navigateBack() }
     )
 }
 

@@ -13,6 +13,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.designsystem.theme.AppTheme
+import com.joker.coolmall.core.navigation.navigateBack
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkView
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
 import com.joker.coolmall.feature.common.R
@@ -33,7 +34,6 @@ internal fun PrivacyPolicyRoute(
 
     PrivacyPolicyScreen(
         uiState = uiState,
-        onBackClick = viewModel::navigateBack,
         onRetry = viewModel::retryRequest,
     )
 }
@@ -42,7 +42,6 @@ internal fun PrivacyPolicyRoute(
  * 隐私政策界面
  *
  * @param uiState UI状态
- * @param onBackClick 返回按钮回调
  * @param onRetry 重试请求回调
  * @author Joker.X
  */
@@ -50,12 +49,11 @@ internal fun PrivacyPolicyRoute(
 @Composable
 internal fun PrivacyPolicyScreen(
     uiState: BaseNetWorkUiState<String> = BaseNetWorkUiState.Loading,
-    onBackClick: () -> Unit = {},
     onRetry: () -> Unit = {}
 ) {
     AppScaffold(
         title = R.string.privacy_policy_title,
-        onBackClick = onBackClick
+        onBackClick = { navigateBack() }
     ) {
         BaseNetWorkView(
             uiState = uiState,

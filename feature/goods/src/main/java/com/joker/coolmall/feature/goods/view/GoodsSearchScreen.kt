@@ -32,6 +32,7 @@ import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.model.entity.GoodsSearchKeyword
 import com.joker.coolmall.core.model.entity.SearchHistory
 import com.joker.coolmall.core.model.preview.previewGoodsSearchKeywordList
+import com.joker.coolmall.core.navigation.navigateBack
 import com.joker.coolmall.core.ui.component.appbar.SearchTopAppBar
 import com.joker.coolmall.core.ui.component.list.AppListItem
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkView
@@ -59,7 +60,6 @@ internal fun GoodsSearchRoute(
     GoodsSearchScreen(
         uiState = uiState,
         searchHistoryList = searchHistoryList,
-        onBackClick = viewModel::navigateBack,
         onRetry = viewModel::retryRequest,
         onSearch = viewModel::onSearch,
         onKeywordClick = viewModel::onKeywordClick,
@@ -73,7 +73,6 @@ internal fun GoodsSearchRoute(
  *
  * @param uiState UI状态
  * @param searchHistoryList 搜索历史列表
- * @param onBackClick 返回按钮回调
  * @param onRetry 重试请求回调
  * @param onSearch 搜索回调
  * @param onKeywordClick 关键词点击回调
@@ -86,7 +85,6 @@ internal fun GoodsSearchRoute(
 internal fun GoodsSearchScreen(
     uiState: BaseNetWorkUiState<List<GoodsSearchKeyword>> = BaseNetWorkUiState.Loading,
     searchHistoryList: List<SearchHistory> = emptyList(),
-    onBackClick: () -> Unit = {},
     onRetry: () -> Unit = {},
     onSearch: (String) -> Unit = {},
     onKeywordClick: (String) -> Unit = {},
@@ -96,7 +94,7 @@ internal fun GoodsSearchScreen(
     AppScaffold(
         topBar = {
             SearchTopAppBar(
-                onBackClick = onBackClick,
+                onBackClick = { navigateBack() },
                 onSearch = onSearch
             )
         }

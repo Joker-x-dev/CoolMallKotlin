@@ -7,17 +7,17 @@ import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
 import com.joker.coolmall.core.data.repository.CommonRepository
 import com.joker.coolmall.core.data.repository.FeedbackRepository
 import com.joker.coolmall.core.data.repository.FileUploadRepository
-import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.entity.DictItem
 import com.joker.coolmall.core.model.request.DictDataRequest
 import com.joker.coolmall.core.model.request.FeedbackSubmitRequest
 import com.joker.coolmall.core.model.response.DictDataResponse
 import com.joker.coolmall.core.model.response.NetworkResponse
+import com.joker.coolmall.core.navigation.RefreshResult
+import com.joker.coolmall.core.navigation.RefreshResultKey
+import com.joker.coolmall.core.navigation.popBackStackWithResult
 import com.joker.coolmall.core.util.log.LogUtils
 import com.joker.coolmall.core.util.toast.ToastUtils
 import com.joker.coolmall.feature.feedback.R
-import com.joker.coolmall.navigation.AppNavigator
-import com.joker.coolmall.navigation.RefreshResultKey
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,8 +33,6 @@ import javax.inject.Inject
  * 提交反馈 ViewModel
  *
  * @param context 应用上下文
- * @param navigator 导航器
- * @param appState 应用状态
  * @param commonRepository 通用数据仓库
  * @param feedbackRepository 反馈仓库
  * @param fileUploadRepository 文件上传仓库
@@ -43,12 +41,10 @@ import javax.inject.Inject
 @HiltViewModel
 class FeedbackSubmitViewModel @Inject constructor(
     @param:ApplicationContext private val context: Context,
-    navigator: AppNavigator,
-    appState: AppState,
     private val commonRepository: CommonRepository,
     private val feedbackRepository: FeedbackRepository,
     private val fileUploadRepository: FileUploadRepository
-) : BaseNetWorkViewModel<DictDataResponse>(navigator, appState) {
+) : BaseNetWorkViewModel<DictDataResponse>() {
 
     /**
      * 选中的反馈类型
@@ -222,7 +218,7 @@ class FeedbackSubmitViewModel @Inject constructor(
             onData = { success ->
                 ToastUtils.showSuccess(R.string.feedback_submit_success)
                 // 使用 NavigationResult 回传刷新信号，通知反馈列表刷新
-                popBackStackWithResult(RefreshResultKey, true)
+                popBackStackWithResult(RefreshResultKey, RefreshResult(refresh = true))
             },
             onFinally = { _isSubmitting.value = false }
         )

@@ -1,7 +1,6 @@
 package com.joker.coolmall.feature.main.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.joker.coolmall.feature.main.model.TopLevelDestination
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

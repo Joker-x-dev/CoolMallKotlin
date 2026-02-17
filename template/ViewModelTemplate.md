@@ -13,7 +13,6 @@
 package com.joker.coolmall.feature.${FEATURE_NAME}.viewmodel
 
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
-import com.joker.coolmall.navigation.AppNavigator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 
@@ -21,9 +20,7 @@ import javax.inject.Inject
  * ${CN_NAME} ViewModel
  */
 @HiltViewModel
-class ${NAME} @Inject constructor(
-    navigator: AppNavigator,
-) : BaseViewModel(navigator) {
+class ${NAME} @Inject constructor() : BaseViewModel() {
 }
 ```
 

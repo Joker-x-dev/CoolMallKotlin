@@ -1,3 +1,5 @@
+package com.joker.coolmall.feature.goods.state
+
 import com.joker.coolmall.core.model.entity.CategoryTree
 
 /**

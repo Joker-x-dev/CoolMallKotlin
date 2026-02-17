@@ -72,6 +72,7 @@ import com.joker.coolmall.core.designsystem.theme.SpacePaddingSmall
 import com.joker.coolmall.core.designsystem.theme.SpacePaddingXSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.model.entity.CsMsg
+import com.joker.coolmall.core.navigation.navigateBack
 import com.joker.coolmall.core.ui.component.appbar.CenterTopAppBar
 import com.joker.coolmall.core.ui.component.image.Avatar
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
@@ -121,7 +122,6 @@ internal fun ChatRoute(
         loadMoreState = loadMoreState,
         inputText = inputText,
         newMessageIds = newMessageIds,
-        onBackClick = viewModel::navigateBack,
         onRefresh = viewModel::retryRequest,
         onLoadMore = viewModel::loadMoreMessages,
         onSendMessage = viewModel::sendMessage,
@@ -141,7 +141,6 @@ internal fun ChatRoute(
  * @param loadMoreState 加载更多状态
  * @param inputText 输入框文本
  * @param newMessageIds 新消息ID集合
- * @param onBackClick 返回按钮回调
  * @param onRefresh 刷新消息回调
  * @param onLoadMore 加载更多消息回调
  * @param onSendMessage 发送消息回调
@@ -160,7 +159,6 @@ internal fun ChatScreen(
     loadMoreState: LoadMoreState = LoadMoreState.Success,
     inputText: String = "",
     newMessageIds: Set<Long> = emptySet(),
-    onBackClick: () -> Unit = {},
     onRefresh: () -> Unit = {},
     onLoadMore: () -> Unit = {},
     onSendMessage: () -> Unit = {},
@@ -176,7 +174,7 @@ internal fun ChatScreen(
         topBar = {
             CenterTopAppBar(
                 title = R.string.customer_service_chat,
-                onBackClick = onBackClick
+                onBackClick = { navigateBack() }
             )
         },
         contentWindowInsets = ScaffoldDefaults

@@ -1,16 +1,12 @@
 package com.joker.coolmall.feature.order.viewmodel
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.toRoute
 import com.joker.coolmall.core.common.base.state.BaseNetWorkListUiState
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.common.base.state.LoadMoreState
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
 import com.joker.coolmall.core.data.repository.CommonRepository
 import com.joker.coolmall.core.data.repository.OrderRepository
-import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.entity.Cart
 import com.joker.coolmall.core.model.entity.CartGoodsSpec
 import com.joker.coolmall.core.model.entity.DictItem
@@ -19,39 +15,41 @@ import com.joker.coolmall.core.model.request.CancelOrderRequest
 import com.joker.coolmall.core.model.request.DictDataRequest
 import com.joker.coolmall.core.model.request.OrderPageRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
+import com.joker.coolmall.core.navigation.*
+import com.joker.coolmall.core.navigation.goods.GoodsNavigator
+import com.joker.coolmall.core.navigation.order.OrderRoutes
 import com.joker.coolmall.feature.order.model.OrderStatus
-import com.joker.coolmall.navigation.AppNavigator
-import com.joker.coolmall.navigation.RefreshResultKey
-import com.joker.coolmall.navigation.routes.GoodsRoutes
-import com.joker.coolmall.navigation.routes.OrderRoutes
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 /**
  * 订单列表视图模型
  *
- * @param navigator 导航器
- * @param appState 应用状态
+ * @param navKey 路由参数
  * @param orderRepository 订单仓库
  * @param commonRepository 通用仓库
- * @param savedStateHandle 保存状态句柄
  * @author Joker.X
  */
-@HiltViewModel
-class OrderListViewModel @Inject constructor(
-    navigator: AppNavigator,
-    appState: AppState,
+@HiltViewModel(assistedFactory = OrderListViewModel.Factory::class)
+class OrderListViewModel @AssistedInject constructor(
+    @Assisted navKey: OrderRoutes.List,
     private val orderRepository: OrderRepository,
     private val commonRepository: CommonRepository,
-    savedStateHandle: SavedStateHandle
-) : BaseViewModel(navigator, appState) {
+) : BaseViewModel() {
+    /**
+     * 刷新结果监听任务
+     */
+    private var refreshObserveJob: Job? = null
 
     /**
      * 当前选中的标签索引
@@ -190,15 +188,32 @@ class OrderListViewModel @Inject constructor(
 
     init {
         // 从路由获取 tab 参数
-        val orderListRoute = savedStateHandle.toRoute<OrderRoutes.List>()
-        orderListRoute.tab?.toIntOrNull()?.let { tabIndex ->
+        navKey.tab?.toIntOrNull()?.let { tabIndex ->
             if (tabIndex in OrderStatus.entries.indices) {
                 _selectedTabIndex.value = tabIndex
             }
         }
 
         // 加载当前选中标签页的数据
+        observeRefreshState()
         loadTabDataIfNeeded(_selectedTabIndex.value)
+    }
+
+    /**
+     * Assisted Factory
+     *
+     * @author Joker.X
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * 创建 ViewModel 实例
+         *
+         * @param navKey 路由参数
+         * @return ViewModel 实例
+         * @author Joker.X
+         */
+        fun create(navKey: OrderRoutes.List): OrderListViewModel
     }
 
     /**
@@ -207,19 +222,14 @@ class OrderListViewModel @Inject constructor(
      *
      * @author Joker.X
      */
-    fun observeRefreshState(backStackEntry: NavBackStackEntry?) {
-        backStackEntry?.savedStateHandle?.let { savedStateHandle ->
-            viewModelScope.launch {
-                savedStateHandle.getStateFlow<Boolean>(RefreshResultKey.key, false)
-                    .collect { shouldRefresh ->
-                        if (shouldRefresh) {
-                            // 刷新全部标签页
-                            refreshSpecificTabs(listOf(0, 1, 2, 3, 4, 5, 6))
-
-                            // 重置刷新标志，避免重复刷新
-                            savedStateHandle[RefreshResultKey.key] = false
-                        }
-                    }
+    fun observeRefreshState() {
+        if (refreshObserveJob != null) return
+        refreshObserveJob = viewModelScope.launch {
+            resultEvents(RefreshResultKey).collect { refreshResult: RefreshResult ->
+                if (refreshResult.refresh == true) {
+                    // 刷新全部标签页
+                    refreshSpecificTabs(listOf(0, 1, 2, 3, 4, 5, 6))
+                }
             }
         }
     }
@@ -476,58 +486,6 @@ class OrderListViewModel @Inject constructor(
     }
 
     /**
-     * 跳转到订单详情页面
-     *
-     * @author Joker.X
-     */
-    fun toOrderDetailPage(orderId: Long) {
-        navigate(OrderRoutes.Detail(orderId = orderId))
-    }
-
-    /**
-     * 跳转到支付页面
-     *
-     * @param order 订单对象
-     *
-     * @author Joker.X
-     */
-    fun toPaymentPage(order: Order) {
-        val orderId = order.id
-        val paymentPrice = order.price - order.discountPrice // 实付金额
-
-        navigate(OrderRoutes.Pay(orderId = orderId, price = paymentPrice))
-    }
-
-    /**
-     * 跳转到商品详情页面（再次购买）
-     *
-     * @author Joker.X
-     */
-    fun toGoodsDetail(goodsId: Long) {
-        // 隐藏弹窗
-        hideRebuyModal()
-        navigate(GoodsRoutes.Detail(goodsId = goodsId))
-    }
-
-    /**
-     * 跳转到订单物流页面
-     *
-     * @author Joker.X
-     */
-    fun toOrderLogistics(orderId: Long) {
-        navigate(OrderRoutes.Logistics(orderId = orderId))
-    }
-
-    /**
-     * 跳转到退款申请页面
-     *
-     * @author Joker.X
-     */
-    fun toOrderRefund(orderId: Long) {
-        navigate(OrderRoutes.Refund(orderId = orderId))
-    }
-
-    /**
      * 取消订单
      *
      * @author Joker.X
@@ -727,6 +685,18 @@ class OrderListViewModel @Inject constructor(
     }
 
     /**
+     * 跳转到商品详情页面（再次购买）
+     *
+     * @param goodsId 商品ID
+     * @author Joker.X
+     */
+    fun toGoodsDetail(goodsId: Long) {
+        // 隐藏弹窗
+        hideRebuyModal()
+        GoodsNavigator.toDetail(goodsId)
+    }
+
+    /**
      * 处理商品评论逻辑
      *
      * @author Joker.X
@@ -745,38 +715,22 @@ class OrderListViewModel @Inject constructor(
         } else {
             // 单个商品时直接跳转
             val orderId = order.id
-            navigate(
-                OrderRoutes.Comment(
-                    orderId = orderId,
-                    goodsId = cartList.firstOrNull()?.goodsId ?: 0L
-                )
-            )
+            val goodsId = cartList.firstOrNull()?.goodsId ?: 0L
+            toOrderCommentForGoods(orderId, goodsId)
         }
     }
 
     /**
      * 跳转到指定商品的订单评价页面
      *
+     * @param orderId 订单ID
+     * @param goodsId 商品ID
      * @author Joker.X
      */
-    fun toOrderCommentForGoods(goodsId: Long) {
-        val order = _commentCurrentOrder.value ?: return
-        val orderId = order.id
-
-        // 添加 goodsId 参数
-        navigate(OrderRoutes.Comment(orderId = orderId, goodsId = goodsId))
+    fun toOrderCommentForGoods(orderId: Long, goodsId: Long) {
+        // 隐藏弹窗
         hideCommentModal()
-    }
-
-    /**
-     * 跳转到指定商品详情页面（再次购买）
-     *
-     * @author Joker.X
-     */
-    fun toGoodsDetailForRebuy(goodsId: Long) {
-        // 先跳转，再隐藏弹窗
-        navigate(GoodsRoutes.Detail(goodsId = goodsId))
-        hideRebuyModal()
+        navigate(OrderRoutes.Comment(orderId = orderId, goodsId = goodsId))
     }
 
     /**

@@ -39,6 +39,9 @@ import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.model.entity.Cart
 import com.joker.coolmall.core.model.preview.previewCartList
+import com.joker.coolmall.core.navigation.goods.GoodsNavigator
+import com.joker.coolmall.core.navigation.main.MainRoutes
+import com.joker.coolmall.core.navigation.navigateBack
 import com.joker.coolmall.core.ui.component.appbar.CenterTopAppBar
 import com.joker.coolmall.core.ui.component.button.AppButtonFixed
 import com.joker.coolmall.core.ui.component.button.ButtonShape
@@ -56,12 +59,18 @@ import kotlinx.coroutines.delay
 /**
  * 购物车页面路由
  *
+ * @param navKey 路由参数
  * @param viewModel 购物车ViewModel
  * @author Joker.X
  */
 @Composable
 internal fun CartRoute(
-    viewModel: CartViewModel = hiltViewModel(),
+    navKey: MainRoutes.Cart,
+    viewModel: CartViewModel = hiltViewModel<CartViewModel, CartViewModel.Factory>(
+        creationCallback = { factory ->
+            factory.create(navKey)
+        }
+    ),
 ) {
     // 购物车商品列表
     val carts by viewModel.cartItems.collectAsState()
@@ -94,9 +103,7 @@ internal fun CartRoute(
         onUpdateCartItemCount = viewModel::updateCartItemCount,
         onDeleteSelected = viewModel::deleteSelectedItems,
         onSettleClick = viewModel::onCheckoutClick,
-        showBackIcon = showBackIcon,
-        onBackClick = viewModel::navigateBack,
-        toGoodsDetailPage = viewModel::toGoodsDetailPage
+        showBackIcon = showBackIcon
     )
 }
 
@@ -116,8 +123,6 @@ internal fun CartRoute(
  * @param onUpdateCartItemCount 更新商品数量回调
  * @param onDeleteSelected 删除已选商品回调
  * @param onSettleClick 结算按钮点击回调
- * @param toGoodsDetailPage 跳转到商品详情
- * @param onBackClick 返回按钮回调
  * @param showBackIcon 是否显示返回按钮
  * @author Joker.X
  */
@@ -137,8 +142,6 @@ internal fun CartScreen(
     onUpdateCartItemCount: (Long, Long, Int) -> Unit = { _, _, _ -> },
     onDeleteSelected: () -> Unit = {},
     onSettleClick: () -> Unit = {},
-    toGoodsDetailPage: (Long) -> Unit = {},
-    onBackClick: () -> Unit = {},
     showBackIcon: Boolean = false,
 ) {
     // 跟踪正在删除的商品
@@ -162,7 +165,7 @@ internal fun CartScreen(
             CenterTopAppBar(
                 title = R.string.cart,
                 showBackIcon = showBackIcon,
-                onBackClick = onBackClick,
+                onBackClick = { navigateBack() },
                 actions = {
                     if (!isEmpty) {
                         TextButton(onClick = onToggleEditMode) {
@@ -199,7 +202,6 @@ internal fun CartScreen(
                 carts = carts ?: emptyList(),
                 selectedItems = selectedItems ?: emptyMap(),
                 deletingItems = deletingItems,
-                toGoodsDetailPage = toGoodsDetailPage,
                 onUpdateCartItemCount = onUpdateCartItemCount,
                 onToggleItemSelection = onToggleItemSelection,
                 modifier = Modifier.padding(paddingValues)
@@ -214,7 +216,6 @@ internal fun CartScreen(
  * @param carts 购物车商品列表
  * @param selectedItems 已选商品和规格ID的映射
  * @param deletingItems 正在删除的商品和规格ID的映射
- * @param toGoodsDetailPage 跳转到商品详情
  * @param onUpdateCartItemCount 更新商品数量回调
  * @param onToggleItemSelection 切换商品选中状态回调
  * @param modifier 修饰符
@@ -225,7 +226,6 @@ private fun CartContentView(
     carts: List<Cart>,
     selectedItems: Map<Long, Set<Long>>,
     deletingItems: Map<Long, Set<Long>>,
-    toGoodsDetailPage: (Long) -> Unit,
     onUpdateCartItemCount: (Long, Long, Int) -> Unit,
     onToggleItemSelection: (Long, Long) -> Unit,
     modifier: Modifier = Modifier
@@ -258,7 +258,7 @@ private fun CartContentView(
                     data = cart,
                     deletingSpecIds = cartDeletingSpecs,
                     onGoodsClick = {
-                        toGoodsDetailPage(cart.goodsId)
+                        GoodsNavigator.toDetail(cart.goodsId)
                     },
                     onQuantityChanged = { specId, newCount ->
                         onUpdateCartItemCount(cart.goodsId, specId, newCount)

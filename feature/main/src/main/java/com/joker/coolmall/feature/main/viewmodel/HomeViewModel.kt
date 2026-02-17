@@ -16,11 +16,10 @@ import com.joker.coolmall.core.model.request.GoodsSearchRequest
 import com.joker.coolmall.core.model.request.ReceiveCouponRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
+import com.joker.coolmall.core.navigation.auth.AuthRoutes
+import com.joker.coolmall.core.navigation.goods.GoodsRoutes
+import com.joker.coolmall.core.navigation.navigate
 import com.joker.coolmall.core.util.toast.ToastUtils
-import com.joker.coolmall.navigation.AppNavigator
-import com.joker.coolmall.navigation.routes.AuthRoutes
-import com.joker.coolmall.navigation.routes.CommonRoutes
-import com.joker.coolmall.navigation.routes.GoodsRoutes
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -33,8 +32,6 @@ import javax.inject.Inject
 /**
  * 首页ViewModel
  *
- * @param navigator 导航器
- * @param appState 应用状态
  * @param pageRepository 页面仓库
  * @param goodsRepository 商品仓库
  * @param couponRepository 优惠券仓库
@@ -42,12 +39,11 @@ import javax.inject.Inject
  */
 @HiltViewModel
 class HomeViewModel @Inject constructor(
-    navigator: AppNavigator,
-    appState: AppState,
+    private val appState: AppState,
     private val pageRepository: PageRepository,
     private val goodsRepository: GoodsRepository,
     private val couponRepository: CouponRepository
-) : BaseNetWorkListViewModel<Goods>(navigator, appState) {
+) : BaseNetWorkListViewModel<Goods>() {
 
     /**
      * 页面数据
@@ -129,25 +125,6 @@ class HomeViewModel @Inject constructor(
     }
 
     /**
-     * 跳转到商品搜索页面
-     *
-     * @author Joker.X
-     */
-    fun toGoodsSearch() {
-        navigate(GoodsRoutes.Search)
-    }
-
-    /**
-     * 导航到商品详情页
-     *
-     * @param goodsId 商品ID
-     * @author Joker.X
-     */
-    fun toGoodsDetail(goodsId: Long) {
-        navigate(GoodsRoutes.Detail(goodsId = goodsId))
-    }
-
-    /**
      * 跳转到商品分类页面
      *
      * @param categoryId 点击的分类ID
@@ -159,45 +136,11 @@ class HomeViewModel @Inject constructor(
             findChildCategoryIds(categoryId, data.categoryAll ?: emptyList())
         // 如果有子分类，传递子分类ID
         val typeIdParam = childCategoryIds.joinToString(",")
-        navigate(GoodsRoutes.Category(typeId = typeIdParam, featured = false, recommend = false, keyword = null))
-    }
-
-    /**
-     * 跳转到限时精选页面
-     *
-     * @author Joker.X
-     */
-    fun toFlashSalePage() {
-        navigate(GoodsRoutes.Category(typeId = null, featured = true, recommend = false, keyword = null))
-    }
-
-    /**
-     * 跳转到推荐商品页面
-     *
-     * @author Joker.X
-     */
-    fun toRecommendPage() {
-        navigate(GoodsRoutes.Category(typeId = null, featured = false, recommend = true, keyword = null))
-    }
-
-    /**
-     * 跳转到 GitHub 页面
-     *
-     * @author Joker.X
-     */
-    fun toGitHubPage() {
-        val url = "https://github.com/Joker-x-dev/CoolMallKotlin"
-        val title = "GitHub"
-        navigate(CommonRoutes.Web(url = url, title = title))
-    }
-
-    /**
-     * 跳转到关于页面
-     *
-     * @author Joker.X
-     */
-    fun toAboutPage() {
-        navigate(CommonRoutes.About)
+        navigate(
+            GoodsRoutes.Category(
+                typeId = typeIdParam
+            )
+        )
     }
 
     /**

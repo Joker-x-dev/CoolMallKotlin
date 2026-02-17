@@ -10,7 +10,6 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -18,7 +17,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
-import androidx.navigation.NavController
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.designsystem.component.EndRow
 import com.joker.coolmall.core.designsystem.component.VerticalList
@@ -30,6 +28,8 @@ import com.joker.coolmall.core.model.entity.Cart
 import com.joker.coolmall.core.model.entity.DictItem
 import com.joker.coolmall.core.model.entity.Order
 import com.joker.coolmall.core.model.preview.previewOrder
+import com.joker.coolmall.core.navigation.navigateBack
+import com.joker.coolmall.core.navigation.order.OrderRoutes
 import com.joker.coolmall.core.ui.component.address.AddressCard
 import com.joker.coolmall.core.ui.component.dialog.WeDialog
 import com.joker.coolmall.core.ui.component.goods.OrderGoodsCard
@@ -51,14 +51,18 @@ import com.joker.coolmall.core.ui.R as CoreUiR
 /**
  * 订单详情路由
  *
+ * @param navKey 路由参数
  * @param viewModel 订单详情ViewModel
- * @param navController 导航控制器
  * @author Joker.X
  */
 @Composable
 internal fun OrderDetailRoute(
-    viewModel: OrderDetailViewModel = hiltViewModel(),
-    navController: NavController
+    navKey: OrderRoutes.Detail,
+    viewModel: OrderDetailViewModel = hiltViewModel<OrderDetailViewModel, OrderDetailViewModel.Factory>(
+        creationCallback = { factory ->
+            factory.create(navKey)
+        }
+    ),
 ) {
     // UI状态
     val uiState by viewModel.uiState.collectAsState()
@@ -76,9 +80,6 @@ internal fun OrderDetailRoute(
     val rebuyModalVisible by viewModel.rebuyModalVisible.collectAsState()
     // 商品评论弹窗显示状态
     val commentModalVisible by viewModel.commentModalVisible.collectAsState()
-    // 注册页面刷新监听
-    val backStackEntry = navController.currentBackStackEntry
-
     OrderDetailScreen(
         uiState = uiState,
         cartList = cartList,
@@ -110,11 +111,6 @@ internal fun OrderDetailRoute(
         onConfirmReceive = viewModel::confirmReceiveOrder
     )
 
-    // 只要backStackEntry不为null就注册监听
-    LaunchedEffect(backStackEntry) {
-        viewModel.observeRefreshState(backStackEntry)
-    }
-
     // 拦截系统返回按钮，使用自定义返回逻辑
     BackHandler {
         viewModel.handleBackClick()
@@ -132,7 +128,6 @@ internal fun OrderDetailRoute(
  * @param showConfirmDialog 确认收货弹窗显示状态
  * @param rebuyModalVisible 再次购买弹窗显示状态
  * @param commentModalVisible 商品评论弹窗显示状态
- * @param onBackClick 返回回调
  * @param onRetry 重试请求回调
  * @param onCancelClick 取消订单回调
  * @param onPayClick 支付回调
@@ -165,7 +160,7 @@ internal fun OrderDetailScreen(
     showConfirmDialog: Boolean = false,
     rebuyModalVisible: Boolean = false,
     commentModalVisible: Boolean = false,
-    onBackClick: () -> Unit = {},
+    onBackClick: () -> Unit = { navigateBack() },
     onRetry: () -> Unit = {},
     onCancelClick: () -> Unit = {},
     onPayClick: () -> Unit = {},

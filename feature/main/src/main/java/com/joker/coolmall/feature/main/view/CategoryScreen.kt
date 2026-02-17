@@ -55,6 +55,7 @@ import com.joker.coolmall.core.designsystem.theme.ShapeMedium
 import com.joker.coolmall.core.designsystem.theme.ShapeSmall
 import com.joker.coolmall.core.model.entity.CategoryTree
 import com.joker.coolmall.core.model.preview.previewCategoryTreeList
+import com.joker.coolmall.core.navigation.goods.GoodsNavigator
 import com.joker.coolmall.core.ui.component.appbar.CenterTopAppBar
 import com.joker.coolmall.core.ui.component.empty.EmptyNetwork
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
@@ -85,7 +86,6 @@ internal fun CategoryRoute(
         uiState = uiState,
         selectedIndex = selectedIndex,
         onCategorySelected = viewModel::selectCategory,
-        toGoodsCategory = viewModel::toGoodsCategoryPage,
         onRetry = viewModel::retryRequest
     )
 }
@@ -96,7 +96,6 @@ internal fun CategoryRoute(
  * @param uiState 当前UI状态
  * @param selectedIndex 当前选中的分类索引
  * @param onCategorySelected 分类选中回调
- * @param toGoodsCategory 跳转到商品分类页面
  * @param onRetry 重试加载数据回调
  * @author Joker.X
  */
@@ -106,7 +105,6 @@ internal fun CategoryScreen(
     uiState: CategoryUiState = CategoryUiState.Loading,
     selectedIndex: Int = 0,
     onCategorySelected: (Int) -> Unit = {},
-    toGoodsCategory: (Long) -> Unit = {},
     onRetry: () -> Unit = {}
 ) {
     CommonScaffold(
@@ -122,7 +120,6 @@ internal fun CategoryScreen(
                     categoryTrees = uiState.data,
                     selectedIndex = selectedIndex,
                     onCategorySelected = onCategorySelected,
-                    toGoodsCategory = toGoodsCategory
                 )
             }
         }
@@ -135,15 +132,13 @@ internal fun CategoryScreen(
  * @param categoryTrees 分类树数据列表
  * @param selectedIndex 当前选中的分类索引
  * @param onCategorySelected 分类选中回调
- * @param toGoodsCategory 跳转到商品分类页面
  * @author Joker.X
  */
 @Composable
 private fun CategoryContentView(
     categoryTrees: List<CategoryTree>,
     selectedIndex: Int,
-    onCategorySelected: (Int) -> Unit,
-    toGoodsCategory: (Long) -> Unit
+    onCategorySelected: (Int) -> Unit
 ) {
     // 记住协程作用域，用于滚动操作
     val coroutineScope = rememberCoroutineScope()
@@ -226,7 +221,6 @@ private fun CategoryContentView(
         RightCategoryContent(
             categoryTrees = categoryTrees,
             listState = rightListState,
-            toGoodsCategory = toGoodsCategory,
             modifier = Modifier
                 .weight(1f)
                 .fillMaxHeight()
@@ -462,7 +456,6 @@ private fun BottomPlaceholderItem(
  * @param modifier 修饰符
  * @param categoryTrees 分类树列表
  * @param listState 列表滚动状态
- * @param toGoodsCategory 跳转到商品分类页面
  * @author Joker.X
  */
 @Composable
@@ -470,7 +463,6 @@ private fun RightCategoryContent(
     modifier: Modifier = Modifier,
     categoryTrees: List<CategoryTree>,
     listState: LazyListState,
-    toGoodsCategory: (Long) -> Unit,
 ) {
     AppLazyColumn(
         listState = listState,
@@ -497,10 +489,7 @@ private fun RightCategoryContent(
 
                 // 二级分类内容
                 if (category.children.isNotEmpty()) {
-                    CategorySection(
-                        categoryTree = category,
-                        toGoodsCategory = toGoodsCategory
-                    )
+                    CategorySection(categoryTree = category)
                 }
             }
         }
@@ -512,14 +501,12 @@ private fun RightCategoryContent(
  *
  * @param modifier 修饰符
  * @param categoryTree 分类树数据
- * @param toGoodsCategory 跳转到商品分类页面
  * @author Joker.X
  */
 @Composable
 private fun CategorySection(
     modifier: Modifier = Modifier,
     categoryTree: CategoryTree,
-    toGoodsCategory: (Long) -> Unit = {},
 ) {
     AppColumn(modifier = modifier.fillMaxWidth()) {
         // 子分类网格
@@ -535,7 +522,9 @@ private fun CategorySection(
                     SubCategoryItem(
                         name = subCategory.name,
                         imageUrl = subCategory.pic ?: "",
-                        onClick = { toGoodsCategory(subCategory.id) },
+                        onClick = {
+                            GoodsNavigator.toCategory(typeId = subCategory.id.toString())
+                        },
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -612,8 +601,6 @@ fun CategoryScreenPreview() {
         CategoryScreen(
             uiState = CategoryUiState.Success(previewCategoryTreeList),
             selectedIndex = 1,
-            onCategorySelected = { /* 预览时不执行任何操作 */ },
-            toGoodsCategory = { /* 预览时不执行任何操作 */ }
         )
     }
-} 
+}

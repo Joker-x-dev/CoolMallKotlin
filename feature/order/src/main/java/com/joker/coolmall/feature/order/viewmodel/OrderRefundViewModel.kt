@@ -1,13 +1,10 @@
 package com.joker.coolmall.feature.order.viewmodel
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
 import com.joker.coolmall.core.data.repository.CommonRepository
 import com.joker.coolmall.core.data.repository.OrderRepository
-import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.entity.Cart
 import com.joker.coolmall.core.model.entity.CartGoodsSpec
 import com.joker.coolmall.core.model.entity.DictItem
@@ -15,44 +12,37 @@ import com.joker.coolmall.core.model.entity.Order
 import com.joker.coolmall.core.model.request.DictDataRequest
 import com.joker.coolmall.core.model.request.RefundOrderRequest
 import com.joker.coolmall.core.model.response.NetworkResponse
-import com.joker.coolmall.navigation.AppNavigator
-import com.joker.coolmall.navigation.RefreshResultKey
-import com.joker.coolmall.navigation.routes.OrderRoutes
+import com.joker.coolmall.core.navigation.RefreshResult
+import com.joker.coolmall.core.navigation.RefreshResultKey
+import com.joker.coolmall.core.navigation.order.OrderRoutes
+import com.joker.coolmall.core.navigation.popBackStackWithResult
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 /**
  * 退款申请 ViewModel
  *
- * @param navigator 导航器
- * @param appState 应用状态
- * @param savedStateHandle 保存状态句柄
+ * @param navKey 路由参数
  * @param orderRepository 订单仓库
  * @param commonRepository 通用仓库
  * @author Joker.X
  */
-@HiltViewModel
-class OrderRefundViewModel @Inject constructor(
-    navigator: AppNavigator,
-    appState: AppState,
-    savedStateHandle: SavedStateHandle,
+@HiltViewModel(assistedFactory = OrderRefundViewModel.Factory::class)
+class OrderRefundViewModel @AssistedInject constructor(
+    @Assisted navKey: OrderRoutes.Refund,
     private val orderRepository: OrderRepository,
     private val commonRepository: CommonRepository
-) : BaseNetWorkViewModel<Order>(
-    navigator = navigator,
-    appState = appState
-) {
+) : BaseNetWorkViewModel<Order>() {
     // 从路由获取订单ID
-    private val refundRoute = savedStateHandle.toRoute<OrderRoutes.Refund>()
-    private val requiredOrderId: Long = refundRoute.orderId
+    private val requiredOrderId: Long = navKey.orderId
 
     /**
      * 退款原因选择弹窗的显示状态
@@ -192,7 +182,7 @@ class OrderRefundViewModel @Inject constructor(
             ).asResult(),
             onData = { _ ->
                 // 使用 NavigationResult 回传刷新信号，通知上一个页面刷新
-                popBackStackWithResult(RefreshResultKey, true)
+                popBackStackWithResult(RefreshResultKey, RefreshResult(refresh = true))
             }
         )
     }
@@ -244,5 +234,22 @@ class OrderRefundViewModel @Inject constructor(
                 }
             }
         } ?: emptyList()
+    }
+
+    /**
+     * Assisted Factory
+     *
+     * @author Joker.X
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * 创建 ViewModel 实例
+         *
+         * @param navKey 路由参数
+         * @return ViewModel 实例
+         * @author Joker.X
+         */
+        fun create(navKey: OrderRoutes.Refund): OrderRefundViewModel
     }
 }

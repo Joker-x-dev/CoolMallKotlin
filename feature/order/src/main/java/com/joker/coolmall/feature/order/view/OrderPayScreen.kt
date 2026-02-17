@@ -29,6 +29,8 @@ import com.joker.coolmall.core.designsystem.component.VerticalList
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.ColorDanger
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
+import com.joker.coolmall.core.navigation.navigateBack
+import com.joker.coolmall.core.navigation.order.OrderRoutes
 import com.joker.coolmall.core.ui.component.bottombar.AppBottomButton
 import com.joker.coolmall.core.ui.component.button.CheckButton
 import com.joker.coolmall.core.ui.component.list.AppListItem
@@ -44,12 +46,18 @@ import kotlinx.coroutines.withContext
 /**
  * 订单支付路由
  *
+ * @param navKey 路由参数
  * @param viewModel 订单支付 ViewModel
  * @author Joker.X
  */
 @Composable
 internal fun OrderPayRoute(
-    viewModel: OrderPayViewModel = hiltViewModel()
+    navKey: OrderRoutes.Pay,
+    viewModel: OrderPayViewModel = hiltViewModel<OrderPayViewModel, OrderPayViewModel.Factory>(
+        creationCallback = { factory ->
+            factory.create(navKey)
+        }
+    ),
 ) {
     // 订单支付路由参数
     val orderPayRoute by viewModel.orderPayRoute.collectAsState()
@@ -89,7 +97,6 @@ internal fun OrderPayRoute(
  * 订单支付界面
  *
  * @param price 支付价格
- * @param onBackClick 返回按钮回调
  * @param onPayClick 支付按钮回调
  * @author Joker.X
  */
@@ -97,7 +104,7 @@ internal fun OrderPayRoute(
 @Composable
 internal fun OrderPayScreen(
     price: Int = 0,
-    onBackClick: () -> Unit = {},
+    onBackClick: () -> Unit = { navigateBack() },
     onPayClick: () -> Unit = {},
 ) {
 

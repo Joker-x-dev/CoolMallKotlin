@@ -1,14 +1,10 @@
 package com.joker.coolmall.feature.order.viewmodel
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavBackStackEntry
-import androidx.navigation.toRoute
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
 import com.joker.coolmall.core.data.repository.CommonRepository
 import com.joker.coolmall.core.data.repository.OrderRepository
-import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.entity.Cart
 import com.joker.coolmall.core.model.entity.CartGoodsSpec
 import com.joker.coolmall.core.model.entity.DictItem
@@ -16,45 +12,48 @@ import com.joker.coolmall.core.model.entity.Order
 import com.joker.coolmall.core.model.request.CancelOrderRequest
 import com.joker.coolmall.core.model.request.DictDataRequest
 import com.joker.coolmall.core.model.response.NetworkResponse
-import com.joker.coolmall.navigation.AppNavigator
-import com.joker.coolmall.navigation.RefreshResultKey
-import com.joker.coolmall.navigation.routes.GoodsRoutes
-import com.joker.coolmall.navigation.routes.OrderRoutes
+import com.joker.coolmall.core.navigation.RefreshResult
+import com.joker.coolmall.core.navigation.RefreshResultKey
+import com.joker.coolmall.core.navigation.goods.GoodsRoutes
+import com.joker.coolmall.core.navigation.navigate
+import com.joker.coolmall.core.navigation.navigateBack
+import com.joker.coolmall.core.navigation.order.OrderRoutes
+import com.joker.coolmall.core.navigation.popBackStackWithResult
+import com.joker.coolmall.core.navigation.resultEvents
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 /**
  * 订单详情视图模型
  *
- * @param navigator 导航器
- * @param appState 应用状态
- * @param savedStateHandle 保存状态句柄
+ * @param navKey 路由参数
  * @param orderRepository 订单仓库
  * @param commonRepository 通用仓库
  * @author Joker.X
  */
-@HiltViewModel
-class OrderDetailViewModel @Inject constructor(
-    navigator: AppNavigator,
-    appState: AppState,
-    savedStateHandle: SavedStateHandle,
+@HiltViewModel(assistedFactory = OrderDetailViewModel.Factory::class)
+class OrderDetailViewModel @AssistedInject constructor(
+    @Assisted navKey: OrderRoutes.Detail,
     private val orderRepository: OrderRepository,
     private val commonRepository: CommonRepository
-) : BaseNetWorkViewModel<Order>(
-    navigator = navigator,
-    appState = appState
-) {
+) : BaseNetWorkViewModel<Order>() {
+    /**
+     * 刷新结果监听任务
+     */
+    private var refreshObserveJob: Job? = null
+
     // 从路由获取订单ID
-    private val detailRoute = savedStateHandle.toRoute<OrderRoutes.Detail>()
-    private val requiredOrderId: Long = detailRoute.orderId
+    private val requiredOrderId: Long = navKey.orderId
 
     private val _cartList = MutableStateFlow<List<Cart>>(emptyList())
     val cartList = _cartList.asStateFlow()
@@ -101,6 +100,7 @@ class OrderDetailViewModel @Inject constructor(
     private var shouldRefreshListOnBack = false
 
     init {
+        observeRefreshState()
         super.executeRequest()
     }
 
@@ -288,22 +288,16 @@ class OrderDetailViewModel @Inject constructor(
      *
      * @author Joker.X
      */
-    fun observeRefreshState(backStackEntry: NavBackStackEntry?) {
-        backStackEntry?.savedStateHandle?.let { savedStateHandle ->
-            viewModelScope.launch {
-                savedStateHandle.getStateFlow(RefreshResultKey.key, false)
-                    .collect { shouldRefresh ->
-                        if (shouldRefresh) {
-                            // 刷新订单详情
-                            retryRequest()
-
-                            // 标记需要在返回时刷新列表
-                            shouldRefreshListOnBack = true
-
-                            // 重置刷新标志，避免重复刷新
-                            savedStateHandle[RefreshResultKey.key] = false
-                        }
-                    }
+    fun observeRefreshState() {
+        if (refreshObserveJob != null) return
+        refreshObserveJob = viewModelScope.launch {
+            resultEvents(RefreshResultKey).collect { refreshResult: RefreshResult ->
+                if (refreshResult.refresh == true) {
+                    // 刷新订单详情
+                    retryRequest()
+                    // 标记需要在返回时刷新列表
+                    shouldRefreshListOnBack = true
+                }
             }
         }
     }
@@ -317,7 +311,7 @@ class OrderDetailViewModel @Inject constructor(
     fun handleBackClick() {
         if (shouldRefreshListOnBack) {
             // 使用 NavigationResult 回传刷新状态给上一个页面（通常是订单列表）
-            popBackStackWithResult(RefreshResultKey, true)
+            popBackStackWithResult(RefreshResultKey, RefreshResult(refresh = true))
             shouldRefreshListOnBack = false
         } else {
             navigateBack()
@@ -380,6 +374,7 @@ class OrderDetailViewModel @Inject constructor(
     /**
      * 跳转到商品详情页面（再次购买）
      *
+     * @param goodsId 商品ID
      * @author Joker.X
      */
     fun toGoodsDetail(goodsId: Long) {
@@ -439,7 +434,6 @@ class OrderDetailViewModel @Inject constructor(
         val orderId = order.id
         // 隐藏弹窗
         hideCommentModal()
-
         navigate(OrderRoutes.Comment(orderId = orderId, goodsId = goodsId))
     }
 
@@ -486,5 +480,22 @@ class OrderDetailViewModel @Inject constructor(
                 }
             }
         } ?: emptyList()
+    }
+
+    /**
+     * Assisted Factory
+     *
+     * @author Joker.X
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * 创建 ViewModel 实例
+         *
+         * @param navKey 路由参数
+         * @return ViewModel 实例
+         * @author Joker.X
+         */
+        fun create(navKey: OrderRoutes.Detail): OrderDetailViewModel
     }
 }

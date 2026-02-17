@@ -6,7 +6,6 @@ import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
 import com.joker.coolmall.core.data.repository.CartRepository
 import com.joker.coolmall.core.data.repository.OrderRepository
 import com.joker.coolmall.core.data.repository.PageRepository
-import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.entity.Address
 import com.joker.coolmall.core.model.entity.Cart
 import com.joker.coolmall.core.model.entity.CartGoodsSpec
@@ -17,12 +16,13 @@ import com.joker.coolmall.core.model.entity.SelectedGoods
 import com.joker.coolmall.core.model.request.CreateOrderRequest
 import com.joker.coolmall.core.model.request.CreateOrderRequest.CreateOrder
 import com.joker.coolmall.core.model.response.NetworkResponse
+import com.joker.coolmall.core.navigation.navigateAndCloseCurrent
+import com.joker.coolmall.core.navigation.order.OrderRoutes
+import com.joker.coolmall.core.navigation.resultEvents
+import com.joker.coolmall.core.navigation.user.SelectAddressResultKey
 import com.joker.coolmall.core.util.storage.MMKVUtils
 import com.joker.coolmall.core.util.toast.ToastUtils
 import com.joker.coolmall.feature.order.R
-import com.joker.coolmall.navigation.AppNavigator
-import com.joker.coolmall.navigation.routes.OrderRoutes
-import com.joker.coolmall.navigation.routes.UserRoutes
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -38,8 +38,6 @@ import javax.inject.Inject
  * 订单确认页面ViewModel
  *
  * @param context 应用上下文
- * @param navigator 导航器
- * @param appState 应用状态
  * @param orderRepository 订单仓库
  * @param cartRepository 购物车仓库
  * @param pageRepository 页面仓库
@@ -48,12 +46,10 @@ import javax.inject.Inject
 @HiltViewModel
 class OrderConfirmViewModel @Inject constructor(
     @param:ApplicationContext private val context: Context,
-    navigator: AppNavigator,
-    appState: AppState,
     private val orderRepository: OrderRepository,
     private val cartRepository: CartRepository,
     private val pageRepository: PageRepository
-) : BaseNetWorkViewModel<ConfirmOrder>(navigator, appState) {
+) : BaseNetWorkViewModel<ConfirmOrder>() {
 
     /**
      * 订单备注状态
@@ -147,6 +143,7 @@ class OrderConfirmViewModel @Inject constructor(
     } ?: emptyList()
 
     init {
+        observeSelectedAddressResult()
         executeRequest()
         // 清除选中商品缓存，避免重复使用
         MMKVUtils.remove("selectedGoodsList")
@@ -159,6 +156,19 @@ class OrderConfirmViewModel @Inject constructor(
         viewModelScope.launch {
             _selectedCoupon.collect { coupon ->
                 calculatePrices(coupon)
+            }
+        }
+    }
+
+    /**
+     * 监听地址选择回传结果
+     *
+     * @author Joker.X
+     */
+    private fun observeSelectedAddressResult() {
+        viewModelScope.launch {
+            resultEvents(SelectAddressResultKey).collect { address ->
+                onAddressSelected(address)
             }
         }
     }
@@ -341,15 +351,6 @@ class OrderConfirmViewModel @Inject constructor(
 
         _discountAmount.value = discountValue
         _totalPrice.value = (originalPriceValue - discountValue).coerceAtLeast(0.0)
-    }
-
-    /**
-     * 跳转到地址选择页面
-     *
-     * @author Joker.X
-     */
-    fun navigateToAddressSelection() {
-        navigate(UserRoutes.AddressList(isSelectMode = true))
     }
 
     /**

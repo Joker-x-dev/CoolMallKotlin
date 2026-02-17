@@ -1,48 +1,36 @@
 package com.joker.coolmall.feature.order.viewmodel
 
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.toRoute
 import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
 import com.joker.coolmall.core.data.repository.OrderRepository
-import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.entity.Logistics
 import com.joker.coolmall.core.model.entity.Order
 import com.joker.coolmall.core.model.response.NetworkResponse
-import com.joker.coolmall.navigation.AppNavigator
-import com.joker.coolmall.navigation.routes.OrderRoutes
+import com.joker.coolmall.core.navigation.order.OrderRoutes
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
+import dagger.assisted.Assisted
+import dagger.assisted.AssistedFactory
+import dagger.assisted.AssistedInject
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import javax.inject.Inject
 
 /**
  * 订单物流 ViewModel
  *
- * @param navigator 导航器
- * @param appState 应用状态
- * @param savedStateHandle 保存状态句柄
+ * @param navKey 路由参数
  * @param orderRepository 订单仓库
  * @author Joker.X
  */
-@HiltViewModel
-class OrderLogisticsViewModel @Inject constructor(
-    navigator: AppNavigator,
-    appState: AppState,
-    savedStateHandle: SavedStateHandle,
+@HiltViewModel(assistedFactory = OrderLogisticsViewModel.Factory::class)
+class OrderLogisticsViewModel @AssistedInject constructor(
+    @Assisted navKey: OrderRoutes.Logistics,
     private val orderRepository: OrderRepository,
-) : BaseNetWorkViewModel<Order>(
-    navigator = navigator,
-    appState = appState
-) {
+) : BaseNetWorkViewModel<Order>() {
     // 从路由获取订单ID
-    private val logisticsRoute = savedStateHandle.toRoute<OrderRoutes.Logistics>()
-
-    // 从路由获取订单ID
-    private val requiredOrderId: Long = logisticsRoute.orderId
+    private val requiredOrderId: Long = navKey.orderId
 
     /**
      * 订单物流数据
@@ -76,5 +64,22 @@ class OrderLogisticsViewModel @Inject constructor(
             flow = orderRepository.getOrderLogistics(requiredOrderId).asResult(),
             onData = { data -> _orderLogisticsUiState.value = data }
         )
+    }
+
+    /**
+     * Assisted Factory
+     *
+     * @author Joker.X
+     */
+    @AssistedFactory
+    interface Factory {
+        /**
+         * 创建 ViewModel 实例
+         *
+         * @param navKey 路由参数
+         * @return ViewModel 实例
+         * @author Joker.X
+         */
+        fun create(navKey: OrderRoutes.Logistics): OrderLogisticsViewModel
     }
 }

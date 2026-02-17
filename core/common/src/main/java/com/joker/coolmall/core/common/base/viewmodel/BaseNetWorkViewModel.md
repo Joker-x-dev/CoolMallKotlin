@@ -285,11 +285,11 @@ BaseNetWorkViewModel(
 // 添加日志和过滤功能
 override fun onRequestSuccess(data: Home) {
     Log.d(TAG, "接收到首页数据: ${data.banner?.size ?: 0} 个轮播图")
-    
+
     // 空安全检查示例
     val filteredBanners = data.banner?.filter { it.isActive } ?: emptyList()
     val processedData = data.copy(banner = filteredBanners)
-    
+
     // 调用父类方法更新状态
     super.onRequestSuccess(processedData)
 }
@@ -298,12 +298,12 @@ override fun onRequestSuccess(data: Home) {
 override fun onRequestError(message: String, exception: Throwable) {
     // 记录错误日志
     Log.e(TAG, "数据加载错误: $message", exception)
-    
+
     // 可以进行特殊错误处理，例如网络错误重试
     if (exception is IOException) {
         // 处理网络错误
     }
-    
+
     // 调用父类方法更新状态
     super.onRequestError(message, exception)
 }

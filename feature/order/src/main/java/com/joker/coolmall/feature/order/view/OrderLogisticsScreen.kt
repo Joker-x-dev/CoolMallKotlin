@@ -23,6 +23,8 @@ import com.joker.coolmall.core.model.entity.Logistics
 import com.joker.coolmall.core.model.entity.Order
 import com.joker.coolmall.core.model.preview.previewLogisticsData
 import com.joker.coolmall.core.model.preview.previewOrder
+import com.joker.coolmall.core.navigation.navigateBack
+import com.joker.coolmall.core.navigation.order.OrderRoutes
 import com.joker.coolmall.core.ui.component.address.AddressCard
 import com.joker.coolmall.core.ui.component.image.NetWorkImage
 import com.joker.coolmall.core.ui.component.list.AppListItem
@@ -39,12 +41,18 @@ import com.joker.coolmall.feature.order.viewmodel.OrderLogisticsViewModel
 /**
  * 订单物流路由
  *
+ * @param navKey 路由参数
  * @param viewModel 订单物流 ViewModel
  * @author Joker.X
  */
 @Composable
 internal fun OrderLogisticsRoute(
-    viewModel: OrderLogisticsViewModel = hiltViewModel()
+    navKey: OrderRoutes.Logistics,
+    viewModel: OrderLogisticsViewModel = hiltViewModel<OrderLogisticsViewModel, OrderLogisticsViewModel.Factory>(
+        creationCallback = { factory ->
+            factory.create(navKey)
+        }
+    ),
 ) {
     val uiState by viewModel.uiState.collectAsState() // 订单数据状态
     val logisticsUiState by viewModel.orderLogisticsUiState.collectAsState() // 物流数据状态
@@ -52,7 +60,6 @@ internal fun OrderLogisticsRoute(
     OrderLogisticsScreen(
         uiState = uiState,
         logisticsUiState = logisticsUiState,
-        onBackClick = viewModel::navigateBack,
         onRetry = viewModel::retryRequest,
     )
 }
@@ -62,7 +69,6 @@ internal fun OrderLogisticsRoute(
  *
  * @param uiState UI状态
  * @param logisticsUiState 物流数据状态
- * @param onBackClick 返回按钮回调
  * @param onRetry 重试请求回调
  * @author Joker.X
  */
@@ -71,13 +77,12 @@ internal fun OrderLogisticsRoute(
 internal fun OrderLogisticsScreen(
     uiState: BaseNetWorkUiState<Order> = BaseNetWorkUiState.Loading,
     logisticsUiState: Logistics = Logistics(),
-    onBackClick: () -> Unit = {},
     onRetry: () -> Unit = {}
 ) {
     AppScaffold(
         titleText = stringResource(R.string.order_logistics),
         useLargeTopBar = true,
-        onBackClick = onBackClick
+        onBackClick = { navigateBack() }
     ) {
         BaseNetWorkView(
             uiState = uiState,

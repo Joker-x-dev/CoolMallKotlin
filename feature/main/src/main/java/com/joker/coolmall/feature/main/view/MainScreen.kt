@@ -22,6 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.joker.coolmall.core.designsystem.theme.AppTheme
+import com.joker.coolmall.core.navigation.main.MainRoutes
 import com.joker.coolmall.feature.main.component.BottomNavigationBar
 import com.joker.coolmall.feature.main.model.TopLevelDestination
 import com.joker.coolmall.feature.main.viewmodel.MainViewModel
@@ -38,8 +39,8 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 internal fun MainRoute(
-    sharedTransitionScope: SharedTransitionScope,
-    animatedContentScope: AnimatedContentScope,
+    sharedTransitionScope: SharedTransitionScope? = null,
+    animatedContentScope: AnimatedContentScope? = null,
     viewModel: MainViewModel = hiltViewModel()
 ) {
     // 当前页面索引
@@ -147,7 +148,7 @@ private fun MainScreenContentView(
             )
 
             1 -> CategoryRoute()
-            2 -> CartRoute()
+            2 -> CartRoute(navKey = MainRoutes.Cart())
             3 -> MeRoute(
                 sharedTransitionScope = sharedTransitionScope,
                 animatedContentScope = animatedContentScope

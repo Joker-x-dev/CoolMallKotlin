@@ -18,7 +18,7 @@ import org.gradle.kotlin.dsl.dependencies
  * 插件会根据模块在项目中的位置自动生成合适的命名空间，支持以下模块类型：
  * - feature模块：com.joker.coolmall.feature.xxx
  * - core模块：com.joker.coolmall.core.xxx
- * - navigation模块：com.joker.coolmall.navigation
+ * - core模块：com.joker.coolmall.core.xxx
  * - 其他模块：根据模块路径生成
  *
  * @author Joker.X
@@ -58,10 +58,6 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
                     coreMatch != null -> {
                         val corePath = coreMatch.groupValues[1].replace("/", ".")
                         "${libs.findVersion("namespace").get()}.$corePath"
-                    }
-                    // navigation模块命名空间
-                    project.path == ":navigation" -> {
-                        "${libs.findVersion("namespace").get()}.navigation"
                     }
                     // 其他模块命名空间
                     else -> {

@@ -14,6 +14,7 @@ import androidx.compose.ui.viewinterop.AndroidView
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.designsystem.theme.AppTheme
+import com.joker.coolmall.core.navigation.navigateBack
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkView
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
 import com.joker.coolmall.feature.common.R
@@ -34,7 +35,6 @@ internal fun UserAgreementRoute(
 
     UserAgreementScreen(
         uiState = uiState,
-        onBackClick = viewModel::navigateBack,
         onRetry = viewModel::retryRequest,
     )
 }
@@ -43,7 +43,6 @@ internal fun UserAgreementRoute(
  * 用户协议界面
  *
  * @param uiState UI状态
- * @param onBackClick 返回按钮回调
  * @param onRetry 重试请求回调
  * @author Joker.X
  */
@@ -51,12 +50,11 @@ internal fun UserAgreementRoute(
 @Composable
 internal fun UserAgreementScreen(
     uiState: BaseNetWorkUiState<String> = BaseNetWorkUiState.Loading,
-    onBackClick: () -> Unit = {},
     onRetry: () -> Unit = {}
 ) {
     AppScaffold(
         title = R.string.user_agreement_title,
-        onBackClick = onBackClick,
+        onBackClick = { navigateBack() },
         backgroundColor = MaterialTheme.colorScheme.surface,
     ) {
         BaseNetWorkView(

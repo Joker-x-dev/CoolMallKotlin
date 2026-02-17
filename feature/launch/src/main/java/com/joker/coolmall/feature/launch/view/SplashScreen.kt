@@ -52,14 +52,14 @@ import kotlinx.coroutines.delay
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 internal fun SplashRoute(
-    sharedTransitionScope: SharedTransitionScope,
-    animatedContentScope: AnimatedContentScope,
+    sharedTransitionScope: SharedTransitionScope? = null,
+    animatedContentScope: AnimatedContentScope? = null,
     viewModel: SplashViewModel = hiltViewModel()
 ) {
     SplashScreen(
         sharedTransitionScope = sharedTransitionScope,
         animatedContentScope = animatedContentScope,
-        toHome = viewModel::checkGuideStatusAndNavigate
+        viewModel = viewModel
     )
 }
 
@@ -68,7 +68,7 @@ internal fun SplashRoute(
  *
  * @param sharedTransitionScope 共享转换作用域
  * @param animatedContentScope 动画内容作用域
- * @param toHome 导航到主页的回调
+ * @param viewModel 启动页 ViewModel
  * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
@@ -76,12 +76,12 @@ internal fun SplashRoute(
 internal fun SplashScreen(
     sharedTransitionScope: SharedTransitionScope? = null,
     animatedContentScope: AnimatedContentScope? = null,
-    toHome: () -> Unit = {}
+    viewModel: SplashViewModel = hiltViewModel()
 ) {
     SplashContentView(
         sharedTransitionScope = sharedTransitionScope,
         animatedContentScope = animatedContentScope,
-        toHome = toHome
+        onSplashFinished = viewModel::checkGuideStatusAndNavigate
     )
 }
 
@@ -90,7 +90,7 @@ internal fun SplashScreen(
  *
  * @param sharedTransitionScope 共享转换作用域
  * @param animatedContentScope 动画内容作用域
- * @param toHome 导航到主页的回调
+ * @param onSplashFinished 启动动画结束后的回调
  * @author Joker.X
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
@@ -98,7 +98,7 @@ internal fun SplashScreen(
 private fun SplashContentView(
     sharedTransitionScope: SharedTransitionScope? = null,
     animatedContentScope: AnimatedContentScope? = null,
-    toHome: () -> Unit = {}
+    onSplashFinished: () -> Unit = {}
 ) {
     // 动画状态
     var startAnimation by rememberSaveable { mutableStateOf(false) }
@@ -108,7 +108,7 @@ private fun SplashContentView(
         // 立即启动动画
         startAnimation = true
         delay(1200)
-        toHome()
+        onSplashFinished()
     }
 
     // Logo Y偏移

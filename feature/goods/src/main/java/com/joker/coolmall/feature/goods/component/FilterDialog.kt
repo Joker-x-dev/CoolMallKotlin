@@ -1,6 +1,5 @@
 package com.joker.coolmall.feature.goods.component
 
-import CategoryUiState
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedVisibilityScope
 import androidx.compose.animation.ExperimentalSharedTransitionApi
@@ -76,6 +75,7 @@ import com.joker.coolmall.core.ui.component.text.AppText
 import com.joker.coolmall.core.ui.component.text.TextSize
 import com.joker.coolmall.core.ui.component.text.TextType
 import com.joker.coolmall.feature.goods.R
+import com.joker.coolmall.feature.goods.state.CategoryUiState
 import com.joker.coolmall.core.ui.R as CoreUiR
 
 /**

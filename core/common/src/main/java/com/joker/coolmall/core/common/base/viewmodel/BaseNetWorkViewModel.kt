@@ -1,18 +1,15 @@
 package com.joker.coolmall.core.common.base.viewmodel
 
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavBackStackEntry
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
-import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.response.NetworkResponse
-import com.joker.coolmall.navigation.AppNavigator
-import com.joker.coolmall.navigation.NavigationResultKey
-import com.joker.coolmall.navigation.RefreshResultKey
+import com.joker.coolmall.core.navigation.NavigationResultKey
+import com.joker.coolmall.core.navigation.RefreshResult
+import com.joker.coolmall.core.navigation.RefreshResultKey
+import com.joker.coolmall.core.navigation.resultEvents
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,20 +20,19 @@ import kotlinx.coroutines.launch
 /**
  * 网络请求ViewModel基类
  *
- * 基于Flow的异步数据流模式，子类只需重写requestApiFlow方法
- * 支持自动从SavedStateHandle获取路由参数ID
+ * 基于Flow的异步数据流模式，子类只需重写requestApiFlow方法。
  *
  * @param T 数据类型
- * @param navigator 导航控制器
- * @param appState 应用状态
- * @param savedStateHandle 保存状态句柄，用于获取路由参数
  * @author Joker.X
  */
-abstract class BaseNetWorkViewModel<T>(
-    navigator: AppNavigator,
-    appState: AppState,
-    protected val savedStateHandle: SavedStateHandle? = null,
-) : BaseViewModel(navigator, appState) {
+abstract class BaseNetWorkViewModel<T> : BaseViewModel() {
+    /**
+     * 刷新结果监听任务
+     *
+     * 用于保证只注册一次刷新结果监听，避免重复 collect 导致重复请求。
+     * 当该任务不为 null 时，表示当前 ViewModel 已经建立监听。
+     */
+    private var refreshObserveJob: Job? = null
 
     /**
      * 通用网络请求UI状态
@@ -66,8 +62,6 @@ abstract class BaseNetWorkViewModel<T>(
     /**
      * 子类必须重写此方法，提供API请求的Flow
      * 适用于各种网络操作：GET、POST、PUT、DELETE等
-     *
-     * 注意：此方法不应在基类构造函数中调用，以避免子类属性初始化问题
      */
     protected abstract fun requestApiFlow(): Flow<NetworkResponse<T>>
 
@@ -172,38 +166,24 @@ abstract class BaseNetWorkViewModel<T>(
             ?: throw IllegalStateException("Current page uiState is not in Success state, unable to retrieve data")
     }
 
-
     /**
-     * 视图层调用此方法，监听页面刷新信号（基于 NavigationResultKey）。
+     * 注册页面刷新信号监听（基于 NavigationResultKey）。
      *
-     * @param backStackEntry 当前页面的 NavBackStackEntry
+     * 推荐在 ViewModel 的 `init` 中调用一次，不依赖 View 层 `LaunchedEffect`。
+     * 内部已做去重：重复调用不会重复注册。
+     *
      * @param key 刷新结果的类型安全 Key，默认使用全局的 [RefreshResultKey]
-     *
-     * 用法：在 Composable 中调用
-     * ```kotlin
-     * val backStackEntry = navController.currentBackStackEntry
-     * LaunchedEffect(backStackEntry) {
-     *     viewModel.observeRefreshState(backStackEntry)
-     * }
-     * ```
-     *
-     * 只需调用一次，自动去重和解绑，无内存泄漏。
-     * 语义等价于旧方案中的 "refresh" 布尔标记。
      */
     fun observeRefreshState(
-        backStackEntry: NavBackStackEntry?,
-        key: NavigationResultKey<Boolean> = RefreshResultKey
+        key: NavigationResultKey<RefreshResult> = RefreshResultKey,
     ) {
-        if (backStackEntry == null) return
-        val owner: LifecycleOwner = backStackEntry
-        backStackEntry.savedStateHandle
-            .getLiveData<Boolean>(key.key)
-            .observe(owner, Observer<Boolean> { value ->
-                if (value) {
+        if (refreshObserveJob != null) return
+        refreshObserveJob = viewModelScope.launch {
+            resultEvents(key).collect { refreshResult ->
+                if (refreshResult.refresh == true) {
                     executeRequest()
-                    // 只刷新一次
-                    backStackEntry.savedStateHandle[key.key] = false
                 }
-            })
+            }
+        }
     }
 }

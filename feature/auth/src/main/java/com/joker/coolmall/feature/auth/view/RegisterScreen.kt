@@ -20,6 +20,8 @@ import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXLarge
 import com.joker.coolmall.core.model.entity.Captcha
+import com.joker.coolmall.core.navigation.common.CommonNavigator
+import com.joker.coolmall.core.navigation.navigateBack
 import com.joker.coolmall.core.ui.component.button.AppButton
 import com.joker.coolmall.core.util.permission.PermissionUtils
 import com.joker.coolmall.core.util.toast.ToastUtils
@@ -100,10 +102,7 @@ internal fun RegisterRoute(
         onSendVerificationCode = onSendVerificationCodeWithPermission,
         onImageCodeConfirm = viewModel::onImageCodeConfirm,
         onRefreshCaptcha = viewModel::getCaptcha,
-        onRegisterClick = viewModel::register,
-        onBackClick = viewModel::navigateBack,
-        onUserAgreementClick = viewModel::onUserAgreementClick,
-        onPrivacyPolicyClick = viewModel::onPrivacyPolicyClick
+        onRegisterClick = viewModel::register
     )
 }
 
@@ -128,9 +127,6 @@ internal fun RegisterRoute(
  * @param onImageCodeConfirm 图形验证码确认回调
  * @param onRefreshCaptcha 刷新验证码回调
  * @param onRegisterClick 注册按钮点击回调
- * @param onBackClick 返回上一页回调
- * @param onUserAgreementClick 用户协议点击回调
- * @param onPrivacyPolicyClick 隐私政策点击回调
  * @author Joker.X
  */
 @OptIn(ExperimentalMaterial3Api::class)
@@ -153,15 +149,12 @@ internal fun RegisterScreen(
     onSendVerificationCode: () -> Unit = {},
     onImageCodeConfirm: (String) -> Unit = {},
     onRefreshCaptcha: () -> Unit = {},
-    onRegisterClick: () -> Unit = {},
-    onBackClick: () -> Unit = {},
-    onUserAgreementClick: () -> Unit = {},
-    onPrivacyPolicyClick: () -> Unit = {}
+    onRegisterClick: () -> Unit = {}
 ) {
     AnimatedAuthPage(
         title = stringResource(id = R.string.welcome_register),
         withFadeIn = true,
-        onBackClick = onBackClick
+        onBackClick = { navigateBack() }
     ) {
         RegisterContentView(
             phone = phone,
@@ -175,10 +168,7 @@ internal fun RegisterScreen(
             onPasswordChange = onPasswordChange,
             onConfirmPasswordChange = onConfirmPasswordChange,
             onSendVerificationCode = onSendVerificationCode,
-            onRegisterClick = onRegisterClick,
-            onBackClick = onBackClick,
-            onUserAgreementClick = onUserAgreementClick,
-            onPrivacyPolicyClick = onPrivacyPolicyClick
+            onRegisterClick = onRegisterClick
         )
     }
 
@@ -207,9 +197,6 @@ internal fun RegisterScreen(
  * @param onConfirmPasswordChange 确认密码变更回调
  * @param onSendVerificationCode 发送验证码回调
  * @param onRegisterClick 注册按钮点击回调
- * @param onBackClick 返回上一页回调
- * @param onUserAgreementClick 用户协议点击回调
- * @param onPrivacyPolicyClick 隐私政策点击回调
  * @author Joker.X
  */
 @Composable
@@ -226,9 +213,6 @@ private fun RegisterContentView(
     onConfirmPasswordChange: (String) -> Unit,
     onSendVerificationCode: () -> Unit,
     onRegisterClick: () -> Unit,
-    onBackClick: () -> Unit,
-    onUserAgreementClick: () -> Unit,
-    onPrivacyPolicyClick: () -> Unit
 ) {
     // 记录输入框焦点状态
     val phoneFieldFocused = remember { mutableStateOf(false) }
@@ -285,8 +269,8 @@ private fun RegisterContentView(
     // 使用封装的用户协议组件
     UserAgreement(
         prefix = stringResource(id = R.string.register_agreement_prefix),
-        onUserAgreementClick = onUserAgreementClick,
-        onPrivacyPolicyClick = onPrivacyPolicyClick
+        onUserAgreementClick = CommonNavigator::toUserAgreement,
+        onPrivacyPolicyClick = CommonNavigator::toPrivacyPolicy
     )
 
     SpaceVerticalXLarge()
@@ -301,7 +285,7 @@ private fun RegisterContentView(
     BottomNavigationRow(
         messageText = stringResource(id = R.string.have_account),
         actionText = stringResource(id = R.string.go_login),
-        onActionClick = onBackClick
+        onActionClick = { navigateBack() }
     )
 }
 

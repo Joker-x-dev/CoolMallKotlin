@@ -34,6 +34,7 @@ import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.model.entity.DictItem
 import com.joker.coolmall.core.model.response.DictDataResponse
+import com.joker.coolmall.core.navigation.navigateBack
 import com.joker.coolmall.core.ui.component.bottombar.AppBottomButton
 import com.joker.coolmall.core.ui.component.card.AppCard
 import com.joker.coolmall.core.ui.component.imagepicker.ImageGridPicker
@@ -78,7 +79,6 @@ internal fun FeedbackSubmitRoute(
         uploadedImageUrls = uploadedImageUrls,
         isSubmitting = isSubmitting,
         isFormValid = viewModel.isFormValid(),
-        onBackClick = viewModel::navigateBack,
         onRetry = viewModel::retryRequest,
         onFeedbackTypeSelected = viewModel::selectFeedbackType,
         onContactChange = viewModel::updateContact,
@@ -99,7 +99,6 @@ internal fun FeedbackSubmitRoute(
  * @param uploadedImageUrls 已上传的图片URL列表
  * @param isSubmitting 是否正在提交
  * @param isFormValid 表单是否有效
- * @param onBackClick 返回按钮回调
  * @param onRetry 重试请求回调
  * @param onFeedbackTypeSelected 反馈类型选择回调
  * @param onContactChange 联系方式变化回调
@@ -119,7 +118,6 @@ internal fun FeedbackSubmitScreen(
     uploadedImageUrls: List<String> = emptyList(),
     isSubmitting: Boolean = false,
     isFormValid: Boolean = true,
-    onBackClick: () -> Unit = {},
     onRetry: () -> Unit = {},
     onFeedbackTypeSelected: (DictItem) -> Unit = {},
     onContactChange: (String) -> Unit = {},
@@ -130,7 +128,7 @@ internal fun FeedbackSubmitScreen(
     AppScaffold(
         title = R.string.feedback_submit,
         useLargeTopBar = true,
-        onBackClick = onBackClick,
+        onBackClick = { navigateBack() },
         bottomBar = {
             if (uiState is BaseNetWorkUiState.Success) {
                 AppBottomButton(

@@ -49,6 +49,7 @@ import com.joker.coolmall.core.designsystem.theme.SpacePaddingLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXXLarge
+import com.joker.coolmall.core.navigation.launch.LaunchRoutes
 import com.joker.coolmall.core.ui.component.button.AppButton
 import com.joker.coolmall.core.ui.component.text.AppText
 import com.joker.coolmall.core.ui.component.text.TextSize
@@ -61,13 +62,19 @@ import kotlinx.coroutines.launch
 /**
  * 引导页路由
  *
+ * @param navKey 路由参数
  * @param viewModel 引导页 ViewModel
  * @author Joker.X
  */
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 internal fun GuideRoute(
-    viewModel: GuideViewModel = hiltViewModel()
+    navKey: LaunchRoutes.Guide,
+    viewModel: GuideViewModel = hiltViewModel<GuideViewModel, GuideViewModel.Factory>(
+        creationCallback = { factory ->
+            factory.create(navKey)
+        }
+    ),
 ) {
     // 协程作用域
     val scope = rememberCoroutineScope()

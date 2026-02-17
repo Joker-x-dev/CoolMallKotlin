@@ -24,6 +24,7 @@ import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.model.entity.User
+import com.joker.coolmall.core.navigation.navigateBack
 import com.joker.coolmall.core.ui.component.image.SmallAvatar
 import com.joker.coolmall.core.ui.component.list.AppListItem
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
@@ -44,15 +45,14 @@ import com.joker.coolmall.feature.user.viewmodel.ProfileViewModel
 @OptIn(ExperimentalSharedTransitionApi::class)
 @Composable
 internal fun ProfileRoute(
-    sharedTransitionScope: SharedTransitionScope,
-    animatedContentScope: AnimatedContentScope,
+    sharedTransitionScope: SharedTransitionScope? = null,
+    animatedContentScope: AnimatedContentScope? = null,
     viewModel: ProfileViewModel = hiltViewModel()
 ) {
     // 收集用户信息
     val userInfo by viewModel.userInfo.collectAsStateWithLifecycle()
 
     ProfileScreen(
-        onBackClick = viewModel::navigateBack,
         onLogoutClick = viewModel::logout,
         sharedTransitionScope = sharedTransitionScope,
         animatedContentScope = animatedContentScope,
@@ -63,7 +63,6 @@ internal fun ProfileRoute(
 /**
  * 个人中心界面
  *
- * @param onBackClick 返回上一页回调
  * @param onLogoutClick 退出登录回调
  * @param sharedTransitionScope 共享转换作用域
  * @param animatedContentScope 动画内容作用域
@@ -73,7 +72,6 @@ internal fun ProfileRoute(
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalSharedTransitionApi::class)
 @Composable
 internal fun ProfileScreen(
-    onBackClick: () -> Unit = {},
     onLogoutClick: () -> Unit = {},
     sharedTransitionScope: SharedTransitionScope? = null,
     animatedContentScope: AnimatedContentScope? = null,
@@ -82,7 +80,7 @@ internal fun ProfileScreen(
     AppScaffold(
         title = R.string.profile_title,
         useLargeTopBar = true,
-        onBackClick = onBackClick
+        onBackClick = { navigateBack() }
     ) {
         ProfileContentView(
             onLogoutClick = onLogoutClick,
