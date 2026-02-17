@@ -95,7 +95,7 @@ to join.
 
 > 🌟 **Tip**: The customer service chat and feedback features are fully functional. I genuinely read every message you send and will respond to each one, so please don't call me a bot....
 
-- **Release Version (Recommended 4MB)
+- **Release Version (Recommended 3.6MB)
   **: [Click to Download](https://www.pgyer.com/CoolMallKotlinProdRelease)
     - Stable version optimized for daily use and experience, with optimal performance and size.
 

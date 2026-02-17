@@ -86,7 +86,7 @@ Android 开发感兴趣，无论是学习还是共同创造，都欢迎加入。
 
 > 🌟 **提示**：客服聊天和意见反馈功能均为真实可用的，大家给我的留言我每一条都会去看，也会回复，所以不要说我是人机了....
 
-- **Release 版本（推荐 4MB）**：[点击下载体验](https://www.pgyer.com/CoolMallKotlinProdRelease)
+- **Release 版本（推荐 3.6MB）**：[点击下载体验](https://www.pgyer.com/CoolMallKotlinProdRelease)
     - 为日常使用和体验优化的稳定版本，具有最佳性能和体积。
 
 
