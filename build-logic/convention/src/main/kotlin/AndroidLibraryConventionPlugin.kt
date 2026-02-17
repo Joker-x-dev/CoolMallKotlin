@@ -1,4 +1,4 @@
-import com.android.build.gradle.LibraryExtension
+import com.android.build.api.dsl.LibraryExtension
 import com.joker.coolmall.configureKotlinAndroid
 import com.joker.coolmall.libs
 import org.gradle.api.Plugin
@@ -35,7 +35,6 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
             // 应用必要的Gradle插件
             with(pluginManager) {
                 apply("com.android.library") // 应用Android库插件
-                apply("org.jetbrains.kotlin.android") // 应用Kotlin Android插件
             }
 
             // 配置Android库扩展
@@ -70,8 +69,6 @@ class AndroidLibraryConventionPlugin : Plugin<Project> {
 
                 // 使用统一的 Kotlin Android 配置
                 configureKotlinAndroid(this)
-
-                defaultConfig.targetSdk = libs.findVersion("targetSdk").get().toString().toInt()
 
                 flavorDimensions += listOf("env")
                 productFlavors {

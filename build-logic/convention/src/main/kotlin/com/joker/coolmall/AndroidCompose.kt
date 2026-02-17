@@ -18,14 +18,10 @@ import org.gradle.kotlin.dsl.dependencies
  * @author Joker.X
  */
 internal fun Project.configureAndroidCompose(
-    commonExtension: CommonExtension<*, *, *, *, *, *>,
+    commonExtension: CommonExtension,
 ) {
-    commonExtension.apply {
-        // 启用 Compose 构建功能
-        buildFeatures {
-            compose = true
-        }
-    }
+    // 启用 Compose 构建功能
+    commonExtension.buildFeatures.compose = true
 
     // 配置 Compose 相关依赖
     dependencies {

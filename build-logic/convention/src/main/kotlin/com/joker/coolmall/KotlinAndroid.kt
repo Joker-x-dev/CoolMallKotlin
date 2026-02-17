@@ -24,28 +24,17 @@ import org.jetbrains.kotlin.gradle.dsl.KotlinJvmProjectExtension
  * @author Joker.X
  */
 internal fun Project.configureKotlinAndroid(
-    commonExtension: CommonExtension<*, *, *, *, *, *>,
+    commonExtension: CommonExtension,
 ) {
-    commonExtension.apply {
-        compileSdk = libs.findVersion("compileSdk").get().toString().toInt()
-
-        defaultConfig {
-            minSdk = libs.findVersion("minSdk").get().toString().toInt()
-        }
-
-        // 统一启用 BuildConfig 生成
-        buildFeatures {
-            buildConfig = true
-        }
-
-        compileOptions {
-            // 通过 desugaring 支持 Java 11 API
-            // https://developer.android.com/studio/write/java11-minimal-support-table
-            sourceCompatibility = JavaVersion.VERSION_11
-            targetCompatibility = JavaVersion.VERSION_11
-            isCoreLibraryDesugaringEnabled = true
-        }
-    }
+    commonExtension.compileSdk = libs.findVersion("compileSdk").get().toString().toInt()
+    commonExtension.defaultConfig.minSdk = libs.findVersion("minSdk").get().toString().toInt()
+    // 统一启用 BuildConfig 生成
+    commonExtension.buildFeatures.buildConfig = true
+    // 通过 desugaring 支持 Java 11 API
+    // https://developer.android.com/studio/write/java11-minimal-support-table
+    commonExtension.compileOptions.sourceCompatibility = JavaVersion.VERSION_11
+    commonExtension.compileOptions.targetCompatibility = JavaVersion.VERSION_11
+    commonExtension.compileOptions.isCoreLibraryDesugaringEnabled = true
 
     configureKotlin<KotlinAndroidProjectExtension>()
 

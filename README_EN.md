@@ -132,10 +132,10 @@ to join.
 
 | Category                | Technology                | Version    | Description                            |
 |-------------------------|---------------------------|------------|----------------------------------------|
-| Programming Language    | Kotlin                    | 2.2.21     | 100% Kotlin Development                |
+| Programming Language    | Kotlin                    | 2.3.10     | 100% Kotlin Development                |
 | UI Framework            | Jetpack Compose           | 2026.02.00 | Declarative UI Framework               |
 | Architecture Pattern    | MVVM + Clean Architecture | -          | MVVM + Clean Architecture              |
-| Dependency Injection    | Hilt                      | 2.57.2     | Dagger-based DI Framework              |
+| Dependency Injection    | Hilt                      | 2.59.1     | Dagger-based DI Framework              |
 | Asynchronous Processing | Coroutines + Flow         | 1.9.0      | Coroutines + Flow Reactive Programming |
 
 ### Functional Modules
@@ -154,7 +154,7 @@ to join.
 | Category      | Technology | Version | Description                        |
 |---------------|------------|---------|------------------------------------|
 | Database      | Room       | 2.8.4   | SQLite Database                    |
-| Local Storage | MMKV       | 2.2.4   | High-performance Key-Value Storage |
+| Local Storage | MMKV       | 2.3.0   | High-performance Key-Value Storage |
 
 ### Development Tools
 

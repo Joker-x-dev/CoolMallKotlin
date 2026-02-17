@@ -26,13 +26,6 @@ class HiltConventionPlugin : Plugin<Project> {
                 "ksp"(libs.findLibrary("hilt.compiler").get())
             }
 
-            // 支持 JVM 模块，基于 org.jetbrains.kotlin.jvm
-            pluginManager.withPlugin("org.jetbrains.kotlin.jvm") {
-                dependencies {
-                    "implementation"(libs.findLibrary("hilt.core").get())
-                }
-            }
-
             // 支持 Android 模块，基于 AndroidBasePlugin
             pluginManager.withPlugin("com.android.base") {
                 apply(plugin = "dagger.hilt.android.plugin")

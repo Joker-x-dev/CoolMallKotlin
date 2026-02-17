@@ -20,6 +20,9 @@ pluginManagement {
         gradlePluginPortal() // Gradle插件门户
     }
 }
+plugins {
+    id("org.gradle.toolchains.foojay-resolver-convention") version "1.0.0"
+}
 
 // 依赖解析管理配置
 dependencyResolutionManagement {

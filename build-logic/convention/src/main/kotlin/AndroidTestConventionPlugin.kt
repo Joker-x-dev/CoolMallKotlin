@@ -1,4 +1,4 @@
-import com.android.build.gradle.TestExtension
+import com.android.build.api.dsl.TestExtension
 import com.joker.coolmall.configureKotlinAndroid
 import com.joker.coolmall.libs
 import org.gradle.api.Plugin
@@ -29,7 +29,6 @@ class AndroidTestConventionPlugin : Plugin<Project> {
             // 应用必要的Gradle插件
             with(pluginManager) {
                 apply("com.android.test") // 应用Android测试插件
-                apply("org.jetbrains.kotlin.android") // 应用Kotlin Android插件
             }
 
             // 配置Android测试扩展

@@ -30,7 +30,6 @@ class AndroidApplicationConventionPlugin : Plugin<Project> {
             // 应用必要的Gradle插件
             with(pluginManager) {
                 apply("com.android.application") // 应用Android应用插件
-                apply("org.jetbrains.kotlin.android") // 应用Kotlin Android插件
             }
 
             // 配置Android应用构建选项
