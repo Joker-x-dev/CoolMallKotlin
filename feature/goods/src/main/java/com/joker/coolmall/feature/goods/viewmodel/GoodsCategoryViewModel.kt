@@ -9,7 +9,7 @@ import com.joker.coolmall.core.model.entity.Goods
 import com.joker.coolmall.core.model.request.GoodsSearchRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
-import com.joker.coolmall.core.navigation.goods.GoodsRoutes
+import com.joker.coolmall.navigation.goods.GoodsRoutes
 import com.joker.coolmall.feature.goods.model.SortState
 import com.joker.coolmall.feature.goods.model.SortType
 import com.joker.coolmall.feature.goods.state.CategoryUiState

@@ -7,10 +7,10 @@ import com.joker.coolmall.core.data.repository.FileUploadRepository
 import com.joker.coolmall.core.data.repository.GoodsRepository
 import com.joker.coolmall.core.model.entity.Comment
 import com.joker.coolmall.core.model.request.GoodsCommentSubmitRequest
-import com.joker.coolmall.core.navigation.RefreshResult
-import com.joker.coolmall.core.navigation.RefreshResultKey
-import com.joker.coolmall.core.navigation.order.OrderRoutes
-import com.joker.coolmall.core.navigation.popBackStackWithResult
+import com.joker.coolmall.navigation.RefreshResult
+import com.joker.coolmall.navigation.RefreshResultKey
+import com.joker.coolmall.navigation.order.OrderRoutes
+import com.joker.coolmall.navigation.popBackStackWithResult
 import com.joker.coolmall.core.util.log.LogUtils
 import com.joker.coolmall.core.util.toast.ToastUtils
 import com.joker.coolmall.feature.order.R

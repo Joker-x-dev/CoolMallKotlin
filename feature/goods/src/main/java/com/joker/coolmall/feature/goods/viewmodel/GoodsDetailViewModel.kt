@@ -19,10 +19,10 @@ import com.joker.coolmall.core.model.entity.GoodsSpec
 import com.joker.coolmall.core.model.entity.SelectedGoods
 import com.joker.coolmall.core.model.request.ReceiveCouponRequest
 import com.joker.coolmall.core.model.response.NetworkResponse
-import com.joker.coolmall.core.navigation.auth.AuthRoutes
-import com.joker.coolmall.core.navigation.goods.GoodsRoutes
-import com.joker.coolmall.core.navigation.navigate
-import com.joker.coolmall.core.navigation.order.OrderRoutes
+import com.joker.coolmall.navigation.auth.AuthRoutes
+import com.joker.coolmall.navigation.goods.GoodsRoutes
+import com.joker.coolmall.navigation.navigate
+import com.joker.coolmall.navigation.order.OrderRoutes
 import com.joker.coolmall.core.util.storage.MMKVUtils
 import com.joker.coolmall.core.util.toast.ToastUtils
 import com.joker.coolmall.feature.goods.R

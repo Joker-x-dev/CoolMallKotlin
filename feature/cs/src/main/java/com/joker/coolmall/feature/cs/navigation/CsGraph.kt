@@ -2,7 +2,7 @@ package com.joker.coolmall.feature.cs.navigation
 
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
-import com.joker.coolmall.core.navigation.cs.CsRoutes
+import com.joker.coolmall.navigation.cs.CsRoutes
 import com.joker.coolmall.feature.cs.view.ChatRoute
 
 /**

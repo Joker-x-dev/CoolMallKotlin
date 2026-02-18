@@ -69,8 +69,8 @@ import com.joker.coolmall.core.model.preview.previewAvailableCoupons
 import com.joker.coolmall.core.model.preview.previewBannerList
 import com.joker.coolmall.core.model.preview.previewCategoryList
 import com.joker.coolmall.core.model.preview.previewGoodsList
-import com.joker.coolmall.core.navigation.common.CommonNavigator
-import com.joker.coolmall.core.navigation.goods.GoodsNavigator
+import com.joker.coolmall.navigation.common.CommonNavigator
+import com.joker.coolmall.navigation.goods.GoodsNavigator
 import com.joker.coolmall.core.ui.component.card.AppCard
 import com.joker.coolmall.core.ui.component.goods.GoodsGridItem
 import com.joker.coolmall.core.ui.component.goods.GoodsListItem

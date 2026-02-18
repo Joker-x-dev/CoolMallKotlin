@@ -17,9 +17,9 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXLarge
-import com.joker.coolmall.core.navigation.auth.AuthNavigator
-import com.joker.coolmall.core.navigation.common.CommonNavigator
-import com.joker.coolmall.core.navigation.navigateBack
+import com.joker.coolmall.navigation.auth.AuthNavigator
+import com.joker.coolmall.navigation.common.CommonNavigator
+import com.joker.coolmall.navigation.navigateBack
 import com.joker.coolmall.core.ui.component.button.AppButton
 import com.joker.coolmall.feature.auth.R
 import com.joker.coolmall.feature.auth.component.AnimatedAuthPage

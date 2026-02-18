@@ -43,9 +43,9 @@ import com.joker.coolmall.core.designsystem.theme.SpacePaddingXSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.model.entity.Goods
-import com.joker.coolmall.core.navigation.goods.GoodsNavigator
-import com.joker.coolmall.core.navigation.goods.GoodsRoutes
-import com.joker.coolmall.core.navigation.navigateBack
+import com.joker.coolmall.navigation.goods.GoodsNavigator
+import com.joker.coolmall.navigation.goods.GoodsRoutes
+import com.joker.coolmall.navigation.navigateBack
 import com.joker.coolmall.core.ui.component.appbar.SearchTopAppBar
 import com.joker.coolmall.core.ui.component.goods.GoodsGridItem
 import com.joker.coolmall.core.ui.component.goods.GoodsListItem

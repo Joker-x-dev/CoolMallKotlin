@@ -32,7 +32,7 @@ import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.model.entity.GoodsSearchKeyword
 import com.joker.coolmall.core.model.entity.SearchHistory
 import com.joker.coolmall.core.model.preview.previewGoodsSearchKeywordList
-import com.joker.coolmall.core.navigation.navigateBack
+import com.joker.coolmall.navigation.navigateBack
 import com.joker.coolmall.core.ui.component.appbar.SearchTopAppBar
 import com.joker.coolmall.core.ui.component.list.AppListItem
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkView

@@ -11,8 +11,8 @@ import com.joker.coolmall.core.common.base.state.BaseNetWorkListUiState
 import com.joker.coolmall.core.common.base.state.LoadMoreState
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.model.entity.Feedback
-import com.joker.coolmall.core.navigation.feedback.FeedbackNavigator
-import com.joker.coolmall.core.navigation.navigateBack
+import com.joker.coolmall.navigation.feedback.FeedbackNavigator
+import com.joker.coolmall.navigation.navigateBack
 import com.joker.coolmall.core.ui.component.bottombar.AppBottomButton
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkListView
 import com.joker.coolmall.core.ui.component.refresh.RefreshLayout

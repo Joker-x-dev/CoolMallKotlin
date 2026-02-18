@@ -11,6 +11,7 @@ import com.joker.coolmall.core.util.notification.NotificationUtil
 import com.joker.coolmall.core.util.toast.ToastUtils
 import com.joker.coolmall.core.util.validation.ValidationUtil
 import com.joker.coolmall.feature.auth.R
+import com.joker.coolmall.navigation.navigateBack
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -310,7 +311,7 @@ class RegisterViewModel @Inject constructor(
             ToastUtils.showSuccess(R.string.register_success)
             appState.updateAuth(authData)
             appState.refreshUserInfo()
-            com.joker.coolmall.core.navigation.navigateBack()
+            navigateBack()
         }
     }
 

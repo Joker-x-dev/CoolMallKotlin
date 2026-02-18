@@ -27,8 +27,8 @@ import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.ShapeMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXXLarge
-import com.joker.coolmall.core.navigation.navigateBack
-import com.joker.coolmall.core.navigation.order.OrderRoutes
+import com.joker.coolmall.navigation.navigateBack
+import com.joker.coolmall.navigation.order.OrderRoutes
 import com.joker.coolmall.core.ui.component.bottombar.AppBottomButton
 import com.joker.coolmall.core.ui.component.imagepicker.ImageGridPicker
 import com.joker.coolmall.core.ui.component.rate.WeRate

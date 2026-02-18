@@ -5,10 +5,10 @@ import com.joker.coolmall.core.common.base.state.BaseNetWorkListUiState
 import com.joker.coolmall.core.common.base.state.LoadMoreState
 import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
-import com.joker.coolmall.core.navigation.NavigationResultKey
-import com.joker.coolmall.core.navigation.RefreshResult
-import com.joker.coolmall.core.navigation.RefreshResultKey
-import com.joker.coolmall.core.navigation.resultEvents
+import com.joker.coolmall.navigation.NavigationResultKey
+import com.joker.coolmall.navigation.RefreshResult
+import com.joker.coolmall.navigation.RefreshResultKey
+import com.joker.coolmall.navigation.resultEvents
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import kotlinx.coroutines.Job

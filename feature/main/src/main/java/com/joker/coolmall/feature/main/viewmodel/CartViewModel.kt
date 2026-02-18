@@ -7,9 +7,9 @@ import com.joker.coolmall.core.model.entity.Cart
 import com.joker.coolmall.core.model.entity.Goods
 import com.joker.coolmall.core.model.entity.GoodsSpec
 import com.joker.coolmall.core.model.entity.SelectedGoods
-import com.joker.coolmall.core.navigation.main.MainRoutes
-import com.joker.coolmall.core.navigation.navigate
-import com.joker.coolmall.core.navigation.order.OrderRoutes
+import com.joker.coolmall.navigation.main.MainRoutes
+import com.joker.coolmall.navigation.navigate
+import com.joker.coolmall.navigation.order.OrderRoutes
 import com.joker.coolmall.core.util.storage.MMKVUtils
 import com.joker.coolmall.core.util.toast.ToastUtils
 import com.joker.coolmall.feature.main.R

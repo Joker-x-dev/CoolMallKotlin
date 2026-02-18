@@ -30,10 +30,10 @@ import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.SpaceHorizontalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalLarge
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalSmall
-import com.joker.coolmall.core.navigation.common.CommonNavigator
-import com.joker.coolmall.core.navigation.feedback.FeedbackNavigator
-import com.joker.coolmall.core.navigation.launch.LaunchNavigator
-import com.joker.coolmall.core.navigation.navigateBack
+import com.joker.coolmall.navigation.common.CommonNavigator
+import com.joker.coolmall.navigation.feedback.FeedbackNavigator
+import com.joker.coolmall.navigation.launch.LaunchNavigator
+import com.joker.coolmall.navigation.navigateBack
 import com.joker.coolmall.core.navigation.user.UserNavigator
 import com.joker.coolmall.core.ui.component.list.AppListItem
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold

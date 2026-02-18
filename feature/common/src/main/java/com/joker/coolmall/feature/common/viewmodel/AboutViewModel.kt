@@ -1,7 +1,7 @@
 package com.joker.coolmall.feature.common.viewmodel
 
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
-import com.joker.coolmall.core.navigation.common.CommonNavigator
+import com.joker.coolmall.navigation.common.CommonNavigator
 import com.joker.coolmall.feature.common.data.DependencyDataSource
 import com.joker.coolmall.feature.common.model.Dependency
 import dagger.hilt.android.lifecycle.HiltViewModel

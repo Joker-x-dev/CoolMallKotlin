@@ -36,7 +36,7 @@ import com.joker.coolmall.core.model.entity.ConfirmOrder
 import com.joker.coolmall.core.model.entity.Coupon
 import com.joker.coolmall.core.model.preview.previewAddress
 import com.joker.coolmall.core.model.preview.previewCartList
-import com.joker.coolmall.core.navigation.navigateBack
+import com.joker.coolmall.navigation.navigateBack
 import com.joker.coolmall.core.navigation.user.UserNavigator
 import com.joker.coolmall.core.ui.component.address.AddressCard
 import com.joker.coolmall.core.ui.component.button.AppButtonFixed

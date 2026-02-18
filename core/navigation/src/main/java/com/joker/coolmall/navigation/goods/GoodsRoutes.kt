@@ -1,4 +1,4 @@
-package com.joker.coolmall.core.navigation.goods
+package com.joker.coolmall.navigation.goods
 
 import androidx.navigation3.runtime.NavKey
 import kotlinx.serialization.Serializable

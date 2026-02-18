@@ -8,7 +8,7 @@ import com.joker.coolmall.core.model.entity.Address
 import com.joker.coolmall.core.model.request.PageRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
-import com.joker.coolmall.core.navigation.popBackStackWithResult
+import com.joker.coolmall.navigation.popBackStackWithResult
 import com.joker.coolmall.core.navigation.user.SelectAddressResultKey
 import com.joker.coolmall.core.navigation.user.UserNavigator
 import com.joker.coolmall.core.navigation.user.UserRoutes

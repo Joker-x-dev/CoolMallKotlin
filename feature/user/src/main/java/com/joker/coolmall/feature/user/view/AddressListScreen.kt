@@ -15,7 +15,7 @@ import com.joker.coolmall.core.common.base.state.LoadMoreState
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.model.entity.Address
 import com.joker.coolmall.core.model.preview.previewAddressList
-import com.joker.coolmall.core.navigation.navigateBack
+import com.joker.coolmall.navigation.navigateBack
 import com.joker.coolmall.core.navigation.user.UserNavigator
 import com.joker.coolmall.core.navigation.user.UserRoutes
 import com.joker.coolmall.core.ui.component.address.AddressActionButton

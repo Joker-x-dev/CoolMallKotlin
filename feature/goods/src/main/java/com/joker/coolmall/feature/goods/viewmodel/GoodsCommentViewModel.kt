@@ -6,7 +6,7 @@ import com.joker.coolmall.core.model.entity.Comment
 import com.joker.coolmall.core.model.request.GoodsCommentPageRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
-import com.joker.coolmall.core.navigation.goods.GoodsRoutes
+import com.joker.coolmall.navigation.goods.GoodsRoutes
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory
 import dagger.assisted.AssistedInject

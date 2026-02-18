@@ -16,9 +16,13 @@ import com.joker.coolmall.core.model.request.DictDataRequest
 import com.joker.coolmall.core.model.request.OrderPageRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.navigation.*
-import com.joker.coolmall.core.navigation.goods.GoodsNavigator
-import com.joker.coolmall.core.navigation.order.OrderRoutes
+import com.joker.coolmall.navigation.goods.GoodsNavigator
+import com.joker.coolmall.navigation.order.OrderRoutes
 import com.joker.coolmall.feature.order.model.OrderStatus
+import com.joker.coolmall.navigation.RefreshResult
+import com.joker.coolmall.navigation.RefreshResultKey
+import com.joker.coolmall.navigation.navigate
+import com.joker.coolmall.navigation.resultEvents
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import dagger.assisted.Assisted

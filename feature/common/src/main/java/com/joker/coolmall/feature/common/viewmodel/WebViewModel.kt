@@ -4,7 +4,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.net.toUri
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
-import com.joker.coolmall.core.navigation.common.CommonRoutes
+import com.joker.coolmall.navigation.common.CommonRoutes
 import com.joker.coolmall.feature.common.model.WebViewData
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedFactory

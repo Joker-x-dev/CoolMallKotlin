@@ -16,9 +16,9 @@ import com.joker.coolmall.core.model.request.GoodsSearchRequest
 import com.joker.coolmall.core.model.request.ReceiveCouponRequest
 import com.joker.coolmall.core.model.response.NetworkPageData
 import com.joker.coolmall.core.model.response.NetworkResponse
-import com.joker.coolmall.core.navigation.auth.AuthRoutes
-import com.joker.coolmall.core.navigation.goods.GoodsRoutes
-import com.joker.coolmall.core.navigation.navigate
+import com.joker.coolmall.navigation.auth.AuthRoutes
+import com.joker.coolmall.navigation.goods.GoodsRoutes
+import com.joker.coolmall.navigation.navigate
 import com.joker.coolmall.core.util.toast.ToastUtils
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult

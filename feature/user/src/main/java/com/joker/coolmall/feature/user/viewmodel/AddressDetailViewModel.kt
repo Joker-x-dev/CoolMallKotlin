@@ -5,9 +5,9 @@ import com.joker.coolmall.core.common.base.viewmodel.BaseNetWorkViewModel
 import com.joker.coolmall.core.data.repository.AddressRepository
 import com.joker.coolmall.core.model.entity.Address
 import com.joker.coolmall.core.model.response.NetworkResponse
-import com.joker.coolmall.core.navigation.RefreshResult
-import com.joker.coolmall.core.navigation.RefreshResultKey
-import com.joker.coolmall.core.navigation.popBackStackWithResult
+import com.joker.coolmall.navigation.RefreshResult
+import com.joker.coolmall.navigation.RefreshResultKey
+import com.joker.coolmall.navigation.popBackStackWithResult
 import com.joker.coolmall.core.navigation.user.UserRoutes
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult

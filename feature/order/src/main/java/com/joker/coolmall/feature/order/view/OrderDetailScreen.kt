@@ -28,8 +28,8 @@ import com.joker.coolmall.core.model.entity.Cart
 import com.joker.coolmall.core.model.entity.DictItem
 import com.joker.coolmall.core.model.entity.Order
 import com.joker.coolmall.core.model.preview.previewOrder
-import com.joker.coolmall.core.navigation.navigateBack
-import com.joker.coolmall.core.navigation.order.OrderRoutes
+import com.joker.coolmall.navigation.navigateBack
+import com.joker.coolmall.navigation.order.OrderRoutes
 import com.joker.coolmall.core.ui.component.address.AddressCard
 import com.joker.coolmall.core.ui.component.dialog.WeDialog
 import com.joker.coolmall.core.ui.component.goods.OrderGoodsCard

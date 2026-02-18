@@ -1,6 +1,6 @@
-package com.joker.coolmall.core.navigation.market
+package com.joker.coolmall.navigation.market
 
-import com.joker.coolmall.core.navigation.navigate
+import com.joker.coolmall.navigation.navigate
 
 /**
  * 营销模块导航封装

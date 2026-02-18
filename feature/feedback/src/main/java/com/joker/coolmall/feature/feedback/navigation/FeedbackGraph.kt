@@ -2,7 +2,7 @@ package com.joker.coolmall.feature.feedback.navigation
 
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
-import com.joker.coolmall.core.navigation.feedback.FeedbackRoutes
+import com.joker.coolmall.navigation.feedback.FeedbackRoutes
 import com.joker.coolmall.feature.feedback.view.FeedbackListRoute
 import com.joker.coolmall.feature.feedback.view.FeedbackSubmitRoute
 

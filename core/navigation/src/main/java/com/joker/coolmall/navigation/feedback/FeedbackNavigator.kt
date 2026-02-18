@@ -1,6 +1,6 @@
-package com.joker.coolmall.core.navigation.feedback
+package com.joker.coolmall.navigation.feedback
 
-import com.joker.coolmall.core.navigation.navigate
+import com.joker.coolmall.navigation.navigate
 
 /**
  * 反馈模块导航封装

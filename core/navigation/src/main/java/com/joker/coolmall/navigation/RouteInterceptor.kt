@@ -1,12 +1,12 @@
-package com.joker.coolmall.core.navigation
+package com.joker.coolmall.navigation
 
 import androidx.navigation3.runtime.NavKey
-import com.joker.coolmall.core.navigation.auth.AuthRoutes
-import com.joker.coolmall.core.navigation.cs.CsRoutes
-import com.joker.coolmall.core.navigation.feedback.FeedbackRoutes
-import com.joker.coolmall.core.navigation.market.MarketRoutes
-import com.joker.coolmall.core.navigation.order.OrderRoutes
 import com.joker.coolmall.core.navigation.user.UserRoutes
+import com.joker.coolmall.navigation.auth.AuthRoutes
+import com.joker.coolmall.navigation.cs.CsRoutes
+import com.joker.coolmall.navigation.feedback.FeedbackRoutes
+import com.joker.coolmall.navigation.market.MarketRoutes
+import com.joker.coolmall.navigation.order.OrderRoutes
 import kotlin.reflect.KClass
 
 /**

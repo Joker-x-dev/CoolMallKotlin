@@ -11,7 +11,7 @@ import com.joker.coolmall.core.common.base.state.LoadMoreState
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.model.entity.Coupon
 import com.joker.coolmall.core.model.preview.previewMyCoupons
-import com.joker.coolmall.core.navigation.navigateBack
+import com.joker.coolmall.navigation.navigateBack
 import com.joker.coolmall.core.ui.component.coupon.CouponCard
 import com.joker.coolmall.core.ui.component.coupon.CouponCardMode
 import com.joker.coolmall.core.ui.component.network.BaseNetWorkListView

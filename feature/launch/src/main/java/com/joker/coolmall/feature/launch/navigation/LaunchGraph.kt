@@ -5,7 +5,7 @@ import androidx.compose.animation.SharedTransitionScope
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.ui.LocalNavAnimatedContentScope
-import com.joker.coolmall.core.navigation.launch.LaunchRoutes
+import com.joker.coolmall.navigation.launch.LaunchRoutes
 import com.joker.coolmall.feature.launch.view.GuideRoute
 import com.joker.coolmall.feature.launch.view.SplashRoute
 

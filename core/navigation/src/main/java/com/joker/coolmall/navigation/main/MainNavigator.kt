@@ -1,8 +1,8 @@
-package com.joker.coolmall.core.navigation.main
+package com.joker.coolmall.navigation.main
 
 import androidx.navigation3.runtime.NavKey
-import com.joker.coolmall.core.navigation.navigate
-import com.joker.coolmall.core.navigation.navigateAndCloseCurrent
+import com.joker.coolmall.navigation.navigate
+import com.joker.coolmall.navigation.navigateAndCloseCurrent
 
 /**
  * 主模块导航封装

@@ -22,7 +22,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.joker.coolmall.core.designsystem.theme.AppTheme
-import com.joker.coolmall.core.navigation.main.MainRoutes
+import com.joker.coolmall.navigation.main.MainRoutes
 import com.joker.coolmall.feature.main.component.BottomNavigationBar
 import com.joker.coolmall.feature.main.model.TopLevelDestination
 import com.joker.coolmall.feature.main.viewmodel.MainViewModel

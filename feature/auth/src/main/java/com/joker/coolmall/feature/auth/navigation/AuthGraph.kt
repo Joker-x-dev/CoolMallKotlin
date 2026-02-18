@@ -2,7 +2,7 @@ package com.joker.coolmall.feature.auth.navigation
 
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
-import com.joker.coolmall.core.navigation.auth.AuthRoutes
+import com.joker.coolmall.navigation.auth.AuthRoutes
 import com.joker.coolmall.feature.auth.view.AccountLoginRoute
 import com.joker.coolmall.feature.auth.view.LoginRoute
 import com.joker.coolmall.feature.auth.view.RegisterRoute

@@ -12,10 +12,10 @@ import com.joker.coolmall.core.model.entity.Order
 import com.joker.coolmall.core.model.request.DictDataRequest
 import com.joker.coolmall.core.model.request.RefundOrderRequest
 import com.joker.coolmall.core.model.response.NetworkResponse
-import com.joker.coolmall.core.navigation.RefreshResult
-import com.joker.coolmall.core.navigation.RefreshResultKey
-import com.joker.coolmall.core.navigation.order.OrderRoutes
-import com.joker.coolmall.core.navigation.popBackStackWithResult
+import com.joker.coolmall.navigation.RefreshResult
+import com.joker.coolmall.navigation.RefreshResultKey
+import com.joker.coolmall.navigation.order.OrderRoutes
+import com.joker.coolmall.navigation.popBackStackWithResult
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import dagger.assisted.Assisted

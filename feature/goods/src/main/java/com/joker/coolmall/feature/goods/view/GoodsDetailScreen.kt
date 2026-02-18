@@ -96,11 +96,11 @@ import com.joker.coolmall.core.model.entity.GoodsSpec
 import com.joker.coolmall.core.model.entity.SelectedGoods
 import com.joker.coolmall.core.model.preview.previewGoods
 import com.joker.coolmall.core.model.preview.previewMyCoupons
-import com.joker.coolmall.core.navigation.cs.CsNavigator
-import com.joker.coolmall.core.navigation.goods.GoodsNavigator
-import com.joker.coolmall.core.navigation.goods.GoodsRoutes
-import com.joker.coolmall.core.navigation.main.MainNavigator
-import com.joker.coolmall.core.navigation.navigateBack
+import com.joker.coolmall.navigation.cs.CsNavigator
+import com.joker.coolmall.navigation.goods.GoodsNavigator
+import com.joker.coolmall.navigation.goods.GoodsRoutes
+import com.joker.coolmall.navigation.main.MainNavigator
+import com.joker.coolmall.navigation.navigateBack
 import com.joker.coolmall.core.ui.component.button.AppButtonBordered
 import com.joker.coolmall.core.ui.component.button.AppButtonFixed
 import com.joker.coolmall.core.ui.component.button.ButtonShape

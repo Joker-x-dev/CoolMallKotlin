@@ -4,6 +4,7 @@ import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.base.viewmodel.BaseViewModel
 import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.entity.User
+import com.joker.coolmall.navigation.navigateBack
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -54,7 +55,7 @@ class ProfileViewModel @Inject constructor(
     fun logout() {
         viewModelScope.launch {
             appState.logout()
-            com.joker.coolmall.core.navigation.navigateBack()
+            navigateBack()
         }
     }
 }

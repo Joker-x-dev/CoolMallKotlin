@@ -39,9 +39,9 @@ import com.joker.coolmall.core.designsystem.theme.SpacePaddingMedium
 import com.joker.coolmall.core.designsystem.theme.SpaceVerticalXSmall
 import com.joker.coolmall.core.model.entity.DictItem
 import com.joker.coolmall.core.model.entity.Order
-import com.joker.coolmall.core.navigation.navigateBack
-import com.joker.coolmall.core.navigation.order.OrderNavigator
-import com.joker.coolmall.core.navigation.order.OrderRoutes
+import com.joker.coolmall.navigation.navigateBack
+import com.joker.coolmall.navigation.order.OrderNavigator
+import com.joker.coolmall.navigation.order.OrderRoutes
 import com.joker.coolmall.core.ui.component.dialog.WeDialog
 import com.joker.coolmall.core.ui.component.divider.WeDivider
 import com.joker.coolmall.core.ui.component.image.NetWorkImage

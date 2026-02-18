@@ -3,10 +3,10 @@ package com.joker.coolmall.core.common.base.viewmodel
 import androidx.lifecycle.viewModelScope
 import com.joker.coolmall.core.common.base.state.BaseNetWorkUiState
 import com.joker.coolmall.core.model.response.NetworkResponse
-import com.joker.coolmall.core.navigation.NavigationResultKey
-import com.joker.coolmall.core.navigation.RefreshResult
-import com.joker.coolmall.core.navigation.RefreshResultKey
-import com.joker.coolmall.core.navigation.resultEvents
+import com.joker.coolmall.navigation.NavigationResultKey
+import com.joker.coolmall.navigation.RefreshResult
+import com.joker.coolmall.navigation.RefreshResultKey
+import com.joker.coolmall.navigation.resultEvents
 import com.joker.coolmall.result.ResultHandler
 import com.joker.coolmall.result.asResult
 import kotlinx.coroutines.Job

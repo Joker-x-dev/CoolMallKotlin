@@ -1,4 +1,4 @@
-package com.joker.coolmall.core.navigation
+package com.joker.coolmall.navigation
 
 import androidx.compose.animation.ExperimentalSharedTransitionApi
 import androidx.compose.animation.SharedTransitionLayout
@@ -18,7 +18,7 @@ import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.runtime.rememberNavBackStack
 import androidx.navigation3.runtime.rememberSaveableStateHolderNavEntryDecorator
 import androidx.navigation3.ui.NavDisplay
-import com.joker.coolmall.core.navigation.launch.LaunchRoutes
+import com.joker.coolmall.navigation.launch.LaunchRoutes
 import com.joker.coolmall.feature.auth.navigation.authGraph
 import com.joker.coolmall.feature.common.navigation.commonGraph
 import com.joker.coolmall.feature.cs.navigation.csGraph

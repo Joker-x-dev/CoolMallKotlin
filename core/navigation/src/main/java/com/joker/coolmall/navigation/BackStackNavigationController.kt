@@ -1,4 +1,4 @@
-package com.joker.coolmall.core.navigation
+package com.joker.coolmall.navigation
 
 import androidx.navigation3.runtime.NavBackStack
 import androidx.navigation3.runtime.NavKey
@@ -108,7 +108,7 @@ private fun NavBackStack<NavKey>.popUpTo(
     if (removeFromIndex >= size) return
 
     if (removeFromIndex == 0) {
-        if (allowPopToEmpty && inclusive) {
+        if (allowPopToEmpty) {
             clear()
         } else if (size > 1) {
             subList(1, size).clear()

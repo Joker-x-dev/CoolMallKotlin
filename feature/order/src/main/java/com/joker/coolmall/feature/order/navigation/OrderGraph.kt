@@ -2,7 +2,7 @@ package com.joker.coolmall.feature.order.navigation
 
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
-import com.joker.coolmall.core.navigation.order.OrderRoutes
+import com.joker.coolmall.navigation.order.OrderRoutes
 import com.joker.coolmall.feature.order.view.OrderCommentRoute
 import com.joker.coolmall.feature.order.view.OrderConfirmRoute
 import com.joker.coolmall.feature.order.view.OrderDetailRoute

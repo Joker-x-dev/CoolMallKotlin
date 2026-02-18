@@ -1,7 +1,7 @@
 package com.joker.coolmall.core.navigation.user
 
 import com.joker.coolmall.core.model.entity.Address
-import com.joker.coolmall.core.navigation.NavigationResultKey
+import com.joker.coolmall.navigation.NavigationResultKey
 import kotlinx.serialization.json.Json
 
 /**

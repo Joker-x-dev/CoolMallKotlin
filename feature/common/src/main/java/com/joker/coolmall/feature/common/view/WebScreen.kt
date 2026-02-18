@@ -31,8 +31,8 @@ import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import com.joker.coolmall.core.designsystem.component.FullScreenBox
 import com.joker.coolmall.core.designsystem.theme.AppTheme
 import com.joker.coolmall.core.designsystem.theme.CommonIcon
-import com.joker.coolmall.core.navigation.common.CommonRoutes
-import com.joker.coolmall.core.navigation.navigateBack
+import com.joker.coolmall.navigation.common.CommonRoutes
+import com.joker.coolmall.navigation.navigateBack
 import com.joker.coolmall.core.ui.component.scaffold.AppScaffold
 import com.joker.coolmall.feature.common.R
 import com.joker.coolmall.feature.common.model.WebViewData

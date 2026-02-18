@@ -9,7 +9,7 @@ import com.joker.coolmall.core.data.repository.AuthRepository
 import com.joker.coolmall.core.data.state.AppState
 import com.joker.coolmall.core.model.entity.Auth
 import com.joker.coolmall.core.model.request.QQLoginRequest
-import com.joker.coolmall.core.navigation.NavigationService.navigateBack
+import com.joker.coolmall.navigation.NavigationService.navigateBack
 import com.joker.coolmall.core.util.toast.ToastUtils
 import com.joker.coolmall.feature.auth.R
 import com.joker.coolmall.result.ResultHandler

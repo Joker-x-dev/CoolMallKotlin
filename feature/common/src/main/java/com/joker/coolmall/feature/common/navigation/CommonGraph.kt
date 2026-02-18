@@ -2,7 +2,7 @@ package com.joker.coolmall.feature.common.navigation
 
 import androidx.navigation3.runtime.EntryProviderScope
 import androidx.navigation3.runtime.NavKey
-import com.joker.coolmall.core.navigation.common.CommonRoutes
+import com.joker.coolmall.navigation.common.CommonRoutes
 import com.joker.coolmall.feature.common.view.AboutRoute
 import com.joker.coolmall.feature.common.view.ContributorsRoute
 import com.joker.coolmall.feature.common.view.PrivacyPolicyRoute

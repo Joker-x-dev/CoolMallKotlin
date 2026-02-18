@@ -16,9 +16,9 @@ import com.joker.coolmall.core.model.entity.SelectedGoods
 import com.joker.coolmall.core.model.request.CreateOrderRequest
 import com.joker.coolmall.core.model.request.CreateOrderRequest.CreateOrder
 import com.joker.coolmall.core.model.response.NetworkResponse
-import com.joker.coolmall.core.navigation.navigateAndCloseCurrent
-import com.joker.coolmall.core.navigation.order.OrderRoutes
-import com.joker.coolmall.core.navigation.resultEvents
+import com.joker.coolmall.navigation.navigateAndCloseCurrent
+import com.joker.coolmall.navigation.order.OrderRoutes
+import com.joker.coolmall.navigation.resultEvents
 import com.joker.coolmall.core.navigation.user.SelectAddressResultKey
 import com.joker.coolmall.core.util.storage.MMKVUtils
 import com.joker.coolmall.core.util.toast.ToastUtils

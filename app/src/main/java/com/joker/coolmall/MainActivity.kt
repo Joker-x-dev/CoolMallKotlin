@@ -15,8 +15,8 @@ import com.joker.coolmall.core.common.config.ThemePreference
 import com.joker.coolmall.core.common.manager.ThemePreferenceManager
 import com.joker.coolmall.core.common.manager.QQLoginManager
 import com.joker.coolmall.core.designsystem.theme.AppTheme
-import com.joker.coolmall.core.navigation.AppNavHost
-import com.joker.coolmall.core.navigation.AppNavigator
+import com.joker.coolmall.navigation.AppNavHost
+import com.joker.coolmall.navigation.AppNavigator
 import com.tencent.connect.common.Constants
 import com.tencent.tauth.Tencent
 import dagger.hilt.android.AndroidEntryPoint

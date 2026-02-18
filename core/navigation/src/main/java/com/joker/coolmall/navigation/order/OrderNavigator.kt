@@ -1,6 +1,6 @@
-package com.joker.coolmall.core.navigation.order
+package com.joker.coolmall.navigation.order
 
-import com.joker.coolmall.core.navigation.navigate
+import com.joker.coolmall.navigation.navigate
 
 /**
  * 订单模块导航封装

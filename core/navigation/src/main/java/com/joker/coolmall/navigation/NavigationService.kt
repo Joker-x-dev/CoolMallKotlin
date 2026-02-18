@@ -1,4 +1,4 @@
-package com.joker.coolmall.core.navigation
+package com.joker.coolmall.navigation
 
 import androidx.navigation3.runtime.NavKey
 import kotlinx.coroutines.flow.Flow
